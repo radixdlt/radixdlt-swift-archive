@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E620AB4321E783F600B36EC2 /* RadixDLTSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4121E783F600B36EC2 /* RadixDLTSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E645E73821E7827D00532ACD /* RadixDLTSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E645E72E21E7827D00532ACD /* RadixDLTSDK.framework */; };
-		E645E73D21E7827D00532ACD /* RadixDLTSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E645E73C21E7827D00532ACD /* RadixDLTSDKTests.swift */; };
+		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
+		E645E73821E7827D00532ACD /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E645E72E21E7827D00532ACD /* RadixSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +23,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E620AB4121E783F600B36EC2 /* RadixDLTSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixDLTSDK.h; sourceTree = "<group>"; };
-		E620AB4221E783F600B36EC2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E645E72E21E7827D00532ACD /* RadixDLTSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RadixDLTSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E645E73721E7827D00532ACD /* RadixDLTSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadixDLTSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E645E73C21E7827D00532ACD /* RadixDLTSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixDLTSDKTests.swift; sourceTree = "<group>"; };
-		E645E73E21E7827D00532ACD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
+		E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RadixSDK-Info.plist"; sourceTree = "<group>"; };
+		E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RadixSDKTests-Info.plist"; sourceTree = "<group>"; };
+		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
+		E645E72E21E7827D00532ACD /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E645E73721E7827D00532ACD /* RadixSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadixSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E645E73821E7827D00532ACD /* RadixDLTSDK.framework in Frameworks */,
+				E645E73821E7827D00532ACD /* RadixSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,17 +53,66 @@
 		E620AB4021E783F600B36EC2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				E620AB4121E783F600B36EC2 /* RadixDLTSDK.h */,
-				E620AB4221E783F600B36EC2 /* Info.plist */,
+				E620AB4521E785D600B36EC2 /* SupportingFiles */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		E620AB4521E785D600B36EC2 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				E620AB4621E785D600B36EC2 /* RadixSDK.h */,
+				E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		E620AB5221E7874300B36EC2 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E620AB5321E7874300B36EC2 /* SupportingFiles */,
+				E620AB5521E7874300B36EC2 /* TestCases */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		E620AB5321E7874300B36EC2 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		E620AB5521E7874300B36EC2 /* TestCases */ = {
+			isa = PBXGroup;
+			children = (
+				E620AB5621E7874300B36EC2 /* Crypto */,
+			);
+			path = TestCases;
+			sourceTree = "<group>";
+		};
+		E620AB5621E7874300B36EC2 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				E620AB5721E7874300B36EC2 /* Keys */,
+			);
+			path = Crypto;
+			sourceTree = "<group>";
+		};
+		E620AB5721E7874300B36EC2 /* Keys */ = {
+			isa = PBXGroup;
+			children = (
+				E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */,
+			);
+			path = Keys;
 			sourceTree = "<group>";
 		};
 		E645E72421E7827D00532ACD = {
 			isa = PBXGroup;
 			children = (
 				E620AB4021E783F600B36EC2 /* Source */,
-				E645E73B21E7827D00532ACD /* Tests */,
+				E620AB5221E7874300B36EC2 /* Tests */,
 				E645E72F21E7827D00532ACD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,19 +120,10 @@
 		E645E72F21E7827D00532ACD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E645E72E21E7827D00532ACD /* RadixDLTSDK.framework */,
-				E645E73721E7827D00532ACD /* RadixDLTSDKTests.xctest */,
+				E645E72E21E7827D00532ACD /* RadixSDK.framework */,
+				E645E73721E7827D00532ACD /* RadixSDKTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E645E73B21E7827D00532ACD /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				E645E73C21E7827D00532ACD /* RadixDLTSDKTests.swift */,
-				E645E73E21E7827D00532ACD /* Info.plist */,
-			);
-			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,16 +133,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E620AB4321E783F600B36EC2 /* RadixDLTSDK.h in Headers */,
+				E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		E645E72D21E7827D00532ACD /* RadixDLTSDK */ = {
+		E645E72D21E7827D00532ACD /* RadixSDK */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E645E74221E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixDLTSDK" */;
+			buildConfigurationList = E645E74221E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixSDK" */;
 			buildPhases = (
 				E645E72921E7827D00532ACD /* Headers */,
 				E645E72A21E7827D00532ACD /* Sources */,
@@ -113,14 +153,14 @@
 			);
 			dependencies = (
 			);
-			name = RadixDLTSDK;
+			name = RadixSDK;
 			productName = RadixDLTSDK;
-			productReference = E645E72E21E7827D00532ACD /* RadixDLTSDK.framework */;
+			productReference = E645E72E21E7827D00532ACD /* RadixSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		E645E73621E7827D00532ACD /* RadixDLTSDKTests */ = {
+		E645E73621E7827D00532ACD /* RadixSDKTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E645E74521E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixDLTSDKTests" */;
+			buildConfigurationList = E645E74521E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixSDKTests" */;
 			buildPhases = (
 				E645E73321E7827D00532ACD /* Sources */,
 				E645E73421E7827D00532ACD /* Frameworks */,
@@ -131,9 +171,9 @@
 			dependencies = (
 				E645E73A21E7827D00532ACD /* PBXTargetDependency */,
 			);
-			name = RadixDLTSDKTests;
+			name = RadixSDKTests;
 			productName = RadixDLTSDKTests;
-			productReference = E645E73721E7827D00532ACD /* RadixDLTSDKTests.xctest */;
+			productReference = E645E73721E7827D00532ACD /* RadixSDKTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -154,7 +194,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E645E72821E7827D00532ACD /* Build configuration list for PBXProject "RadixDLTSDK" */;
+			buildConfigurationList = E645E72821E7827D00532ACD /* Build configuration list for PBXProject "RadixSDK" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -166,8 +206,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E645E72D21E7827D00532ACD /* RadixDLTSDK */,
-				E645E73621E7827D00532ACD /* RadixDLTSDKTests */,
+				E645E72D21E7827D00532ACD /* RadixSDK */,
+				E645E73621E7827D00532ACD /* RadixSDKTests */,
 			);
 		};
 /* End PBXProject section */
@@ -201,7 +241,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E645E73D21E7827D00532ACD /* RadixDLTSDKTests.swift in Sources */,
+				E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,7 +250,7 @@
 /* Begin PBXTargetDependency section */
 		E645E73A21E7827D00532ACD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E645E72D21E7827D00532ACD /* RadixDLTSDK */;
+			target = E645E72D21E7827D00532ACD /* RadixSDK */;
 			targetProxy = E645E73921E7827D00532ACD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -347,14 +387,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Source/Info.plist;
+				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.RadixDLTSDK;
+				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -371,14 +411,14 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Source/Info.plist;
+				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.RadixDLTSDK;
+				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -390,13 +430,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.RadixDLTSDKTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.sdk.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -407,13 +447,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.RadixDLTSDKTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.sdk.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -423,7 +463,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E645E72821E7827D00532ACD /* Build configuration list for PBXProject "RadixDLTSDK" */ = {
+		E645E72821E7827D00532ACD /* Build configuration list for PBXProject "RadixSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E645E74021E7827D00532ACD /* Debug */,
@@ -432,7 +472,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E645E74221E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixDLTSDK" */ = {
+		E645E74221E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E645E74321E7827D00532ACD /* Debug */,
@@ -441,7 +481,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E645E74521E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixDLTSDKTests" */ = {
+		E645E74521E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixSDKTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E645E74621E7827D00532ACD /* Debug */,
