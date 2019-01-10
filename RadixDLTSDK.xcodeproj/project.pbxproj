@@ -63,7 +63,7 @@
 			isa = PBXGroup;
 			children = (
 				E620AB4021E783F600B36EC2 /* Source */,
-				E645E73B21E7827D00532ACD /* RadixDLTSDKTests */,
+				E645E73B21E7827D00532ACD /* Tests */,
 				E645E72F21E7827D00532ACD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -77,13 +77,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E645E73B21E7827D00532ACD /* RadixDLTSDKTests */ = {
+		E645E73B21E7827D00532ACD /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				E645E73C21E7827D00532ACD /* RadixDLTSDKTests.swift */,
 				E645E73E21E7827D00532ACD /* Info.plist */,
 			);
-			path = RadixDLTSDKTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -390,7 +390,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = RadixDLTSDKTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -407,7 +407,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = RadixDLTSDKTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
