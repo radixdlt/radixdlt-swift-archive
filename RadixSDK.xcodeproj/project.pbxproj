@@ -37,6 +37,7 @@
 		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
 		E645E72E21E7827D00532ACD /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E645E73721E7827D00532ACD /* RadixSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadixSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +142,7 @@
 		E645E72421E7827D00532ACD = {
 			isa = PBXGroup;
 			children = (
+				E6DE2C2D21E7A02C007DDA26 /* README.md */,
 				E620AB4021E783F600B36EC2 /* Source */,
 				E620AB5221E7874300B36EC2 /* Tests */,
 				E645E72F21E7827D00532ACD /* Products */,
