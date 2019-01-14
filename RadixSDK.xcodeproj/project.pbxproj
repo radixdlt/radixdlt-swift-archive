@@ -10,8 +10,19 @@
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
 		E645E73821E7827D00532ACD /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E645E72E21E7827D00532ACD /* RadixSDK.framework */; };
-		EF4094DAF2E6423EBB7314E7 /* libPods-RadixSDKTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18AAB60499068EAE2054BDB9 /* libPods-RadixSDKTests.a */; };
-		FEFDAC46E6D8568161E86239 /* libPods-RadixSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C8CB5F1EFEFAD10CBFA241 /* libPods-RadixSDK.a */; };
+		E6FB03C921EC95E8002CE331 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C721EC95E8002CE331 /* RxSwift.framework */; };
+		E6FB03CA21EC95E8002CE331 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */; };
+		E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
+		E6FB03CE21EC9976002CE331 /* SipHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CD21EC9976002CE331 /* SipHash.framework */; };
+		E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
+		E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
+		E6FB03D721ECE4EC002CE331 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
+		E6FB03D821ECE4EC002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
+		E6FB03D921ECE4EC002CE331 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
+		E6FB03DA21ECE4EC002CE331 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C721EC95E8002CE331 /* RxSwift.framework */; };
+		E6FB03DB21ECE4EC002CE331 /* SipHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CD21EC9976002CE331 /* SipHash.framework */; };
+		E6FB03DC21ECE4EC002CE331 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */; };
+		E6FB03E221ECF186002CE331 /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB03E121ECF186002CE331 /* Macros.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,12 +36,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		18AAB60499068EAE2054BDB9 /* libPods-RadixSDKTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RadixSDKTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		19B3DFBC415639CEC3E62B06 /* Pods-RadixSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RadixSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-RadixSDK/Pods-RadixSDK.release.xcconfig"; sourceTree = "<group>"; };
-		42C8CB5F1EFEFAD10CBFA241 /* libPods-RadixSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RadixSDK.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		42CED38B7B021313A2E2CA2B /* Pods-RadixSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RadixSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RadixSDK/Pods-RadixSDK.debug.xcconfig"; sourceTree = "<group>"; };
-		A90A26D3E8EEE83879F0A54A /* Pods-RadixSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RadixSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RadixSDKTests/Pods-RadixSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B68A1B0BE1D5976DDB52E4C4 /* Pods-RadixSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RadixSDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RadixSDKTests/Pods-RadixSDKTests.release.xcconfig"; sourceTree = "<group>"; };
 		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
 		E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RadixSDK-Info.plist"; sourceTree = "<group>"; };
 		E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RadixSDKTests-Info.plist"; sourceTree = "<group>"; };
@@ -38,6 +43,13 @@
 		E645E72E21E7827D00532ACD /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E645E73721E7827D00532ACD /* RadixSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadixSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E6FB03C721EC95E8002CE331 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
+		E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BitcoinKit.framework; path = Carthage/Build/iOS/BitcoinKit.framework; sourceTree = "<group>"; };
+		E6FB03CD21EC9976002CE331 /* SipHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SipHash.framework; path = Carthage/Build/iOS/SipHash.framework; sourceTree = "<group>"; };
+		E6FB03CF21EC9987002CE331 /* BigInt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BigInt.framework; path = Carthage/Build/iOS/BigInt.framework; sourceTree = "<group>"; };
+		E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
+		E6FB03E121ECF186002CE331 /* Macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macros.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +57,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEFDAC46E6D8568161E86239 /* libPods-RadixSDK.a in Frameworks */,
+				E6FB03C921EC95E8002CE331 /* RxSwift.framework in Frameworks */,
+				E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */,
+				E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */,
+				E6FB03CA21EC95E8002CE331 /* SwiftyBeaver.framework in Frameworks */,
+				E6FB03CE21EC9976002CE331 /* SipHash.framework in Frameworks */,
+				E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,36 +71,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				E645E73821E7827D00532ACD /* RadixSDK.framework in Frameworks */,
-				EF4094DAF2E6423EBB7314E7 /* libPods-RadixSDKTests.a in Frameworks */,
+				E6FB03D721ECE4EC002CE331 /* BigInt.framework in Frameworks */,
+				E6FB03D821ECE4EC002CE331 /* BitcoinKit.framework in Frameworks */,
+				E6FB03D921ECE4EC002CE331 /* CryptoSwift.framework in Frameworks */,
+				E6FB03DA21ECE4EC002CE331 /* RxSwift.framework in Frameworks */,
+				E6FB03DB21ECE4EC002CE331 /* SipHash.framework in Frameworks */,
+				E6FB03DC21ECE4EC002CE331 /* SwiftyBeaver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		90BFAF59B4B259A60C9F8B0D /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				42C8CB5F1EFEFAD10CBFA241 /* libPods-RadixSDK.a */,
-				18AAB60499068EAE2054BDB9 /* libPods-RadixSDKTests.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		D74A80010FC3302498278E9D /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				42CED38B7B021313A2E2CA2B /* Pods-RadixSDK.debug.xcconfig */,
-				19B3DFBC415639CEC3E62B06 /* Pods-RadixSDK.release.xcconfig */,
-				A90A26D3E8EEE83879F0A54A /* Pods-RadixSDKTests.debug.xcconfig */,
-				B68A1B0BE1D5976DDB52E4C4 /* Pods-RadixSDKTests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		E620AB4021E783F600B36EC2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				E6FB03BF21EC91D5002CE331 /* Code */,
 				E620AB4521E785D600B36EC2 /* SupportingFiles */,
 			);
 			path = Source;
@@ -146,8 +149,7 @@
 				E620AB4021E783F600B36EC2 /* Source */,
 				E620AB5221E7874300B36EC2 /* Tests */,
 				E645E72F21E7827D00532ACD /* Products */,
-				D74A80010FC3302498278E9D /* Pods */,
-				90BFAF59B4B259A60C9F8B0D /* Frameworks */,
+				E6FB03C621EC95E8002CE331 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -158,6 +160,35 @@
 				E645E73721E7827D00532ACD /* RadixSDKTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E6FB03BF21EC91D5002CE331 /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				E6FB03E021ECF175002CE331 /* Utils */,
+			);
+			path = Code;
+			sourceTree = "<group>";
+		};
+		E6FB03C621EC95E8002CE331 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */,
+				E6FB03CF21EC9987002CE331 /* BigInt.framework */,
+				E6FB03CD21EC9976002CE331 /* SipHash.framework */,
+				E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */,
+				E6FB03C721EC95E8002CE331 /* RxSwift.framework */,
+				E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E6FB03E021ECF175002CE331 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E6FB03E121ECF186002CE331 /* Macros.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -178,7 +209,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E645E74221E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixSDK" */;
 			buildPhases = (
-				BBC4EDA6B937C516546BA3B9 /* [CP] Check Pods Manifest.lock */,
 				E645E72921E7827D00532ACD /* Headers */,
 				E6FB03B821E7B287002CE331 /* ✅ SwiftLint */,
 				E645E72A21E7827D00532ACD /* Sources */,
@@ -198,7 +228,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E645E74521E7827D00532ACD /* Build configuration list for PBXNativeTarget "RadixSDKTests" */;
 			buildPhases = (
-				DDB551739C2AF0A00E6E8909 /* [CP] Check Pods Manifest.lock */,
 				E645E73321E7827D00532ACD /* Sources */,
 				E645E73421E7827D00532ACD /* Frameworks */,
 				E645E73521E7827D00532ACD /* Resources */,
@@ -268,50 +297,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		BBC4EDA6B937C516546BA3B9 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RadixSDK-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DDB551739C2AF0A00E6E8909 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RadixSDKTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		E6FB03B821E7B287002CE331 /* ✅ SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -328,7 +313,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"Killing build since you haven't insatlled SwiftLint: download from https://github.com/realm/SwiftLint\"\n    exit 666\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -337,6 +322,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6FB03E221ECF186002CE331 /* Macros.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,14 +469,18 @@
 		};
 		E645E74321E7827D00532ACD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 42CED38B7B021313A2E2CA2B /* Pods-RadixSDK.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -501,6 +491,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.sdk;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -508,14 +499,18 @@
 		};
 		E645E74421E7827D00532ACD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 19B3DFBC415639CEC3E62B06 /* Pods-RadixSDK.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -533,14 +528,19 @@
 		};
 		E645E74621E7827D00532ACD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A90A26D3E8EEE83879F0A54A /* Pods-RadixSDKTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.sdk.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -551,14 +551,19 @@
 		};
 		E645E74721E7827D00532ACD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B68A1B0BE1D5976DDB52E4C4 /* Pods-RadixSDKTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.sdk.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

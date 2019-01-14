@@ -1,0 +1,5 @@
+github "ReactiveX/RxSwift"
+github "SwiftyBeaver/SwiftyBeaver"
+github "yenom/BitcoinKit"
+github "attaswift/BigInt"
+github "krzyzanowskim/CryptoSwift"
