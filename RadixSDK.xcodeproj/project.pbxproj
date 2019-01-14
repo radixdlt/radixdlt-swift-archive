@@ -10,6 +10,8 @@
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
 		E645E73821E7827D00532ACD /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E645E72E21E7827D00532ACD /* RadixSDK.framework */; };
+		E6D325A621ED3B1A00851F4E /* String+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D325A521ED3B1A00851F4E /* String+Data.swift */; };
+		E6D325A921ED3B3700851F4E /* Data+HexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D325A821ED3B3700851F4E /* Data+HexString.swift */; };
 		E6FB03C921EC95E8002CE331 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C721EC95E8002CE331 /* RxSwift.framework */; };
 		E6FB03CA21EC95E8002CE331 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */; };
 		E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
@@ -42,6 +44,8 @@
 		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
 		E645E72E21E7827D00532ACD /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E645E73721E7827D00532ACD /* RadixSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RadixSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6D325A521ED3B1A00851F4E /* String+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Data.swift"; sourceTree = "<group>"; };
+		E6D325A821ED3B3700851F4E /* Data+HexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+HexString.swift"; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6FB03C721EC95E8002CE331 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
@@ -162,9 +166,35 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		E6D325A321ED3AFC00851F4E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E6D325A721ED3B2700851F4E /* Data */,
+				E6D325A421ED3B0900851F4E /* String */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E6D325A421ED3B0900851F4E /* String */ = {
+			isa = PBXGroup;
+			children = (
+				E6D325A521ED3B1A00851F4E /* String+Data.swift */,
+			);
+			path = String;
+			sourceTree = "<group>";
+		};
+		E6D325A721ED3B2700851F4E /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				E6D325A821ED3B3700851F4E /* Data+HexString.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		E6FB03BF21EC91D5002CE331 /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				E6D325A321ED3AFC00851F4E /* Extensions */,
 				E6FB03E021ECF175002CE331 /* Utils */,
 			);
 			path = Code;
@@ -322,6 +352,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6D325A921ED3B3700851F4E /* Data+HexString.swift in Sources */,
+				E6D325A621ED3B1A00851F4E /* String+Data.swift in Sources */,
 				E6FB03E221ECF186002CE331 /* Macros.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
