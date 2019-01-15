@@ -8,12 +8,30 @@
 # Getting Started
 
 ## Prerequisites
-0. Xcode
+0. Xcode 10
 1. [brew](https://brew.sh/)
 2. [carthage](https://github.com/Carthage/Carthage) - `brew install carthage`
 3. [swiftlint](https://github.com/realm/SwiftLint) - `brew install swiftlint`
-4. Install dependencies - `carthage bootstrap --cache-builds`
+4. Install dependencies using Carthage  
+```bash
+carthage bootstrap --platform iOS --cache-builds
+```
+
+If that fails you might need to install some additional tools:
+```bash
+brew install autoconf automake libtool pkgconfig wget
+````
+
+Which suggests adding some exports in your shell profile, try:
+
+```bash
+export LDFLAGS="-L/usr/local/opt/openssl/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl/include"
+export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
+```
+
 5. `open RadixSDK.xcodeproj`
+6. Run unit tests: `CMD` + `U` to verify that everything is working. 
 
 # Dependencies
 

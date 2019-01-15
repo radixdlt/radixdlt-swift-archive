@@ -12,43 +12,33 @@ import XCTest
 @testable import RadixSDK
 
 class PrivateKeyTests: XCTestCase {
-  
+    
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+    }
+    
     func testPerformanceOfBitcoinKitRestorationUsingMnemonic24Words() {
         measure {
-            do {
-                let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords)
-                let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
-                let privateKey = try wallet.privateKey(index: expected.hdWalletIndex)
-                XCTAssertEqual(privateKey.toWIF(), expected.wif)
-            } catch {
-                return XCTFail("Key generation should not have throwed error: \(error)")
-            }
+            let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords)
+            let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
+            let privateKey = try! wallet.privateKey(index: expected.hdWalletIndex)
+            XCTAssertEqual(privateKey.toWIF(), expected.wif)
         }
     }
     
     func testPerformanceOfBitcoinKitSignAndVerify() {
         let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords)
         let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
-        let privateKey: BitcoinKit.PrivateKey
-        let publicKey: BitcoinKit.PublicKey
-        do {
-            privateKey = try wallet.privateKey(index: expected.hdWalletIndex)
-            publicKey = try wallet.publicKey(index: expected.hdWalletIndex)
-            let publicKeyString = publicKey.description
-            XCTAssertEqual(publicKeyString, expected.publicKey)
-        } catch {
-            return XCTFail("Key generation should not have throwed error: \(error)")
-        }
+        let privateKey = try! wallet.privateKey(index: expected.hdWalletIndex)
+        let publicKey = try! wallet.publicKey(index: expected.hdWalletIndex)
+        let publicKeyString = publicKey.description
+        XCTAssertEqual(publicKeyString, expected.publicKey)
+        
         measure {
-            do {
-                let message = "Hello BitcoinKit".data(using: .utf8)!
-                let _ = try BitcoinKit.Crypto.sign(message, privateKey: privateKey)
-                // 10 % of the times the verification fails. This is not good.
-                // I've created an issue at Github: https://github.com/yenom/BitcoinKit/issues/194
-//                XCTAssertTrue(try BitcoinKit.Crypto.verifySignature(signatureData, message: message, publicKey: publicKey.raw))
-            } catch {
-                return XCTFail("Key generation should not have throwed error: \(error)")
-            }
+            let signatureData = try! BitcoinKit.Crypto.sign(messageToSignData, privateKey: privateKey)
+            XCTAssertEqual(signatureData.hex, expected.signature)
+            XCTAssertTrue(try! BitcoinKit.Crypto.verifySignature(signatureData, message: messageToSignData, publicKey: publicKey.raw))
         }
     }
 }
@@ -58,5 +48,9 @@ private let expected = (
     network: BitcoinKit.Network.mainnet,
     hdWalletIndex: UInt32(0),
     wif: "L5TEfWGHHUVyt16MbiZiQmANrz8zEaKW2EBKiZRfZ8hbEcy2ymGd",
-    publicKey: "030cd0e6d332de86d3c964cac7e98c6b1330154433a8f8aa82a93cbc7a1bfdd45b"
+    publicKey: "030cd0e6d332de86d3c964cac7e98c6b1330154433a8f8aa82a93cbc7a1bfdd45b",
+    signature: "3045022100a1ce4f7b3a39685c546f9d54b987f9922c514f18d7d5e0bfd0c6dc097e62475802204e4fe33e9341246122770861bc5a39078b0dbcfc18e9b92b7229244aae11fc03"
 )
+
+private let messageToSignText = "Hello BitcoinKit"
+private let messageToSignData = Crypto.sha256(messageToSignText.data(using: .utf8)!)
