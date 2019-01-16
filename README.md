@@ -8,16 +8,21 @@
 # Getting Started
 
 ## Prerequisites
-### 0. Xcode 10
-### 1. [brew](https://brew.sh/)
-### 2. [carthage](https://github.com/Carthage/Carthage)
+### 0. [Xcode 10](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12)
+You might possibly be promted to install "Command Line Tools". Make sure to start Xcode and accept terms and conditions (if this is the first time you run it) before you proceed.
+### 1. `git clone git@github.com:radixdlt/radixdlt-swift.git && cd radixdlt-swift`
+### 2. [brew](https://brew.sh/)
+Use link above, but should be something like:
+```bash
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+### 3. [carthage](https://github.com/Carthage/Carthage)
 ```bash
 brew install carthage
 ```
 
 If that command says that Carthage needs **linking** (maybe it was already installed but not linked) with a permissions error similar to the one below:
 ```
-$ brew install carthage
 Warning: carthage 0.31.2 is already installed, it's just not linked
 You can use `brew link carthage` to link this version.
 $ brew link carthage
@@ -33,8 +38,9 @@ brew link carthage
 
 Which makes sure that your current user is owning that directory, therefore `brew link` can **sudoless** - which is needed. For more info about this issue, [please refer to this Gist](https://gist.github.com/irazasyed/7732946).
 
-### 3. [swiftlint](https://github.com/realm/SwiftLint) - `brew install swiftlint`
-### 4. Install dependencies using Carthage  
+### 4. [swiftlint](https://github.com/realm/SwiftLint) - `brew install swiftlint`
+### 5. Install dependencies using Carthage
+Please make sure that your **current directory is the _root of the repo_** (as per previous instructions).
 ```bash
 carthage bootstrap --platform iOS --cache-builds
 ```
@@ -52,8 +58,8 @@ export CPPFLAGS="-I/usr/local/opt/openssl/include"
 export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
 ```
 
-### 5. `open RadixSDK.xcodeproj`
-### 6. Run unit tests: `CMD` + `U` to verify that everything is working. 
+### 6. `open RadixSDK.xcodeproj`
+### 7. Run unit tests: `CMD` + `U` to verify that everything is working. 
 
 # Dependencies
 
