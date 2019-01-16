@@ -33,7 +33,7 @@ file_length:
   error: 300
   ignore_comment_only_lines: true
 
-variable_name:
+identifier_name:
   min_length:
     warning: 3
     error: 2
