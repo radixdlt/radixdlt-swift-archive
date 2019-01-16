@@ -8,11 +8,33 @@
 # Getting Started
 
 ## Prerequisites
-0. Xcode 10
-1. [brew](https://brew.sh/)
-2. [carthage](https://github.com/Carthage/Carthage) - `brew install carthage`
-3. [swiftlint](https://github.com/realm/SwiftLint) - `brew install swiftlint`
-4. Install dependencies using Carthage  
+### 0. Xcode 10
+### 1. [brew](https://brew.sh/)
+### 2. [carthage](https://github.com/Carthage/Carthage)
+```bash
+brew install carthage
+```
+
+If that command says that Carthage needs **linking** (maybe it was already installed but not linked) with a permissions error similar to the one below:
+```
+$ brew install carthage
+Warning: carthage 0.31.2 is already installed, it's just not linked
+You can use `brew link carthage` to link this version.
+$ brew link carthage
+Linking /usr/local/Cellar/carthage/0.31.2... Error: Permission denied @ dir_s_mkdir - /usr/local/Frameworks
+```
+
+Then you can fix that by running:
+```
+sudo mkdir -p /usr/local/Frameworks && \
+sudo chown -R $(whoami) /usr/local/Frameworks && \
+brew link carthage
+```
+
+Which makes sure that your current user is owning that directory, therefore `brew link` can **sudoless** - which is needed. For more info about this issue, [please refer to this Gist](https://gist.github.com/irazasyed/7732946).
+
+### 3. [swiftlint](https://github.com/realm/SwiftLint) - `brew install swiftlint`
+### 4. Install dependencies using Carthage  
 ```bash
 carthage bootstrap --platform iOS --cache-builds
 ```
@@ -30,8 +52,8 @@ export CPPFLAGS="-I/usr/local/opt/openssl/include"
 export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
 ```
 
-5. `open RadixSDK.xcodeproj`
-6. Run unit tests: `CMD` + `U` to verify that everything is working. 
+### 5. `open RadixSDK.xcodeproj`
+### 6. Run unit tests: `CMD` + `U` to verify that everything is working. 
 
 # Dependencies
 
