@@ -7,23 +7,33 @@
 
 # Getting Started
 
-## Prerequisites
-### 0. [Xcode 10](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12)
+## 0. Install Xcode 10
+
+[Install it from App Store](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12).
+
 **Make sure that you have a simulator installed**, by starting Xcode - agree to Terms and Conditions and install any additional dependency if needed - navigate to *Settings -> Components* and verify that you see at least one installed *iPhone Simulator* in the list.
 
-### 1. `git clone git@github.com:radixdlt/radixdlt-swift.git && cd radixdlt-swift`
-### 2. [brew](https://brew.sh/)
-Use link above, but should be something like:
+## 1. Clone this repo
+```bash
+git clone git@github.com:radixdlt/radixdlt-swift.git && cd radixdlt-swift`
+```
+
+## 2. Install `brew`
 ```bash
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
-### 3. [carthage](https://github.com/Carthage/Carthage)
+
+### Issues?
+[See brew troubleshooting page](https://docs.brew.sh/Troubleshooting)
+
+## 3. Install `carthage`
 ```bash
 brew install carthage
 ```
 
+### Issues?
 If that command says that Carthage needs **linking** (maybe it was already installed but not linked) with a permissions error similar to the one below:
-```
+```bash
 Warning: carthage 0.31.2 is already installed, it's just not linked
 You can use `brew link carthage` to link this version.
 $ brew link carthage
@@ -31,7 +41,7 @@ Linking /usr/local/Cellar/carthage/0.31.2... Error: Permission denied @ dir_s_mk
 ```
 
 Then you can fix that by running:
-```
+```bash
 sudo mkdir -p /usr/local/Frameworks && \
 sudo chown -R $(whoami) /usr/local/Frameworks && \
 brew link carthage
@@ -39,13 +49,22 @@ brew link carthage
 
 Which makes sure that your current user is owning that directory, therefore `brew link` can **sudoless** - which is needed. For more info about this issue, [please refer to this Gist](https://gist.github.com/irazasyed/7732946).
 
-### 4. [swiftlint](https://github.com/realm/SwiftLint) - `brew install swiftlint`
-### 5. Install dependencies using Carthage
+## 4. Install `swiftlint`
+```bash
+brew install swiftlint`
+```
+
+### Issues?
+If you have any issues [go to swiftlint repo](https://github.com/realm/SwiftLint)
+
+
+## 5. Install dependencies using Carthage
 Please make sure that your **current directory is the _root of the repo_** (as per previous instructions).
 ```bash
 carthage bootstrap --platform iOS --cache-builds
 ```
 
+### Issues?
 If that fails you might need to install some additional tools:
 ```bash
 brew install autoconf automake libtool pkgconfig wget
@@ -59,10 +78,27 @@ export CPPFLAGS="-I/usr/local/opt/openssl/include"
 export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
 ```
 
-### 6. `open RadixSDK.xcodeproj`
-### 7. Run unit tests: `CMD` + `U` to verify that everything is working. 
+## 6. Run tests
+Open the project:
+```bash
+open RadixSDK.xcodeproj
+```
 
-# Dependencies
+In Xcode run the tests by pressing `CMD` + `U`, verify that everything is working. 
+
+# Architecture
+
+To be written.
+
+## Design choices
+
+### Why Carthage?
+As of 2019-01-14, [BitcoinKit doesn't build using Cocoapods](https://github.com/yenom/BitcoinKit/issues/193). But it works fine using Carthage.
+
+### Why RxSwift based APIs?
+First of all, all the existing Radix Libraries are Rx based, secondly because it makes perfect sense since it makes async programming easy.
+
+## Dependencies
 
 You will find the dependencies in the [Cartfile](Cartfile), but we will go through the most important ones here:
 
@@ -78,17 +114,6 @@ Support for big numbers.
 ## [RxSwift](https://github.com/ReactiveX/RxSwift)
 The library uses RxSwift for async programming.
 
-# Architecture
-
-To be written.
-
-## Design choices
-
-### Why Carthage?
-As of 2019-01-14, [BitcoinKit doesn't build using Cocoapods](https://github.com/yenom/BitcoinKit/issues/193). But it works fine using Carthage.
-
-### Why RxSwift based APIs?
-First of all, all the existing Radix Libraries are Rx based, secondly because it makes perfect sense since it makes async programming easy.
 
 # Other Radix Libraries
 * [Java Library](https://github.com/radixdlt/radixdlt-java)
