@@ -9,7 +9,8 @@
 
 ## Prerequisites
 ### 0. [Xcode 10](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12)
-You might possibly be promted to install "Command Line Tools". Make sure to start Xcode and accept terms and conditions (if this is the first time you run it) before you proceed.
+**Make sure that you have a simulator installed**, by starting Xcode - agree to Terms and Conditions and install any additional dependency if needed - navigate to *Settings -> Components* and verify that you see at least one installed *iPhone Simulator* in the list.
+
 ### 1. `git clone git@github.com:radixdlt/radixdlt-swift.git && cd radixdlt-swift`
 ### 2. [brew](https://brew.sh/)
 Use link above, but should be something like:
