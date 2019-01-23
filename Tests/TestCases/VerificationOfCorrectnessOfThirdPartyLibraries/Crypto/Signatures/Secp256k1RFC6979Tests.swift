@@ -74,7 +74,7 @@ class Secp256k1RFC6979Tests: XCTestCase {
         message: String,
         expectedDer: String
         ) {
-        let privateKey = PrivateKey(data: Data(hex: privateKeyHex)!)
+        let privateKey = BitcoinKit.PrivateKey(data: Data(hex: privateKeyHex)!)
         let signature = try! Crypto.sign(message: message, privateKey: privateKey)
         XCTAssertEqual(signature.hex, expectedDer)
     }

@@ -9,6 +9,10 @@
 import Foundation
 
 internal var abstract: Never {
+    fatalError("Override this")
+}
+
+internal var implementMe: Never {
     fatalError("Implement this")
 }
 
