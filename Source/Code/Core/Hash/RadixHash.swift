@@ -27,10 +27,28 @@ public struct Sha256TwiceHasher: Hashing {
     }
 }
 
-public struct RadixHash: Hashable, CustomStringConvertible {
+public struct RadixHash: Hashable, CustomStringConvertible, Collection {
     private let data: Data
     public init(unhashedData: Data, hashedBy hasher: Hashing) {
         self.data = hasher.hash(data: unhashedData)
+    }
+}
+
+// MARK: - Collection
+public extension RadixHash {
+    public typealias Element = Byte
+    typealias Index = Array<Element>.Index
+    var startIndex: Index {
+        return data.startIndex
+    }
+    var endIndex: Index {
+        return data.endIndex
+    }
+    subscript(position: Index) -> Element {
+        return data[position]
+    }
+    func index(after index: Index) -> Index {
+        return data.index(after: index)
     }
 }
 

@@ -74,7 +74,6 @@ public extension EUID {
 }
 
 // MARK: - Public
-public typealias Shard = Int64
 public extension EUID {
     
     func toHexString() -> HexString {

@@ -16,7 +16,7 @@ public protocol StringConvertibleErrorOwner {
     associatedtype Error: StringConvertibleError
 }
 
-public protocol StringConvertible: Equatable, Codable, ExpressibleByStringLiteral, CustomStringConvertible {
+public protocol StringConvertible: Hashable, Codable, ExpressibleByStringLiteral, CustomStringConvertible {
     var value: String { get }
     
     /// Calling this with an invalid String will result in runtime crash.

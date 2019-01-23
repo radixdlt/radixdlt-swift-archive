@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Base64String: StringConvertible {
+public struct Base64String: StringConvertible, DataConvertible {
     public let value: String
     
     public init(data: Data) {
@@ -34,5 +34,15 @@ public extension Base64String {
             throw Error.invalidCharacters
         }
         return string // valid
+    }
+}
+
+// MARK: - DataConvertible
+public extension Base64String {
+    var asData: Data {
+        guard let data = Data(base64Encoded: value) else {
+            incorrectImplementation("Should always be possible to create data from a validated Base64String")
+        }
+        return data
     }
 }

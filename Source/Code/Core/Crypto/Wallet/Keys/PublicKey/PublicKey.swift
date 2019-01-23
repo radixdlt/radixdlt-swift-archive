@@ -8,8 +8,11 @@
 
 import Foundation
 
-public struct PublicKey: Codable {
+public struct PublicKey: Codable, Hashable {
     public let data: Data
+    public init(data: Data) {
+        self.data = data
+    }
 }
 
 public extension PublicKey {

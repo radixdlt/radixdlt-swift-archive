@@ -9,7 +9,7 @@
 import Foundation
 
 /// Unique network node endpoint.
-public struct Node {
+public struct Node: Hashable {
     public enum Error: Swift.Error {
         case portTooBig
         case portNegative

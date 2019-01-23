@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Base58String: StringConvertible, CharacterSetSpecifying, StringConvertibleErrorOwner {
+public struct Base58String: StringConvertible, CharacterSetSpecifying, StringConvertibleErrorOwner, DataConvertible {
     public enum Error: StringConvertibleError {
         public static var invalidCharactersError: Error {
             return Error.invalidCharacters
@@ -26,5 +26,25 @@ public struct Base58String: StringConvertible, CharacterSetSpecifying, StringCon
         } catch {
             fatalError("Passed unvalid string, error: \(error)")
         }
+    }
+}
+
+public extension Base58String {
+    var asData: Data {
+    
+        let alphabet = String.base58Alphabet.data(using: .utf8)!
+        let radix = BigUnsignedInt(alphabet.count)
+        let byteString = [UInt8](value.utf8)
+        
+        var answer = BigUnsignedInt(0)
+        var temp = BigUnsignedInt(1)
+        for character in byteString.reversed() {
+            guard let index = alphabet.index(of: character) else {
+                incorrectImplementation("Should always be able to convert to data")
+            }
+            answer += temp * BigUnsignedInt(index)
+            temp *= radix
+        }
+        return byteString.prefix(while: { $0 == alphabet[0] }) + answer.serialize()
     }
 }

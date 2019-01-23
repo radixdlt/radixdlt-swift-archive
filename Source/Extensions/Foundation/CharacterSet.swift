@@ -8,12 +8,18 @@
 
 import Foundation
 
-extension CharacterSet {
+public extension String {
+    static var base58Alphabet: String {
+        return "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+    }
+}
+
+public extension CharacterSet {
     static var hexadecimal: CharacterSet {
         let afToAF = CharacterSet(charactersIn: "abcdefABCDEF")
         return CharacterSet.decimalDigits.union(afToAF)
     }
     static var base58: CharacterSet {
-        return CharacterSet(charactersIn: "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz")
+        return CharacterSet(charactersIn: String.base58Alphabet)
     }
 }
