@@ -1,6 +1,6 @@
-[![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
 # Radix Swift Library
+
+[![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **radixdlt-swift** is a Swift Client library for interacting with a [Radix](https://www.radixdlt.com) Distributed Ledger.
 
