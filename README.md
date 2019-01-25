@@ -22,7 +22,7 @@
 
 ### 0. Install Xcode 10
 
-[Install it from App Store](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12).
+Install it from the [App Store](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12).
 
 **Make sure that you have a simulator installed**, by starting Xcode - agree to Terms and Conditions and install any additional dependency if needed - navigate to *Settings -> Components* and verify that you see at least one installed *iPhone Simulator* in the list.
 
