@@ -1,3 +1,5 @@
+[![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 # Radix Swift Library
 
 **radixdlt-swift** is a Swift Client library for interacting with a [Radix](https://www.radixdlt.com) Distributed Ledger.
@@ -6,10 +8,9 @@
 
 - [Features](#features)
 - [Getting started](#getting-started)
-- [Build](#build)
-- [Example applications](#example-applications)
-- [Code examples](#code-examples)
-- [Known issues](#known-issues)
+- [Architecture](#architecture)
+- [Design choices](#design-choices)
+- [Dependencies](#dependencies)
 - [Contribute](#contribute)
 - [Links](#links)
 - [License](#license)
@@ -114,16 +115,16 @@ First of all, all the existing Radix Libraries are Rx based, secondly because it
 
 You will find the dependencies in the [Cartfile](Cartfile), but we will go through the most important ones here:
 
-### [BitcoinKit](https://github.com/yenom/BitcoinKit)
+- [BitcoinKit](https://github.com/yenom/BitcoinKit):
 Elliptic Curve Cryptography, this library is one of the better Swift wrappers of the C library [bitcoin-core/secp256k1](https://github.com/bitcoin-core/secp256k1).
 
-### [CryptoSwift](https://github.com/krzyzanowskim/CryptoSwift)
+- [CryptoSwift](https://github.com/krzyzanowskim/CryptoSwift):
 For standard crypto utilities such as hash functions.
 
-### [BigInt](https://github.com/attaswift/BigInt)
+- [BigInt](https://github.com/attaswift/BigInt):
 Support for big numbers.
 
-### [RxSwift](https://github.com/ReactiveX/RxSwift)
+- [RxSwift](https://github.com/ReactiveX/RxSwift):
 The library uses RxSwift for async programming.
 
 
