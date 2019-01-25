@@ -156,4 +156,4 @@ Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) in all your interactions
 
 ## License
 
-The radixdlt-swift library is released under the [MIT License](LICENSE).
+The **radixdlt-swift** library is released under the [MIT License](LICENSE).
