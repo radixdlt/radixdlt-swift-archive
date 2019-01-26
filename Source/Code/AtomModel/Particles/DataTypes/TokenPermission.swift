@@ -9,7 +9,7 @@
 import Foundation
 
 // TODO should this be an optionset?
-public enum TokenPermission: String, Codable, DsonConvertible {
+public enum TokenPermission: String, Codable, StringInitializable {
     case pow = "pow"
     case genesisOnly = "genesis_only"
     case sameAtomOnly = "same_atom_only"
@@ -18,11 +18,11 @@ public enum TokenPermission: String, Codable, DsonConvertible {
     case none = "none"
 }
 
-// MARK: DsonConvertible
+// MARK: StringInitializable
 public extension TokenPermission {
-    init(from: String) throws {
-        guard let permission = TokenPermission(rawValue: from) else {
-            throw Error.unsupportedPermission(from)
+    init(string: String) throws {
+        guard let permission = TokenPermission(rawValue: string) else {
+            throw Error.unsupportedPermission(string)
         }
         self = permission
     }

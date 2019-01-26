@@ -17,7 +17,7 @@ class NonEmptyAtomTests: XCTestCase {
         super.setUp()
         continueAfterFailure = false
     }
-        
+    
     func testAtomConsistingOfThreeParticleGroups() {
         do {
             let jsonData = jsonStringThreeParticleGroups.data(using: .utf8)!

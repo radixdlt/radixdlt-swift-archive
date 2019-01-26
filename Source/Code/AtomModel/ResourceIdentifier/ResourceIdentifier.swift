@@ -74,13 +74,6 @@ public extension ResourceIdentifier {
     }
 }
 
-// MARK: - DsonConvertible
-public extension ResourceIdentifier {
-    init(from string: String) throws {
-        try self.init(string: string)
-    }
-}
-
 // MARK: - ExpressibleByStringLiteral
 public extension ResourceIdentifier {
     init(stringLiteral value: String) {
@@ -89,6 +82,14 @@ public extension ResourceIdentifier {
         } catch {
             fatalError("Passed non ResourceIdentifier string: `\(value)`, error: \(error)")
         }
+    }
+}
+
+// MARK: - DsonConvertible
+public extension ResourceIdentifier {
+    static let tag: DsonTag = .uri
+    init(from string: String) throws {
+        try self.init(string: string)
     }
 }
 

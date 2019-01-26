@@ -96,7 +96,8 @@ public extension EUID {
 
 // MARK: - DsonConvertible
 public extension EUID {
-    public init(from: HexString) throws {
+    static let tag: DsonTag = .euidHex
+    init(from: HexString) throws {
         try self.init(hexString: from)
     }
 }

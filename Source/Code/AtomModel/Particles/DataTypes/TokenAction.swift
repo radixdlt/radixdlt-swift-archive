@@ -8,8 +8,33 @@
 
 import Foundation
 
+public struct StringDson<Value: StringInitializable>: DsonConvertible {
+    public let value: Value
+}
+
+// MARK: DsonConvertible
+public extension DsonConvertible where Self: StringInitializable, Self.From == String {
+    init(from string: String) throws {
+        try self.init(string: string)
+    }
+}
+
+// MARK: DsonConvertible
+public extension StringDson {
+    static var tag: DsonTag {
+        return .string
+    }
+    init(from string: String) throws {
+        value = try Value(string: string)
+    }
+    
+    var description: String {
+        return String(describing: value)
+    }
+}
+
 /// Verb version of `FungibleType`
-public enum TokenAction: String, StringInitializable, DsonConvertible, Hashable {
+public enum TokenAction: String, StringInitializable, Hashable {
     case mint
     case transfer
     case burn
@@ -27,6 +52,7 @@ public extension TokenAction {
 
 // MARK: DsonConvertible
 public extension TokenAction {
+    static let tag: DsonTag = .string
     init(from string: String) throws {
         try self.init(string: string)
     }

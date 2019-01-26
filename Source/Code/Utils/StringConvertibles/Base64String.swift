@@ -9,6 +9,8 @@
 import Foundation
 
 public struct Base64String: DsonConvertible, StringConvertible, DataConvertible {
+    public static let tag: DsonTag = .bytesBase64
+    
     public let value: String
     
     public init(data: Data) {

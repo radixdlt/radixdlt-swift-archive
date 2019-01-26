@@ -30,12 +30,12 @@ public enum DsonTag: String, CaseIterable {
 }
 
 public extension DsonTag {
-    var dataType: StringInitializable.Type {
-        switch self {
-        case .addressBase58: return Base58String.self
-        case .bytesBase64: return Base64String.self
-        case .uri, .string, .uint256DecimalString: return String.self
-        case .euidHex, .hashHex: return HexString.self
-        }
+    var identifier: String {
+        let separator = ":"
+        return [
+            separator,
+            rawValue,
+            separator
+        ].joined()
     }
 }

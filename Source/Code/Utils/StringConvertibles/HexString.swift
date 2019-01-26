@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct HexString: DsonConvertible, StringConvertible, CharacterSetSpecifying, StringConvertibleErrorOwner, DataConvertible {
+public struct HexString: StringConvertible, CharacterSetSpecifying, StringConvertibleErrorOwner, DataConvertible {
     
     public enum Error: StringConvertibleError {
         public static var invalidCharactersError: Error {

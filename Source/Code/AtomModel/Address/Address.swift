@@ -80,6 +80,7 @@ public extension Address {
 
 // MARK: - DsonConvertible
 public extension Address {
+    static let tag: DsonTag = .addressBase58
     init(from: Base58String) throws {
        try self.init(base58String: from)
     }

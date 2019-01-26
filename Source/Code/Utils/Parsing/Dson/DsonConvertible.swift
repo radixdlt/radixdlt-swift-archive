@@ -9,11 +9,13 @@
 import Foundation
 
 public protocol DsonConvertible: CustomStringConvertible {
+    static var tag: DsonTag { get }
     associatedtype From: StringInitializable
     init(from: From) throws
 }
 
 extension String: DsonConvertible {
+    public static var tag: DsonTag { return .string }
     public init(from: String) throws {
         self = from
     }

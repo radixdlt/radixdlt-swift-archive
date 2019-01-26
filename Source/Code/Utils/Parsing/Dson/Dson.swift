@@ -19,57 +19,26 @@ extension Dson: Hashable where Value: Hashable {}
 extension Dson: Equatable where Value: Equatable {}
 
 // MARK: - Decodable
-private let separator = ":"
 public extension Dson {
     
     init(from: Value.From) throws {
         try self.init(value: Value(from: from))
     }
-    
-    init(tag: DsonTag, rawValueString: String) throws {
-        try self.init(from: try Value.From(string: rawValueString))
-    }
-    
-    // swiftlint:disable:next function_body_length
+
     init(string rawString: String) throws {
-        let separatorCount = rawString.countInstances(of: separator)
-        switch separatorCount {
-        case 0: throw Error.noSeparator
-        case 1: throw Error.singleSeparator
-        default: break
-        }
-        guard rawString[0] == separator else {
-            throw Error.noLeadingSepartor
-        }
-        let leadingStripped = String(rawString.dropFirst())
-        
-        var tagRaw = ""
-        var valueString = ""
-        for index in 0..<leadingStripped.count {
-            guard leadingStripped[index] != separator else {
-                tagRaw = String(leadingStripped.prefix(index))
-                valueString = String(leadingStripped.dropFirst(index+1))
-                break
-            }
-        }
-        
-        guard let tag = DsonTag(rawValue: tagRaw) else {
-            throw Error.noTagFound
-        }
-        guard !valueString.isEmpty else {
+        let components = rawString.components(separatedBy: Value.tag.identifier)
+        guard components.count == 2 else {
             throw Error.noValueFound
         }
-        try self.init(tag: tag, rawValueString: valueString)
+        try self.init(from: Value.From(string: components[1]))
     }
+    
     public var identifer: String {
         return [
-            separator,
-//            Value.From.dsonTag.rawValue,
-            separator,
+            Value.tag.identifier,
             String(describing: value)
         ].joined()
     }
-
 }
 
 // MARK: - Error

@@ -28,6 +28,14 @@ public extension Granularity {
     }
 }
 
+// MARK: - DsonConvertible
+public extension Granularity {
+    static let tag = DsonTag.uint256DecimalString
+    init(from string: String) throws {
+        try self.init(string: string)
+    }
+}
+
 // MARK: - ExpressibleByIntegerLiteral
 public extension Granularity {
     init(integerLiteral int: Int) {
@@ -43,13 +51,6 @@ public extension Granularity {
         } catch {
             fatalError("Passed decimal string passed: `\(value)`, error: \(error)")
         }
-    }
-}
-
-// MARK: - DsonConvertible
-public extension Granularity {
-    init(from string: String) throws {
-        try self.init(string: string)
     }
 }
 

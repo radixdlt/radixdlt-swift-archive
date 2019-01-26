@@ -28,6 +28,14 @@ public extension Amount {
     }
 }
 
+// MARK: - DsonConvertible
+public extension Amount {
+    static let tag = DsonTag.uint256DecimalString
+    init(from string: String) throws {
+        try self.init(string: string)
+    }
+}
+
 // MARK: - ExpressibleByIntegerLiteral
 public extension Amount {
     init(integerLiteral int: Int) {
@@ -43,13 +51,6 @@ public extension Amount {
         } catch {
             fatalError("Passed decimal string passed: `\(value)`, error: \(error)")
         }
-    }
-}
-
-// MARK: - DsonConvertible
-public extension Amount {
-    init(from string: String) throws {
-        try self.init(string: string)
     }
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 
 /// Adjective version of TokenAction
-public enum FungibleType: String, StringInitializable, DsonConvertible, Hashable {
+public enum FungibleType: String, StringInitializable, Hashable {
     case minted
     case transferred
     case burned
@@ -22,13 +22,6 @@ public extension FungibleType {
             throw Error.unsupportedFungibleType(string)
         }
         self = type
-    }
-}
-
-// MARK: DsonConvertible
-public extension FungibleType {
-    init(from string: String) throws {
-        try self.init(string: string)
     }
 }
 

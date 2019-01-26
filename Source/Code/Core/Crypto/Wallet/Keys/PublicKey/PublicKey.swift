@@ -15,6 +15,7 @@ public struct PublicKey: StringInitializable, Hashable, DsonConvertible, DataCon
     }
 }
 
+// MARK: - Convenience init
 public extension PublicKey {
     init(private privateKey: PrivateKey) {
         implementMe
@@ -33,6 +34,7 @@ public extension PublicKey {
     }
 }
 
+// MARK: - ExpressibleByStringLiteral
 public extension PublicKey {
     init(stringLiteral value: String) {
         do {
@@ -45,6 +47,7 @@ public extension PublicKey {
 
 // MARK: - DsonConvertible
 public extension PublicKey {
+    static let tag = DsonTag.bytesBase64
     init(from: Base64String) throws {
         self.init(data: from.asData)
     }

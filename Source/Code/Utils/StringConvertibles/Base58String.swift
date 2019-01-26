@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Base58String: DsonConvertible, StringConvertible, CharacterSetSpecifying, StringConvertibleErrorOwner, DataConvertible {
+public struct Base58String: StringConvertible, CharacterSetSpecifying, StringConvertibleErrorOwner, DataConvertible {
     public enum Error: StringConvertibleError {
         public static var invalidCharactersError: Error {
             return Error.invalidCharacters
@@ -26,13 +26,6 @@ public struct Base58String: DsonConvertible, StringConvertible, CharacterSetSpec
         } catch {
             fatalError("Passed unvalid string, error: \(error)")
         }
-    }
-}
-
-// MARK: DsonConvertible
-public extension DsonConvertible where Self: StringInitializable, Self.From == String {
-    init(from string: String) throws {
-        try self.init(string: string)
     }
 }
 

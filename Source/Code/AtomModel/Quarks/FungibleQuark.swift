@@ -23,7 +23,7 @@ public extension FungibleQuark {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.decode(Dson<FungibleType>.self, forKey: .type).value
+        type = try container.decode(Dson<StringDson<FungibleType>>.self, forKey: .type).value.value
         planck = try container.decode(UInt64.self, forKey: .planck)
         nonce = try container.decode(UInt64.self, forKey: .nonce)
         amount = try container.decode(Dson<Amount>.self, forKey: .amount).value

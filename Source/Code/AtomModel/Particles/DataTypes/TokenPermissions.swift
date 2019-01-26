@@ -22,7 +22,7 @@ public extension TokenPermissions {
         let map = try [Key: Value](uniqueKeysWithValues: stringMap.map {
             (
                 try Key(string: $0.key),
-                try Dson<Value>(string: $0.value).value
+                try Dson<StringDson<TokenPermission>>(string: $0.value).value.value
             )
         })
         self.init(map: map)
