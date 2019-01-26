@@ -15,3 +15,9 @@ public struct AccountableQuark: QuarkConvertible {
         self.addresses = addresses
     }
 }
+
+public extension AccountableQuark {
+    init(address: Address) {
+        self.init(addresses: [address])
+    }
+}

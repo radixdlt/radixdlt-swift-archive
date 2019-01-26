@@ -8,6 +8,16 @@
 
 import Foundation
 
-public protocol DataConvertible {
+public protocol DataConvertible: CustomStringConvertible {
     var asData: Data { get }
+}
+
+public extension DataConvertible {
+    var hex: String {
+        return asData.toHexString()
+    }
+    
+    var unsignedBigInteger: BigUnsignedInt {
+        return BigUnsignedInt(asData)
+    }
 }

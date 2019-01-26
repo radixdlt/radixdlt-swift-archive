@@ -9,7 +9,11 @@
 import Foundation
 
 public struct DataQuark: QuarkConvertible {
-    private let metaData: [String: String]
-    private let payload: Data
+    public let payload: Data
+    public let metaData: MetaData?
     
+    public init(payload: Data, metaData: MetaData?) {
+        self.payload = payload
+        self.metaData = metaData
+    }
 }

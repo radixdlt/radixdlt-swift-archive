@@ -7,17 +7,33 @@
 //
 
 import Foundation
-import BigInt
-
-public enum FungibleType: String, Codable, Hashable {
-    case minted = "mint"
-    case transferred = "transfer"
-    case burned = "burn"
-}
 
 public struct FungibleQuark: QuarkConvertible {
-    private let type: FungibleType
-    private let plack: BigInt
-    private let nonce: BigInt
-    private let amount: BigUInt
+    public let type: FungibleType
+    public let planck: UInt64
+    public let nonce: UInt64
+    public let amount: Amount
 }
+
+// MARK: Codable
+public extension FungibleQuark {
+    public enum CodingKeys: CodingKey {
+        case type, planck, nonce, amount
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        type = try container.decode(Dson<FungibleType>.self, forKey: .type).value
+        planck = try container.decode(UInt64.self, forKey: .planck)
+        nonce = try container.decode(UInt64.self, forKey: .nonce)
+        amount = try container.decode(Dson<Amount>.self, forKey: .amount).value
+    }
+}
+
+// MARK: - Encodable
+public extension FungibleQuark {
+    func encode(to encoder: Encoder) throws {
+        implementMe
+    }
+}
+

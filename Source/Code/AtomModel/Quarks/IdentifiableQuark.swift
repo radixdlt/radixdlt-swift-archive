@@ -15,3 +15,15 @@ public struct IdentifiableQuark: QuarkConvertible {
         self.identifier = identifier
     }
 }
+
+// MARK: - Codable
+public extension IdentifiableQuark {
+    public enum CodingKeys: String, CodingKey {
+        case identifier = "id"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.identifier = try container.decode(Dson<ResourceIdentifier>.self, forKey: .identifier).value
+    }
+}

@@ -9,10 +9,10 @@
 import Foundation
 
 /// EffectiveUserIdentifier
-public struct EUID: Hashable, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral, CustomStringConvertible {
+public struct EUID: DsonConvertible, StringInitializable, Hashable, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral {
+    
     public typealias Value = BigUnsignedInt
-
-    public static let byteCount = 128
+    public static let byteCount = 16
 
     private let value: Value
 
@@ -30,7 +30,6 @@ public struct EUID: Hashable, ExpressibleByStringLiteral, ExpressibleByIntegerLi
 
 // MARK: - Convenience Initializers
 public extension EUID {
-    
     init(hexString: HexString) throws {
         try self.init(data: hexString.asData)
     }
@@ -38,20 +37,23 @@ public extension EUID {
     init(value: Value) throws {
         try self.init(data: value.toData(minByteCount: EUID.byteCount))
     }
-    
-    init(string: String) {
-        do {
-            try self.init(hexString: try HexString(string: string))
-        } catch {
-            fatalError("Passed non hexstring, error: \(error)")
-        }
+}
+
+// MARK: - StringInitializable
+public extension EUID {
+    init(string: String) throws {
+        try self.init(hexString: try HexString(string: string))
     }
 }
 
 // MARK: - ExpressibleByStringLiteral
 public extension EUID {
     init(stringLiteral string: String) {
-        self.init(string: string)
+        do {
+            try self.init(string: string)
+        } catch {
+            fatalError("Passed bad string (`\(string)`), error: \(error)")
+        }
     }
 }
 
@@ -89,5 +91,20 @@ public extension EUID {
             return pointer.pointee
         }
         
+    }
+}
+
+// MARK: - DsonConvertible
+public extension EUID {
+    public init(from: HexString) throws {
+        try self.init(hexString: from)
+    }
+}
+
+// MARK: - Encodable
+public extension EUID {
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(toHexString())
     }
 }

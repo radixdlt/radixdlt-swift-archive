@@ -16,7 +16,7 @@ public protocol StringConvertibleErrorOwner {
     associatedtype Error: StringConvertibleError
 }
 
-public protocol StringConvertible: Hashable, Codable, ExpressibleByStringLiteral, CustomStringConvertible {
+public protocol StringConvertible: StringInitializable, Hashable, ExpressibleByStringLiteral {
     var value: String { get }
     
     /// Calling this with an invalid String will result in runtime crash.
@@ -27,12 +27,16 @@ public protocol StringConvertible: Hashable, Codable, ExpressibleByStringLiteral
     static func validate(_ string: String) throws -> String
 }
 
+// MARK: - Decodable
 public extension StringConvertible {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         self.init(validated: try container.decode(String.self))
     }
-    
+}
+
+// MARK: - Encodable
+public extension StringConvertible {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(value)
@@ -68,7 +72,7 @@ public extension StringConvertible {
     }
 }
 
-// MARK: - Default Implementation
+// MARK: - StringInitializable
 public extension StringConvertible {
     init(string: String) throws {
         self.init(validated: try Self.validate(string))

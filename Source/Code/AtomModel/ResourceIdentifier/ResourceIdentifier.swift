@@ -10,34 +10,23 @@ import Foundation
 
 /// A Radix resource identifier is a human readable index into the Ledger which points to a unique UP particle.
 /// On format: `/:address/:type/:unique`
-public struct ResourceIdentifier: Equatable, Codable, CustomStringConvertible {
-    private static let componentCount = 3
-    public enum Error: Swift.Error {
-        case incorrectSeparatorCount(expected: Int, butGot: Int)
-        case unexpectedLeadingPath
-        case addressPathIsEmpty
-        case typePathEmpty
-        case uniquePathEmpty
-        case badAddress(error: Address.Error)
-    }
-    
-    fileprivate static let separator = "/"
-    
+public struct ResourceIdentifier: Equatable, DsonConvertible, StringInitializable, ExpressibleByStringLiteral, Codable {
+   
     public let address: Address
-    fileprivate static let addressIndex = 1
-    fileprivate let type: ResourceType
-    fileprivate static let typeIndex = 2
+    public let type: ResourceType
     public let unique: String
-    fileprivate static let uniqueIndex = 3
     
     public init(address: Address, type: ResourceType, unique: String) {
         self.address = address
         self.type = type
         self.unique = unique
     }
-    
+}
+
+// MARK: - StringInitializable
+public extension ResourceIdentifier {
     // swiftlint:disable:next function_body_length
-    public init(string: String) throws {
+    init(string: String) throws {
         let components = string.components(separatedBy: ResourceIdentifier.separator)
         let componentCount = components.count
         guard componentCount == ResourceIdentifier.componentCount else {
@@ -64,19 +53,54 @@ public struct ResourceIdentifier: Equatable, Codable, CustomStringConvertible {
     }
 }
 
-public enum ResourceType: String, Codable, Equatable {
-    case tokenClass = "tokenclasses"
-    case unique
+// MARK: - Private
+private extension ResourceIdentifier {
+    static let componentCount = 4
+    static let separator = "/"
+    static let addressIndex = 1
+    static let typeIndex = 2
+    static let uniqueIndex = 3
+}
+
+// MARK: - Error
+public extension ResourceIdentifier {
+    public enum Error: Swift.Error {
+        case incorrectSeparatorCount(expected: Int, butGot: Int)
+        case unexpectedLeadingPath
+        case addressPathIsEmpty
+        case typePathEmpty
+        case uniquePathEmpty
+        case badAddress(error: Address.Error)
+    }
+}
+
+// MARK: - DsonConvertible
+public extension ResourceIdentifier {
+    init(from string: String) throws {
+        try self.init(string: string)
+    }
+}
+
+// MARK: - ExpressibleByStringLiteral
+public extension ResourceIdentifier {
+    init(stringLiteral value: String) {
+        do {
+            try self.init(string: value)
+        } catch {
+            fatalError("Passed non ResourceIdentifier string: `\(value)`, error: \(error)")
+        }
+    }
 }
 
 // MARK: - Public
 public extension ResourceIdentifier {
     var identifier: String {
-        var map = [Int: String]()
-        map[ResourceIdentifier.addressIndex] = address.base58String.value
-        map[ResourceIdentifier.typeIndex] = type.rawValue
-        map[ResourceIdentifier.uniqueIndex] = unique
-        return ResourceIdentifier.separator + map.values.joined(separator: ResourceIdentifier.separator)
+        return [
+            "",
+            address.base58String.value,
+            type.rawValue,
+            unique
+        ].joined(separator: ResourceIdentifier.separator)
     }
 }
 

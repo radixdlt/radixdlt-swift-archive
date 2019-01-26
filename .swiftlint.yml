@@ -25,8 +25,6 @@ type_name:
   max_length:
     warning: 45
     error:  50
-  excluded:
-    - id
 
 file_length:
   warning: 200
@@ -40,6 +38,14 @@ identifier_name:
   max_length:
     warning: 35
     error:  45
+  excluded:
+    - id
+    - to
+    - i
+    - r
+    - s
+    - x
+    - y
 
 type_body_length:
   - 75 # warning

@@ -14,8 +14,22 @@ public struct Shards: RangeExpression, Codable {
     
     private let range: Range<Bound>
     
-    public init(lower: Bound, upper: Bound) {
-        self.range = Range(uncheckedBounds: (lower: lower, upper: upper))
+    public init(range: Range<Bound>) {
+        self.range = range
+    }
+}
+
+public extension Shards {
+    public enum Error: Swift.Error {
+        case upperMustBeGreaterThanLower
+    }
+    
+    init(lower: Bound, upper: Bound) throws {
+        guard lower < upper else {
+            throw Error.upperMustBeGreaterThanLower
+        }
+        let actuallyCheckedbounds = (lower, upper)
+        self.init(range: Range(uncheckedBounds: actuallyCheckedbounds))
     }
 }
 
@@ -42,7 +56,7 @@ public extension Shards {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let lower = try container.decode(Shard.self, forKey: .low)
         let upper = try container.decode(Shard.self, forKey: .high)
-        self.init(lower: lower, upper: upper)
+        try self.init(lower: lower, upper: upper)
     }
     
     func encode(to encoder: Encoder) throws {

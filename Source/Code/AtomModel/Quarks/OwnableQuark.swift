@@ -9,8 +9,20 @@
 import Foundation
 
 public struct OwnableQuark: QuarkConvertible {
-    private let owner: PublicKey
+    public let owner: PublicKey
     public init(owner: PublicKey) {
         self.owner = owner
+    }
+}
+
+// MARK: - Codable
+public extension OwnableQuark {
+    public enum CodingKeys: CodingKey {
+        case owner
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.owner = try container.decode(Dson<PublicKey>.self, forKey: .owner).value
     }
 }

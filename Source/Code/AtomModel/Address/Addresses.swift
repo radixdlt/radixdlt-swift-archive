@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Addresses: Codable, ExpressibleByArrayLiteral, Collection {
+public struct Addresses: Equatable, Codable, ExpressibleByArrayLiteral, Collection {
     
     public typealias Element = Address
     public let addresses: [Element]
@@ -21,7 +21,8 @@ public struct Addresses: Codable, ExpressibleByArrayLiteral, Collection {
 public extension Addresses {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(addresses: try container.decode([Element].self))
+        let addresses = try container.decode([Dson<Address>].self)
+        self.init(addresses: addresses.map { $0.value })
     }
     
     func encode(to encoder: Encoder) throws {

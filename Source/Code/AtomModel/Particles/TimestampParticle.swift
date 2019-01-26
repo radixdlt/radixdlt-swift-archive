@@ -18,6 +18,6 @@ public struct TimestampParticle: ParticleConvertible {
 
 public extension TimestampParticle {
     func timestamp() -> Date? {
-        return quarkOrCrash(type: ChronoQuark.self).defaultTimestamp
+        return quark(type: ChronoQuark.self)?.defaultTimestamp
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 public typealias Magic = Int64
 
-public struct UniverseConfig: Codable, CustomStringConvertible, DSONDecodable {
+public struct UniverseConfig: Codable, CustomStringConvertible {
     public let magic: Magic
     public let port: Int64
     public let name: String

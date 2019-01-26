@@ -20,12 +20,12 @@ public final class RadixUniverse {
     private init(config: UniverseConfig, apiClient: APIClient, ledger: Ledger? = nil) throws {
         self.config = config
         self.apiClient = apiClient
-        guard let powToken = config.genesis.token(symbol: "POW", comparison: ==) else {
+        guard let powToken = try config.genesis.token(symbol: "POW", comparison: ==) else {
             throw Error.noPowToken
         }
         self.powToken = powToken
 
-        guard let nativeToken = config.genesis.token(symbol: "POW", comparison: !=) else {
+        guard let nativeToken = try config.genesis.token(symbol: "POW", comparison: !=) else {
             throw Error.noNativeToken
         }
         self.nativeToken = nativeToken

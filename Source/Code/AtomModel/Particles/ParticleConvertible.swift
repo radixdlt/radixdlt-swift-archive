@@ -17,9 +17,9 @@ public extension ParticleConvertible {
         return quarks.compactMap { $0 as? Q }.first
     }
     
-    func quarkOrCrash<Q>(type: Q.Type) -> Q where Q: QuarkConvertible {
+    func quarkOrError<Q>(type: Q.Type) throws -> Q where Q: QuarkConvertible {
         guard let quark = quark(type: Q.self) else {
-            incorrectImplementation("Should have at least one quark of type: \(Q.self)")
+            throw ParticleError.quarkNotFound
         }
         return quark
     }
@@ -30,4 +30,8 @@ public extension ParticleConvertible {
             .flatMap { $0.map { $0.publicKey } }
             .map { Set($0) } ?? Set()
     }
+}
+
+public enum ParticleError: Swift.Error {
+    case quarkNotFound
 }

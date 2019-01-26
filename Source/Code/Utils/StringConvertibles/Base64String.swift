@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Base64String: StringConvertible, DataConvertible {
+public struct Base64String: DsonConvertible, StringConvertible, DataConvertible {
     public let value: String
     
     public init(data: Data) {
