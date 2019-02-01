@@ -64,7 +64,7 @@ Which makes sure that your current user is owning that directory, therefore `bre
 
 ### 4. Install `swiftlint`
 ```bash
-brew install swiftlint`
+brew install swiftlint
 ```
 
 #### Issues?
