@@ -28,7 +28,7 @@ Install it from the [App Store](https://itunes.apple.com/gb/app/xcode/id49779983
 
 ### 1. Clone this repo
 ```bash
-git clone git@github.com:radixdlt/radixdlt-swift.git && cd radixdlt-swift`
+git clone git@github.com:radixdlt/radixdlt-swift.git && cd radixdlt-swift
 ```
 
 ### 2. Install `brew`
