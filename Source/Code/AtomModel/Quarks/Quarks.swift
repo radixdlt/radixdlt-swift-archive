@@ -58,15 +58,19 @@ public extension Quarks {
 // MARK: - Collection
 public extension Quarks {
     typealias Index = Array<Element>.Index
+    
     var startIndex: Index {
         return quarks.startIndex
     }
+    
     var endIndex: Index {
         return quarks.endIndex
     }
+    
     subscript(position: Index) -> Element {
         return quarks[position]
     }
+    
     func index(after index: Index) -> Index {
         return quarks.index(after: index)
     }

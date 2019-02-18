@@ -1,5 +1,5 @@
 //
-//  NonEmptyAtomTests.swift
+//  AtomJsonDeserializationTests.swift
 //  RadixSDKTests
 //
 //  Created by Alexander Cyon on 2019-01-22.
@@ -11,7 +11,7 @@ import XCTest
 
 @testable import RadixSDK
 
-class NonEmptyAtomTests: XCTestCase {
+class AtomJsonDeserializationTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -23,7 +23,9 @@ class NonEmptyAtomTests: XCTestCase {
             let jsonData = jsonStringThreeParticleGroups.data(using: .utf8)!
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .millisecondsSince1970
+            
             let atom = try decoder.decode(Atom.self, from: jsonData)
+            
             XCTAssertEqual(atom.particleGroups.count, 3)
             
             // GROUP 0

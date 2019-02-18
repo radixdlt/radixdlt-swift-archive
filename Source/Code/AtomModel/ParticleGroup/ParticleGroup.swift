@@ -31,15 +31,19 @@ public extension ParticleGroup {
 // MARK: - Collection
 public extension ParticleGroup {
     typealias Index = Array<Element>.Index
+    
     var startIndex: Index {
         return spunParticles.startIndex
     }
+    
     var endIndex: Index {
         return spunParticles.endIndex
     }
+    
     subscript(position: Index) -> Element {
         return spunParticles[position]
     }
+    
     func index(after index: Index) -> Index {
         return spunParticles.index(after: index)
     }

@@ -13,7 +13,7 @@ public struct SpunParticle: Codable {
     public let spin: Spin
 }
 
-// MARK: - Codable
+// MARK: - Deodable
 public extension SpunParticle {
     
     public enum CodingKeys: CodingKey {
@@ -39,6 +39,10 @@ public extension SpunParticle {
         }
         spin = try container.decode(Spin.self, forKey: .spin)
     }
+}
+
+// MARK: - Encodable
+public extension SpunParticle {
     
     // swiftlint:disable:next function_body_length
     func encode(to encoder: Encoder) throws {

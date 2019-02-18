@@ -75,9 +75,3 @@ public extension AtomConvertible {
             .asSet
     }
 }
-
-public extension Sequence where Element: Hashable {
-    var asSet: Set<Element> {
-        return Set(self)
-    }
-}

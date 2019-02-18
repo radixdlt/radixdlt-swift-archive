@@ -12,17 +12,17 @@ import XCTest
 class ResourceIdentifierTests: XCTestCase {
 
     func testResourceIdentifierEncodingAndDecoding() {
-        let manual = ResourceIdentifier(address: "JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6", type: .tokenClass, unique: "Ada")
-        let encoded = try! JSONEncoder().encode([manual])
+        let address: Address = "JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6"
+        let resourceIdentifier = ResourceIdentifier(address: address, type: .tokenClass, unique: "Ada")
+        let encoded = try! JSONEncoder().encode([resourceIdentifier])
         let decodedPlural = try! JSONDecoder().decode([ResourceIdentifier].self, from: encoded)
         let decoded = decodedPlural[0]
-        XCTAssertEqual(decoded.address, manual.address)
-        XCTAssertEqual(decoded.unique, manual.unique)
-        XCTAssertEqual(decoded.type, manual.type)
-        XCTAssertEqual(decoded.address, "JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6")
+        XCTAssertEqual(decoded.address, resourceIdentifier.address)
+        XCTAssertEqual(decoded.unique, resourceIdentifier.unique)
+        XCTAssertEqual(decoded.type, resourceIdentifier.type)
+        XCTAssertEqual(decoded.address, address)
         XCTAssertEqual(decoded.unique, "Ada")
         XCTAssertEqual(decoded.type, .tokenClass)
-        //        let dson = Dson(tag: .uri, rawValueString: decoded.identifier)
-        //        XCTAssertEqual(dson.taggedValueString, ":rri:/JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6/tokenclasses/Ada")
+        XCTAssertEqual(Dson(value: resourceIdentifier).identifer, ":rri:/\(address)/tokenclasses/Ada")
     }
 }
