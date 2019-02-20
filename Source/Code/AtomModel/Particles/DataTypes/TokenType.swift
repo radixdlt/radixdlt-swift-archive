@@ -1,5 +1,5 @@
 //
-//  FungibleType.swift
+//  TokenType.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-01-25.
@@ -9,32 +9,32 @@
 import Foundation
 
 /// Adjective version of TokenAction
-public enum FungibleType: String, StringInitializable, Hashable {
+public enum TokenType: String, StringInitializable, Hashable {
     case minted
     case transferred
     case burned
 }
 
 // MARK: - StringInitializable
-public extension FungibleType {
+public extension TokenType {
     init(string: String) throws {
-        guard let type = FungibleType(rawValue: string) else {
-            throw Error.unsupportedFungibleType(string)
+        guard let type = TokenType(rawValue: string) else {
+            throw Error.unsupportedTokenType(string)
         }
         self = type
     }
 }
 
 // MARK: CustomStringConvertible
-public extension FungibleType {
+public extension TokenType {
     var description: String {
         return rawValue
     }
 }
 
 // MARK: - Error
-public extension FungibleType {
+public extension TokenType {
     public enum Error: Swift.Error {
-        case unsupportedFungibleType(String)
+        case unsupportedTokenType(String)
     }
 }

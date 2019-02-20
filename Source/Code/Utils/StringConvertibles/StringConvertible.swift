@@ -8,12 +8,63 @@
 
 import Foundation
 
-public protocol StringConvertibleError: Swift.Error {
-    static var invalidCharactersError: Self { get }
+public enum InvalidStringError: Swift.Error {
+    case invalidCharacters(expectedCharacters: String, butGot: String)
+    case tooManyCharacters(expectedAtMost: Int, butGot: Int)
+    case tooFewCharacters(expectedAtLeast: Int, butGot: Int)
+    
 }
 
-public protocol StringConvertibleErrorOwner {
-    associatedtype Error: StringConvertibleError
+public protocol UpperBound {
+    static var maxValue: Int { get }
+}
+
+public protocol MaxLengthSpecifying: UpperBound {
+    static var maxLength: Int { get }
+}
+
+public extension MaxLengthSpecifying {
+    static var maxValue: Int {
+        return maxLength
+    }
+}
+
+public extension UpperBound {
+    var maxValue: Int {
+        return Self.maxValue
+    }
+    
+    func validateLength(of string: String) throws {
+        if string.count > maxValue {
+            throw InvalidStringError.tooManyCharacters(expectedAtMost: maxValue, butGot: string.count)
+        }
+    }
+}
+
+public protocol LowerBound {
+    static var minValue: Int { get }
+}
+
+public protocol MinLengthSpecifying: LowerBound {
+    static var minLength: Int { get }
+}
+
+public extension MinLengthSpecifying {
+    static var minValue: Int {
+        return minLength
+    }
+}
+
+public extension LowerBound {
+    var minValue: Int {
+        return Self.minValue
+    }
+    
+    func validateLength(of string: String) throws {
+        if string.count < minValue {
+            throw InvalidStringError.tooFewCharacters(expectedAtLeast: minValue, butGot: string.count)
+        }
+    }
 }
 
 public protocol StringConvertible: StringInitializable, Hashable, ExpressibleByStringLiteral {
@@ -23,7 +74,6 @@ public protocol StringConvertible: StringInitializable, Hashable, ExpressibleByS
     init(validated: String)
     
     init(string value: String) throws
-    
     static func validate(_ string: String) throws -> String
 }
 
@@ -79,13 +129,20 @@ public extension StringConvertible {
     }
 }
 
-// MARK: - Default Implementation Constrained
-extension StringConvertible where Self: CharacterSetSpecifying, Self: StringConvertibleErrorOwner {
+extension StringConvertible {
     public static func validate(_ string: String) throws -> String {
-        guard Self.allowedCharacters.isSuperset(of: CharacterSet(charactersIn: string)) else {
-            throw Error.invalidCharactersError
+        if let characterSetSpecifying = self as? CharacterSetSpecifying {
+            try characterSetSpecifying.validate(string)
         }
-        // Valid
+    
+        if let lowerBound = self as? LowerBound {
+            try lowerBound.validateLength(of: string)
+        }
+    
+        if let upperBound = self as? UpperBound {
+            try upperBound.validateLength(of: string)
+        }
+        
         return string
     }
 }

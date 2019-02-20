@@ -8,18 +8,12 @@
 
 import Foundation
 
-public struct HexString: StringConvertible, CharacterSetSpecifying, StringConvertibleErrorOwner, DataConvertible {
+public struct HexString: StringConvertible, CharacterSetSpecifying, DataConvertible {
     
-    public enum Error: StringConvertibleError {
-        public static var invalidCharactersError: Error {
-            return Error.invalidCharacters
-        }
-        
-        case invalidCharacters
-    }
     public static var allowedCharacters = CharacterSet.hexadecimal
     
     public let value: String
+    
     public init(validated unvalidated: String) {
         do {
             self.value = try HexString.validate(unvalidated)

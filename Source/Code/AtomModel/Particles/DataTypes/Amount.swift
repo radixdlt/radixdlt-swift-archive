@@ -9,6 +9,10 @@
 import Foundation
 
 public struct Amount: DsonConvertible, StringInitializable, Equatable, Codable, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
+    
+    public static let subunitsDenominatorDecimalExponent: Int = 18
+    public static let subunitsDenominator = BigUnsignedInt(10).power(Amount.subunitsDenominatorDecimalExponent)
+
     public typealias Value = BigUnsignedInt
     
     public let value: Value

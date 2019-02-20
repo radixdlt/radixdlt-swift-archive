@@ -25,7 +25,7 @@ public extension DefaultParticleStore {
             self.atomStore.atoms(for: address)
                 .map { $0.atom }.filterNil()
                 .flatMap { atom -> Observable<SpunParticle> in return Observable.from(atom.spunParticles()) }
-                .filter { $0.particle.publicKeys().contains(address.publicKey) }
+                .filter { $0.particle.keyDestinations().contains(address.publicKey) }
                 .replay(1)
         }
     }

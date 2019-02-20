@@ -11,7 +11,7 @@ import Foundation
 public struct TokenPermissions: Equatable, Codable, ExpressibleByDictionaryLiteral, Collection {
     public typealias Key = TokenAction
     public typealias Value = TokenPermission
-    public let map: [Key: Value]
+    public let values: [Key: Value]
 }
 
 // MARK: - Decodable
@@ -25,7 +25,7 @@ public extension TokenPermissions {
                 try Dson<StringDson<TokenPermission>>(string: $0.value).value.value
             )
         })
-        self.init(map: map)
+        self.init(values: map)
     }
 }
 
@@ -39,7 +39,7 @@ public extension TokenPermissions {
 // MARK: - Subscript
 public extension TokenPermissions {
     subscript(key: Key) -> Value? {
-        return map[key]
+        return values[key]
     }
 }
 
@@ -47,23 +47,27 @@ public extension TokenPermissions {
 public extension TokenPermissions {
     typealias Element = Dictionary<Key, Value>.Element
     typealias Index = Dictionary<Key, Value>.Index
+    
     var startIndex: Index {
-        return map.startIndex
+        return values.startIndex
     }
+    
     var endIndex: Index {
-        return map.endIndex
+        return values.endIndex
     }
+    
     subscript(position: Index) -> Element {
-        return map[position]
+        return values[position]
     }
+    
     func index(after index: Index) -> Index {
-        return map.index(after: index)
+        return values.index(after: index)
     }
 }
 
 // MARK: - ExpressibleByDictionaryLiteral
 public extension TokenPermissions {
     init(dictionaryLiteral permissions: (Key, Value)...) {
-        self.init(map: Dictionary(uniqueKeysWithValues: permissions))
+        self.init(values: Dictionary(uniqueKeysWithValues: permissions))
     }
 }

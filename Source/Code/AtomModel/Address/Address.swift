@@ -54,7 +54,7 @@ public extension Address {
         do {
             let base58 = try Base58String(string: string)
             try self.init(base58String: base58)
-        } catch let base58Error as Base58String.Error {
+        } catch let base58Error as InvalidStringError {
             throw Address.Error.nonBase58(error: base58Error)
         }
     }
@@ -108,7 +108,7 @@ public extension Address {
     public enum Error: Swift.Error {
         case tooLong(expected: Int, butGot: Int)
         case tooShort(expected: Int, butGot: Int)
-        case nonBase58(error: Base58String.Error)
+        case nonBase58(error: InvalidStringError)
         case checksumMismatch
     }
 }

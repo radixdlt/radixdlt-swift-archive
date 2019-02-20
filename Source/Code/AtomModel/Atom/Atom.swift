@@ -13,9 +13,11 @@ public struct Atom: AtomConvertible {
     
     public let particleGroups: ParticleGroups
     public let signatures: Signatures
+    public let metaData: MetaData
     
-    public init(particleGroups: ParticleGroups = [], signatures: Signatures = [:]) {
+    public init(particleGroups: ParticleGroups = [], signatures: Signatures = [:], metaData: MetaData = [:]) {
         self.particleGroups = particleGroups
         self.signatures = signatures
+        self.metaData = metaData
     }
 }

@@ -23,6 +23,17 @@ public struct ResourceIdentifier: Equatable, DsonConvertible, StringInitializabl
     }
 }
 
+// MARK: - Initializers
+public extension ResourceIdentifier {
+    public init(address: Address, type: ResourceType, symbol: Symbol) {
+        self.init(address: address, type: type, unique: symbol.value)
+    }
+    
+    public init(address: Address, type: ResourceType, name: Name) {
+        self.init(address: address, type: type, unique: name.value)
+    }
+}
+
 // MARK: - StringInitializable
 public extension ResourceIdentifier {
     // swiftlint:disable:next function_body_length
@@ -53,6 +64,17 @@ public extension ResourceIdentifier {
     }
 }
 
+// MARK: - ExpressibleByStringLiteral
+public extension ResourceIdentifier {
+    init(stringLiteral value: String) {
+        do {
+            try self.init(string: value)
+        } catch {
+            fatalError("Passed non ResourceIdentifier string: `\(value)`, error: \(error)")
+        }
+    }
+}
+
 // MARK: - Private
 private extension ResourceIdentifier {
     static let componentCount = 4
@@ -71,17 +93,6 @@ public extension ResourceIdentifier {
         case typePathEmpty
         case uniquePathEmpty
         case badAddress(error: Address.Error)
-    }
-}
-
-// MARK: - ExpressibleByStringLiteral
-public extension ResourceIdentifier {
-    init(stringLiteral value: String) {
-        do {
-            try self.init(string: value)
-        } catch {
-            fatalError("Passed non ResourceIdentifier string: `\(value)`, error: \(error)")
-        }
     }
 }
 

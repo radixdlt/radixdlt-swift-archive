@@ -8,15 +8,8 @@
 
 import Foundation
 
-public struct Base58String: StringConvertible, CharacterSetSpecifying, StringConvertibleErrorOwner, DataConvertible {
-    public enum Error: StringConvertibleError {
-        public static var invalidCharactersError: Error {
-            return Error.invalidCharacters
-        }
-        
-        case invalidCharacters
-    }
-    
+public struct Base58String: StringConvertible, CharacterSetSpecifying, DataConvertible {
+
     public static var allowedCharacters = CharacterSet.base58
     
     public let value: String

@@ -12,12 +12,19 @@ public struct ParticleGroup: Codable, Collection, ExpressibleByArrayLiteral {
     public typealias Element = SpunParticle
     
     public let spunParticles: [Element]
+    public let metaData: MetaData
+    
+    public init(spunParticles: [Element], metaData: MetaData = [:]) {
+        self.spunParticles = spunParticles
+        self.metaData = metaData
+    }
 }
 
 // MARK: - Codable
 public extension ParticleGroup {
     public enum CodingKeys: String, CodingKey {
         case spunParticles = "particles"
+        case metaData
     }
 }
 
