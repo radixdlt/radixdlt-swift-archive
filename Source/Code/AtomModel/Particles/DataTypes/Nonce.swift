@@ -17,3 +17,11 @@ public struct Nonce: Codable, Equatable {
     }
     
 }
+
+// MARK: - Decodable
+public extension Nonce {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        value = try container.decode(Value.self)
+    }
+}

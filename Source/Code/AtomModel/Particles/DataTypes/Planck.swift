@@ -17,3 +17,11 @@ public struct Planck: Codable, Equatable {
         value = secondsSince1970/60 + 60
     }
 }
+
+// MARK: - Decodable
+public extension Planck {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        value = try container.decode(Value.self)
+    }
+}

@@ -13,3 +13,9 @@ public extension KeyedDecodingContainer {
         return try decode(Dson<D>.self, forKey: key).value
     }
 }
+
+public extension SingleValueDecodingContainer {
+    func decodeDson<D>(_ type: D.Type) throws -> D where D: Decodable & DsonDecodable {
+        return try decode(Dson<D>.self).value
+    }
+}

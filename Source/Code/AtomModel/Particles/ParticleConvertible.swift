@@ -24,4 +24,11 @@ public extension ParticleConvertible {
         
         return addresses.map { $0.publicKey }.asSet
     }
+    
+    func `as`<P>(_ type: P.Type) -> P? where P: ParticleConvertible {
+        guard let specific = self as? P else {
+            return nil
+        }
+        return specific
+    }
 }

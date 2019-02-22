@@ -47,3 +47,12 @@ public extension TokenDefinitionIdentifier {
         return identifier.identifier
     }
 }
+
+// MARK: - Decodable
+public extension TokenDefinitionIdentifier {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rri = try container.decodeDson(ResourceIdentifier.self)
+        try self.init(identifier: rri)
+    }
+}

@@ -34,7 +34,7 @@ public extension UpperBound {
         return Self.maxValue
     }
     
-    func validateLength(of string: String) throws {
+    static func validateLength(of string: String) throws {
         if string.count > maxValue {
             throw InvalidStringError.tooManyCharacters(expectedAtMost: maxValue, butGot: string.count)
         }
@@ -60,7 +60,7 @@ public extension LowerBound {
         return Self.minValue
     }
     
-    func validateLength(of string: String) throws {
+    static func validateLength(of string: String) throws {
         if string.count < minValue {
             throw InvalidStringError.tooFewCharacters(expectedAtLeast: minValue, butGot: string.count)
         }
@@ -137,15 +137,15 @@ public extension StringConvertible {
 
 extension StringConvertible {
     public static func validate(_ string: String) throws -> String {
-        if let characterSetSpecifying = self as? CharacterSetSpecifying {
+        if let characterSetSpecifying = self as? CharacterSetSpecifying.Type {
             try characterSetSpecifying.validate(string)
         }
-    
-        if let lowerBound = self as? LowerBound {
+        
+        if let lowerBound = self as? LowerBound.Type {
             try lowerBound.validateLength(of: string)
         }
     
-        if let upperBound = self as? UpperBound {
+        if let upperBound = self as? UpperBound.Type {
             try upperBound.validateLength(of: string)
         }
         

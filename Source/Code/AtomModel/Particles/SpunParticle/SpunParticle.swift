@@ -21,7 +21,7 @@ public extension SpunParticle {
     }
     
     private enum ParticleTypeKey: String, CodingKey {
-        case type = "serializer"
+        case type
     }
     
     init(from decoder: Decoder) throws {
@@ -29,10 +29,11 @@ public extension SpunParticle {
         let particleNestedContainer = try container.nestedContainer(keyedBy: ParticleTypeKey.self, forKey: .particle)
         let particleType = try particleNestedContainer.decode(ParticleTypes.self, forKey: .type)
         switch particleType {
-        case .messageParticle: particle = try container.decode(MessageParticle.self, forKey: .particle)
-        case .tokenParticle: particle = try container.decode(TokenParticle.self, forKey: .particle)
-        case .tokenDefinitionParticle: particle = try container.decode(TokenDefinitionParticle.self, forKey: .particle)
-        case .uniqueParticle: particle = try container.decode(UniqueParticle.self, forKey: .particle)
+        case .message: particle = try container.decode(MessageParticle.self, forKey: .particle)
+        case .burnedToken, .transferredToken, .mintedToken:
+            particle = try container.decode(TokenParticle.self, forKey: .particle)
+        case .tokenDefinition: particle = try container.decode(TokenDefinitionParticle.self, forKey: .particle)
+        case .unique: particle = try container.decode(UniqueParticle.self, forKey: .particle)
         }
         spin = try container.decode(Spin.self, forKey: .spin)
     }
@@ -61,5 +62,9 @@ public extension SpunParticle {
     
     static func down(particle: ParticleConvertible) -> SpunParticle {
         return SpunParticle(particle: particle, spin: .down)
+    }
+    
+    func particle<P>(as type: P.Type) -> P? where P: ParticleConvertible {
+        return particle.as(P.self)
     }
 }

@@ -9,10 +9,29 @@
 import Foundation
 
 /// Adjective version of TokenAction
-public enum TokenType: String, StringInitializable, Hashable {
+public enum TokenType: String, StringInitializable, Hashable, Codable {
     case minted
     case transferred
     case burned
+}
+
+public extension TokenType {
+    init(from decoder: Decoder) throws {
+        var container = try decoder.unkeyedContainer()
+        let particleType = try container.decode(ParticleTypes.self)
+        try self.init(particleType: particleType)
+    }
+}
+
+internal extension TokenType {
+    init(particleType: ParticleTypes) throws {
+        switch particleType {
+        case .burnedToken: self = .burned
+        case .mintedToken: self = .minted
+        case .transferredToken: self = .transferred
+        default: throw Error.particleIsNotTokenType
+        }
+    }
 }
 
 // MARK: - StringInitializable
@@ -36,5 +55,6 @@ public extension TokenType {
 public extension TokenType {
     public enum Error: Swift.Error {
         case unsupportedTokenType(String)
+        case particleIsNotTokenType
     }
 }
