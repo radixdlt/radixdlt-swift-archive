@@ -26,7 +26,11 @@ public struct Amount: DsonDecodable, StringInitializable, Equatable, Codable, Ex
 public extension Amount {
     init(string: String) throws {
         guard let value = Value(string, radix: 10) else {
-            throw Error.failedToCreateBigInt(fromString: string)
+            if string.starts(with: "-") {
+                throw Error.cannotBeNegative
+            } else {
+                throw Error.failedToCreateBigInt(fromString: string)
+            }
         }
         self.init(value: value)
     }
@@ -68,6 +72,7 @@ public extension Amount {
 // MARK: - Error
 public extension Amount {
     public enum Error: Swift.Error {
+        case cannotBeNegative
         case failedToCreateBigInt(fromString: String)
     }
 }

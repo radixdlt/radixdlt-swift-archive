@@ -97,7 +97,7 @@ class AtomJsonDeserializationSpec: QuickSpec {
                 }
             }
             
-            describe("Scenario 4: Too long symbol name") {
+            describe("Scenario 4: Too long symbol") {
                 let badJson = """
                         {
                             "signatures": {},
@@ -144,7 +144,335 @@ class AtomJsonDeserializationSpec: QuickSpec {
                 }
             }
             
-            describe("Scenario 5: Bad int value for spin") {
+            describe("Scenario 5: Empty symbol") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "tokenDefinition",
+                                                "symbol": ":str:",
+                                                "name": ":str:BadCoin",
+                                                "description": ":str:The symbol of this coin is empty",
+                                                "metaData": {},
+                                                "granularity": ":u20:1",
+                                                "permissions": {
+                                                    "burn": ":str:none"
+                                                },
+                                                "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with empty symbol") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able to decode JSON with a TokenDefinitionParticle having a symbol with 0 characters")
+                    } catch let error as InvalidStringError {
+                        switch error {
+                        case .tooFewCharacters(let expectedAtLeast, let butGot):
+                            expect(expectedAtLeast).to(equal(1))
+                            expect(butGot).to(equal(0))
+                        default: fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 6: Symbol bad chars") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "tokenDefinition",
+                                                "symbol": ":str:",
+                                                "name": ":str:BadCoin",
+                                                "description": ":str:The symbol of this coin is empty",
+                                                "metaData": {},
+                                                "granularity": ":u20:1",
+                                                "permissions": {
+                                                    "burn": ":str:none"
+                                                },
+                                                "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with empty symbol") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able to decode JSON with a TokenDefinitionParticle having a symbol with 0 characters")
+                    } catch let error as InvalidStringError {
+                        switch error {
+                        case .tooFewCharacters(let expectedAtLeast, let butGot):
+                            expect(expectedAtLeast).to(equal(1))
+                            expect(butGot).to(equal(0))
+                        default: fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 7: Too long name") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "tokenDefinition",
+                                                "symbol": ":str:",
+                                                "name": ":str:BadCoin",
+                                                "description": ":str:The symbol of this coin is empty",
+                                                "metaData": {},
+                                                "granularity": ":u20:1",
+                                                "permissions": {
+                                                    "burn": ":str:none"
+                                                },
+                                                "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with empty symbol") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able to decode JSON with a TokenDefinitionParticle having a symbol with 0 characters")
+                    } catch let error as InvalidStringError {
+                        switch error {
+                        case .tooFewCharacters(let expectedAtLeast, let butGot):
+                            expect(expectedAtLeast).to(equal(1))
+                            expect(butGot).to(equal(0))
+                        default: fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 8: Too short name") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "tokenDefinition",
+                                                "symbol": ":str:BAD",
+                                                "name": ":str:B",
+                                                "description": ":str:The name of this coin is too short",
+                                                "metaData": {},
+                                                "granularity": ":u20:1",
+                                                "permissions": {
+                                                    "burn": ":str:none"
+                                                },
+                                                "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with a too short name") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able to decode JSON with a TokenDefinitionParticle having a name shorter than 2")
+                    } catch let error as InvalidStringError {
+                        switch error {
+                        case .tooFewCharacters(let expectedAtLeast, let butGot):
+                            expect(expectedAtLeast).to(equal(2))
+                            expect(butGot).to(equal(1))
+                        default: fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 9: Too long description") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "tokenDefinition",
+                                                "symbol": ":str:BAD",
+                                                "name": ":str:BadCoin",
+                                                "description": ":str:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit metus sit amet nulla facilisis condimentum. Nullam at risus ante. Praesent tortor nisl, volutpat eget magna quis, fermentum. 12345!",
+                                                "metaData": {},
+                                                "granularity": ":u20:1",
+                                                "permissions": {
+                                                    "burn": ":str:none"
+                                                },
+                                                "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with a too long description") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able to decode JSON with a TokenDefinitionParticle having a description longer than 200 chars")
+                    } catch let error as InvalidStringError {
+                        switch error {
+                        case .tooManyCharacters(let expectedAtMost, let butGot):
+                            expect(expectedAtMost).to(equal(200))
+                            expect(butGot).to(equal(201))
+                        default: fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 10: Too short description") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "tokenDefinition",
+                                                "symbol": ":str:BAD",
+                                                "name": ":str:BadCoin",
+                                                "description": ":str:1234567",
+                                                "metaData": {},
+                                                "granularity": ":u20:1",
+                                                "permissions": {
+                                                    "burn": ":str:none"
+                                                },
+                                                "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with a too short description") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able to decode JSON with a TokenDefinitionParticle having a description with 7 characters")
+                    } catch let error as InvalidStringError {
+                        switch error {
+                        case .tooFewCharacters(let expectedAtLeast, let butGot):
+                            expect(expectedAtLeast).to(equal(8))
+                            expect(butGot).to(equal(7))
+                        default: fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 11: Bad permissions") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "tokenDefinition",
+                                                "symbol": ":str:BAD",
+                                                "name": ":str:BadCoin",
+                                                "description": ":str:The symbol of this coin is empty",
+                                                "metaData": {},
+                                                "granularity": ":u20:1",
+                                                "permissions": {
+                                                    "burn": ":str:foobar"
+                                                },
+                                                "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with a foobar permission") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able to decode JSON with a TokenDefinitionParticle with a foobar permission")
+                    } catch let error as TokenPermission.Error {
+                        if case .unsupportedPermission(let name) = error {
+                            expect(name).to(be("foobar"))
+                        } else {
+                            fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 12: Bad int value for spin") {
                 let badJson = """
                         {
                             "signatures": {},
@@ -179,6 +507,134 @@ class AtomJsonDeserializationSpec: QuickSpec {
                         switch error {
                         case .dataCorrupted(let context):
                             expect(context.debugDescription).to(contain("Cannot initialize Spin from invalid Int value 2"))
+                        default: fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 13: negative amount") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "mintedToken",
+                                                "owner": ":byt:A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
+                                                "receiver": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                                                "nonce": 992284943125945,
+                                                "planck": 24805440,
+                                                "amount": ":u20:-1",
+                                                "token_reference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with a MintedTokenParticle with negative amount") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able create Atom with invalid JSON")
+                    } catch let error as Amount.Error  {
+                        switch error {
+                        case .cannotBeNegative: break
+                        default: fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 14: negative planck") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "mintedToken",
+                                                "owner": ":byt:A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
+                                                "receiver": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                                                "nonce": 992284943125945,
+                                                "planck": -1,
+                                                "amount": ":u20:1000000000000000000000000000",
+                                                "token_reference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with a MintedTokenParticle with negative planck") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able create Atom with invalid JSON")
+                    } catch let error as DecodingError {
+                        switch error {
+                        case .dataCorrupted(let context):
+                            expect(context.debugDescription).to(contain("Parsed JSON number <-1> does not fit in UInt64."))
+                        default: fail("wrong error")
+                        }
+                    } catch {
+                        fail("Wrong error type, got: \(error)")
+                    }
+                }
+            }
+            
+            describe("Scenario 15: bad RadixResourceIdentifier") {
+                let badJson = """
+                        {
+                            "signatures": {},
+                            "metaData": {},
+                            "particleGroups": [
+                                {
+                                    "particles": [
+                                        {
+                                            "spin": 1,
+                                            "particle": {
+                                                "type": "mintedToken",
+                                                "owner": ":byt:A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
+                                                "receiver": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                                                "nonce": 992284943125945,
+                                                "planck": 24805440,
+                                                "amount": ":u20:1000000000000000000000000000",
+                                                "token_reference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/foobar/XRD"
+                                            }
+                                        }
+                                    ],
+                                    "metaData": {}
+                                }
+                            ]
+                        }
+                        """.data(using: .utf8)!
+                
+                it("should fail to deserialize JSON with a MintedTokenParticle with") {
+                    do {
+                        _ = try JSONDecoder().decode(Atom.self, from: badJson)
+                        fail("Should not be able create Atom with invalid JSON")
+                    } catch let error as ResourceIdentifier.Error {
+                        switch error {
+                        case .unsupportedResourceType(let got):
+                            expect(got).to(equal("foobar"))
                         default: fail("wrong error")
                         }
                     } catch {

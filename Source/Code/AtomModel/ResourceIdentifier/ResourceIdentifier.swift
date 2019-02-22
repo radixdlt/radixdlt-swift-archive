@@ -49,9 +49,12 @@ public extension ResourceIdentifier {
         guard case let addressPath = components[ResourceIdentifier.addressIndex], !addressPath.isEmpty else {
             throw Error.addressPathIsEmpty
         }
-        guard case let typePath = components[ResourceIdentifier.typeIndex], let type = ResourceType(rawValue: typePath) else {
-            throw Error.typePathEmpty
+
+        let typePath = components[ResourceIdentifier.typeIndex]
+        guard let type = ResourceType(rawValue: typePath) else {
+            throw Error.unsupportedResourceType(got: typePath)
         }
+        
         guard case let uniquePath = components[ResourceIdentifier.uniqueIndex], !uniquePath.isEmpty else {
             throw Error.uniquePathEmpty
         }
@@ -98,8 +101,8 @@ public extension ResourceIdentifier {
         case incorrectSeparatorCount(expected: Int, butGot: Int)
         case unexpectedLeadingPath
         case addressPathIsEmpty
-        case typePathEmpty
         case uniquePathEmpty
+        case unsupportedResourceType(got: String)
         case badAddress(error: Address.Error)
     }
 }
