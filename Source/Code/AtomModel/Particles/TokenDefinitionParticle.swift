@@ -13,7 +13,7 @@ public struct TokenDefinitionParticle: ParticleConvertible, Identifiable {
     public let symbol: Symbol
     public let name: Name
     public let description: Description
-    public let creator: Address
+    public let address: Address
     public let metaData: MetaData
     public let granularity: Granularity
     public let permissions: TokenPermissions
@@ -23,14 +23,14 @@ public struct TokenDefinitionParticle: ParticleConvertible, Identifiable {
 // MARK: - Identifiable
 public extension TokenDefinitionParticle {
     var identifier: ResourceIdentifier {
-        return ResourceIdentifier(address: creator, type: .tokens, symbol: symbol)
+        return ResourceIdentifier(address: address, type: .tokens, symbol: symbol)
     }
 }
 
 // MARK: - Codable
 public extension TokenDefinitionParticle {
     public enum CodingKeys: CodingKey {
-        case symbol, name, description, creator, metaData, granularity, permissions
+        case symbol, name, description, address, metaData, granularity, permissions
     }
 }
 
@@ -42,9 +42,9 @@ public extension TokenDefinitionParticle {
         symbol = try container.decode(Symbol.self, forKey: .symbol)
         name = try container.decode(Name.self, forKey: .name)
         description = try container.decode(Description.self, forKey: .description)
-        creator = try container.decode(Address.self, forKey: .creator)
+        address = try container.decode(Address.self, forKey: .address)
         metaData = try container.decode(MetaData.self, forKey: .metaData)
-        granularity = try container.decode(Dson<Granularity>.self, forKey: .granularity).value
+        granularity = try container.decode(Granularity.self, forKey: .granularity)
         permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
     }
 }

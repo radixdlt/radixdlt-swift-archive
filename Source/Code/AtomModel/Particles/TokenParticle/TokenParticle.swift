@@ -26,3 +26,31 @@ public extension TokenParticle {
         return tokenDefinitionIdentifier.identifier
     }
 }
+
+// MARK: Decodable
+public extension TokenParticle {
+    public enum CodingKeys: String, CodingKey {
+        case tokenDefinitionIdentifier = "token_reference"
+        case owner, receiver, nonce, planck, amount
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        type = .burned // TODO read value from outer JSON
+
+        owner = try container.decode(PublicKey.self, forKey: .owner)
+        receiver = try container.decode(Address.self, forKey: .receiver)
+        nonce = try container.decode(Nonce.self, forKey: .nonce)
+        planck = try container.decode(Planck.self, forKey: .planck)
+        amount = try container.decode(Amount.self, forKey: .amount)
+        tokenDefinitionIdentifier = try container.decode(TokenDefinitionIdentifier.self, forKey: .tokenDefinitionIdentifier)
+    }
+}
+
+// MARK: Encodable
+public extension TokenParticle {
+    func encode(to encoder: Encoder) throws {
+        implementMe
+    }
+}

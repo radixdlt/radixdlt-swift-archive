@@ -38,6 +38,13 @@ public extension Signatures {
     }
 }
 
+// MARK: - Subscript
+public extension Signatures {
+    subscript(key: Key) -> Value? {
+        return values[key]
+    }
+}
+
 // MARK: - ExpressibleByDictionaryLiteral
 public extension Signatures {
     init(dictionaryLiteral signatures: (Key, Value)...) {

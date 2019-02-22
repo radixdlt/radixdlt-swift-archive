@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Amount: DsonConvertible, StringInitializable, Equatable, Codable, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
+public struct Amount: DsonDecodable, StringInitializable, Equatable, Codable, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
     
     public static let subunitsDenominatorDecimalExponent: Int = 18
     public static let subunitsDenominator = BigUnsignedInt(10).power(Amount.subunitsDenominatorDecimalExponent)
@@ -32,7 +32,7 @@ public extension Amount {
     }
 }
 
-// MARK: - DsonConvertible
+// MARK: - DsonDecodable
 public extension Amount {
     static let tag = DsonTag.uint256DecimalString
     init(from string: String) throws {

@@ -10,7 +10,7 @@ import Foundation
 
 /// A Radix resource identifier is a human readable index into the Ledger which points to a unique UP particle.
 /// On format: `/:address/:type/:unique`
-public struct ResourceIdentifier: Equatable, DsonConvertible, StringInitializable, ExpressibleByStringLiteral, Codable {
+public struct ResourceIdentifier: Equatable, DsonDecodable, StringInitializable, ExpressibleByStringLiteral, Codable {
    
     public let address: Address
     public let type: ResourceType
@@ -75,6 +75,14 @@ public extension ResourceIdentifier {
     }
 }
 
+//// MARK: - Encodable
+//public extension ResourceIdentifier {
+//    func encode(to encoder: Encoder) throws {
+//        var container = encoder.unkeyedContainer()
+//        try container.encode(Dson<String>(value: identifier))
+//    }
+//}
+
 // MARK: - Private
 private extension ResourceIdentifier {
     static let componentCount = 4
@@ -96,7 +104,7 @@ public extension ResourceIdentifier {
     }
 }
 
-// MARK: - DsonConvertible
+// MARK: - DsonDecodable
 public extension ResourceIdentifier {
     static let tag: DsonTag = .uri
     init(from string: String) throws {

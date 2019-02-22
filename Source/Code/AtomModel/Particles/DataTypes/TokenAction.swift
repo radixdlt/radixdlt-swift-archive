@@ -25,7 +25,7 @@ public extension TokenAction {
     }
 }
 
-// MARK: DsonConvertible
+// MARK: DsonDecodable
 public extension TokenAction {
     static let tag: DsonTag = .string
     init(from string: String) throws {

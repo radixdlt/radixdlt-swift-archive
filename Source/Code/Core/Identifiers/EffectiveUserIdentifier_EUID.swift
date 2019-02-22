@@ -9,7 +9,7 @@
 import Foundation
 
 /// EffectiveUserIdentifier
-public struct EUID: DsonConvertible, StringInitializable, Hashable, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral {
+public struct EUID: DsonDecodable, StringInitializable, Hashable, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral {
     
     public typealias Value = BigUnsignedInt
     public static let byteCount = 16
@@ -94,7 +94,7 @@ public extension EUID {
     }
 }
 
-// MARK: - DsonConvertible
+// MARK: - DsonDecodable
 public extension EUID {
     static let tag: DsonTag = .euidHex
     init(from: HexString) throws {

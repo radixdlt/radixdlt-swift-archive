@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PublicKey: StringInitializable, Hashable, DsonConvertible, DataConvertible, ExpressibleByStringLiteral {
+public struct PublicKey: StringInitializable, Hashable, DsonDecodable, DataConvertible, ExpressibleByStringLiteral {
     public let data: Data
     public init(data: Data) {
         self.data = data
@@ -45,7 +45,7 @@ public extension PublicKey {
     }
 }
 
-// MARK: - DsonConvertible
+// MARK: - DsonDecodable
 public extension PublicKey {
     static let tag = DsonTag.bytesBase64
     init(from: Base64String) throws {

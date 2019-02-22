@@ -29,10 +29,9 @@ public extension SpunParticle {
         let particleNestedContainer = try container.nestedContainer(keyedBy: ParticleTypeKey.self, forKey: .particle)
         let particleType = try particleNestedContainer.decode(ParticleTypes.self, forKey: .type)
         switch particleType {
-        case .feeParticle: fatalError("Fee Particle has been removed until Java library has been updated")
         case .messageParticle: particle = try container.decode(MessageParticle.self, forKey: .particle)
-        case .ownedTokensParticle: fatalError("OwnedTokensParticle removed until Java library has been updated")
         case .tokenParticle: particle = try container.decode(TokenParticle.self, forKey: .particle)
+        case .tokenDefinitionParticle: particle = try container.decode(TokenDefinitionParticle.self, forKey: .particle)
         case .uniqueParticle: particle = try container.decode(UniqueParticle.self, forKey: .particle)
         }
         spin = try container.decode(Spin.self, forKey: .spin)

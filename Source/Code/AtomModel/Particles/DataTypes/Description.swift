@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Description: StringConvertible, MinLengthSpecifying, MaxLengthSpecifying {
+public struct Description: DsonDecodable, StringConvertible, MinLengthSpecifying, MaxLengthSpecifying {
     
     public static let minLength = 8
     public static let maxLength = 200

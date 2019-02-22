@@ -77,6 +77,12 @@ public protocol StringConvertible: StringInitializable, Hashable, ExpressibleByS
     static func validate(_ string: String) throws -> String
 }
 
+public extension DsonDecodable where Self: StringConvertible {
+    public static var tag: DsonTag {
+        return .string
+    }
+}
+
 // MARK: - Decodable
 public extension StringConvertible {
     init(from decoder: Decoder) throws {

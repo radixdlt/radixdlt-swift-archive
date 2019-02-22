@@ -8,12 +8,21 @@
 
 import Foundation
 
-public struct Dson<Value: DsonConvertible>: Codable {
+// TODO change `Value: DsonDecodable` to `Value: DsonCodable` when we have support for Encoding
+public struct Dson<Value: DsonDecodable>: Decodable {
     public let value: Value
     public init(value: Value) {
         self.value = value
     }
 }
+
+// MARK: - Encodable // TODO 
+//public extension Dson {
+//    func encode(to encoder: Encoder) throws {
+//        var container = encoder.singleValueContainer()
+//        try container.encode(identifer)
+//    }
+//}
 
 extension Dson: Hashable where Value: Hashable {}
 extension Dson: Equatable where Value: Equatable {}
@@ -63,17 +72,14 @@ public extension Dson {
     }
 }
 
-// MARK: - Encodable
-public extension Dson {
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(identifer)
-    }
-}
-
 // MARK: - CustomStringConvertible
 public extension Dson {
     var description: String {
+        print(identifer)
         return identifer
     }
+}
+
+func dsonToString(from string: String) throws -> String {
+    return try Dson<StringDson<String>>(string: string).value.value
 }
