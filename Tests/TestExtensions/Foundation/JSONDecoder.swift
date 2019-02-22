@@ -9,12 +9,18 @@
 import Foundation
 @testable import RadixSDK
 
+@discardableResult
 func model<D>(from jsonString: String) -> D where D: Decodable {
-    let json = jsonString.data(using: .utf8)!
     do {
-        return try JSONDecoder().decode(D.self, from: json)
+        return try decode(D.self, from: jsonString)
     } catch {
         print(error)
         incorrectImplementation("error: \(error)")
     }
+}
+
+@discardableResult
+func decode<D>(_ type: D.Type, from jsonString: String) throws -> D where D: Decodable {
+    let json = jsonString.data(using: .utf8)!
+    return try JSONDecoder().decode(D.self, from: json)
 }

@@ -9,7 +9,7 @@
 import Foundation
 
 public enum InvalidStringError: Swift.Error {
-    case invalidCharacters(expectedCharacters: String, butGot: String)
+    case invalidCharacters(expectedCharacters: CharacterSet, butGot: String)
     case tooManyCharacters(expectedAtMost: Int, butGot: Int)
     case tooFewCharacters(expectedAtLeast: Int, butGot: Int)
     

@@ -22,16 +22,19 @@ public extension CharacterSetSpecifying {
     }
     
     static func disallowedCharacters(in string: String) -> String? {
-        let disallowed = CharacterSet(charactersIn: string).subtracting(allowedCharacters)
-        guard !disallowed.isEmpty else {
-            return nil
+        for char in string {
+            for unicodeScalar in char.unicodeScalars {
+                guard allowedCharacters.contains(unicodeScalar) else {
+                    return String(unicodeScalar)
+                }
+            }
         }
-        return disallowed.description
+        return nil
     }
     
     static func validate(_ string: String) throws {
         if let disallowed = disallowedCharacters(in: string) {
-            throw InvalidStringError.invalidCharacters(expectedCharacters: allowedCharacters.description, butGot: disallowed)
+            throw InvalidStringError.invalidCharacters(expectedCharacters: allowedCharacters, butGot: disallowed)
         }
     }
 }

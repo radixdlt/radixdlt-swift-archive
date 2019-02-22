@@ -31,14 +31,13 @@ public extension TokenParticle {
 public extension TokenParticle {
     public enum CodingKeys: String, CodingKey {
         case tokenDefinitionIdentifier = "token_reference"
-        case owner, receiver, nonce, planck, amount
+        case type, owner, receiver, nonce, planck, amount
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        type = .burned // TODO read value from outer JSON
-
+        type = try container.decode(TokenType.self, forKey: .type)
         owner = try container.decode(PublicKey.self, forKey: .owner)
         receiver = try container.decode(Address.self, forKey: .receiver)
         nonce = try container.decode(Nonce.self, forKey: .nonce)

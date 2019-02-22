@@ -12,7 +12,7 @@ public struct Symbol: DsonDecodable, StringConvertible, CharacterSetSpecifying, 
     
     public static let minLength = 1
     public static let maxLength = 16
-    public static let allowedCharacters = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+    public static let allowedCharacters = CharacterSet.numbersAndUppercaseAtoZ
     
     public let value: String
     

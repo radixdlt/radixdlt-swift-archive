@@ -17,7 +17,7 @@ public enum TokenType: String, StringInitializable, Hashable, Codable {
 
 public extension TokenType {
     init(from decoder: Decoder) throws {
-        var container = try decoder.unkeyedContainer()
+        let container = try decoder.singleValueContainer()
         let particleType = try container.decode(ParticleTypes.self)
         try self.init(particleType: particleType)
     }
