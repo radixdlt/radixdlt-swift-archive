@@ -9,7 +9,7 @@
 import Foundation
 
 /// Java `TokenClassReference`
-public struct TokenDefinitionIdentifier: Identifiable, CustomStringConvertible, Codable, Hashable {
+public struct TokenDefinitionIdentifier: Identifiable, CustomStringConvertible, Codable, Hashable, ExpressibleByStringLiteral {
     
     public let address: Address
     public let symbol: Symbol
@@ -17,6 +17,18 @@ public struct TokenDefinitionIdentifier: Identifiable, CustomStringConvertible, 
     public init(address: Address, symbol: Symbol) {
         self.address = address
         self.symbol = symbol
+    }
+}
+
+// MARK: - ExpressibleByStringLiteral
+public extension TokenDefinitionIdentifier {
+    init(stringLiteral value: String) {
+        do {
+            let identifier = try ResourceIdentifier(from: value)
+            try self.init(identifier: identifier)
+        } catch {
+            fatalError("Invalid ResourceIdentifier, error: \(error)")
+        }
     }
 }
 

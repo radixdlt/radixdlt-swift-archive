@@ -8,14 +8,20 @@
 
 import Foundation
 
-public struct Nonce: Codable, Equatable {
+public struct Nonce: Codable, Equatable, ExpressibleByIntegerLiteral {
     public typealias Value = Int64
     public let value: Value
     
     public init() {
         value = Int64.random(in: Value.min...Value.max)
     }
-    
+}
+
+// MARK: - ExpressibleByIntegerLiteral
+public extension Nonce {
+    init(integerLiteral value: Value) {
+        self.value = value
+    }
 }
 
 // MARK: - Decodable

@@ -72,8 +72,6 @@ public protocol StringConvertible: StringInitializable, Hashable, ExpressibleByS
     
     /// Calling this with an invalid String will result in runtime crash.
     init(validated: String)
-    
-    init(string value: String) throws
     static func validate(_ string: String) throws -> String
 }
 

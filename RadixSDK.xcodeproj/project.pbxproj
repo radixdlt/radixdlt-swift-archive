@@ -58,7 +58,7 @@
 		E6A4AB9A221D508D006C5CA8 /* Nonce.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB99221D508D006C5CA8 /* Nonce.swift */; };
 		E6A4AB9C221D5098006C5CA8 /* Planck.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB9B221D5098006C5CA8 /* Planck.swift */; };
 		E6A4AB9E221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB9D221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift */; };
-		E6A4ABA1221D592C006C5CA8 /* TokenParticle+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABA0221D592C006C5CA8 /* TokenParticle+Sequence.swift */; };
+		E6A4ABA1221D592C006C5CA8 /* Fungible+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABA0221D592C006C5CA8 /* Fungible+Sequence.swift */; };
 		E6A4ABBB221EA120006C5CA8 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A4ABB9221EA120006C5CA8 /* Nimble.framework */; };
 		E6A4ABBC221EA120006C5CA8 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A4ABBA221EA120006C5CA8 /* Quick.framework */; };
 		E6A4ABC0221EBAB1006C5CA8 /* QuickSpec_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABBF221EBAB1006C5CA8 /* QuickSpec_Extension.swift */; };
@@ -231,7 +231,7 @@
 		E6A4AB99221D508D006C5CA8 /* Nonce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nonce.swift; sourceTree = "<group>"; };
 		E6A4AB9B221D5098006C5CA8 /* Planck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planck.swift; sourceTree = "<group>"; };
 		E6A4AB9D221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDefinitionIdentifier.swift; sourceTree = "<group>"; };
-		E6A4ABA0221D592C006C5CA8 /* TokenParticle+Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TokenParticle+Sequence.swift"; sourceTree = "<group>"; };
+		E6A4ABA0221D592C006C5CA8 /* Fungible+Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Fungible+Sequence.swift"; sourceTree = "<group>"; };
 		E6A4ABB9221EA120006C5CA8 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		E6A4ABBA221EA120006C5CA8 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		E6A4ABBF221EBAB1006C5CA8 /* QuickSpec_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSpec_Extension.swift; sourceTree = "<group>"; };
@@ -689,7 +689,7 @@
 			children = (
 				E6A4AB7B221BF7B3006C5CA8 /* Accountable.swift */,
 				E6A4AB83221BFCF4006C5CA8 /* Ownable.swift */,
-				E6A4AB85221BFCFC006C5CA8 /* Fungible.swift */,
+				E6A4ABFE2224286F006C5CA8 /* Fungible */,
 				E6A4AB7D221BF7C0006C5CA8 /* Identifiable.swift */,
 				E6A4AB87221BFD2C006C5CA8 /* Chronological.swift */,
 			);
@@ -716,7 +716,6 @@
 			isa = PBXGroup;
 			children = (
 				E6ED1A4621F892B600654105 /* TokenParticle.swift */,
-				E6A4ABA0221D592C006C5CA8 /* TokenParticle+Sequence.swift */,
 			);
 			path = TokenParticle;
 			sourceTree = "<group>";
@@ -801,6 +800,15 @@
 				E6A4ABF322207E12006C5CA8 /* AtomJsonDeserializationMintedTokenBadValuesSpec.swift */,
 			);
 			path = MintedTokenParticleBadValues;
+			sourceTree = "<group>";
+		};
+		E6A4ABFE2224286F006C5CA8 /* Fungible */ = {
+			isa = PBXGroup;
+			children = (
+				E6A4ABA0221D592C006C5CA8 /* Fungible+Sequence.swift */,
+				E6A4AB85221BFCFC006C5CA8 /* Fungible.swift */,
+			);
+			path = Fungible;
 			sourceTree = "<group>";
 		};
 		E6CEE70921F5AE5300D745EC /* Convenience */ = {
@@ -1364,7 +1372,7 @@
 				E6ED1A8321F8E95100654105 /* DefaultAPIClient.swift in Sources */,
 				E6CEE77321F7A65F00D745EC /* RadixHashable.swift in Sources */,
 				E6CEE76921F7A59700D745EC /* EffectiveUserIdentifier_EUID.swift in Sources */,
-				E6A4ABA1221D592C006C5CA8 /* TokenParticle+Sequence.swift in Sources */,
+				E6A4ABA1221D592C006C5CA8 /* Fungible+Sequence.swift in Sources */,
 				E6ED1A5121F8E54900654105 /* AtomPuller.swift in Sources */,
 				E6CEE70721F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift in Sources */,
 				E6A4ABCA221EEE71006C5CA8 /* JSONDecoder+PrefixedJson.swift in Sources */,
