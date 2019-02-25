@@ -30,7 +30,7 @@ public extension MetaData {
         let map = try [Key: Value](uniqueKeysWithValues: stringMap.map {
             (
                 Key($0.key),
-                try dsonToString(from: $0.value)
+                try prefixedJsonToString(from: $0.value)
             )
         })
         self.init(values: map)

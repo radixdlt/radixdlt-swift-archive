@@ -1,5 +1,5 @@
 //
-//  Dson.swift
+//  PrefixedJson.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-01-25.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-// TODO change `Value: DsonDecodable` to `Value: DsonCodable` when we have support for Encoding
-public struct Dson<Value: DsonDecodable>: Decodable {
+// TODO change `Value: PrefixedJsonDecodable` to `Value: DsonCodable` when we have support for Encoding
+public struct PrefixedJson<Value: PrefixedJsonDecodable>: Decodable {
     public let value: Value
     public init(value: Value) {
         self.value = value
@@ -17,18 +17,18 @@ public struct Dson<Value: DsonDecodable>: Decodable {
 }
 
 // MARK: - Encodable // TODO 
-//public extension Dson {
+//public extension PrefixedJson {
 //    func encode(to encoder: Encoder) throws {
 //        var container = encoder.singleValueContainer()
 //        try container.encode(identifer)
 //    }
 //}
 
-extension Dson: Hashable where Value: Hashable {}
-extension Dson: Equatable where Value: Equatable {}
+extension PrefixedJson: Hashable where Value: Hashable {}
+extension PrefixedJson: Equatable where Value: Equatable {}
 
 // MARK: - Decodable
-public extension Dson {
+public extension PrefixedJson {
     
     init(from: Value.From) throws {
         try self.init(value: Value(from: from))
@@ -51,7 +51,7 @@ public extension Dson {
 }
 
 // MARK: - Error
-public extension Dson {
+public extension PrefixedJson {
     public enum Error: Swift.Error {
         case noSeparator
         case singleSeparator
@@ -59,12 +59,12 @@ public extension Dson {
         case noTagFound
         case noValueFound
         case valueMismatch
-        case tagMismatch(expected: DsonTag, butGot: DsonTag)
+        case tagMismatch(expected: JSONPrefix, butGot: JSONPrefix)
     }
 }
 
 // MARK: - Decodable
-public extension Dson {
+public extension PrefixedJson {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawString = try container.decode(String.self)
@@ -73,13 +73,13 @@ public extension Dson {
 }
 
 // MARK: - CustomStringConvertible
-public extension Dson {
+public extension PrefixedJson {
     var description: String {
         print(identifer)
         return identifer
     }
 }
 
-func dsonToString(from string: String) throws -> String {
-    return try Dson<StringDson<String>>(string: string).value.value
+func prefixedJsonToString(from string: String) throws -> String {
+    return try PrefixedJson<StringPrefixedJson<String>>(string: string).value.value
 }

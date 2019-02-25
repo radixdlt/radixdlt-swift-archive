@@ -52,7 +52,7 @@ public extension TokenDefinitionIdentifier {
 public extension TokenDefinitionIdentifier {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let rri = try container.decodeDson(ResourceIdentifier.self)
+        let rri = try container.decodePrefixed(ResourceIdentifier.self)
         try self.init(identifier: rri)
     }
 }

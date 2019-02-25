@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Symbol: DsonDecodable, StringConvertible, CharacterSetSpecifying, MinLengthSpecifying, MaxLengthSpecifying {
+public struct Symbol: PrefixedJsonDecodable, StringConvertible, CharacterSetSpecifying, MinLengthSpecifying, MaxLengthSpecifying {
     
     public static let minLength = 1
     public static let maxLength = 16

@@ -25,9 +25,9 @@ public extension TokenAction {
     }
 }
 
-// MARK: DsonDecodable
+// MARK: PrefixedJsonDecodable
 public extension TokenAction {
-    static let tag: DsonTag = .string
+    static let tag: JSONPrefix = .string
     init(from string: String) throws {
         try self.init(string: string)
     }

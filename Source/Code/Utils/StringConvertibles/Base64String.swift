@@ -8,8 +8,8 @@
 
 import Foundation
 
-public struct Base64String: DsonDecodable, StringConvertible, DataConvertible {
-    public static let tag: DsonTag = .bytesBase64
+public struct Base64String: PrefixedJsonDecodable, StringConvertible, DataConvertible {
+    public static let tag: JSONPrefix = .bytesBase64
     
     public let value: String
     

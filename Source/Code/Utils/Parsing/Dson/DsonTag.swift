@@ -1,5 +1,5 @@
 //
-//  DsonTag.swift
+//  JSONPrefix.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-01-25.
@@ -9,7 +9,7 @@
 import Foundation
 
 extension String: StringInitializable {
-    public static var dsonTag: DsonTag {
+    public static var JSONPrefix: JSONPrefix {
         return .string
     }
     
@@ -19,7 +19,7 @@ extension String: StringInitializable {
 }
 
 /// https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding+new
-public enum DsonTag: String, CaseIterable {
+public enum JSONPrefix: String, CaseIterable {
     case string = "str"
     case addressBase58 = "adr"
     case uri = "rri"
@@ -29,7 +29,7 @@ public enum DsonTag: String, CaseIterable {
     case euidHex = "uid"
 }
 
-public extension DsonTag {
+public extension JSONPrefix {
     var identifier: String {
         let separator = ":"
         return [

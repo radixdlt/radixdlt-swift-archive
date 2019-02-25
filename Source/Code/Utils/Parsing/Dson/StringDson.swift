@@ -1,5 +1,5 @@
 //
-//  StringDson.swift
+//  StringPrefixedJson.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-02-20.
@@ -8,20 +8,20 @@
 
 import Foundation
 
-public struct StringDson<Value: StringInitializable>: DsonDecodable {
+public struct StringPrefixedJson<Value: StringInitializable>: PrefixedJsonDecodable {
     public let value: Value
 }
 
-// MARK: DsonDecodable
-public extension DsonDecodable where Self: StringInitializable, Self.From == String {
+// MARK: PrefixedJsonDecodable
+public extension PrefixedJsonDecodable where Self: StringInitializable, Self.From == String {
     init(from string: String) throws {
         try self.init(string: string)
     }
 }
 
-// MARK: DsonDecodable
-public extension StringDson {
-    static var tag: DsonTag {
+// MARK: PrefixedJsonDecodable
+public extension StringPrefixedJson {
+    static var tag: JSONPrefix {
         return .string
     }
     init(from string: String) throws {

@@ -19,7 +19,7 @@ class ResourceIdentifierTests: XCTestCase {
 //        let jsonString = String(data: encoded, encoding: .utf8)!
 //
 //        XCTAssertEqual(jsonString, "[\(resourceIdentifier.identifier)]")
-//        let decodedPlural: [ResourceIdentifier] = try! JSONDecoder().decodeDson([ResourceIdentifier].self, from: encoded)
+//        let decodedPlural: [ResourceIdentifier] = try! JSONDecoder().decodePrefixed([ResourceIdentifier].self, from: encoded)
 //        let decoded = decodedPlural[0]
 //        XCTAssertEqual(decoded.address, resourceIdentifier.address)
 //        XCTAssertEqual(decoded.unique, resourceIdentifier.unique)
@@ -27,6 +27,6 @@ class ResourceIdentifierTests: XCTestCase {
 //        XCTAssertEqual(decoded.address, address)
 //        XCTAssertEqual(decoded.unique, "Ada")
 //        XCTAssertEqual(decoded.type, .tokens)
-//        XCTAssertEqual(Dson(value: resourceIdentifier).identifer, ":rri:/\(address)/tokens/Ada")
+//        XCTAssertEqual(PrefixedJson(value: resourceIdentifier).identifer, ":rri:/\(address)/tokens/Ada")
 //    }
 }

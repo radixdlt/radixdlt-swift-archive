@@ -1,5 +1,5 @@
 //
-//  DsonDecodable.swift
+//  PrefixedJsonDecodable.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-01-25.
@@ -8,29 +8,29 @@
 
 import Foundation
 
-public protocol DsonDecodable: CustomStringConvertible, Decodable {
-    static var tag: DsonTag { get }
+public protocol PrefixedJsonDecodable: CustomStringConvertible, Decodable {
+    static var tag: JSONPrefix { get }
     associatedtype From: StringInitializable
     init(from: From) throws
 }
 
-extension String: DsonDecodable {
-    public static var tag: DsonTag { return .string }
+extension String: PrefixedJsonDecodable {
+    public static var tag: JSONPrefix { return .string }
     public init(from: String) throws {
         self = from
     }
 }
 
-public protocol DsonEncodable: Encodable {
-//    static var tag: DsonTag { get }
+public protocol PrefixedJsonEncodable: Encodable {
+//    static var tag: JSONPrefix { get }
 //    var stringToDecode: String { get }
 }
 
-public typealias DsonCodable = DsonDecodable & DsonEncodable
+public typealias DsonCodable = PrefixedJsonDecodable & PrefixedJsonEncodable
 
-//public extension DsonEncodable {
+//public extension PrefixedJsonEncodable {
 //    func encode(to encoder: Encoder) throws {
 //        var container = encoder.singleValueContainer()
-//        try container.encode(Dson(value: ))
+//        try container.encode(PrefixedJson(value: ))
 //    }
 //}

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Amount: DsonDecodable, StringInitializable, Equatable, Codable, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
+public struct Amount: PrefixedJsonDecodable, StringInitializable, Equatable, Codable, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
     
     public static let subunitsDenominatorDecimalExponent: Int = 18
     public static let subunitsDenominator = BigUnsignedInt(10).power(Amount.subunitsDenominatorDecimalExponent)
@@ -36,9 +36,9 @@ public extension Amount {
     }
 }
 
-// MARK: - DsonDecodable
+// MARK: - PrefixedJsonDecodable
 public extension Amount {
-    static let tag = DsonTag.uint256DecimalString
+    static let tag = JSONPrefix.uint256DecimalString
     init(from string: String) throws {
         try self.init(string: string)
     }

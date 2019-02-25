@@ -1,5 +1,5 @@
 //
-//  KeyedDecodingContainer+Dson+Decode.swift
+//  KeyedDecodingContainer+PrefixedJson+Decode.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-02-21.
@@ -9,13 +9,13 @@
 import Foundation
 
 public extension KeyedDecodingContainer {
-    func decode<D>(_ type: D.Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> D where D: Decodable & DsonDecodable {
-        return try decode(Dson<D>.self, forKey: key).value
+    func decode<D>(_ type: D.Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> D where D: Decodable & PrefixedJsonDecodable {
+        return try decode(PrefixedJson<D>.self, forKey: key).value
     }
 }
 
 public extension SingleValueDecodingContainer {
-    func decodeDson<D>(_ type: D.Type) throws -> D where D: Decodable & DsonDecodable {
-        return try decode(Dson<D>.self).value
+    func decodePrefixed<D>(_ type: D.Type) throws -> D where D: Decodable & PrefixedJsonDecodable {
+        return try decode(PrefixedJson<D>.self).value
     }
 }

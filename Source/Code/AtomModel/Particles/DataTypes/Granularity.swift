@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Granularity: DsonDecodable, StringInitializable, Equatable, Codable, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
+public struct Granularity: PrefixedJsonDecodable, StringInitializable, Equatable, Codable, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
     public typealias Value = BigUnsignedInt
     
     public let value: Value
@@ -28,9 +28,9 @@ public extension Granularity {
     }
 }
 
-// MARK: - DsonDecodable
+// MARK: - PrefixedJsonDecodable
 public extension Granularity {
-    static let tag = DsonTag.uint256DecimalString
+    static let tag = JSONPrefix.uint256DecimalString
     init(from string: String) throws {
         try self.init(string: string)
     }

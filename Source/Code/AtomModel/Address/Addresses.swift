@@ -29,7 +29,7 @@ public extension Addresses {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let addresses = try container.decode([Dson<Address>].self)
+        let addresses = try container.decode([PrefixedJson<Address>].self)
         self.init(addresses: addresses.map { $0.value }.asSet)
     }
     
