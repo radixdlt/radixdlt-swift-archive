@@ -26,7 +26,7 @@ public protocol PrefixedJsonEncodable: Encodable {
 //    var stringToDecode: String { get }
 }
 
-public typealias DsonCodable = PrefixedJsonDecodable & PrefixedJsonEncodable
+public typealias PrefixedJsonCodable = PrefixedJsonDecodable & PrefixedJsonEncodable
 
 //public extension PrefixedJsonEncodable {
 //    func encode(to encoder: Encoder) throws {

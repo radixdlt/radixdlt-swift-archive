@@ -8,7 +8,6 @@
 
 import Foundation
 
-// TODO change `Value: PrefixedJsonDecodable` to `Value: DsonCodable` when we have support for Encoding
 public struct PrefixedJson<Value: PrefixedJsonDecodable>: Decodable {
     public let value: Value
     public init(value: Value) {
