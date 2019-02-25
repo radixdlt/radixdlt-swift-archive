@@ -8,6 +8,14 @@
 
 import Foundation
 
-public protocol StringInitializable: Codable, CustomStringConvertible {
-    init(string: String) throws
+public protocol StringInitializable: Codable, ValidValueInitializable where ValidationValue == String {}
+
+extension String: StringInitializable {
+    public static var jsonPrefix: JSONPrefix {
+        return .string
+    }
+    
+    public init(value string: String) throws {
+        self = string
+    }
 }

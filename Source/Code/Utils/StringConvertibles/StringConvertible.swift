@@ -8,71 +8,11 @@
 
 import Foundation
 
-public enum InvalidStringError: Swift.Error {
-    case invalidCharacters(expectedCharacters: CharacterSet, butGot: String)
-    case tooManyCharacters(expectedAtMost: Int, butGot: Int)
-    case tooFewCharacters(expectedAtLeast: Int, butGot: Int)
-    
-}
-
-public protocol UpperBound {
-    static var maxValue: Int { get }
-}
-
-public protocol MaxLengthSpecifying: UpperBound {
-    static var maxLength: Int { get }
-}
-
-public extension MaxLengthSpecifying {
-    static var maxValue: Int {
-        return maxLength
-    }
-}
-
-public extension UpperBound {
-    var maxValue: Int {
-        return Self.maxValue
-    }
-    
-    static func validateLength(of string: String) throws {
-        if string.count > maxValue {
-            throw InvalidStringError.tooManyCharacters(expectedAtMost: maxValue, butGot: string.count)
-        }
-    }
-}
-
-public protocol LowerBound {
-    static var minValue: Int { get }
-}
-
-public protocol MinLengthSpecifying: LowerBound {
-    static var minLength: Int { get }
-}
-
-public extension MinLengthSpecifying {
-    static var minValue: Int {
-        return minLength
-    }
-}
-
-public extension LowerBound {
-    var minValue: Int {
-        return Self.minValue
-    }
-    
-    static func validateLength(of string: String) throws {
-        if string.count < minValue {
-            throw InvalidStringError.tooFewCharacters(expectedAtLeast: minValue, butGot: string.count)
-        }
-    }
-}
-
-public protocol StringConvertible: StringInitializable, Hashable, ExpressibleByStringLiteral {
-    var value: String { get }
+public protocol StringConvertible: StringInitializable, ValueValidating, Hashable, ExpressibleByStringLiteral {
+    var value: ValidationValue { get }
     
     /// Calling this with an invalid String will result in runtime crash.
-    init(validated: String)
-    static func validate(_ string: String) throws -> String
+    init(validated: ValidationValue)
 }
 
 public extension PrefixedJsonDecodable where Self: StringConvertible {
@@ -99,9 +39,9 @@ public extension StringConvertible {
 
 // MARK: - ExpressibleByStringLiteral
 public extension StringConvertible {
-    init(stringLiteral value: String) {
+    init(stringLiteral string: String) {
         do {
-            self = try Self.init(string: value)
+            self = try Self.init(value: string)
         } catch {
             fatalError("Bad string, error: \(error)")
         }
@@ -128,15 +68,15 @@ public extension StringConvertible {
 
 // MARK: - StringInitializable
 public extension StringConvertible {
-    init(string: String) throws {
-        self.init(validated: try Self.validate(string))
+    init(value string: String) throws {
+        self.init(validated: try Self.validate(value: string))
     }
 }
 
 extension StringConvertible {
-    public static func validate(_ string: String) throws -> String {
+    public static func validate(value string: Value) throws -> Value {
         if let characterSetSpecifying = self as? CharacterSetSpecifying.Type {
-            try characterSetSpecifying.validate(string)
+            try characterSetSpecifying.validate(value: string)
         }
         
         if let lowerBound = self as? LowerBound.Type {
