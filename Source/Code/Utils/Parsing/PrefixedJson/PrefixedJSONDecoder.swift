@@ -8,9 +8,6 @@
 
 import Foundation
 
-//public typealias JSONDecoder = PrefixedJSONDecoder
-//public class PrefixedJSONDecoder: Foundation.JSONDecoder {}
-
 public protocol PrefixedJsonDecodable: StringInitializable {
     static var jsonPrefix: JSONPrefix { get }
     init(prefixedString: PrefixedStringWithValue) throws
@@ -39,16 +36,3 @@ public extension PrefixedJsonDecodableByProxy {
         try self.init(proxy: proxy)
     }
 }
-
-//public protocol PrefixedJsonDecodable: CustomStringConvertible, Decodable {
-//    static var jsonPrefix: JSONPrefix { get }
-//    associatedtype From: StringInitializable
-//    init(from: From) throws
-//}
-//
-//extension String: PrefixedJsonDecodable {
-//    public static var jsonPrefix: JSONPrefix { return .string }
-//    public init(from: String) throws {
-//        self = from
-//    }
-//}

@@ -31,6 +31,7 @@
 		E6611F2B22259E2E00AD2F83 /* AddressInvalidChecksumSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2A22259E2E00AD2F83 /* AddressInvalidChecksumSpec.swift */; };
 		E6611F2D2225A09D00AD2F83 /* GranularityNegativeSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2C2225A09D00AD2F83 /* GranularityNegativeSpec.swift */; };
 		E6611F302225A0E300AD2F83 /* ExactLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2E2225A0DE00AD2F83 /* ExactLengthSpecifying.swift */; };
+		E6611F322225A1EE00AD2F83 /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F312225A1EE00AD2F83 /* StringRepresentable.swift */; };
 		E672573021FB8D3900BE3B4C /* ParticleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672572F21FB8D3900BE3B4C /* ParticleTypes.swift */; };
 		E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573321FB8D5E00BE3B4C /* RadixModelType.swift */; };
 		E672573721FB8D8E00BE3B4C /* JSONPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */; };
@@ -217,6 +218,7 @@
 		E6611F2A22259E2E00AD2F83 /* AddressInvalidChecksumSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressInvalidChecksumSpec.swift; sourceTree = "<group>"; };
 		E6611F2C2225A09D00AD2F83 /* GranularityNegativeSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GranularityNegativeSpec.swift; sourceTree = "<group>"; };
 		E6611F2E2225A0DE00AD2F83 /* ExactLengthSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExactLengthSpecifying.swift; sourceTree = "<group>"; };
+		E6611F312225A1EE00AD2F83 /* StringRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringRepresentable.swift; sourceTree = "<group>"; };
 		E672572F21FB8D3900BE3B4C /* ParticleTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleTypes.swift; sourceTree = "<group>"; };
 		E672573321FB8D5E00BE3B4C /* RadixModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixModelType.swift; sourceTree = "<group>"; };
 		E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPrefix.swift; sourceTree = "<group>"; };
@@ -959,6 +961,7 @@
 				E6A4AC0C22243CA5006C5CA8 /* MinLengthSpecifying.swift */,
 				E6A4AC0E22243CD7006C5CA8 /* ValueValidating.swift */,
 				E6CEE75821F7A3F700D745EC /* StringConvertible.swift */,
+				E6611F312225A1EE00AD2F83 /* StringRepresentable.swift */,
 				E6A4AC0622243C54006C5CA8 /* UpperBound.swift */,
 				E6A4AC0A22243C8F006C5CA8 /* LowerBound.swift */,
 				E6CEE75D21F7A42900D745EC /* CharacterSetSpecifying.swift */,
@@ -1381,6 +1384,7 @@
 				E6CEE76221F7A45000D745EC /* Base64String.swift in Sources */,
 				E6CEE73221F5D4F700D745EC /* Base58String.swift in Sources */,
 				E6A4AB92221C40A4006C5CA8 /* Name.swift in Sources */,
+				E6611F322225A1EE00AD2F83 /* StringRepresentable.swift in Sources */,
 				E631DAA821F249DB0063F632 /* PublicKey.swift in Sources */,
 				E631DAA021F249620063F632 /* KeyPair.swift in Sources */,
 				E68B5C0A21FBD8B000BEB049 /* MetaDataKey.swift in Sources */,

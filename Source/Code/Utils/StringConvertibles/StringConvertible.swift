@@ -8,16 +8,6 @@
 
 import Foundation
 
-public protocol StringRepresentable {
-    var stringValue: String { get }
-}
-
-extension String: StringRepresentable {
-    public var stringValue: String {
-        return self
-    }
-}
-
 public protocol StringConvertible: StringInitializable, StringRepresentable, ValueValidating, Hashable, ExpressibleByStringLiteral {
     var value: ValidationValue { get }
     
