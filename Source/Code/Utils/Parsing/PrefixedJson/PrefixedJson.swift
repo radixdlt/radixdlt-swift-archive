@@ -8,15 +8,7 @@
 
 import Foundation
 
-extension String {
-    func removingSubrange(_ bounds: Range<Index>) -> String {
-        var mutable = self
-        mutable.removeSubrange(bounds)
-        return mutable
-    }
-}
-
-public struct PrefixedStringWithValue: Decodable {
+public struct PrefixedStringWithValue: Decodable, StringRepresentable {
     public let stringValue: String
     public let jsonPrefix: JSONPrefix
     

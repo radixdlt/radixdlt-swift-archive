@@ -32,6 +32,9 @@
 		E6611F2D2225A09D00AD2F83 /* GranularityNegativeSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2C2225A09D00AD2F83 /* GranularityNegativeSpec.swift */; };
 		E6611F302225A0E300AD2F83 /* ExactLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2E2225A0DE00AD2F83 /* ExactLengthSpecifying.swift */; };
 		E6611F322225A1EE00AD2F83 /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F312225A1EE00AD2F83 /* StringRepresentable.swift */; };
+		E6611F352225B2C000AD2F83 /* DictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F342225B2C000AD2F83 /* DictionaryConvertible.swift */; };
+		E6611F372225B2D600AD2F83 /* DictionaryDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F362225B2D600AD2F83 /* DictionaryDecodable.swift */; };
+		E6611F392225B2E400AD2F83 /* StringDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F382225B2E400AD2F83 /* StringDictionary.swift */; };
 		E672573021FB8D3900BE3B4C /* ParticleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672572F21FB8D3900BE3B4C /* ParticleTypes.swift */; };
 		E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573321FB8D5E00BE3B4C /* RadixModelType.swift */; };
 		E672573721FB8D8E00BE3B4C /* JSONPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */; };
@@ -219,6 +222,9 @@
 		E6611F2C2225A09D00AD2F83 /* GranularityNegativeSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GranularityNegativeSpec.swift; sourceTree = "<group>"; };
 		E6611F2E2225A0DE00AD2F83 /* ExactLengthSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExactLengthSpecifying.swift; sourceTree = "<group>"; };
 		E6611F312225A1EE00AD2F83 /* StringRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringRepresentable.swift; sourceTree = "<group>"; };
+		E6611F342225B2C000AD2F83 /* DictionaryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryConvertible.swift; sourceTree = "<group>"; };
+		E6611F362225B2D600AD2F83 /* DictionaryDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDecodable.swift; sourceTree = "<group>"; };
+		E6611F382225B2E400AD2F83 /* StringDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDictionary.swift; sourceTree = "<group>"; };
 		E672572F21FB8D3900BE3B4C /* ParticleTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleTypes.swift; sourceTree = "<group>"; };
 		E672573321FB8D5E00BE3B4C /* RadixModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixModelType.swift; sourceTree = "<group>"; };
 		E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPrefix.swift; sourceTree = "<group>"; };
@@ -651,6 +657,16 @@
 				E645E73721E7827D00532ACD /* RadixSDK iOS Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E6611F332225B2B700AD2F83 /* DictionaryConvertible */ = {
+			isa = PBXGroup;
+			children = (
+				E6611F342225B2C000AD2F83 /* DictionaryConvertible.swift */,
+				E6611F362225B2D600AD2F83 /* DictionaryDecodable.swift */,
+				E6611F382225B2E400AD2F83 /* StringDictionary.swift */,
+			);
+			path = DictionaryConvertible;
 			sourceTree = "<group>";
 		};
 		E672573521FB8D8600BE3B4C /* PrefixedJson */ = {
@@ -1242,6 +1258,7 @@
 				E6CEE76D21F7A5E000D745EC /* BigInteger */,
 				E6FB03E121ECF186002CE331 /* Macros.swift */,
 				E631DAC821F259BE0063F632 /* MnemonicBackedUpByUser.swift */,
+				E6611F332225B2B700AD2F83 /* DictionaryConvertible */,
 				E67A715021FBC62500F4B2D0 /* StringInitializable */,
 				E6CEE75A21F7A40C00D745EC /* DataConvertible */,
 				E6CEE75721F7A3EF00D745EC /* StringConvertibles */,
@@ -1400,6 +1417,7 @@
 				E67A714C21FBB1DA00F4B2D0 /* TokenPermission.swift in Sources */,
 				E6A4ABC6221EDD4A006C5CA8 /* BigUInt_Extension.swift in Sources */,
 				E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */,
+				E6611F392225B2E400AD2F83 /* StringDictionary.swift in Sources */,
 				E67A715221FBC63300F4B2D0 /* StringInitializable.swift in Sources */,
 				E6A4AC0522243C38006C5CA8 /* InvalidStringError.swift in Sources */,
 				E67A714F21FBC52900F4B2D0 /* TokenType.swift in Sources */,
@@ -1426,6 +1444,7 @@
 				E6CEE71321F5B3C000D745EC /* RandomData.swift in Sources */,
 				E6A4AB7C221BF7B3006C5CA8 /* Accountable.swift in Sources */,
 				E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */,
+				E6611F372225B2D600AD2F83 /* DictionaryDecodable.swift in Sources */,
 				E6ED1A4E21F8E51A00654105 /* AtomObservation.swift in Sources */,
 				E6FB03E221ECF186002CE331 /* Macros.swift in Sources */,
 				E6611F302225A0E300AD2F83 /* ExactLengthSpecifying.swift in Sources */,
@@ -1483,6 +1502,7 @@
 				E631DAD621F5A7570063F632 /* Network.swift in Sources */,
 				E6ED1A5E21F8E5DD00654105 /* Ledger.swift in Sources */,
 				E6A4AC0D22243CA5006C5CA8 /* MinLengthSpecifying.swift in Sources */,
+				E6611F352225B2C000AD2F83 /* DictionaryConvertible.swift in Sources */,
 				E6ED1A6D21F8E71100654105 /* Cache.swift in Sources */,
 				E6A4ABCE221EEECC006C5CA8 /* KeyedDecodingContainer+PrefixedJson+Decode.swift in Sources */,
 				E6ED1A6521F8E69000654105 /* NodeRunnerData.swift in Sources */,
