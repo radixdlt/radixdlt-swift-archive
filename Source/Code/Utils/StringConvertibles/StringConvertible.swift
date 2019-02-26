@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol StringConvertible: StringInitializable, StringRepresentable, ValueValidating, Hashable, ExpressibleByStringLiteral {
+public protocol StringConvertible: StringInitializable, StringRepresentable, ValueValidating, Hashable {
     var value: ValidationValue { get }
     
     /// Calling this with an invalid String will result in runtime crash.

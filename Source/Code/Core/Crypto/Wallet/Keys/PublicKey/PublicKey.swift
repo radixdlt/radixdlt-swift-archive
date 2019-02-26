@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PublicKey: PrefixedJsonDecodableByProxy, StringInitializable, Hashable, DataConvertible, ExpressibleByStringLiteral {
+public struct PublicKey: PrefixedJsonDecodableByProxy, Hashable, DataConvertible {
     public let data: Data
     public init(data: Data) {
         self.data = data
@@ -42,18 +42,6 @@ public extension PublicKey {
     init(string: String) throws {
         let base64 = try Base64String(string: string)
         try self.init(base64: base64)
-    }
-}
-
-// MARK: - ExpressibleByStringLiteral
-public extension PublicKey {
-    /// Base64String as string
-    init(stringLiteral value: String) {
-        do {
-            try self.init(string: value)
-        } catch {
-            fatalError("Passed non address value string: `\(value)`, error: \(error)")
-        }
     }
 }
 

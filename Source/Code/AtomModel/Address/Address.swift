@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Address: PrefixedJsonDecodableByProxy, StringInitializable, Hashable, Codable, CustomStringConvertible, DataConvertible, ExpressibleByStringLiteral, ExactLengthSpecifying {
+public struct Address: PrefixedJsonDecodableByProxy, Hashable, CustomStringConvertible, DataConvertible, ExactLengthSpecifying {
     
     public static let length = 51
     
@@ -57,18 +57,6 @@ public extension Address {
         try self.init(base58String: base58)
     }
 }
-
-// MARK: - ExpressibleByStringLiteral
-public extension Address {
-    public init(stringLiteral value: String) {
-        do {
-            try self.init(string: value)
-        } catch {
-            fatalError("Passed non address value string: `\(value)`, error: \(error)")
-        }
-    }
-}
-
 // MARK: - CustomStringConvertible
 public extension Address {
     var description: String {

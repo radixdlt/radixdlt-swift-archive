@@ -8,13 +8,24 @@
 
 import Foundation
 
-public protocol StringInitializable: Codable, ValidValueInitializable where ValidationValue == String {
+public protocol StringInitializable: Codable, ExpressibleByStringLiteral, ValidValueInitializable where ValidationValue == String {
     init(string: String) throws
 }
 
 public extension StringInitializable {
     init(unvalidated value: ValidationValue) throws {
         try self.init(string: value)
+    }
+}
+
+// MARK: - ExpressibleByStringLiteral
+public extension StringInitializable {
+    init(stringLiteral value: String) {
+        do {
+            try self.init(string: value)
+        } catch {
+            fatalError("Passed non address value string: `\(value)`, error: \(error)")
+        }
     }
 }
 

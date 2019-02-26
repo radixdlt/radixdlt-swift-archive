@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Granularity: PrefixedJsonDecodable, StringInitializable, Equatable, Codable, ExpressibleByIntegerLiteral, ExpressibleByStringLiteral {
+public struct Granularity: PrefixedJsonDecodable, Equatable, ExpressibleByIntegerLiteral {
     public typealias Value = BigUnsignedInt
     
     public let value: Value
@@ -40,17 +40,6 @@ public extension Granularity {
 public extension Granularity {
     init(integerLiteral int: Int) {
         self.init(value: Value(int))
-    }
-}
-
-// MARK: - ExpressibleByStringLiteral
-public extension Granularity {
-    init(stringLiteral value: String) {
-        do {
-            try self.init(string: value)
-        } catch {
-            fatalError("Passed decimal string passed: `\(value)`, error: \(error)")
-        }
     }
 }
 
