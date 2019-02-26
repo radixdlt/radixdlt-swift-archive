@@ -35,6 +35,9 @@
 		E6611F352225B2C000AD2F83 /* DictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F342225B2C000AD2F83 /* DictionaryConvertible.swift */; };
 		E6611F372225B2D600AD2F83 /* DictionaryDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F362225B2D600AD2F83 /* DictionaryDecodable.swift */; };
 		E6611F392225B2E400AD2F83 /* StringDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F382225B2E400AD2F83 /* StringDictionary.swift */; };
+		E6611F3C2225B55C00AD2F83 /* ArrayConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3B2225B55C00AD2F83 /* ArrayConvertible.swift */; };
+		E6611F3E2225B56A00AD2F83 /* ArrayDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3D2225B56A00AD2F83 /* ArrayDecodable.swift */; };
+		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E672573021FB8D3900BE3B4C /* ParticleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672572F21FB8D3900BE3B4C /* ParticleTypes.swift */; };
 		E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573321FB8D5E00BE3B4C /* RadixModelType.swift */; };
 		E672573721FB8D8E00BE3B4C /* JSONPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */; };
@@ -225,6 +228,9 @@
 		E6611F342225B2C000AD2F83 /* DictionaryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryConvertible.swift; sourceTree = "<group>"; };
 		E6611F362225B2D600AD2F83 /* DictionaryDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDecodable.swift; sourceTree = "<group>"; };
 		E6611F382225B2E400AD2F83 /* StringDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDictionary.swift; sourceTree = "<group>"; };
+		E6611F3B2225B55C00AD2F83 /* ArrayConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayConvertible.swift; sourceTree = "<group>"; };
+		E6611F3D2225B56A00AD2F83 /* ArrayDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayDecodable.swift; sourceTree = "<group>"; };
+		E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+AsArray.swift"; sourceTree = "<group>"; };
 		E672572F21FB8D3900BE3B4C /* ParticleTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleTypes.swift; sourceTree = "<group>"; };
 		E672573321FB8D5E00BE3B4C /* RadixModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixModelType.swift; sourceTree = "<group>"; };
 		E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPrefix.swift; sourceTree = "<group>"; };
@@ -471,6 +477,7 @@
 			children = (
 				E62C030B220491CD001F27DE /* Sequence_Extension.swift */,
 				E6A4AB7F221BF7DD006C5CA8 /* Set+InsertContentsOf.swift */,
+				E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */,
 			);
 			path = Collection;
 			sourceTree = "<group>";
@@ -667,6 +674,15 @@
 				E6611F382225B2E400AD2F83 /* StringDictionary.swift */,
 			);
 			path = DictionaryConvertible;
+			sourceTree = "<group>";
+		};
+		E6611F3A2225B54B00AD2F83 /* ArrayConvertible */ = {
+			isa = PBXGroup;
+			children = (
+				E6611F3B2225B55C00AD2F83 /* ArrayConvertible.swift */,
+				E6611F3D2225B56A00AD2F83 /* ArrayDecodable.swift */,
+			);
+			path = ArrayConvertible;
 			sourceTree = "<group>";
 		};
 		E672573521FB8D8600BE3B4C /* PrefixedJson */ = {
@@ -1258,6 +1274,7 @@
 				E6CEE76D21F7A5E000D745EC /* BigInteger */,
 				E6FB03E121ECF186002CE331 /* Macros.swift */,
 				E631DAC821F259BE0063F632 /* MnemonicBackedUpByUser.swift */,
+				E6611F3A2225B54B00AD2F83 /* ArrayConvertible */,
 				E6611F332225B2B700AD2F83 /* DictionaryConvertible */,
 				E67A715021FBC62500F4B2D0 /* StringInitializable */,
 				E6CEE75A21F7A40C00D745EC /* DataConvertible */,
@@ -1403,6 +1420,7 @@
 				E6A4AB92221C40A4006C5CA8 /* Name.swift in Sources */,
 				E6611F322225A1EE00AD2F83 /* StringRepresentable.swift in Sources */,
 				E631DAA821F249DB0063F632 /* PublicKey.swift in Sources */,
+				E6611F3C2225B55C00AD2F83 /* ArrayConvertible.swift in Sources */,
 				E631DAA021F249620063F632 /* KeyPair.swift in Sources */,
 				E68B5C0A21FBD8B000BEB049 /* MetaDataKey.swift in Sources */,
 				E6A4AB8E221C2FB3006C5CA8 /* Symbol.swift in Sources */,
@@ -1422,6 +1440,7 @@
 				E6A4AC0522243C38006C5CA8 /* InvalidStringError.swift in Sources */,
 				E67A714F21FBC52900F4B2D0 /* TokenType.swift in Sources */,
 				E6A4ABFD2223E4DA006C5CA8 /* PrefixedJSONDecoder.swift in Sources */,
+				E6611F3E2225B56A00AD2F83 /* ArrayDecodable.swift in Sources */,
 				E6CEE74621F6381E00D745EC /* Signatures.swift in Sources */,
 				E672573721FB8D8E00BE3B4C /* JSONPrefix.swift in Sources */,
 				E631DAB321F24E280063F632 /* EncryptedPrivateKey.swift in Sources */,
@@ -1514,6 +1533,7 @@
 				E631DACF21F25A570063F632 /* Mnemonic+Word.swift in Sources */,
 				E6A4AB86221BFCFC006C5CA8 /* Fungible.swift in Sources */,
 				E68B5C0621FBD36400BEB049 /* TokenAction.swift in Sources */,
+				E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */,
 				E6A4ABC0221EBAB1006C5CA8 /* QuickSpec_Extension.swift in Sources */,
 				E6CEE75C21F7A41A00D745EC /* DataConvertible.swift in Sources */,
 				E6CEE74A21F6384000D745EC /* MessageParticle.swift in Sources */,

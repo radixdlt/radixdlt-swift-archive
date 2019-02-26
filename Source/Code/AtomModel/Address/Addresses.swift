@@ -8,61 +8,24 @@
 
 import Foundation
 
-public struct Addresses: Equatable, Codable, ExpressibleByArrayLiteral, Collection {
+public struct Addresses: ArrayDecodable, Equatable {
     
-    public typealias Element = Address
-    public let addresses: Set<Element>
+    public let addresses: Set<Address>
     
-    public init(addresses: Set<Element> = Set()) {
+    public init(addresses: Set<Address> = Set()) {
         self.addresses = addresses
     }
 }
 
+// MARK: - ArrayDecodable
 public extension Addresses {
-    public init(_ addresses: [Address]) {
-        self.init(addresses: addresses.asSet)
-    }
-}
-
-// MARK: - Codable
-public extension Addresses {
+    public typealias Element = Address
     
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let addresses = try container.decode([Address].self)
-        self.init(addresses: addresses.asSet)
+    var elements: [Element] {
+        return addresses.asArray
     }
     
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(addresses)
-    }
-}
-
-// MARK: - Collection
-public extension Addresses {
-    typealias Index = Set<Element>.Index
-    
-    var startIndex: Index {
-        return addresses.startIndex
-    }
-    
-    var endIndex: Index {
-        return addresses.endIndex
-    }
-    
-    subscript(position: Index) -> Element {
-        return addresses[position]
-    }
-    
-    func index(after index: Index) -> Index {
-        return addresses.index(after: index)
-    }
-}
-
-// MARK: - ExpressibleByArrayLiteral
-public extension Addresses {
-    init(arrayLiteral addresses: Element...) {
-        self.init(addresses)
+    init(elements: [Element]) {
+        self.init(addresses: elements.asSet)
     }
 }
