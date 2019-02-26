@@ -8,11 +8,27 @@
 
 import Foundation
 
-public protocol StringConvertible: StringInitializable, ValueValidating, Hashable, ExpressibleByStringLiteral {
+public protocol StringRepresentable {
+    var stringValue: String { get }
+}
+
+extension String: StringRepresentable {
+    public var stringValue: String {
+        return self
+    }
+}
+
+public protocol StringConvertible: StringInitializable, StringRepresentable, ValueValidating, Hashable, ExpressibleByStringLiteral {
     var value: ValidationValue { get }
     
     /// Calling this with an invalid String will result in runtime crash.
     init(validated: ValidationValue)
+}
+
+public extension StringConvertible {
+    var stringValue: String {
+        return value
+    }
 }
 
 public extension PrefixedJsonDecodable where Self: StringConvertible {
@@ -74,19 +90,10 @@ public extension StringConvertible {
 }
 
 extension StringConvertible {
-    public static func validate(_ string: ValidationValue) throws -> ValidationValue {
-        if let characterSetSpecifying = self as? CharacterSetSpecifying.Type {
-            try characterSetSpecifying.validate(string)
-        }
-        
-        if let lowerBound = self as? LowerBound.Type {
-            try lowerBound.validateLength(of: string)
-        }
-    
-        if let upperBound = self as? UpperBound.Type {
-            try upperBound.validateLength(of: string)
-        }
-        
+    public static func validate(_ string: String) throws -> ValidationValue {
+        try (self as? CharacterSetSpecifying.Type)?.validate(string)
+        try (self as? MinLengthSpecifying.Type)?.validateMinLength(of: string)
+        try (self as? MaxLengthSpecifying.Type)?.validateMaxLength(of: string)
         return string
     }
 }

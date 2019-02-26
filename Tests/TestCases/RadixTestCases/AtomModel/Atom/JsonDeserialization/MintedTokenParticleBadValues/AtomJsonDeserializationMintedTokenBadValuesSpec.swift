@@ -11,6 +11,7 @@ import Nimble
 import Quick
 
 class AtomJsonDeserializationMintedTokenBadValuesSpec: AtomJsonDeserializationChangeJson {
+        
     override func jsonString() -> String {
         return """
             {

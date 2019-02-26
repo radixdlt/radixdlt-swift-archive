@@ -16,7 +16,7 @@ class TokenPermissionBadValueSpec: AtomJsonDeserializationChangeJson {
         /// Scenario 11
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - TokenDefinitionParticle: Bad permissions") {
-            let badJson = self.replaceValueInParticle(for: "permissions", with: "{ \"burn\": \":str:foobar\"}")
+            let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"burn\": \":str:foobar\"}")
             it("should fail to deserialize JSON with a foobar permission") {
                 do {
                     try decode(Atom.self, from: badJson)

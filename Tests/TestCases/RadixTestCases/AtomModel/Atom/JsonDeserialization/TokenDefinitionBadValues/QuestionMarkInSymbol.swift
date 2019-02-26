@@ -16,7 +16,7 @@ class QuestionMarkInSymbolSpec: AtomJsonDeserializationChangeJson {
         /// Scenario 6
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - TokenDefinitionParticle: Symbol bad chars") {
-            let badJson = self.replaceValueInParticle(for: "symbol", with: ":str:BAD?")
+            let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:BAD?")
             
             it("should fail to deserialize JSON with empty symbol") {
                 do {

@@ -22,12 +22,12 @@ class AtomJsonDeserializationChangeJson: QuickSpec {
     
     lazy var jsonData = self.jsonString().data(using: .utf8)!
     
-    func replaceValueInParticle(for key: String, with replacement: Any) -> String {
-        return replaceValueInParticle { particle in
-            var particle = particle
-            particle[key] = replacement
-            return particle
-        }
+    func replaceValueInParticle(for key: TokenDefinitionParticle.CodingKeys, with replacement: Any) -> String {
+      return replaceValueInParticle(for: key.stringValue, with: replacement)
+    }
+    
+    func replaceValueInParticle(for key: TokenParticle.CodingKeys, with replacement: Any) -> String {
+        return replaceValueInParticle(for: key.stringValue, with: replacement)
     }
     
     func replaceSpinForSpunParticle(spin: Int) -> String {
@@ -41,6 +41,16 @@ class AtomJsonDeserializationChangeJson: QuickSpec {
 
 // MARK: - Private
 private extension AtomJsonDeserializationChangeJson {
+    
+    func replaceValueInParticle(for key: String, with replacement: Any) -> String {
+        return replaceValueInParticle { particle in
+            var particle = particle
+            particle[key.stringValue] = replacement
+            return particle
+        }
+    }
+    
+    
     func replaceValueInParticle(replaceParticle: (JSON) -> JSON) -> String {
         return replaceSpunParticleWithValue { spunParticle in
             var spunParticle = spunParticle

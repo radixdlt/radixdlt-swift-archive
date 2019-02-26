@@ -8,18 +8,6 @@
 
 import Foundation
 
-public protocol ExactLengthSpecifying: MinLengthSpecifying, MaxLengthSpecifying {
-    static var length: Int { get }
-}
-public extension ExactLengthSpecifying {
-    static var minLength: Int {
-        return length
-    }
-    static var maxLength: Int {
-        return length
-    }
-}
-
 public struct Address: PrefixedJsonDecodableByProxy, StringInitializable, Hashable, Codable, CustomStringConvertible, DataConvertible, ExpressibleByStringLiteral, ExactLengthSpecifying {
     
     public static let length = 51
@@ -28,11 +16,13 @@ public struct Address: PrefixedJsonDecodableByProxy, StringInitializable, Hashab
     public let publicKey: PublicKey
     
     public init(base58String: Base58String, publicKey: PublicKey? = nil) throws {
+        try Address.validateLength(of: base58String)
         try Address.isChecksummed(base58String: base58String)
         self.base58String = base58String
         let addressData = base58String.asData
         self.publicKey = publicKey ?? PublicKey(data: addressData[1...addressData.count - 5])
     }
+    
 }
 
 // MARK: - PrefixedJsonDecodableByProxy
@@ -63,12 +53,8 @@ public extension Address {
 // MARK: - StringInitializable
 public extension Address {
     init(string: String) throws {
-        do {
-            let base58 = try Base58String(string: string)
-            try self.init(base58String: base58)
-        } catch let base58Error as InvalidStringError {
-            throw Address.Error.nonBase58(error: base58Error)
-        }
+        let base58 = try Base58String(string: string)
+        try self.init(base58String: base58)
     }
 }
 
@@ -108,9 +94,6 @@ public extension Address {
     }
     
     public enum Error: Swift.Error {
-        case tooLong(expected: Int, butGot: Int)
-        case tooShort(expected: Int, butGot: Int)
-        case nonBase58(error: InvalidStringError)
         case checksumMismatch
     }
 }

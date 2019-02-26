@@ -16,7 +16,7 @@ class TooShortSymbolSpec: AtomJsonDeserializationChangeJson {
         /// Scenario 5
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - TokenDefinitionParticle: too short symbol") {
-            let badJson = self.replaceValueInParticle(for: "symbol", with: ":str:")
+            let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:")
             it("should fail to deserialize JSON with empty symbol") {
                 do {
                     try decode(Atom.self, from: badJson)

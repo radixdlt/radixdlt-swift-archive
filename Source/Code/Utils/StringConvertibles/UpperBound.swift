@@ -16,10 +16,4 @@ public extension UpperBound {
     var maxValue: Int {
         return Self.maxValue
     }
-    
-    static func validateLength(of string: String) throws {
-        if string.count > maxValue {
-            throw InvalidStringError.tooManyCharacters(expectedAtMost: maxValue, butGot: string.count)
-        }
-    }
 }

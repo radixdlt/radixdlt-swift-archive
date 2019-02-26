@@ -16,10 +16,4 @@ public extension LowerBound {
     var minValue: Int {
         return Self.minValue
     }
-    
-    static func validateLength(of string: String) throws {
-        if string.count < minValue {
-            throw InvalidStringError.tooFewCharacters(expectedAtLeast: minValue, butGot: string.count)
-        }
-    }
 }
