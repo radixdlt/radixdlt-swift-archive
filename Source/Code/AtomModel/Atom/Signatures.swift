@@ -10,16 +10,45 @@ import Foundation
 
 public let dataFormatVersion = 100
 
-public struct Signatures: Equatable, ExpressibleByDictionaryLiteral, Codable {
+public struct Signatures: Equatable, ExpressibleByDictionaryLiteral, Collection, Codable {
     public typealias Key = EUID
     public typealias Value = Signature
-    public let map: [Key: Value]
+    public let values: [Key: Value]
+}
+
+// MARK: - Collection
+public extension Signatures {
+    typealias Element = Dictionary<Key, Value>.Element
+    typealias Index = Dictionary<Key, Value>.Index
+    
+    var startIndex: Index {
+        return values.startIndex
+    }
+    
+    var endIndex: Index {
+        return values.endIndex
+    }
+    
+    subscript(position: Index) -> Element {
+        return values[position]
+    }
+    
+    func index(after index: Index) -> Index {
+        return values.index(after: index)
+    }
+}
+
+// MARK: - Subscript
+public extension Signatures {
+    subscript(key: Key) -> Value? {
+        return values[key]
+    }
 }
 
 // MARK: - ExpressibleByDictionaryLiteral
 public extension Signatures {
     init(dictionaryLiteral signatures: (Key, Value)...) {
-        self.init(map: Dictionary(uniqueKeysWithValues: signatures))
+        self.init(values: Dictionary(uniqueKeysWithValues: signatures))
     }
 }
 
@@ -34,7 +63,7 @@ public extension Signatures {
                 $0.value
             )
         })
-        self.init(map: map)
+        self.init(values: map)
     }
 }
 
@@ -42,6 +71,6 @@ public extension Signatures {
 public extension Signatures {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(map)
+        try container.encode(values)
     }
 }

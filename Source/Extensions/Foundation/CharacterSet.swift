@@ -19,7 +19,12 @@ public extension CharacterSet {
         let afToAF = CharacterSet(charactersIn: "abcdefABCDEF")
         return CharacterSet.decimalDigits.union(afToAF)
     }
+    
     static var base58: CharacterSet {
         return CharacterSet(charactersIn: String.base58Alphabet)
+    }
+    
+    static var numbersAndUppercaseAtoZ: CharacterSet {
+        return CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
     }
 }

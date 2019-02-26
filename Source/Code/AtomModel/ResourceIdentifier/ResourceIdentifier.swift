@@ -10,7 +10,7 @@ import Foundation
 
 /// A Radix resource identifier is a human readable index into the Ledger which points to a unique UP particle.
 /// On format: `/:address/:type/:unique`
-public struct ResourceIdentifier: Equatable, DsonConvertible, StringInitializable, ExpressibleByStringLiteral, Codable {
+public struct ResourceIdentifier: Equatable, PrefixedJsonDecodable, StringInitializable, ExpressibleByStringLiteral, Codable {
    
     public let address: Address
     public let type: ResourceType
@@ -20,6 +20,17 @@ public struct ResourceIdentifier: Equatable, DsonConvertible, StringInitializabl
         self.address = address
         self.type = type
         self.unique = unique
+    }
+}
+
+// MARK: - Initializers
+public extension ResourceIdentifier {
+    public init(address: Address, type: ResourceType, symbol: Symbol) {
+        self.init(address: address, type: type, unique: symbol.value)
+    }
+    
+    public init(address: Address, type: ResourceType, name: Name) {
+        self.init(address: address, type: type, unique: name.value)
     }
 }
 
@@ -38,9 +49,12 @@ public extension ResourceIdentifier {
         guard case let addressPath = components[ResourceIdentifier.addressIndex], !addressPath.isEmpty else {
             throw Error.addressPathIsEmpty
         }
-        guard case let typePath = components[ResourceIdentifier.typeIndex], let type = ResourceType(rawValue: typePath) else {
-            throw Error.typePathEmpty
+
+        let typePath = components[ResourceIdentifier.typeIndex]
+        guard let type = ResourceType(rawValue: typePath) else {
+            throw Error.unsupportedResourceType(got: typePath)
         }
+        
         guard case let uniquePath = components[ResourceIdentifier.uniqueIndex], !uniquePath.isEmpty else {
             throw Error.uniquePathEmpty
         }
@@ -52,6 +66,25 @@ public extension ResourceIdentifier {
         }
     }
 }
+
+// MARK: - ExpressibleByStringLiteral
+public extension ResourceIdentifier {
+    init(stringLiteral value: String) {
+        do {
+            try self.init(string: value)
+        } catch {
+            fatalError("Passed non ResourceIdentifier string: `\(value)`, error: \(error)")
+        }
+    }
+}
+
+//// MARK: - Encodable
+//public extension ResourceIdentifier {
+//    func encode(to encoder: Encoder) throws {
+//        var container = encoder.unkeyedContainer()
+//        try container.encode(PrefixedJson<String>(value: identifier))
+//    }
+//}
 
 // MARK: - Private
 private extension ResourceIdentifier {
@@ -68,26 +101,15 @@ public extension ResourceIdentifier {
         case incorrectSeparatorCount(expected: Int, butGot: Int)
         case unexpectedLeadingPath
         case addressPathIsEmpty
-        case typePathEmpty
         case uniquePathEmpty
+        case unsupportedResourceType(got: String)
         case badAddress(error: Address.Error)
     }
 }
 
-// MARK: - ExpressibleByStringLiteral
+// MARK: - PrefixedJsonDecodable
 public extension ResourceIdentifier {
-    init(stringLiteral value: String) {
-        do {
-            try self.init(string: value)
-        } catch {
-            fatalError("Passed non ResourceIdentifier string: `\(value)`, error: \(error)")
-        }
-    }
-}
-
-// MARK: - DsonConvertible
-public extension ResourceIdentifier {
-    static let tag: DsonTag = .uri
+    static let tag: JSONPrefix = .uri
     init(from string: String) throws {
         try self.init(string: string)
     }

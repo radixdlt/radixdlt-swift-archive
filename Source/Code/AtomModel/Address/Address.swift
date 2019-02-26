@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Address: DsonConvertible, StringInitializable, Hashable, Codable, CustomStringConvertible, DataConvertible, ExpressibleByStringLiteral {
+public struct Address: PrefixedJsonDecodable, StringInitializable, Hashable, Codable, CustomStringConvertible, DataConvertible, ExpressibleByStringLiteral {
     
     public let base58String: Base58String
     public let publicKey: PublicKey
@@ -54,7 +54,7 @@ public extension Address {
         do {
             let base58 = try Base58String(string: string)
             try self.init(base58String: base58)
-        } catch let base58Error as Base58String.Error {
+        } catch let base58Error as InvalidStringError {
             throw Address.Error.nonBase58(error: base58Error)
         }
     }
@@ -78,9 +78,9 @@ public extension Address {
     }
 }
 
-// MARK: - DsonConvertible
+// MARK: - PrefixedJsonDecodable
 public extension Address {
-    static let tag: DsonTag = .addressBase58
+    static let tag: JSONPrefix = .addressBase58
     init(from: Base58String) throws {
        try self.init(base58String: from)
     }
@@ -108,7 +108,7 @@ public extension Address {
     public enum Error: Swift.Error {
         case tooLong(expected: Int, butGot: Int)
         case tooShort(expected: Int, butGot: Int)
-        case nonBase58(error: Base58String.Error)
+        case nonBase58(error: InvalidStringError)
         case checksumMismatch
     }
 }

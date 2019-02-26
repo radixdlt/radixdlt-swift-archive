@@ -8,11 +8,11 @@
 
 import Foundation
 
-internal enum ParticleTypes: Int, Codable {
-    case feeParticle = -95901716
-    case messageParticle = -1254222995
-    case ownedTokensParticle = -1820701723
-    case timestampParticle = -1611775620
-    case tokenParticle = -1034420571
-    case uniqueParticle = 1446890290
+internal enum ParticleTypes: String, Codable {
+    case message
+    case tokenDefinition
+    case burnedToken
+    case mintedToken
+    case transferredToken
+    case unique
 }

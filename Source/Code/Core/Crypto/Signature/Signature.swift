@@ -27,8 +27,8 @@ public extension Signature {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        r = try container.decode(Dson<Base64String>.self, forKey: .r).value.unsignedBigInteger
-        s = try container.decode(Dson<Base64String>.self, forKey: .s).value.unsignedBigInteger
+        r = try container.decode(Base64String.self, forKey: .r).unsignedBigInteger
+        s = try container.decode(Base64String.self, forKey: .s).unsignedBigInteger
     }
 }
 

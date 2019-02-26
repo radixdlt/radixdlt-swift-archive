@@ -11,18 +11,26 @@ import Foundation
 public struct Addresses: Equatable, Codable, ExpressibleByArrayLiteral, Collection {
     
     public typealias Element = Address
-    public let addresses: [Element]
-    public init(addresses: [Element] = []) {
+    public let addresses: Set<Element>
+    
+    public init(addresses: Set<Element> = Set()) {
         self.addresses = addresses
+    }
+}
+
+public extension Addresses {
+    public init(_ addresses: [Address]) {
+        self.init(addresses: addresses.asSet)
     }
 }
 
 // MARK: - Codable
 public extension Addresses {
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let addresses = try container.decode([Dson<Address>].self)
-        self.init(addresses: addresses.map { $0.value })
+        let addresses = try container.decode([PrefixedJson<Address>].self)
+        self.init(addresses: addresses.map { $0.value }.asSet)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -33,16 +41,20 @@ public extension Addresses {
 
 // MARK: - Collection
 public extension Addresses {
-    typealias Index = Array<Element>.Index
+    typealias Index = Set<Element>.Index
+    
     var startIndex: Index {
         return addresses.startIndex
     }
+    
     var endIndex: Index {
         return addresses.endIndex
     }
+    
     subscript(position: Index) -> Element {
         return addresses[position]
     }
+    
     func index(after index: Index) -> Index {
         return addresses.index(after: index)
     }
@@ -51,6 +63,6 @@ public extension Addresses {
 // MARK: - ExpressibleByArrayLiteral
 public extension Addresses {
     init(arrayLiteral addresses: Element...) {
-        self.init(addresses: addresses)
+        self.init(addresses)
     }
 }

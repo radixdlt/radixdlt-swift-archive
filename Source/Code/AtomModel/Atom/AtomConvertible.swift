@@ -8,10 +8,11 @@
 
 import Foundation
 
-public protocol AtomConvertible: RadixHashable, Codable, ExpressibleByArrayLiteral, CustomStringConvertible {
+public protocol AtomConvertible: RadixHashable, Codable, ExpressibleByArrayLiteral {
     var particleGroups: ParticleGroups { get }
     var signatures: Signatures { get }
-    init(particleGroups: ParticleGroups, signatures: Signatures)
+    var metaData: MetaData { get }
+    init(particleGroups: ParticleGroups, signatures: Signatures, metaData: MetaData)
 }
 
 public extension AtomConvertible {
@@ -37,15 +38,16 @@ public extension AtomConvertible {
 // MARK: - ExpressibleByArrayLiteral
 public extension AtomConvertible {
     public init(arrayLiteral particleGroups: ParticleGroup...) {
-        self.init(particleGroups: ParticleGroups(particleGroups: particleGroups), signatures: [:])
+        self.init(particleGroups: ParticleGroups(particleGroups: particleGroups), signatures: [:], metaData: [:])
     }
 }
 
 // MARK: - CustomStringConvertible
 public extension AtomConvertible {
-    public var description: String {
-        return "Atom(\(hid))"
-    }
+    // TODO implement this when `hid` does not crash
+//    public var description: String {
+//        return "Atom(\(hid))"
+//    }
 }
 
 public extension AtomConvertible {
@@ -54,24 +56,28 @@ public extension AtomConvertible {
         return particleGroups.flatMap { $0.spunParticles }
     }
     
-    func dataParticles() -> [MessageParticle] {
+    func messageParticles() -> [MessageParticle] {
         return spunParticles().compactMap(type: MessageParticle.self)
     }
     
-    func consumables(spin: Spin) -> [OwnedTokensParticle] {
-        return spunParticles()
+    func tokensParticles(spin: Spin, type: TokenType? = nil) -> [TokenParticle] {
+        let tokenParticles = spunParticles()
             .filter(spin: spin)
-            .compactMap(type: OwnedTokensParticle.self)
+            .compactMap(type: TokenParticle.self)
+        guard let type = type else {
+            return tokenParticles
+        }
+        return tokenParticles.filter(type: type)
     }
     
-    func timestamp() -> Date? {
-        return spunParticles().compactMap(type: TimestampParticle.self).first?.timestamp()
+    var timestamp: Date? {
+        return metaData.timestamp
     }
     
     func publicKeys() -> Set<PublicKey> {
         return spunParticles()
             .map { $0.particle }
-            .flatMap { Array($0.publicKeys()) }
+            .flatMap { Array($0.keyDestinations()) }
             .asSet
     }
 }

@@ -13,19 +13,19 @@ public final class RadixUniverse {
     public let apiClient: APIClient
     public let config: UniverseConfig
     public let ledger: Ledger
-    public let powToken: TokenClassReference
-    public let nativeToken: TokenClassReference
+    public let powToken: TokenDefinitionIdentifier
+    public let nativeToken: TokenDefinitionIdentifier
     
     // swiftlint:disable:next function_body_length
     private init(config: UniverseConfig, apiClient: APIClient, ledger: Ledger? = nil) throws {
         self.config = config
         self.apiClient = apiClient
-        guard let powToken = try config.genesis.token(symbol: "POW", comparison: ==) else {
+        guard let powToken = config.genesis.token(symbol: "POW", comparison: ==) else {
             throw Error.noPowToken
         }
         self.powToken = powToken
 
-        guard let nativeToken = try config.genesis.token(symbol: "POW", comparison: !=) else {
+        guard let nativeToken = config.genesis.token(symbol: "POW", comparison: !=) else {
             throw Error.noNativeToken
         }
         self.nativeToken = nativeToken

@@ -10,13 +10,17 @@ import Foundation
 
 public struct UniqueParticle: ParticleConvertible {
     
-    // MARK: ParticleConvertible properties
-    public let quarks: Quarks
+    public let address: Address
+    public let name: Name
     
-    public init(address: Address, unique: String) {
-        self.quarks = [
-            AccountableQuark(address: address),
-            IdentifiableQuark(identifier: ResourceIdentifier(address: address, type: .unique, unique: unique))
-        ]
+    public init(address: Address, uniqueName name: Name) {
+        self.address = address
+        self.name = name
+    }
+}
+
+public extension UniqueParticle {
+    var identifier: ResourceIdentifier {
+        return ResourceIdentifier(address: address, type: .unique, name: name)
     }
 }
