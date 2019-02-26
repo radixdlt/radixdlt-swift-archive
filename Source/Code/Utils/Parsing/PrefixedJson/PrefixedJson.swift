@@ -34,11 +34,7 @@ public struct PrefixedStringWithValue: Decodable {
         guard range.lowerBound == string.startIndex else {
             throw Error.noPrefixFoundAtStart
         }
-        print("🐿🐿🐿")
-        print(string)
         let value = string.removingSubrange(range)
-        print(value)
-        print("🐿🐿🐿")
         guard !value.isEmpty else {
             throw Error.noValueFound
         }

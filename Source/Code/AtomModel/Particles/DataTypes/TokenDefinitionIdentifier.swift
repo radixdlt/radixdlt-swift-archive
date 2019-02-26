@@ -9,7 +9,7 @@
 import Foundation
 
 /// Java `TokenClassReference`
-public struct TokenDefinitionIdentifier: Identifiable, CustomStringConvertible, Codable, Hashable, ExpressibleByStringLiteral {
+public struct TokenDefinitionIdentifier: PrefixedJsonDecodableByProxy, Identifiable, CustomStringConvertible, Codable, Hashable, ExpressibleByStringLiteral {
     
     public let address: Address
     public let symbol: Symbol
@@ -20,12 +20,26 @@ public struct TokenDefinitionIdentifier: Identifiable, CustomStringConvertible, 
     }
 }
 
+// MARK: - PrefixedJsonDecodableByProxy
+public extension TokenDefinitionIdentifier {
+    init(proxy: ResourceIdentifier) throws {
+        try self.init(identifier: proxy)
+    }
+}
+
+// MARK: - StringInitializable
+public extension TokenDefinitionIdentifier {
+    init(string: String) throws {
+        let identifier = try ResourceIdentifier(from: string)
+        try self.init(identifier: identifier)
+    }
+}
+
 // MARK: - ExpressibleByStringLiteral
 public extension TokenDefinitionIdentifier {
     init(stringLiteral value: String) {
         do {
-            let identifier = try ResourceIdentifier(from: value)
-            try self.init(identifier: identifier)
+            try self.init(string: value)
         } catch {
             fatalError("Invalid ResourceIdentifier, error: \(error)")
         }

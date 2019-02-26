@@ -23,7 +23,7 @@ class TokenPermissionBadValueSpec: AtomJsonDeserializationChangeJson {
                     fail("Should not be able to decode invalid JSON")
                 } catch let error as TokenPermission.Error {
                     if case .unsupportedPermission(let name) = error {
-                        expect(name).to(be("foobar"))
+                        expect(name).to(equal("foobar"))
                     } else {
                         fail("wrong error")
                     }
