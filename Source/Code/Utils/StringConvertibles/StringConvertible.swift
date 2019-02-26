@@ -16,7 +16,7 @@ public protocol StringConvertible: StringInitializable, ValueValidating, Hashabl
 }
 
 public extension PrefixedJsonDecodable where Self: StringConvertible {
-    public static var tag: JSONPrefix {
+    public static var jsonPrefix: JSONPrefix {
         return .string
     }
 }
@@ -41,7 +41,7 @@ public extension StringConvertible {
 public extension StringConvertible {
     init(stringLiteral string: String) {
         do {
-            self = try Self.init(value: string)
+            self = try Self.init(string: string)
         } catch {
             fatalError("Bad string, error: \(error)")
         }
@@ -68,15 +68,15 @@ public extension StringConvertible {
 
 // MARK: - StringInitializable
 public extension StringConvertible {
-    init(value string: String) throws {
-        self.init(validated: try Self.validate(value: string))
+    init(string: String) throws {
+        self.init(validated: try Self.validate(string))
     }
 }
 
 extension StringConvertible {
-    public static func validate(value string: Value) throws -> Value {
+    public static func validate(_ string: ValidationValue) throws -> ValidationValue {
         if let characterSetSpecifying = self as? CharacterSetSpecifying.Type {
-            try characterSetSpecifying.validate(value: string)
+            try characterSetSpecifying.validate(string)
         }
         
         if let lowerBound = self as? LowerBound.Type {

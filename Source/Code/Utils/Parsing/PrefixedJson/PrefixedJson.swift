@@ -8,62 +8,67 @@
 
 import Foundation
 
-public struct PrefixedJson<Value: PrefixedJsonDecodable>: Decodable {
-    public let value: Value
-    public init(value: Value) {
-        self.value = value
+extension String {
+    func removingSubrange(_ bounds: Range<Index>) -> String {
+        var mutable = self
+        mutable.removeSubrange(bounds)
+        return mutable
     }
 }
 
-// MARK: - Encodable // TODO 
-//public extension PrefixedJson {
-//    func encode(to encoder: Encoder) throws {
-//        var container = encoder.singleValueContainer()
-//        try container.encode(identifer)
-//    }
-//}
-
-extension PrefixedJson: Hashable where Value: Hashable {}
-extension PrefixedJson: Equatable where Value: Equatable {}
-
-// MARK: - Decodable
-public extension PrefixedJson {
+public struct PrefixedStringWithValue: Decodable {
+    public let stringValue: String
+    public let jsonPrefix: JSONPrefix
     
-    init(from: Value.From) throws {
-        try self.init(value: Value(from: from))
-    }
-
-    init(string rawString: String) throws {
-        let components = rawString.components(separatedBy: Value.tag.identifier)
-        guard components.count == 2 else {
+    // swiftlint:disable:next function_body_length
+    public init(string: String) throws {
+        var prefix: JSONPrefix?
+        for jsonPrefix in JSONPrefix.allCases {
+            guard string.contains(jsonPrefix.identifier) else { continue }
+            prefix = jsonPrefix
+            break
+        }
+        guard let jsonPrefix = prefix, let range = string.range(of: jsonPrefix.identifier) else {
+            throw Error.noPrefixFound
+        }
+        guard range.lowerBound == string.startIndex else {
+            throw Error.noPrefixFoundAtStart
+        }
+        print("🐿🐿🐿")
+        print(string)
+        let value = string.removingSubrange(range)
+        print(value)
+        print("🐿🐿🐿")
+        guard !value.isEmpty else {
             throw Error.noValueFound
         }
-        try self.init(from: Value.From(string: components[1]))
+        self.jsonPrefix = jsonPrefix
+        self.stringValue = value
     }
-    
-    public var identifer: String {
+}
+
+public extension PrefixedStringWithValue {
+    var identifer: String {
         return [
-            Value.tag.identifier,
-            String(describing: value)
+            jsonPrefix.rawValue,
+            String(describing: stringValue)
         ].joined()
     }
 }
 
 // MARK: - Error
-public extension PrefixedJson {
+public extension PrefixedStringWithValue {
     public enum Error: Swift.Error {
-        case noSeparator
-        case singleSeparator
-        case noLeadingSepartor
-        case noTagFound
+        case noPrefixFoundAtStart
+        case noPrefixFound
         case noValueFound
-        case valueMismatch
-        case tagMismatch(expected: JSONPrefix, butGot: JSONPrefix)
+        case prefixMismatch(expected: JSONPrefix, butGot: JSONPrefix)
+
     }
 }
 
 // MARK: - Decodable
-public extension PrefixedJson {
+public extension PrefixedStringWithValue {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawString = try container.decode(String.self)
@@ -72,13 +77,9 @@ public extension PrefixedJson {
 }
 
 // MARK: - CustomStringConvertible
-public extension PrefixedJson {
+public extension PrefixedStringWithValue {
     var description: String {
         print(identifer)
         return identifer
     }
-}
-
-func prefixedJsonToString(from string: String) throws -> String {
-    return try PrefixedJson<StringPrefixedJson<String>>(string: string).value.value
 }

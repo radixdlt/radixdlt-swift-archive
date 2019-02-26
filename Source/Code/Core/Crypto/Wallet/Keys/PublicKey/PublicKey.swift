@@ -47,7 +47,7 @@ public extension PublicKey {
 
 // MARK: - PrefixedJsonDecodable
 public extension PublicKey {
-    static let tag = JSONPrefix.bytesBase64
+    static let jsonPrefix = JSONPrefix.bytesBase64
     init(from: Base64String) throws {
         self.init(data: from.asData)
     }

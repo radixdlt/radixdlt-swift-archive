@@ -8,14 +8,23 @@
 
 import Foundation
 
-public protocol StringInitializable: Codable, ValidValueInitializable where ValidationValue == String {}
+public protocol StringInitializable: Codable, ValidValueInitializable where ValidationValue == String {
+    init(string: String) throws
+}
+
+public extension StringInitializable {
+    init(unvalidated value: ValidationValue) throws {
+        try self.init(string: value)
+    }
+}
 
 extension String: StringInitializable {
+   
     public static var jsonPrefix: JSONPrefix {
         return .string
     }
     
-    public init(value string: String) throws {
+    public init(string: String) throws {
         self = string
     }
 }

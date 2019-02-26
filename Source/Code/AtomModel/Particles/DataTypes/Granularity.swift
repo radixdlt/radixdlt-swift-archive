@@ -30,7 +30,7 @@ public extension Granularity {
 
 // MARK: - PrefixedJsonDecodable
 public extension Granularity {
-    static let tag = JSONPrefix.uint256DecimalString
+    static let jsonPrefix = JSONPrefix.uint256DecimalString
     init(from string: String) throws {
         try self.init(string: string)
     }

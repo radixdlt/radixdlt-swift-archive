@@ -38,7 +38,7 @@ public extension Amount {
 
 // MARK: - PrefixedJsonDecodable
 public extension Amount {
-    static let tag = JSONPrefix.uint256DecimalString
+    static let jsonPrefix = JSONPrefix.uint256DecimalString
     init(from string: String) throws {
         try self.init(string: string)
     }

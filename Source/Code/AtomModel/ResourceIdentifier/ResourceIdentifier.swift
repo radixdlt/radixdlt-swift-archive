@@ -109,7 +109,7 @@ public extension ResourceIdentifier {
 
 // MARK: - PrefixedJsonDecodable
 public extension ResourceIdentifier {
-    static let tag: JSONPrefix = .uri
+    static let jsonPrefix: JSONPrefix = .uri
     init(from string: String) throws {
         try self.init(string: string)
     }

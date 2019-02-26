@@ -96,7 +96,7 @@ public extension EUID {
 
 // MARK: - PrefixedJsonDecodable
 public extension EUID {
-    static let tag: JSONPrefix = .euidHex
+    static let jsonPrefix: JSONPrefix = .euidHex
     init(from: HexString) throws {
         try self.init(hexString: from)
     }

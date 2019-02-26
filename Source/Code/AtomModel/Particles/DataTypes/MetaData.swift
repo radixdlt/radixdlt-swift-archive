@@ -26,11 +26,11 @@ public extension MetaData {
 public extension MetaData {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let stringMap = try container.decode([String: String].self)
-        let map = try [Key: Value](uniqueKeysWithValues: stringMap.map {
+        let stringMap = try container.decode([String: PrefixedStringWithValue].self)
+        let map = [Key: Value](uniqueKeysWithValues: stringMap.map {
             (
                 Key($0.key),
-                try prefixedJsonToString(from: $0.value)
+                $0.value.stringValue
             )
         })
         self.init(values: map)

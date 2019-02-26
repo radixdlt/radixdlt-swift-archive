@@ -10,5 +10,5 @@ import Foundation
 
 public protocol ValidValueInitializable {
     associatedtype ValidationValue: Comparable
-    init(value: ValidationValue) throws
+    init(unvalidated value: ValidationValue) throws
 }

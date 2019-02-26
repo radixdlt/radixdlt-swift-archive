@@ -8,26 +8,38 @@
 
 import Foundation
 
-public struct Address: PrefixedJsonDecodable, StringInitializable, Hashable, Codable, CustomStringConvertible, DataConvertible, ExpressibleByStringLiteral {
+public protocol ExactLengthSpecifying: MinLengthSpecifying, MaxLengthSpecifying {
+    static var length: Int { get }
+}
+public extension ExactLengthSpecifying {
+    static var minLength: Int {
+        return length
+    }
+    static var maxLength: Int {
+        return length
+    }
+}
+
+public struct Address: PrefixedJsonDecodableByProxy, StringInitializable, Hashable, Codable, CustomStringConvertible, DataConvertible, ExpressibleByStringLiteral, ExactLengthSpecifying {
+    
+    public static let length = 51
     
     public let base58String: Base58String
     public let publicKey: PublicKey
     
     public init(base58String: Base58String, publicKey: PublicKey? = nil) throws {
-        if base58String.length > Address.length {
-            throw Error.tooLong(expected: Address.length, butGot: base58String.length)
-        }
-        
-        if base58String.length < Address.length {
-            throw Error.tooShort(expected: Address.length, butGot: base58String.length)
-        }
-       
         try Address.isChecksummed(base58String: base58String)
         self.base58String = base58String
         let addressData = base58String.asData
         self.publicKey = publicKey ?? PublicKey(data: addressData[1...addressData.count - 5])
     }
-    
+}
+
+// MARK: - PrefixedJsonDecodableByProxy
+public extension Address {
+    init(proxy: Base58String) throws {
+        try self.init(base58String: proxy)
+    }
 }
 
 // MARK: - DataConvertible
@@ -78,14 +90,6 @@ public extension Address {
     }
 }
 
-// MARK: - PrefixedJsonDecodable
-public extension Address {
-    static let tag: JSONPrefix = .addressBase58
-    init(from: Base58String) throws {
-       try self.init(base58String: from)
-    }
-}
-
 // MARK: - Checksum
 public extension Address {
     
@@ -102,8 +106,6 @@ public extension Address {
         }
         // is valid
     }
-    
-    static let length = 51
     
     public enum Error: Swift.Error {
         case tooLong(expected: Int, butGot: Int)

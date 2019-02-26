@@ -29,8 +29,8 @@ public extension Addresses {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let addresses = try container.decode([PrefixedJson<Address>].self)
-        self.init(addresses: addresses.map { $0.value }.asSet)
+        let addresses = try container.decode([Address].self)
+        self.init(addresses: addresses.asSet)
     }
     
     func encode(to encoder: Encoder) throws {

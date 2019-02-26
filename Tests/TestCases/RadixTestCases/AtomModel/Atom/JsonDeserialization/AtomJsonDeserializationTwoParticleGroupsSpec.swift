@@ -55,6 +55,12 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
     }
 }
 
+class TestDeseriali: XCTestCase {
+    func testDeser() {
+         let atom: Atom = model(from: json)
+    }
+}
+
 
 private let json = """
 {

@@ -9,6 +9,6 @@
 import Foundation
 
 public protocol ValueValidating {
-    associatedtype Value: Comparable
-    static func validate(value: Value) throws -> Value
+    associatedtype ValidationValue: Comparable
+    static func validate(_ value: ValidationValue) throws -> ValidationValue
 }

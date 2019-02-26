@@ -18,11 +18,11 @@ public struct TokenPermissions: Equatable, Codable, ExpressibleByDictionaryLiter
 public extension TokenPermissions {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let stringMap = try container.decode([String: String].self)
+        let stringMap = try container.decode([String: PrefixedStringWithValue].self)
         let map = try [Key: Value](uniqueKeysWithValues: stringMap.map {
             (
                 try Key(string: $0.key),
-                try PrefixedJson<StringPrefixedJson<TokenPermission>>(string: $0.value).value.value
+                try Value(string: $0.value.stringValue)
             )
         })
         self.init(values: map)
