@@ -9,7 +9,7 @@
 import Foundation
 
 /// EffectiveUserIdentifier
-public struct EUID: PrefixedJsonDecodable, StringInitializable, Hashable, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral {
+public struct EUID: PrefixedJsonDecodable, Hashable, ExpressibleByIntegerLiteral {
     
     public typealias Value = BigUnsignedInt
     public static let byteCount = 16
@@ -43,17 +43,6 @@ public extension EUID {
 public extension EUID {
     init(string: String) throws {
         try self.init(hexString: try HexString(string: string))
-    }
-}
-
-// MARK: - ExpressibleByStringLiteral
-public extension EUID {
-    init(stringLiteral string: String) {
-        do {
-            try self.init(string: string)
-        } catch {
-            fatalError("Passed bad string (`\(string)`), error: \(error)")
-        }
     }
 }
 
@@ -96,7 +85,7 @@ public extension EUID {
 
 // MARK: - PrefixedJsonDecodable
 public extension EUID {
-    static let tag: JSONPrefix = .euidHex
+    static let jsonPrefix: JSONPrefix = .euidHex
     init(from: HexString) throws {
         try self.init(hexString: from)
     }

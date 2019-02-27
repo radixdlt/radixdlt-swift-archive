@@ -8,24 +8,12 @@
 
 import Foundation
 
-public struct TokenPermissions: Equatable, Codable, ExpressibleByDictionaryLiteral, Collection {
+public struct TokenPermissions: DictionaryDecodable, Equatable {
     public typealias Key = TokenAction
     public typealias Value = TokenPermission
-    public let values: [Key: Value]
-}
-
-// MARK: - Decodable
-public extension TokenPermissions {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let stringMap = try container.decode([String: String].self)
-        let map = try [Key: Value](uniqueKeysWithValues: stringMap.map {
-            (
-                try Key(string: $0.key),
-                try PrefixedJson<StringPrefixedJson<TokenPermission>>(string: $0.value).value.value
-            )
-        })
-        self.init(values: map)
+    public let dictionary: [Key: Value]
+    public init(dictionary: Map) {
+        self.dictionary = dictionary
     }
 }
 
@@ -36,38 +24,3 @@ public extension TokenPermissions {
     }
 }
 
-// MARK: - Subscript
-public extension TokenPermissions {
-    subscript(key: Key) -> Value? {
-        return values[key]
-    }
-}
-
-// MARK: - Collection
-public extension TokenPermissions {
-    typealias Element = Dictionary<Key, Value>.Element
-    typealias Index = Dictionary<Key, Value>.Index
-    
-    var startIndex: Index {
-        return values.startIndex
-    }
-    
-    var endIndex: Index {
-        return values.endIndex
-    }
-    
-    subscript(position: Index) -> Element {
-        return values[position]
-    }
-    
-    func index(after index: Index) -> Index {
-        return values.index(after: index)
-    }
-}
-
-// MARK: - ExpressibleByDictionaryLiteral
-public extension TokenPermissions {
-    init(dictionaryLiteral permissions: (Key, Value)...) {
-        self.init(values: Dictionary(uniqueKeysWithValues: permissions))
-    }
-}

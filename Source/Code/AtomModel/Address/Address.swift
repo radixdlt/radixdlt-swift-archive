@@ -8,26 +8,28 @@
 
 import Foundation
 
-public struct Address: PrefixedJsonDecodable, StringInitializable, Hashable, Codable, CustomStringConvertible, DataConvertible, ExpressibleByStringLiteral {
+public struct Address: PrefixedJsonDecodableByProxy, Hashable, CustomStringConvertible, DataConvertible, ExactLengthSpecifying {
+    
+    public static let length = 51
     
     public let base58String: Base58String
     public let publicKey: PublicKey
     
     public init(base58String: Base58String, publicKey: PublicKey? = nil) throws {
-        if base58String.length > Address.length {
-            throw Error.tooLong(expected: Address.length, butGot: base58String.length)
-        }
-        
-        if base58String.length < Address.length {
-            throw Error.tooShort(expected: Address.length, butGot: base58String.length)
-        }
-       
+        try Address.validateLength(of: base58String)
         try Address.isChecksummed(base58String: base58String)
         self.base58String = base58String
         let addressData = base58String.asData
         self.publicKey = publicKey ?? PublicKey(data: addressData[1...addressData.count - 5])
     }
     
+}
+
+// MARK: - PrefixedJsonDecodableByProxy
+public extension Address {
+    init(proxy: Base58String) throws {
+        try self.init(base58String: proxy)
+    }
 }
 
 // MARK: - DataConvertible
@@ -51,38 +53,14 @@ public extension Address {
 // MARK: - StringInitializable
 public extension Address {
     init(string: String) throws {
-        do {
-            let base58 = try Base58String(string: string)
-            try self.init(base58String: base58)
-        } catch let base58Error as InvalidStringError {
-            throw Address.Error.nonBase58(error: base58Error)
-        }
+        let base58 = try Base58String(string: string)
+        try self.init(base58String: base58)
     }
 }
-
-// MARK: - ExpressibleByStringLiteral
-public extension Address {
-    public init(stringLiteral value: String) {
-        do {
-            try self.init(string: value)
-        } catch {
-            fatalError("Passed non address value string: `\(value)`, error: \(error)")
-        }
-    }
-}
-
 // MARK: - CustomStringConvertible
 public extension Address {
     var description: String {
         return base58String.value
-    }
-}
-
-// MARK: - PrefixedJsonDecodable
-public extension Address {
-    static let tag: JSONPrefix = .addressBase58
-    init(from: Base58String) throws {
-       try self.init(base58String: from)
     }
 }
 
@@ -103,12 +81,7 @@ public extension Address {
         // is valid
     }
     
-    static let length = 51
-    
     public enum Error: Swift.Error {
-        case tooLong(expected: Int, butGot: Int)
-        case tooShort(expected: Int, butGot: Int)
-        case nonBase58(error: InvalidStringError)
         case checksumMismatch
     }
 }

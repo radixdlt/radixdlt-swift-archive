@@ -16,7 +16,7 @@ class TooShortNameSpec: AtomJsonDeserializationChangeJson {
         /// Scenario 8
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - TokenDefinitionParticle: too short name") {
-            let badJson = self.replaceValueInParticle(for: "name", with: ":str:B")
+            let badJson = self.replaceValueInParticle(for: .name, with: ":str:B")
             
             it("should fail to deserialize JSON with a too short name") {
                 do {

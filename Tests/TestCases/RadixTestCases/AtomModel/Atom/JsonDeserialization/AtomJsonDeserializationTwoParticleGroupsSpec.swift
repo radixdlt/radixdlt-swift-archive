@@ -55,7 +55,6 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
     }
 }
 
-
 private let json = """
 {
     "signatures": {

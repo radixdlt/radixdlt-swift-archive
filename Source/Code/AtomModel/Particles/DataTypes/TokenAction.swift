@@ -9,7 +9,7 @@
 import Foundation
 
 /// Verb version of `FungibleType`
-public enum TokenAction: String, StringInitializable, Hashable {
+public enum TokenAction: String, PrefixedJsonDecodable, Hashable {
     case mint
     case transfer
     case burn
@@ -27,10 +27,7 @@ public extension TokenAction {
 
 // MARK: PrefixedJsonDecodable
 public extension TokenAction {
-    static let tag: JSONPrefix = .string
-    init(from string: String) throws {
-        try self.init(string: string)
-    }
+    static let jsonPrefix: JSONPrefix = .string
 }
 
 // MARK: CustomStringConvertible

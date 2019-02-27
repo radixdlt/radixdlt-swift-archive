@@ -8,52 +8,21 @@
 
 import Foundation
 
-public struct ParticleGroups: Codable, ExpressibleByArrayLiteral, Collection {
+public struct ParticleGroups: ArrayDecodable {
     
-    public typealias Element = ParticleGroup
-    public let particleGroups: [Element]
-    public init(particleGroups: [Element] = []) {
+    public let particleGroups: [ParticleGroup]
+    public init(particleGroups: [ParticleGroup] = []) {
         self.particleGroups = particleGroups
     }
 }
 
-// MARK: - Codable
+// MARK: - ArrayDecodable
 public extension ParticleGroups {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(particleGroups: try container.decode([Element].self))
+    public typealias Element = ParticleGroup
+    var elements: [Element] {
+        return particleGroups
     }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(particleGroups)
-    }
-}
-
-// MARK: - Collection
-public extension ParticleGroups {
-    typealias Index = Array<Element>.Index
-    
-    var startIndex: Index {
-        return particleGroups.startIndex
-    }
-    
-    var endIndex: Index {
-        return particleGroups.endIndex
-    }
-    
-    subscript(position: Index) -> Element {
-        return particleGroups[position]
-    }
-    
-    func index(after index: Index) -> Index {
-        return particleGroups.index(after: index)
-    }
-}
-
-// MARK: - ExpressibleByArrayLiteral
-public extension ParticleGroups {
-    init(arrayLiteral groups: Element...) {
-        self.init(particleGroups: groups)
+    init(elements: [Element]) {
+        self.init(particleGroups: elements)
     }
 }

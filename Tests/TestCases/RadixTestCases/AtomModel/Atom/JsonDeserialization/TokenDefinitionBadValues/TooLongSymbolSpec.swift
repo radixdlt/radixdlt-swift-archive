@@ -16,7 +16,7 @@ class TooLongSymbolSpec: AtomJsonDeserializationChangeJson {
         /// Scenario 4
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - TokenDefinitionParticle: too long symbol") {
-            let badJson = self.replaceValueInParticle(for: "symbol", with: ":str:01234567890123456")
+            let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:01234567890123456")
             it("should fail to deserialize JSON with too long symbol") {
                 do {
                     try decode(Atom.self, from: badJson)

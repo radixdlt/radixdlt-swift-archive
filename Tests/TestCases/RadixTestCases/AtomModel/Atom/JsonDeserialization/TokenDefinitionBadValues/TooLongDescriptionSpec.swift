@@ -16,7 +16,7 @@ class TooLongDescriptionSpec: AtomJsonDeserializationChangeJson {
         /// Scenario 9
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - TokenDefinitionParticle: too long description") {
-            let badJson = self.replaceValueInParticle(for: "description", with: ":str:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit metus sit amet nulla facilisis condimentum. Nullam at risus ante. Praesent tortor nisl, volutpat eget magna quis, fermentum. 12345!")
+            let badJson = self.replaceValueInParticle(for: .description, with: ":str:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit metus sit amet nulla facilisis condimentum. Nullam at risus ante. Praesent tortor nisl, volutpat eget magna quis, fermentum. 12345!")
             
             it("should fail to deserialize JSON with a too long description") {
                 do {

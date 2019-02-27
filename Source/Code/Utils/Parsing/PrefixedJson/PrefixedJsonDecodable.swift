@@ -8,29 +8,16 @@
 
 import Foundation
 
-public protocol PrefixedJsonDecodable: CustomStringConvertible, Decodable {
-    static var tag: JSONPrefix { get }
-    associatedtype From: StringInitializable
-    init(from: From) throws
+public protocol PrefixedJsonDecodable: StringInitializable {
+    static var jsonPrefix: JSONPrefix { get }
+    init(prefixedString: PrefixedStringWithValue) throws
 }
 
-extension String: PrefixedJsonDecodable {
-    public static var tag: JSONPrefix { return .string }
-    public init(from: String) throws {
-        self = from
+public extension PrefixedJsonDecodable {
+    init(prefixedString: PrefixedStringWithValue) throws {
+        guard prefixedString.jsonPrefix == Self.jsonPrefix else {
+            throw PrefixedStringWithValue.Error.prefixMismatch(expected: Self.jsonPrefix, butGot: prefixedString.jsonPrefix)
+        }
+        try self.init(string: prefixedString.stringValue)
     }
 }
-
-public protocol PrefixedJsonEncodable: Encodable {
-//    static var tag: JSONPrefix { get }
-//    var stringToDecode: String { get }
-}
-
-public typealias PrefixedJsonCodable = PrefixedJsonDecodable & PrefixedJsonEncodable
-
-//public extension PrefixedJsonEncodable {
-//    func encode(to encoder: Encoder) throws {
-//        var container = encoder.singleValueContainer()
-//        try container.encode(PrefixedJson(value: ))
-//    }
-//}

@@ -15,7 +15,7 @@ class NegativeAmountSpec: AtomJsonDeserializationMintedTokenBadValuesSpec {
         /// Scenario 13
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - MintedTokenParticle: negative amount") {
-            let badJson = self.replaceValueInParticle(for: "amount", with: ":u20:-1")
+            let badJson = self.replaceValueInParticle(for: .amount, with: ":u20:-1")
             
             it("should fail to deserialize JSON with a MintedTokenParticle with negative amount") {
                 do {

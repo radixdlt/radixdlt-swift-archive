@@ -20,4 +20,10 @@ public extension String {
         }
         return count
     }
+    
+    func removingSubrange(_ bounds: Range<Index>) -> String {
+        var mutable = self
+        mutable.removeSubrange(bounds)
+        return mutable
+    }
 }

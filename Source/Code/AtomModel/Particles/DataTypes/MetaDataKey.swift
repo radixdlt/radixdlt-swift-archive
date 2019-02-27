@@ -9,12 +9,19 @@
 import Foundation
 
 /// Open enum
-public struct MetaDataKey: Hashable, CustomStringConvertible, Codable {
+public struct MetaDataKey: Hashable, CustomStringConvertible, Codable, StringInitializable {
 
     public let key: String
     
     public init(_ key: String) {
         self.key = key
+    }
+}
+
+// MARK: - StringInitializable
+public extension MetaDataKey {
+    init(string: String) throws {
+        self.init(string)
     }
 }
 

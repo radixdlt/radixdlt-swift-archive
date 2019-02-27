@@ -8,6 +8,34 @@
 
 import Foundation
 
-public protocol StringInitializable: Codable, CustomStringConvertible {
+public protocol StringInitializable: Codable, ExpressibleByStringLiteral, ValidValueInitializable where ValidationValue == String {
     init(string: String) throws
+}
+
+public extension StringInitializable {
+    init(unvalidated value: ValidationValue) throws {
+        try self.init(string: value)
+    }
+}
+
+// MARK: - ExpressibleByStringLiteral
+public extension StringInitializable {
+    init(stringLiteral value: String) {
+        do {
+            try self.init(string: value)
+        } catch {
+            fatalError("Passed non address value string: `\(value)`, error: \(error)")
+        }
+    }
+}
+
+extension String: StringInitializable {
+   
+    public static var jsonPrefix: JSONPrefix {
+        return .string
+    }
+    
+    public init(string: String) throws {
+        self = string
+    }
 }

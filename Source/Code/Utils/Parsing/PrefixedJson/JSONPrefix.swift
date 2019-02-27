@@ -8,16 +8,6 @@
 
 import Foundation
 
-extension String: StringInitializable {
-    public static var JSONPrefix: JSONPrefix {
-        return .string
-    }
-    
-    public init(string: String) throws {
-        self = string
-    }
-}
-
 /// https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding+new
 public enum JSONPrefix: String, CaseIterable {
     case string = "str"

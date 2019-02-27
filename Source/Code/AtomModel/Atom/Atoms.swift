@@ -8,48 +8,21 @@
 
 import Foundation
 
-public struct Atoms: Codable, ExpressibleByArrayLiteral, Collection {
+public struct Atoms: ArrayDecodable {
     
-    public typealias Element = Atom
-    public let atoms: [Element]
-    public init(atoms: [Element] = []) {
+    public let atoms: [Atom]
+    public init(atoms: [Atom] = []) {
         self.atoms = atoms
     }
 }
 
-// MARK: - Codable
+// MARK: - ArrayDecodable
 public extension Atoms {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(atoms: try container.decode([Element].self))
+    public typealias Element = Atom
+    var elements: [Element] {
+        return atoms
     }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(atoms)
-    }
-}
-
-// MARK: - Collection
-public extension Atoms {
-    typealias Index = Array<Element>.Index
-    var startIndex: Index {
-        return atoms.startIndex
-    }
-    var endIndex: Index {
-        return atoms.endIndex
-    }
-    subscript(position: Index) -> Element {
-        return atoms[position]
-    }
-    func index(after index: Index) -> Index {
-        return atoms.index(after: index)
-    }
-}
-
-// MARK: - ExpressibleByArrayLiteral
-public extension Atoms {
-    init(arrayLiteral atoms: Element...) {
-        self.init(atoms: atoms)
+    init(elements: [Element]) {
+        self.init(atoms: elements)
     }
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Base58String: StringConvertible, CharacterSetSpecifying, DataConvertible {
+public struct Base58String: PrefixedJsonDecodable, StringConvertible, CharacterSetSpecifying, DataConvertible {
 
     public static var allowedCharacters = CharacterSet.base58
     
@@ -20,6 +20,11 @@ public struct Base58String: StringConvertible, CharacterSetSpecifying, DataConve
             fatalError("Passed unvalid string, error: \(error)")
         }
     }
+}
+
+// MARK: - PrefixedJsonDecodable
+public extension Base58String {
+    static let jsonPrefix: JSONPrefix = .addressBase58
 }
 
 // MARK: DataConvertible

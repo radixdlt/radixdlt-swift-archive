@@ -7,14 +7,12 @@
 //
 
 import Foundation
-
-public struct ParticleGroup: Codable, Collection, ExpressibleByArrayLiteral {
-    public typealias Element = SpunParticle
+public struct ParticleGroup: ArrayDecodable {
     
-    public let spunParticles: [Element]
+    public let spunParticles: [SpunParticle]
     public let metaData: MetaData
     
-    public init(spunParticles: [Element], metaData: MetaData = [:]) {
+    public init(spunParticles: [SpunParticle], metaData: MetaData = [:]) {
         self.spunParticles = spunParticles
         self.metaData = metaData
     }
@@ -26,32 +24,21 @@ public extension ParticleGroup {
         case spunParticles = "particles"
         case metaData
     }
-}
-
-// MARK: - ExpressibleByArrayLiteral
-public extension ParticleGroup {
-    init(arrayLiteral spunParticles: SpunParticle...) {
-        self.init(spunParticles: spunParticles)
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        spunParticles = try container.decode([SpunParticle].self, forKey: .spunParticles)
+        metaData = try container.decode(MetaData.self, forKey: .metaData)
     }
 }
 
-// MARK: - Collection
+// MARK: - ArrayDecodable
 public extension ParticleGroup {
-    typealias Index = Array<Element>.Index
-    
-    var startIndex: Index {
-        return spunParticles.startIndex
+    public typealias Element = SpunParticle
+    var elements: [Element] {
+        return spunParticles
     }
-    
-    var endIndex: Index {
-        return spunParticles.endIndex
-    }
-    
-    subscript(position: Index) -> Element {
-        return spunParticles[position]
-    }
-    
-    func index(after index: Index) -> Index {
-        return spunParticles.index(after: index)
+    init(elements: [Element]) {
+        self.init(spunParticles: elements)
     }
 }
