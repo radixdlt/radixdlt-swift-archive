@@ -21,3 +21,32 @@ public struct Atom: AtomConvertible {
         self.metaData = metaData
     }
 }
+
+// MARK: - Encodable
+public extension Atom {
+    
+    // swiftlint:disable:next function_body_length
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Atom.CodingKeys.self)
+        try container.encode(particleGroups, forKey: .particleGroups)
+        try container.encode(signatures, forKey: .signatures)
+        try container.encode(metaData, forKey: .metaData)
+
+        let enc = JSONEncoder()
+        let atomSize = [
+            try enc.encode(particleGroups),
+            try enc.encode(signatures),
+            try enc.encode(metaData)
+        ].map { $0.length }.reduce(0, +)
+        guard atomSize <= Atom.maxSize else {
+            throw Error.tooManyBytes(expectedAtMost: Atom.maxSize, butGot: atomSize)
+        }
+    }
+}
+
+public extension Atom {
+    static let maxSize = 60000
+    public enum Error: Swift.Error {
+        case tooManyBytes(expectedAtMost: Int, butGot: Int)
+    }
+}

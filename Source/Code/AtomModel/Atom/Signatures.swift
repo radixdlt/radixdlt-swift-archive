@@ -71,6 +71,13 @@ public extension Signatures {
 public extension Signatures {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(values)
+     
+        let dictionary = [String: Signature](uniqueKeysWithValues: values.map {
+            (
+                $0.key.toHexString().stringValue,
+                $0.value
+            )
+        })
+        try container.encode(dictionary)
     }
 }

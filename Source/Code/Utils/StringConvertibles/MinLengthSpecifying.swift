@@ -10,7 +10,7 @@ import Foundation
 
 public protocol MinLengthSpecifying: LowerBound {
     static var minLength: Int { get }
-    static func validateMinLength<S>(of stringRepresentable: S) throws where S: StringRepresentable
+    static func validateMinLength<L>(of measurable: L) throws where L: LengthMeasurable
     
 }
 
@@ -19,10 +19,10 @@ public extension MinLengthSpecifying {
         return minLength
     }
 
-    static func validateMinLength<S>(of stringRepresentable: S) throws where S: StringRepresentable {
-        let string = stringRepresentable.stringValue
-        if string.count < minValue {
-            throw InvalidStringError.tooFewCharacters(expectedAtLeast: minValue, butGot: string.count)
+    static func validateMinLength<L>(of measurable: L) throws where L: LengthMeasurable {
+        let length = measurable.length
+        if length < minLength {
+            throw InvalidStringError.tooFewCharacters(expectedAtLeast: minLength, butGot: length)
         }
     }
 }

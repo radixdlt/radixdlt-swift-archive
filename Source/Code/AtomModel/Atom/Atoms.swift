@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Atoms: ArrayDecodable {
+public struct Atoms: ArrayCodable {
     
     public let atoms: [Atom]
     public init(atoms: [Atom] = []) {

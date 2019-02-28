@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ParticleGroups: ArrayDecodable {
+public struct ParticleGroups: ArrayCodable {
     
     public let particleGroups: [ParticleGroup]
     public init(particleGroups: [ParticleGroup] = []) {

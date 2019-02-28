@@ -8,8 +8,36 @@
 
 import Foundation
 
-public protocol StringRepresentable {
+public protocol LengthMeasurable {
+    var length: Int { get }
+}
+
+public protocol StringRepresentable: LengthMeasurable {
     var stringValue: String { get }
+}
+
+public extension StringRepresentable {
+    public var length: Int {
+        return stringValue.length
+    }
+}
+
+public extension StringRepresentable where Self: DataConvertible {
+    public var length: Int {
+        return stringValue.length
+    }
+}
+
+extension String: LengthMeasurable {
+    public var length: Int {
+        return count
+    }
+}
+
+public extension StringRepresentable where Self: RawRepresentable, Self.RawValue == String {
+    var stringValue: String {
+        return rawValue
+    }
 }
 
 extension String: StringRepresentable {

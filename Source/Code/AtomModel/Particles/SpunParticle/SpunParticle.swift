@@ -9,8 +9,12 @@
 import Foundation
 
 public struct SpunParticle: Codable {
-    public let particle: ParticleConvertible
     public let spin: Spin
+    public let particle: ParticleConvertible
+    public init(spin: Spin = .down, particle: ParticleConvertible) {
+        self.spin = spin
+        self.particle = particle
+    }
 }
 
 // MARK: - Deodable
@@ -46,6 +50,8 @@ public extension SpunParticle {
         var encoder = encoder.container(keyedBy: CodingKeys.self)
         if let messageParticle = particle as? MessageParticle {
             try encoder.encode(messageParticle, forKey: .particle)
+        } else if let tokenDefinitionParticle = particle as? TokenDefinitionParticle {
+            try encoder.encode(tokenDefinitionParticle, forKey: .particle)
         } else if let tokenParticle = particle as? TokenParticle {
             try encoder.encode(tokenParticle, forKey: .particle)
         } else if let uniqueParticle = particle as? UniqueParticle {
@@ -57,11 +63,11 @@ public extension SpunParticle {
 
 public extension SpunParticle {
     static func up(particle: ParticleConvertible) -> SpunParticle {
-        return SpunParticle(particle: particle, spin: .up)
+        return SpunParticle(spin: .up, particle: particle)
     }
     
     static func down(particle: ParticleConvertible) -> SpunParticle {
-        return SpunParticle(particle: particle, spin: .down)
+        return SpunParticle(spin: .down, particle: particle)
     }
     
     func particle<P>(as type: P.Type) -> P? where P: ParticleConvertible {

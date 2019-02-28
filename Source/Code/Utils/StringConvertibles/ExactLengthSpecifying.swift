@@ -20,8 +20,8 @@ public extension ExactLengthSpecifying {
         return length
     }
     
-    static func validateLength<S>(of stringRepresentable: S) throws where S: StringRepresentable {
-        try validateMaxLength(of: stringRepresentable)
-        try validateMinLength(of: stringRepresentable)
+    static func validateLength<L>(of measurable: L) throws where L: LengthMeasurable {
+        try validateMaxLength(of: measurable)
+        try validateMinLength(of: measurable)
     }
 }

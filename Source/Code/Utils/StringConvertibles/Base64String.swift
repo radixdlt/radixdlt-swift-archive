@@ -8,15 +8,29 @@
 
 import Foundation
 
-public struct Base64String: PrefixedJsonDecodable, StringConvertible, DataConvertible {
+public protocol RequiringThatLengthIsMultipleOfN {
+    static var lengthMultiple: Int { get }
+    static func validateLengthMultiple<L>(of measurable: L) throws where L: LengthMeasurable
+}
+
+public extension RequiringThatLengthIsMultipleOfN {
+    static func validateLengthMultiple<L>(of measurable: L) throws where L: LengthMeasurable {
+        let length = measurable.length
+        let multiple = Self.lengthMultiple
+        if length % multiple != 0 {
+            let (_, remainder) = length.quotientAndRemainder(dividingBy: multiple)
+            throw InvalidStringError.lengthNotMultiple(of: multiple, shortOf: remainder)
+        }
+    }
+}
+
+public struct Base64String: PrefixedJsonCodable, StringConvertible, StringRepresentable, DataConvertible, DataInitializable, RequiringThatLengthIsMultipleOfN, CharacterSetSpecifying {
     public static let jsonPrefix: JSONPrefix = .bytesBase64
     
+    public static var lengthMultiple = 4
+    public static var allowedCharacters =  CharacterSet.base64
+    
     public let value: String
-    
-    public init(data: Data) {
-        self.value = data.base64EncodedString()
-    }
-    
     public init(validated unvalidated: String) {
         do {
             self.value = try Base64String.validate(unvalidated)
@@ -26,16 +40,17 @@ public struct Base64String: PrefixedJsonDecodable, StringConvertible, DataConver
     }
 }
 
+// MARK: - DataInitializable
 public extension Base64String {
-    public enum Error: Swift.Error {
-        case invalidCharacters
+    init(data: Data) {
+        self.value = data.base64EncodedString()
     }
-    
-    public static func validate(_ string: String) throws -> String {
-        guard Data(base64Encoded: string) != nil else {
-            throw Error.invalidCharacters
-        }
-        return string // valid
+}
+
+// MARK: - StringRepresentable
+public extension Base64String {
+    var stringValue: String {
+        return value
     }
 }
 

@@ -8,8 +8,14 @@
 
 import Foundation
 
+public extension CustomStringConvertible where Self: StringRepresentable {
+    var description: String {
+        return stringValue
+    }
+}
+
 /// EffectiveUserIdentifier
-public struct EUID: PrefixedJsonDecodable, Hashable, ExpressibleByIntegerLiteral {
+public struct EUID: PrefixedJsonCodable, StringRepresentable, Hashable, ExpressibleByIntegerLiteral, CustomStringConvertible {
     
     public typealias Value = BigUnsignedInt
     public static let byteCount = 16
@@ -46,6 +52,13 @@ public extension EUID {
     }
 }
 
+// MARK: - StringRepresentable
+public extension EUID {
+    var stringValue: String {
+        return value.toHexString().stringValue
+    }
+}
+
 // MARK: - ExpressibleByIntegerLiteral
 public extension EUID {
     public init(integerLiteral int: Int) {
@@ -68,7 +81,7 @@ public extension EUID {
 public extension EUID {
     
     func toHexString() -> HexString {
-        return HexString(data: value.toData())
+        return value.toHexString()
     }
     
     /// Converting to `Shard` throws away all bytes of the `value` except the low-order 64 bytes.
@@ -86,9 +99,6 @@ public extension EUID {
 // MARK: - PrefixedJsonDecodable
 public extension EUID {
     static let jsonPrefix: JSONPrefix = .euidHex
-    init(from: HexString) throws {
-        try self.init(hexString: from)
-    }
 }
 
 // MARK: - Encodable

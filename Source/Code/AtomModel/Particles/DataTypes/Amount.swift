@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Amount: PrefixedJsonDecodable, Equatable, ExpressibleByIntegerLiteral {
+public struct Amount: PrefixedJsonCodable, StringRepresentable, Equatable, ExpressibleByIntegerLiteral {
     
     public static let subunitsDenominatorDecimalExponent: Int = 18
     public static let subunitsDenominator = BigUnsignedInt(10).power(Amount.subunitsDenominatorDecimalExponent)
@@ -36,12 +36,16 @@ public extension Amount {
     }
 }
 
+// MARK: - StringRepresentable
+public extension Amount {
+    var stringValue: String {
+        return value.toDecimalString()
+    }
+}
+
 // MARK: - PrefixedJsonDecodable
 public extension Amount {
     static let jsonPrefix = JSONPrefix.uint256DecimalString
-    init(from string: String) throws {
-        try self.init(string: string)
-    }
 }
 
 // MARK: - ExpressibleByIntegerLiteral

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol StringInitializable: Codable, ExpressibleByStringLiteral, ValidValueInitializable where ValidationValue == String {
+public protocol StringInitializable: ExpressibleByStringLiteral, ValidValueInitializable where ValidationValue == String {
     init(string: String) throws
 }
 

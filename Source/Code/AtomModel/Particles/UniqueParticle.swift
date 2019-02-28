@@ -10,6 +10,8 @@ import Foundation
 
 public struct UniqueParticle: ParticleConvertible {
     
+    public let type: ParticleTypes = .unique
+    
     public let address: Address
     public let name: Name
     

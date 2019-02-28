@@ -10,6 +10,8 @@ import Foundation
 
 public struct TokenDefinitionParticle: ParticleConvertible, Identifiable {
     
+    public let type: ParticleTypes = .tokenDefinition
+    
     public let symbol: Symbol
     public let name: Name
     public let description: Description
@@ -17,6 +19,24 @@ public struct TokenDefinitionParticle: ParticleConvertible, Identifiable {
     public let metaData: MetaData
     public let granularity: Granularity
     public let permissions: TokenPermissions
+    
+    public init(
+        symbol: Symbol,
+        name: Name,
+        description: Description,
+        address: Address,
+        metaData: MetaData = [:],
+        granularity: Granularity,
+        permissions: TokenPermissions
+        ) {
+        self.symbol = symbol
+        self.name = name
+        self.description = description
+        self.address = address
+        self.metaData = metaData
+        self.granularity = granularity
+        self.permissions = permissions
+    }
 
 }
 
@@ -29,8 +49,8 @@ public extension TokenDefinitionParticle {
 
 // MARK: - Codable
 public extension TokenDefinitionParticle {
-    public enum CodingKeys: CodingKey {
-        case symbol, name, description, address, metaData, granularity, permissions
+    public enum CodingKeys: String, CodingKey {
+        case type, symbol, name, description, address, metaData, granularity, permissions
     }
 }
 

@@ -9,9 +9,13 @@
 import Foundation
 import BigInt
 
-public protocol BigInteger: BinaryInteger {}
+public protocol BigInteger: BinaryInteger, DataConvertible, DataInitializable {}
 
 public typealias BigSignedInt = BigInt
 public typealias BigUnsignedInt = BigUInt
 extension BigSignedInt: BigInteger {}
-extension BigUnsignedInt: BigInteger {}
+extension BigUnsignedInt: BigInteger {
+    public init(data: Data) {
+        self.init(data)
+    }
+}

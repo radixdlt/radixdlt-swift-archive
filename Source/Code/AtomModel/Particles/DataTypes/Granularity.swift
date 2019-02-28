@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Granularity: PrefixedJsonDecodable, Equatable, ExpressibleByIntegerLiteral {
+public struct Granularity: PrefixedJsonCodable, Equatable, StringRepresentable, ExpressibleByIntegerLiteral {
     public typealias Value = BigUnsignedInt
     
     public let value: Value
@@ -28,12 +28,16 @@ public extension Granularity {
     }
 }
 
+// MARK: - StringRepresentable
+public extension Granularity {
+    var stringValue: String {
+        return value.toDecimalString()
+    }
+}
+
 // MARK: - PrefixedJsonDecodable
 public extension Granularity {
     static let jsonPrefix = JSONPrefix.uint256DecimalString
-    init(from string: String) throws {
-        try self.init(string: string)
-    }
 }
 
 // MARK: - ExpressibleByIntegerLiteral

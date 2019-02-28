@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct MetaData: DictionaryDecodable, Equatable {
+public struct MetaData: DictionaryCodable, Equatable {
     public typealias Key = MetaDataKey
     public typealias Value = String
     public let dictionary: [Key: Value]
@@ -20,9 +20,12 @@ public struct MetaData: DictionaryDecodable, Equatable {
 // MARK: Values for Default Keys
 public extension MetaData {
     var timestamp: Date? {
-        guard let timestampString = self[.timestamp] else {
+        guard
+            let timestampString = self[.timestamp],
+            let timeIntervalSince1970 = TimeInterval(timestampString)
+        else {
             return nil
         }
-        return DateFormatter(dateStyle: .full).date(from: timestampString)
+        return Date(timeIntervalSince1970: timeIntervalSince1970)
     }
 }
