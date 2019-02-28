@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Address: PrefixedJsonDecodableByProxy, Hashable, CustomStringConvertible, DataConvertible, ExactLengthSpecifying {
+public struct Address: PrefixedJsonCodableByProxy, Hashable, CustomStringConvertible, DataConvertible, ExactLengthSpecifying {
     
     public static let length = 51
     
@@ -27,7 +27,11 @@ public struct Address: PrefixedJsonDecodableByProxy, Hashable, CustomStringConve
 
 // MARK: - PrefixedJsonDecodableByProxy
 public extension Address {
-    init(proxy: Base58String) throws {
+    public typealias Proxy = Base58String
+    var proxy: Proxy {
+        return base58String
+    }
+    init(proxy: Proxy) throws {
         try self.init(base58String: proxy)
     }
 }

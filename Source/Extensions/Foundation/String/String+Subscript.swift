@@ -10,10 +10,6 @@ import Foundation
 
 public extension String {
     
-    private var length: Int {
-        return count
-    }
-    
     subscript (i: Int) -> String {
         return self[i ..< i + 1]
     }

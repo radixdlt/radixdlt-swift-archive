@@ -7,7 +7,7 @@
 //
 
 import Foundation
-public struct ParticleGroup: ArrayDecodable {
+public struct ParticleGroup: ArrayCodable {
     
     public let spunParticles: [SpunParticle]
     public let metaData: MetaData
@@ -29,6 +29,12 @@ public extension ParticleGroup {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         spunParticles = try container.decode([SpunParticle].self, forKey: .spunParticles)
         metaData = try container.decode(MetaData.self, forKey: .metaData)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(spunParticles, forKey: .spunParticles)
+        try container.encode(metaData, forKey: .metaData)
     }
 }
 

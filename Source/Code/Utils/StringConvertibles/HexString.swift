@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct HexString: StringConvertible, CharacterSetSpecifying, DataConvertible {
+public struct HexString: PrefixedJsonCodable, StringConvertible, StringRepresentable, CharacterSetSpecifying, DataConvertible, DataInitializable {
     
     public static var allowedCharacters = CharacterSet.hexadecimal
     
@@ -21,8 +21,11 @@ public struct HexString: StringConvertible, CharacterSetSpecifying, DataConverti
             fatalError("Passed unvalid string, error: \(error)")
         }
     }
-    
-    public init(data: Data) {
+}
+
+// MARK: - DataInitializable
+public extension HexString {
+    init(data: Data) {
         self.init(validated: data.toHexString())
     }
 }
@@ -31,5 +34,12 @@ public struct HexString: StringConvertible, CharacterSetSpecifying, DataConverti
 public extension HexString {
     var asData: Data {
         return Data(hex: value)
+    }
+}
+
+// MARK: - StringRepresentable
+public extension HexString {
+    var stringValue: String {
+        return value
     }
 }

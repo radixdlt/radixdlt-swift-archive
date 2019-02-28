@@ -10,6 +10,8 @@ import Foundation
 
 public struct MessageParticle: ParticleConvertible, Accountable {
     
+    public let type: ParticleTypes = .message
+    
     public let from: Address
     public let to: Address
     public let metaData: MetaData

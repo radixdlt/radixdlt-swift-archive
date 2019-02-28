@@ -9,7 +9,7 @@
 import Foundation
 
 // TODO should this be an optionset?
-public enum TokenPermission: String, Codable, StringInitializable {
+public enum TokenPermission: String, StringInitializable, StringRepresentable, PrefixedJsonCodable {
     case pow = "pow"
     case genesisOnly = "genesis_only"
     case sameAtomOnly = "same_atom_only"

@@ -28,18 +28,64 @@ public extension BigInteger {
         guard uppercased else { return stringRepresentation }
         return stringRepresentation.uppercased()
     }
+        
+    var asData: Data {
+        return Data(hex: toHexString().value)
+    }
+}
+
+extension Data: DataConvertible {
     
-    /// Returns this integer as `Data` of `length`, if `length` is greater
-    /// than the number itself, we pad empty bytes.
-    func toData(minByteCount: Int? = nil) -> Data {
-        var hexString = toHexString().value
-        if let minByteCount = minByteCount {
-            // each byte is represented as two hexadecimal chars
-            let minStringLength = 2 * minByteCount
-            while hexString.count < minStringLength {
-                hexString = "0" + hexString
-            }
+    public var asData: Data {
+        return self
+    }
+    
+    public func toData(minByteCount: Int? = nil) -> Data {
+        guard let minByteCount = minByteCount else {
+            return self
         }
-        return Data(hex: hexString)
+        var bytes = self.bytes
+        while bytes.count < minByteCount {
+            bytes = [Byte(0x0)] + bytes
+        }
+        return Data(bytes: bytes)
+    }
+}
+
+func * <I>(lhs: I, rhs: I?) -> I? where I: BinaryInteger {
+    guard let rhs = rhs else {
+        return nil
+    }
+    return lhs * rhs
+}
+
+extension String {
+    func append(character: Character, toLength expectedLength: Int?) -> String {
+        return prependingOrAppending(character: character, toLength: expectedLength, mode: .append)
+    }
+    
+    func prepending(character: Character, toLength expectedLength: Int?) -> String {
+        return prependingOrAppending(character: character, toLength: expectedLength, mode: .prepend)
+    }
+    
+    private enum ConcatMode {
+        case prepend
+        case append
+    }
+    
+    private func prependingOrAppending(character: Character, toLength expectedLength: Int?, mode: ConcatMode) -> String {
+        guard let expectedLength = expectedLength else {
+            return self
+        }
+        var modified = self
+        let new = String(character)
+        while modified.length < expectedLength {
+            switch mode {
+            case .prepend: modified = new + modified
+            case .append: modified += new
+            }
+   
+        }
+        return modified
     }
 }

@@ -25,7 +25,7 @@ class AtomJsonDeserializationChangeJson: QuickSpec {
     func replaceValueInParticle(for key: TokenDefinitionParticle.CodingKeys, with replacement: Any) -> String {
       return replaceValueInParticle(for: key.stringValue, with: replacement)
     }
-    
+        
     func replaceValueInParticle(for key: TokenParticle.CodingKeys, with replacement: Any) -> String {
         return replaceValueInParticle(for: key.stringValue, with: replacement)
     }
@@ -113,7 +113,9 @@ private let tokenDefintionJson = """
                         "metaData": {},
                         "granularity": ":u20:1",
                         "permissions": {
-                            "burn": ":str:none"
+                            "burn": ":str:none",
+                            "mint": ":str:none",
+                            "transfer": ":str:none"
                         },
                         "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
                     }

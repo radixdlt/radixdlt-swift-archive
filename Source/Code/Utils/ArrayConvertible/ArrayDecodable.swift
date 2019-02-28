@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol ArrayDecodable: Codable, ArrayConvertible where Element: Decodable {}
+public protocol ArrayDecodable: Decodable, ArrayConvertible where Element: Decodable {}
 
 public extension ArrayDecodable {
     init(from decoder: Decoder) throws {
@@ -16,3 +16,16 @@ public extension ArrayDecodable {
         self.init(elements: try container.decode([Element].self))
     }
 }
+
+public protocol ArrayEncodable: Encodable, ArrayDecodable where Element: Encodable {}
+
+public typealias ArrayCodable = ArrayDecodable & ArrayEncodable
+
+// MARK: - Encodable
+public extension ArrayEncodable {
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(elements)
+    }
+}
+

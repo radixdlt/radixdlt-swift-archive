@@ -16,6 +16,6 @@ public extension Sequence where Element: Fungible {
     }
     
     func filter(type: TokenType) -> [Fungible] {
-        return filter { $0.type == type }
+        return filter { $0.tokenType == type }
     }
 }

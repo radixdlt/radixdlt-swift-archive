@@ -10,7 +10,7 @@ import Foundation
 
 public struct TokenParticle: ParticleConvertible, Ownable, Fungible, Identifiable {
 
-    public let type: TokenType
+    public let type: ParticleTypes
     
     public let owner: PublicKey
     public let receiver: Address
@@ -27,6 +27,17 @@ public extension TokenParticle {
     }
 }
 
+// MARK: - Public
+public extension TokenParticle {
+    public var tokenType: TokenType {
+        do {
+            return try TokenType(particleType: type)
+        } catch {
+            incorrectImplementation("Should always be possible to get TokenType")
+        }
+    }
+}
+
 // MARK: Decodable
 public extension TokenParticle {
     public enum CodingKeys: String, CodingKey {
@@ -37,19 +48,12 @@ public extension TokenParticle {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        type = try container.decode(TokenType.self, forKey: .type)
+        type = try container.decode(ParticleTypes.self, forKey: .type)
         owner = try container.decode(PublicKey.self, forKey: .owner)
         receiver = try container.decode(Address.self, forKey: .receiver)
         nonce = try container.decode(Nonce.self, forKey: .nonce)
         planck = try container.decode(Planck.self, forKey: .planck)
         amount = try container.decode(Amount.self, forKey: .amount)
         tokenDefinitionIdentifier = try container.decode(TokenDefinitionIdentifier.self, forKey: .tokenDefinitionIdentifier)
-    }
-}
-
-// MARK: Encodable
-public extension TokenParticle {
-    func encode(to encoder: Encoder) throws {
-        implementMe
     }
 }

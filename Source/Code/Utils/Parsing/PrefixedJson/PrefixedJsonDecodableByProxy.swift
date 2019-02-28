@@ -22,3 +22,15 @@ public extension PrefixedJsonDecodableByProxy {
         try self.init(proxy: proxy)
     }
 }
+
+public protocol PrefixedJsonEncodableByProxy: PrefixedJsonEncodable {
+    associatedtype Proxy: PrefixedJsonEncodable
+    var proxy: Proxy { get }
+}
+
+public extension PrefixedJsonEncodableByProxy {
+    var prefixedString: PrefixedStringWithValue {
+        return proxy.prefixedString
+    }
+}
+public typealias PrefixedJsonCodableByProxy = PrefixedJsonDecodableByProxy & PrefixedJsonEncodableByProxy

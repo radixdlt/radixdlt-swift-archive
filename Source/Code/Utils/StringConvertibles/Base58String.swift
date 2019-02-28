@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Base58String: PrefixedJsonDecodable, StringConvertible, CharacterSetSpecifying, DataConvertible {
+public struct Base58String: PrefixedJsonCodable, StringConvertible, StringRepresentable, CharacterSetSpecifying, DataConvertible, DataInitializable {
 
     public static var allowedCharacters = CharacterSet.base58
     
@@ -25,6 +25,42 @@ public struct Base58String: PrefixedJsonDecodable, StringConvertible, CharacterS
 // MARK: - PrefixedJsonDecodable
 public extension Base58String {
     static let jsonPrefix: JSONPrefix = .addressBase58
+}
+
+public extension Data {
+    public var length: Int {
+        return bytes.count
+    }
+}
+
+// MARK: - DataInitializable
+public extension Base58String {
+    
+    // swiftlint:disable:next function_body_length
+    init(data: Data) {
+        let bytes = data.bytes
+        var x = data.unsignedBigInteger
+        let alphabet = String.base58Alphabet.data(using: .utf8)!
+        let radix = BigUnsignedInt(alphabet.count)
+        
+        var answer = [UInt8]()
+        answer.reserveCapacity(bytes.count)
+        
+        while x > 0 {
+            let (quotient, modulus) = x.quotientAndRemainder(dividingBy: radix)
+            answer.append(alphabet[Int(modulus)])
+            x = quotient
+        }
+        
+        let prefix = Array(bytes.prefix(while: {$0 == 0})).map { _ in alphabet[0] }
+        answer.append(contentsOf: prefix)
+        answer.reverse()
+        
+        guard let base58String = String(bytes: answer, encoding: .utf8) else {
+            incorrectImplementation("Should always be able to create a Base58 string from data.")
+        }
+        self.init(validated: base58String)
+    }
 }
 
 // MARK: DataConvertible
@@ -45,5 +81,12 @@ public extension Base58String {
             temp *= radix
         }
         return byteString.prefix(while: { $0 == alphabet[0] }) + answer.serialize()
+    }
+}
+
+// MARK: - StringRepresentable
+public extension Base58String {
+    var stringValue: String {
+        return value
     }
 }

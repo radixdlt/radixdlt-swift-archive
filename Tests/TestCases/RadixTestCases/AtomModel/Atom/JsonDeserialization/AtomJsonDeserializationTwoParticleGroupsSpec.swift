@@ -16,11 +16,17 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
         /// Scenario 3
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - Non trivial Atom") {
-            let atom: Atom = model(from: json)
+            let atom: Atom = model(from: jsonForAtomWith2ParticleGroups)
             describe("Its non empty Signature") {
                 let signature = atom.signatures["71c3c2fc9fee73b13cad082800a6d0de"]!
                 it("should contain a BigInteger r") {
-                    expect(signature.r).to(equal(BigUnsignedInt(hex: "94542c69265b3c55c7402d3bc358999d00a9b8ba846fd58fa19ea01dd3bc7017")))
+                    expect(signature.r).to(equal(BigUnsignedInt(hex: "25150b1a4996cf1571d00b4ef0d62667402a6e2ea11bf563e867a80774ef1c05")))
+                }
+            }
+            describe("Its non empty metadata") {
+                let metaData = atom.metaData
+                it("Should have a valid timestamp") {
+                    expect(metaData.timestamp).to(beNotNil())
                 }
             }
             describe("Its non empty ParticleGroup") {
@@ -55,15 +61,18 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
     }
 }
 
-private let json = """
+let jsonForAtomWith2ParticleGroups = """
 {
     "signatures": {
         "71c3c2fc9fee73b13cad082800a6d0de":{
-            "r":":byt:AJRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX",
-            "s":":byt:AKbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H"
+            "r":":byt:JRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX=",
+            "s":":byt:KbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H="
         }
     },
-    "metaData": {},
+    "metaData": {
+        "timestamp": ":str:1546300800",
+        "foo": ":str:bar"
+    },
     "particleGroups": [
         {
             "metaData": {},
@@ -76,8 +85,8 @@ private let json = """
                         "name": ":str:Cyon",
                         "description": ":str:Cyon Crypto Coin is the worst shit coin",
                         "metaData": {
-                            "foo": ":str:bar",
-                            "bar": ":str:buz"
+                            "timestamp": ":str:1551345320000",
+                            "foo": ":str:bar"
                         },
                         "granularity": ":u20:1",
                         "permissions": {

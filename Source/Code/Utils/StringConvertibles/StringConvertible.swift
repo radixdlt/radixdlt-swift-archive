@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol StringConvertible: StringInitializable, StringRepresentable, ValueValidating, Hashable {
+public protocol StringConvertible: StringInitializable, StringRepresentable, ValueValidating, Hashable, CustomStringConvertible {
     var value: ValidationValue { get }
     
     /// Calling this with an invalid String will result in runtime crash.
@@ -24,22 +24,6 @@ public extension StringConvertible {
 public extension PrefixedJsonDecodable where Self: StringConvertible {
     public static var jsonPrefix: JSONPrefix {
         return .string
-    }
-}
-
-// MARK: - Decodable
-public extension StringConvertible {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(validated: try container.decode(String.self))
-    }
-}
-
-// MARK: - Encodable
-public extension StringConvertible {
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(value)
     }
 }
 
@@ -63,10 +47,6 @@ public extension StringConvertible {
 
 // MARK: - Public Convenience
 public extension StringConvertible {
-    var length: Int {
-        return value.count
-    }
-    
     var isEmpty: Bool {
         return length == 0
     }
@@ -84,6 +64,7 @@ extension StringConvertible {
         try (self as? CharacterSetSpecifying.Type)?.validate(string)
         try (self as? MinLengthSpecifying.Type)?.validateMinLength(of: string)
         try (self as? MaxLengthSpecifying.Type)?.validateMaxLength(of: string)
+        try (self as? RequiringThatLengthIsMultipleOfN.Type)?.validateLengthMultiple(of: string)
         return string
     }
 }

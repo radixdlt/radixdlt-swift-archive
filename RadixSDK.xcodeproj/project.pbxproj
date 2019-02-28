@@ -38,6 +38,9 @@
 		E6611F3C2225B55C00AD2F83 /* ArrayConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3B2225B55C00AD2F83 /* ArrayConvertible.swift */; };
 		E6611F3E2225B56A00AD2F83 /* ArrayDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3D2225B56A00AD2F83 /* ArrayDecodable.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
+		E6611F42222696AC00AD2F83 /* PublicKey+EllipticCurve.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F41222696AC00AD2F83 /* PublicKey+EllipticCurve.swift */; };
+		E6611F44222696E900AD2F83 /* BigInt_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F43222696E900AD2F83 /* BigInt_Extension.swift */; };
+		E6611F472227F2A300AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F452227F29F00AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift */; };
 		E672573021FB8D3900BE3B4C /* ParticleTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672572F21FB8D3900BE3B4C /* ParticleTypes.swift */; };
 		E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573321FB8D5E00BE3B4C /* RadixModelType.swift */; };
 		E672573721FB8D8E00BE3B4C /* JSONPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */; };
@@ -231,6 +234,9 @@
 		E6611F3B2225B55C00AD2F83 /* ArrayConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayConvertible.swift; sourceTree = "<group>"; };
 		E6611F3D2225B56A00AD2F83 /* ArrayDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayDecodable.swift; sourceTree = "<group>"; };
 		E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+AsArray.swift"; sourceTree = "<group>"; };
+		E6611F41222696AC00AD2F83 /* PublicKey+EllipticCurve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PublicKey+EllipticCurve.swift"; sourceTree = "<group>"; };
+		E6611F43222696E900AD2F83 /* BigInt_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigInt_Extension.swift; sourceTree = "<group>"; };
+		E6611F452227F29F00AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomJsonSerializationTwoParticleGroupsSpec.swift; sourceTree = "<group>"; };
 		E672572F21FB8D3900BE3B4C /* ParticleTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleTypes.swift; sourceTree = "<group>"; };
 		E672573321FB8D5E00BE3B4C /* RadixModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixModelType.swift; sourceTree = "<group>"; };
 		E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPrefix.swift; sourceTree = "<group>"; };
@@ -551,6 +557,7 @@
 			isa = PBXGroup;
 			children = (
 				E631DAA721F249DB0063F632 /* PublicKey.swift */,
+				E6611F41222696AC00AD2F83 /* PublicKey+EllipticCurve.swift */,
 			);
 			path = PublicKey;
 			sourceTree = "<group>";
@@ -871,6 +878,7 @@
 			isa = PBXGroup;
 			children = (
 				E6611EFE222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift */,
+				E6611F452227F29F00AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift */,
 			);
 			path = JsonSerialization;
 			sourceTree = "<group>";
@@ -1032,6 +1040,7 @@
 			isa = PBXGroup;
 			children = (
 				E6A4ABC5221EDD4A006C5CA8 /* BigUInt_Extension.swift */,
+				E6611F43222696E900AD2F83 /* BigInt_Extension.swift */,
 			);
 			path = BigInt;
 			sourceTree = "<group>";
@@ -1421,6 +1430,7 @@
 				E6611F322225A1EE00AD2F83 /* StringRepresentable.swift in Sources */,
 				E631DAA821F249DB0063F632 /* PublicKey.swift in Sources */,
 				E6611F3C2225B55C00AD2F83 /* ArrayConvertible.swift in Sources */,
+				E6611F42222696AC00AD2F83 /* PublicKey+EllipticCurve.swift in Sources */,
 				E631DAA021F249620063F632 /* KeyPair.swift in Sources */,
 				E68B5C0A21FBD8B000BEB049 /* MetaDataKey.swift in Sources */,
 				E6A4AB8E221C2FB3006C5CA8 /* Symbol.swift in Sources */,
@@ -1504,6 +1514,7 @@
 				E6ED1A5621F8E58300654105 /* SubmitAtomAction.swift in Sources */,
 				E67A714821FBAEF500F4B2D0 /* Granularity.swift in Sources */,
 				E6CEE74421F637EC00D745EC /* Signature.swift in Sources */,
+				E6611F44222696E900AD2F83 /* BigInt_Extension.swift in Sources */,
 				E6CEE76C21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift in Sources */,
 				E6CEE72321F5D44300D745EC /* Address.swift in Sources */,
 				E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */,
@@ -1563,6 +1574,7 @@
 				E6A4ABF622207E49006C5CA8 /* NegativePlanckSpec.swift in Sources */,
 				E6A4ABE322206F8A006C5CA8 /* QuestionMarkInSymbol.swift in Sources */,
 				E6A4ABF222207E02006C5CA8 /* NegativeAmountSpec.swift in Sources */,
+				E6611F472227F2A300AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift in Sources */,
 				E6A4ABDE22206F1D006C5CA8 /* TooLongSymbolSpec.swift in Sources */,
 				E6A4ABE122206F33006C5CA8 /* TooShortSymbolSpec.swift in Sources */,
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,

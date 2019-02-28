@@ -8,7 +8,9 @@
 
 import Foundation
 
-public protocol ParticleConvertible: Codable {}
+public protocol ParticleConvertible: Codable {
+    var type: ParticleTypes { get }
+}
 
 public extension ParticleConvertible {
     func keyDestinations() -> Set<PublicKey> {

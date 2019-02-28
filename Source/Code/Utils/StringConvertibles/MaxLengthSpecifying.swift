@@ -10,7 +10,7 @@ import Foundation
 
 public protocol MaxLengthSpecifying: UpperBound {
     static var maxLength: Int { get }
-    static func validateMaxLength<S>(of stringRepresentable: S) throws where S: StringRepresentable
+    static func validateMaxLength<L>(of measurable: L) throws where L: LengthMeasurable
 }
 
 public extension MaxLengthSpecifying {
@@ -18,10 +18,10 @@ public extension MaxLengthSpecifying {
         return maxLength
     }
     
-    static func validateMaxLength<S>(of stringRepresentable: S) throws where S: StringRepresentable {
-        let string = stringRepresentable.stringValue
-        if string.count > maxValue {
-            throw InvalidStringError.tooManyCharacters(expectedAtMost: maxValue, butGot: string.count)
+    static func validateMaxLength<L>(of measurable: L) throws where L: LengthMeasurable {
+        let length = measurable.length
+        if length > maxLength {
+            throw InvalidStringError.tooManyCharacters(expectedAtMost: maxLength, butGot: length)
         }
     }
 }

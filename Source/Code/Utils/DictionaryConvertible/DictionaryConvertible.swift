@@ -15,7 +15,14 @@ Value: StringInitializable {
     typealias Map = [Key: Value]
     var dictionary: Map { get }
     init(dictionary: Map)
+    init(validate: Map) throws
     subscript(key: Key) -> Value? { get }
+}
+
+public extension DictionaryConvertible {
+    init(validate valid: Map) throws {
+        self.init(dictionary: valid)
+    }
 }
 
 // MARK: - ExpressibleByDictionaryLiteral

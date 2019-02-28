@@ -41,6 +41,8 @@ identifier_name:
   excluded:
     - id
     - to
+    - in
+    - of
     - i
     - r
     - s

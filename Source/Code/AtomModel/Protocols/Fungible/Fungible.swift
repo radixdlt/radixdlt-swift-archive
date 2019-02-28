@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol Fungible {
-    var type: TokenType { get }
+    var tokenType: TokenType { get }
     var planck: Planck { get }
     var nonce: Nonce { get }
     var amount: Amount { get }

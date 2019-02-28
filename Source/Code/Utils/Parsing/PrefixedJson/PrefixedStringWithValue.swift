@@ -33,12 +33,17 @@ public struct PrefixedStringWithValue: Decodable, StringRepresentable {
         self.jsonPrefix = jsonPrefix
         self.stringValue = value
     }
+    
+    public init(value: String, prefix: JSONPrefix) {
+        self.stringValue = value
+        self.jsonPrefix = prefix
+    }
 }
 
 public extension PrefixedStringWithValue {
     var identifer: String {
         return [
-            jsonPrefix.rawValue,
+            jsonPrefix.identifier,
             String(describing: stringValue)
         ].joined()
     }
@@ -61,6 +66,11 @@ public extension PrefixedStringWithValue {
         let container = try decoder.singleValueContainer()
         let rawString = try container.decode(String.self)
         try self.init(string: rawString)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(identifer)
     }
 }
 

@@ -21,3 +21,13 @@ public struct Atom: AtomConvertible {
         self.metaData = metaData
     }
 }
+
+// MARK: - Encodable
+public extension Atom {
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: Atom.CodingKeys.self)
+        try container.encode(particleGroups, forKey: .particleGroups)
+        try container.encode(signatures, forKey: .signatures)
+        try container.encode(metaData, forKey: .metaData)
+    }
+}
