@@ -13,6 +13,8 @@ import Quick
 class GranularityNegativeSpec: AtomJsonDeserializationChangeJson {
     
     override func spec() {
+        /// Scenario 16
+        /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - TokenDefinitionParticle: negative granularity") {
             let badJson = self.replaceValueInParticle(for: .granularity, with: ":u20:-1")
             

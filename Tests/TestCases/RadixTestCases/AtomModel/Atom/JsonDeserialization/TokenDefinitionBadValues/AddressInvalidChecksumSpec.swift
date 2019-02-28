@@ -14,6 +14,8 @@ import Quick
 class AddressInvalidChecksumSpec: AtomJsonDeserializationChangeJson {
     
     override func spec() {
+        /// Scenario 19
+        /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - TokenDefinitionParticle: invalid checksum in address") {
             let badJson = self.replaceValueInParticle(for: .address, with: ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCea")
             

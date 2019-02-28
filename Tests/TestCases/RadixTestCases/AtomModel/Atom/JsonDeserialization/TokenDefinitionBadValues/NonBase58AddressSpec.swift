@@ -13,7 +13,9 @@ import Quick
 class NonBase58AddressSpec: AtomJsonDeserializationChangeJson {
     
     override func spec() {
-        describe("JSON deserialization - TokenDefinitionParticle: invalid checksum in address") {
+        /// Scenario 18
+        /// https://radixdlt.atlassian.net/browse/RLAU-567
+        describe("JSON deserialization - TokenDefinitionParticle: invalid Base58 in address") {
             let badJson = self.replaceValueInParticle(for: .address, with: ":adr:J0dWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCea")
             
             it("should fail to deserialize JSON with a non base58 string as address since it contains a zero") {

@@ -13,6 +13,8 @@ import Quick
 class TooShortAddressSpec: AtomJsonDeserializationChangeJson {
     
     override func spec() {
+        /// Scenario 17
+        /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - TokenDefinitionParticle: too short address") {
             let badJson = self.replaceValueInParticle(for: .address, with: ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCe")
             
