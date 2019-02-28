@@ -35,7 +35,7 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
                     expect(particleGroup[0].particle).to(beAKindOf(TokenDefinitionParticle.self))
                 }
                 describe("The ParticleGroup's TokenDefinitionParticle") {
-                    let tokenDefinitionParticle = particleGroup[0].particle as! TokenDefinitionParticle
+                    let tokenDefinitionParticle = atom.particleGroups.firstParticle(ofType: TokenDefinitionParticle.self)!
                     
                     it("has a name") {
                         expect(tokenDefinitionParticle.name).to(equal("Cyon"))
@@ -54,6 +54,16 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
                         it("contains two values") {
                             expect(metaData).to(haveCount(2))
                         }
+                    }
+                }
+                describe("The ParticleGroup's MessageParticke") {
+                    let messsageParticle = atom.particleGroups.firstParticle(ofType: MessageParticle.self)!
+                    
+                    it("Its payload is a text message to us") {
+                        guard let message = messsageParticle.textMessage else {
+                            return fail("should have a message")
+                        }
+                        expect(message).to(equal("Hello Radix!"))
                     }
                 }
             }
@@ -113,6 +123,18 @@ let jsonForAtomWith2ParticleGroups = """
                         "amount": ":u20:1000000000000000000000000000",
                         "token_reference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
                     }
+                },
+                {
+	                "spin": 1,
+					"particle": {
+						"type": "message",
+						"source": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+						"destination": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
+						"data": ":byt:SGVsbG8gUmFkaXgh",
+						"metaData": {
+							"timestamp": ":str:1551345320000"
+						}
+					}
                 }
             ]
         }

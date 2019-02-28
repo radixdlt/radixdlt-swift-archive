@@ -33,7 +33,8 @@ public extension SpunParticle {
         let particleNestedContainer = try container.nestedContainer(keyedBy: ParticleTypeKey.self, forKey: .particle)
         let particleType = try particleNestedContainer.decode(ParticleTypes.self, forKey: .type)
         switch particleType {
-        case .message: particle = try container.decode(MessageParticle.self, forKey: .particle)
+        case .message:
+            particle = try container.decode(MessageParticle.self, forKey: .particle)
         case .burnedToken, .transferredToken, .mintedToken:
             particle = try container.decode(TokenParticle.self, forKey: .particle)
         case .tokenDefinition: particle = try container.decode(TokenDefinitionParticle.self, forKey: .particle)

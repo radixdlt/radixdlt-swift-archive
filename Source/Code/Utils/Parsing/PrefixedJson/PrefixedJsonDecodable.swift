@@ -39,7 +39,7 @@ public extension PrefixedJsonEncodable {
     }
 }
 
-/// Ugly hack to resolve "candidate exactly matches" error since RawRepresentable have a default `encode` function, and the compiler is unable to distinquich between the RawRepresentable `encode` and the PrefixedJsonCodable `encode` function.
+/// Ugly hack to resolve "candidate exactly matches" error since RawRepresentable have a default `encode` function, and the compiler is unable to distinguish between the RawRepresentable `encode` and the PrefixedJsonCodable `encode` function.
 extension RawRepresentable where Self: PrefixedJsonCodable, Self.RawValue == String {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()

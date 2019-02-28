@@ -26,3 +26,15 @@ public extension ParticleGroups {
         self.init(particleGroups: elements)
     }
 }
+
+public extension Sequence where Element == ParticleGroup {
+    func firstParticle<P>(ofType type: P.Type) -> P? {
+        return flatMap { $0.firstParticle(ofType: type) }.first
+    }
+}
+
+public extension ParticleGroup {
+    func firstParticle<P>(ofType type: P.Type) -> P? {
+        return spunParticles.compactMap { $0.particle as? P }.first
+    }
+}

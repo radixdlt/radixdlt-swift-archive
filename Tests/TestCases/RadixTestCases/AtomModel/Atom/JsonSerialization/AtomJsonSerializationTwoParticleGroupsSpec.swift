@@ -70,8 +70,16 @@ private let atom = Atom(
                     amount: 1337,
                     tokenDefinitionIdentifier: "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
                 )
+            ),
+            SpunParticle(
+                spin: .up,
+                particle: MessageParticle(
+                    from: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                    to: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
+                    message: "Hello Radix!"
+                )
             )
-            ])
+        ])
     ],
     signatures: [
         "71c3c2fc9fee73b13cad082800a6d0de": try! Signature(
