@@ -28,4 +28,8 @@ public extension MetaData {
         }
         return Date(timeIntervalSince1970: timeIntervalSince1970)
     }
+    
+    static var timeNow: MetaData {
+        return [.timestamp: Int(Date().timeIntervalSinceNow).description]
+    }
 }
