@@ -18,17 +18,7 @@ class NegativeAmountSpec: AtomJsonDeserializationMintedTokenBadValuesSpec {
             let badJson = self.replaceValueInParticle(for: .amount, with: ":u20:-1")
             
             it("should fail to deserialize JSON with a MintedTokenParticle with negative amount") {
-                do {
-                    try decode(Atom.self, from: badJson)
-                    fail("Should not be able to decode invalid JSON")
-                } catch let error as Amount.Error  {
-                    switch error {
-                    case .cannotBeNegative: break
-                    default: fail("wrong error")
-                    }
-                } catch {
-                    fail("Wrong error type, got: \(error)")
-                }
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(Amount.Error.cannotBeNegative))
             }
         }
     }

@@ -18,18 +18,12 @@ class TokenPermissionBadValueSpec: AtomJsonDeserializationChangeJson {
         describe("JSON deserialization - TokenDefinitionParticle: Bad permission value") {
             let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"burn\": \":str:foobar\"}")
             it("should fail to deserialize JSON with a foobar permission") {
-                do {
-                    try decode(Atom.self, from: badJson)
-                    fail("Should not be able to decode invalid JSON")
-                } catch let error as TokenPermission.Error {
-                    if case .unsupportedPermission(let name) = error {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: TokenPermission.Error.self) {
+                    switch $0 {
+                    case .unsupportedPermission(let name):
                         expect(name).to(equal("foobar"))
-                    } else {
-                        fail("wrong error")
                     }
-                } catch {
-                    fail("Wrong error type, got: \(error)")
-                }
+                })
             }
         }
         

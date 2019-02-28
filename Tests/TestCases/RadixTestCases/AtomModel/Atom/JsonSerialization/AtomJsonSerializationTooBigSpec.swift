@@ -17,15 +17,12 @@ class AtomJsonSerializationTooBigSpec: QuickSpec {
         /// https://radixdlt.atlassian.net/browse/RLAU-943
         describe("JSON serialization - Too big Atom") {
             let atom = Atom(
-                particleGroups: [ParticleGroup(spunParticles: oneHundredParticles)]
+                particleGroups: [ParticleGroup(spunParticles: oneThousandParticles)]
             )
             
             it("should fail because it is too big") {
-                expect { try JSONEncoder().encode(atom) }.to(throwError { error in
-                    guard let atomError = error as? Atom.Error else {
-                        return fail("wrong error type")
-                    }
-                    switch atomError {
+                expect { try JSONEncoder().encode(atom) }.to(throwError(type: Atom.Error.self) {
+                    switch $0 {
                     case .tooManyBytes(let expectedAtMost, let butGot):
                         let maxSize = Atom.maxSize
                         expect(expectedAtMost).to(equal(maxSize))
@@ -37,7 +34,7 @@ class AtomJsonSerializationTooBigSpec: QuickSpec {
         
     }
 }
-private let oneHundredParticles = [SpunParticle](repeating: spunTokenParticle, count: 1000)
+private let oneThousandParticles = [SpunParticle](repeating: spunTokenParticle, count: 1000)
 private let spunTokenParticle = SpunParticle(
     spin: .up,
     particle: TokenParticle(

@@ -18,19 +18,14 @@ class TooLongSymbolSpec: AtomJsonDeserializationChangeJson {
         describe("JSON deserialization - TokenDefinitionParticle: too long symbol") {
             let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:01234567890123456")
             it("should fail to deserialize JSON with too long symbol") {
-                do {
-                    try decode(Atom.self, from: badJson)
-                    fail("Should not be able to decode invalid JSON")
-                } catch let error as InvalidStringError {
-                    switch error {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: InvalidStringError.self) {
+                    switch $0 {
                     case .tooManyCharacters(let expectedAtMost, let butGot):
                         expect(expectedAtMost).to(equal(16))
                         expect(butGot).to(equal(17))
                     default: fail("wrong error")
                     }
-                } catch {
-                    fail("Wrong error type, got: \(error)")
-                }
+                })
             }
         }
     }

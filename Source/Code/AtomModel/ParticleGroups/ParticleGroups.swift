@@ -29,7 +29,7 @@ public extension ParticleGroups {
 
 public extension Sequence where Element == ParticleGroup {
     func firstParticle<P>(ofType type: P.Type) -> P? {
-        return flatMap { $0.firstParticle(ofType: type) }.first
+        return compactMap { $0.firstParticle(ofType: type) }.first
     }
 }
 

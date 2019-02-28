@@ -19,18 +19,13 @@ class IncorrectSpinValue: AtomJsonDeserializationChangeJson {
             let badJson = self.replaceSpinForSpunParticle(spin: 2)
             
             it("should fail to deserialize JSON with a particle of spin 2") {
-                do {
-                    try decode(Atom.self, from: badJson)
-                    fail("Should not be able to decode invalid JSON")
-                } catch let error as DecodingError {
-                    switch error {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: DecodingError.self) {
+                    switch $0 {
                     case .dataCorrupted(let context):
                         expect(context.debugDescription).to(contain("Cannot initialize Spin from invalid Int value 2"))
                     default: fail("wrong error")
                     }
-                } catch {
-                    fail("Wrong error type, got: \(error)")
-                }
+                })
             }
         }
     }

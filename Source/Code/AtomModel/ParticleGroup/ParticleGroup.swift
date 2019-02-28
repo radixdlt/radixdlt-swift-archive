@@ -12,7 +12,10 @@ public struct ParticleGroup: ArrayCodable {
     public let spunParticles: [SpunParticle]
     public let metaData: MetaData
     
-    public init(spunParticles: [SpunParticle], metaData: MetaData = [:]) {
+    public init(
+        spunParticles: [SpunParticle],
+        metaData: MetaData = [:]
+    ) {
         self.spunParticles = spunParticles
         self.metaData = metaData
     }

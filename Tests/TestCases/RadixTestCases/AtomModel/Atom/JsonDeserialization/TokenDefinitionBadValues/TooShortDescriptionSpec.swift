@@ -19,19 +19,14 @@ class TooShortDescriptionSpec: AtomJsonDeserializationChangeJson {
             let badJson = self.replaceValueInParticle(for: .description, with: ":str:1234567")
             
             it("should fail to deserialize JSON with a too short description") {
-                do {
-                    try decode(Atom.self, from: badJson)
-                    fail("Should not be able to decode invalid JSON")
-                } catch let error as InvalidStringError {
-                    switch error {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: InvalidStringError.self) {
+                    switch $0 {
                     case .tooFewCharacters(let expectedAtLeast, let butGot):
                         expect(expectedAtLeast).to(equal(8))
                         expect(butGot).to(equal(7))
                     default: fail("wrong error")
                     }
-                } catch {
-                    fail("Wrong error type, got: \(error)")
-                }
+                })
             }
         }
     }

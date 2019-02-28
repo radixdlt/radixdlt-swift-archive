@@ -19,19 +19,14 @@ class TooLongNameSpec: AtomJsonDeserializationChangeJson {
             let badJson = self.replaceValueInParticle(for: .name, with: ":str:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed 123!")
             
             it("should fail to deserialize JSON with too long name") {
-                do {
-                    try decode(Atom.self, from: badJson)
-                    fail("Should not be able to decode invalid JSON")
-                } catch let error as InvalidStringError {
-                    switch error {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: InvalidStringError.self) {
+                    switch $0 {
                     case .tooManyCharacters(let expectedAtMost, let butGot):
                         expect(expectedAtMost).to(equal(64))
                         expect(butGot).to(equal(65))
                     default: fail("wrong error")
                     }
-                } catch {
-                    fail("Wrong error type, got: \(error)")
-                }
+                })
             }
         }
     }

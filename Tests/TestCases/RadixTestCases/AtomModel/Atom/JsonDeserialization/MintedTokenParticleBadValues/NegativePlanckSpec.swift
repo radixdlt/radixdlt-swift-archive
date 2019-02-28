@@ -18,18 +18,13 @@ class NegativePlanckSpec: AtomJsonDeserializationMintedTokenBadValuesSpec {
             let badJson = self.replaceValueInParticle(for: .planck, with: -1)
             
             it("should fail to deserialize JSON with a MintedTokenParticle with negative planck") {
-                do {
-                    try decode(Atom.self, from: badJson)
-                    fail("Should not be able to decode invalid JSON")
-                } catch let error as DecodingError {
-                    switch error {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: DecodingError.self) {
+                    switch $0 {
                     case .dataCorrupted(let context):
                         expect(context.debugDescription).to(contain("Parsed JSON number <-1> does not fit in UInt64."))
                     default: fail("wrong error")
                     }
-                } catch {
-                    fail("Wrong error type, got: \(error)")
-                }
+                })
             }
         }
     }

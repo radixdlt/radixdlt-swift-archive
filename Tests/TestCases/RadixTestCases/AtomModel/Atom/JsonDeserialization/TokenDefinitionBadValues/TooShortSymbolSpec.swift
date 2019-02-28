@@ -18,17 +18,7 @@ class TooShortSymbolSpec: AtomJsonDeserializationChangeJson {
         describe("JSON deserialization - TokenDefinitionParticle: too short symbol") {
             let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:")
             it("should fail to deserialize JSON with empty symbol") {
-                do {
-                    try decode(Atom.self, from: badJson)
-                    fail("Should not be able to decode invalid JSON")
-                } catch let error as PrefixedStringWithValue.Error {
-                    switch error {
-                    case .noValueFound: break
-                    default: fail("wrong error")
-                    }
-                } catch {
-                    fail("Wrong error type, got: \(error)")
-                }
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(PrefixedStringWithValue.Error.noValueFound))
             }
         }
     }
