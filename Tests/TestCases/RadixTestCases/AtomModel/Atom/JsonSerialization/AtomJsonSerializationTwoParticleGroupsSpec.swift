@@ -18,9 +18,9 @@ class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
         describe("JSON serialization - Two ParticleGroups each containing one particle") {
             it("should result in the appropriate non trivial JSON") {
                 do {
-                    let json = try JSONEncoder(outputFormat: .prettyPrinted).encode(atom)
+                    let json = try RadixEncoder(outputFormat: .prettyPrinted).encode(atom)
                     let jsonString = String(data: json, encoding: .utf8)!
-                    let atomFromJSON = try JSONDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
+                    let atomFromJSON = try RadixDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
                     expect(atomFromJSON).to(equal(atom))
                 } catch let encodingError as EncodingError {
                     fail("unexpected EncodingError: \(encodingError)")

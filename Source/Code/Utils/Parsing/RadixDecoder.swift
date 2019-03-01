@@ -8,8 +8,6 @@
 
 import Foundation
 
-public typealias JSONDecoder = RadixDecoder
-
 public final class RadixDecoder: Foundation.JSONDecoder {
     public override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T: Decodable & RadixModelTypeStaticSpecifying {
         let jsonObjectAny = try JSONSerialization.jsonObject(with: data, options: [])

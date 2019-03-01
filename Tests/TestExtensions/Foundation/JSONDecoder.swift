@@ -1,5 +1,5 @@
 //
-//  JSONDecoder.swift
+//  RadixDecoder.swift
 //  RadixSDK Tests
 //
 //  Created by Alexander Cyon on 2019-02-21.

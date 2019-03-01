@@ -8,8 +8,6 @@
 
 import Foundation
 
-public typealias JSONEncoder = RadixEncoder
-
 public final class RadixEncoder: Foundation.JSONEncoder {
     
     convenience init(outputFormat: Foundation.JSONEncoder.OutputFormatting = .sortedKeys) {
