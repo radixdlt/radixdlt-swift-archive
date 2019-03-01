@@ -12,6 +12,16 @@ public protocol ParticleConvertible: Codable {
     var particleType: ParticleType { get }
 }
 
+public extension ParticleConvertible where Self: RadixModelTypeSpecifying {
+    var particleType: ParticleType {
+        do {
+            return try ParticleType(modelType: type)
+        } catch {
+            incorrectImplementation("Error: \(error)")
+        }
+    }
+}
+
 public extension ParticleConvertible {
     func keyDestinations() -> Set<PublicKey> {
         var addresses = Set<Address>()

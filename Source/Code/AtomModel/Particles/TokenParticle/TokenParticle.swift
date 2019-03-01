@@ -40,13 +40,6 @@ public struct TokenParticle: ParticleConvertible, Ownable, Fungible, Identifiabl
     }
 }
 
-// MARK: - ParticleConvertible
-public extension TokenParticle {
-    var particleType: ParticleType {
-        return tokenType.particleType
-    }
-}
-
 // MARK: - Identifiable
 public extension TokenParticle {
     var identifier: ResourceIdentifier {

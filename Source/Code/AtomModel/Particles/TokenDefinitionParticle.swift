@@ -40,13 +40,6 @@ public struct TokenDefinitionParticle: ParticleModelConvertible, Identifiable {
     }
 }
 
-// MARK: - ParticleConvertible
-public extension TokenDefinitionParticle {
-    var particleType: ParticleType {
-        return .tokenDefinition
-    }
-}
-
 // MARK: - Identifiable
 public extension TokenDefinitionParticle {
     var identifier: ResourceIdentifier {

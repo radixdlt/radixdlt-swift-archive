@@ -45,13 +45,6 @@ public extension UniqueParticle {
     }
 }
 
-// MARK: - ParticleConvertible
-public extension UniqueParticle {
-    var particleType: ParticleType {
-        return .unique
-    }
-}
-
 public extension UniqueParticle {
     var identifier: ResourceIdentifier {
         return ResourceIdentifier(address: address, type: .unique, name: name)

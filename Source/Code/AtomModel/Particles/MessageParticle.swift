@@ -25,13 +25,6 @@ public struct MessageParticle: ParticleModelConvertible, Accountable {
     }
 }
 
-// MARK: - ParticleConvertible
-public extension MessageParticle {
-    var particleType: ParticleType {
-        return .message
-    }
-}
-
 // MARK: - Convenience init
 public extension MessageParticle {
     public init(from: Address, to: Address, message: String, includeTimeNow: Bool = true) {
