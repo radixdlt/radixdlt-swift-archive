@@ -46,8 +46,8 @@
 		E6611F4F2229849000AD2F83 /* AtomModelDecodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F4E2229849000AD2F83 /* AtomModelDecodingError.swift */; };
 		E6611F51222984B900AD2F83 /* RadixModelTypeSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F50222984B900AD2F83 /* RadixModelTypeSpecifying.swift */; };
 		E6611F55222984DE00AD2F83 /* ParticleModelConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F54222984DE00AD2F83 /* ParticleModelConvertible.swift */; };
-		E6611F5722298F7600AD2F83 /* RadixDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F5622298F7600AD2F83 /* RadixDecoder.swift */; };
-		E6611F5922298F9000AD2F83 /* RadixEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F5822298F9000AD2F83 /* RadixEncoder.swift */; };
+		E6611F5722298F7600AD2F83 /* RadixJSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F5622298F7600AD2F83 /* RadixJSONDecoder.swift */; };
+		E6611F5922298F9000AD2F83 /* RadixJSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F5822298F9000AD2F83 /* RadixJSONEncoder.swift */; };
 		E672573021FB8D3900BE3B4C /* ParticleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672572F21FB8D3900BE3B4C /* ParticleType.swift */; };
 		E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573321FB8D5E00BE3B4C /* RadixModelType.swift */; };
 		E672573721FB8D8E00BE3B4C /* JSONPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */; };
@@ -249,8 +249,8 @@
 		E6611F4E2229849000AD2F83 /* AtomModelDecodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomModelDecodingError.swift; sourceTree = "<group>"; };
 		E6611F50222984B900AD2F83 /* RadixModelTypeSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixModelTypeSpecifying.swift; sourceTree = "<group>"; };
 		E6611F54222984DE00AD2F83 /* ParticleModelConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleModelConvertible.swift; sourceTree = "<group>"; };
-		E6611F5622298F7600AD2F83 /* RadixDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixDecoder.swift; sourceTree = "<group>"; };
-		E6611F5822298F9000AD2F83 /* RadixEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixEncoder.swift; sourceTree = "<group>"; };
+		E6611F5622298F7600AD2F83 /* RadixJSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJSONDecoder.swift; sourceTree = "<group>"; };
+		E6611F5822298F9000AD2F83 /* RadixJSONEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJSONEncoder.swift; sourceTree = "<group>"; };
 		E672572F21FB8D3900BE3B4C /* ParticleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleType.swift; sourceTree = "<group>"; };
 		E672573321FB8D5E00BE3B4C /* RadixModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixModelType.swift; sourceTree = "<group>"; };
 		E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPrefix.swift; sourceTree = "<group>"; };
@@ -1265,8 +1265,8 @@
 				E672572F21FB8D3900BE3B4C /* ParticleType.swift */,
 				E672573321FB8D5E00BE3B4C /* RadixModelType.swift */,
 				E6611F4E2229849000AD2F83 /* AtomModelDecodingError.swift */,
-				E6611F5622298F7600AD2F83 /* RadixDecoder.swift */,
-				E6611F5822298F9000AD2F83 /* RadixEncoder.swift */,
+				E6611F5622298F7600AD2F83 /* RadixJSONDecoder.swift */,
+				E6611F5822298F9000AD2F83 /* RadixJSONEncoder.swift */,
 			);
 			path = Parsing;
 			sourceTree = "<group>";
@@ -1485,7 +1485,7 @@
 				E6A4AC0722243C54006C5CA8 /* UpperBound.swift in Sources */,
 				E6ED1A8321F8E95100654105 /* DefaultAPIClient.swift in Sources */,
 				E6CEE77321F7A65F00D745EC /* RadixHashable.swift in Sources */,
-				E6611F5922298F9000AD2F83 /* RadixEncoder.swift in Sources */,
+				E6611F5922298F9000AD2F83 /* RadixJSONEncoder.swift in Sources */,
 				E6CEE76921F7A59700D745EC /* EffectiveUserIdentifier_EUID.swift in Sources */,
 				E6A4ABA1221D592C006C5CA8 /* Fungible+Sequence.swift in Sources */,
 				E6ED1A5121F8E54900654105 /* AtomPuller.swift in Sources */,
@@ -1509,7 +1509,7 @@
 				E6ED1A7E21F8E83300654105 /* ObservableType+ValidAtoms.swift in Sources */,
 				E631DAC721F258D80063F632 /* Mnemonic+Error.swift in Sources */,
 				E67A714A21FBB1B900F4B2D0 /* TokenPermissions.swift in Sources */,
-				E6611F5722298F7600AD2F83 /* RadixDecoder.swift in Sources */,
+				E6611F5722298F7600AD2F83 /* RadixJSONDecoder.swift in Sources */,
 				E6A4AB96221D4680006C5CA8 /* Description.swift in Sources */,
 				E6A4AB9A221D508D006C5CA8 /* Nonce.swift in Sources */,
 				E6A4AB9E221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift in Sources */,

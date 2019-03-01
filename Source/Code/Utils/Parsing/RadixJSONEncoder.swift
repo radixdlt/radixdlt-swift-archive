@@ -1,5 +1,5 @@
 //
-//  RadixEncoder.swift
+//  RadixJSONEncoder.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-03-01.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class RadixEncoder: Foundation.JSONEncoder {
+public final class RadixJSONEncoder: Foundation.JSONEncoder {
     
     convenience init(outputFormat: Foundation.JSONEncoder.OutputFormatting = .sortedKeys) {
         self.init()

@@ -27,7 +27,7 @@ public extension AtomConvertible {
     
     func toDson() -> Data {
         // swiftlint:disable:next force_try
-        return try! RadixEncoder().encode(self)
+        return try! RadixJSONEncoder().encode(self)
     }
     
     var hid: EUID {
