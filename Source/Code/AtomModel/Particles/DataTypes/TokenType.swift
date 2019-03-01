@@ -8,53 +8,36 @@
 
 import Foundation
 
-/// Adjective version of TokenAction
-public enum TokenType: String, StringInitializable, Hashable, Codable {
+public enum TokenType {
     case minted
     case transferred
     case burned
 }
 
 public extension TokenType {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let particleType = try container.decode(ParticleTypes.self)
-        try self.init(particleType: particleType)
+    public enum Error: Swift.Error {
+        case notToken
     }
-}
-
-internal extension TokenType {
-    init(particleType: ParticleTypes) throws {
+    
+    init(particleType: ParticleType) throws {
         switch particleType {
         case .burnedToken: self = .burned
         case .mintedToken: self = .minted
         case .transferredToken: self = .transferred
-        default: throw Error.particleIsNotTokenType
+        default: throw Error.notToken
         }
     }
-}
-
-// MARK: - StringInitializable
-public extension TokenType {
-    init(string: String) throws {
-        guard let type = TokenType(rawValue: string) else {
-            throw Error.unsupportedTokenType(string)
+    
+    init(modelType: RadixModelType) throws {
+        let particleType = try ParticleType(modelType: modelType)
+        try self.init(particleType: particleType)
+    }
+    
+    var particleType: ParticleType {
+        switch self {
+        case .minted: return .mintedToken
+        case .burned: return .burnedToken
+        case .transferred: return .transferredToken
         }
-        self = type
-    }
-}
-
-// MARK: CustomStringConvertible
-public extension TokenType {
-    var description: String {
-        return rawValue
-    }
-}
-
-// MARK: - Error
-public extension TokenType {
-    public enum Error: Swift.Error {
-        case unsupportedTokenType(String)
-        case particleIsNotTokenType
     }
 }

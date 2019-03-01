@@ -8,16 +8,51 @@
 
 import Foundation
 
-public struct UniqueParticle: ParticleConvertible {
+public struct UniqueParticle: ParticleModelConvertible {
     
-    public let type: ParticleTypes = .unique
-    
+    public static let type = RadixModelType.uniqueParticle
     public let address: Address
     public let name: Name
     
     public init(address: Address, uniqueName name: Name) {
+        
         self.address = address
         self.name = name
+    }
+}
+
+// MARK: Codable
+public extension UniqueParticle {
+
+    public enum CodingKeys: String, RadixModelKey {
+        public static let modelType = CodingKeys.type
+        case type = "serializer"
+        
+        case address, name
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        try UniqueParticle.verifyType(container: container)
+        
+        address = try container.decode(Address.self, forKey: .address)
+        name = try container.decode(Name.self, forKey: .name)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type, forKey: .type)
+        
+        try container.encode(address, forKey: .address)
+        try container.encode(name, forKey: .name)
+        
+    }
+}
+
+// MARK: - ParticleConvertible
+public extension UniqueParticle {
+    var particleType: ParticleType {
+        return .unique
     }
 }
 

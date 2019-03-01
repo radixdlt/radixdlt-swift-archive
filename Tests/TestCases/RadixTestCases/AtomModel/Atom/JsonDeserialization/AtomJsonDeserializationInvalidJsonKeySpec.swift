@@ -17,12 +17,7 @@ class AtomJsonDeserializationInvalidJsonKeySpec: QuickSpec {
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - Incorrect JSON Key") {
             it("should fail with decoding error") {
-                do {
-                    _ = try decode(Atom.self, from: json)
-                    fail("Should not be able to decode invalid JSON")
-                } catch {
-                    expect(error).to(beAKindOf(DecodingError.self))
-                }
+                expect { try decode(Atom.self, from: json) }.to(throwError(errorType: DecodingError.self))
             }
         }
     }
@@ -30,10 +25,12 @@ class AtomJsonDeserializationInvalidJsonKeySpec: QuickSpec {
 
 private let json = """
 {
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
     "signatures": {},
     "metaData": {},
-    "p4rticleGroups": [
+    "p⚠️⚠️⚠️⚠️⚠️⚠️s": [
         {
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
             "particles": [],
             "metaData": {}
         }

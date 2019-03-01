@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct MessageParticle: ParticleConvertible, Accountable {
+public struct MessageParticle: ParticleModelConvertible, Accountable {
     
-    public let type: ParticleTypes = .message
+    public static let type = RadixModelType.messageParticle
     
     public let from: Address
     public let to: Address
@@ -25,6 +25,14 @@ public struct MessageParticle: ParticleConvertible, Accountable {
     }
 }
 
+// MARK: - ParticleConvertible
+public extension MessageParticle {
+    var particleType: ParticleType {
+        return .message
+    }
+}
+
+// MARK: - Convenience init
 public extension MessageParticle {
     public init(from: Address, to: Address, message: String, includeTimeNow: Bool = true) {
         guard let messageData = message.data(using: .utf8) else {
@@ -44,15 +52,21 @@ public extension MessageParticle {
 
 // MARK: Codable
 public extension MessageParticle {
-    public enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, RadixModelKey {
+        public static let modelType = CodingKeys.type
+        case type = "serializer"
+
         case from = "source"
         case to = "destination"
         case payload = "data"
-        case metaData, type
+        case metaData
     }
     
+    // swiftlint:disable:next function_body_length
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        try MessageParticle.verifyType(container: container)
+        
         let from = try container.decode(Address.self, forKey: .from)
         let to = try container.decode(Address.self, forKey: .to)
         let payloadBase64 = try container.decode(Base64String.self, forKey: .payload)
@@ -69,6 +83,7 @@ public extension MessageParticle {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(type, forKey: .type)
+        
         try container.encode(from, forKey: .from)
         try container.encode(to, forKey: .to)
         try container.encode(metaData, forKey: .metaData)

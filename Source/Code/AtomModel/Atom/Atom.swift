@@ -11,6 +11,8 @@ import Foundation
 // MARK: - Atom
 public struct Atom: AtomConvertible {
     
+    public static let type = RadixModelType.atom
+    
     public let particleGroups: ParticleGroups
     public let signatures: Signatures
     public let metaData: MetaData
@@ -29,9 +31,29 @@ public struct Atom: AtomConvertible {
 // MARK: - Encodable
 public extension Atom {
     
+    public enum CodingKeys: String, RadixModelKey {
+        public static let modelType = CodingKeys.type
+        case type = "serializer"
+        
+        case particleGroups
+        case signatures
+        case metaData
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        try Atom.verifyType(container: container)
+        
+        particleGroups = try container.decode(ParticleGroups.self, forKey: .particleGroups)
+        signatures = try container.decode(Signatures.self, forKey: .signatures)
+        metaData = try container.decode(MetaData.self, forKey: .metaData)
+    }
+    
     // swiftlint:disable:next function_body_length
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: Atom.CodingKeys.self)
+        try container.encode(type, forKey: .type)
+        
         try container.encode(particleGroups, forKey: .particleGroups)
         try container.encode(signatures, forKey: .signatures)
         try container.encode(metaData, forKey: .metaData)

@@ -73,8 +73,10 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
 
 let jsonForAtomWith2ParticleGroups = """
 {
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
     "signatures": {
         "71c3c2fc9fee73b13cad082800a6d0de":{
+            "\(RadixModelType.jsonKey)": \(RadixModelType.signature.rawValue),
             "r":":byt:JRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX=",
             "s":":byt:KbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H="
         }
@@ -85,12 +87,14 @@ let jsonForAtomWith2ParticleGroups = """
     },
     "particleGroups": [
         {
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
             "metaData": {},
             "particles": [
                 {
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
                     "spin": 1,
                     "particle": {
-                        "type": "tokenDefinition",
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.tokenDefinitionParticle.rawValue),
                         "symbol": ":str:CCC",
                         "name": ":str:Cyon",
                         "description": ":str:Cyon Crypto Coin is the worst shit coin",
@@ -110,12 +114,14 @@ let jsonForAtomWith2ParticleGroups = """
             ]
         },
         {
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
             "metaData": {},
             "particles": [
                 {
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
                     "spin": 1,
                     "particle": {
-                        "type": "mintedToken",
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.mintedTokenParticle.rawValue),
                         "owner": ":byt:A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
                         "receiver": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
                         "nonce": 992284943125945,
@@ -125,9 +131,10 @@ let jsonForAtomWith2ParticleGroups = """
                     }
                 },
                 {
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
 	                "spin": 1,
 					"particle": {
-						"type": "message",
+						"\(RadixModelType.jsonKey)": \(RadixModelType.messageParticle.rawValue),
 						"source": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 						"destination": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
 						"data": ":byt:SGVsbG8gUmFkaXgh",

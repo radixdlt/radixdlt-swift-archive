@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct TokenDefinitionParticle: ParticleConvertible, Identifiable {
+public struct TokenDefinitionParticle: ParticleModelConvertible, Identifiable {
     
-    public let type: ParticleTypes = .tokenDefinition
+    public static let type = RadixModelType.tokenDefinitionParticle
     
     public let symbol: Symbol
     public let name: Name
@@ -29,6 +29,7 @@ public struct TokenDefinitionParticle: ParticleConvertible, Identifiable {
         granularity: Granularity,
         permissions: TokenPermissions
         ) {
+        
         self.symbol = symbol
         self.name = name
         self.description = description
@@ -37,7 +38,13 @@ public struct TokenDefinitionParticle: ParticleConvertible, Identifiable {
         self.granularity = granularity
         self.permissions = permissions
     }
+}
 
+// MARK: - ParticleConvertible
+public extension TokenDefinitionParticle {
+    var particleType: ParticleType {
+        return .tokenDefinition
+    }
 }
 
 // MARK: - Identifiable
@@ -49,16 +56,25 @@ public extension TokenDefinitionParticle {
 
 // MARK: - Codable
 public extension TokenDefinitionParticle {
-    public enum CodingKeys: String, CodingKey {
-        case type, symbol, name, description, address, metaData, granularity, permissions
+   
+    public static let expectedType: RadixModelType = .tokenDefinitionParticle
+    
+    public enum CodingKeys: String, RadixModelKey {
+        public static let modelType = CodingKeys.type
+        case type = "serializer"
+        
+        case symbol, name, description, address, metaData, granularity, permissions
+        
     }
 }
 
 // MARK: - Decodable
 public extension TokenDefinitionParticle {
- 
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        try TokenDefinitionParticle.verifyType(container: container)
+        
         symbol = try container.decode(Symbol.self, forKey: .symbol)
         name = try container.decode(Name.self, forKey: .name)
         description = try container.decode(Description.self, forKey: .description)
@@ -66,5 +82,18 @@ public extension TokenDefinitionParticle {
         metaData = try container.decode(MetaData.self, forKey: .metaData)
         granularity = try container.decode(Granularity.self, forKey: .granularity)
         permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type, forKey: .type)
+        
+        try container.encode(symbol, forKey: .symbol)
+        try container.encode(name, forKey: .name)
+        try container.encode(description, forKey: .description)
+        try container.encode(address, forKey: .address)
+        try container.encode(granularity, forKey: .granularity)
+        try container.encode(metaData, forKey: .metaData)
+        try container.encode(permissions, forKey: .permissions)
     }
 }

@@ -8,7 +8,10 @@
 
 import Foundation
 
-public struct SpunParticle: Codable {
+public struct SpunParticle: Codable, AtomModelConvertible {
+
+    public static let type = RadixModelType.spunParticle
+
     public let spin: Spin
     public let particle: ParticleConvertible
     public init(spin: Spin = .down, particle: ParticleConvertible) {
@@ -20,19 +23,25 @@ public struct SpunParticle: Codable {
 // MARK: - Deodable
 public extension SpunParticle {
     
-    public enum CodingKeys: CodingKey {
+    public enum CodingKeys: String, RadixModelKey {
+        public static let modelType = CodingKeys.type
+        case type = "serializer"
+        
         case particle, spin
     }
     
     private enum ParticleTypeKey: String, CodingKey {
-        case type
+        case type = "serializer"
     }
     
     // swiftlint:disable:next function_body_length
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        try SpunParticle.verifyType(container: container)
+        
         let particleNestedContainer = try container.nestedContainer(keyedBy: ParticleTypeKey.self, forKey: .particle)
-        let particleType = try particleNestedContainer.decode(ParticleTypes.self, forKey: .type)
+        let modelType = try particleNestedContainer.decode(RadixModelType.self, forKey: .type)
+        let particleType = try ParticleType(modelType: modelType)
         switch particleType {
         case .message:
             particle = try container.decode(MessageParticle.self, forKey: .particle)
@@ -48,18 +57,21 @@ public extension SpunParticle {
 // MARK: - Encodable
 public extension SpunParticle {
     
+    // swiftlint:disable:next function_body_length
     func encode(to encoder: Encoder) throws {
-        var encoder = encoder.container(keyedBy: CodingKeys.self)
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(SpunParticle.type, forKey: .type)
+
         if let messageParticle = particle as? MessageParticle {
-            try encoder.encode(messageParticle, forKey: .particle)
+            try container.encode(messageParticle, forKey: .particle)
         } else if let tokenDefinitionParticle = particle as? TokenDefinitionParticle {
-            try encoder.encode(tokenDefinitionParticle, forKey: .particle)
+            try container.encode(tokenDefinitionParticle, forKey: .particle)
         } else if let tokenParticle = particle as? TokenParticle {
-            try encoder.encode(tokenParticle, forKey: .particle)
+            try container.encode(tokenParticle, forKey: .particle)
         } else if let uniqueParticle = particle as? UniqueParticle {
-            try encoder.encode(uniqueParticle, forKey: .particle)
+            try container.encode(uniqueParticle, forKey: .particle)
         }
-        try encoder.encode(spin, forKey: .spin)
+        try container.encode(spin, forKey: .spin)
     }
 }
 

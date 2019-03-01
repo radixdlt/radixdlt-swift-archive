@@ -62,7 +62,7 @@ private let atom = Atom(
             SpunParticle(
                 spin: .up,
                 particle: TokenParticle(
-                    type: .mintedToken,
+                    type: .minted,
                     owner: "A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
                     receiver: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
                     nonce: 992284943125945,

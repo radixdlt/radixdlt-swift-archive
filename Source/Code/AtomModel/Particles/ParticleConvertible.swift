@@ -8,9 +8,45 @@
 
 import Foundation
 
-public protocol ParticleConvertible: Codable {
-    var type: ParticleTypes { get }
+public enum AtomModelDecodingError: Swift.Error {
+    case jsonDecodingErrorTypeMismatch(expectedType: RadixModelType, butGot: RadixModelType)
 }
+
+public protocol RadixModelKey: CodingKey, RawRepresentable where RawValue == String {
+    static var modelType: Self { get }
+}
+
+public protocol AtomModelConvertible: Codable {
+    associatedtype CodingKeys: RadixModelKey
+
+    static var type: RadixModelType { get }
+    
+    @discardableResult
+    static func verifyType(container: KeyedDecodingContainer<CodingKeys>) throws -> RadixModelType
+}
+
+public extension AtomModelConvertible {
+    
+    var type: RadixModelType {
+        return Self.type
+    }
+    
+    @discardableResult
+    static func verifyType(container: KeyedDecodingContainer<CodingKeys>) throws -> RadixModelType {
+        let decodedType = try container.decode(RadixModelType.self, forKey: CodingKeys.modelType)
+        
+        guard decodedType == Self.type else {
+            throw AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedType: Self.type, butGot: decodedType)
+        }
+        return decodedType
+    }
+}
+
+public protocol ParticleConvertible: Codable {
+    var particleType: ParticleType { get }
+}
+
+public protocol ParticleModelConvertible: ParticleConvertible, AtomModelConvertible {}
 
 public extension ParticleConvertible {
     func keyDestinations() -> Set<PublicKey> {

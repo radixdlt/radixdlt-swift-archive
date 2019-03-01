@@ -38,10 +38,12 @@ class AtomJsonDeserializationTrivialSpec: QuickSpec {
 
 private let json = """
 {
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
     "signatures": {},
     "metaData": {},
     "particleGroups": [
         {
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
             "particles": [],
             "metaData": {}
         }

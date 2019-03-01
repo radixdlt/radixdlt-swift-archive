@@ -7,7 +7,9 @@
 //
 
 import Foundation
-public struct ParticleGroup: ArrayCodable {
+public struct ParticleGroup: ArrayCodable, AtomModelConvertible {
+    
+    public static let type = RadixModelType.particleGroup
     
     public let spunParticles: [SpunParticle]
     public let metaData: MetaData
@@ -23,19 +25,26 @@ public struct ParticleGroup: ArrayCodable {
 
 // MARK: - Codable
 public extension ParticleGroup {
-    public enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, RadixModelKey {
+        public static let modelType = CodingKeys.type
+        case type = "serializer"
+        
         case spunParticles = "particles"
         case metaData
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        try ParticleGroup.verifyType(container: container)
+        
         spunParticles = try container.decode([SpunParticle].self, forKey: .spunParticles)
         metaData = try container.decode(MetaData.self, forKey: .metaData)
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type, forKey: .type)
+        
         try container.encode(spunParticles, forKey: .spunParticles)
         try container.encode(metaData, forKey: .metaData)
     }
