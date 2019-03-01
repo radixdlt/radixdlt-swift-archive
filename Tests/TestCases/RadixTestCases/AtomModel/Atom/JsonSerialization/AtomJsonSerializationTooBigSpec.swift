@@ -21,7 +21,7 @@ class AtomJsonSerializationTooBigSpec: QuickSpec {
             )
             
             it("should fail because it is too big") {
-                expect { try JSONEncoder().encode(atom) }.to(throwError(type: Atom.Error.self) {
+                expect { try RadixEncoder().encode(atom) }.to(throwError(errorType: Atom.Error.self) {
                     switch $0 {
                     case .tooManyBytes(let expectedAtMost, let butGot):
                         let maxSize = Atom.maxSize

@@ -19,7 +19,7 @@ class QuestionMarkInSymbolSpec: AtomJsonDeserializationChangeJson {
             let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:BAD?")
             
             it("should fail to deserialize JSON with empty symbol") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: InvalidStringError.self) {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: InvalidStringError.self) {
                     switch $0 {
                     case .invalidCharacters(let expectedCharacters, let butGot):
                         expect(expectedCharacters).to(equal(CharacterSet.numbersAndUppercaseAtoZ))

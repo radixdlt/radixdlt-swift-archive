@@ -10,7 +10,7 @@ import Foundation
 @testable import RadixSDK
 
 @discardableResult
-func model<D>(from jsonString: String) -> D where D: Decodable {
+func model<D>(from jsonString: String) -> D where D: Decodable & RadixModelTypeStaticSpecifying {
     do {
         return try decode(D.self, from: jsonString)
     } catch {
@@ -20,7 +20,7 @@ func model<D>(from jsonString: String) -> D where D: Decodable {
 }
 
 @discardableResult
-func decode<D>(_ type: D.Type, from jsonString: String) throws -> D where D: Decodable {
+func decode<D>(_ type: D.Type, from jsonString: String) throws -> D where D: Decodable & RadixModelTypeStaticSpecifying {
     let json = jsonString.data(using: .utf8)!
-    return try JSONDecoder().decode(D.self, from: json)
+    return try RadixDecoder().decode(D.self, from: json)
 }

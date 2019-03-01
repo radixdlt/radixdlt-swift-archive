@@ -15,12 +15,3 @@ func beNotNil<T>() -> Predicate<T> {
         return PredicateStatus(bool: actualValue != nil)
     }
 }
-
-func throwError<E>(type: E.Type, closure: @escaping ((E) -> Void)) -> Nimble.Predicate<Any> where E: Swift.Error {
-    return throwError { (anyError: Error) in
-        guard let error = anyError as? E else {
-            return fail("Incorrect error type, expected '\(type)' but got \(anyError)")
-        }
-        closure(error)
-    }
-}

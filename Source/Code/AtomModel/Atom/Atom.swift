@@ -31,10 +31,8 @@ public struct Atom: AtomConvertible {
 // MARK: - Encodable
 public extension Atom {
     
-    public enum CodingKeys: String, RadixModelKey {
-        public static let modelType = CodingKeys.type
+    public enum CodingKeys: String, CodingKey {
         case type = "serializer"
-        
         case particleGroups
         case signatures
         case metaData
@@ -42,8 +40,6 @@ public extension Atom {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try Atom.verifyType(container: container)
-        
         particleGroups = try container.decode(ParticleGroups.self, forKey: .particleGroups)
         signatures = try container.decode(Signatures.self, forKey: .signatures)
         metaData = try container.decode(MetaData.self, forKey: .metaData)
@@ -58,12 +54,13 @@ public extension Atom {
         try container.encode(signatures, forKey: .signatures)
         try container.encode(metaData, forKey: .metaData)
 
-        let enc = JSONEncoder()
+        let enc = Foundation.JSONEncoder()
         let atomSize = [
             try enc.encode(particleGroups),
             try enc.encode(signatures),
             try enc.encode(metaData)
         ].map { $0.length }.reduce(0, +)
+        
         guard atomSize <= Atom.maxSize else {
             throw Error.tooManyBytes(expectedAtMost: Atom.maxSize, butGot: atomSize)
         }

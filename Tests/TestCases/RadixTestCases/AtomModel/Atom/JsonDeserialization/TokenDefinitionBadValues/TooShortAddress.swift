@@ -19,7 +19,7 @@ class TooShortAddressSpec: AtomJsonDeserializationChangeJson {
             let badJson = self.replaceValueInParticle(for: .address, with: ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCe")
             
             it("should fail to deserialize JSON with too short address") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: InvalidStringError.self) {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: InvalidStringError.self) {
                     switch $0 {
                     case .tooFewCharacters(let expectedAtLeast, let butGot):
                         expect(expectedAtLeast).to(equal(51))

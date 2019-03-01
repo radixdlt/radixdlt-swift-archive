@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct SpunParticle: Codable, AtomModelConvertible {
+public struct SpunParticle: Codable, RadixModelTypeStaticSpecifying {
 
     public static let type = RadixModelType.spunParticle
 
@@ -23,8 +23,7 @@ public struct SpunParticle: Codable, AtomModelConvertible {
 // MARK: - Deodable
 public extension SpunParticle {
     
-    public enum CodingKeys: String, RadixModelKey {
-        public static let modelType = CodingKeys.type
+    public enum CodingKeys: String, CodingKey {
         case type = "serializer"
         
         case particle, spin
@@ -37,7 +36,6 @@ public extension SpunParticle {
     // swiftlint:disable:next function_body_length
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try SpunParticle.verifyType(container: container)
         
         let particleNestedContainer = try container.nestedContainer(keyedBy: ParticleTypeKey.self, forKey: .particle)
         let modelType = try particleNestedContainer.decode(RadixModelType.self, forKey: .type)
@@ -60,8 +58,8 @@ public extension SpunParticle {
     // swiftlint:disable:next function_body_length
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(SpunParticle.type, forKey: .type)
-
+        try container.encode(type, forKey: .type)
+        
         if let messageParticle = particle as? MessageParticle {
             try container.encode(messageParticle, forKey: .particle)
         } else if let tokenDefinitionParticle = particle as? TokenDefinitionParticle {

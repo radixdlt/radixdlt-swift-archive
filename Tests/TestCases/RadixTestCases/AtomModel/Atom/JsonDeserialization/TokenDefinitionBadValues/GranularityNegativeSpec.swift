@@ -19,7 +19,7 @@ class GranularityNegativeSpec: AtomJsonDeserializationChangeJson {
             let badJson = self.replaceValueInParticle(for: .granularity, with: ":u20:-1")
             
             it("should fail to deserialize JSON with negative granulariy") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: Granularity.Error.self) {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: Granularity.Error.self) {
                     switch $0 {
                     case .failedToCreateBigInt(let negativeAmountString):
                         expect(negativeAmountString).to(equal("-1"))

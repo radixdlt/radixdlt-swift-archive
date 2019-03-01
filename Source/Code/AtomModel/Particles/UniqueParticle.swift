@@ -24,17 +24,13 @@ public struct UniqueParticle: ParticleModelConvertible {
 // MARK: Codable
 public extension UniqueParticle {
 
-    public enum CodingKeys: String, RadixModelKey {
-        public static let modelType = CodingKeys.type
+    public enum CodingKeys: String, CodingKey {
         case type = "serializer"
-        
         case address, name
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try UniqueParticle.verifyType(container: container)
-        
         address = try container.decode(Address.self, forKey: .address)
         name = try container.decode(Name.self, forKey: .name)
     }

@@ -52,8 +52,7 @@ public extension MessageParticle {
 
 // MARK: Codable
 public extension MessageParticle {
-    public enum CodingKeys: String, RadixModelKey {
-        public static let modelType = CodingKeys.type
+    public enum CodingKeys: String, CodingKey {
         case type = "serializer"
 
         case from = "source"
@@ -65,7 +64,6 @@ public extension MessageParticle {
     // swiftlint:disable:next function_body_length
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try MessageParticle.verifyType(container: container)
         
         let from = try container.decode(Address.self, forKey: .from)
         let to = try container.decode(Address.self, forKey: .to)

@@ -13,15 +13,21 @@ import Quick
 class AtomJsonDeserializationInvalidSerializerValueSpec: QuickSpec {
     
     override func spec() {
-        describe("JSON deserialization - Incorrect serializer value at top level") {
+        describe("JSON deserialization - Incorrect serializer value for atom") {
             it("should fail with decoding error") {
-                expect { try decode(Atom.self, from: json) }.to(throwError(AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedType: RadixModelType.atom, butGot: .signature)))
+                expect { try decode(Atom.self, from: invalidAtomSerializerJson) }.to(throwError(AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedType: RadixModelType.atom, butGot: .signature)))
+            }
+        }
+        
+        describe("JSON deserialization - Incorrect serializer value for TokenDefinitionParticle") {
+            it("should fail with decoding error") {
+                expect { try decode(Atom.self, from: invalidTokenDefinitionParticleSerializerJson) }.to(throwError(errorType: DecodingError.self))
             }
         }
     }
 }
 
-private let json = """
+private let invalidAtomSerializerJson = """
 {
     "\(RadixModelType.jsonKey)": \(RadixModelType.signature.rawValue),
     "signatures": {},
@@ -36,3 +42,37 @@ private let json = """
 }
 """
 
+
+private let invalidTokenDefinitionParticleSerializerJson = """
+{
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
+    "signatures": {},
+    "metaData": {},
+    "particleGroups": [
+        {
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
+            "particles": [
+                {
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
+                    "spin": 1,
+                    "particle": {
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.messageParticle.rawValue),
+                        "symbol": ":str:BAD",
+                        "name": ":str:BadCoin",
+                        "description": ":str:Some TokenDefinition",
+                        "metaData": {},
+                        "granularity": ":u20:1",
+                        "permissions": {
+                            "burn": ":str:none",
+                            "mint": ":str:none",
+                            "transfer": ":str:none"
+                        },
+                        "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                    }
+                }
+            ],
+            "metaData": {}
+        }
+    ]
+}
+"""

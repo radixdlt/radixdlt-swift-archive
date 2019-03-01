@@ -59,8 +59,7 @@ public extension TokenDefinitionParticle {
    
     public static let expectedType: RadixModelType = .tokenDefinitionParticle
     
-    public enum CodingKeys: String, RadixModelKey {
-        public static let modelType = CodingKeys.type
+    public enum CodingKeys: String, CodingKey {
         case type = "serializer"
         
         case symbol, name, description, address, metaData, granularity, permissions
@@ -73,7 +72,6 @@ public extension TokenDefinitionParticle {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try TokenDefinitionParticle.verifyType(container: container)
         
         symbol = try container.decode(Symbol.self, forKey: .symbol)
         name = try container.decode(Name.self, forKey: .name)

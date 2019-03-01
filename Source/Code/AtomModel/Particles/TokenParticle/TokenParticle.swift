@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct TokenParticle: ParticleConvertible, Ownable, Fungible, Identifiable {
+public struct TokenParticle: ParticleConvertible, Ownable, Fungible, Identifiable, RadixModelTypeSpecifying {
 
     public let type: RadixModelType
     public let tokenType: TokenType

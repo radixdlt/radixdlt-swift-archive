@@ -22,7 +22,7 @@ public extension Secp256k1 {
 /// ECDSA Signature consisting of two BigIntegers "R" and "S"
 /// Read more: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
 /// Low value `S` is enforced according to BIP62: https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures
-public struct Signature: Equatable, AtomModelConvertible {
+public struct Signature: Equatable, RadixModelTypeStaticSpecifying {
     
     public static let type = RadixModelType.signature
     
@@ -71,15 +71,13 @@ public struct Signature: Equatable, AtomModelConvertible {
 // MARK: - Decodable
 public extension Signature {
     
-    public enum CodingKeys: String, RadixModelKey {
-        public static let modelType = CodingKeys.type
+    public enum CodingKeys: String, CodingKey {
         case type = "serializer"
         case r, s
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try Signature.verifyType(container: container)
         
         let rBase64 = try container.decode(Base64String.self, forKey: .r)
         let sBase64 = try container.decode(Base64String.self, forKey: .s)
@@ -92,6 +90,7 @@ public extension Signature {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(type, forKey: .type)
+        
         let length = 32
         try container.encode(r.toBase64String(minLength: length), forKey: .r)
         try container.encode(s.toBase64String(minLength: length), forKey: .s)

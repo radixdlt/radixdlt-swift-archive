@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol AtomConvertible: AtomModelConvertible, RadixHashable, ExpressibleByArrayLiteral {
+public protocol AtomConvertible: RadixModelTypeStaticSpecifying, RadixHashable, ExpressibleByArrayLiteral {
     var particleGroups: ParticleGroups { get }
     var signatures: Signatures { get }
     var metaData: MetaData { get }

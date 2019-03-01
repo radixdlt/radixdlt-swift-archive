@@ -10,13 +10,6 @@
 import Nimble
 import Quick
 
-extension JSONEncoder {
-    convenience init(outputFormat: JSONEncoder.OutputFormatting) {
-        self.init()
-        self.outputFormatting = outputFormat
-    }
-}
-
 class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
     
     override func spec() {
