@@ -22,9 +22,9 @@ class AtomJsonSerializationTrivialSpec: QuickSpec {
             
             it("should result in the appropriate trival JSON") {
                 do {
-                    let json = try JSONEncoder().encode(atom)
+                    let json = try RadixJSONEncoder(outputFormat: .prettyPrinted).encode(atom)
                     let jsonString = String(data: json, encoding: .utf8)!
-                    let atomFromJSON = try JSONDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
+                    let atomFromJSON = try RadixJSONDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
                     expect(atomFromJSON).to(equal(atom))
                 } catch {
                     fail("unexpected error: \(error)")
@@ -37,10 +37,12 @@ class AtomJsonSerializationTrivialSpec: QuickSpec {
 
 private let expectedJson = """
 {
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
     "signatures": {},
     "metaData": {},
     "particleGroups": [
         {
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
             "particles": [],
             "metaData": {}
         }

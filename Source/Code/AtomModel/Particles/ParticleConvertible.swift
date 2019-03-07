@@ -9,7 +9,17 @@
 import Foundation
 
 public protocol ParticleConvertible: Codable {
-    var type: ParticleTypes { get }
+    var particleType: ParticleType { get }
+}
+
+public extension ParticleConvertible where Self: RadixModelTypeSpecifying {
+    var particleType: ParticleType {
+        do {
+            return try ParticleType(modelType: type)
+        } catch {
+            incorrectImplementation("Error: \(error)")
+        }
+    }
 }
 
 public extension ParticleConvertible {

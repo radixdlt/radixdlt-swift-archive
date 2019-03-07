@@ -15,15 +15,18 @@ class AtomJsonDeserializationMintedTokenBadValuesSpec: AtomJsonDeserializationCh
     override func jsonString() -> String {
         return """
             {
+                "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
                 "signatures": {},
                 "metaData": {},
                 "particleGroups": [
                     {
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
                         "particles": [
                             {
+                                "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
                                 "spin": 1,
                                 "particle": {
-                                    "type": "mintedToken",
+                                    "\(RadixModelType.jsonKey)": \(RadixModelType.mintedTokenParticle.rawValue),
                                     "owner": ":byt:A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
                                     "receiver": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
                                     "nonce": 992284943125945,

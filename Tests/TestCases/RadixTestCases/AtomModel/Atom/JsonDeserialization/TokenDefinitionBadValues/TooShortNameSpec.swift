@@ -19,7 +19,7 @@ class TooShortNameSpec: AtomJsonDeserializationChangeJson {
             let badJson = self.replaceValueInParticle(for: .name, with: ":str:B")
             
             it("should fail to deserialize JSON with a too short name") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: InvalidStringError.self) {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: InvalidStringError.self) {
                     switch $0 {
                     case .tooFewCharacters(let expectedAtLeast, let butGot):
                         expect(expectedAtLeast).to(equal(2))

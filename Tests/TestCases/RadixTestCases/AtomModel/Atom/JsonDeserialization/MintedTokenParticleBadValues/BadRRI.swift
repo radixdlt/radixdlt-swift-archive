@@ -18,7 +18,7 @@ class BadRRI: AtomJsonDeserializationMintedTokenBadValuesSpec {
             let badJson = self.replaceValueInParticle(for: .tokenDefinitionIdentifier, with: ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/foobar/XRD")
             
             it("should fail to deserialize JSON with a MintedTokenParticle with") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: ResourceIdentifier.Error.self) {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: ResourceIdentifier.Error.self) {
                     switch $0 {
                     case .unsupportedResourceType(let got):
                         expect(got).to(equal("foobar"))

@@ -13,13 +13,13 @@ class ResourceIdentifierTests: XCTestCase {
 //    func testResourceIdentifierEncodingAndDecoding() {
 //        let address: Address = "JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6"
 //        let resourceIdentifier = ResourceIdentifier(address: address, type: .tokens, unique: "Ada")
-//        let jsonEncoder = JSONEncoder()
+//        let jsonEncoder = RadixJSONEncoder()
 //        jsonEncoder.outputFormatting = .prettyPrinted
 //        let encoded = try! jsonEncoder.encode([resourceIdentifier])
 //        let jsonString = String(data: encoded, encoding: .utf8)!
 //
 //        XCTAssertEqual(jsonString, "[\(resourceIdentifier.identifier)]")
-//        let decodedPlural: [ResourceIdentifier] = try! JSONDecoder().decodePrefixed([ResourceIdentifier].self, from: encoded)
+//        let decodedPlural: [ResourceIdentifier] = try! RadixJSONDecoder().decodePrefixed([ResourceIdentifier].self, from: encoded)
 //        let decoded = decodedPlural[0]
 //        XCTAssertEqual(decoded.address, resourceIdentifier.address)
 //        XCTAssertEqual(decoded.unique, resourceIdentifier.unique)

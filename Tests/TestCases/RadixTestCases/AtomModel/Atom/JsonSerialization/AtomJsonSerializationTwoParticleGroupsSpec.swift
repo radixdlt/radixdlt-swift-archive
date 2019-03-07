@@ -10,13 +10,6 @@
 import Nimble
 import Quick
 
-extension JSONEncoder {
-    convenience init(outputFormat: JSONEncoder.OutputFormatting) {
-        self.init()
-        self.outputFormatting = outputFormat
-    }
-}
-
 class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
     
     override func spec() {
@@ -25,9 +18,9 @@ class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
         describe("JSON serialization - Two ParticleGroups each containing one particle") {
             it("should result in the appropriate non trivial JSON") {
                 do {
-                    let json = try JSONEncoder(outputFormat: .prettyPrinted).encode(atom)
+                    let json = try RadixJSONEncoder(outputFormat: .prettyPrinted).encode(atom)
                     let jsonString = String(data: json, encoding: .utf8)!
-                    let atomFromJSON = try JSONDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
+                    let atomFromJSON = try RadixJSONDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
                     expect(atomFromJSON).to(equal(atom))
                 } catch let encodingError as EncodingError {
                     fail("unexpected EncodingError: \(encodingError)")
@@ -62,7 +55,7 @@ private let atom = Atom(
             SpunParticle(
                 spin: .up,
                 particle: TokenParticle(
-                    type: .mintedToken,
+                    type: .minted,
                     owner: "A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
                     receiver: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
                     nonce: 992284943125945,

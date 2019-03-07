@@ -19,7 +19,7 @@ class TooLongAddressSpec: AtomJsonDeserializationChangeJson {
             let badJson = self.replaceValueInParticle(for: .address, with: ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCeiA")
             
             it("should fail to deserialize JSON with too long address") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: InvalidStringError.self) {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: InvalidStringError.self) {
                     switch $0 {
                     case .tooManyCharacters(let expectedAtMost, let butGot):
                         expect(expectedAtMost).to(equal(51))

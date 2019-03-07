@@ -19,7 +19,7 @@ class TooLongDescriptionSpec: AtomJsonDeserializationChangeJson {
             let badJson = self.replaceValueInParticle(for: .description, with: ":str:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed suscipit metus sit amet nulla facilisis condimentum. Nullam at risus ante. Praesent tortor nisl, volutpat eget magna quis, fermentum. 12345!")
             
             it("should fail to deserialize JSON with a too long description") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(type: InvalidStringError.self) {
+                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: InvalidStringError.self) {
                     switch $0 {
                     case .tooManyCharacters(let expectedAtMost, let butGot):
                         expect(expectedAtMost).to(equal(200))

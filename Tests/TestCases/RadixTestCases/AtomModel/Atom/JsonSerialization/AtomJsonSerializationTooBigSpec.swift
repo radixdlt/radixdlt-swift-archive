@@ -21,7 +21,7 @@ class AtomJsonSerializationTooBigSpec: QuickSpec {
             )
             
             it("should fail because it is too big") {
-                expect { try JSONEncoder().encode(atom) }.to(throwError(type: Atom.Error.self) {
+                expect { try RadixJSONEncoder().encode(atom) }.to(throwError(errorType: Atom.Error.self) {
                     switch $0 {
                     case .tooManyBytes(let expectedAtMost, let butGot):
                         let maxSize = Atom.maxSize
@@ -38,7 +38,7 @@ private let oneThousandParticles = [SpunParticle](repeating: spunTokenParticle, 
 private let spunTokenParticle = SpunParticle(
     spin: .up,
     particle: TokenParticle(
-        type: .mintedToken,
+        type: .minted,
         owner: "A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
         receiver: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
         nonce: 992284943125945,
