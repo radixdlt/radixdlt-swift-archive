@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Base58String: PrefixedJsonCodable, StringConvertible, StringRepresentable, CharacterSetSpecifying, DataConvertible, DataInitializable {
+public struct Base58String: PrefixedJsonCodable, StringConvertible, StringRepresentable, CharacterSetSpecifying, DataConvertible, DataInitializable, Base58Convertible {
 
     public static var allowedCharacters = CharacterSet.base58
     
@@ -22,9 +22,12 @@ public struct Base58String: PrefixedJsonCodable, StringConvertible, StringRepres
     }
 }
 
-// MARK: - PrefixedJsonDecodable
+// MARK: - Base58Convertible
 public extension Base58String {
     static let jsonPrefix: JSONPrefix = .addressBase58
+    var base58String: Base58String {
+        return self
+    }
 }
 
 public extension Data {

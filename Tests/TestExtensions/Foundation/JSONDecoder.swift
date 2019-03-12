@@ -10,12 +10,12 @@ import Foundation
 @testable import RadixSDK
 
 @discardableResult
-func model<D>(from jsonString: String) -> D where D: Decodable & RadixModelTypeStaticSpecifying {
+func model<D>(from jsonString: String, _ file: String = #file, _ line: Int = #line) -> D where D: Decodable & RadixModelTypeStaticSpecifying {
     do {
         return try decode(D.self, from: jsonString)
     } catch {
         print(error)
-        incorrectImplementation("error: \(error)")
+        incorrectImplementation("error: \(error)", file, line)
     }
 }
 

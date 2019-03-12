@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftCBOR
 
 public enum RadixModelType: Int, Codable {
     case signature = -434788200
@@ -33,4 +34,15 @@ public extension RadixModelType {
     }
     
     static let jsonKey = "serializer"
+}
+
+extension RadixModelType: CBORConvertible {
+    // TODO: move into default conformance? in `extension CBORConvertible`
+    public func encode() -> [UInt8] {
+        return toCBOR().encode()
+    }
+    
+    public func toCBOR() -> CBOR {
+        return CBOR(integerLiteral: rawValue)
+    }
 }

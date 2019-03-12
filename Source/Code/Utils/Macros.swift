@@ -16,9 +16,9 @@ internal var implementMe: Never {
     fatalError("Implement this")
 }
 
-internal func incorrectImplementation(_ reason: String?) -> Never {
+internal func incorrectImplementation(_ reason: String?, _ file: String = #file, _ line: Int = #line) -> Never {
     let message: String
-    let base = "Incorrect implementation"
+    let base = "Incorrect implementation, file: \(file), line: \(line)"
     if let reason = reason {
         message = "\(base), \(reason)"
     } else {

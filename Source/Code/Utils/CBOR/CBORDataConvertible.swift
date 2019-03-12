@@ -1,0 +1,27 @@
+//
+//  CBORDataConvertible.swift
+//  RadixSDK iOS
+//
+//  Created by Alexander Cyon on 2019-03-12.
+//  Copyright © 2019 Radix DLT. All rights reserved.
+//
+
+import Foundation
+import SwiftCBOR
+
+public protocol CBORDataConvertible: DataConvertible, CBORConvertible, DSONPrefixSpecifying {}
+
+// MARK: - CBOREncodable
+public extension CBORDataConvertible {
+    // TODO can default conformance to `CBOREncodable` be moved to CBORConvertible
+    func encode() -> [UInt8] {
+        return toCBOR().encode()
+    }
+}
+
+// MARK: - CBORConvertible
+public extension CBORDataConvertible {
+    func toCBOR() -> CBOR {
+        return CBOR.bytes(self, dsonPrefix: dsonPrefix)
+    }
+}

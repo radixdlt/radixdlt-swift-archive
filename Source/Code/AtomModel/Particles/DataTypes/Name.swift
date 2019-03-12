@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Name: PrefixedJsonCodable, StringConvertible, MinLengthSpecifying, MaxLengthSpecifying {
+public struct Name: PrefixedJsonCodable, CBORStringConvertible, MinLengthSpecifying, MaxLengthSpecifying {
     
     public static let minLength = 2
     public static let maxLength = 64

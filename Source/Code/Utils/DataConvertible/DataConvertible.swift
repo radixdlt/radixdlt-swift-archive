@@ -8,30 +8,20 @@
 
 import Foundation
 
-public protocol DataInitializable {
-    init(data: Data)
-}
-
-public extension DataInitializable {
-    init(base64: Base64String) {
-        self.init(data: base64.asData)
-    }
-    init(base58: Base58String) {
-        self.init(data: base58.asData)
-    }
-    init(hex: HexString) {
-        self.init(data: hex.asData)
-    }
-}
-
 public protocol DataConvertible: CustomStringConvertible, LengthMeasurable {
     var asData: Data { get }
+    var bytes: [Byte] { get }
     func toData(minByteCount: Int?) -> Data
 }
 
+// MARK: - Default Implementation
 public extension DataConvertible {
     func toData(minByteCount: Int? = nil) -> Data {
-       return asData.toData(minByteCount: minByteCount)
+        return asData.toData(minByteCount: minByteCount)
+    }
+
+    var bytes: [Byte] {
+        return asData.bytes
     }
 }
 
@@ -79,10 +69,6 @@ public extension DataConvertible {
     }
 }
 
-//public extension DataConvertible where Self == Base64String {
-//    func foobar() {}
-//}
-
 public extension HexString {
     func toHexString() -> HexString {
         return self
@@ -98,5 +84,20 @@ public extension Base64String {
 public extension Base58String {
     func toBase58String() -> Base58String {
         return self
+    }
+}
+
+func + (lhs: DataConvertible, rhs: Byte) -> Data {
+    return Data(bytes: lhs.bytes + [rhs])
+}
+
+func + (lhs: Byte, rhs: DataConvertible) -> Data {
+    return Data(bytes: [lhs] + rhs.bytes)
+}
+
+// MARK: - Conformance
+extension Array: DataConvertible where Element == Byte {
+    public var asData: Data {
+        return Data(bytes: self)
     }
 }

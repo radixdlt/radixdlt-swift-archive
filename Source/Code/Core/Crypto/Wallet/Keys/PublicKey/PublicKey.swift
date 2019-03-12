@@ -8,11 +8,11 @@
 
 import Foundation
 
-public struct PublicKey: PrefixedJsonCodableByProxy, Hashable, DataConvertible {
+public struct PublicKey: PrefixedJsonCodableByProxy, Hashable, DataConvertible, DataInitializable {
     
-    public let data: Data
-    public init(data: Data) {
-        self.data = data
+    public let compressedData: Data
+    public init(data: Data) throws {
+        self.compressedData = data
     }
 }
 
@@ -20,14 +20,6 @@ public struct PublicKey: PrefixedJsonCodableByProxy, Hashable, DataConvertible {
 public extension PublicKey {
     init(private privateKey: PrivateKey) {
         implementMe
-    }
-    
-    init(hexString: HexString) throws {
-        self.init(data: hexString.asData)
-    }
-    
-    init(base64: Base64String) throws {
-        self.init(data: base64.asData)
     }
 }
 
@@ -53,22 +45,12 @@ public extension PublicKey {
 
 // MARK: - DataConvertible
 public extension PublicKey {
-    var asData: Data { return data }
+    var asData: Data { return compressedData }
 }
 
 // MARK: - CustomStringConvertible
 public extension PublicKey {
     var description: String {
         return hex
-    }
-}
-
-public extension PublicKey {
-    func toBase64String() -> Base64String {
-        return Base64String(data: data)
-    }
-    
-    func toHexString() -> HexString {
-        return HexString(data: data)
     }
 }

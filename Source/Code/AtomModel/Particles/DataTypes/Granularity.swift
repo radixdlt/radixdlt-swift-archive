@@ -60,3 +60,10 @@ public extension Granularity {
         case failedToCreateBigInt(fromString: String)
     }
 }
+
+// MARK: - Presets
+public extension Granularity {
+    static var `default`: Granularity {
+        return 100
+    }
+}
