@@ -37,11 +37,6 @@ public extension RadixModelType {
 }
 
 extension RadixModelType: CBORConvertible {
-    // TODO: move into default conformance? in `extension CBORConvertible`
-    public func encode() -> [UInt8] {
-        return toCBOR().encode()
-    }
-    
     public func toCBOR() -> CBOR {
         return CBOR(integerLiteral: rawValue)
     }

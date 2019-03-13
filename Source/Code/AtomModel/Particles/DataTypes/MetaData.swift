@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import SwiftCBOR
 
-public struct MetaData: DictionaryCodable, Equatable {
+public struct MetaData: DictionaryCodable, CBORDictionaryConvertible, Equatable {
     public typealias Key = MetaDataKey
     public typealias Value = String
     public let dictionary: [Key: Value]

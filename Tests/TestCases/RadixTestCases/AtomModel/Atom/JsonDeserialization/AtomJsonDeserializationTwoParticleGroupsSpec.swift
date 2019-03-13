@@ -30,10 +30,6 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
                 }
             }
             describe("Its non empty ParticleGroup") {
-                let particleGroup = atom.particleGroups[0]
-                it("should contain a TokenDefinitionParticle") {
-                    expect(particleGroup[0].particle).to(beAKindOf(TokenDefinitionParticle.self))
-                }
                 describe("The ParticleGroup's TokenDefinitionParticle") {
                     let tokenDefinitionParticle = atom.particleGroups.firstParticle(ofType: TokenDefinitionParticle.self)!
                     
@@ -55,6 +51,18 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
                             expect(metaData).to(haveCount(2))
                         }
                     }
+                }
+                describe("The ParticleGroup's UniqueParticle") {
+                    let uniqueParticle = atom.particleGroups.firstParticle(ofType: UniqueParticle.self)!
+                    
+                    it("has a name") {
+                        expect(uniqueParticle.name).to(equal("Sajjon"))
+                    }
+                    
+                    it("has an address") {
+                        expect(uniqueParticle.address).to(equal("JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"))
+                    }
+                 
                 }
                 describe("The ParticleGroup's MessageParticke") {
                     let messsageParticle = atom.particleGroups.firstParticle(ofType: MessageParticle.self)!
@@ -108,6 +116,15 @@ let jsonForAtomWith2ParticleGroups = """
                             "mint": ":str:pow",
                             "transfer": ":str:none"
                         },
+                        "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                    }
+                },
+                {
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
+                    "spin": 1,
+                    "particle": {
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.uniqueParticle.rawValue),
+                        "name": ":str:Sajjon",
                         "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
                     }
                 }

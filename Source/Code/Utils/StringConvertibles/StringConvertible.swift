@@ -15,6 +15,7 @@ public protocol StringConvertible: StringInitializable, StringRepresentable, Val
     init(validated: String)
 }
 
+// MARK: - StringRepresentable
 public extension StringConvertible {
     var stringValue: String {
         return value

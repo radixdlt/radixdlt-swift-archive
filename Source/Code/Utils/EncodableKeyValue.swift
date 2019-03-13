@@ -9,13 +9,31 @@
 import Foundation
 import SwiftCBOR
 
-public struct EncodableKeyValue<Key: CodingKey>: CBOREncodable {
+public struct CBOREncodableProperty {
+    public let key: String
+    public let cborEncodedValue: [Byte]
+    
+    init(key unencodedKey: String, encoded cborEncodedValue: [Byte]) {
+        self.key = unencodedKey
+        self.cborEncodedValue = cborEncodedValue
+    }
+    
+    init<Value>(key: String, encodable: Value) where Value: CBOREncodable {
+        self.init(key: key, encoded: encodable.encode())
+    }
+    
+    public func cborEncodedKey() -> [UInt8] {
+        return CBOR.utf8String(key).encode()
+    }
+}
+
+public struct EncodableKeyValue<Key: CodingKey> {
     public typealias Container = KeyedEncodingContainer<Key>
     public typealias JSONEncoding<Value: Encodable> = (inout Container, Value, Key) throws -> Void
     
     private let _jsonEncode: (inout Container) throws -> Void
-    private let _cborEncodedValue: [Byte]
-    public let key: String
+    private let cborEncodedValue: [Byte]
+    private let key: String
     init<Value>(
         key: Key,
         value: Value,
@@ -25,18 +43,16 @@ public struct EncodableKeyValue<Key: CodingKey>: CBOREncodable {
         _jsonEncode = { container in
             try jsonEncoding(&container, value, key)
         }
-        _cborEncodedValue = value.encode()
+        self.cborEncodedValue = value.encode()
     }
     
     public func jsonEncoded(by container: inout KeyedEncodingContainer<Key>) throws {
         try _jsonEncode(&container)
     }
-    
-    public func encode() -> [UInt8] {
-        return _cborEncodedValue
-    }
-    
-    public func cborEncodedKey() -> [UInt8] {
-        return CBOR.utf8String(key).encode()
+}
+
+public extension EncodableKeyValue {
+    func toCBOREncodableProperty() -> CBOREncodableProperty {
+        return CBOREncodableProperty(key: key, encoded: cborEncodedValue)
     }
 }

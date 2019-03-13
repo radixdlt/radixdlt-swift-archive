@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct TokenPermissions: DictionaryCodable, Equatable {
+public struct TokenPermissions: DictionaryCodable, Equatable, CBORDictionaryConvertible {
     public typealias Key = TokenAction
     public typealias Value = TokenPermission
     public let dictionary: [Key: Value]
@@ -39,7 +39,10 @@ public extension TokenPermissions {
 }
 
 public extension TokenPermissions {
-    static var allPow: TokenPermissions {
+    static var pow: TokenPermissions {
         return [.mint: .pow, .burn: .pow, .transfer: .pow]
+    }
+    static var all: TokenPermissions {
+        return [.mint: .all, .burn: .all, .transfer: .all]
     }
 }

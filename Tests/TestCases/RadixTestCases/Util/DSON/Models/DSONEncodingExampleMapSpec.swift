@@ -24,6 +24,10 @@ class DSONEncodingExampleMapSpec: QuickSpec {
             case b
         }
         
+        var processProperties: Processor {
+            return { $0 }
+        }
+        
         public var keyValues: [EncodableKeyValue<CodingKeys>] {
             return [
                 EncodableKeyValue(key: .a, value: a),

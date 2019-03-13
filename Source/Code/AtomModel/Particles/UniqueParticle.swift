@@ -38,7 +38,6 @@ public extension UniqueParticle {
     
     public var keyValues: [EncodableKeyValue<CodingKeys>] {
         return [
-            EncodableKeyValue(key: .type, value: type),
             EncodableKeyValue(key: .address, value: address),
             EncodableKeyValue(key: .name, value: name)
         ]

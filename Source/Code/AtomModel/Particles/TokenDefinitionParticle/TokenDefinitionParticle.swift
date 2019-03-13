@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct TokenDefinitionParticle: ParticleModelConvertible, Identifiable {
+public struct TokenDefinitionParticle: ParticleModelConvertible, Identifiable, CBORStreamable {
     
     public static let type = RadixModelType.tokenDefinitionParticle
     
@@ -27,7 +27,7 @@ public struct TokenDefinitionParticle: ParticleModelConvertible, Identifiable {
         address: Address,
         metaData: MetaData = [:],
         granularity: Granularity = .default,
-        permissions: TokenPermissions
+        permissions: TokenPermissions = .all
     ) {
         self.symbol = symbol
         self.name = name

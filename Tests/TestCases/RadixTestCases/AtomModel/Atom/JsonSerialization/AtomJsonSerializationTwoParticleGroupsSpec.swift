@@ -20,6 +20,8 @@ class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
                 do {
                     let json = try RadixJSONEncoder(outputFormat: .prettyPrinted).encode(atom)
                     let jsonString = String(data: json, encoding: .utf8)!
+                    expect(jsonString).to(contain("Sajjon"))
+                    expect(jsonString).to(contain("1446890290"))
                     let atomFromJSON = try RadixJSONDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
                     expect(atomFromJSON).to(equal(atom))
                 } catch let encodingError as EncodingError {
@@ -49,7 +51,7 @@ private let atom = Atom(
                         "foo": "bar"
                     ],
                     granularity: 1,
-                    permissions: .allPow
+                    permissions: .pow
                 )
             ),
             SpunParticle(
@@ -70,6 +72,13 @@ private let atom = Atom(
                     from: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
                     to: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
                     message: "Hello Radix!"
+                )
+            ),
+            SpunParticle(
+                spin: .up,
+                particle: UniqueParticle(
+                    address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
+                    uniqueName: "Sajjon"
                 )
             )
         ])

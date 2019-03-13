@@ -7,14 +7,30 @@
 //
 
 import Foundation
+import SwiftCBOR
 
-public struct Granularity: PrefixedJsonCodable, Equatable, StringRepresentable, ExpressibleByIntegerLiteral {
+public struct Granularity: PrefixedJsonCodable, CBORDataConvertible, Equatable, StringRepresentable, ExpressibleByIntegerLiteral {
     public typealias Value = BigUnsignedInt
     
     public let value: Value
 
     public init(value: Value) {
         self.value = value
+    }
+}
+
+// MARK: DSONPrefixSpecifying
+public extension Granularity {
+    var dsonPrefix: DSONPrefix {
+        return .unsignedBigInteger
+    }
+}
+
+// MARK: - DataConvertible
+public extension Granularity {
+    var asData: Data {
+        // Java library ensures length of 32, so we do it just to be compatible
+        return value.toData(minByteCount: 32)
     }
 }
 

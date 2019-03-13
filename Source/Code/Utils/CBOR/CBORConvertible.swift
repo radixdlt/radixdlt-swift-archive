@@ -20,6 +20,13 @@ public protocol CBORConvertible: CBOREncodable {
     func toCBOR() -> CBOR
 }
 
+// MARK: - CBOREncodable
+public extension CBORConvertible {
+    func encode() -> [UInt8] {
+        return toCBOR().encode()
+    }
+}
+
 // MARK: - Conformance
 extension Int: CBORConvertible {
     public func toCBOR() -> CBOR {

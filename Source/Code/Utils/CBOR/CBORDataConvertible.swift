@@ -11,14 +11,6 @@ import SwiftCBOR
 
 public protocol CBORDataConvertible: DataConvertible, CBORConvertible, DSONPrefixSpecifying {}
 
-// MARK: - CBOREncodable
-public extension CBORDataConvertible {
-    // TODO can default conformance to `CBOREncodable` be moved to CBORConvertible
-    func encode() -> [UInt8] {
-        return toCBOR().encode()
-    }
-}
-
 // MARK: - CBORConvertible
 public extension CBORDataConvertible {
     func toCBOR() -> CBOR {

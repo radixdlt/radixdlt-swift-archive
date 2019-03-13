@@ -9,41 +9,49 @@
 import Foundation
 import SwiftCBOR
 
-public typealias CBORStreamable = CBOREncodable & KeyValueSpecifying
-
-public enum Order {
-    case asending
-    case descending
+public protocol CBORPropertyListConvertible: CBOREncodable {
+    var propertyList: [CBOREncodableProperty] { get }
 }
 
-public extension Sequence {
-  
-    func sorted<Property>(by keyPath: KeyPath<Element, Property>, order: Order = .asending) -> [Element] where Property: Comparable {
-        return sorted(by: {
-            let lhs = $0[keyPath: keyPath]
-            let rhs = $1[keyPath: keyPath]
-            switch order {
-            case .asending: return lhs < rhs
-            case .descending: return lhs > rhs
-            }
-        })
-    }
+public protocol CBORPropertyListProcessing {
+    typealias Processor = ([CBOREncodableProperty]) -> [CBOREncodableProperty]
+    var processProperties: Processor { get }
 }
 
-public extension CBOREncodable where Self: KeyValueSpecifying {
+// MARK: - CBOREncodable
+public extension CBORPropertyListConvertible {
+    
     /// Radix type "map", according to this: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding
     /// Format is this:
     /// 0xbf (encodeMapStreamStart)
     /// [propertyName (CBOREncoded) + propertyValue (CBOREncoded)] for each property
     /// 0xff (encodeStreamEnd)
-    public func encode() -> [UInt8] {
+    func encode() -> [UInt8] {
+        var properties = self.propertyList
+        if let processor = self as? CBORPropertyListProcessing {
+            properties = processor.processProperties(properties)
+        }
+        
         return [
             CBOR.encodeMapStreamStart(),
-            keyValues.sorted(by: \.key)
-            .flatMap {
-                $0.cborEncodedKey() + $0.encode()
-            },
+            properties.flatMap { $0.cborEncodedKey() + $0.cborEncodedValue },
             CBOR.encodeStreamEnd()
             ].flatMap { $0 }
+    }
+}
+
+public protocol CBORStreamable: KeyValueSpecifying, CBORPropertyListProcessing {}
+
+public extension CBORStreamable {
+    
+    var processProperties: Processor {
+        return {
+            var properties = $0
+            properties.append(CBOREncodableProperty(key: "version", encodable: 100))
+            if let modelTypeSpecyfing = self as? RadixModelTypeSpecifying {
+                properties.append(CBOREncodableProperty(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.type.serializerId))
+            }
+            return properties.sorted(by: \.key)
+        }
     }
 }

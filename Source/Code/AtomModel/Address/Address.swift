@@ -65,7 +65,7 @@ public extension Address {
 // MARK: DSONPrefixSpecifying
 public extension Address {
     var dsonPrefix: DSONPrefix {
-        return  .addressBase58
+        return .addressBase58
     }
 }
 
