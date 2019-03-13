@@ -7,20 +7,12 @@
 //
 
 import Foundation
-import SwiftCBOR
 
-public typealias DSON = Data
-public extension CBOREncodable {
-    func toDSON() -> DSON {
-        return encode().asData
-    }
-}
-
-public protocol CBORConvertible: CBOREncodable {
+public protocol CBORConvertible: DSONEncodable {
     func toCBOR() -> CBOR
 }
 
-// MARK: - CBOREncodable
+// MARK: - DSONEncodable
 public extension CBORConvertible {
     func encode() -> [UInt8] {
         return toCBOR().encode()

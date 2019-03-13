@@ -29,10 +29,6 @@ public struct Signature: Equatable, RadixModelTypeStaticSpecifying {
     public let r: Part
     public let s: Part
     
-    // MARK: These properties are need in ordet to assure correct hash
-    public let serializer = RadixModelType.signature.rawValue
-    public let version = dataFormatVersion
-    
     public enum Error: Swift.Error {
         case rTooBig(expectedAtMost: BigUnsignedInt, butGot: BigUnsignedInt)
         case sTooBig(expectedAtMost: BigUnsignedInt, butGot: BigUnsignedInt)

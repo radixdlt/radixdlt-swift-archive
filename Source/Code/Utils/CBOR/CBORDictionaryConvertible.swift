@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftCBOR
 
 public protocol CBORDictionaryConvertible: CBORPropertyListConvertible,
     CBORPropertyListProcessing,
@@ -39,13 +38,13 @@ public extension CBORDictionaryConvertible where Value: StringRepresentable {
     }
 }
 
-public extension CBORDictionaryConvertible where Value: CBOREncodable {
+public extension CBORDictionaryConvertible where Value: DSONEncodable {
     var valueCBOREncoder: (Value) -> [Byte] {
         return { $0.encode() }
     }
 }
 
-/// Ugly hack to resolve "candidate exactly matches" error since compiler is unable to distinguish between implementation `where Value: StringRepresentable` and `where Value: CBOREncodable`
+/// Ugly hack to resolve "candidate exactly matches" error since compiler is unable to distinguish between implementation `where Value: StringRepresentable` and `where Value: DSONEncodable`
 public extension CBORDictionaryConvertible where Value == String {
     var valueCBOREncoder: (Value) -> [Byte] {
         return {

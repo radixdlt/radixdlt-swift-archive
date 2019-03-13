@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftCBOR
 
 public struct CBOREncodableProperty {
     public let key: String
@@ -18,7 +17,7 @@ public struct CBOREncodableProperty {
         self.cborEncodedValue = cborEncodedValue
     }
     
-    init<Value>(key: String, encodable: Value) where Value: CBOREncodable {
+    init<Value>(key: String, encodable: Value) where Value: DSONEncodable {
         self.init(key: key, encoded: encodable.encode())
     }
     
@@ -38,7 +37,7 @@ public struct EncodableKeyValue<Key: CodingKey> {
         key: Key,
         value: Value,
         jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
-    ) where Value: Encodable & CBOREncodable {
+    ) where Value: Encodable & DSONEncodable {
         self.key = key.stringValue
         _jsonEncode = { container in
             try jsonEncoding(&container, value, key)

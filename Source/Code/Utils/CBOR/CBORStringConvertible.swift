@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftCBOR
 
 public protocol CBORStringConvertible: StringConvertible, CBORConvertible {}
 

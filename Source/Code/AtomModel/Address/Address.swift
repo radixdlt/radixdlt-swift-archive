@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftCBOR
 
 public protocol PrefixAddressSpecifying: JSONPrefixSpecifying {}
 public protocol Base58Convertible: PrefixAddressSpecifying {

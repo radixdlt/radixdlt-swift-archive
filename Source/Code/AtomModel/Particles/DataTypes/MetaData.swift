@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftCBOR
 
 public struct MetaData: DictionaryCodable, CBORDictionaryConvertible, Equatable {
     public typealias Key = MetaDataKey

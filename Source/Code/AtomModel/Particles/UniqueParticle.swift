@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftCBOR
 
 public struct UniqueParticle: ParticleModelConvertible, CBORStreamable {
     

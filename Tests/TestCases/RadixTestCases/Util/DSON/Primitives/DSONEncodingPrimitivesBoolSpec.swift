@@ -29,9 +29,11 @@ class CBOREncodingPrimitivesBoolSpec: QuickSpec {
     }
 }
 
-import SwiftCBOR
-extension CBOREncodable {
+extension Bool: DSONEncodable {}
+extension String: DSONEncodable {}
+
+extension DSONEncodable {
     func cborEncodedHexString() -> String {
-        return encode().hex
+        return toDSON().hex
     }
 }

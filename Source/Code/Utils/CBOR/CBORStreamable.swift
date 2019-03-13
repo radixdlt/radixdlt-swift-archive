@@ -7,9 +7,8 @@
 //
 
 import Foundation
-import SwiftCBOR
 
-public protocol CBORPropertyListConvertible: CBOREncodable {
+public protocol CBORPropertyListConvertible: DSONEncodable {
     var propertyList: [CBOREncodableProperty] { get }
 }
 
@@ -18,7 +17,7 @@ public protocol CBORPropertyListProcessing {
     var processProperties: Processor { get }
 }
 
-// MARK: - CBOREncodable
+// MARK: - DSONEncodable
 public extension CBORPropertyListConvertible {
     
     /// Radix type "map", according to this: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding

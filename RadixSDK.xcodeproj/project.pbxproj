@@ -93,6 +93,7 @@
 		E69AB7482238F626006153DD /* DsonEncodingTokenDefinitionParticleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7472238F626006153DD /* DsonEncodingTokenDefinitionParticleSpec.swift */; };
 		E69AB74A2239117A006153DD /* CBORDictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7492239117A006153DD /* CBORDictionaryConvertible.swift */; };
 		E69AB74D223912B6006153DD /* GranularitySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB74C223912B6006153DD /* GranularitySpec.swift */; };
+		E69AB74F2239172C006153DD /* DSONEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB74E2239172C006153DD /* DSONEncodable.swift */; };
 		E6A4AB7C221BF7B3006C5CA8 /* Accountable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB7B221BF7B3006C5CA8 /* Accountable.swift */; };
 		E6A4AB7E221BF7C0006C5CA8 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB7D221BF7C0006C5CA8 /* Identifiable.swift */; };
 		E6A4AB80221BF7DD006C5CA8 /* Set+InsertContentsOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB7F221BF7DD006C5CA8 /* Set+InsertContentsOf.swift */; };
@@ -324,6 +325,7 @@
 		E69AB7472238F626006153DD /* DsonEncodingTokenDefinitionParticleSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DsonEncodingTokenDefinitionParticleSpec.swift; sourceTree = "<group>"; };
 		E69AB7492239117A006153DD /* CBORDictionaryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBORDictionaryConvertible.swift; sourceTree = "<group>"; };
 		E69AB74C223912B6006153DD /* GranularitySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GranularitySpec.swift; sourceTree = "<group>"; };
+		E69AB74E2239172C006153DD /* DSONEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONEncodable.swift; sourceTree = "<group>"; };
 		E6A4AB7B221BF7B3006C5CA8 /* Accountable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accountable.swift; sourceTree = "<group>"; };
 		E6A4AB7D221BF7C0006C5CA8 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		E6A4AB7F221BF7DD006C5CA8 /* Set+InsertContentsOf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+InsertContentsOf.swift"; sourceTree = "<group>"; };
@@ -830,6 +832,7 @@
 			isa = PBXGroup;
 			children = (
 				E693DAC2223685F9003720C2 /* DSONPrefixSpecifying.swift */,
+				E69AB74E2239172C006153DD /* DSONEncodable.swift */,
 				E693DAC422368607003720C2 /* DSONPrefix.swift */,
 			);
 			path = DSON;
@@ -1716,6 +1719,7 @@
 				E6A4AC0F22243CD7006C5CA8 /* ValueValidating.swift in Sources */,
 				E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */,
 				E6A4AB84221BFCF4006C5CA8 /* Ownable.swift in Sources */,
+				E69AB74F2239172C006153DD /* DSONEncodable.swift in Sources */,
 				E631DAD121F25A6B0063F632 /* Mnemonic+Strength.swift in Sources */,
 				E6CEE75921F7A3F700D745EC /* StringConvertible.swift in Sources */,
 				E69AB74A2239117A006153DD /* CBORDictionaryConvertible.swift in Sources */,

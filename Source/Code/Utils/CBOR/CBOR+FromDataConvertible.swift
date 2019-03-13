@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftCBOR
 
 public extension CBOR {
     static func bytes(_ data: DataConvertible, dsonPrefix: DSONPrefix) -> CBOR {

@@ -8,8 +8,6 @@
 
 import Foundation
 
-public let dataFormatVersion = 100
-
 public struct Signatures: Equatable, ExpressibleByDictionaryLiteral, Collection, Codable {
     public typealias Key = EUID
     public typealias Value = Signature

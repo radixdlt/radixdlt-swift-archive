@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftCBOR
 
 public enum RadixModelType: Int, Codable {
     case signature = -434788200

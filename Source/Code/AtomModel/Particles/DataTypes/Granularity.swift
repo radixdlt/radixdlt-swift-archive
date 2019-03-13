@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftCBOR
 
 public struct Granularity: PrefixedJsonCodable, CBORDataConvertible, Equatable, StringRepresentable, ExpressibleByIntegerLiteral {
     public typealias Value = BigUnsignedInt
@@ -80,6 +79,6 @@ public extension Granularity {
 // MARK: - Presets
 public extension Granularity {
     static var `default`: Granularity {
-        return 100
+        return 1
     }
 }
