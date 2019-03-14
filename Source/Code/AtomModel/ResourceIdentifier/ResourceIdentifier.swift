@@ -10,7 +10,7 @@ import Foundation
 
 /// A Radix resource identifier is a human readable index into the Ledger which points to a unique UP particle.
 /// On format: `/:address/:type/:unique`
-public struct ResourceIdentifier: Equatable, PrefixedJsonCodable, StringRepresentable, CBORDataConvertible {
+public struct ResourceIdentifier: Equatable, PrefixedJsonCodable, StringRepresentable, DSONPrefixedDataConvertible {
    
     public let address: Address
     public let type: ResourceType
@@ -41,9 +41,9 @@ public extension ResourceIdentifier {
     }
 }
 
-// MARK: - DataConvertible
+// MARK: - DSONPrefixedDataConvertible
 public extension ResourceIdentifier {
-    var asData: Data {
+    var dborEncodedData: Data {
         return CBOR(stringLiteral: identifier).encode().asData
     }
 }
@@ -51,7 +51,7 @@ public extension ResourceIdentifier {
 // MARK: - StringRepresentable
 public extension ResourceIdentifier {
     var stringValue: String {
-            return identifier
+        return identifier
     }
 }
 

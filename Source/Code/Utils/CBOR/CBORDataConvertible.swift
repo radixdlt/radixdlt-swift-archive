@@ -8,18 +8,27 @@
 
 import Foundation
 
-public protocol CBORDataConvertible: DataConvertible, CBORConvertible, DSONPrefixSpecifying {}
+public protocol DSONPrefixedDataConvertible: CBORConvertible, DSONPrefixSpecifying {
+    var dborEncodedData: Data { get }
+}
+
+public typealias CBORDataConvertible = DSONPrefixedDataConvertible & DataConvertible
 
 // MARK: - DSONPrefixSpecifying
-public extension CBORDataConvertible {
+public extension DSONPrefixedDataConvertible where Self: DataConvertible {
+    
+    var dborEncodedData: Data {
+        return asData
+    }
+    
     var dsonPrefix: DSONPrefix {
         return .bytesBase64
     }
 }
 
 // MARK: - CBORConvertible
-public extension CBORDataConvertible {
+public extension DSONPrefixedDataConvertible {
     func toCBOR() -> CBOR {
-        return CBOR.bytes(self, dsonPrefix: dsonPrefix)
+        return CBOR.bytes(dborEncodedData, dsonPrefix: dsonPrefix)
     }
 }
