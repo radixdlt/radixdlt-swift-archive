@@ -54,9 +54,6 @@ class AtomJsonSerializationTrivialSpec: QuickSpec {
                 do {
                     let json = try RadixJSONEncoder(outputFormat: .prettyPrinted).encode(atom)
                     let jsonString = String(data: json, encoding: .utf8)!
-                    print("🎢")
-                    print(jsonString)
-                    print("🎢")
                     let atomFromJSON = try RadixJSONDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
                     expect(atomFromJSON).to(equal(atom))
                 } catch {

@@ -22,9 +22,6 @@ class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
                     let jsonString = String(data: json, encoding: .utf8)!
                     expect(jsonString).to(contain("Sajjon"))
                     expect(jsonString).to(contain("1446890290"))
-                    print("🚗")
-                    print(jsonString)
-                    print("🚗")
                     let atomFromJSON = try RadixJSONDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
                     expect(atomFromJSON).to(equal(atom))
                 } catch let encodingError as EncodingError {

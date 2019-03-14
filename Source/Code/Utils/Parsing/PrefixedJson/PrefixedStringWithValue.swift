@@ -77,7 +77,6 @@ public extension PrefixedStringWithValue {
 // MARK: - CustomStringConvertible
 public extension PrefixedStringWithValue {
     var description: String {
-        print(identifer)
         return identifer
     }
 }
