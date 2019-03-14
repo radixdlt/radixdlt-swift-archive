@@ -25,3 +25,9 @@ extension Int: CBORConvertible {
         return CBOR(integerLiteral: self)
     }
 }
+
+extension Int64: CBORConvertible {
+    public func toCBOR() -> CBOR {
+        return CBOR.int64(self)
+    }
+}
