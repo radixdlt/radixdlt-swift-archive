@@ -8,13 +8,13 @@
 
 import Foundation
 
-public struct SpunParticle: Codable, RadixModelTypeStaticSpecifying {
+public struct SpunParticle: Codable, RadixModelTypeStaticSpecifying, CBORStreamable {
 
     public static let type = RadixModelType.spunParticle
 
     public let spin: Spin
-    public let particle: ParticleConvertible
-    public init(spin: Spin = .down, particle: ParticleConvertible) {
+    public let particle: ParticleConvertible & DSONEncodable
+    public init(spin: Spin = .down, particle: ParticleConvertible & DSONEncodable) {
         self.spin = spin
         self.particle = particle
     }
@@ -56,33 +56,38 @@ public extension SpunParticle {
 public extension SpunParticle {
     
     // swiftlint:disable:next function_body_length
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
+    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         
+        let encodableParticle: EncodableKeyValue<CodingKeys>
         if let messageParticle = particle as? MessageParticle {
-            try container.encode(messageParticle, forKey: .particle)
+            encodableParticle = EncodableKeyValue(key: .particle, value: messageParticle)
         } else if let tokenDefinitionParticle = particle as? TokenDefinitionParticle {
-            try container.encode(tokenDefinitionParticle, forKey: .particle)
+            encodableParticle = EncodableKeyValue(key: .particle, value: tokenDefinitionParticle)
         } else if let tokenParticle = particle as? TokenParticle {
-            try container.encode(tokenParticle, forKey: .particle)
+            encodableParticle = EncodableKeyValue(key: .particle, value: tokenParticle)
         } else if let uniqueParticle = particle as? UniqueParticle {
-            try container.encode(uniqueParticle, forKey: .particle)
+            encodableParticle = EncodableKeyValue(key: .particle, value: uniqueParticle)
+        } else {
+            incorrectImplementation("Forgot some particle type")
         }
-        try container.encode(spin, forKey: .spin)
+        
+        return [
+            EncodableKeyValue(key: .spin, value: spin),
+            encodableParticle
+        ]
     }
 }
 
 public extension SpunParticle {
-    static func up(particle: ParticleConvertible) -> SpunParticle {
+    static func up(particle: ParticleConvertible & DSONEncodable) -> SpunParticle {
         return SpunParticle(spin: .up, particle: particle)
     }
     
-    static func down(particle: ParticleConvertible) -> SpunParticle {
+    static func down(particle: ParticleConvertible& DSONEncodable) -> SpunParticle {
         return SpunParticle(spin: .down, particle: particle)
     }
     
-    func particle<P>(as type: P.Type) -> P? where P: ParticleConvertible {
+    func particle<P>(as type: P.Type) -> P? where P: ParticleConvertible, P: DSONEncodable {
         return particle.as(P.self)
     }
 }

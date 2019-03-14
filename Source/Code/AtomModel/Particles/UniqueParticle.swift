@@ -9,7 +9,7 @@
 import Foundation
 
 public struct UniqueParticle: ParticleModelConvertible, CBORStreamable {
-    
+
     public static let type = RadixModelType.uniqueParticle
     public let address: Address
     public let name: Name
@@ -35,7 +35,7 @@ public extension UniqueParticle {
         name = try container.decode(Name.self, forKey: .name)
     }
     
-    public var keyValues: [EncodableKeyValue<CodingKeys>] {
+    public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .address, value: address),
             EncodableKeyValue(key: .name, value: name)

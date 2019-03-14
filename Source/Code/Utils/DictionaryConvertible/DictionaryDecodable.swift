@@ -13,7 +13,7 @@ public protocol DictionaryDecodable: Decodable, DictionaryConvertible {
     static var valueDecoder: (String) throws -> Value { get }
 }
 
-public extension DictionaryDecodable {
+public extension DictionaryDecodable where Key: StringInitializable, Value: StringInitializable {
    
     static var keyDecoder: (String) throws -> Key {
         return {

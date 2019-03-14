@@ -15,7 +15,7 @@ public extension CustomStringConvertible where Self: StringRepresentable {
 }
 
 /// EffectiveUserIdentifier
-public struct EUID: PrefixedJsonCodable, StringRepresentable, DataInitializable, DataConvertible, Hashable, ExpressibleByIntegerLiteral, CustomStringConvertible {
+public struct EUID: PrefixedJsonCodable, StringRepresentable, DataInitializable, CBORDataConvertible, Hashable, ExpressibleByIntegerLiteral, CustomStringConvertible {
     
     public typealias Value = BigUnsignedInt
     public static let byteCount = 16
@@ -31,6 +31,13 @@ public struct EUID: PrefixedJsonCodable, StringRepresentable, DataInitializable,
             throw Error.tooFewBytes(expected: EUID.byteCount, butGot: data.count)
         }
         self.value = Value(data)
+    }
+}
+
+// MARK: - DSONPrefixSpecifying
+public extension EUID {
+    var dsonPrefix: DSONPrefix {
+        return .euidHex
     }
 }
 

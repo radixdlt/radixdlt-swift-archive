@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct PublicKey: PrefixedJsonCodableByProxy, Hashable, DataConvertible, DataInitializable {
+public struct PublicKey: PrefixedJsonCodableByProxy, Hashable, CBORDataConvertible, DataInitializable {
     
     public let compressedData: Data
     public init(data: Data) throws {

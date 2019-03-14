@@ -11,44 +11,40 @@ import Foundation
 public protocol CBORDictionaryConvertible: CBORPropertyListConvertible,
     CBORPropertyListProcessing,
     DictionaryConvertible {
-    var valueCBOREncoder: (Value) -> [Byte] { get }
+    func valueDSONEncode(_ value: Value, output: DSONOutput) throws -> DSON
 }
 
 // MARK: - CBORPropertyListConvertible
 public extension CBORDictionaryConvertible where Key: StringRepresentable {
-    var propertyList: [CBOREncodableProperty] {
-        return self.dictionary.map {
-            CBOREncodableProperty(key: $0.key.stringValue, encoded: valueCBOREncoder($0.value))
+    func propertyList(output: DSONOutput) throws -> [CBOREncodableProperty] {
+        return try dictionary.map {
+            CBOREncodableProperty(key: $0.key.stringValue, encoded: try valueDSONEncode($0.value, output: output))
         }
     }
 }
 
 // MARK: - CBORPropertyListProcessing
 public extension CBORDictionaryConvertible {
-    var processProperties: Processor {
-        return { $0.sorted(by: \.key) }
+    func processProperties(_ properties: [CBOREncodableProperty]) throws -> [CBOREncodableProperty] {
+        return properties.sorted(by: \.key)
     }
 }
 
 public extension CBORDictionaryConvertible where Value: StringRepresentable {
-    var valueCBOREncoder: (Value) -> [Byte] {
-        return {
-            CBOR(stringLiteral: $0.stringValue).encode()
-        }
+    func valueDSONEncode(_ value: Value, output: DSONOutput) throws -> DSON {
+        return try CBOR(stringLiteral: value.stringValue).toDSON(output: output)
     }
 }
 
 public extension CBORDictionaryConvertible where Value: DSONEncodable {
-    var valueCBOREncoder: (Value) -> [Byte] {
-        return { $0.encode() }
+    func valueDSONEncode(_ value: Value, output: DSONOutput) throws -> DSON {
+        return try value.toDSON(output: output)
     }
 }
 
 /// Ugly hack to resolve "candidate exactly matches" error since compiler is unable to distinguish between implementation `where Value: StringRepresentable` and `where Value: DSONEncodable`
 public extension CBORDictionaryConvertible where Value == String {
-    var valueCBOREncoder: (Value) -> [Byte] {
-        return {
-            CBOR(stringLiteral: $0.stringValue).encode()
-        }
+    func valueDSONEncode(_ value: Value, output: DSONOutput) throws -> DSON {
+        return try CBOR(stringLiteral: value).toDSON(output: output)
     }
 }

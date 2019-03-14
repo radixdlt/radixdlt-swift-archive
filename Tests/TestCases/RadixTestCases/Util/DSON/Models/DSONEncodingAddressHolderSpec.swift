@@ -37,7 +37,7 @@ class DSONEncodingAddressHolderSpec: QuickSpec {
             case type = "serializer"
             case version
         }
-        public var keyValues: [EncodableKeyValue<CodingKeys>] { return
+        public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] { return
             [
                 EncodableKeyValue(key: .address, value: address),
                 EncodableKeyValue(key: .type, value: -1322468736),
@@ -49,7 +49,7 @@ class DSONEncodingAddressHolderSpec: QuickSpec {
         let addressHolder = AddressHolder(address: address)
         describe("DSON encoding - AddressHolder") {
             it("should result in the appropriate data") {
-                let addressHolderDsonEncoded = addressHolder.toDSON()
+                let addressHolderDsonEncoded = try! addressHolder.toDSON()
                 expect(addressHolderDsonEncoded.hex)
                     .to(equal("bf67616464726573735827040203000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f175341a96a73657269616c697a65723a4ed3457f6776657273696f6e1864ff"))
                 expect(addressHolderDsonEncoded.toBase64String()).to(equal("v2dhZGRyZXNzWCcEAgMAAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHxdTQalqc2VyaWFsaXplcjpO00V/Z3ZlcnNpb24YZP8="))

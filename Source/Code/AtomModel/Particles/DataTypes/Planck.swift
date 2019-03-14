@@ -8,13 +8,20 @@
 
 import Foundation
 
-public struct Planck: Codable, Equatable, ExpressibleByIntegerLiteral {
+public struct Planck: CBORConvertible, Codable, Equatable, ExpressibleByIntegerLiteral {
     public typealias Value = UInt64
     let value: Value
     
     public init() {
         let secondsSince1970 = Value(Date().timeIntervalSince1970)
         value = secondsSince1970/60 + 60
+    }
+}
+
+// MARK: - CBORConvertible
+public extension Planck {
+    func toCBOR() -> CBOR {
+        return CBOR.unsignedInt(value)
     }
 }
 

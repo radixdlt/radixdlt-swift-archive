@@ -11,7 +11,7 @@ import Foundation
 // MARK: - Decodable
 public extension TokenDefinitionParticle {
     
-    public var keyValues: [EncodableKeyValue<CodingKeys>] {
+    public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .symbol, value: symbol),
             EncodableKeyValue(key: .description, value: description),

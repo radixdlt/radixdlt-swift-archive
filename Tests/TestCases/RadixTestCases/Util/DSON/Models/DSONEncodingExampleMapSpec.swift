@@ -24,11 +24,11 @@ class DSONEncodingExampleMapSpec: QuickSpec {
             case b
         }
         
-        var processProperties: Processor {
-            return { $0 }
+        public func processProperties(_ properties: [CBOREncodableProperty]) throws -> [CBOREncodableProperty] {
+            return properties
         }
         
-        public var keyValues: [EncodableKeyValue<CodingKeys>] {
+        public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
             return [
                 EncodableKeyValue(key: .a, value: a),
                 EncodableKeyValue(key: .b, value: b)
@@ -41,7 +41,7 @@ class DSONEncodingExampleMapSpec: QuickSpec {
         let exampleMap = ExampleMap()
         describe("DSON encoding - ExampleMap") {
             it("should result in the appropriate data") {
-                let exampleMapDsonEncoded = exampleMap.toDSON()
+                let exampleMapDsonEncoded = try! exampleMap.toDSON()
                 expect(exampleMapDsonEncoded.hex)
                     .to(equal("bf616101616202ff"))
                 

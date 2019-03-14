@@ -8,12 +8,19 @@
 
 import Foundation
 
-public struct Nonce: Codable, Equatable, ExpressibleByIntegerLiteral {
+public struct Nonce: Codable, Equatable, ExpressibleByIntegerLiteral, CBORConvertible {
     public typealias Value = Int64
     public let value: Value
     
     public init() {
         value = Int64.random(in: Value.min...Value.max)
+    }
+}
+
+// MARK: - CBORConvertible
+public extension Nonce {
+    func toCBOR() -> CBOR {
+        return CBOR.int64(value)
     }
 }
 

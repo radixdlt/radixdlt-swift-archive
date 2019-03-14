@@ -34,6 +34,6 @@ extension String: DSONEncodable {}
 
 extension DSONEncodable {
     func cborEncodedHexString() -> String {
-        return toDSON().hex
+        return try! toDSON(output: .all).hex
     }
 }

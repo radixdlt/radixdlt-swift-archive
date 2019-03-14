@@ -9,7 +9,7 @@
 import Foundation
 
 // MARK: - Atom
-public struct Atom: AtomConvertible {
+public struct Atom: AtomConvertible, CBORStreamable {
     
     public static let type = RadixModelType.atom
     
@@ -41,29 +41,29 @@ public extension Atom {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         particleGroups = try container.decode(ParticleGroups.self, forKey: .particleGroups)
-        signatures = try container.decode(Signatures.self, forKey: .signatures)
-        metaData = try container.decode(MetaData.self, forKey: .metaData)
+        signatures = try container.decodeIfPresent(Signatures.self, forKey: .signatures) ?? [:]
+        metaData = try container.decodeIfPresent(MetaData.self, forKey: .metaData) ?? [:]
     }
     
     // swiftlint:disable:next function_body_length
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: Atom.CodingKeys.self)
-        try container.encode(type, forKey: .type)
+    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        var properties = [EncodableKeyValue<CodingKeys>]()
+        if !particleGroups.isEmpty {
+            properties.append(EncodableKeyValue(key: .particleGroups, value: particleGroups.particleGroups))
+        }
+        if !signatures.isEmpty {
+            properties.append(EncodableKeyValue(key: .signatures, value: signatures))
+        }
+        if !metaData.isEmpty {
+            properties.append(EncodableKeyValue(key: .metaData, value: metaData))
+        }
         
-        try container.encode(particleGroups, forKey: .particleGroups)
-        try container.encode(signatures, forKey: .signatures)
-        try container.encode(metaData, forKey: .metaData)
-
-        let enc = Foundation.JSONEncoder()
-        let atomSize = [
-            try enc.encode(particleGroups),
-            try enc.encode(signatures),
-            try enc.encode(metaData)
-        ].map { $0.length }.reduce(0, +)
-        
+        let atomSize = try AnyCBORPropertyListConvertible(keyValues: properties).toDSON().asData.length
         guard atomSize <= Atom.maxSize else {
             throw Error.tooManyBytes(expectedAtMost: Atom.maxSize, butGot: atomSize)
         }
+        
+        return properties
     }
 }
 

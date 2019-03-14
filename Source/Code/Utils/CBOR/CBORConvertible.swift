@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol CBORConvertible: DSONEncodable {
+public protocol CBORConvertible: DSONEncodable, CBOREncodable {
     func toCBOR() -> CBOR
 }
 

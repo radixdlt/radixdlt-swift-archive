@@ -10,17 +10,22 @@ import Foundation
 
 public protocol KeyValueSpecifying: CBORPropertyListConvertible {
     associatedtype CodingKeys: CodingKey
-    var keyValues: [EncodableKeyValue<CodingKeys>] { get }
+    func keyValues() throws -> [EncodableKeyValue<CodingKeys>]
 }
 
 // MARK: - CBORPropertyListConvertible
 public extension KeyValueSpecifying {
-    var propertyList: [CBOREncodableProperty] {
-        return keyValues.map { $0.toCBOREncodableProperty() }
+    func propertyList(output: DSONOutput) throws -> [CBOREncodableProperty] {
+        return try keyValues().map { try $0.toCBOREncodableProperty() }
     }
 }
 
-// MARK: Encodable
+// MARK: - DSONEncodable
+public extension DSONEncodable where Self: KeyValueSpecifying {
+    
+}
+
+// MARK: - Swift.Encodable (JSON)
 public extension Encodable where Self: KeyValueSpecifying {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -28,7 +33,7 @@ public extension Encodable where Self: KeyValueSpecifying {
             let typeKey = CodingKeys(stringValue: RadixModelType.jsonKey)!
             try container.encode(modelTypeSpecyfing.type, forKey: typeKey)
         }
-        try keyValues.forEach {
+        try keyValues().forEach {
             try $0.jsonEncoded(by: &container)
         }
     }

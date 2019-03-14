@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct TokenParticle: ParticleConvertible, Ownable, Fungible, Identifiable, RadixModelTypeSpecifying {
+public struct TokenParticle: ParticleConvertible, Ownable, Fungible, Identifiable, CBORStreamable, RadixModelTypeSpecifying {
 
     public let type: RadixModelType
     public let tokenType: TokenType
@@ -68,16 +68,15 @@ public extension TokenParticle {
         amount = try container.decode(Amount.self, forKey: .amount)
         tokenDefinitionIdentifier = try container.decode(TokenDefinitionIdentifier.self, forKey: .tokenDefinitionIdentifier)
     }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
-        
-        try container.encode(owner, forKey: .owner)
-        try container.encode(receiver, forKey: .receiver)
-        try container.encode(nonce, forKey: .nonce)
-        try container.encode(planck, forKey: .planck)
-        try container.encode(tokenDefinitionIdentifier, forKey: .tokenDefinitionIdentifier)
-        try container.encode(amount, forKey: .amount)
+ 
+    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        return [
+            EncodableKeyValue(key: .owner, value: owner),
+            EncodableKeyValue(key: .receiver, value: receiver),
+            EncodableKeyValue(key: .nonce, value: nonce),
+            EncodableKeyValue(key: .planck, value: planck),
+            EncodableKeyValue(key: .tokenDefinitionIdentifier, value: tokenDefinitionIdentifier.identifier),
+            EncodableKeyValue(key: .amount, value: amount)
+        ]
     }
 }

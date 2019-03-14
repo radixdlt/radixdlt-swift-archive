@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E6161013223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */; };
+		E6161016223A607B00025A54 /* DSONEncodingIntArraySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161014223A607800025A54 /* DSONEncodingIntArraySpec.swift */; };
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
 		E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62C030B220491CD001F27DE /* Sequence_Extension.swift */; };
@@ -95,6 +97,8 @@
 		E69AB74D223912B6006153DD /* GranularitySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB74C223912B6006153DD /* GranularitySpec.swift */; };
 		E69AB74F2239172C006153DD /* DSONEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB74E2239172C006153DD /* DSONEncodable.swift */; };
 		E69AB7522239318B006153DD /* TokenPermissionEncodingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7512239318B006153DD /* TokenPermissionEncodingSpec.swift */; };
+		E69AB75422393D3E006153DD /* CBORArrayConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB75322393D3E006153DD /* CBORArrayConvertible.swift */; };
+		E69AB75622393F2F006153DD /* CBORPropertyListConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB75522393F2F006153DD /* CBORPropertyListConvertible.swift */; };
 		E6A4AB7C221BF7B3006C5CA8 /* Accountable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB7B221BF7B3006C5CA8 /* Accountable.swift */; };
 		E6A4AB7E221BF7C0006C5CA8 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB7D221BF7C0006C5CA8 /* Identifiable.swift */; };
 		E6A4AB80221BF7DD006C5CA8 /* Set+InsertContentsOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB7F221BF7DD006C5CA8 /* Set+InsertContentsOf.swift */; };
@@ -237,6 +241,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiringThatLengthIsMultipleOfN.swift; sourceTree = "<group>"; };
+		E6161014223A607800025A54 /* DSONEncodingIntArraySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONEncodingIntArraySpec.swift; sourceTree = "<group>"; };
 		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
 		E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RadixSDK-Info.plist"; sourceTree = "<group>"; };
 		E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RadixSDKTests-Info.plist"; sourceTree = "<group>"; };
@@ -328,6 +334,8 @@
 		E69AB74C223912B6006153DD /* GranularitySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GranularitySpec.swift; sourceTree = "<group>"; };
 		E69AB74E2239172C006153DD /* DSONEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONEncodable.swift; sourceTree = "<group>"; };
 		E69AB7512239318B006153DD /* TokenPermissionEncodingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPermissionEncodingSpec.swift; sourceTree = "<group>"; };
+		E69AB75322393D3E006153DD /* CBORArrayConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBORArrayConvertible.swift; sourceTree = "<group>"; };
+		E69AB75522393F2F006153DD /* CBORPropertyListConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBORPropertyListConvertible.swift; sourceTree = "<group>"; };
 		E6A4AB7B221BF7B3006C5CA8 /* Accountable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accountable.swift; sourceTree = "<group>"; };
 		E6A4AB7D221BF7C0006C5CA8 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		E6A4AB7F221BF7DD006C5CA8 /* Set+InsertContentsOf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+InsertContentsOf.swift"; sourceTree = "<group>"; };
@@ -895,8 +903,10 @@
 				E693DAC02232BC6F003720C2 /* CBOR+FromDataConvertible.swift */,
 				E69AB7282237B22C006153DD /* CBORDataConvertible.swift */,
 				E69AB7492239117A006153DD /* CBORDictionaryConvertible.swift */,
+				E69AB75322393D3E006153DD /* CBORArrayConvertible.swift */,
 				E69AB7302237B9A2006153DD /* CBORStringConvertible.swift */,
 				E69AB72A2237B469006153DD /* CBORStreamable.swift */,
+				E69AB75522393F2F006153DD /* CBORPropertyListConvertible.swift */,
 				E69AB7262237B172006153DD /* CBORConvertible.swift */,
 			);
 			path = CBOR;
@@ -932,6 +942,7 @@
 			children = (
 				E69AB7412237FC80006153DD /* DSONEncodingAddressHolderSpec.swift */,
 				E69AB7432237FC91006153DD /* DSONEncodingExampleMapSpec.swift */,
+				E6161014223A607800025A54 /* DSONEncodingIntArraySpec.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1201,6 +1212,7 @@
 			children = (
 				E6CEE73121F5D4F700D745EC /* Base58String.swift */,
 				E6CEE76121F7A45000D745EC /* Base64String.swift */,
+				E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */,
 				E6A4AC0422243C38006C5CA8 /* InvalidStringError.swift */,
 				E6A4AC0822243C61006C5CA8 /* MaxLengthSpecifying.swift */,
 				E6611F2E2225A0DE00AD2F83 /* ExactLengthSpecifying.swift */,
@@ -1740,6 +1752,7 @@
 				E6ED1A5C21F8E5CA00654105 /* AtomStore.swift in Sources */,
 				E6CEE77A21F7A71F00D745EC /* EUID+Error.swift in Sources */,
 				E6A4AB88221BFD2C006C5CA8 /* Chronological.swift in Sources */,
+				E69AB75422393D3E006153DD /* CBORArrayConvertible.swift in Sources */,
 				E6ED1A7521F8E76C00654105 /* DefaultParticleStore.swift in Sources */,
 				E693DAB6223265BA003720C2 /* TokenDefinitionParticle+Identifiable.swift in Sources */,
 				E67A715621FBC71B00F4B2D0 /* ResourceType.swift in Sources */,
@@ -1754,6 +1767,7 @@
 				E6ED1A5621F8E58300654105 /* SubmitAtomAction.swift in Sources */,
 				E67A714821FBAEF500F4B2D0 /* Granularity.swift in Sources */,
 				E6EF45A622369EE200FA4158 /* DataInitializable.swift in Sources */,
+				E69AB75622393F2F006153DD /* CBORPropertyListConvertible.swift in Sources */,
 				E6CEE74421F637EC00D745EC /* Signature.swift in Sources */,
 				E6611F44222696E900AD2F83 /* BigInt_Extension.swift in Sources */,
 				E6CEE76C21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift in Sources */,
@@ -1778,6 +1792,7 @@
 				E693DABC2232B598003720C2 /* PrefixedJsonCodable.swift in Sources */,
 				E6A4AC0D22243CA5006C5CA8 /* MinLengthSpecifying.swift in Sources */,
 				E6611F352225B2C000AD2F83 /* DictionaryConvertible.swift in Sources */,
+				E6161013223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift in Sources */,
 				E6ED1A6D21F8E71100654105 /* Cache.swift in Sources */,
 				E6A4ABCE221EEECC006C5CA8 /* KeyedDecodingContainer+PrefixedJson+Decode.swift in Sources */,
 				E6611F51222984B900AD2F83 /* RadixModelTypeSpecifying.swift in Sources */,
@@ -1837,6 +1852,7 @@
 				E6A4ABF822207EA0006C5CA8 /* BadRRI.swift in Sources */,
 				E6611F2D2225A09D00AD2F83 /* GranularityNegativeSpec.swift in Sources */,
 				E6A4ABF422207E12006C5CA8 /* AtomJsonDeserializationMintedTokenBadValuesSpec.swift in Sources */,
+				E6161016223A607B00025A54 /* DSONEncodingIntArraySpec.swift in Sources */,
 				E6611EFF222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift in Sources */,
 				E69AB7442237FC91006153DD /* DSONEncodingExampleMapSpec.swift in Sources */,
 				E6A4ABDF22206F1D006C5CA8 /* AtomJsonDeserializationTokenDefinitionIncorrectJsonSpec.swift in Sources */,

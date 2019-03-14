@@ -8,23 +8,7 @@
 
 import Foundation
 
-public protocol RequiringThatLengthIsMultipleOfN {
-    static var lengthMultiple: Int { get }
-    static func validateLengthMultiple<L>(of measurable: L) throws where L: LengthMeasurable
-}
-
-public extension RequiringThatLengthIsMultipleOfN {
-    static func validateLengthMultiple<L>(of measurable: L) throws where L: LengthMeasurable {
-        let length = measurable.length
-        let multiple = Self.lengthMultiple
-        if length % multiple != 0 {
-            let (_, remainder) = length.quotientAndRemainder(dividingBy: multiple)
-            throw InvalidStringError.lengthNotMultiple(of: multiple, shortOf: remainder)
-        }
-    }
-}
-
-public struct Base64String: PrefixedJsonCodable, StringConvertible, StringRepresentable, DataConvertible, DataInitializable, RequiringThatLengthIsMultipleOfN, CharacterSetSpecifying {
+public struct Base64String: PrefixedJsonCodable, StringConvertible, StringRepresentable, CBORDataConvertible, DataInitializable, RequiringThatLengthIsMultipleOfN, CharacterSetSpecifying {
     public static let jsonPrefix: JSONPrefix = .bytesBase64
     
     public static var lengthMultiple = 4

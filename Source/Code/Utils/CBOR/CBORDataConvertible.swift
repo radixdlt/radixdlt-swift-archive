@@ -10,6 +10,13 @@ import Foundation
 
 public protocol CBORDataConvertible: DataConvertible, CBORConvertible, DSONPrefixSpecifying {}
 
+// MARK: - DSONPrefixSpecifying
+public extension CBORDataConvertible {
+    var dsonPrefix: DSONPrefix {
+        return .bytesBase64
+    }
+}
+
 // MARK: - CBORConvertible
 public extension CBORDataConvertible {
     func toCBOR() -> CBOR {

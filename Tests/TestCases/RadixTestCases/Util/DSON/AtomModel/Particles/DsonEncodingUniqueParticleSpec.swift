@@ -17,7 +17,7 @@ class DSONEncodingPrimitivesUniqueParticleSpec: QuickSpec {
             describe("UniqueParticle") {
                 it("should result in the appropriate data") {
                     let uniqueParticle = UniqueParticle(address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei", uniqueName: "CYON")
-                    expect(uniqueParticle.toDSON().base64).to(equal("v2dhZGRyZXNzWCcEAgPKYhmie++7PrG8oBKdVISJu+zKiwO7B6MK39/0eVA7/lJdBFdkbmFtZWRDWU9OanNlcmlhbGl6ZXIaVj3LMmd2ZXJzaW9uGGT/"))
+                    expect(try! uniqueParticle.toDSON().base64).to(equal("v2dhZGRyZXNzWCcEAgPKYhmie++7PrG8oBKdVISJu+zKiwO7B6MK39/0eVA7/lJdBFdkbmFtZWRDWU9OanNlcmlhbGl6ZXIaVj3LMmd2ZXJzaW9uGGT/"))
                 }
             }
         }

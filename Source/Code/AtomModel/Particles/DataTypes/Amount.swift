@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Amount: PrefixedJsonCodable, StringRepresentable, Equatable, ExpressibleByIntegerLiteral {
+public struct Amount: PrefixedJsonCodable, StringRepresentable, CBORDataConvertible, Equatable, ExpressibleByIntegerLiteral {
     
     public static let subunitsDenominatorDecimalExponent: Int = 18
     public static let subunitsDenominator = BigUnsignedInt(10).power(Amount.subunitsDenominatorDecimalExponent)
@@ -19,6 +19,21 @@ public struct Amount: PrefixedJsonCodable, StringRepresentable, Equatable, Expre
     
     public init(value: Value) {
         self.value = value
+    }
+}
+
+// MARK: DSONPrefixSpecifying
+public extension Amount {
+    var dsonPrefix: DSONPrefix {
+        return .unsignedBigInteger
+    }
+}
+
+// MARK: - DataConvertible
+public extension Amount {
+    var asData: Data {
+        // Java library ensures length of 32, so we do it just to be compatible
+        return value.toData(minByteCount: 32)
     }
 }
 

@@ -9,9 +9,7 @@
 import Foundation
 
 public protocol DictionaryConvertible: ExpressibleByDictionaryLiteral, Collection
-    where
-    Key: Hashable & StringInitializable,
-Value: StringInitializable {
+    where Key: Hashable {
     typealias Map = [Key: Value]
     var dictionary: Map { get }
     init(dictionary: Map)

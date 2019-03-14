@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct MessageParticle: ParticleModelConvertible, Accountable {
+public struct MessageParticle: ParticleModelConvertible, Accountable, CBORStreamable {
     
     public static let type = RadixModelType.messageParticle
     
@@ -70,14 +70,13 @@ public extension MessageParticle {
         )
     }
     
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
-        
-        try container.encode(from, forKey: .from)
-        try container.encode(to, forKey: .to)
-        try container.encode(metaData, forKey: .metaData)
-        try container.encode(payload.toBase64String(), forKey: .payload)
+    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        return [
+            EncodableKeyValue(key: .from, value: from),
+            EncodableKeyValue(key: .to, value: to),
+            EncodableKeyValue(key: .metaData, value: metaData),
+            EncodableKeyValue(key: .payload, value: payload.toBase64String())
+        ]
     }
 }
 
