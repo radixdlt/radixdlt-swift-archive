@@ -32,7 +32,6 @@ public extension Amount {
 // MARK: - DataConvertible
 public extension Amount {
     var asData: Data {
-        // Java library ensures length of 32, so we do it just to be compatible
         return value.toData(minByteCount: 32)
     }
 }

@@ -9,6 +9,6 @@
 import Foundation
 
 public enum ResourceType: String, Codable, Equatable {
-    case tokens
+    case tokens = "tokenclasses"
     case unique
 }

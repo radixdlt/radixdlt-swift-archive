@@ -13,17 +13,17 @@ public struct TokenParticle: ParticleConvertible, Ownable, Fungible, Identifiabl
     public let type: RadixModelType
     public let tokenType: TokenType
     
-    public let owner: PublicKey
-    public let receiver: Address
-    public let nonce: Nonce
-    public let planck: Planck
-    public let amount: Amount
+    public let address: Address
     public let tokenDefinitionIdentifier: TokenDefinitionIdentifier
+    public let granularity: Granularity
+    public let planck: Planck
+    public let nonce: Nonce
+    public let amount: Amount
     
     public init(
         type: TokenType,
-        owner: PublicKey,
-        receiver: Address,
+        address: Address,
+        granularity: Granularity,
         nonce: Nonce = Nonce(),
         planck: Planck = Planck(),
         amount: Amount,
@@ -31,8 +31,8 @@ public struct TokenParticle: ParticleConvertible, Ownable, Fungible, Identifiabl
         ) {
         self.type = type.particleType.modelType
         self.tokenType = type
-        self.owner = owner
-        self.receiver = receiver
+        self.address = address
+        self.granularity = granularity
         self.nonce = nonce
         self.planck = planck
         self.amount = amount
@@ -47,12 +47,19 @@ public extension TokenParticle {
     }
 }
 
+// MARK: - Ownable
+public extension TokenParticle {
+    var owner: PublicKey {
+        return address.publicKey
+    }
+}
+
 // MARK: Decodable
 public extension TokenParticle {
     public enum CodingKeys: String, CodingKey {
         case type = "serializer"
-        case tokenDefinitionIdentifier = "token_reference"
-        case owner, receiver, nonce, planck, amount
+        case tokenDefinitionIdentifier = "tokenTypeReference"
+        case address, granularity, nonce, planck, amount
     }
     
     init(from decoder: Decoder) throws {
@@ -61,8 +68,8 @@ public extension TokenParticle {
         let modelType = try container.decode(RadixModelType.self, forKey: .type)
         type = modelType
         tokenType = try TokenType(modelType: modelType)
-        owner = try container.decode(PublicKey.self, forKey: .owner)
-        receiver = try container.decode(Address.self, forKey: .receiver)
+        address = try container.decode(Address.self, forKey: .address)
+        granularity = try container.decode(Granularity.self, forKey: .granularity)
         nonce = try container.decode(Nonce.self, forKey: .nonce)
         planck = try container.decode(Planck.self, forKey: .planck)
         amount = try container.decode(Amount.self, forKey: .amount)
@@ -71,8 +78,8 @@ public extension TokenParticle {
  
     func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
-            EncodableKeyValue(key: .owner, value: owner),
-            EncodableKeyValue(key: .receiver, value: receiver),
+            EncodableKeyValue(key: .address, value: address),
+            EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .nonce, value: nonce),
             EncodableKeyValue(key: .planck, value: planck),
             EncodableKeyValue(key: .tokenDefinitionIdentifier, value: tokenDefinitionIdentifier.identifier),

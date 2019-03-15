@@ -28,8 +28,7 @@ public extension Granularity {
 // MARK: - DataConvertible
 public extension Granularity {
     var asData: Data {
-        // Java library ensures length of 32, so we do it just to be compatible
-        return value.toData(minByteCount: 32)
+        return value.toHexString(uppercased: false, mode: StringConversionMode.minimumLength(64, .prepend)).asData
     }
 }
 

@@ -9,7 +9,9 @@
 import Foundation
 import BigInt
 
-public protocol BigInteger: BinaryInteger, DataConvertible, DataInitializable {}
+public protocol BigInteger: BinaryInteger, DataConvertible, DataInitializable {
+    func serialize() -> Data
+}
 
 public typealias BigSignedInt = BigInt
 public typealias BigUnsignedInt = BigUInt

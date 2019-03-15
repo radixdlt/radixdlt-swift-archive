@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol AtomConvertible: RadixModelTypeStaticSpecifying, RadixHashable, ExpressibleByArrayLiteral {
+public protocol AtomConvertible: RadixModelTypeStaticSpecifying, RadixHashable, DSONEncodable, ExpressibleByArrayLiteral {
     var particleGroups: ParticleGroups { get }
     var signatures: Signatures { get }
     var metaData: MetaData { get }
@@ -22,12 +22,11 @@ public extension AtomConvertible {
     }
 
     var radixHash: RadixHash {
-        return RadixHash(unhashedData: toDson(), hashedBy: Sha256TwiceHasher())
-    }
-    
-    func toDson() -> Data {
-        // swiftlint:disable:next force_try
-        return try! RadixJSONEncoder().encode(self)
+        do {
+            return RadixHash(unhashedData: try toDSON(output: .hash), hashedBy: Sha256TwiceHasher())
+        } catch {
+            incorrectImplementation("Should always be able to hash, error: \(error)")
+        }
     }
     
     var hid: EUID {

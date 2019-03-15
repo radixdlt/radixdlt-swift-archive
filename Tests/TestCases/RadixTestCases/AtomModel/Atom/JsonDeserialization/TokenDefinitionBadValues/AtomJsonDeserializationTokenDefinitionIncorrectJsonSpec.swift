@@ -26,7 +26,7 @@ class AtomJsonDeserializationChangeJson: QuickSpec {
       return replaceValueInParticle(for: key.stringValue, with: replacement)
     }
         
-    func replaceValueInParticle(for key: TokenParticle.CodingKeys, with replacement: Any) -> String {
+    func replaceValueInTokenParticle(for key: TokenParticle.CodingKeys, with replacement: Any) -> String {
         return replaceValueInParticle(for: key.stringValue, with: replacement)
     }
     

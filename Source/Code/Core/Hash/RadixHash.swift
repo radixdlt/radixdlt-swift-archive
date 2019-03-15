@@ -27,7 +27,7 @@ public struct Sha256TwiceHasher: Hashing {
     }
 }
 
-public struct RadixHash: Hashable, CustomStringConvertible, Collection {
+public struct RadixHash: Hashable, CustomStringConvertible, Collection, DataConvertible {
     private let data: Data
     public init(unhashedData: Data, hashedBy hasher: Hashing) {
         self.data = hasher.hash(data: unhashedData)
@@ -52,6 +52,13 @@ public extension RadixHash {
     }
 }
 
+// MARK: - DataConvertible
+public extension RadixHash {
+    var asData: Data {
+        return data
+    }
+}
+
 // MARK: - Hashable
 public extension RadixHash {
     func hash(into hasher: inout Hasher) {
@@ -60,14 +67,6 @@ public extension RadixHash {
 }
 
 public extension RadixHash {
-    
-    func toHexString() -> HexString {
-        return HexString(data: data)
-    }
-    
-    func toBase64String() -> Base64String {
-        return Base64String(data: data)
-    }
     
     func toEUID() -> EUID {
         var dataToPad = self.data
@@ -82,6 +81,6 @@ public extension RadixHash {
 // MARK: - CustomStringConvertible
 public extension RadixHash {
     var description: String {
-        return toBase64String().value
+        return toBase64String().stringValue
     }
 }

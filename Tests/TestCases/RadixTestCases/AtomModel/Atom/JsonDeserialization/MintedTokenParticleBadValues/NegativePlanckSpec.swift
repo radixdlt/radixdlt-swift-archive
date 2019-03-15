@@ -15,7 +15,7 @@ class NegativePlanckSpec: AtomJsonDeserializationMintedTokenBadValuesSpec {
         /// Scenario 14
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - MintedTokenParticle: negative Planck") {
-            let badJson = self.replaceValueInParticle(for: .planck, with: -1)
+            let badJson = self.replaceValueInTokenParticle(for: .planck, with: -1)
             
             it("should fail to deserialize JSON with a MintedTokenParticle with negative planck") {
                 expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: DecodingError.self) {

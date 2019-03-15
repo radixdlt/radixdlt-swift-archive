@@ -20,19 +20,19 @@ public extension KeyValueSpecifying {
     }
 }
 
-// MARK: - DSONEncodable
-public extension DSONEncodable where Self: KeyValueSpecifying {
-    
-}
-
 // MARK: - Swift.Encodable (JSON)
 public extension Encodable where Self: KeyValueSpecifying {
     func encode(to encoder: Encoder) throws {
+        guard let typeKey = CodingKeys(stringValue: RadixModelType.jsonKey) else {
+            incorrectImplementation("You MUST declare a CodingKey having the string value \(RadixModelType.jsonKey) in your encodable model.")
+        }
+        
         var container = encoder.container(keyedBy: CodingKeys.self)
+        
         if let modelTypeSpecyfing = self as? RadixModelTypeSpecifying {
-            let typeKey = CodingKeys(stringValue: RadixModelType.jsonKey)!
             try container.encode(modelTypeSpecyfing.type, forKey: typeKey)
         }
+        
         try keyValues().forEach {
             try $0.jsonEncoded(by: &container)
         }

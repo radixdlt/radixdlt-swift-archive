@@ -41,7 +41,7 @@ public extension Base64String {
 // MARK: - DataConvertible
 public extension Base64String {
     var asData: Data {
-        guard let data = Data(base64Encoded: value) else {
+        guard let data = Data.init(base64Encoded: value) else {
             incorrectImplementation("Should always be possible to create data from a validated Base64String")
         }
         return data

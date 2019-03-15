@@ -41,14 +41,6 @@ public extension UniqueParticle {
             EncodableKeyValue(key: .name, value: name)
         ]
     }
-    
-//    func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//        try container.encode(type, forKey: .type)
-//
-//        try container.encode(address, forKey: .address)
-//        try container.encode(name, forKey: .name)
-//    }
 }
 
 public extension UniqueParticle {

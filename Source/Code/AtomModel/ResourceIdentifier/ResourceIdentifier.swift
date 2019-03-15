@@ -44,7 +44,7 @@ public extension ResourceIdentifier {
 // MARK: - DSONPrefixedDataConvertible
 public extension ResourceIdentifier {
     var dborEncodedData: Data {
-        return CBOR(stringLiteral: identifier).encode().asData
+        return identifier.data(using: .utf8)!
     }
 }
 
@@ -117,12 +117,16 @@ public extension ResourceIdentifier {
 // MARK: - Public
 public extension ResourceIdentifier {
     var identifier: String {
-        return [
+        let identifier = [
             "",
             address.base58String.value,
             type.rawValue,
             unique
         ].joined(separator: ResourceIdentifier.separator)
+        print("🚎")
+        print(identifier)
+        print("🚎")
+        return identifier
     }
 }
 

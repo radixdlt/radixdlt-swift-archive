@@ -13,6 +13,20 @@ import Quick
 class AtomJsonDeserializationTrivialSpec: QuickSpec {
     
     override func spec() {
+        let json = """
+{
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
+    "signatures": {},
+    "metaData": {},
+    "particleGroups": [
+        {
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
+            "particles": [],
+            "metaData": {}
+        }
+    ]
+}
+"""
         /// Scenario 1
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - Trivial Atom") {
@@ -36,17 +50,4 @@ class AtomJsonDeserializationTrivialSpec: QuickSpec {
     }
 }
 
-private let json = """
-{
-    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
-    "signatures": {},
-    "metaData": {},
-    "particleGroups": [
-        {
-            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
-            "particles": [],
-            "metaData": {}
-        }
-    ]
-}
-"""
+
