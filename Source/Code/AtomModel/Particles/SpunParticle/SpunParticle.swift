@@ -44,18 +44,27 @@ public extension SpunParticle {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
+        spin = try container.decode(Spin.self, forKey: .spin)
+
+        // Particle
         let particleNestedContainer = try container.nestedContainer(keyedBy: ParticleTypeKey.self, forKey: .particle)
         let modelType = try particleNestedContainer.decode(RadixModelType.self, forKey: .type)
         let particleType = try ParticleType(modelType: modelType)
+        
         switch particleType {
         case .message:
             particle = try container.decode(MessageParticle.self, forKey: .particle)
-        case .burnedToken, .transferredToken, .mintedToken:
-            particle = try container.decode(TokenParticle.self, forKey: .particle)
-        case .tokenDefinition: particle = try container.decode(TokenDefinitionParticle.self, forKey: .particle)
-        case .unique: particle = try container.decode(UniqueParticle.self, forKey: .particle)
+        case .burnedToken:
+            particle = try container.decode(BurnedTokenParticle.self, forKey: .particle)
+        case .transferredToken:
+            particle = try container.decode(TransferredTokenParticle.self, forKey: .particle)
+        case .mintedToken:
+            particle = try container.decode(MintedTokenParticle.self, forKey: .particle)
+        case .tokenDefinition:
+            particle = try container.decode(TokenDefinitionParticle.self, forKey: .particle)
+        case .unique:
+            particle = try container.decode(UniqueParticle.self, forKey: .particle)
         }
-        spin = try container.decode(Spin.self, forKey: .spin)
     }
 }
 
@@ -70,8 +79,12 @@ public extension SpunParticle {
             encodableParticle = EncodableKeyValue(key: .particle, value: messageParticle)
         } else if let tokenDefinitionParticle = particle as? TokenDefinitionParticle {
             encodableParticle = EncodableKeyValue(key: .particle, value: tokenDefinitionParticle)
-        } else if let tokenParticle = particle as? TokenParticle {
-            encodableParticle = EncodableKeyValue(key: .particle, value: tokenParticle)
+        } else if let burnedTokenParticle = particle as? BurnedTokenParticle {
+            encodableParticle = EncodableKeyValue(key: .particle, value: burnedTokenParticle)
+        } else if let transferredTokenParticle = particle as? TransferredTokenParticle {
+            encodableParticle = EncodableKeyValue(key: .particle, value: transferredTokenParticle)
+        } else if let mintedTokenParticle = particle as? MintedTokenParticle {
+            encodableParticle = EncodableKeyValue(key: .particle, value: mintedTokenParticle)
         } else if let uniqueParticle = particle as? UniqueParticle {
             encodableParticle = EncodableKeyValue(key: .particle, value: uniqueParticle)
         } else {

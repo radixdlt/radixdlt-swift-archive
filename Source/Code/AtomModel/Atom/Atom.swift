@@ -118,14 +118,11 @@ public extension Atom {
         return spunParticles().compactMap(type: MessageParticle.self)
     }
     
-    func tokensParticles(spin: Spin, type: TokenType? = nil) -> [TokenParticle] {
-        let tokenParticles = spunParticles()
+    func particles<P>(spin: Spin, type: P.Type) -> [P] where P: ParticleConvertible {
+        return spunParticles()
             .filter(spin: spin)
-            .compactMap(type: TokenParticle.self)
-        guard let type = type else {
-            return tokenParticles
-        }
-        return tokenParticles.filter(type: type)
+            .compactMap(type: P.self)
+
     }
     
     var timestamp: Date? {

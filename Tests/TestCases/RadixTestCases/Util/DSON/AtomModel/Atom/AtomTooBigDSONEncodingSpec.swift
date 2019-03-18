@@ -35,8 +35,7 @@ class AtomTooBigDSONEncodingSpec: QuickSpec {
 private let oneThousandParticles = [SpunParticle](repeating: spunTokenParticle, count: 1000)
 private let spunTokenParticle = SpunParticle(
     spin: .up,
-    particle: TokenParticle(
-        type: .minted,
+    particle: MintedTokenParticle(
         address: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
         granularity: 1,
         nonce: 992284943125945,

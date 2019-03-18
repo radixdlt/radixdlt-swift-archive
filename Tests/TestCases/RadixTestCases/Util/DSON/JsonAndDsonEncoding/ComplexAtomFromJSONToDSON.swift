@@ -14,8 +14,9 @@ class ComplexAtomFromJSONToDSONSpec: QuickSpec {
     override func spec() {
         describe("Atom JSON Deserialization") {
             let atom: Atom = model(from: atomJson)
+            print(atom)
             it("should deserialize into an Atom") {
-                expect(atom.tokensParticles(spin: .up, type: .minted).first?.identifier.unique).to(equal("XRD"))
+                expect(atom.particles(spin: .up, type: MintedTokenParticle.self).first?.identifier.unique).to(equal("XRD"))
             }
             it("should serialize into correct DSON") {
                 let dson = try! atom.toDSON()
