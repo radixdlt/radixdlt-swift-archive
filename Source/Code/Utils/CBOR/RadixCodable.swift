@@ -15,13 +15,13 @@ public protocol RadixCodable: EncodableKeyValueListConvertible, AnyEncodableKeyV
 
 public extension RadixCodable {
     
-    func process(keyValues: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
+    func process(keyValues: [AnyEncodableKeyValue], output: DSONOutput) throws -> [AnyEncodableKeyValue] {
         var keyValues = keyValues
         keyValues.append(try AnyEncodableKeyValue(key: jsonKeyVersion, encodable: serializerVersion))
         if let modelTypeSpecyfing = self as? RadixModelTypeSpecifying {
             keyValues.append(try AnyEncodableKeyValue(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.type.serializerId))
         }
         
-        return keyValues.sorted(by: \.key)
+        return keyValues.sorted(by: \.key).filter { $0.allowsOutput(of: output) }
     }
 }

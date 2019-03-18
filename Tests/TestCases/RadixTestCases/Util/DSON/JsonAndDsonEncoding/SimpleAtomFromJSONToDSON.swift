@@ -90,7 +90,7 @@ class SimpleAtomFromJSONToDSONSpec: QuickSpec {
 
         describe("DSON encoding Output == All") {
             describe("DSON Hex") {
-                let dson = try! atom.toDSON(output: .none)
+                let dson = try! atom.toDSON()
                 it("should serialize into correct DSON") {
                     expect(dson.hex).to(equal(expectedDsonAllHex))
                 }

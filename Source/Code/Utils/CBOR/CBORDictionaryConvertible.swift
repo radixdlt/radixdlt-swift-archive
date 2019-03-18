@@ -28,14 +28,14 @@ public extension CBORDictionaryConvertible where Key: StringRepresentable {
                 encoded: try valueDSONEncode($0.value, output: output),
                 output: output
             )
-        }.filter { $0.output >= output }
+        }.filter { $0.allowsOutput(of: output) }
     }
 }
 
 // MARK: - AnyEncodableKeyValuesProcessing
 public extension CBORDictionaryConvertible {
-    func process(keyValues: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
-        return keyValues.sorted(by: \.key)
+    func process(keyValues: [AnyEncodableKeyValue], output: DSONOutput) throws -> [AnyEncodableKeyValue] {
+        return keyValues.sorted(by: \.key).filter { $0.allowsOutput(of: output) }
     }
 }
 

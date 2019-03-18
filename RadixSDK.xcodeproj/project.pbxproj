@@ -205,6 +205,8 @@
 		E6D4B35F223FD01A004FC83A /* AnyEncodableKeyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B35E223FD01A004FC83A /* AnyEncodableKeyValue.swift */; };
 		E6D4B361223FD046004FC83A /* AnyEncodableKeyValueList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B360223FD046004FC83A /* AnyEncodableKeyValueList.swift */; };
 		E6D4B363223FF7D0004FC83A /* DSONOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B362223FF7D0004FC83A /* DSONOutput.swift */; };
+		E6D4B36722400E1E004FC83A /* DSONOutputting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B36622400E1E004FC83A /* DSONOutputting.swift */; };
+		E6D4B36922400F41004FC83A /* SetAlgebra+Intersecting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B36822400F41004FC83A /* SetAlgebra+Intersecting.swift */; };
 		E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2B21F7CE9C00654105 /* Node.swift */; };
 		E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */; };
 		E6ED1A3421F879F600654105 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3321F879F600654105 /* HashTests.swift */; };
@@ -466,6 +468,8 @@
 		E6D4B35E223FD01A004FC83A /* AnyEncodableKeyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodableKeyValue.swift; sourceTree = "<group>"; };
 		E6D4B360223FD046004FC83A /* AnyEncodableKeyValueList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodableKeyValueList.swift; sourceTree = "<group>"; };
 		E6D4B362223FF7D0004FC83A /* DSONOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONOutput.swift; sourceTree = "<group>"; };
+		E6D4B36622400E1E004FC83A /* DSONOutputting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONOutputting.swift; sourceTree = "<group>"; };
+		E6D4B36822400F41004FC83A /* SetAlgebra+Intersecting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SetAlgebra+Intersecting.swift"; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6ED1A2B21F7CE9C00654105 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleGroups.swift; sourceTree = "<group>"; };
@@ -614,6 +618,7 @@
 			isa = PBXGroup;
 			children = (
 				E62C030B220491CD001F27DE /* Sequence_Extension.swift */,
+				E6D4B36822400F41004FC83A /* SetAlgebra+Intersecting.swift */,
 				E6A4AB7F221BF7DD006C5CA8 /* Set+InsertContentsOf.swift */,
 				E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */,
 			);
@@ -1629,6 +1634,7 @@
 				E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */,
 				E69AB72C2237B762006153DD /* EncodableKeyValueListConvertible.swift */,
 				E69AB72E2237B774006153DD /* EncodableKeyValue.swift */,
+				E6D4B36622400E1E004FC83A /* DSONOutputting.swift */,
 				E6D4B360223FD046004FC83A /* AnyEncodableKeyValueList.swift */,
 				E6D4B35E223FD01A004FC83A /* AnyEncodableKeyValue.swift */,
 			);
@@ -1820,6 +1826,7 @@
 				E6A4AC0B22243C8F006C5CA8 /* LowerBound.swift in Sources */,
 				E6D4B339223F9DB2004FC83A /* KeyValued.swift in Sources */,
 				E6CEE71321F5B3C000D745EC /* RandomData.swift in Sources */,
+				E6D4B36722400E1E004FC83A /* DSONOutputting.swift in Sources */,
 				E6D4B363223FF7D0004FC83A /* DSONOutput.swift in Sources */,
 				E6A4AB7C221BF7B3006C5CA8 /* Accountable.swift in Sources */,
 				E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */,
@@ -1860,6 +1867,7 @@
 				E6CEE75921F7A3F700D745EC /* StringConvertible.swift in Sources */,
 				E69AB74A2239117A006153DD /* CBORDictionaryConvertible.swift in Sources */,
 				E6D4B33D223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift in Sources */,
+				E6D4B36922400F41004FC83A /* SetAlgebra+Intersecting.swift in Sources */,
 				E6ED1A4C21F8ACB700654105 /* Int+DataConvertible.swift in Sources */,
 				E6CEE71921F5B4B900D745EC /* Atom.swift in Sources */,
 				E631DAD321F25AA00063F632 /* Mnemonic+Language.swift in Sources */,

@@ -9,7 +9,7 @@
 import Foundation
 
 /// A fully type-erased container of a keyed-value that is DSONEncodable
-public struct AnyEncodableKeyValue {
+public struct AnyEncodableKeyValue: DSONOutputSpecifying {
     public let key: String
     public let dsonEncodedValue: DSON
     public let output: DSONOutput

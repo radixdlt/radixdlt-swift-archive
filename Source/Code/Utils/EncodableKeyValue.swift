@@ -9,7 +9,7 @@
 import Foundation
 
 /// A partially type-erased container of an encodable Value for a certain CodingKey. The CodingKey is not type-erased, it is held by the generic passed to this struct. The encodable `Value`, however, is type-erased.
-public struct EncodableKeyValue<Key: CodingKey> {
+public struct EncodableKeyValue<Key: CodingKey>: DSONOutputSpecifying {
     public typealias Container = KeyedEncodingContainer<Key>
     public typealias JSONEncoding<Value: Encodable> = (inout Container, Value, Key) throws -> Void
     

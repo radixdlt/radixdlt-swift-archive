@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol AnyEncodableKeyValuesProcessing {
-    func process(keyValues: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue]
+    func process(keyValues: [AnyEncodableKeyValue], output: DSONOutput) throws -> [AnyEncodableKeyValue]
 }

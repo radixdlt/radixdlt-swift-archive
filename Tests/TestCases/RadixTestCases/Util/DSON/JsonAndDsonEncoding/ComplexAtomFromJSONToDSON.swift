@@ -14,14 +14,23 @@ class ComplexAtomFromJSONToDSONSpec: QuickSpec {
     override func spec() {
         let atom: Atom = model(from: atomJson)
         describe("Atom JSON Deserialization") {
-            print(atom)
             it("should deserialize into an Atom") {
                 expect(atom.particles(spin: .up, type: MintedTokenParticle.self).first?.identifier.unique).to(equal("XRD"))
             }
             it("should serialize into correct DSON") {
-                let dson = try! atom.toDSON(output: .none)
-                expect(dson.hex).to(equal(expectedDsonHex))
-                expect(dson.base64).to(equal(expecteDsonBase64))
+                let outputScenarios: [DSONOutput] = [DSONOutput.wire, DSONOutput.api, DSONOutput.persist, DSONOutput.all]
+                for output in outputScenarios {
+                    let dson = try! atom.toDSON(output: output)
+                    expect(dson.hex).to(equal(expectedDsonHex))
+                    expect(dson.base64).to(equal(expecteDsonBase64))
+                }
+            }
+            describe("DSON encoding output none") {
+                let dsonEmpty = try! atom.toDSON(output: .none)
+                
+                it("should result in approriate output for `toDSON(output: .none)`") {
+                    expect(dsonEmpty.hex).to(equal("bfff"))
+                }
             }
         }
         

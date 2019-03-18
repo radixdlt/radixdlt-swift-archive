@@ -22,10 +22,10 @@ public extension AnyEncodableKeyValueListConvertible {
     /// 0xff (encodeStreamEnd)
     func toDSON(output: DSONOutput = .default) throws -> DSON {
         var keyValues = try anyEncodableKeyValues(output: output)
-        keyValues = keyValues.filter { $0.output >= output }
+        keyValues = keyValues.filter { $0.allowsOutput(of: output) }
         
         if let processor = self as? AnyEncodableKeyValuesProcessing {
-            keyValues = try processor.process(keyValues: keyValues)
+            keyValues = try processor.process(keyValues: keyValues, output: output)
         }
         
         return [
