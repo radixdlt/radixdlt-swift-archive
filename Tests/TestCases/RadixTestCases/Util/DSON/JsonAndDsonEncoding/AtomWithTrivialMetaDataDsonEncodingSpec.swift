@@ -24,6 +24,7 @@ class AtomWithTrivialMetaDataDsonEncodingSpec: QuickSpec {
                 
                 let dsonFromCodeAtom = try! atomInCode.toDSON()
                 expect(dsonFromCodeAtom.hex).to(equal(expectedDsonHex))
+                expect(dsonFromCodeAtom.base64).to(equal(expectedDsonBase64))
                 
             }
         }
@@ -31,6 +32,8 @@ class AtomWithTrivialMetaDataDsonEncodingSpec: QuickSpec {
 }
 
 private let expectedDsonHex = "bf686d65746144617461bf6974696d657374616d706d31343838333236343030303030ff6a73657269616c697a65721a001ed1516776657273696f6e1864ff"
+
+private let expectedDsonBase64 = "v2htZXRhRGF0Yb9pdGltZXN0YW1wbTE0ODgzMjY0MDAwMDD/anNlcmlhbGl6ZXIaAB7RUWd2ZXJzaW9uGGT/"
 
 private let atomTrivialMetaData = """
 {
