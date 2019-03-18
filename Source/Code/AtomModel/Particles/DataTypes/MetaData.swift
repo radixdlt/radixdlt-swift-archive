@@ -8,32 +8,6 @@
 
 import Foundation
 
-public protocol MetaDataConvertible: DictionaryCodable, CBORDictionaryConvertible, Equatable where Key == MetaDataKey, Value == String {}
-
-public extension MetaDataConvertible {
-    var timestampString: String {
-        guard let timestampString = self[.timestamp] else {
-            incorrectImplementation("MetaData must contain timestamp")
-        }
-        return timestampString
-    }
-    
-    var timestamp: Date {
-        guard let timestamp = TimeConverter.dateFrom(string: timestampString) else {
-            incorrectImplementation("Should not be possible to save bad timestamp string")
-        }
-        return timestamp
-    }
-    
-    static func timestamp(_ date: Date) -> Self {
-        return [.timestamp: TimeConverter.stringFrom(date: date)]
-    }
-    
-    static var timeNow: Self {
-        return .timestamp(Date())
-    }
-}
-
 public struct MetaData: MetaDataConvertible {
     public typealias Key = MetaDataKey
     public typealias Value = String

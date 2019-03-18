@@ -8,8 +8,17 @@
 
 import Foundation
 
+//swiftlint:disable colon
+
 /// Open enum
-public struct MetaDataKey: Hashable, CustomStringConvertible, PrefixedJsonCodable, StringInitializable, StringRepresentable {
+public struct MetaDataKey:
+    PrefixedJsonCodable,
+    StringInitializable,
+    StringRepresentable,
+    Hashable,
+    CustomStringConvertible {
+
+//swiftlint:enable colon
 
     public let key: String
     

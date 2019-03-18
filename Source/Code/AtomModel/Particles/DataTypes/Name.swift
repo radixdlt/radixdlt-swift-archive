@@ -8,7 +8,12 @@
 
 import Foundation
 
-public struct Name: PrefixedJsonCodable, CBORStringConvertible, MinLengthSpecifying, MaxLengthSpecifying {
+//swiftlint:disable:next colon
+public struct Name:
+    PrefixedJsonCodable,
+    CBORStringConvertible,
+    MinLengthSpecifying,
+    MaxLengthSpecifying {
     
     public static let minLength = 2
     public static let maxLength = 64

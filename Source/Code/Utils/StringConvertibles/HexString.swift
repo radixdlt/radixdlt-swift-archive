@@ -8,7 +8,14 @@
 
 import Foundation
 
-public struct HexString: PrefixedJsonCodable, StringConvertible, StringRepresentable, CharacterSetSpecifying, DataConvertible, DataInitializable {
+//swiftlint:disable:next colon
+public struct HexString:
+    PrefixedJsonCodable,
+    StringConvertible,
+    StringRepresentable,
+    CharacterSetSpecifying,
+    DataConvertible,
+    DataInitializable {
     
     public static var allowedCharacters = CharacterSet.hexadecimal
     

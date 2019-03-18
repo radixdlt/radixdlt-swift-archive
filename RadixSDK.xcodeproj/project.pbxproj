@@ -186,6 +186,7 @@
 		E6D4B32C223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B32B223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift */; };
 		E6D4B32E223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B32D223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift */; };
 		E6D4B331223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */; };
+		E6D4B335223F9A2E004FC83A /* MetaDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B334223F9A2E004FC83A /* MetaDataConvertible.swift */; };
 		E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2B21F7CE9C00654105 /* Node.swift */; };
 		E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */; };
 		E6ED1A3421F879F600654105 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3321F879F600654105 /* HashTests.swift */; };
@@ -428,6 +429,7 @@
 		E6D4B32B223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomWithTrivialMetaDataDsonEncodingSpec.swift; sourceTree = "<group>"; };
 		E6D4B32D223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleAtomFromJSONToDSON.swift; sourceTree = "<group>"; };
 		E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigUnsignedIntHexConversionTests.swift; sourceTree = "<group>"; };
+		E6D4B334223F9A2E004FC83A /* MetaDataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataConvertible.swift; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6ED1A2B21F7CE9C00654105 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleGroups.swift; sourceTree = "<group>"; };
@@ -825,6 +827,7 @@
 				E68B5C0721FBD46F00BEB049 /* Amount.swift */,
 				E68B5C0921FBD8B000BEB049 /* MetaDataKey.swift */,
 				E6A4AB81221BF92A006C5CA8 /* MetaData.swift */,
+				E6D4B334223F9A2E004FC83A /* MetaDataConvertible.swift */,
 				E67A714721FBAEF500F4B2D0 /* Granularity.swift */,
 				E6A4AB9D221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift */,
 				E67A714B21FBB1DA00F4B2D0 /* TokenPermission.swift */,
@@ -1180,8 +1183,8 @@
 		E6CEE72121F5D43A00D745EC /* Address */ = {
 			isa = PBXGroup;
 			children = (
-				E6CEE72221F5D44300D745EC /* Address.swift */,
-				E6ED1A4821F896C300654105 /* Addresses.swift */,
+				E6D4B333223F987B004FC83A /* Address */,
+				E6D4B332223F986D004FC83A /* Addresses */,
 			);
 			path = Address;
 			sourceTree = "<group>";
@@ -1357,6 +1360,22 @@
 				E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */,
 			);
 			path = DataConvertible;
+			sourceTree = "<group>";
+		};
+		E6D4B332223F986D004FC83A /* Addresses */ = {
+			isa = PBXGroup;
+			children = (
+				E6ED1A4821F896C300654105 /* Addresses.swift */,
+			);
+			path = Addresses;
+			sourceTree = "<group>";
+		};
+		E6D4B333223F987B004FC83A /* Address */ = {
+			isa = PBXGroup;
+			children = (
+				E6CEE72221F5D44300D745EC /* Address.swift */,
+			);
+			path = Address;
 			sourceTree = "<group>";
 		};
 		E6ED1A2A21F7CE9100654105 /* Network */ = {
@@ -1795,6 +1814,7 @@
 				E6EF45A622369EE200FA4158 /* DataInitializable.swift in Sources */,
 				E69AB75622393F2F006153DD /* CBORPropertyListConvertible.swift in Sources */,
 				E6CEE74421F637EC00D745EC /* Signature.swift in Sources */,
+				E6D4B335223F9A2E004FC83A /* MetaDataConvertible.swift in Sources */,
 				E6611F44222696E900AD2F83 /* BigInt_Extension.swift in Sources */,
 				E6CEE76C21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift in Sources */,
 				E6CEE72321F5D44300D745EC /* Address.swift in Sources */,

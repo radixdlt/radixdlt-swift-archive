@@ -8,7 +8,13 @@
 
 import Foundation
 
-public struct Amount: PrefixedJsonCodable, StringRepresentable, CBORDataConvertible, Equatable, ExpressibleByIntegerLiteral {
+//swiftlint:disable:next colon
+public struct Amount:
+    PrefixedJsonCodable,
+    StringRepresentable,
+    CBORDataConvertible,
+    Equatable,
+    ExpressibleByIntegerLiteral {
     
     public static let subunitsDenominatorDecimalExponent: Int = 18
     public static let subunitsDenominator = BigUnsignedInt(10).power(Amount.subunitsDenominatorDecimalExponent)

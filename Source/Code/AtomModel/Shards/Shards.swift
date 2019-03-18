@@ -9,7 +9,13 @@
 import Foundation
 
 public typealias Shard = Int64
-public struct Shards: RangeExpression, Codable, CBORStreamable {
+
+//swiftlint:disable:next colon
+public struct Shards:
+    CBORStreamable,
+    RangeExpression,
+    Codable {
+    
     public typealias Bound = Shard
     
     private let range: Range<Bound>

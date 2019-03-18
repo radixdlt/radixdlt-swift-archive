@@ -8,7 +8,16 @@
 
 import Foundation
 
-public struct Base64String: PrefixedJsonCodable, StringConvertible, StringRepresentable, CBORDataConvertible, DataInitializable, RequiringThatLengthIsMultipleOfN, CharacterSetSpecifying {
+//swiftlint:disable:next colon
+public struct Base64String:
+    PrefixedJsonCodable,
+    StringConvertible,
+    StringRepresentable,
+    CBORDataConvertible,
+    DataInitializable,
+    RequiringThatLengthIsMultipleOfN,
+    CharacterSetSpecifying {
+    
     public static let jsonPrefix: JSONPrefix = .bytesBase64
     
     public static var lengthMultiple = 4

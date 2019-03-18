@@ -8,7 +8,13 @@
 
 import Foundation
 
-public struct Planck: CBORConvertible, Codable, Equatable, ExpressibleByIntegerLiteral {
+//swiftlint:disable:next colon
+public struct Planck:
+    CBORConvertible,
+    Codable,
+    Equatable,
+    ExpressibleByIntegerLiteral {
+    
     public typealias Value = UInt64
     let value: Value
     

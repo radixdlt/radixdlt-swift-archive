@@ -14,8 +14,18 @@ public extension CustomStringConvertible where Self: StringRepresentable {
     }
 }
 
+//swiftlint:disable colon
+
 /// EffectiveUserIdentifier
-public struct EUID: PrefixedJsonCodable, StringRepresentable, DataInitializable, CBORDataConvertible, Hashable, ExpressibleByIntegerLiteral, CustomStringConvertible {
+public struct EUID:
+    PrefixedJsonCodable,
+    StringRepresentable,
+    DataInitializable,
+    CBORDataConvertible,
+    Hashable,
+    ExpressibleByIntegerLiteral,
+    CustomStringConvertible {
+//swiftlint:enable colon
     
     public typealias Value = BigUnsignedInt
     public static let byteCount = 16

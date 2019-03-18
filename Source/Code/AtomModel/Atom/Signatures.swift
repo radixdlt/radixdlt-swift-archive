@@ -8,7 +8,14 @@
 
 import Foundation
 
-public struct Signatures: CBORDictionaryConvertible, Equatable, ExpressibleByDictionaryLiteral, Collection, Codable {
+//swiftlint:disable:next colon
+public struct Signatures:
+    CBORDictionaryConvertible,
+    Equatable,
+    ExpressibleByDictionaryLiteral,
+    Collection,
+    Codable {
+    
     public typealias Key = EUID
     public typealias Value = Signature
     public let dictionary: Map

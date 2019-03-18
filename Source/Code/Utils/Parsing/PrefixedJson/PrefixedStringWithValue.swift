@@ -8,7 +8,11 @@
 
 import Foundation
 
-public struct PrefixedStringWithValue: Decodable, StringRepresentable {
+//swiftlint:disable:next colon
+public struct PrefixedStringWithValue:
+    StringRepresentable,
+    Decodable {
+
     public let stringValue: String
     public let jsonPrefix: JSONPrefix
     

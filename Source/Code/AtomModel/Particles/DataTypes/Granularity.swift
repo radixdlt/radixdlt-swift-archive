@@ -8,7 +8,14 @@
 
 import Foundation
 
-public struct Granularity: PrefixedJsonCodable, CBORDataConvertible, Equatable, StringRepresentable, ExpressibleByIntegerLiteral {
+//swiftlint:disable:next colon
+public struct Granularity:
+    PrefixedJsonCodable,
+    CBORDataConvertible,
+    StringRepresentable,
+    Equatable,
+    ExpressibleByIntegerLiteral {
+    
     public typealias Value = BigUnsignedInt
     
     public let value: Value

@@ -8,7 +8,11 @@
 
 import Foundation
 
-public struct SpunParticle: Codable, RadixModelTypeStaticSpecifying, CBORStreamable {
+//swiftlint:disable:next colon
+public struct SpunParticle:
+    RadixModelTypeStaticSpecifying,
+    CBORStreamable,
+    Codable {
 
     public static let type = RadixModelType.spunParticle
 

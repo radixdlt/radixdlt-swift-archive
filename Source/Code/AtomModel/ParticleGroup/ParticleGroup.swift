@@ -7,7 +7,12 @@
 //
 
 import Foundation
-public struct ParticleGroup: CBORStreamable, ArrayConvertible, RadixModelTypeStaticSpecifying {
+
+//swiftlint:disable:next colon
+public struct ParticleGroup:
+    CBORStreamable,
+    ArrayConvertible,
+    RadixModelTypeStaticSpecifying {
     
     public static let type = RadixModelType.particleGroup
     

@@ -8,8 +8,10 @@
 
 import Foundation
 
-// MARK: - Atom
-public struct Atom: AtomConvertible, CBORStreamable {
+//swiftlint:disable:next colon
+public struct Atom:
+    AtomConvertible,
+    CBORStreamable {
     
     public static let type = RadixModelType.atom
     

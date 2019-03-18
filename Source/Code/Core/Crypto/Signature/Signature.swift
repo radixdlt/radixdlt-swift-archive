@@ -13,10 +13,16 @@ public extension Secp256k1 {
     static let order = BigUnsignedInt(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141")!
 }
 
+//swiftlint:disable colon
+
 /// ECDSA Signature consisting of two BigIntegers "R" and "S"
 /// Read more: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
 /// Low value `S` is enforced according to BIP62: https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures
-public struct Signature: Equatable, RadixModelTypeStaticSpecifying, CBORStreamable {
+public struct Signature:
+    RadixModelTypeStaticSpecifying,
+    CBORStreamable,
+    Equatable {
+//swiftlint:enable colon
     
     public static let type = RadixModelType.signature
     

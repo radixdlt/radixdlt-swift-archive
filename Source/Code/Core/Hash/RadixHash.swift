@@ -27,7 +27,13 @@ public struct Sha256TwiceHasher: Hashing {
     }
 }
 
-public struct RadixHash: Hashable, CustomStringConvertible, Collection, DataConvertible {
+//swiftlint:disable:next colon
+public struct RadixHash:
+    DataConvertible,
+    Hashable,
+    CustomStringConvertible,
+    Collection {
+
     private let data: Data
     public init(unhashedData: Data, hashedBy hasher: Hashing) {
         self.data = hasher.hash(data: unhashedData)

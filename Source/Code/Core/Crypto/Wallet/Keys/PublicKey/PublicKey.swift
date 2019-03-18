@@ -8,7 +8,12 @@
 
 import Foundation
 
-public struct PublicKey: PrefixedJsonCodableByProxy, Hashable, CBORDataConvertible, DataInitializable {
+//swiftlint:disable:next colon
+public struct PublicKey:
+    PrefixedJsonCodableByProxy,
+    CBORDataConvertible,
+    DataInitializable,
+    Hashable {
     
     public let compressedData: Data
     public init(data: Data) throws {

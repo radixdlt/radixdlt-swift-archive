@@ -8,7 +8,10 @@
 
 import Foundation
 
-public struct Addresses: ArrayDecodable, Equatable {
+//swiftlint:disable:next colon
+public struct Addresses:
+    ArrayDecodable,
+    Equatable {
     
     public let addresses: Set<Address>
     

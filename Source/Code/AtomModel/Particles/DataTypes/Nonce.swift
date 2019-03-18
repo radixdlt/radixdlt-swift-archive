@@ -8,7 +8,13 @@
 
 import Foundation
 
-public struct Nonce: Codable, Equatable, ExpressibleByIntegerLiteral, CBORConvertible {
+//swiftlint:disable:next colon
+public struct Nonce:
+    CBORConvertible,
+    Codable,
+    Equatable,
+    ExpressibleByIntegerLiteral {
+    
     public typealias Value = Int64
     public let value: Value
     

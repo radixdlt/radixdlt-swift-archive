@@ -8,7 +8,11 @@
 
 import Foundation
 
-public struct MessageParticle: ParticleModelConvertible, Accountable, CBORStreamable {
+//swiftlint:disable:next colon
+public struct MessageParticle:
+    ParticleModelConvertible,
+    Accountable,
+    CBORStreamable {
     
     public static let type = RadixModelType.messageParticle
     

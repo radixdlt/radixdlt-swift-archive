@@ -8,7 +8,11 @@
 
 import Foundation
 
-public struct TokenDefinitionParticle: ParticleModelConvertible, Identifiable, CBORStreamable {
+//swiftlint:disable:next colon
+public struct TokenDefinitionParticle:
+    ParticleModelConvertible,
+    Identifiable,
+    CBORStreamable {
     
     public static let type = RadixModelType.tokenDefinitionParticle
     

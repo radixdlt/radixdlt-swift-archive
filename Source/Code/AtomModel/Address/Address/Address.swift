@@ -8,12 +8,14 @@
 
 import Foundation
 
-public protocol PrefixAddressSpecifying: JSONPrefixSpecifying {}
-public protocol Base58Convertible: PrefixAddressSpecifying {
-    var base58String: Base58String { get }
-}
-
-public struct Address: Base58Convertible, CBORDataConvertible, PrefixedJsonCodableByProxy, Hashable, CustomStringConvertible, ExactLengthSpecifying, DataInitializable {
+//swiftlint:disable:next colon
+public struct Address:
+    CBORDataConvertible,
+    PrefixedJsonCodableByProxy,
+    ExactLengthSpecifying,
+    DataInitializable,
+    Hashable,
+    CustomStringConvertible {
     
     public static let length = 51
     

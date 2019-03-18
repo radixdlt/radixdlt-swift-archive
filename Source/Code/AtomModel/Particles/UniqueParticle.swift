@@ -8,7 +8,10 @@
 
 import Foundation
 
-public struct UniqueParticle: ParticleModelConvertible, CBORStreamable {
+//swiftlint:disable:next colon
+public struct UniqueParticle:
+    ParticleModelConvertible,
+    CBORStreamable {
 
     public static let type = RadixModelType.uniqueParticle
     public let address: Address

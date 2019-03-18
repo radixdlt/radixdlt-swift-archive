@@ -8,7 +8,12 @@
 
 import Foundation
 
-public struct TokenPermissions: DictionaryCodable, Equatable, CBORDictionaryConvertible {
+//swiftlint:disable:next colon
+public struct TokenPermissions:
+    DictionaryCodable,
+    CBORDictionaryConvertible,
+    Equatable {
+    
     public typealias Key = TokenAction
     public typealias Value = TokenPermission
     public let dictionary: [Key: Value]
