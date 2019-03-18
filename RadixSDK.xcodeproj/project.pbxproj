@@ -175,7 +175,6 @@
 		E6CEE76F21F7A61B00D745EC /* BigInteger+StringConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE76E21F7A61B00D745EC /* BigInteger+StringConversion.swift */; };
 		E6CEE77121F7A64900D745EC /* RadixHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE77021F7A64900D745EC /* RadixHash.swift */; };
 		E6CEE77321F7A65F00D745EC /* RadixHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE77221F7A65F00D745EC /* RadixHashable.swift */; };
-		E6CEE77521F7A67D00D745EC /* AtomConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE77421F7A67D00D745EC /* AtomConvertible.swift */; };
 		E6CEE77821F7A6B000D745EC /* SpunParticle+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE77721F7A6B000D745EC /* SpunParticle+Sequence.swift */; };
 		E6CEE77A21F7A71F00D745EC /* EUID+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE77921F7A71F00D745EC /* EUID+Error.swift */; };
 		E6D1318321F7B2050014792D /* Data+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D1318221F7B2050014792D /* Data+Hex.swift */; };
@@ -426,7 +425,6 @@
 		E6CEE76E21F7A61B00D745EC /* BigInteger+StringConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BigInteger+StringConversion.swift"; sourceTree = "<group>"; };
 		E6CEE77021F7A64900D745EC /* RadixHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixHash.swift; sourceTree = "<group>"; };
 		E6CEE77221F7A65F00D745EC /* RadixHashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixHashable.swift; sourceTree = "<group>"; };
-		E6CEE77421F7A67D00D745EC /* AtomConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomConvertible.swift; sourceTree = "<group>"; };
 		E6CEE77721F7A6B000D745EC /* SpunParticle+Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpunParticle+Sequence.swift"; sourceTree = "<group>"; };
 		E6CEE77921F7A71F00D745EC /* EUID+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EUID+Error.swift"; sourceTree = "<group>"; };
 		E6D1318221F7B2050014792D /* Data+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Hex.swift"; sourceTree = "<group>"; };
@@ -1190,7 +1188,6 @@
 			isa = PBXGroup;
 			children = (
 				E6CEE71821F5B4B900D745EC /* Atom.swift */,
-				E6CEE77421F7A67D00D745EC /* AtomConvertible.swift */,
 				E6CEE74521F6381E00D745EC /* Signatures.swift */,
 				E6ED1A4421F8914F00654105 /* Atoms.swift */,
 				E6ED1A4D21F8E51A00654105 /* AtomObservation.swift */,
@@ -1739,7 +1736,6 @@
 				E68B5C0A21FBD8B000BEB049 /* MetaDataKey.swift in Sources */,
 				E6A4AB8E221C2FB3006C5CA8 /* Symbol.swift in Sources */,
 				E6CEE73421F5D50E00D745EC /* Spin.swift in Sources */,
-				E6CEE77521F7A67D00D745EC /* AtomConvertible.swift in Sources */,
 				E6ED1A7121F8E74F00654105 /* InMemoryAtomStore.swift in Sources */,
 				E693DAB82232B549003720C2 /* JSONPrefixSpecifying.swift in Sources */,
 				E6ED1A6921F8E6CF00654105 /* NetworkState.swift in Sources */,

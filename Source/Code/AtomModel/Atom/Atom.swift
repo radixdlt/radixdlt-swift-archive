@@ -16,8 +16,11 @@ import Foundation
 /// `ParticleGroup`
 ///
 public struct Atom:
-    AtomConvertible,
-    CBORStreamable {
+    RadixModelTypeStaticSpecifying,
+    RadixHashable,
+    DSONEncodable,
+    CBORStreamable,
+    ArrayInitializable {
 // swiftlint:enable colon
     
     public static let type = RadixModelType.atom
@@ -71,6 +74,70 @@ public extension Atom {
         }
         
         return properties
+    }
+    
+    static func == (lhs: Atom, rhs: Atom) -> Bool {
+        return lhs.radixHash == rhs.radixHash
+    }
+    
+    var radixHash: RadixHash {
+        do {
+            return RadixHash(unhashedData: try toDSON(output: .hash), hashedBy: Sha256TwiceHasher())
+        } catch {
+            incorrectImplementation("Should always be able to hash, error: \(error)")
+        }
+    }
+    
+    var hid: EUID {
+        return radixHash.toEUID()
+    }
+}
+
+// MARK: - ArrayInitializable
+public extension Atom {
+    public typealias Element = ParticleGroup
+    init(elements particleGroups: [Element]) {
+        self.init(particleGroups: ParticleGroups(particleGroups: particleGroups))
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension Atom {
+    // TODO implement this when `hid` does not crash
+    //    public var description: String {
+    //        return "Atom(\(hid))"
+    //    }
+}
+
+public extension Atom {
+    
+    func spunParticles() -> [SpunParticle] {
+        return particleGroups.flatMap { $0.spunParticles }
+    }
+    
+    func messageParticles() -> [MessageParticle] {
+        return spunParticles().compactMap(type: MessageParticle.self)
+    }
+    
+    func tokensParticles(spin: Spin, type: TokenType? = nil) -> [TokenParticle] {
+        let tokenParticles = spunParticles()
+            .filter(spin: spin)
+            .compactMap(type: TokenParticle.self)
+        guard let type = type else {
+            return tokenParticles
+        }
+        return tokenParticles.filter(type: type)
+    }
+    
+    var timestamp: Date? {
+        return metaData.timestamp
+    }
+    
+    func publicKeys() -> Set<PublicKey> {
+        return spunParticles()
+            .map { $0.particle }
+            .flatMap { Array($0.keyDestinations()) }
+            .asSet
     }
 }
 
