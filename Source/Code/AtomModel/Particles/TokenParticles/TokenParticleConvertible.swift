@@ -22,8 +22,6 @@ where
     CodingKeys == TokenParticleCodingKeys {
 // swiftlint:enable colon
     
-    var tokenType: TokenType { get }
-    
     var address: Address { get }
     var tokenDefinitionIdentifier: TokenDefinitionIdentifier { get }
     var granularity: Granularity { get }

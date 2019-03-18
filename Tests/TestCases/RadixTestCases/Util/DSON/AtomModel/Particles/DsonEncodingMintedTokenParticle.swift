@@ -20,7 +20,6 @@ class DsonEncodingMintedTokenParticle: QuickSpec {
                 it("should result in the appropriate data") {
                     
                     let tokenParticle = try! JSONDecoder().decode(MintedTokenParticle.self, from: mintedTokenParticleJson.data(using: .utf8)!)
-                    expect(tokenParticle.tokenType).to(equal(.minted))
                     let dson = try! tokenParticle.toDSON()
              
                     expect(dson.hex).to(equal(expectedDsonHex))

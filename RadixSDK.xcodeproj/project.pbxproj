@@ -60,7 +60,6 @@
 		E67A714821FBAEF500F4B2D0 /* Granularity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A714721FBAEF500F4B2D0 /* Granularity.swift */; };
 		E67A714A21FBB1B900F4B2D0 /* TokenPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A714921FBB1B900F4B2D0 /* TokenPermissions.swift */; };
 		E67A714C21FBB1DA00F4B2D0 /* TokenPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A714B21FBB1DA00F4B2D0 /* TokenPermission.swift */; };
-		E67A714F21FBC52900F4B2D0 /* TokenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A714E21FBC52900F4B2D0 /* TokenType.swift */; };
 		E67A715421FBC65800F4B2D0 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A715321FBC65800F4B2D0 /* String+Extensions.swift */; };
 		E67A715621FBC71B00F4B2D0 /* ResourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A715521FBC71B00F4B2D0 /* ResourceType.swift */; };
 		E68B5BFF21FBCD2C00BEB049 /* PrefixedJsonDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B5BFE21FBCD2C00BEB049 /* PrefixedJsonDecodable.swift */; };
@@ -320,7 +319,6 @@
 		E67A714721FBAEF500F4B2D0 /* Granularity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Granularity.swift; sourceTree = "<group>"; };
 		E67A714921FBB1B900F4B2D0 /* TokenPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPermissions.swift; sourceTree = "<group>"; };
 		E67A714B21FBB1DA00F4B2D0 /* TokenPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPermission.swift; sourceTree = "<group>"; };
-		E67A714E21FBC52900F4B2D0 /* TokenType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenType.swift; sourceTree = "<group>"; };
 		E67A715121FBC63300F4B2D0 /* StringInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringInitializable.swift; sourceTree = "<group>"; };
 		E67A715321FBC65800F4B2D0 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		E67A715521FBC71B00F4B2D0 /* ResourceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceType.swift; sourceTree = "<group>"; };
@@ -851,7 +849,6 @@
 		E67A714621FBAEE900F4B2D0 /* DataTypes */ = {
 			isa = PBXGroup;
 			children = (
-				E67A714E21FBC52900F4B2D0 /* TokenType.swift */,
 				E6A4AB8D221C2FB3006C5CA8 /* Symbol.swift */,
 				E6A4AB91221C40A4006C5CA8 /* Name.swift */,
 				E6A4AB95221D4680006C5CA8 /* Description.swift */,
@@ -1785,7 +1782,6 @@
 				E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */,
 				E6611F392225B2E400AD2F83 /* StringDictionary.swift in Sources */,
 				E6A4AC0522243C38006C5CA8 /* InvalidStringError.swift in Sources */,
-				E67A714F21FBC52900F4B2D0 /* TokenType.swift in Sources */,
 				E6A4ABFD2223E4DA006C5CA8 /* PrefixedJsonDecodableByProxy.swift in Sources */,
 				E6611F3E2225B56A00AD2F83 /* ArrayDecodable.swift in Sources */,
 				E6CEE74621F6381E00D745EC /* Signatures.swift in Sources */,

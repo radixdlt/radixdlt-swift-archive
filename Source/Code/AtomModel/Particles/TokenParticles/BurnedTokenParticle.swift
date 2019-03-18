@@ -11,7 +11,6 @@ import Foundation
 public struct BurnedTokenParticle: TokenParticleConvertible {
     
     public static let type = RadixModelType.burnedTokenParticle
-    public let tokenType = TokenType.burned
     
     public let address: Address
     public let tokenDefinitionIdentifier: TokenDefinitionIdentifier

@@ -11,7 +11,6 @@ import Foundation
 public struct TransferredTokenParticle: TokenParticleConvertible {
     
     public static let type = RadixModelType.transferredTokenParticle
-    public let tokenType = TokenType.transferred
     
     public let address: Address
     public let tokenDefinitionIdentifier: TokenDefinitionIdentifier

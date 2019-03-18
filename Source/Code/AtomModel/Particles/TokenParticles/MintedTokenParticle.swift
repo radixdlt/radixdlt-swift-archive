@@ -11,7 +11,6 @@ import Foundation
 public struct MintedTokenParticle: TokenParticleConvertible {
     
     public static let type = RadixModelType.mintedTokenParticle
-    public let tokenType = TokenType.minted
     
     public let address: Address
     public let tokenDefinitionIdentifier: TokenDefinitionIdentifier
