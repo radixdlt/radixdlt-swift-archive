@@ -148,7 +148,7 @@ let jsonForAtomWith2ParticleGroups = """
                         "nonce": 992284943125945,
                         "planck": 24805440,
                         "amount": ":u20:1000000000000000000000000000",
-                        "tokenTypeReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokenclasses/XRD"
+                        "tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
                     }
                 },
                 {
