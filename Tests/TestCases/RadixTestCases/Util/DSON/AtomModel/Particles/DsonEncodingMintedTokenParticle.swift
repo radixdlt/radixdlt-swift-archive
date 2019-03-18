@@ -12,79 +12,10 @@ import Nimble
 import Quick
 import BigInt
 
-class BigUnsignedIntTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-    }
-    
-//    func testNumbers() {
-//
-//        for i in 1...10000 {
-//            let bigInt = BigUInt(integerLiteral: UInt64(i))
-//            let data = bigInt.asData
-//            let cryptoSwiftHex = data.toHexString()
-//            let radixHex = data.toHexString(uppercased: false).stringValue
-//            let radixHexViaHexString = bigInt.toHexString(uppercased: false).stringValue
-//            XCTAssertEqual(cryptoSwiftHex, radixHex)
-//            print("cryptoSwiftHex: `\(cryptoSwiftHex)`")
-//            print("radixHexViaHexString: `\(radixHexViaHexString)`")
-//            XCTAssertEqual(cryptoSwiftHex, radixHexViaHexString)
-//        }
-//    }
-    
-    func testUint256() {
-        let table = [
-            "10": "A",
-            "100": "64",
-            "1000": "3E8",
-            "10000": "2710",
-            "100000": "186A0",
-            "1000000": "F4240",
-            "10000000": "989680",
-            "100000000": "5F5E100",
-            "1000000000": "3B9ACA00",
-        ]
-        for (key, value) in table {
-            let bigInt = BigUnsignedInt(stringLiteral: key)
-            
-            XCTAssertEqual(bigInt.toHexString(uppercased: true).stringValue, value)
-            XCTAssertEqual(bigInt.asData.toHexString(uppercased: true, mode: .trim).stringValue, value)
-            XCTAssertEqual(bigInt.toBase64String().asData.toHexString(uppercased: true, mode: .trim).stringValue, value)
-            XCTAssertEqual(bigInt.asData.toBase64String().toHexString(uppercased: true, mode: .trim).stringValue, value)
-            
-//            let bigIntFromDataAndBack: String = try! Base58String(hexString: bigIntToHex).toHexString(uppercased: true, mode: .trim).stringValue
-//            XCTAssertEqual(bigIntFromDataAndBack, value)
-        }
-//        var decimalBase = "1"
-//        while decimalBase.length < 30 {
-//            decimalBase += "0"
-//            let bigUint = BigUnsignedInt(stringLiteral: decimalBase)
-//
-//        }
-    }
-}
-
 class DsonEncodingMintedTokenParticle: QuickSpec {
     
     override func spec() {
         describe("DSON encoding") {
-            
-            it("hex of int") {
-                let bigInt: BigUnsignedInt = "1000000000000000000000000000"
-
-                expect(bigInt.toHexString(uppercased: false, mode: .trim)).to(equal("33b2e3c9fd0803ce8000000"))
-//                expect(bigInt.asData.hex).to(equal("33b2e3c9fd0803ce8000000"))
-            }
-            
-            it("should be possible to encode UInt256") {
-                let gran1: Granularity = 1
-                expect(try! gran1.toDSON().hex).to(equal("5821050000000000000000000000000000000000000000000000000000000000000001"))
-                 let gran2: Granularity = "1000000000000000000000000000"
-                expect(try! gran2.toDSON().hex).to(equal("5821050000000000000000000000000000000000000000033b2e3c9fd0803ce8000000"))
-            }
-            
             describe("MintedTokenParticle") {
                 it("should result in the appropriate data") {
                     

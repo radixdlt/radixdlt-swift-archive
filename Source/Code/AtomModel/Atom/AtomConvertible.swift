@@ -11,11 +11,18 @@ import Foundation
 public protocol AtomConvertible: RadixModelTypeStaticSpecifying, RadixHashable, DSONEncodable, ExpressibleByArrayLiteral {
     var particleGroups: ParticleGroups { get }
     var signatures: Signatures { get }
-    var metaData: MetaData { get }
-    init(particleGroups: ParticleGroups, signatures: Signatures, metaData: MetaData)
+    var metaData: ChronoMetaData { get }
+    init(metaData: ChronoMetaData, signatures: Signatures, particleGroups: ParticleGroups)
 }
 
 public extension AtomConvertible {
+    
+    init(
+        metaData: ChronoMetaData = .timeNow,
+        signatures: Signatures = [:],
+        particleGroups: ParticleGroups = []) {
+        self.init(metaData: metaData, signatures: signatures, particleGroups: particleGroups)
+    }
     
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.hashValue == rhs.hashValue
@@ -37,7 +44,7 @@ public extension AtomConvertible {
 // MARK: - ExpressibleByArrayLiteral
 public extension AtomConvertible {
     public init(arrayLiteral particleGroups: ParticleGroup...) {
-        self.init(particleGroups: ParticleGroups(particleGroups: particleGroups), signatures: [:], metaData: [:])
+        self.init(particleGroups: ParticleGroups(particleGroups: particleGroups))
     }
 }
 

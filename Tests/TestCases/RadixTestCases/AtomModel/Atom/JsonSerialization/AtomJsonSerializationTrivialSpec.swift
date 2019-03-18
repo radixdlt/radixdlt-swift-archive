@@ -14,14 +14,11 @@ class AtomToDsonSpec: QuickSpec {
     override func spec() {
         describe("Dson encoding of trivial atom") {
             it("should not encode empty signatures and empty particle group list") {
-                let atom = Atom(metaData: ["U": "3"])
+                let atom = Atom(metaData: .timestamp("1234567890123"))
                 let dson = try! atom.toDSON()
                 let dsonHex = dson.hex
-                expect(dsonHex).to(equal("bf686d65746144617461bf61556133ff6a73657269616c697a65721a001ed1516776657273696f6e1864ff"))
+                expect(dsonHex).to(equal("bf686d65746144617461bf6974696d657374616d706d31323334353637383930313233ff6a73657269616c697a65721a001ed1516776657273696f6e1864ff"))
                 
-//                expect(dsonHex).to(contain(
-//                    ["burn", "all"].map { try! $0.toDSON().hex }.joined()
-//                ))
                 expect(dsonHex).to(contain(try! Atom.CodingKeys.metaData.rawValue.toDSON().hex))
                 expect(dsonHex).toNot(contain(try! Atom.CodingKeys.signatures.rawValue.toDSON().hex))
                 expect(dsonHex).toNot(contain(try! Atom.CodingKeys.particleGroups.rawValue.toDSON().hex))

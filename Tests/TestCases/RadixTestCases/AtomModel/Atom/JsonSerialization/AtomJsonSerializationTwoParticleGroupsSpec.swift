@@ -37,6 +37,15 @@ class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
     }
 }
 private let atom = Atom(
+    metaData: [
+        .timestamp: "1551345320000"
+    ],
+    signatures: [
+        "71c3c2fc9fee73b13cad082800a6d0de": try! Signature(
+            r: Signature.Part(base64: "JRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX="),
+            s: Signature.Part(base64: "KbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H=")
+        )
+    ],
     particleGroups: [
         ParticleGroup(spunParticles: [
             SpunParticle(
@@ -82,14 +91,5 @@ private let atom = Atom(
                 )
             )
         ])
-    ],
-    signatures: [
-        "71c3c2fc9fee73b13cad082800a6d0de": try! Signature(
-            r: Signature.Part(base64: "JRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX="),
-            s: Signature.Part(base64: "KbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H=")
-        )
-    ],
-    metaData: [
-        .timestamp: "1551345320000"
     ]
 )

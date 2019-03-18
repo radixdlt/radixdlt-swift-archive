@@ -41,7 +41,7 @@ public extension CBORPropertyListConvertible {
     /// 0xff (encodeStreamEnd)
     func toDSON(output: DSONOutput = .all) throws -> DSON {
         var properties = try propertyList(output: output)
-        
+        properties = properties.filter { $0.output >= output }
         if let processor = self as? CBORPropertyListProcessing {
             properties = try processor.processProperties(properties)
         }

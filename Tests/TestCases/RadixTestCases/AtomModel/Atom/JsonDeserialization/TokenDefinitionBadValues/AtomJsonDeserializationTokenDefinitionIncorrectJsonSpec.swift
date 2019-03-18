@@ -99,8 +99,9 @@ private extension AtomJsonDeserializationChangeJson {
 private let tokenDefintionJson = """
 {
     "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
-    "signatures": {},
-    "metaData": {},
+    "metaData": {
+        "timestamp": ":str:1488326400000"
+    },
     "particleGroups": [
         {
             "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
@@ -113,7 +114,6 @@ private let tokenDefintionJson = """
                         "symbol": ":str:BAD",
                         "name": ":str:BadCoin",
                         "description": ":str:Some TokenDefinition",
-                        "metaData": {},
                         "granularity": ":u20:1",
                         "permissions": {
                             "burn": ":str:none",
@@ -124,7 +124,9 @@ private let tokenDefintionJson = """
                     }
                 }
             ],
-            "metaData": {}
+            "metaData": {
+                "timestamp": ":str:1488326400000"
+            }
         }
     ]
 }

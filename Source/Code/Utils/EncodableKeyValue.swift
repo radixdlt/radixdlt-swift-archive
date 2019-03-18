@@ -11,14 +11,15 @@ import Foundation
 public struct CBOREncodableProperty {
     public let key: String
     public let dsonEncodedValue: DSON
-    
-    init(key unencodedKey: String, encoded dsonEncodedValue: DSON) {
+    public let output: DSONOutput
+    init(key unencodedKey: String, encoded dsonEncodedValue: DSON, output: DSONOutput) {
         self.key = unencodedKey
         self.dsonEncodedValue = dsonEncodedValue
+        self.output = output
     }
     
     init<Value>(key: String, encodable: Value, output: DSONOutput = .all) throws where Value: DSONEncodable {
-        self.init(key: key, encoded: try encodable.toDSON(output: output))
+        self.init(key: key, encoded: try encodable.toDSON(output: output), output: output)
     }
     
     public func cborEncodedKey() -> [UInt8] {
@@ -33,6 +34,7 @@ public struct EncodableKeyValue<Key: CodingKey> {
     private let _jsonEncode: (inout Container) throws -> Void
     private let _dsonEncode: () throws -> DSON
     private let key: String
+    public let output: DSONOutput
     init<Value>(
         key: Key,
         value: Value,
@@ -40,6 +42,7 @@ public struct EncodableKeyValue<Key: CodingKey> {
         jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
     ) where Value: Encodable & DSONEncodable {
         self.key = key.stringValue
+        self.output = output
         _jsonEncode = { container in
             try jsonEncoding(&container, value, key)
         }
@@ -59,6 +62,6 @@ public struct EncodableKeyValue<Key: CodingKey> {
 
 public extension EncodableKeyValue {
     func toCBOREncodableProperty() throws -> CBOREncodableProperty {
-        return CBOREncodableProperty(key: key, encoded: try _dsonEncode())
+        return CBOREncodableProperty(key: key, encoded: try _dsonEncode(), output: output)
     }
 }

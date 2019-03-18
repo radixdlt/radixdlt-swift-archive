@@ -8,13 +8,17 @@
 
 import Foundation
 
-public protocol DictionaryConvertible: ExpressibleByDictionaryLiteral, Collection
-    where Key: Hashable {
+public protocol DictionaryConvertible: Collection, KeyValued {
     typealias Map = [Key: Value]
     var dictionary: Map { get }
     init(dictionary: Map)
     init(validate: Map) throws
     subscript(key: Key) -> Value? { get }
+}
+
+public extension DictionaryConvertible {
+    var keys: Dictionary<Key, Value>.Keys { return dictionary.keys }
+    var values: Dictionary<Key, Value>.Values { return dictionary.values }
 }
 
 public extension DictionaryConvertible {

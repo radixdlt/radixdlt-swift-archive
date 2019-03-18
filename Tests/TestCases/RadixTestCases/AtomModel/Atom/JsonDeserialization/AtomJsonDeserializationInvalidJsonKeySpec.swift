@@ -27,13 +27,6 @@ private let json = """
 {
     "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
     "signatures": {},
-    "metaData": {},
-    "p⚠️⚠️⚠️⚠️⚠️⚠️s": [
-        {
-            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
-            "particles": [],
-            "metaData": {}
-        }
-    ]
+    "met⚠️⚠️⚠️⚠️⚠️⚠️Data": {}
 }
 """

@@ -59,23 +59,30 @@ public extension MessageParticle {
         
         let from = try container.decode(Address.self, forKey: .from)
         let to = try container.decode(Address.self, forKey: .to)
-        let payload = try container.decodeIfPresent(Base64String.self, forKey: .payload)?.asData ?? Data()
+        let payloadBase64 = try container.decodeIfPresent(Base64String.self, forKey: .payload)
         let metaData = try container.decodeIfPresent(MetaData.self, forKey: .metaData) ?? [:]
         
         self.init(
             from: from,
             to: to,
-            payload: payload,
+            payload: payloadBase64?.asData ?? Data(),
             metaData: metaData
         )
     }
     
     func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-        return [
+        var properties: [EncodableKeyValue<CodingKeys>] = [
             EncodableKeyValue(key: .from, value: from),
             EncodableKeyValue(key: .to, value: to)
-        ].appending(EncodableKeyValue(key: .metaData, value: metaData), if: !metaData.isEmpty)
-        .appending(EncodableKeyValue(key: .payload, value: payload.toBase64String()), if: !payload.isEmpty)
+        ]
+        if !payload.isEmpty {
+            properties.append(EncodableKeyValue(key: .payload, value: payload.toBase64String()))
+        }
+        
+        if !metaData.isEmpty {
+            properties.append(EncodableKeyValue(key: .metaData, value: metaData))
+        }
+        return properties
     }
 }
 

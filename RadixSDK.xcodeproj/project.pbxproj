@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		E6161013223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */; };
 		E6161016223A607B00025A54 /* DSONEncodingIntArraySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161014223A607800025A54 /* DSONEncodingIntArraySpec.swift */; };
-		E6161018223A998F00025A54 /* JsonToAtomToDson.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161017223A998F00025A54 /* JsonToAtomToDson.swift */; };
+		E6161018223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161017223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift */; };
 		E616101A223AAEA300025A54 /* DsonEncodingMintedTokenParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161019223AAEA300025A54 /* DsonEncodingMintedTokenParticle.swift */; };
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
@@ -182,6 +182,10 @@
 		E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D325AB21EE37DA00851F4E /* Int+Extension.swift */; };
 		E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D325B221EE48B800851F4E /* Signing+Message+Hash.swift */; };
 		E6D325B921EF35DA00851F4E /* Secp256k1RFC6979Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D325B721EF35AD00851F4E /* Secp256k1RFC6979Tests.swift */; };
+		E6D4B32A223C0327004FC83A /* MessageParticleFromJsonToDsonSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B328223C0324004FC83A /* MessageParticleFromJsonToDsonSpec.swift */; };
+		E6D4B32C223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B32B223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift */; };
+		E6D4B32E223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B32D223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift */; };
+		E6D4B331223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */; };
 		E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2B21F7CE9C00654105 /* Node.swift */; };
 		E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */; };
 		E6ED1A3421F879F600654105 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3321F879F600654105 /* HashTests.swift */; };
@@ -245,7 +249,7 @@
 /* Begin PBXFileReference section */
 		E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiringThatLengthIsMultipleOfN.swift; sourceTree = "<group>"; };
 		E6161014223A607800025A54 /* DSONEncodingIntArraySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONEncodingIntArraySpec.swift; sourceTree = "<group>"; };
-		E6161017223A998F00025A54 /* JsonToAtomToDson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonToAtomToDson.swift; sourceTree = "<group>"; };
+		E6161017223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplexAtomFromJSONToDSON.swift; sourceTree = "<group>"; };
 		E6161019223AAEA300025A54 /* DsonEncodingMintedTokenParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DsonEncodingMintedTokenParticle.swift; sourceTree = "<group>"; };
 		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
 		E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RadixSDK-Info.plist"; sourceTree = "<group>"; };
@@ -420,6 +424,10 @@
 		E6D325AB21EE37DA00851F4E /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		E6D325B221EE48B800851F4E /* Signing+Message+Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Signing+Message+Hash.swift"; sourceTree = "<group>"; };
 		E6D325B721EF35AD00851F4E /* Secp256k1RFC6979Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secp256k1RFC6979Tests.swift; sourceTree = "<group>"; };
+		E6D4B328223C0324004FC83A /* MessageParticleFromJsonToDsonSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageParticleFromJsonToDsonSpec.swift; sourceTree = "<group>"; };
+		E6D4B32B223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomWithTrivialMetaDataDsonEncodingSpec.swift; sourceTree = "<group>"; };
+		E6D4B32D223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleAtomFromJSONToDSON.swift; sourceTree = "<group>"; };
+		E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigUnsignedIntHexConversionTests.swift; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6ED1A2B21F7CE9C00654105 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleGroups.swift; sourceTree = "<group>"; };
@@ -659,6 +667,7 @@
 		E631DAAA21F24D500063F632 /* RadixTestCases */ = {
 			isa = PBXGroup;
 			children = (
+				E6D4B32F223F9472004FC83A /* DataConvertible */,
 				E69AB74B223912A4006153DD /* Granularity */,
 				E69AB7322237F6C9006153DD /* Address */,
 				E68B5C0021FBCEA600BEB049 /* Util */,
@@ -938,6 +947,7 @@
 				E69AB73A2237FC27006153DD /* DsonEncodingUniqueParticleSpec.swift */,
 				E69AB7472238F626006153DD /* DsonEncodingTokenDefinitionParticleSpec.swift */,
 				E6161019223AAEA300025A54 /* DsonEncodingMintedTokenParticle.swift */,
+				E6D4B328223C0324004FC83A /* MessageParticleFromJsonToDsonSpec.swift */,
 			);
 			path = Particles;
 			sourceTree = "<group>";
@@ -964,7 +974,9 @@
 			isa = PBXGroup;
 			children = (
 				E69AB7512239318B006153DD /* TokenPermissionEncodingSpec.swift */,
-				E6161017223A998F00025A54 /* JsonToAtomToDson.swift */,
+				E6D4B32B223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift */,
+				E6161017223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift */,
+				E6D4B32D223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift */,
 			);
 			path = JsonAndDsonEncoding;
 			sourceTree = "<group>";
@@ -1337,6 +1349,14 @@
 				E6D325B721EF35AD00851F4E /* Secp256k1RFC6979Tests.swift */,
 			);
 			path = Signatures;
+			sourceTree = "<group>";
+		};
+		E6D4B32F223F9472004FC83A /* DataConvertible */ = {
+			isa = PBXGroup;
+			children = (
+				E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */,
+			);
+			path = DataConvertible;
 			sourceTree = "<group>";
 		};
 		E6ED1A2A21F7CE9100654105 /* Network */ = {
@@ -1842,6 +1862,7 @@
 				E69AB73F2237FC62006153DD /* CBOREncodingPrimitivesStringSpec.swift in Sources */,
 				E69AB7422237FC80006153DD /* DSONEncodingAddressHolderSpec.swift in Sources */,
 				E6A4ABE92220706E006C5CA8 /* TooLongDescriptionSpec.swift in Sources */,
+				E6D4B331223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift in Sources */,
 				E6611F4B2227FEDA00AD2F83 /* AtomJsonSerializationTooBigSpec.swift in Sources */,
 				E6611F2722259E0800AD2F83 /* TooLongAddressSpec.swift in Sources */,
 				E68B5C0421FBCEEC00BEB049 /* ResourceIdentifierTests.swift in Sources */,
@@ -1852,6 +1873,7 @@
 				E69AB73D2237FC4C006153DD /* CBOREncodingPrimitivesIntSpec.swift in Sources */,
 				E6611F472227F2A300AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift in Sources */,
 				E693DAAC22319AB2003720C2 /* DSONEncodingPrimitivesBoolSpec.swift in Sources */,
+				E6D4B32C223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift in Sources */,
 				E6A4ABDE22206F1D006C5CA8 /* TooLongSymbolSpec.swift in Sources */,
 				E6A4ABE122206F33006C5CA8 /* TooShortSymbolSpec.swift in Sources */,
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
@@ -1859,12 +1881,13 @@
 				E6611F2D2225A09D00AD2F83 /* GranularityNegativeSpec.swift in Sources */,
 				E6A4ABF422207E12006C5CA8 /* AtomJsonDeserializationMintedTokenBadValuesSpec.swift in Sources */,
 				E6161016223A607B00025A54 /* DSONEncodingIntArraySpec.swift in Sources */,
+				E6D4B32A223C0327004FC83A /* MessageParticleFromJsonToDsonSpec.swift in Sources */,
 				E6611EFF222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift in Sources */,
 				E69AB7442237FC91006153DD /* DSONEncodingExampleMapSpec.swift in Sources */,
 				E6A4ABDF22206F1D006C5CA8 /* AtomJsonDeserializationTokenDefinitionIncorrectJsonSpec.swift in Sources */,
 				E616101A223AAEA300025A54 /* DsonEncodingMintedTokenParticle.swift in Sources */,
 				E69AB7372237F839006153DD /* AddressChecksumSpec.swift in Sources */,
-				E6161018223A998F00025A54 /* JsonToAtomToDson.swift in Sources */,
+				E6161018223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift in Sources */,
 				E6611F2922259E1B00AD2F83 /* NonBase58AddressSpec.swift in Sources */,
 				E6A4ABEB222070B7006C5CA8 /* TooShortDescriptionSpec.swift in Sources */,
 				E6A4ABED2220710B006C5CA8 /* TokenPermissionBadValueSpec.swift in Sources */,
@@ -1876,6 +1899,7 @@
 				E69AB7522239318B006153DD /* TokenPermissionEncodingSpec.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
 				E68B5C0221FBCEC300BEB049 /* Base58Tests.swift in Sources */,
+				E6D4B32E223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift in Sources */,
 				E6611F25222584A300AD2F83 /* TooShortAddress.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

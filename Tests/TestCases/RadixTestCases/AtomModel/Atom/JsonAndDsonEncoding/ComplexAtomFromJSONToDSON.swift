@@ -1,5 +1,5 @@
 //
-//  JsonToAtomToDson.swift
+//  ComplexAtomFromJSONToDSON.swift
 //  RadixSDK iOS Tests
 //
 //  Created by Alexander Cyon on 2019-03-14.
@@ -10,62 +10,17 @@
 import Quick
 import Nimble
 
-class MessageParticleWithoutPayloadFromJsonToDsonSpec: QuickSpec {
+class ComplexAtomFromJSONToDSONSpec: QuickSpec {
     override func spec() {
-        let messageParticle: MessageParticle = model(from: messageParticleWithoutPayloadJSON)
-        describe("MessageParticle JSON Deserialization") {
-            it("should serialize into correct DSON") {
-                let dson = try! messageParticle.toDSON()
-            expect(dson.hex).to(equal("bf6466726f6d5827040203785a9c259fde9991e44fa2fb0b5659f2a5781ac339076e2dbfef70528e4adf688879c1b96a73657269616c697a65723a4ac1ec9262746f5827040203785a9c259fde9991e44fa2fb0b5659f2a5781ac339076e2dbfef70528e4adf688879c1b96776657273696f6e1864ff"))
-            }
-        }
-    }
-}
-
-class MessageParticleFromJsonToDsonSpec: QuickSpec {
-    override func spec() {
-        let messageParticle: MessageParticle = model(from: messageParticleJSON)
-        describe("MessageParticle JSON Deserialization") {
-            it("should serialize into correct DSON") {
-                let dson = try! messageParticle.toDSON()
-                expect(dson.hex).to(equal("bf656279746573570152616469782e2e2e206a75737420696d6167696e65216466726f6d5827040203785a9c259fde9991e44fa2fb0b5659f2a5781ac339076e2dbfef70528e4adf688879c1b96a73657269616c697a65723a4ac1ec9262746f5827040203785a9c259fde9991e44fa2fb0b5659f2a5781ac339076e2dbfef70528e4adf688879c1b96776657273696f6e1864ff"))
-            }
-        }
-    }
-}
-
-private let messageParticleWithoutPayloadJSON = """
-{
-	"from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-	"serializer": -1254222995,
-	"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-	"version": 100
-}
-"""
-
-
-
-private let messageParticleJSON = """
-{
-	"bytes": ":byt:UmFkaXguLi4ganVzdCBpbWFnaW5lIQ==",
-	"from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-	"serializer": -1254222995,
-	"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-	"version": 100
-}
-"""
-
-class JsonToAtomToDsonSpec: QuickSpec {
-    override func spec() {
-        let atom: Atom = model(from: atomJson)
         describe("Atom JSON Deserialization") {
+            let atom: Atom = model(from: atomJson)
             it("should deserialize into an Atom") {
                 expect(atom.tokensParticles(spin: .up, type: .minted).first?.identifier.unique).to(equal("XRD"))
             }
             it("should serialize into correct DSON") {
                 let dson = try! atom.toDSON()
                 expect(dson.hex).to(equal(expectedDsonHex))
-//                expect(dson.base64).to(equal(expecteDsonBase64))
+                expect(dson.base64).to(equal(expecteDsonBase64))
             }
         }
     }
@@ -151,5 +106,4 @@ private let atomJson = """
     },
     "version": 100
 }
-
 """

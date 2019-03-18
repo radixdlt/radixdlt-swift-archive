@@ -123,9 +123,6 @@ public extension ResourceIdentifier {
             type.rawValue,
             unique
         ].joined(separator: ResourceIdentifier.separator)
-        print("🚎")
-        print(identifier)
-        print("🚎")
         return identifier
     }
 }

@@ -44,9 +44,11 @@ public extension ParticleGroup {
         if !spunParticles.isEmpty {
             properties.append(EncodableKeyValue(key: .spunParticles, value: spunParticles))
         }
+        
         if !metaData.isEmpty {
             properties.append(EncodableKeyValue(key: .metaData, value: metaData))
         }
+        
         return properties
     }
 }

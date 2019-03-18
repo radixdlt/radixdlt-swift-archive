@@ -16,15 +16,9 @@ class AtomJsonDeserializationTrivialSpec: QuickSpec {
         let json = """
 {
     "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
-    "signatures": {},
-    "metaData": {},
-    "particleGroups": [
-        {
-            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
-            "particles": [],
-            "metaData": {}
-        }
-    ]
+    "metaData": {
+        "timestamp": ":str:1488326400000"
+    }
 }
 """
         /// Scenario 1
@@ -32,19 +26,12 @@ class AtomJsonDeserializationTrivialSpec: QuickSpec {
         describe("JSON deserialization - Trivial Atom") {
             let atom: Atom = model(from: json)
             
-            it("should contain empty MetaData") {
-                expect(atom.metaData).to(beEmpty())
-            }
-            
             it("should contain empty Signatures") {
                 expect(atom.signatures).to(beEmpty())
             }
             
-            it("should contain one single ParticleGroup") {
-                expect(atom.particleGroups).to(haveCount(1))
-                expect(atom.particleGroups).to(containElementSatisfying({ particleGroup in
-                    return particleGroup.isEmpty
-                }, "which contains zero particles"))
+            it("should contain empty ParticleGroups") {
+                expect(atom.particleGroups).to(beEmpty())
             }
         }
     }

@@ -17,9 +17,15 @@ public protocol CBORDictionaryConvertible: CBORPropertyListConvertible,
 // MARK: - CBORPropertyListConvertible
 public extension CBORDictionaryConvertible where Key: StringRepresentable {
     func propertyList(output: DSONOutput) throws -> [CBOREncodableProperty] {
-        return try dictionary.map {
-            CBOREncodableProperty(key: $0.key.stringValue, encoded: try valueDSONEncode($0.value, output: output))
+        var properties = try dictionary.map {
+            CBOREncodableProperty(
+                key: $0.key.stringValue,
+                encoded: try valueDSONEncode($0.value, output: output),
+                output: output
+            )
         }
+        properties = properties.filter { $0.output >= output }
+        return properties
     }
 }
 

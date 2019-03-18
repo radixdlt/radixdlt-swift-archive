@@ -96,7 +96,9 @@ let jsonForAtomWith2ParticleGroups = """
     "particleGroups": [
         {
             "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
-            "metaData": {},
+            "metaData": {
+                "timestamp": ":str:1546300800",
+            },
             "particles": [
                 {
                     "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
@@ -132,7 +134,9 @@ let jsonForAtomWith2ParticleGroups = """
         },
         {
             "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
-            "metaData": {},
+            "metaData": {
+                "timestamp": ":str:1546300800",
+            },
             "particles": [
                 {
                     "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),

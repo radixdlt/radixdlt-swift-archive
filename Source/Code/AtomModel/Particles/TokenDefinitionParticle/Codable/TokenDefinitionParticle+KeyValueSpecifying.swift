@@ -12,13 +12,17 @@ import Foundation
 public extension TokenDefinitionParticle {
     
     public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-        return [
+        var properties: [EncodableKeyValue<CodingKeys>]  = [
             EncodableKeyValue(key: .symbol, value: symbol),
             EncodableKeyValue(key: .description, value: description),
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .permissions, value: permissions),
             EncodableKeyValue(key: .address, value: address),
             EncodableKeyValue(key: .name, value: name)
-        ].appending(EncodableKeyValue(key: .metaData, value: metaData), if: !metaData.isEmpty)
+        ]
+        if !metaData.isEmpty {
+            properties.append(EncodableKeyValue(key: .metaData, value: metaData))
+        }
+        return properties
     }
 }

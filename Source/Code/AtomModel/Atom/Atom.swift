@@ -15,12 +15,12 @@ public struct Atom: AtomConvertible, CBORStreamable {
     
     public let particleGroups: ParticleGroups
     public let signatures: Signatures
-    public let metaData: MetaData
+    public let metaData: ChronoMetaData
     
     public init(
-        particleGroups: ParticleGroups = [],
+        metaData: ChronoMetaData = .timeNow,
         signatures: Signatures = [:],
-        metaData: MetaData = [:]
+        particleGroups: ParticleGroups = []
     ) {
         self.particleGroups = particleGroups
         self.signatures = signatures
@@ -40,23 +40,21 @@ public extension Atom {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        particleGroups = try container.decode(ParticleGroups.self, forKey: .particleGroups)
+        particleGroups = try container.decodeIfPresent(ParticleGroups.self, forKey: .particleGroups) ?? []
         signatures = try container.decodeIfPresent(Signatures.self, forKey: .signatures) ?? [:]
-        metaData = try container.decodeIfPresent(MetaData.self, forKey: .metaData) ?? [:]
+        metaData = try container.decode(ChronoMetaData.self, forKey: .metaData)
     }
     
-    // swiftlint:disable:next function_body_length
     func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         var properties = [EncodableKeyValue<CodingKeys>]()
         if !particleGroups.isEmpty {
             properties.append(EncodableKeyValue(key: .particleGroups, value: particleGroups.particleGroups))
         }
         if !signatures.isEmpty {
-            properties.append(EncodableKeyValue(key: .signatures, value: signatures))
+            properties.append(EncodableKeyValue(key: .signatures, value: signatures, output: .all))
         }
-        if !metaData.isEmpty {
-            properties.append(EncodableKeyValue(key: .metaData, value: metaData))
-        }
+        
+        properties.append(EncodableKeyValue(key: .metaData, value: metaData))
         
         let atomSize = try AnyCBORPropertyListConvertible(keyValues: properties).toDSON().asData.length
         guard atomSize <= Atom.maxSize else {

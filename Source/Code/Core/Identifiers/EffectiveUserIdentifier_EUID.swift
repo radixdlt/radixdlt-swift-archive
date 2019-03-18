@@ -80,7 +80,8 @@ public extension EUID {
 // MARK: - StringRepresentable
 public extension EUID {
     var stringValue: String {
-        return value.toHexString().stringValue
+        // Yes MUST be lower case, since DSON encoding is case sensitive
+        return toHexString(uppercased: false).stringValue
     }
 }
 
