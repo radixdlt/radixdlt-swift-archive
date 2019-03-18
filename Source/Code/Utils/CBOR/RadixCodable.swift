@@ -14,13 +14,13 @@ public protocol RadixCodable: EncodableKeyValueListConvertible, AnyEncodableKeyV
 
 public extension RadixCodable {
     
-    func processProperties(_ properties: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
-        var properties = properties
-        properties.append(try AnyEncodableKeyValue(key: jsonKeyVersion, encodable: 100))
+    func process(keyValues: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
+        var keyValues = keyValues
+        keyValues.append(try AnyEncodableKeyValue(key: jsonKeyVersion, encodable: 100))
         if let modelTypeSpecyfing = self as? RadixModelTypeSpecifying {
-            properties.append(try AnyEncodableKeyValue(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.type.serializerId))
+            keyValues.append(try AnyEncodableKeyValue(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.type.serializerId))
         }
         
-        return properties.sorted(by: \.key)
+        return keyValues.sorted(by: \.key)
     }
 }

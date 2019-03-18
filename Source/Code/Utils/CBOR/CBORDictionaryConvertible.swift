@@ -22,22 +22,20 @@ public protocol CBORDictionaryConvertible:
 // MARK: - AnyEncodableKeyValueListConvertible
 public extension CBORDictionaryConvertible where Key: StringRepresentable {
     func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue] {
-        var properties = try dictionary.map {
+        return try dictionary.map {
             AnyEncodableKeyValue(
                 key: $0.key.stringValue,
                 encoded: try valueDSONEncode($0.value, output: output),
                 output: output
             )
-        }
-        properties = properties.filter { $0.output >= output }
-        return properties
+        }.filter { $0.output >= output }
     }
 }
 
 // MARK: - AnyEncodableKeyValuesProcessing
 public extension CBORDictionaryConvertible {
-    func processProperties(_ properties: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
-        return properties.sorted(by: \.key)
+    func process(keyValues: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
+        return keyValues.sorted(by: \.key)
     }
 }
 

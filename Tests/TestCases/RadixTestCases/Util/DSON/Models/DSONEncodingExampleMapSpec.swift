@@ -23,8 +23,8 @@ class DSONEncodingExampleMapSpec: QuickSpec {
             case b
         }
         
-        public func processProperties(_ properties: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
-            return properties
+        public func process(keyValues: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
+            return keyValues
         }
         
         public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {

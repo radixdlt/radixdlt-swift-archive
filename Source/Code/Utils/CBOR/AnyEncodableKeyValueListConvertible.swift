@@ -21,15 +21,16 @@ public extension AnyEncodableKeyValueListConvertible {
     /// [propertyName (CBOREncoded) + propertyValue (CBOREncoded)] for each property
     /// 0xff (encodeStreamEnd)
     func toDSON(output: DSONOutput = .all) throws -> DSON {
-        var properties = try anyEncodableKeyValues(output: output)
-        properties = properties.filter { $0.output >= output }
+        var keyValues = try anyEncodableKeyValues(output: output)
+        keyValues = keyValues.filter { $0.output >= output }
+        
         if let processor = self as? AnyEncodableKeyValuesProcessing {
-            properties = try processor.processProperties(properties)
+            keyValues = try processor.process(keyValues: keyValues)
         }
         
         return [
             CBOR.encodeMapStreamStart(),
-            properties.flatMap { $0.cborEncodedKey() + $0.dsonEncodedValue },
+            keyValues.flatMap { $0.cborEncodedKey() + $0.dsonEncodedValue },
             CBOR.encodeStreamEnd()
         ].flatMap { $0 }.asData
     }

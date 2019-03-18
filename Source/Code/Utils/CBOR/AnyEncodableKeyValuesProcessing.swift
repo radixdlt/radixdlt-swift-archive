@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol AnyEncodableKeyValuesProcessing {
-    func processProperties(_ properties: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue]
+    func process(keyValues: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue]
 }
