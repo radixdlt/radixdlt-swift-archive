@@ -20,7 +20,7 @@ public extension AnyEncodableKeyValueListConvertible {
     /// 0xbf (encodeMapStreamStart)
     /// [propertyName (CBOREncoded) + propertyValue (CBOREncoded)] for each property
     /// 0xff (encodeStreamEnd)
-    func toDSON(output: DSONOutput = .all) throws -> DSON {
+    func toDSON(output: DSONOutput = .default) throws -> DSON {
         var keyValues = try anyEncodableKeyValues(output: output)
         keyValues = keyValues.filter { $0.output >= output }
         

@@ -12,16 +12,22 @@ import Nimble
 
 class ComplexAtomFromJSONToDSONSpec: QuickSpec {
     override func spec() {
+        let atom: Atom = model(from: atomJson)
         describe("Atom JSON Deserialization") {
-            let atom: Atom = model(from: atomJson)
             print(atom)
             it("should deserialize into an Atom") {
                 expect(atom.particles(spin: .up, type: MintedTokenParticle.self).first?.identifier.unique).to(equal("XRD"))
             }
             it("should serialize into correct DSON") {
-                let dson = try! atom.toDSON()
+                let dson = try! atom.toDSON(output: .none)
                 expect(dson.hex).to(equal(expectedDsonHex))
                 expect(dson.base64).to(equal(expecteDsonBase64))
+            }
+        }
+        
+        describe("Radix Hash") {
+            it("should work") {
+                expect(atom.radixHash.hex).to(equal("f3904297efea9b54d6484bf4605145257078967a7cefde789b62176299831d45"))
             }
         }
     }

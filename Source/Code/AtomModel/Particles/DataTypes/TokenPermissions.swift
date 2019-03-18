@@ -63,4 +63,6 @@ public extension TokenPermissions {
     static var all: TokenPermissions {
         return [.mint: .all, .burn: .all, .transfer: .all]
     }
+    
+    static var `default`: TokenPermissions = .all
 }

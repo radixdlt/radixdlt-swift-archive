@@ -20,7 +20,7 @@ public struct EncodableKeyValue<Key: CodingKey> {
     init<Value>(
         key: Key,
         value: Value,
-        output: DSONOutput = .all,
+        output: DSONOutput = .default,
         jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
     ) where Value: Encodable & DSONEncodable {
         self.key = key.stringValue
@@ -47,7 +47,7 @@ public extension EncodableKeyValue {
         key: Key,
         nonEmpty lengthMeasurable: ConditionalValue,
         value: (ConditionalValue) -> Value,
-        output: DSONOutput = .all,
+        output: DSONOutput = .default,
         jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
         ) where ConditionalValue: LengthMeasurable, Value: Encodable & DSONEncodable {
         guard lengthMeasurable.length > 0 else {
@@ -59,7 +59,7 @@ public extension EncodableKeyValue {
     init?<Value>(
         key: Key,
         nonEmpty lengthMeasurable: Value,
-        output: DSONOutput = .all,
+        output: DSONOutput = .default,
         jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
         ) where Value: Encodable & DSONEncodable & LengthMeasurable {
         guard lengthMeasurable.length > 0 else {

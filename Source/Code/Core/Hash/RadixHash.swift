@@ -22,7 +22,7 @@ public struct RadixHash:
     private let data: Data
     
     // MARK: - Designated initializer
-    public init(unhashedData: Data, hashedBy hasher: Hashing) {
+    public init(unhashedData: Data, hashedBy hasher: Hashing = Sha256TwiceHasher()) {
         self.data = hasher.hash(data: unhashedData)
     }
 }

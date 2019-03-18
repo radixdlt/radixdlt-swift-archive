@@ -19,7 +19,7 @@ public struct AnyEncodableKeyValue {
         self.output = output
     }
     
-    init<Value>(key: String, encodable: Value, output: DSONOutput = .all) throws where Value: DSONEncodable {
+    init<Value>(key: String, encodable: Value, output: DSONOutput = .default) throws where Value: DSONEncodable {
         self.init(key: key, encoded: try encodable.toDSON(output: output), output: output)
     }
     

@@ -28,6 +28,12 @@ class AtomWithTrivialMetaDataDsonEncodingSpec: QuickSpec {
                 
             }
         }
+        
+        describe("Radix Hash") {
+            it("should work") {
+                expect(atomInCode.radixHash.hex).to(equal("f26d420d0a2f24d92c4bb1e7eeab587a403210b636b2ff936e6b9cc97ac6fa60"))
+            }
+        }
     }
 }
 
