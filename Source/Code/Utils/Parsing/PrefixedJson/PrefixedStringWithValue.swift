@@ -8,10 +8,23 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// Small container used for JSON encoding/decoding. The JSON received
+/// from the Radix API contains type encoded as strings with some prefix, giving information to the Decoder on how it should be decoded. An example of such a string fetched from the API is:
+/// ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor", which is how addresses are sent.
+/// This type holds the Swift enum type translated from ":adr: into JSONPrefix.addressBase58 and
+/// the value "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor", being a string that should be decoded into a Base58String type.
+///
+/// - seeAlso:
+/// `JSONPrefix`
+///
+/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding
+///
 public struct PrefixedStringWithValue:
     StringRepresentable,
     Decodable {
+// swiftlint:enable colon
 
     public let stringValue: String
     public let jsonPrefix: JSONPrefix

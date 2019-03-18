@@ -8,11 +8,21 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// A way of sending, receiving and storing data from a verified source via a Message Particle type. Message Particle instances may contain arbitrary byte data with arbitrary string-based key-value metadata.
+///
+/// Sending, storing and fetching data in some form is required for virtually every application - from everyday instant messaging to complex supply chain management.
+/// A decentralised ledger needs to support simple and safe mechanisms for data management to be a viable platforms for decentralised applications (or DApps).
+/// For a formal definition read [RIP - Messages][1].
+///
+/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/412844083/RIP-3+Messages
+///
 public struct MessageParticle:
     ParticleModelConvertible,
     Accountable,
     CBORStreamable {
+// swiftlint:enable colon
     
     public static let type = RadixModelType.messageParticle
     

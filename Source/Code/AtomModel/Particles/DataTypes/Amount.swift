@@ -8,14 +8,16 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// The strictly positive UInt256 integer representing some amount, e.g. amount of tokens to transfer.
 public struct Amount:
     PrefixedJsonCodable,
     StringRepresentable,
     CBORDataConvertible,
     Equatable,
     ExpressibleByIntegerLiteral {
-    
+// swiftlint:enable colon
     public static let subunitsDenominatorDecimalExponent: Int = 18
     public static let subunitsDenominator = BigUnsignedInt(10).power(Amount.subunitsDenominatorDecimalExponent)
 

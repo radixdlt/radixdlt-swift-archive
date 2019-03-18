@@ -8,12 +8,15 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// A subset of `ResourceIdentifier` which `type == .tokens`
 public struct TokenDefinitionIdentifier:
     PrefixedJsonCodableByProxy,
     Identifiable,
     Hashable,
     CustomStringConvertible {
+// swiftlint:enable colon
     
     public let address: Address
     public let symbol: Symbol

@@ -8,7 +8,9 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// String representation of a Base58 string which is impossible to instantiatie with invalid values.
 public struct Base58String:
     PrefixedJsonCodable,
     StringConvertible,
@@ -16,6 +18,7 @@ public struct Base58String:
     CharacterSetSpecifying,
     DataConvertible,
     DataInitializable {
+// swiftlint:enable colon
 
     public static var allowedCharacters = CharacterSet.base58
     

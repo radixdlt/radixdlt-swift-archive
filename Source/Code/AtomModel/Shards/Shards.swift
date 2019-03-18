@@ -10,12 +10,13 @@ import Foundation
 
 public typealias Shard = Int64
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+/// Represents an interval of Radix shards
 public struct Shards:
     CBORStreamable,
     RangeExpression,
     Codable {
-    
+// swiftlint:enable colon
     public typealias Bound = Shard
     
     private let range: Range<Bound>

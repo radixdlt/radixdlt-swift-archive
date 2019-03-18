@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol ArrayDecodable: Decodable, ArrayConvertible where Element: Decodable {}
+public protocol ArrayDecodable: Decodable, ArrayConvertible, ArrayInitializable where Element: Decodable {}
 
 public extension ArrayDecodable {
     init(from decoder: Decoder) throws {
@@ -17,7 +17,7 @@ public extension ArrayDecodable {
     }
 }
 
-public protocol ArrayEncodable: Encodable, ArrayDecodable where Element: Encodable {}
+public protocol ArrayEncodable: Encodable, ArrayConvertible, ArrayInitializable where Element: Encodable {}
 
 public typealias ArrayCodable = ArrayDecodable & ArrayEncodable
 

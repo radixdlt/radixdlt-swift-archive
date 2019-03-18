@@ -8,13 +8,16 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// An ECDSA signature
 public struct Signatures:
     CBORDictionaryConvertible,
     Equatable,
     ExpressibleByDictionaryLiteral,
     Collection,
     Codable {
+// swiftlint:enable colon
     
     public typealias Key = EUID
     public typealias Value = Signature

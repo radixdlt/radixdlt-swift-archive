@@ -8,11 +8,24 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// The permissions of a Token control who can mint, transfer and burn a Tokens instances under which circumstances.
+///
+/// For example, typically the creator of a Token restricts minting and burning of their Token to either just themselves for multi-issuance supply or no-one for single-issuance supply.
+/// By setting permission restrictions for actions, the Token creator can fine-tune access and usage restrictions to their token. This enables basic economic properties out of the box (e.g. everyone can burn, no-one can trade).
+/// The available permissions can be found in the `TokenPermission` enum. For the formal definition read [RIP - Tokens][1].
+///
+/// - seeAlso:
+/// `TokenPermission`
+///
+/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
+///
 public struct TokenPermissions:
     DictionaryCodable,
     CBORDictionaryConvertible,
     Equatable {
+// swiftlint:enable colon
     
     public typealias Key = TokenAction
     public typealias Value = TokenPermission

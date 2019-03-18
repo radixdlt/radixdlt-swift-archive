@@ -14,9 +14,7 @@ import Quick
 /// DSON encoding of example map from: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding
 class DSONEncodingExampleMapSpec: QuickSpec {
     
-    
-    // swiftlint:disable:next colon
-public struct ExampleMap: CBORStreamable {
+    public struct ExampleMap: CBORStreamable {
         let a: Int = 1
         let b: Int = 2
         
@@ -36,7 +34,6 @@ public struct ExampleMap: CBORStreamable {
             ]
         }
     }
-    
     
     override func spec() {
         let exampleMap = ExampleMap()

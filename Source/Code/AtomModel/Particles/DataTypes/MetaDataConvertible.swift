@@ -8,7 +8,9 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// Shared protocol for MetaData and ChronoMetaData, some dictionary having `MetaDataKey` as key.
 public protocol MetaDataConvertible:
     DictionaryCodable,
     CBORDictionaryConvertible,
@@ -16,6 +18,8 @@ public protocol MetaDataConvertible:
 where
     Key == MetaDataKey,
     Value == String {}
+
+// swiftlint:enable colon
 
 public extension MetaDataConvertible {
     var timestampString: String {

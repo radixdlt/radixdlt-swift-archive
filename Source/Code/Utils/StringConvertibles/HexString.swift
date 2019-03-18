@@ -8,7 +8,9 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// String representation of a Hex string which is impossible to instantiatie with invalid values.
 public struct HexString:
     PrefixedJsonCodable,
     StringConvertible,
@@ -16,6 +18,7 @@ public struct HexString:
     CharacterSetSpecifying,
     DataConvertible,
     DataInitializable {
+// swiftlint:enable colon
     
     public static var allowedCharacters = CharacterSet.hexadecimal
     

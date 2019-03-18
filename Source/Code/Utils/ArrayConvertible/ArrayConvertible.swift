@@ -8,27 +8,8 @@
 
 import Foundation
 
-public protocol ArrayConvertible: ExpressibleByArrayLiteral, Collection {
+public protocol ArrayConvertible: Collection {
     var elements: [Element] { get }
-    init(elements: [Element])
-}
-
-// MARK: - Convenience Init
-public extension ArrayConvertible {
-    init(_ elements: [Element]) {
-        self.init(elements: elements)
-    }
-    
-    init(_ elements: Element...) {
-        self.init(elements: elements)
-    }
-}
-
-// MARK: - ExpressibleByArrayLiteral
-public extension ArrayConvertible {
-    public init(arrayLiteral elements: Element...) {
-        self.init(elements: elements)
-    }
 }
 
 // MARK: - Collection

@@ -8,11 +8,14 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// Small container for a `Particle` and its `Spin`. The reason why we do not want to add the `Spin` as a property on the Particle itself is that it would change the Hash of the particle.
 public struct SpunParticle:
     RadixModelTypeStaticSpecifying,
     CBORStreamable,
     Codable {
+// swiftlint:enable colon
 
     public static let type = RadixModelType.spunParticle
 

@@ -191,6 +191,10 @@
 		E6D4B339223F9DB2004FC83A /* KeyValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B338223F9DB2004FC83A /* KeyValued.swift */; };
 		E6D4B33B223F9DD2004FC83A /* TimeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */; };
 		E6D4B33D223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B33C223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift */; };
+		E6D4B33F223FAC72004FC83A /* Hashing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B33E223FAC72004FC83A /* Hashing.swift */; };
+		E6D4B341223FAC7F004FC83A /* Sha256Hasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B340223FAC7F004FC83A /* Sha256Hasher.swift */; };
+		E6D4B343223FAC8B004FC83A /* Sha256TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B342223FAC8B004FC83A /* Sha256TwiceHasher.swift */; };
+		E6D4B345223FAF52004FC83A /* ArrayInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B344223FAF52004FC83A /* ArrayInitializable.swift */; };
 		E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2B21F7CE9C00654105 /* Node.swift */; };
 		E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */; };
 		E6ED1A3421F879F600654105 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3321F879F600654105 /* HashTests.swift */; };
@@ -438,6 +442,10 @@
 		E6D4B338223F9DB2004FC83A /* KeyValued.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValued.swift; sourceTree = "<group>"; };
 		E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeConverter.swift; sourceTree = "<group>"; };
 		E6D4B33C223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+ExpressibleByStringLiteral.swift"; sourceTree = "<group>"; };
+		E6D4B33E223FAC72004FC83A /* Hashing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hashing.swift; sourceTree = "<group>"; };
+		E6D4B340223FAC7F004FC83A /* Sha256Hasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sha256Hasher.swift; sourceTree = "<group>"; };
+		E6D4B342223FAC8B004FC83A /* Sha256TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sha256TwiceHasher.swift; sourceTree = "<group>"; };
+		E6D4B344223FAF52004FC83A /* ArrayInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayInitializable.swift; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6ED1A2B21F7CE9C00654105 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleGroups.swift; sourceTree = "<group>"; };
@@ -795,6 +803,7 @@
 			children = (
 				E6611F3B2225B55C00AD2F83 /* ArrayConvertible.swift */,
 				E6611F3D2225B56A00AD2F83 /* ArrayDecodable.swift */,
+				E6D4B344223FAF52004FC83A /* ArrayInitializable.swift */,
 			);
 			path = ArrayConvertible;
 			sourceTree = "<group>";
@@ -1272,6 +1281,9 @@
 			isa = PBXGroup;
 			children = (
 				E6CEE77021F7A64900D745EC /* RadixHash.swift */,
+				E6D4B33E223FAC72004FC83A /* Hashing.swift */,
+				E6D4B340223FAC7F004FC83A /* Sha256Hasher.swift */,
+				E6D4B342223FAC8B004FC83A /* Sha256TwiceHasher.swift */,
 				E6CEE77221F7A65F00D745EC /* RadixHashable.swift */,
 			);
 			path = Hash;
@@ -1745,6 +1757,7 @@
 				E6A4ABFD2223E4DA006C5CA8 /* PrefixedJsonDecodableByProxy.swift in Sources */,
 				E6611F3E2225B56A00AD2F83 /* ArrayDecodable.swift in Sources */,
 				E6CEE74621F6381E00D745EC /* Signatures.swift in Sources */,
+				E6D4B345223FAF52004FC83A /* ArrayInitializable.swift in Sources */,
 				E672573721FB8D8E00BE3B4C /* JSONPrefix.swift in Sources */,
 				E631DAB321F24E280063F632 /* EncryptedPrivateKey.swift in Sources */,
 				E672573C21FB8DB900BE3B4C /* String+Subscript.swift in Sources */,
@@ -1773,6 +1786,7 @@
 				E6A4AB7C221BF7B3006C5CA8 /* Accountable.swift in Sources */,
 				E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */,
 				E6611F372225B2D600AD2F83 /* DictionaryDecodable.swift in Sources */,
+				E6D4B341223FAC7F004FC83A /* Sha256Hasher.swift in Sources */,
 				E693DABA2232B55F003720C2 /* PrefixedJsonEncodable.swift in Sources */,
 				E69AB7312237B9A2006153DD /* CBORStringConvertible.swift in Sources */,
 				E6ED1A4E21F8E51A00654105 /* AtomObservation.swift in Sources */,
@@ -1794,6 +1808,7 @@
 				E6A4AB96221D4680006C5CA8 /* Description.swift in Sources */,
 				E6A4AB9A221D508D006C5CA8 /* Nonce.swift in Sources */,
 				E6A4AB9E221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift in Sources */,
+				E6D4B343223FAC8B004FC83A /* Sha256TwiceHasher.swift in Sources */,
 				E69AB72F2237B774006153DD /* EncodableKeyValue.swift in Sources */,
 				E6ED1A6B21F8E6E900654105 /* APIClient.swift in Sources */,
 				E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */,
@@ -1843,6 +1858,7 @@
 				E68B5C0821FBD46F00BEB049 /* Amount.swift in Sources */,
 				E6A4AB9C221D5098006C5CA8 /* Planck.swift in Sources */,
 				E672573921FB8D9A00BE3B4C /* PrefixedStringWithValue.swift in Sources */,
+				E6D4B33F223FAC72004FC83A /* Hashing.swift in Sources */,
 				E6ED1A6F21F8E73D00654105 /* DefaultAtomPuller.swift in Sources */,
 				E6611F55222984DE00AD2F83 /* ParticleModelConvertible.swift in Sources */,
 				E6A4AB82221BF92A006C5CA8 /* MetaData.swift in Sources */,

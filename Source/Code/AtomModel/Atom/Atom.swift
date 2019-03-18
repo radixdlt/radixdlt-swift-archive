@@ -8,10 +8,17 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+/// The packaging of any transaction to the Radix Ledger, the Atom is the highest level model in the [Atom Model][1], consisting of a list of ParticleGroups, which in turn consists of a list of SpunParticles and metadata.
+///
+/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/404029477/RIP-1+The+Atom+Model
+/// - seeAlso:
+/// `ParticleGroup`
+///
 public struct Atom:
     AtomConvertible,
     CBORStreamable {
+// swiftlint:enable colon
     
     public static let type = RadixModelType.atom
     

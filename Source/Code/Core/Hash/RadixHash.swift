@@ -9,52 +9,29 @@
 import Foundation
 import CryptoSwift
 
-public protocol Hashing {
-    func hash(data: Data) -> Data
-}
+// swiftlint:disable colon
 
-public struct Sha256Hasher: Hashing {
-    public init() {}
-    public func hash(data: Data) -> Data {
-        return data.sha256()
-    }
-}
-
-public struct Sha256TwiceHasher: Hashing {
-    public init() {}
-    public func hash(data: Data) -> Data {
-        return data.sha256().sha256()
-    }
-}
-
-// swiftlint:disable:next colon
+/// Radix hash relies on the DSON encoding of a type.
 public struct RadixHash:
     DataConvertible,
+    ArrayConvertible,
     Hashable,
-    CustomStringConvertible,
-    Collection {
+    CustomStringConvertible {
+// swiftlint:enable colon
 
     private let data: Data
+    
+    // MARK: - Designated initializer
     public init(unhashedData: Data, hashedBy hasher: Hashing) {
         self.data = hasher.hash(data: unhashedData)
     }
 }
 
-// MARK: - Collection
+// MARK: - ArrayConvertible
 public extension RadixHash {
     public typealias Element = Byte
-    typealias Index = Array<Element>.Index
-    var startIndex: Index {
-        return data.startIndex
-    }
-    var endIndex: Index {
-        return data.endIndex
-    }
-    subscript(position: Index) -> Element {
-        return data[position]
-    }
-    func index(after index: Index) -> Index {
-        return data.index(after: index)
+    var elements: [Element] {
+        return data.bytes
     }
 }
 

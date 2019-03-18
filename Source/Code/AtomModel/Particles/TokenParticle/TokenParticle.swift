@@ -8,7 +8,9 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// Wrapper for `BurnedTokensParticle`, `MintedTokensParticle` and `TransferredTokensParticle`
 public struct TokenParticle:
     ParticleConvertible,
     Ownable,
@@ -16,6 +18,7 @@ public struct TokenParticle:
     Identifiable,
     CBORStreamable,
     RadixModelTypeSpecifying {
+// swiftlint:enable colon
 
     public let type: RadixModelType
     public let tokenType: TokenType

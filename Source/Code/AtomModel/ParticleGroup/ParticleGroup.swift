@@ -8,12 +8,13 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+/// Grouping of Particles relating to each other also holding some metadata
 public struct ParticleGroup:
     CBORStreamable,
     ArrayConvertible,
     RadixModelTypeStaticSpecifying {
-    
+ // swiftlint:enable colon
     public static let type = RadixModelType.particleGroup
     
     public let spunParticles: [SpunParticle]

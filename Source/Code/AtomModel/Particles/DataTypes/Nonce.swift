@@ -8,12 +8,15 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// A random value between [Int.min...Int.max]
 public struct Nonce:
     CBORConvertible,
     Codable,
     Equatable,
     ExpressibleByIntegerLiteral {
+// swiftlint:enable colon
     
     public typealias Value = Int64
     public let value: Value

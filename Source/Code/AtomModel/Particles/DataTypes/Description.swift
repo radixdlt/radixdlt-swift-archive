@@ -8,12 +8,22 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// The description of a specific Radix Token (e.g. "XRD"). Constrained to a specific length.
+/// For the formal definition of these constraints read [RIP - Tokens][1].
+///
+/// - seeAlso:
+/// `TokenDefinitionParticle`
+///
+/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
+///
 public struct Description:
     PrefixedJsonCodable,
     CBORStringConvertible,
     MinLengthSpecifying,
     MaxLengthSpecifying {
+// swiftlint:enable colon
     
     public static let minLength = 8
     public static let maxLength = 200

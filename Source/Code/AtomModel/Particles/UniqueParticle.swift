@@ -8,10 +8,13 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// A representation of something unique.
 public struct UniqueParticle:
     ParticleModelConvertible,
     CBORStreamable {
+// swiftlint:enable colon
 
     public static let type = RadixModelType.uniqueParticle
     public let address: Address

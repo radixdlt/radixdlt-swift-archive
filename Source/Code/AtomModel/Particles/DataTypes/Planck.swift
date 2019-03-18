@@ -8,12 +8,15 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// A seemlingly random, strict positive integer, based on current time.
 public struct Planck:
     CBORConvertible,
     Codable,
     Equatable,
     ExpressibleByIntegerLiteral {
+// swiftlint:enable colon
     
     public typealias Value = UInt64
     let value: Value

@@ -8,7 +8,9 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// String representation of a Base64 string which is impossible to instantiatie with invalid values.
 public struct Base64String:
     PrefixedJsonCodable,
     StringConvertible,
@@ -17,6 +19,7 @@ public struct Base64String:
     DataInitializable,
     RequiringThatLengthIsMultipleOfN,
     CharacterSetSpecifying {
+// swiftlint:enable colon
     
     public static let jsonPrefix: JSONPrefix = .bytesBase64
     

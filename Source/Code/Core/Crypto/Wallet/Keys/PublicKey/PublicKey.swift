@@ -8,12 +8,15 @@
 
 import Foundation
 
-// swiftlint:disable:next colon
+// swiftlint:disable colon
+
+/// An ECC Public Key storing compressed key on binary format.
 public struct PublicKey:
     PrefixedJsonCodableByProxy,
     CBORDataConvertible,
     DataInitializable,
     Hashable {
+// swiftlint:enable colon
     
     public let compressedData: Data
     public init(data: Data) throws {
