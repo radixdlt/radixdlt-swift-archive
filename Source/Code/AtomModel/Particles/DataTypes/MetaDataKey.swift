@@ -8,7 +8,7 @@
 
 import Foundation
 
-//swiftlint:disable colon
+// swiftlint:disable colon
 
 /// Open enum
 public struct MetaDataKey:
@@ -18,7 +18,7 @@ public struct MetaDataKey:
     Hashable,
     CustomStringConvertible {
 
-//swiftlint:enable colon
+// swiftlint:enable colon
 
     public let key: String
     

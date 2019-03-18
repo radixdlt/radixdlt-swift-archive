@@ -187,6 +187,10 @@
 		E6D4B32E223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B32D223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift */; };
 		E6D4B331223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */; };
 		E6D4B335223F9A2E004FC83A /* MetaDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B334223F9A2E004FC83A /* MetaDataConvertible.swift */; };
+		E6D4B337223F9D99004FC83A /* ChronoMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B336223F9D99004FC83A /* ChronoMetaData.swift */; };
+		E6D4B339223F9DB2004FC83A /* KeyValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B338223F9DB2004FC83A /* KeyValued.swift */; };
+		E6D4B33B223F9DD2004FC83A /* TimeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */; };
+		E6D4B33D223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B33C223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift */; };
 		E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2B21F7CE9C00654105 /* Node.swift */; };
 		E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */; };
 		E6ED1A3421F879F600654105 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3321F879F600654105 /* HashTests.swift */; };
@@ -430,6 +434,10 @@
 		E6D4B32D223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleAtomFromJSONToDSON.swift; sourceTree = "<group>"; };
 		E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigUnsignedIntHexConversionTests.swift; sourceTree = "<group>"; };
 		E6D4B334223F9A2E004FC83A /* MetaDataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataConvertible.swift; sourceTree = "<group>"; };
+		E6D4B336223F9D99004FC83A /* ChronoMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronoMetaData.swift; sourceTree = "<group>"; };
+		E6D4B338223F9DB2004FC83A /* KeyValued.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValued.swift; sourceTree = "<group>"; };
+		E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeConverter.swift; sourceTree = "<group>"; };
+		E6D4B33C223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+ExpressibleByStringLiteral.swift"; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6ED1A2B21F7CE9C00654105 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleGroups.swift; sourceTree = "<group>"; };
@@ -827,6 +835,8 @@
 				E68B5C0721FBD46F00BEB049 /* Amount.swift */,
 				E68B5C0921FBD8B000BEB049 /* MetaDataKey.swift */,
 				E6A4AB81221BF92A006C5CA8 /* MetaData.swift */,
+				E6D4B338223F9DB2004FC83A /* KeyValued.swift */,
+				E6D4B336223F9D99004FC83A /* ChronoMetaData.swift */,
 				E6D4B334223F9A2E004FC83A /* MetaDataConvertible.swift */,
 				E67A714721FBAEF500F4B2D0 /* Granularity.swift */,
 				E6A4AB9D221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift */,
@@ -1000,6 +1010,7 @@
 			isa = PBXGroup;
 			children = (
 				E6A4AB8A221C0709006C5CA8 /* DateFormatter */,
+				E6D4B33C223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift */,
 			);
 			path = Date;
 			sourceTree = "<group>";
@@ -1513,6 +1524,7 @@
 				E6611F4E2229849000AD2F83 /* AtomModelDecodingError.swift */,
 				E6611F5622298F7600AD2F83 /* RadixJSONDecoder.swift */,
 				E6611F5822298F9000AD2F83 /* RadixJSONEncoder.swift */,
+				E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */,
 			);
 			path = Parsing;
 			sourceTree = "<group>";
@@ -1756,6 +1768,7 @@
 				E6CEE70721F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift in Sources */,
 				E6CEE75E21F7A42900D745EC /* CharacterSetSpecifying.swift in Sources */,
 				E6A4AC0B22243C8F006C5CA8 /* LowerBound.swift in Sources */,
+				E6D4B339223F9DB2004FC83A /* KeyValued.swift in Sources */,
 				E6CEE71321F5B3C000D745EC /* RandomData.swift in Sources */,
 				E6A4AB7C221BF7B3006C5CA8 /* Accountable.swift in Sources */,
 				E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */,
@@ -1791,6 +1804,7 @@
 				E631DAD121F25A6B0063F632 /* Mnemonic+Strength.swift in Sources */,
 				E6CEE75921F7A3F700D745EC /* StringConvertible.swift in Sources */,
 				E69AB74A2239117A006153DD /* CBORDictionaryConvertible.swift in Sources */,
+				E6D4B33D223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift in Sources */,
 				E6ED1A4C21F8ACB700654105 /* Int+DataConvertible.swift in Sources */,
 				E6CEE71921F5B4B900D745EC /* Atom.swift in Sources */,
 				E631DAD321F25AA00063F632 /* Mnemonic+Language.swift in Sources */,
@@ -1818,6 +1832,7 @@
 				E6611F44222696E900AD2F83 /* BigInt_Extension.swift in Sources */,
 				E6CEE76C21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift in Sources */,
 				E6CEE72321F5D44300D745EC /* Address.swift in Sources */,
+				E6D4B337223F9D99004FC83A /* ChronoMetaData.swift in Sources */,
 				E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */,
 				E631DAA321F249910063F632 /* PrivateKey.swift in Sources */,
 				E6ED1A8121F8E87400654105 /* Atom+Sequence.swift in Sources */,
@@ -1848,6 +1863,7 @@
 				E6ED1A8921F9F5BC00654105 /* UniqueParticle.swift in Sources */,
 				E6A4AB90221C3F64006C5CA8 /* TokenDefinitionParticle.swift in Sources */,
 				E6CEE75121F6391300D745EC /* SpunParticle.swift in Sources */,
+				E6D4B33B223F9DD2004FC83A /* TimeConverter.swift in Sources */,
 				E631DACF21F25A570063F632 /* Mnemonic+Word.swift in Sources */,
 				E6A4AB86221BFCFC006C5CA8 /* Fungible.swift in Sources */,
 				E68B5C0621FBD36400BEB049 /* TokenAction.swift in Sources */,

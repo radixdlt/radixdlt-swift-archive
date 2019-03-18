@@ -13,7 +13,7 @@ public extension Secp256k1 {
     static let order = BigUnsignedInt(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141")!
 }
 
-//swiftlint:disable colon
+// swiftlint:disable colon
 
 /// ECDSA Signature consisting of two BigIntegers "R" and "S"
 /// Read more: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
@@ -22,7 +22,7 @@ public struct Signature:
     RadixModelTypeStaticSpecifying,
     CBORStreamable,
     Equatable {
-//swiftlint:enable colon
+// swiftlint:enable colon
     
     public static let type = RadixModelType.signature
     

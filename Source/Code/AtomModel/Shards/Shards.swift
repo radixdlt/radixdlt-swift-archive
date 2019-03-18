@@ -10,7 +10,7 @@ import Foundation
 
 public typealias Shard = Int64
 
-//swiftlint:disable:next colon
+// swiftlint:disable:next colon
 public struct Shards:
     CBORStreamable,
     RangeExpression,

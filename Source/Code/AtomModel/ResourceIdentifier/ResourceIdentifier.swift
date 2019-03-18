@@ -8,7 +8,7 @@
 
 import Foundation
 
-//swiftlint:disable colon
+// swiftlint:disable colon
 
 /// A Radix resource identifier is a human readable index into the Ledger which points to a unique UP particle.
 /// On format: `/:address/:type/:unique`
@@ -17,7 +17,7 @@ public struct ResourceIdentifier:
     StringRepresentable,
     DSONPrefixedDataConvertible,
     Equatable {
-//swiftlint:enable colon
+// swiftlint:enable colon
 
     public let address: Address
     public let type: ResourceType

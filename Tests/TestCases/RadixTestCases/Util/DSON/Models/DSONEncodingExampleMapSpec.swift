@@ -15,7 +15,7 @@ import Quick
 class DSONEncodingExampleMapSpec: QuickSpec {
     
     
-    //swiftlint:disable:next colon
+    // swiftlint:disable:next colon
 public struct ExampleMap: CBORStreamable {
         let a: Int = 1
         let b: Int = 2

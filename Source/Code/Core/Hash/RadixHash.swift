@@ -27,7 +27,7 @@ public struct Sha256TwiceHasher: Hashing {
     }
 }
 
-//swiftlint:disable:next colon
+// swiftlint:disable:next colon
 public struct RadixHash:
     DataConvertible,
     Hashable,

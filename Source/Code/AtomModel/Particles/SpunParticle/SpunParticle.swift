@@ -8,7 +8,7 @@
 
 import Foundation
 
-//swiftlint:disable:next colon
+// swiftlint:disable:next colon
 public struct SpunParticle:
     RadixModelTypeStaticSpecifying,
     CBORStreamable,
