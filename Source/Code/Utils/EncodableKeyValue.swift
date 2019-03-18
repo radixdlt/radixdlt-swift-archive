@@ -61,6 +61,31 @@ public struct EncodableKeyValue<Key: CodingKey> {
 }
 
 public extension EncodableKeyValue {
+    init?<ConditionalValue, Value>(
+        key: Key,
+        nonEmpty lengthMeasurable: ConditionalValue,
+        value: (ConditionalValue) -> Value,
+        output: DSONOutput = .all,
+        jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
+        ) where ConditionalValue: LengthMeasurable, Value: Encodable & DSONEncodable {
+        guard lengthMeasurable.length > 0 else {
+            return nil
+        }
+        self.init(key: key, value: value(lengthMeasurable), output: output, jsonEncoding: jsonEncoding)
+    }
+    
+    init?<Value>(
+        key: Key,
+        nonEmpty lengthMeasurable: Value,
+        output: DSONOutput = .all,
+        jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
+        ) where Value: Encodable & DSONEncodable & LengthMeasurable {
+        guard lengthMeasurable.length > 0 else {
+            return nil
+        }
+        self.init(key: key, value: lengthMeasurable, output: output, jsonEncoding: jsonEncoding)
+    }
+    
     func toCBOREncodableProperty() throws -> CBOREncodableProperty {
         return CBOREncodableProperty(key: key, encoded: try _dsonEncode(), output: output)
     }

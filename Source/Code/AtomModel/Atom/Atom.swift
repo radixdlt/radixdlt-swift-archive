@@ -75,7 +75,7 @@ public extension Atom {
         
         return properties
     }
-    
+        
     static func == (lhs: Atom, rhs: Atom) -> Bool {
         return lhs.radixHash == rhs.radixHash
     }

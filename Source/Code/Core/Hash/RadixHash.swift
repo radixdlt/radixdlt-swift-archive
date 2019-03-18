@@ -27,6 +27,13 @@ public struct RadixHash:
     }
 }
 
+// MARK: - LengthMeasurable
+public extension RadixHash {
+    var length: Int {
+        return bytes.length
+    }
+}
+
 // MARK: - ArrayConvertible
 public extension RadixHash {
     public typealias Element = Byte

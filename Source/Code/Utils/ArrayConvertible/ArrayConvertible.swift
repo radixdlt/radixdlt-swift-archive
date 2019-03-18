@@ -8,8 +8,21 @@
 
 import Foundation
 
-public protocol ArrayConvertible: Collection {
+// swiftlint:disable colon
+
+/// An Array-like type
+public protocol ArrayConvertible:
+    LengthMeasurable,
+    Collection {
+// swiftlint:enable colon
     var elements: [Element] { get }
+}
+
+// MARK: - LengthMeasurable Conformance
+public extension ArrayConvertible {
+    var length: Int {
+        return elements.count
+    }
 }
 
 // MARK: - Collection

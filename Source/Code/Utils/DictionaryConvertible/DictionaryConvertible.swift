@@ -8,7 +8,14 @@
 
 import Foundation
 
-public protocol DictionaryConvertible: Collection, KeyValued {
+// swiftlint:disable colon
+
+/// A KeyValue-d Collection
+public protocol DictionaryConvertible:
+    KeyValued,
+    LengthMeasurable,
+    Collection {
+// swiftlint:enable colon
     typealias Map = [Key: Value]
     var dictionary: Map { get }
     init(dictionary: Map)
@@ -16,15 +23,24 @@ public protocol DictionaryConvertible: Collection, KeyValued {
     subscript(key: Key) -> Value? { get }
 }
 
-public extension DictionaryConvertible {
-    var keys: Dictionary<Key, Value>.Keys { return dictionary.keys }
-    var values: Dictionary<Key, Value>.Values { return dictionary.values }
-}
-
+// MARK: Default Implementation
 public extension DictionaryConvertible {
     init(validate valid: Map) throws {
         self.init(dictionary: valid)
     }
+}
+
+// MARK: - LengthMeasurable Conformance
+public extension DictionaryConvertible {
+    var length: Int {
+        return keys.count
+    }
+}
+
+// MARK: - KeyValued Conformance
+public extension DictionaryConvertible {
+    var keys: Dictionary<Key, Value>.Keys { return dictionary.keys }
+    var values: Dictionary<Key, Value>.Values { return dictionary.values }
 }
 
 // MARK: - ExpressibleByDictionaryLiteral

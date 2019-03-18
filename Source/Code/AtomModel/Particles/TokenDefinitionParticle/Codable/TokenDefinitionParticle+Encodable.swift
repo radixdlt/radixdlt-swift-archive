@@ -8,21 +8,18 @@
 
 import Foundation
 
-// MARK: - Decodable
+// MARK: - KeyValueSpecifying
 public extension TokenDefinitionParticle {
     
-    public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-        var properties: [EncodableKeyValue<CodingKeys>]  = [
+    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        return [
             EncodableKeyValue(key: .symbol, value: symbol),
             EncodableKeyValue(key: .description, value: description),
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .permissions, value: permissions),
             EncodableKeyValue(key: .address, value: address),
-            EncodableKeyValue(key: .name, value: name)
-        ]
-        if !metaData.isEmpty {
-            properties.append(EncodableKeyValue(key: .metaData, value: metaData))
-        }
-        return properties
+            EncodableKeyValue(key: .name, value: name),
+            EncodableKeyValue(key: .metaData, nonEmpty: metaData)
+        ].compactMap { $0 }
     }
 }

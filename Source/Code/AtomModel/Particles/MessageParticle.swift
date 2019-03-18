@@ -85,18 +85,12 @@ public extension MessageParticle {
     }
     
     func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-        var properties: [EncodableKeyValue<CodingKeys>] = [
+        return [
             EncodableKeyValue(key: .from, value: from),
-            EncodableKeyValue(key: .to, value: to)
-        ]
-        if !payload.isEmpty {
-            properties.append(EncodableKeyValue(key: .payload, value: payload.toBase64String()))
-        }
-        
-        if !metaData.isEmpty {
-            properties.append(EncodableKeyValue(key: .metaData, value: metaData))
-        }
-        return properties
+            EncodableKeyValue(key: .to, value: to),
+            EncodableKeyValue(key: .payload, nonEmpty: payload, value: { $0.toBase64String() }),
+            EncodableKeyValue(key: .metaData, nonEmpty: metaData)
+        ].compactMap { $0 }
     }
 }
 

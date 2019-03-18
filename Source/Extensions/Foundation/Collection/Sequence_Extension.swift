@@ -31,12 +31,4 @@ public extension Sequence {
             }
         })
     }
-
-    func appending(_ element: Element, `if` condition: @autoclosure () -> Bool = true) -> [Element] {
-        var array = [Element](self)
-        if condition() {
-            array.append(element)
-        }
-        return array
-    }
 }
