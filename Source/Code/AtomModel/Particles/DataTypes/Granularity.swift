@@ -28,7 +28,7 @@ public extension Granularity {
 // MARK: - DataConvertible
 public extension Granularity {
     var asData: Data {
-        return value.toHexString(uppercased: false, mode: StringConversionMode.minimumLength(64, .prepend)).asData
+        return value.toHexString(case: .lower, mode: .minimumLength(64, .prepend)).asData
     }
 }
 

@@ -33,9 +33,9 @@ class BigUnsignedIntTests: XCTestCase {
         for (key, value) in table {
             let bigInt = BigUnsignedInt(stringLiteral: key)
             XCTAssertEqual(bigInt.toHexString(uppercased: true).stringValue, value)
-            XCTAssertEqual(bigInt.asData.toHexString(uppercased: true, mode: .trim).stringValue, value)
-            XCTAssertEqual(bigInt.toBase64String().asData.toHexString(uppercased: true, mode: .trim).stringValue, value)
-            XCTAssertEqual(bigInt.asData.toBase64String().toHexString(uppercased: true, mode: .trim).stringValue, value)
+            XCTAssertEqual(bigInt.asData.toHexString(case: .upper, mode: .trim).stringValue, value)
+            XCTAssertEqual(bigInt.toBase64String().asData.toHexString(case: .upper, mode: .trim).stringValue, value)
+            XCTAssertEqual(bigInt.asData.toBase64String().toHexString(case: .upper, mode: .trim).stringValue, value)
         }
         
     }

@@ -81,7 +81,7 @@ public extension EUID {
 public extension EUID {
     var stringValue: String {
         // Yes MUST be lower case, since DSON encoding is case sensitive
-        return toHexString(uppercased: false).stringValue
+        return toHexString(case: .lower).stringValue
     }
 }
 
