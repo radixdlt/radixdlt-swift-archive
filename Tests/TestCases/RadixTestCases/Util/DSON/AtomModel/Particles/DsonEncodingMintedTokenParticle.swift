@@ -42,8 +42,8 @@ private let mintedTokenParticleJson = """
     "granularity": ":u20:1",
     "nonce": 698107847399721,
     "planck": 24805440,
-    "serializer": \(RadixModelType.mintedTokenParticle.rawValue),
+    "\(RadixModelType.jsonKey)": \(RadixModelType.mintedTokenParticle.rawValue),
     "tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD",
-    "version": 100
+    "\(jsonKeyVersion)": \(serializerVersion)
 }
 """

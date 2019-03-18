@@ -35,6 +35,6 @@ private let messageParticleJSON = """
 	"from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 	"serializer": -1254222995,
 	"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-	"version": 100
+	"\(jsonKeyVersion)": \(serializerVersion)
 }
 """

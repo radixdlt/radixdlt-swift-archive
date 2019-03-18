@@ -43,17 +43,17 @@ private let atomJson = """
                     "particle": {
                         "bytes": ":byt:UmFkaXguLi4ganVzdCBpbWFnaW5lIQ==",
                         "from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-                        "serializer": \(RadixModelType.messageParticle.rawValue),
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.messageParticle.rawValue),
                         "to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-                        "version": 100
+                        "\(jsonKeyVersion)": \(serializerVersion)
                     },
-                    "serializer": \(RadixModelType.spunParticle.rawValue),
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
                     "spin": 1,
-                    "version": 100
+                    "\(jsonKeyVersion)": \(serializerVersion)
                 }
             ],
-            "serializer": \(RadixModelType.particleGroup.rawValue),
-            "version": 100
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
+            "\(jsonKeyVersion)": \(serializerVersion)
         },
         {
             "particles": [
@@ -64,13 +64,13 @@ private let atomJson = """
                         "granularity": ":u20:1",
                         "nonce": 698107847399721,
                         "planck": 24805440,
-                        "serializer": \(RadixModelType.mintedTokenParticle.rawValue),
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.mintedTokenParticle.rawValue),
                         "tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD",
-                        "version": 100
+                        "\(jsonKeyVersion)": \(serializerVersion)
                     },
-                    "serializer": \(RadixModelType.spunParticle.rawValue),
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
                     "spin": 1,
-                    "version": 100
+                    "\(jsonKeyVersion)": \(serializerVersion)
                 },
                 {
                     "particle": {
@@ -83,28 +83,28 @@ private let atomJson = """
                             "transfer": ":str:none"
                         },
                         "name": ":str:Proof of Work",
-                        "serializer": \(RadixModelType.tokenDefinitionParticle.rawValue),
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.tokenDefinitionParticle.rawValue),
                         "description": ":str:Radix POW",
-                        "version": 100
+                        "\(jsonKeyVersion)": \(serializerVersion)
                     },
-                    "serializer": \(RadixModelType.spunParticle.rawValue),
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
                     "spin": 1,
-                    "version": 100
+                    "\(jsonKeyVersion)": \(serializerVersion)
                 }
             ],
-            "serializer": \(RadixModelType.particleGroup.rawValue),
-            "version": 100
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
+            "\(jsonKeyVersion)": \(serializerVersion)
         }
     ],
-    "serializer": \(RadixModelType.atom.rawValue),
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
     "signatures": {
         "71c3c2fc9fee73b13cad082800a6d0de": {
             "r":":byt:JRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX=",
             "s":":byt:KbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H=",
-            "serializer": \(RadixModelType.signature.rawValue),
-            "version": 100
+            "\(RadixModelType.jsonKey)": \(RadixModelType.signature.rawValue),
+            "\(jsonKeyVersion)": \(serializerVersion)
         }
     },
-    "version": 100
+    "\(jsonKeyVersion)": \(serializerVersion)
 }
 """

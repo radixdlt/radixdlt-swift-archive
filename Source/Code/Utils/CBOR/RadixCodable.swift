@@ -9,6 +9,7 @@
 import Foundation
 
 let jsonKeyVersion = "version"
+let serializerVersion = 100
 
 public protocol RadixCodable: EncodableKeyValueListConvertible, AnyEncodableKeyValuesProcessing {}
 
@@ -16,7 +17,7 @@ public extension RadixCodable {
     
     func process(keyValues: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
         var keyValues = keyValues
-        keyValues.append(try AnyEncodableKeyValue(key: jsonKeyVersion, encodable: 100))
+        keyValues.append(try AnyEncodableKeyValue(key: jsonKeyVersion, encodable: serializerVersion))
         if let modelTypeSpecyfing = self as? RadixModelTypeSpecifying {
             keyValues.append(try AnyEncodableKeyValue(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.type.serializerId))
         }

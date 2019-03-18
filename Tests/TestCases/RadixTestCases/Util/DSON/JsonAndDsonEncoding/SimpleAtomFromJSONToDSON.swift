@@ -114,7 +114,7 @@ private let jsonString = """
         {
             "particles": [],
             "serializer": -67058791,
-            "version": 100
+            "\(jsonKeyVersion)": \(serializerVersion)
         }
     ],
     "serializer": 2019665,
@@ -123,9 +123,9 @@ private let jsonString = """
             "r":":byt:JRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX=",
             "s":":byt:KbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H=",
             "serializer": -434788200,
-            "version": 100
+            "\(jsonKeyVersion)": \(serializerVersion)
         }
     },
-    "version": 100
+    "\(jsonKeyVersion)": \(serializerVersion)
 }
 """

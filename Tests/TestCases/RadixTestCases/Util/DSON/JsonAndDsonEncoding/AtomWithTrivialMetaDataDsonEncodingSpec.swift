@@ -38,7 +38,7 @@ private let expectedDsonBase64 = "v2htZXRhRGF0Yb9pdGltZXN0YW1wbTE0ODgzMjY0MDAwMD
 private let atomTrivialMetaData = """
 {
     "serializer": 2019665,
-    "version": 100,
+    "\(jsonKeyVersion)": \(serializerVersion),
     "metaData": {
         "timestamp": ":str:1488326400000"
     }
