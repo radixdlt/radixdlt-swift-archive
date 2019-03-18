@@ -124,13 +124,12 @@ public extension ResourceIdentifier {
 // MARK: - Public
 public extension ResourceIdentifier {
     var identifier: String {
-        let identifier = [
+        return [
             "",
             address.base58String.value,
             type.rawValue,
             unique
         ].joined(separator: ResourceIdentifier.separator)
-        return identifier
     }
 }
 
