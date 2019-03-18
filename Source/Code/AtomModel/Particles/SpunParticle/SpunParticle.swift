@@ -20,8 +20,8 @@ public struct SpunParticle:
     public static let type = RadixModelType.spunParticle
 
     public let spin: Spin
-    public let particle: ParticleConvertible & DSONEncodable
-    public init(spin: Spin = .down, particle: ParticleConvertible & DSONEncodable) {
+    public let particle: ParticleConvertible
+    public init(spin: Spin = .down, particle: ParticleConvertible) {
         self.spin = spin
         self.particle = particle
     }
@@ -86,15 +86,15 @@ public extension SpunParticle {
 }
 
 public extension SpunParticle {
-    static func up(particle: ParticleConvertible & DSONEncodable) -> SpunParticle {
+    static func up(particle: ParticleConvertible) -> SpunParticle {
         return SpunParticle(spin: .up, particle: particle)
     }
     
-    static func down(particle: ParticleConvertible& DSONEncodable) -> SpunParticle {
+    static func down(particle: ParticleConvertible) -> SpunParticle {
         return SpunParticle(spin: .down, particle: particle)
     }
     
-    func particle<P>(as type: P.Type) -> P? where P: ParticleConvertible, P: DSONEncodable {
+    func particle<P>(as type: P.Type) -> P? where P: ParticleConvertible {
         return particle.as(P.self)
     }
 }
