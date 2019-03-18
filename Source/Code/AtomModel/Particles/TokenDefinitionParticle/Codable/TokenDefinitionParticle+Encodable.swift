@@ -8,10 +8,10 @@
 
 import Foundation
 
-// MARK: - KeyValueSpecifying
+// MARK: - EncodableKeyValueListConvertible
 public extension TokenDefinitionParticle {
     
-    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .symbol, value: symbol),
             EncodableKeyValue(key: .description, value: description),

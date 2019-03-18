@@ -8,7 +8,22 @@
 
 import Foundation
 
-public struct CBOREncodableProperty {
+public struct AnyEncodableKeyValueList: AnyEncodableKeyValueListConvertible {
+    
+    private let _propertyList: (DSONOutput) throws -> [AnyEncodableKeyValue]
+    
+    init<K>(keyValues: [EncodableKeyValue<K>]) throws where K: CodingKey {
+        _propertyList = { _ in
+            return try keyValues.map { try $0.toAnyEncodableKeyValue() }
+        }
+    }
+    
+    public func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue] {
+        return try _propertyList(output)
+    }
+}
+
+public struct AnyEncodableKeyValue {
     public let key: String
     public let dsonEncodedValue: DSON
     public let output: DSONOutput
@@ -86,7 +101,7 @@ public extension EncodableKeyValue {
         self.init(key: key, value: lengthMeasurable, output: output, jsonEncoding: jsonEncoding)
     }
     
-    func toCBOREncodableProperty() throws -> CBOREncodableProperty {
-        return CBOREncodableProperty(key: key, encoded: try _dsonEncode(), output: output)
+    func toAnyEncodableKeyValue() throws -> AnyEncodableKeyValue {
+        return AnyEncodableKeyValue(key: key, encoded: try _dsonEncode(), output: output)
     }
 }

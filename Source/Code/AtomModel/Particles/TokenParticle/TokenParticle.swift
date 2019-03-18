@@ -16,7 +16,7 @@ public struct TokenParticle:
     Ownable,
     Fungible,
     Identifiable,
-    CBORStreamable,
+    RadixCodable,
     RadixModelTypeSpecifying {
 // swiftlint:enable colon
 
@@ -86,7 +86,7 @@ public extension TokenParticle {
         tokenDefinitionIdentifier = try container.decode(TokenDefinitionIdentifier.self, forKey: .tokenDefinitionIdentifier)
     }
  
-    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .address, value: address),
             EncodableKeyValue(key: .granularity, value: granularity),

@@ -30,14 +30,14 @@ class DSONEncodingAddressHolderSpec: QuickSpec {
         publicKey: try! PublicKey(hexString: "03000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F")
     )
     
-    struct AddressHolder: CBORStreamable {
+    struct AddressHolder: RadixCodable {
         public let address: Address
         public enum CodingKeys: String, CodingKey {
             case address
             case type = "serializer"
             case version
         }
-        public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] { return
+        public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] { return
             [
                 EncodableKeyValue(key: .address, value: address),
                 EncodableKeyValue(key: .type, value: -1322468736),

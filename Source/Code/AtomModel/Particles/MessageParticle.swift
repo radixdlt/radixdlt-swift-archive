@@ -21,7 +21,7 @@ import Foundation
 public struct MessageParticle:
     ParticleModelConvertible,
     Accountable,
-    CBORStreamable {
+    RadixCodable {
 // swiftlint:enable colon
     
     public static let type = RadixModelType.messageParticle
@@ -84,7 +84,7 @@ public extension MessageParticle {
         )
     }
     
-    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .from, value: from),
             EncodableKeyValue(key: .to, value: to),

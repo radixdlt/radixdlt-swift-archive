@@ -8,17 +8,22 @@
 
 import Foundation
 
-public protocol CBORDictionaryConvertible: CBORPropertyListConvertible,
-    CBORPropertyListProcessing,
-    DictionaryConvertible {
+// swiftlint:disable colon
+
+/// /// A KeyValue-d Collection that can be represented as an array of `AnyEncodableKeyValue`.
+public protocol CBORDictionaryConvertible:
+    DictionaryConvertible,
+    AnyEncodableKeyValueListConvertible,
+    AnyEncodableKeyValuesProcessing {
+// swiftlint:enable colon
     func valueDSONEncode(_ value: Value, output: DSONOutput) throws -> DSON
 }
 
-// MARK: - CBORPropertyListConvertible
+// MARK: - AnyEncodableKeyValueListConvertible
 public extension CBORDictionaryConvertible where Key: StringRepresentable {
-    func propertyList(output: DSONOutput) throws -> [CBOREncodableProperty] {
+    func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue] {
         var properties = try dictionary.map {
-            CBOREncodableProperty(
+            AnyEncodableKeyValue(
                 key: $0.key.stringValue,
                 encoded: try valueDSONEncode($0.value, output: output),
                 output: output
@@ -29,9 +34,9 @@ public extension CBORDictionaryConvertible where Key: StringRepresentable {
     }
 }
 
-// MARK: - CBORPropertyListProcessing
+// MARK: - AnyEncodableKeyValuesProcessing
 public extension CBORDictionaryConvertible {
-    func processProperties(_ properties: [CBOREncodableProperty]) throws -> [CBOREncodableProperty] {
+    func processProperties(_ properties: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
         return properties.sorted(by: \.key)
     }
 }

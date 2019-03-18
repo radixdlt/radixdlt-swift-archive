@@ -14,7 +14,7 @@ import Quick
 /// DSON encoding of example map from: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding
 class DSONEncodingExampleMapSpec: QuickSpec {
     
-    public struct ExampleMap: CBORStreamable {
+    public struct ExampleMap: RadixCodable {
         let a: Int = 1
         let b: Int = 2
         
@@ -23,11 +23,11 @@ class DSONEncodingExampleMapSpec: QuickSpec {
             case b
         }
         
-        public func processProperties(_ properties: [CBOREncodableProperty]) throws -> [CBOREncodableProperty] {
+        public func processProperties(_ properties: [AnyEncodableKeyValue]) throws -> [AnyEncodableKeyValue] {
             return properties
         }
         
-        public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
             return [
                 EncodableKeyValue(key: .a, value: a),
                 EncodableKeyValue(key: .b, value: b)

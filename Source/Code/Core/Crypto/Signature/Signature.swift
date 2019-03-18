@@ -20,7 +20,7 @@ public extension Secp256k1 {
 /// Low value `S` is enforced according to BIP62: https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures
 public struct Signature:
     RadixModelTypeStaticSpecifying,
-    CBORStreamable,
+    RadixCodable,
     Equatable {
 // swiftlint:enable colon
     
@@ -84,7 +84,7 @@ public extension Signature {
 // MARK: - Encodable
 public extension Signature {
     
-    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         let length = 32
         return [
             EncodableKeyValue(key: .r, value: r.toBase64String(minLength: length)),

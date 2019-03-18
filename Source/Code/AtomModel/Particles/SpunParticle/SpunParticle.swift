@@ -13,7 +13,7 @@ import Foundation
 /// Small container for a `Particle` and its `Spin`. The reason why we do not want to add the `Spin` as a property on the Particle itself is that it would change the Hash of the particle.
 public struct SpunParticle:
     RadixModelTypeStaticSpecifying,
-    CBORStreamable,
+    RadixCodable,
     Codable {
 // swiftlint:enable colon
 
@@ -63,7 +63,7 @@ public extension SpunParticle {
 public extension SpunParticle {
     
     // swiftlint:disable:next function_body_length
-    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         
         let encodableParticle: EncodableKeyValue<CodingKeys>
         if let messageParticle = particle as? MessageParticle {

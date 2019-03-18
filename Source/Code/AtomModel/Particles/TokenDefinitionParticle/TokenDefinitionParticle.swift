@@ -23,7 +23,7 @@ import Foundation
 public struct TokenDefinitionParticle:
     ParticleModelConvertible,
     Identifiable,
-    CBORStreamable {
+    RadixCodable {
 // swiftlint:enable colon
     
     public static let type = RadixModelType.tokenDefinitionParticle

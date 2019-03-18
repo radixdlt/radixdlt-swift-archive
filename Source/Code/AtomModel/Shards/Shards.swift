@@ -13,7 +13,7 @@ public typealias Shard = Int64
 // swiftlint:disable colon
 /// Represents an interval of Radix shards
 public struct Shards:
-    CBORStreamable,
+    RadixCodable,
     RangeExpression,
     Codable {
 // swiftlint:enable colon
@@ -66,7 +66,7 @@ public extension Shards {
         try self.init(lower: lower, upper: upper)
     }
     
-    func keyValues() throws -> [EncodableKeyValue<Shards.CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<Shards.CodingKeys>] {
         return [
             EncodableKeyValue(key: .low, value: range.lowerBound),
             EncodableKeyValue(key: .high, value: range.upperBound)

@@ -13,7 +13,7 @@ import Foundation
 /// A representation of something unique.
 public struct UniqueParticle:
     ParticleModelConvertible,
-    CBORStreamable {
+    RadixCodable {
 // swiftlint:enable colon
 
     public static let type = RadixModelType.uniqueParticle
@@ -41,7 +41,7 @@ public extension UniqueParticle {
         name = try container.decode(Name.self, forKey: .name)
     }
     
-    public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .address, value: address),
             EncodableKeyValue(key: .name, value: name)

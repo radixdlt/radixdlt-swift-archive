@@ -18,8 +18,7 @@ import Foundation
 public struct Atom:
     RadixModelTypeStaticSpecifying,
     RadixHashable,
-    DSONEncodable,
-    CBORStreamable,
+    RadixCodable,
     ArrayInitializable {
 // swiftlint:enable colon
     
@@ -57,7 +56,7 @@ public extension Atom {
         metaData = try container.decode(ChronoMetaData.self, forKey: .metaData)
     }
     
-    func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         var properties = [EncodableKeyValue<CodingKeys>]()
         if !particleGroups.isEmpty {
             properties.append(EncodableKeyValue(key: .particleGroups, value: particleGroups.particleGroups))
@@ -68,7 +67,7 @@ public extension Atom {
         
         properties.append(EncodableKeyValue(key: .metaData, value: metaData))
         
-        let atomSize = try AnyCBORPropertyListConvertible(keyValues: properties).toDSON().asData.length
+        let atomSize = try AnyEncodableKeyValueList(keyValues: properties).toDSON().asData.length
         guard atomSize <= Atom.maxSize else {
             throw Error.tooManyBytes(expectedAtMost: Atom.maxSize, butGot: atomSize)
         }

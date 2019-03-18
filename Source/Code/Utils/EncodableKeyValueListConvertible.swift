@@ -1,5 +1,5 @@
 //
-//  KeyValueSpecifying.swift
+//  EncodableKeyValueListConvertible.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-03-12.
@@ -8,20 +8,20 @@
 
 import Foundation
 
-public protocol KeyValueSpecifying: CBORPropertyListConvertible {
+public protocol EncodableKeyValueListConvertible: AnyEncodableKeyValueListConvertible {
     associatedtype CodingKeys: CodingKey
-    func keyValues() throws -> [EncodableKeyValue<CodingKeys>]
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>]
 }
 
-// MARK: - CBORPropertyListConvertible
-public extension KeyValueSpecifying {
-    func propertyList(output: DSONOutput) throws -> [CBOREncodableProperty] {
-        return try keyValues().map { try $0.toCBOREncodableProperty() }
+// MARK: - AnyEncodableKeyValueListConvertible
+public extension EncodableKeyValueListConvertible {
+    func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue] {
+        return try encodableKeyValues().map { try $0.toAnyEncodableKeyValue() }
     }
 }
 
 // MARK: - Swift.Encodable (JSON)
-public extension Encodable where Self: KeyValueSpecifying {
+public extension Encodable where Self: EncodableKeyValueListConvertible {
     func encode(to encoder: Encoder) throws {
         guard let typeKey = CodingKeys(stringValue: RadixModelType.jsonKey) else {
             incorrectImplementation("You MUST declare a CodingKey having the string value \(RadixModelType.jsonKey) in your encodable model.")
@@ -33,7 +33,7 @@ public extension Encodable where Self: KeyValueSpecifying {
             try container.encode(modelTypeSpecyfing.type, forKey: typeKey)
         }
         
-        try keyValues().forEach {
+        try encodableKeyValues().forEach {
             try $0.jsonEncoded(by: &container)
         }
     }

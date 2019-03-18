@@ -11,7 +11,7 @@ import Foundation
 // swiftlint:disable colon
 /// Grouping of Particles relating to each other also holding some metadata
 public struct ParticleGroup:
-    CBORStreamable,
+    RadixCodable,
     ArrayConvertible,
     RadixModelTypeStaticSpecifying {
  // swiftlint:enable colon
@@ -45,7 +45,7 @@ public extension ParticleGroup {
         metaData = try container.decodeIfPresent(MetaData.self, forKey: .metaData) ?? [:]
     }
         
-    public func keyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         var properties = [EncodableKeyValue<CodingKeys>]()
         if !spunParticles.isEmpty {
             properties.append(EncodableKeyValue(key: .spunParticles, value: spunParticles))
