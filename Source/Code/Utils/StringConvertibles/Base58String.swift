@@ -34,9 +34,6 @@ public struct Base58String:
 
 public extension Base58String {
     static let jsonPrefix: JSONPrefix = .addressBase58
-    var base58String: Base58String {
-        return self
-    }
 }
 
 public extension Data {

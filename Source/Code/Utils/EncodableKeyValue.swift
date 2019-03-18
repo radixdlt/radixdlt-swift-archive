@@ -8,40 +8,7 @@
 
 import Foundation
 
-public struct AnyEncodableKeyValueList: AnyEncodableKeyValueListConvertible {
-    
-    private let _propertyList: (DSONOutput) throws -> [AnyEncodableKeyValue]
-    
-    init<K>(keyValues: [EncodableKeyValue<K>]) throws where K: CodingKey {
-        _propertyList = { _ in
-            return try keyValues.map { try $0.toAnyEncodableKeyValue() }
-        }
-    }
-    
-    public func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue] {
-        return try _propertyList(output)
-    }
-}
-
-public struct AnyEncodableKeyValue {
-    public let key: String
-    public let dsonEncodedValue: DSON
-    public let output: DSONOutput
-    init(key unencodedKey: String, encoded dsonEncodedValue: DSON, output: DSONOutput) {
-        self.key = unencodedKey
-        self.dsonEncodedValue = dsonEncodedValue
-        self.output = output
-    }
-    
-    init<Value>(key: String, encodable: Value, output: DSONOutput = .all) throws where Value: DSONEncodable {
-        self.init(key: key, encoded: try encodable.toDSON(output: output), output: output)
-    }
-    
-    public func cborEncodedKey() -> [UInt8] {
-        return CBOR.utf8String(key).encode()
-    }
-}
-
+/// A partially type-erased container of an encodable Value for a certain CodingKey. The CodingKey is not type-erased, it is held by the generic passed to this struct. The encodable `Value`, however, is type-erased.
 public struct EncodableKeyValue<Key: CodingKey> {
     public typealias Container = KeyedEncodingContainer<Key>
     public typealias JSONEncoding<Value: Encodable> = (inout Container, Value, Key) throws -> Void
