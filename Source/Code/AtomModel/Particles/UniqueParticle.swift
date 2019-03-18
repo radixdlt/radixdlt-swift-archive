@@ -30,7 +30,7 @@ public struct UniqueParticle:
 // MARK: Codable
 public extension UniqueParticle {
 
-    public enum CodingKeys: String, CodingKey, CaseIterable {
+    public enum CodingKeys: String, CodingKey {
         case type = "serializer"
         case address, name
     }

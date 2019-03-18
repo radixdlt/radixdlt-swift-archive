@@ -11,7 +11,7 @@ import Foundation
 /// Encoding type information, for more information see the column "Additional Encoding" in the [DSON][1] table
 ///
 /// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding+new
-public enum DSONPrefix: Int, CaseIterable {
+public enum DSONPrefix: Int {
     case bytesBase64 = 0x01
     case euidHex = 0x02
     case hashHex = 0x03
