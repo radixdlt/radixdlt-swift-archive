@@ -198,6 +198,7 @@
 		E6D4B349223FBAC5004FC83A /* Data+StringConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B348223FBAC5004FC83A /* Data+StringConversion.swift */; };
 		E6D4B34B223FBB12004FC83A /* DataConvertible+Concatenation+Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B34A223FBB12004FC83A /* DataConvertible+Concatenation+Operators.swift */; };
 		E6D4B34D223FBB37004FC83A /* StringConversionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B34C223FBB37004FC83A /* StringConversionMode.swift */; };
+		E6D4B353223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B352223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift */; };
 		E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2B21F7CE9C00654105 /* Node.swift */; };
 		E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */; };
 		E6ED1A3421F879F600654105 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3321F879F600654105 /* HashTests.swift */; };
@@ -452,6 +453,7 @@
 		E6D4B348223FBAC5004FC83A /* Data+StringConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+StringConversion.swift"; sourceTree = "<group>"; };
 		E6D4B34A223FBB12004FC83A /* DataConvertible+Concatenation+Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataConvertible+Concatenation+Operators.swift"; sourceTree = "<group>"; };
 		E6D4B34C223FBB37004FC83A /* StringConversionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConversionMode.swift; sourceTree = "<group>"; };
+		E6D4B352223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomTooBigDSONEncodingSpec.swift; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6ED1A2B21F7CE9C00654105 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleGroups.swift; sourceTree = "<group>"; };
@@ -892,6 +894,7 @@
 		E693DAA822319A63003720C2 /* DSON */ = {
 			isa = PBXGroup;
 			children = (
+				E69AB75022393150006153DD /* JsonAndDsonEncoding */,
 				E69AB7402237FC78006153DD /* Models */,
 				E69AB7382237FC0F006153DD /* AtomModel */,
 				E693DAAA22319A7E003720C2 /* Primitives */,
@@ -964,6 +967,7 @@
 		E69AB7382237FC0F006153DD /* AtomModel */ = {
 			isa = PBXGroup;
 			children = (
+				E6D4B351223FBE36004FC83A /* Atom */,
 				E69AB7392237FC15006153DD /* Particles */,
 			);
 			path = AtomModel;
@@ -1410,6 +1414,14 @@
 			path = Address;
 			sourceTree = "<group>";
 		};
+		E6D4B351223FBE36004FC83A /* Atom */ = {
+			isa = PBXGroup;
+			children = (
+				E6D4B352223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift */,
+			);
+			path = Atom;
+			sourceTree = "<group>";
+		};
 		E6ED1A2A21F7CE9100654105 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -1453,7 +1465,6 @@
 		E6ED1A3221F879D900654105 /* Atom */ = {
 			isa = PBXGroup;
 			children = (
-				E69AB75022393150006153DD /* JsonAndDsonEncoding */,
 				E6A4AC0022243AC5006C5CA8 /* JsonSerialization */,
 				E6A4ABCF22205B69006C5CA8 /* JsonDeserialization */,
 			);
@@ -1937,6 +1948,7 @@
 				E69AB73D2237FC4C006153DD /* CBOREncodingPrimitivesIntSpec.swift in Sources */,
 				E6611F472227F2A300AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift in Sources */,
 				E693DAAC22319AB2003720C2 /* DSONEncodingPrimitivesBoolSpec.swift in Sources */,
+				E6D4B353223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift in Sources */,
 				E6D4B32C223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift in Sources */,
 				E6A4ABDE22206F1D006C5CA8 /* TooLongSymbolSpec.swift in Sources */,
 				E6A4ABE122206F33006C5CA8 /* TooShortSymbolSpec.swift in Sources */,
