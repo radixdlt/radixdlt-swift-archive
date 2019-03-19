@@ -15,6 +15,7 @@ public struct PublicKey:
     PrefixedJsonCodableByProxy,
     CBORDataConvertible,
     DataInitializable,
+    RadixHashable,
     Hashable {
 // swiftlint:enable colon
     
@@ -60,5 +61,12 @@ public extension PublicKey {
 public extension PublicKey {
     var description: String {
         return hex
+    }
+}
+
+// MARK: - RadixHashable
+public extension PublicKey {
+    var radixHash: RadixHash {
+        return RadixHash(unhashedData: compressedData)
     }
 }

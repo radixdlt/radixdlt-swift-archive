@@ -109,7 +109,7 @@ public extension EUID {
 // MARK: - CustomStringConvertible
 public extension EUID {
     var description: String {
-        return toHexString().value
+        return toHexString(case: .lower).value
     }
 }
 

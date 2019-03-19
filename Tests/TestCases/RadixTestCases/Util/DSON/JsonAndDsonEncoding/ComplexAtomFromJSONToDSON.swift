@@ -35,8 +35,20 @@ class ComplexAtomFromJSONToDSONSpec: QuickSpec {
         }
         
         describe("Radix Hash") {
-            it("should work") {
+            it("should match Java") {
                 expect(atom.radixHash.hex).to(equal("f3904297efea9b54d6484bf4605145257078967a7cefde789b62176299831d45"))
+            }
+        }
+        
+        describe("Hash Id (EUID)") {
+            it("should match Java") {
+                expect(atom.hashId).to(equal("f3904297efea9b54d6484bf460514525"))
+            }
+        }
+        
+        describe("Atom description") {
+            it("should contain the Hash Id") {
+                expect(atom.description).to(contain("f3904297efea9b54d6484bf460514525"))
             }
         }
     }

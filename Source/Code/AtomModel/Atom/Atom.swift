@@ -19,7 +19,9 @@ public struct Atom:
     RadixModelTypeStaticSpecifying,
     RadixHashable,
     RadixCodable,
-    ArrayInitializable {
+    ArrayInitializable,
+    CustomStringConvertible,
+    CustomDebugStringConvertible {
 // swiftlint:enable colon
     
     public static let type = RadixModelType.atom
@@ -75,18 +77,6 @@ public extension Atom {
     static func == (lhs: Atom, rhs: Atom) -> Bool {
         return lhs.radixHash == rhs.radixHash
     }
-    
-    var radixHash: RadixHash {
-        do {
-            return RadixHash(unhashedData: try toDSON(output: .hash))
-        } catch {
-            incorrectImplementation("Should always be able to hash, error: \(error)")
-        }
-    }
-    
-    var hid: EUID {
-        return radixHash.toEUID()
-    }
 }
 
 // MARK: - ArrayInitializable
@@ -99,10 +89,15 @@ public extension Atom {
 
 // MARK: - CustomStringConvertible
 public extension Atom {
-    // TODO implement this when `hid` does not crash
-    //    public var description: String {
-    //        return "Atom(\(hid))"
-    //    }
+    var description: String {
+        return "Atom(\(hashId))"
+    }
+}
+// MARK: - CustomDebugStringConvertible
+public extension Atom {
+    var debugDescription: String {
+        return "Atom(\(hashId), pg#\(particleGroups.count), p#\(spunParticles().count), md#\(metaData.count), s#\(signatures.count))"
+    }
 }
 
 public extension Atom {

@@ -15,6 +15,7 @@ public struct Address:
     PrefixedJsonCodableByProxy,
     ExactLengthSpecifying,
     DataInitializable,
+    RadixHashable,
     Hashable,
     CustomStringConvertible {
 // swiftlint:enable colon
@@ -92,6 +93,14 @@ public extension Address {
         try self.init(base58String: base58)
     }
 }
+
+// MARK: - RadixHashable
+public extension Address {
+    var radixHash: RadixHash {
+        return publicKey.radixHash
+    }
+}
+
 // MARK: - CustomStringConvertible
 public extension Address {
     var description: String {

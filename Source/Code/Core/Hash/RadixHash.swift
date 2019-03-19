@@ -59,9 +59,8 @@ public extension RadixHash {
 public extension RadixHash {
     
     func toEUID() -> EUID {
-        var dataToPad = self.data
         do {
-            return try EUID(Data(bytes: &dataToPad, count: EUID.byteCount))
+            return try EUID(data.prefix(EUID.byteCount))
         } catch {
             incorrectImplementation("Should always be able to return EUID, error: \(error)")
         }

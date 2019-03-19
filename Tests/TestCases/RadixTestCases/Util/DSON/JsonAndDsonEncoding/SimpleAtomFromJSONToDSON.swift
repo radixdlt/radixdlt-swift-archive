@@ -104,7 +104,7 @@ class SimpleAtomFromJSONToDSONSpec: QuickSpec {
                     expect(dson.hex).to(equal(expectedDsonHashHex))
                 }
             }
-            it("should work") {
+            it("should match Java library") {
                 expect(atom.radixHash.hex).to(equal("6a7838c881e9303d0e3ee23563533a7881b5385748e95687e584e8f111122de1"))
             }
         }
