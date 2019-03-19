@@ -49,3 +49,9 @@ extension String: StringRepresentable {
         return self
     }
 }
+
+public extension CustomStringConvertible where Self: StringRepresentable {
+    var description: String {
+        return stringValue
+    }
+}

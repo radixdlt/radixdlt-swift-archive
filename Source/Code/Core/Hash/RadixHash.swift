@@ -60,7 +60,7 @@ public extension RadixHash {
     
     func toEUID() -> EUID {
         do {
-            return try EUID(data.prefix(EUID.byteCount))
+            return try EUID(data.prefix(EUID.length))
         } catch {
             incorrectImplementation("Should always be able to return EUID, error: \(error)")
         }

@@ -1,5 +1,5 @@
 //
-//  EffectiveUserIdentifier_EUID.swift
+//  EUID.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-01-22.
@@ -7,12 +7,6 @@
 //
 
 import Foundation
-
-public extension CustomStringConvertible where Self: StringRepresentable {
-    var description: String {
-        return stringValue
-    }
-}
 
 // swiftlint:disable colon
 
@@ -22,24 +16,20 @@ public struct EUID:
     StringRepresentable,
     DataInitializable,
     CBORDataConvertible,
+    ExactLengthSpecifying,
     Hashable,
     ExpressibleByIntegerLiteral,
     CustomStringConvertible {
 // swiftlint:enable colon
     
+    public static let length = 16
+    
     public typealias Value = BigUnsignedInt
-    public static let byteCount = 16
 
     private let value: Value
 
     public init(_ data: Data) throws {
-        if data.count > EUID.byteCount {
-            throw Error.tooManyBytes(expected: EUID.byteCount, butGot: data.count)
-        }
-        
-        if data.count < EUID.byteCount {
-            throw Error.tooFewBytes(expected: EUID.byteCount, butGot: data.count)
-        }
+        try EUID.validateLength(of: data)
         self.value = Value(data)
     }
 }
@@ -76,7 +66,7 @@ public extension EUID {
     }
     
     init(value: Value) throws {
-        try self.init(value.toData(minByteCount: EUID.byteCount))
+        try self.init(value.toData(minByteCount: EUID.length))
     }
 }
 

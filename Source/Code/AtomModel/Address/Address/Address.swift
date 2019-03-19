@@ -22,13 +22,21 @@ public struct Address:
     public static let length = 51
     
     /// `base58String` is the base58 encoding of `Z` where:
+    ///
     /// `Z` = X | Y
+    ///
     /// `|` = Concatenation between [Byte]
+    ///
     /// `Y` = first 4 bytes of `H`
+    ///
     /// `H` = RadixHash of X
+    ///
     /// `X` = M | C
+    ///
     /// `C` = Public Key on Compressed format (33 bytes)
+    ///
     /// `M` = first byte of `Magic` number
+    ///
     /// => Base58(Magic[0] | PKc | RadixHash(Magic[0] | PKc).prefix(4))
     public let base58String: Base58String
     public let publicKey: PublicKey
