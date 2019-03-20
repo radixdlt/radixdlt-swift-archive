@@ -30,10 +30,6 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
                 }
             }
             describe("Its non empty ParticleGroup") {
-                let particleGroup = atom.particleGroups[0]
-                it("should contain a TokenDefinitionParticle") {
-                    expect(particleGroup[0].particle).to(beAKindOf(TokenDefinitionParticle.self))
-                }
                 describe("The ParticleGroup's TokenDefinitionParticle") {
                     let tokenDefinitionParticle = atom.particleGroups.firstParticle(ofType: TokenDefinitionParticle.self)!
                     
@@ -55,6 +51,18 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
                             expect(metaData).to(haveCount(2))
                         }
                     }
+                }
+                describe("The ParticleGroup's UniqueParticle") {
+                    let uniqueParticle = atom.particleGroups.firstParticle(ofType: UniqueParticle.self)!
+                    
+                    it("has a name") {
+                        expect(uniqueParticle.name).to(equal("Sajjon"))
+                    }
+                    
+                    it("has an address") {
+                        expect(uniqueParticle.address).to(equal("JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"))
+                    }
+                 
                 }
                 describe("The ParticleGroup's MessageParticke") {
                     let messsageParticle = atom.particleGroups.firstParticle(ofType: MessageParticle.self)!
@@ -88,7 +96,9 @@ let jsonForAtomWith2ParticleGroups = """
     "particleGroups": [
         {
             "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
-            "metaData": {},
+            "metaData": {
+                "timestamp": ":str:1546300800",
+            },
             "particles": [
                 {
                     "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
@@ -110,24 +120,35 @@ let jsonForAtomWith2ParticleGroups = """
                         },
                         "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
                     }
+                },
+                {
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
+                    "spin": 1,
+                    "particle": {
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.uniqueParticle.rawValue),
+                        "name": ":str:Sajjon",
+                        "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                    }
                 }
             ]
         },
         {
             "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
-            "metaData": {},
+            "metaData": {
+                "timestamp": ":str:1546300800",
+            },
             "particles": [
                 {
                     "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
                     "spin": 1,
                     "particle": {
                         "\(RadixModelType.jsonKey)": \(RadixModelType.mintedTokenParticle.rawValue),
-                        "owner": ":byt:A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
-                        "receiver": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                        "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
+                        "granularity": ":u20:1",
                         "nonce": 992284943125945,
                         "planck": 24805440,
                         "amount": ":u20:1000000000000000000000000000",
-                        "token_reference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+                        "tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
                     }
                 },
                 {
@@ -135,9 +156,9 @@ let jsonForAtomWith2ParticleGroups = """
 	                "spin": 1,
 					"particle": {
 						"\(RadixModelType.jsonKey)": \(RadixModelType.messageParticle.rawValue),
-						"source": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-						"destination": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
-						"data": ":byt:SGVsbG8gUmFkaXgh",
+						"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+						"from": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
+						"bytes": ":byt:SGVsbG8gUmFkaXgh",
 						"metaData": {
 							"timestamp": ":str:1551345320000"
 						}

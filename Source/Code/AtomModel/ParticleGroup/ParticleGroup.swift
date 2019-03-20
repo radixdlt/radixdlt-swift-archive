@@ -7,8 +7,14 @@
 //
 
 import Foundation
-public struct ParticleGroup: ArrayCodable, RadixModelTypeStaticSpecifying {
-    
+
+// swiftlint:disable colon
+/// Grouping of Particles relating to each other also holding some metadata
+public struct ParticleGroup:
+    RadixCodable,
+    ArrayConvertible,
+    RadixModelTypeStaticSpecifying {
+ // swiftlint:enable colon
     public static let type = RadixModelType.particleGroup
     
     public let spunParticles: [SpunParticle]
@@ -36,13 +42,20 @@ public extension ParticleGroup {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         spunParticles = try container.decode([SpunParticle].self, forKey: .spunParticles)
-        metaData = try container.decode(MetaData.self, forKey: .metaData)
+        metaData = try container.decodeIfPresent(MetaData.self, forKey: .metaData) ?? [:]
     }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(spunParticles, forKey: .spunParticles)
-        try container.encode(metaData, forKey: .metaData)
+        
+    public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        var properties = [EncodableKeyValue<CodingKeys>]()
+        if !spunParticles.isEmpty {
+            properties.append(EncodableKeyValue(key: .spunParticles, value: spunParticles))
+        }
+        
+        if !metaData.isEmpty {
+            properties.append(EncodableKeyValue(key: .metaData, value: metaData))
+        }
+        
+        return properties
     }
 }
 

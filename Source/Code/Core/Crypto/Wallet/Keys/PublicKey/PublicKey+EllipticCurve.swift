@@ -32,7 +32,7 @@ public extension PublicKey {
     }
     
     var format: Format {
-        return Format(byte: data[0])
+        return Format(byte: asData[0])
     }
     
     public enum DecodePointError: Swift.Error {

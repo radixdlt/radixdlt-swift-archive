@@ -8,13 +8,29 @@
 
 import Foundation
 
-public struct Planck: Codable, Equatable, ExpressibleByIntegerLiteral {
+// swiftlint:disable colon
+
+/// A seemlingly random, strict positive integer, based on current time.
+public struct Planck:
+    CBORConvertible,
+    Codable,
+    Equatable,
+    ExpressibleByIntegerLiteral {
+// swiftlint:enable colon
+    
     public typealias Value = UInt64
     let value: Value
     
     public init() {
         let secondsSince1970 = Value(Date().timeIntervalSince1970)
         value = secondsSince1970/60 + 60
+    }
+}
+
+// MARK: - CBORConvertible
+public extension Planck {
+    func toCBOR() -> CBOR {
+        return CBOR.unsignedInt(value)
     }
 }
 

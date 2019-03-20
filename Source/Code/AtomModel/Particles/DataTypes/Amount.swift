@@ -8,8 +8,16 @@
 
 import Foundation
 
-public struct Amount: PrefixedJsonCodable, StringRepresentable, Equatable, ExpressibleByIntegerLiteral {
-    
+// swiftlint:disable colon
+
+/// The strictly positive UInt256 integer representing some amount, e.g. amount of tokens to transfer.
+public struct Amount:
+    PrefixedJsonCodable,
+    StringRepresentable,
+    CBORDataConvertible,
+    Equatable,
+    ExpressibleByIntegerLiteral {
+// swiftlint:enable colon
     public static let subunitsDenominatorDecimalExponent: Int = 18
     public static let subunitsDenominator = BigUnsignedInt(10).power(Amount.subunitsDenominatorDecimalExponent)
 
@@ -19,6 +27,20 @@ public struct Amount: PrefixedJsonCodable, StringRepresentable, Equatable, Expre
     
     public init(value: Value) {
         self.value = value
+    }
+}
+
+// MARK: DSONPrefixSpecifying
+public extension Amount {
+    var dsonPrefix: DSONPrefix {
+        return .unsignedBigInteger
+    }
+}
+
+// MARK: - DataConvertible
+public extension Amount {
+    var asData: Data {
+        return value.toData(minByteCount: 32)
     }
 }
 

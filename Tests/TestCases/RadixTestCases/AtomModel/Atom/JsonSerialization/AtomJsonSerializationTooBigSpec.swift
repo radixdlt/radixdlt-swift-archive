@@ -37,10 +37,9 @@ class AtomJsonSerializationTooBigSpec: QuickSpec {
 private let oneThousandParticles = [SpunParticle](repeating: spunTokenParticle, count: 1000)
 private let spunTokenParticle = SpunParticle(
     spin: .up,
-    particle: TokenParticle(
-        type: .minted,
-        owner: "A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
-        receiver: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+    particle: MintedTokenParticle(
+        address: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+        granularity: 1,
         nonce: 992284943125945,
         planck: 24805440,
         amount: 1337,

@@ -8,7 +8,13 @@
 
 import Foundation
 
-public struct ParticleGroups: ArrayCodable {
+// swiftlint:disable colon
+
+/// Collection of ParticleGroups
+public struct ParticleGroups:
+    ArrayCodable,
+    DSONArrayConvertible {
+ // swiftlint:enable colon
     
     public let particleGroups: [ParticleGroup]
     public init(particleGroups: [ParticleGroup] = []) {

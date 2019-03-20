@@ -8,12 +8,28 @@
 
 import Foundation
 
-public struct Nonce: Codable, Equatable, ExpressibleByIntegerLiteral {
+// swiftlint:disable colon
+
+/// A random value between [Int.min...Int.max]
+public struct Nonce:
+    CBORConvertible,
+    Codable,
+    Equatable,
+    ExpressibleByIntegerLiteral {
+// swiftlint:enable colon
+    
     public typealias Value = Int64
     public let value: Value
     
     public init() {
         value = Int64.random(in: Value.min...Value.max)
+    }
+}
+
+// MARK: - CBORConvertible
+public extension Nonce {
+    func toCBOR() -> CBOR {
+        return CBOR.int64(value)
     }
 }
 

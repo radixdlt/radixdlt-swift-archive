@@ -8,13 +8,43 @@
 
 import Foundation
 
-public struct Granularity: PrefixedJsonCodable, Equatable, StringRepresentable, ExpressibleByIntegerLiteral {
+// swiftlint:disable colon
+
+/// The smallest non-divisible amount of subunits one can have is introduced. For the formal definition read [RIP - Tokens][1].
+///
+/// - seeAlso:
+/// `TokenDefinitionParticle`
+///
+/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
+///
+public struct Granularity:
+    PrefixedJsonCodable,
+    CBORDataConvertible,
+    StringRepresentable,
+    Equatable,
+    ExpressibleByIntegerLiteral {
+// swiftlint:enable colon
+    
     public typealias Value = BigUnsignedInt
     
     public let value: Value
 
     public init(value: Value) {
         self.value = value
+    }
+}
+
+// MARK: DSONPrefixSpecifying
+public extension Granularity {
+    var dsonPrefix: DSONPrefix {
+        return .unsignedBigInteger
+    }
+}
+
+// MARK: - DataConvertible
+public extension Granularity {
+    var asData: Data {
+        return value.toHexString(case: .lower, mode: .minimumLength(64, .prepend)).asData
     }
 }
 
@@ -58,5 +88,12 @@ public extension Granularity {
 public extension Granularity {
     public enum Error: Swift.Error {
         case failedToCreateBigInt(fromString: String)
+    }
+}
+
+// MARK: - Presets
+public extension Granularity {
+    static var `default`: Granularity {
+        return 1
     }
 }

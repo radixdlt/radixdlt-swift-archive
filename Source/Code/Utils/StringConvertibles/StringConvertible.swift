@@ -9,12 +9,13 @@
 import Foundation
 
 public protocol StringConvertible: StringInitializable, StringRepresentable, ValueValidating, Hashable, CustomStringConvertible {
-    var value: ValidationValue { get }
+    var value: String { get }
     
     /// Calling this with an invalid String will result in runtime crash.
-    init(validated: ValidationValue)
+    init(validated: String)
 }
 
+// MARK: - StringRepresentable
 public extension StringConvertible {
     var stringValue: String {
         return value

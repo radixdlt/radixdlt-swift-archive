@@ -8,21 +8,21 @@
 
 import Foundation
 
-//extension BigUnsignedInt: DataConvertible {
-//    public var asData: Data {
-//        return toData()
-//    }
-//}
-
 public struct Secp256k1 {}
 public extension Secp256k1 {
     static let order = BigUnsignedInt(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141")!
 }
 
+// swiftlint:disable colon
+
 /// ECDSA Signature consisting of two BigIntegers "R" and "S"
 /// Read more: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
 /// Low value `S` is enforced according to BIP62: https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures
-public struct Signature: Equatable, RadixModelTypeStaticSpecifying {
+public struct Signature:
+    RadixModelTypeStaticSpecifying,
+    RadixCodable,
+    Equatable {
+// swiftlint:enable colon
     
     public static let type = RadixModelType.signature
     
@@ -34,10 +34,6 @@ public struct Signature: Equatable, RadixModelTypeStaticSpecifying {
     
     public let r: Part
     public let s: Part
-    
-    // MARK: These properties are need in ordet to assure correct hash
-    public let serializer = RadixModelType.signature.rawValue
-    public let version = dataFormatVersion
     
     public enum Error: Swift.Error {
         case rTooBig(expectedAtMost: BigUnsignedInt, butGot: BigUnsignedInt)
@@ -87,12 +83,12 @@ public extension Signature {
 
 // MARK: - Encodable
 public extension Signature {
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
-        
+    
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         let length = 32
-        try container.encode(r.toBase64String(minLength: length), forKey: .r)
-        try container.encode(s.toBase64String(minLength: length), forKey: .s)
+        return [
+            EncodableKeyValue(key: .r, value: r.toBase64String(minLength: length)),
+            EncodableKeyValue(key: .s, value: s.toBase64String(minLength: length))
+        ]
     }
 }

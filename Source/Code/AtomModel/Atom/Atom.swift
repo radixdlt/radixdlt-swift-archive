@@ -8,19 +8,30 @@
 
 import Foundation
 
-// MARK: - Atom
-public struct Atom: AtomConvertible {
+// swiftlint:disable colon
+/// The packaging of any transaction to the Radix Ledger, the Atom is the highest level model in the [Atom Model][1], consisting of a list of ParticleGroups, which in turn consists of a list of SpunParticles and metadata.
+///
+/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/404029477/RIP-1+The+Atom+Model
+/// - seeAlso:
+/// `ParticleGroup`
+///
+public struct Atom:
+    RadixModelTypeStaticSpecifying,
+    RadixHashable,
+    RadixCodable,
+    ArrayInitializable {
+// swiftlint:enable colon
     
     public static let type = RadixModelType.atom
     
     public let particleGroups: ParticleGroups
     public let signatures: Signatures
-    public let metaData: MetaData
+    public let metaData: ChronoMetaData
     
     public init(
-        particleGroups: ParticleGroups = [],
+        metaData: ChronoMetaData = .timeNow,
         signatures: Signatures = [:],
-        metaData: MetaData = [:]
+        particleGroups: ParticleGroups = []
     ) {
         self.particleGroups = particleGroups
         self.signatures = signatures
@@ -40,30 +51,89 @@ public extension Atom {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        particleGroups = try container.decode(ParticleGroups.self, forKey: .particleGroups)
-        signatures = try container.decode(Signatures.self, forKey: .signatures)
-        metaData = try container.decode(MetaData.self, forKey: .metaData)
+        particleGroups = try container.decodeIfPresent(ParticleGroups.self, forKey: .particleGroups) ?? []
+        signatures = try container.decodeIfPresent(Signatures.self, forKey: .signatures) ?? [:]
+        metaData = try container.decode(ChronoMetaData.self, forKey: .metaData)
     }
     
-    // swiftlint:disable:next function_body_length
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: Atom.CodingKeys.self)
-        try container.encode(type, forKey: .type)
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        var properties = [EncodableKeyValue<CodingKeys>]()
+        if !particleGroups.isEmpty {
+            properties.append(EncodableKeyValue(key: .particleGroups, value: particleGroups.particleGroups))
+        }
+        if !signatures.isEmpty {
+            properties.append(EncodableKeyValue(key: .signatures, value: signatures, output: .all))
+        }
         
-        try container.encode(particleGroups, forKey: .particleGroups)
-        try container.encode(signatures, forKey: .signatures)
-        try container.encode(metaData, forKey: .metaData)
-
-        let enc = Foundation.JSONEncoder()
-        let atomSize = [
-            try enc.encode(particleGroups),
-            try enc.encode(signatures),
-            try enc.encode(metaData)
-        ].map { $0.length }.reduce(0, +)
+        properties.append(EncodableKeyValue(key: .metaData, value: metaData))
         
+        let atomSize = try AnyEncodableKeyValueList(keyValues: properties).toDSON().asData.length
         guard atomSize <= Atom.maxSize else {
             throw Error.tooManyBytes(expectedAtMost: Atom.maxSize, butGot: atomSize)
         }
+        
+        return properties
+    }
+        
+    static func == (lhs: Atom, rhs: Atom) -> Bool {
+        return lhs.radixHash == rhs.radixHash
+    }
+    
+    var radixHash: RadixHash {
+        do {
+            return RadixHash(unhashedData: try toDSON(output: .hash), hashedBy: Sha256TwiceHasher())
+        } catch {
+            incorrectImplementation("Should always be able to hash, error: \(error)")
+        }
+    }
+    
+    var hid: EUID {
+        return radixHash.toEUID()
+    }
+}
+
+// MARK: - ArrayInitializable
+public extension Atom {
+    public typealias Element = ParticleGroup
+    init(elements particleGroups: [Element]) {
+        self.init(particleGroups: ParticleGroups(particleGroups: particleGroups))
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension Atom {
+    // TODO implement this when `hid` does not crash
+    //    public var description: String {
+    //        return "Atom(\(hid))"
+    //    }
+}
+
+public extension Atom {
+    
+    func spunParticles() -> [SpunParticle] {
+        return particleGroups.flatMap { $0.spunParticles }
+    }
+    
+    func messageParticles() -> [MessageParticle] {
+        return spunParticles().compactMap(type: MessageParticle.self)
+    }
+    
+    func particles<P>(spin: Spin, type: P.Type) -> [P] where P: ParticleConvertible {
+        return spunParticles()
+            .filter(spin: spin)
+            .compactMap(type: P.self)
+
+    }
+    
+    var timestamp: Date? {
+        return metaData.timestamp
+    }
+    
+    func publicKeys() -> Set<PublicKey> {
+        return spunParticles()
+            .map { $0.particle }
+            .flatMap { Array($0.keyDestinations()) }
+            .asSet
     }
 }
 

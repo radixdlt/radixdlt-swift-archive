@@ -8,8 +8,15 @@
 
 import Foundation
 
-/// Java `TokenClassReference`
-public struct TokenDefinitionIdentifier: PrefixedJsonCodableByProxy, Identifiable, CustomStringConvertible, Hashable {
+// swiftlint:disable colon
+
+/// A subset of `ResourceIdentifier` which `type == .tokens`
+public struct TokenDefinitionIdentifier:
+    PrefixedJsonCodableByProxy,
+    Identifiable,
+    Hashable,
+    CustomStringConvertible {
+// swiftlint:enable colon
     
     public let address: Address
     public let symbol: Symbol

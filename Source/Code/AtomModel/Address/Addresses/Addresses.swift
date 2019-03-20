@@ -8,8 +8,12 @@
 
 import Foundation
 
-public struct Addresses: ArrayDecodable, Equatable {
-    
+// swiftlint:disable colon
+/// A collection of Radix addresses
+public struct Addresses:
+    ArrayDecodable,
+    Equatable {
+// swiftlint:enable colon
     public let addresses: Set<Address>
     
     public init(addresses: Set<Address> = Set()) {

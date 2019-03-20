@@ -9,7 +9,14 @@
 import Foundation
 
 public typealias Shard = Int64
-public struct Shards: RangeExpression, Codable {
+
+// swiftlint:disable colon
+/// Represents an interval of Radix shards
+public struct Shards:
+    RadixCodable,
+    RangeExpression,
+    Codable {
+// swiftlint:enable colon
     public typealias Bound = Shard
     
     private let range: Range<Bound>
@@ -59,9 +66,10 @@ public extension Shards {
         try self.init(lower: lower, upper: upper)
     }
     
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(range.lowerBound, forKey: .low)
-        try container.encode(range.upperBound, forKey: .high)
+    func encodableKeyValues() throws -> [EncodableKeyValue<Shards.CodingKeys>] {
+        return [
+            EncodableKeyValue(key: .low, value: range.lowerBound),
+            EncodableKeyValue(key: .high, value: range.upperBound)
+        ]
     }
 }

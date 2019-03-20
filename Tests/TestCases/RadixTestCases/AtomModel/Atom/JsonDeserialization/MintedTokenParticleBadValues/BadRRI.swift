@@ -15,7 +15,7 @@ class BadRRI: AtomJsonDeserializationMintedTokenBadValuesSpec {
         /// Scenario 15
         /// https://radixdlt.atlassian.net/browse/RLAU-567
         describe("JSON deserialization - MintedTokenParticle: bad RadixResourceIdentifier") {
-            let badJson = self.replaceValueInParticle(for: .tokenDefinitionIdentifier, with: ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/foobar/XRD")
+            let badJson = self.replaceValueInTokenParticle(for: .tokenDefinitionIdentifier, with: ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/foobar/XRD")
             
             it("should fail to deserialize JSON with a MintedTokenParticle with") {
                 expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: ResourceIdentifier.Error.self) {

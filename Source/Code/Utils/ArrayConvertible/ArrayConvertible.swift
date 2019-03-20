@@ -8,26 +8,20 @@
 
 import Foundation
 
-public protocol ArrayConvertible: ExpressibleByArrayLiteral, Collection {
+// swiftlint:disable colon
+
+/// An Array-like type
+public protocol ArrayConvertible:
+    LengthMeasurable,
+    Collection {
+// swiftlint:enable colon
     var elements: [Element] { get }
-    init(elements: [Element])
 }
 
-// MARK: - Convenience Init
+// MARK: - LengthMeasurable Conformance
 public extension ArrayConvertible {
-    init(_ elements: [Element]) {
-        self.init(elements: elements)
-    }
-    
-    init(_ elements: Element...) {
-        self.init(elements: elements)
-    }
-}
-
-// MARK: - ExpressibleByArrayLiteral
-public extension ArrayConvertible {
-    public init(arrayLiteral elements: Element...) {
-        self.init(elements: elements)
+    var length: Int {
+        return elements.count
     }
 }
 

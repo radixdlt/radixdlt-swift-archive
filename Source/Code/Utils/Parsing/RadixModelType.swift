@@ -20,7 +20,7 @@ public enum RadixModelType: Int, Codable {
 
     // MARK: - Particles
     case messageParticle = -1254222995
-    case tokenDefinitionParticle = -1034420571
+    case tokenDefinitionParticle = -1135093134
     case burnedTokenParticle = 1180201038
     case mintedTokenParticle = 1745075425
     case transferredTokenParticle = 1311280198
@@ -33,4 +33,10 @@ public extension RadixModelType {
     }
     
     static let jsonKey = "serializer"
+}
+
+extension RadixModelType: CBORConvertible {
+    public func toCBOR() -> CBOR {
+        return CBOR(integerLiteral: rawValue)
+    }
 }

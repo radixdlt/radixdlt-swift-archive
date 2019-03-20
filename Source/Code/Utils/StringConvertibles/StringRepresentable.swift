@@ -12,6 +12,10 @@ public protocol LengthMeasurable {
     var length: Int { get }
 }
 
+extension Array: LengthMeasurable {
+    public var length: Int { return count }
+}
+
 public protocol StringRepresentable: LengthMeasurable {
     var stringValue: String { get }
 }

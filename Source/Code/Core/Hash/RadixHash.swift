@@ -9,46 +9,43 @@
 import Foundation
 import CryptoSwift
 
-public protocol Hashing {
-    func hash(data: Data) -> Data
-}
+// swiftlint:disable colon
 
-public struct Sha256Hasher: Hashing {
-    public init() {}
-    public func hash(data: Data) -> Data {
-        return data.sha256()
-    }
-}
+/// Radix hash relies on the DSON encoding of a type.
+public struct RadixHash:
+    DataConvertible,
+    ArrayConvertible,
+    Hashable,
+    CustomStringConvertible {
+// swiftlint:enable colon
 
-public struct Sha256TwiceHasher: Hashing {
-    public init() {}
-    public func hash(data: Data) -> Data {
-        return data.sha256().sha256()
-    }
-}
-
-public struct RadixHash: Hashable, CustomStringConvertible, Collection {
     private let data: Data
+    
+    // MARK: - Designated initializer
     public init(unhashedData: Data, hashedBy hasher: Hashing) {
         self.data = hasher.hash(data: unhashedData)
     }
 }
 
-// MARK: - Collection
+// MARK: - LengthMeasurable
+public extension RadixHash {
+    var length: Int {
+        return bytes.length
+    }
+}
+
+// MARK: - ArrayConvertible
 public extension RadixHash {
     public typealias Element = Byte
-    typealias Index = Array<Element>.Index
-    var startIndex: Index {
-        return data.startIndex
+    var elements: [Element] {
+        return data.bytes
     }
-    var endIndex: Index {
-        return data.endIndex
-    }
-    subscript(position: Index) -> Element {
-        return data[position]
-    }
-    func index(after index: Index) -> Index {
-        return data.index(after: index)
+}
+
+// MARK: - DataConvertible
+public extension RadixHash {
+    var asData: Data {
+        return data
     }
 }
 
@@ -61,18 +58,10 @@ public extension RadixHash {
 
 public extension RadixHash {
     
-    func toHexString() -> HexString {
-        return HexString(data: data)
-    }
-    
-    func toBase64String() -> Base64String {
-        return Base64String(data: data)
-    }
-    
     func toEUID() -> EUID {
         var dataToPad = self.data
         do {
-            return try EUID(data: Data(bytes: &dataToPad, count: EUID.byteCount))
+            return try EUID(Data(bytes: &dataToPad, count: EUID.byteCount))
         } catch {
             incorrectImplementation("Should always be able to return EUID, error: \(error)")
         }
@@ -82,6 +71,6 @@ public extension RadixHash {
 // MARK: - CustomStringConvertible
 public extension RadixHash {
     var description: String {
-        return toBase64String().value
+        return toBase64String().stringValue
     }
 }

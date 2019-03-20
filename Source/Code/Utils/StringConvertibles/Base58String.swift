@@ -8,7 +8,17 @@
 
 import Foundation
 
-public struct Base58String: PrefixedJsonCodable, StringConvertible, StringRepresentable, CharacterSetSpecifying, DataConvertible, DataInitializable {
+// swiftlint:disable colon
+
+/// String representation of a Base58 string which is impossible to instantiatie with invalid values.
+public struct Base58String:
+    PrefixedJsonCodable,
+    StringConvertible,
+    StringRepresentable,
+    CharacterSetSpecifying,
+    DataConvertible,
+    DataInitializable {
+// swiftlint:enable colon
 
     public static var allowedCharacters = CharacterSet.base58
     
@@ -22,7 +32,6 @@ public struct Base58String: PrefixedJsonCodable, StringConvertible, StringRepres
     }
 }
 
-// MARK: - PrefixedJsonDecodable
 public extension Base58String {
     static let jsonPrefix: JSONPrefix = .addressBase58
 }

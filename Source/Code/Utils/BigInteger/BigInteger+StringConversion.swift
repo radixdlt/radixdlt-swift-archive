@@ -28,27 +28,12 @@ public extension BigInteger {
         guard uppercased else { return stringRepresentation }
         return stringRepresentation.uppercased()
     }
-        
-    var asData: Data {
-        return Data(hex: toHexString().value)
-    }
 }
 
 extension Data: DataConvertible {
     
     public var asData: Data {
         return self
-    }
-    
-    public func toData(minByteCount: Int? = nil) -> Data {
-        guard let minByteCount = minByteCount else {
-            return self
-        }
-        var bytes = self.bytes
-        while bytes.count < minByteCount {
-            bytes = [Byte(0x0)] + bytes
-        }
-        return Data(bytes: bytes)
     }
 }
 
@@ -57,6 +42,11 @@ func * <I>(lhs: I, rhs: I?) -> I? where I: BinaryInteger {
         return nil
     }
     return lhs * rhs
+}
+
+public enum ConcatMode {
+    case prepend
+    case append
 }
 
 extension String {
@@ -68,12 +58,11 @@ extension String {
         return prependingOrAppending(character: character, toLength: expectedLength, mode: .prepend)
     }
     
-    private enum ConcatMode {
-        case prepend
-        case append
+    mutating func prependOrAppend(character: Character, toLength expectedLength: Int?, mode: ConcatMode) {
+        self = prependingOrAppending(character: character, toLength: expectedLength, mode: mode)
     }
     
-    private func prependingOrAppending(character: Character, toLength expectedLength: Int?, mode: ConcatMode) -> String {
+    func prependingOrAppending(character: Character, toLength expectedLength: Int?, mode: ConcatMode) -> String {
         guard let expectedLength = expectedLength else {
             return self
         }

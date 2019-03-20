@@ -10,6 +10,23 @@
 import Nimble
 import Quick
 
+class AtomToDsonSpec: QuickSpec {
+    override func spec() {
+        describe("Dson encoding of trivial atom") {
+            it("should not encode empty signatures and empty particle group list") {
+                let atom = Atom(metaData: .timestamp("1234567890123"))
+                let dson = try! atom.toDSON()
+                let dsonHex = dson.hex
+                expect(dsonHex).to(equal("bf686d65746144617461bf6974696d657374616d706d31323334353637383930313233ff6a73657269616c697a65721a001ed1516776657273696f6e1864ff"))
+                
+                expect(dsonHex).to(contain(try! Atom.CodingKeys.metaData.rawValue.toDSON().hex))
+                expect(dsonHex).toNot(contain(try! Atom.CodingKeys.signatures.rawValue.toDSON().hex))
+                expect(dsonHex).toNot(contain(try! Atom.CodingKeys.particleGroups.rawValue.toDSON().hex))
+            }
+        }
+    }
+}
+
 class AtomJsonSerializationTrivialSpec: QuickSpec {
     
     override func spec() {
@@ -17,7 +34,17 @@ class AtomJsonSerializationTrivialSpec: QuickSpec {
         /// https://radixdlt.atlassian.net/browse/RLAU-943
         describe("JSON serialization - Trivial Atom") {
             let atom = Atom(
-                particleGroups: [ParticleGroup()]
+                particleGroups: [
+                    ParticleGroup(spunParticles: [
+                        SpunParticle(
+                            spin: .up,
+                            particle: UniqueParticle(
+                                address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
+                                uniqueName: "Sajjon"
+                            )
+                        )
+                    ])
+                ]
             )
             
             it("should result in the appropriate trival JSON") {
@@ -43,7 +70,17 @@ private let expectedJson = """
     "particleGroups": [
         {
             "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
-            "particles": [],
+            "particles": [
+                {
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
+                    "spin": 1,
+                    "particle": {
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.uniqueParticle.rawValue),
+                        "name": ":str:Sajjon",
+                        "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                    }
+                }
+            ],
             "metaData": {}
         }
     ]

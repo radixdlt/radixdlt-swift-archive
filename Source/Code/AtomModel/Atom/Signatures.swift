@@ -8,12 +8,26 @@
 
 import Foundation
 
-public let dataFormatVersion = 100
+// swiftlint:disable colon
 
-public struct Signatures: Equatable, ExpressibleByDictionaryLiteral, Collection, Codable {
+/// An ECDSA signature
+public struct Signatures:
+    CBORDictionaryConvertible,
+    Equatable,
+    ExpressibleByDictionaryLiteral,
+    Collection,
+    Codable {
+// swiftlint:enable colon
+    
     public typealias Key = EUID
     public typealias Value = Signature
-    public let values: [Key: Value]
+    public let dictionary: Map
+    public init(dictionary: Map) {
+        self.dictionary = dictionary
+    }
+    public init(validate dictionary: Map) throws {
+        self.init(dictionary: dictionary)
+    }
 }
 
 // MARK: - Collection
@@ -22,33 +36,33 @@ public extension Signatures {
     typealias Index = Dictionary<Key, Value>.Index
     
     var startIndex: Index {
-        return values.startIndex
+        return dictionary.startIndex
     }
     
     var endIndex: Index {
-        return values.endIndex
+        return dictionary.endIndex
     }
     
     subscript(position: Index) -> Element {
-        return values[position]
+        return dictionary[position]
     }
     
     func index(after index: Index) -> Index {
-        return values.index(after: index)
+        return dictionary.index(after: index)
     }
 }
 
 // MARK: - Subscript
 public extension Signatures {
     subscript(key: Key) -> Value? {
-        return values[key]
+        return dictionary[key]
     }
 }
 
 // MARK: - ExpressibleByDictionaryLiteral
 public extension Signatures {
     init(dictionaryLiteral signatures: (Key, Value)...) {
-        self.init(values: Dictionary(uniqueKeysWithValues: signatures))
+        self.init(dictionary: Dictionary(uniqueKeysWithValues: signatures))
     }
 }
 
@@ -63,7 +77,7 @@ public extension Signatures {
                 $0.value
             )
         })
-        self.init(values: map)
+        self.init(dictionary: map)
     }
 }
 
@@ -72,12 +86,12 @@ public extension Signatures {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
      
-        let dictionary = [String: Signature](uniqueKeysWithValues: values.map {
+        let dictToEnc = [String: Signature](uniqueKeysWithValues: dictionary.map {
             (
                 $0.key.toHexString().stringValue,
                 $0.value
             )
         })
-        try container.encode(dictionary)
+        try container.encode(dictToEnc)
     }
 }

@@ -8,8 +8,14 @@
 
 import Foundation
 
-public struct UniqueParticle: ParticleModelConvertible {
-    
+// swiftlint:disable colon
+
+/// A representation of something unique.
+public struct UniqueParticle:
+    ParticleModelConvertible,
+    RadixCodable {
+// swiftlint:enable colon
+
     public static let type = RadixModelType.uniqueParticle
     public let address: Address
     public let name: Name
@@ -35,18 +41,17 @@ public extension UniqueParticle {
         name = try container.decode(Name.self, forKey: .name)
     }
     
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(type, forKey: .type)
-        
-        try container.encode(address, forKey: .address)
-        try container.encode(name, forKey: .name)
-        
+    public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        return [
+            EncodableKeyValue(key: .address, value: address),
+            EncodableKeyValue(key: .name, value: name)
+        ]
     }
 }
 
 public extension UniqueParticle {
     var identifier: ResourceIdentifier {
+        
         return ResourceIdentifier(address: address, type: .unique, name: name)
     }
 }

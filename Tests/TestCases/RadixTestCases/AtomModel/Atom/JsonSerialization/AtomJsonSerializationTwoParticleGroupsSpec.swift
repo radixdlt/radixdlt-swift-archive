@@ -20,6 +20,8 @@ class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
                 do {
                     let json = try RadixJSONEncoder(outputFormat: .prettyPrinted).encode(atom)
                     let jsonString = String(data: json, encoding: .utf8)!
+                    expect(jsonString).to(contain("Sajjon"))
+                    expect(jsonString).to(contain("1446890290"))
                     let atomFromJSON = try RadixJSONDecoder().decode(Atom.self, from: jsonString.data(using: .utf8)!)
                     expect(atomFromJSON).to(equal(atom))
                 } catch let encodingError as EncodingError {
@@ -35,6 +37,15 @@ class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
     }
 }
 private let atom = Atom(
+    metaData: [
+        .timestamp: "1551345320000"
+    ],
+    signatures: [
+        "71c3c2fc9fee73b13cad082800a6d0de": try! Signature(
+            r: Signature.Part(base64: "JRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX="),
+            s: Signature.Part(base64: "KbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H=")
+        )
+    ],
     particleGroups: [
         ParticleGroup(spunParticles: [
             SpunParticle(
@@ -49,15 +60,14 @@ private let atom = Atom(
                         "foo": "bar"
                     ],
                     granularity: 1,
-                    permissions: .allPow
+                    permissions: .pow
                 )
             ),
             SpunParticle(
                 spin: .up,
-                particle: TokenParticle(
-                    type: .minted,
-                    owner: "A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
-                    receiver: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                particle: MintedTokenParticle(
+                    address: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                    granularity: 1,
                     nonce: 992284943125945,
                     planck: 24805440,
                     amount: 1337,
@@ -71,16 +81,14 @@ private let atom = Atom(
                     to: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
                     message: "Hello Radix!"
                 )
+            ),
+            SpunParticle(
+                spin: .up,
+                particle: UniqueParticle(
+                    address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
+                    uniqueName: "Sajjon"
+                )
             )
         ])
-    ],
-    signatures: [
-        "71c3c2fc9fee73b13cad082800a6d0de": try! Signature(
-            r: Signature.Part(base64: "JRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX="),
-            s: Signature.Part(base64: "KbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H=")
-        )
-    ],
-    metaData: [
-        .timestamp: "1551345320000"
     ]
 )

@@ -9,6 +9,7 @@
 import Foundation
 
 public final class RadixJSONDecoder: Foundation.JSONDecoder {
+    
     public override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T: Decodable & RadixModelTypeStaticSpecifying {
         let jsonObjectAny = try JSONSerialization.jsonObject(with: data, options: [])
         guard let json = jsonObjectAny as? [String: Any] else {
@@ -25,4 +26,5 @@ public final class RadixJSONDecoder: Foundation.JSONDecoder {
         }
         return try super.decode(type, from: data)
     }
+    
 }

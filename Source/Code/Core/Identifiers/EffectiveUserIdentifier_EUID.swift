@@ -14,15 +14,25 @@ public extension CustomStringConvertible where Self: StringRepresentable {
     }
 }
 
+// swiftlint:disable colon
+
 /// EffectiveUserIdentifier
-public struct EUID: PrefixedJsonCodable, StringRepresentable, Hashable, ExpressibleByIntegerLiteral, CustomStringConvertible {
+public struct EUID:
+    PrefixedJsonCodable,
+    StringRepresentable,
+    DataInitializable,
+    CBORDataConvertible,
+    Hashable,
+    ExpressibleByIntegerLiteral,
+    CustomStringConvertible {
+// swiftlint:enable colon
     
     public typealias Value = BigUnsignedInt
     public static let byteCount = 16
 
     private let value: Value
 
-    public init(data: Data) throws {
+    public init(_ data: Data) throws {
         if data.count > EUID.byteCount {
             throw Error.tooManyBytes(expected: EUID.byteCount, butGot: data.count)
         }
@@ -34,14 +44,39 @@ public struct EUID: PrefixedJsonCodable, StringRepresentable, Hashable, Expressi
     }
 }
 
+// MARK: - DSONPrefixSpecifying
+public extension EUID {
+    var dsonPrefix: DSONPrefix {
+        return .euidHex
+    }
+}
+
+// MARK: - DataInitializable
+public extension EUID {
+    init(data: Data) {
+        do {
+            try self.init(data)
+        } catch {
+            incorrectImplementation("Bad data")
+        }
+    }
+}
+
+// MARK: - DataConvertible
+public extension EUID {
+    var asData: Data {
+        return value.asData
+    }
+}
+
 // MARK: - Convenience Initializers
 public extension EUID {
     init(hexString: HexString) throws {
-        try self.init(data: hexString.asData)
+        try self.init(hexString.asData)
     }
     
     init(value: Value) throws {
-        try self.init(data: value.toData(minByteCount: EUID.byteCount))
+        try self.init(value.toData(minByteCount: EUID.byteCount))
     }
 }
 
@@ -55,7 +90,8 @@ public extension EUID {
 // MARK: - StringRepresentable
 public extension EUID {
     var stringValue: String {
-        return value.toHexString().stringValue
+        // Yes MUST be lower case, since DSON encoding is case sensitive
+        return toHexString(case: .lower).stringValue
     }
 }
 

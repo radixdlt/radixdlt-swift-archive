@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import BitcoinKit
 
 public extension Mnemonic {
     public struct Generator {
@@ -32,7 +33,6 @@ public extension Mnemonic.Generator {
 }
 
 // MARK: - From BitcoinKit
-import BitcoinKit
 public extension Mnemonic.Generator {
     public func generate() throws -> Mnemonic {
         do {
