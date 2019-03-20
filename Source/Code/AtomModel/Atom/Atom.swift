@@ -19,7 +19,9 @@ public struct Atom:
     RadixModelTypeStaticSpecifying,
     RadixHashable,
     RadixCodable,
-    ArrayInitializable {
+    ArrayInitializable,
+    CustomStringConvertible,
+    CustomDebugStringConvertible {
 // swiftlint:enable colon
     
     public static let type = RadixModelType.atom
@@ -57,17 +59,14 @@ public extension Atom {
     }
     
     func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-        var properties = [EncodableKeyValue<CodingKeys>]()
-        if !particleGroups.isEmpty {
-            properties.append(EncodableKeyValue(key: .particleGroups, value: particleGroups.particleGroups))
-        }
-        if !signatures.isEmpty {
-            properties.append(EncodableKeyValue(key: .signatures, value: signatures, output: .all))
-        }
-        
-        properties.append(EncodableKeyValue(key: .metaData, value: metaData))
-        
+        let properties = [
+            EncodableKeyValue<CodingKeys>(key: .metaData, value: metaData),
+            EncodableKeyValue(key: .particleGroups, nonEmpty: particleGroups.particleGroups),
+            EncodableKeyValue(key: .signatures, nonEmpty: signatures, output: [.api, .wire, .persist])
+        ].compactMap { $0 }
+
         let atomSize = try AnyEncodableKeyValueList(keyValues: properties).toDSON().asData.length
+        
         guard atomSize <= Atom.maxSize else {
             throw Error.tooManyBytes(expectedAtMost: Atom.maxSize, butGot: atomSize)
         }
@@ -77,18 +76,6 @@ public extension Atom {
         
     static func == (lhs: Atom, rhs: Atom) -> Bool {
         return lhs.radixHash == rhs.radixHash
-    }
-    
-    var radixHash: RadixHash {
-        do {
-            return RadixHash(unhashedData: try toDSON(output: .hash), hashedBy: Sha256TwiceHasher())
-        } catch {
-            incorrectImplementation("Should always be able to hash, error: \(error)")
-        }
-    }
-    
-    var hid: EUID {
-        return radixHash.toEUID()
     }
 }
 
@@ -102,10 +89,15 @@ public extension Atom {
 
 // MARK: - CustomStringConvertible
 public extension Atom {
-    // TODO implement this when `hid` does not crash
-    //    public var description: String {
-    //        return "Atom(\(hid))"
-    //    }
+    var description: String {
+        return "Atom(\(hashId))"
+    }
+}
+// MARK: - CustomDebugStringConvertible
+public extension Atom {
+    var debugDescription: String {
+        return "Atom(\(hashId), pg#\(particleGroups.count), p#\(spunParticles().count), md#\(metaData.count), s#\(signatures.count))"
+    }
 }
 
 public extension Atom {

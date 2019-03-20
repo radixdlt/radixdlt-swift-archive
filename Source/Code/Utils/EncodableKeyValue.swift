@@ -9,7 +9,7 @@
 import Foundation
 
 /// A partially type-erased container of an encodable Value for a certain CodingKey. The CodingKey is not type-erased, it is held by the generic passed to this struct. The encodable `Value`, however, is type-erased.
-public struct EncodableKeyValue<Key: CodingKey> {
+public struct EncodableKeyValue<Key: CodingKey>: DSONOutputSpecifying {
     public typealias Container = KeyedEncodingContainer<Key>
     public typealias JSONEncoding<Value: Encodable> = (inout Container, Value, Key) throws -> Void
     
@@ -20,7 +20,7 @@ public struct EncodableKeyValue<Key: CodingKey> {
     init<Value>(
         key: Key,
         value: Value,
-        output: DSONOutput = .all,
+        output: DSONOutput = .default,
         jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
     ) where Value: Encodable & DSONEncodable {
         self.key = key.stringValue
@@ -47,7 +47,7 @@ public extension EncodableKeyValue {
         key: Key,
         nonEmpty lengthMeasurable: ConditionalValue,
         value: (ConditionalValue) -> Value,
-        output: DSONOutput = .all,
+        output: DSONOutput = .default,
         jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
         ) where ConditionalValue: LengthMeasurable, Value: Encodable & DSONEncodable {
         guard lengthMeasurable.length > 0 else {
@@ -59,7 +59,7 @@ public extension EncodableKeyValue {
     init?<Value>(
         key: Key,
         nonEmpty lengthMeasurable: Value,
-        output: DSONOutput = .all,
+        output: DSONOutput = .default,
         jsonEncoding: @escaping JSONEncoding<Value> = { try $0.encode($1, forKey: $2) }
         ) where Value: Encodable & DSONEncodable & LengthMeasurable {
         guard lengthMeasurable.length > 0 else {

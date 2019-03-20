@@ -24,30 +24,12 @@ public typealias CBOREncodable = SwiftCBOR.CBOREncodable
 
 public typealias DSON = Data
 
-public enum DSONOutput: Int, Comparable {
-    case none = 0
-    case hash = 1
-    case all = 2
-}
-
-public extension Comparable where Self: RawRepresentable, Self.RawValue: Comparable {
-    static func < (lhs: Self, rhs: Self) -> Bool {
-        return lhs.rawValue < rhs.rawValue
-    }
-    static func > (lhs: Self, rhs: Self) -> Bool {
-        return lhs.rawValue > rhs.rawValue
-    }
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        return lhs.rawValue == rhs.rawValue
-    }
-}
-
 public protocol DSONEncodable {
     func toDSON(output: DSONOutput) throws -> DSON
 }
 
 public extension CBOREncodable where Self: CBOREncodable {
-    func toDSON(output: DSONOutput = .all) throws -> DSON {
+    func toDSON(output: DSONOutput = .default) throws -> DSON {
         return encode().asData
     }
 }

@@ -12,16 +12,43 @@ import Nimble
 
 class ComplexAtomFromJSONToDSONSpec: QuickSpec {
     override func spec() {
+        let atom: Atom = model(from: atomJson)
         describe("Atom JSON Deserialization") {
-            let atom: Atom = model(from: atomJson)
-            print(atom)
             it("should deserialize into an Atom") {
                 expect(atom.particles(spin: .up, type: MintedTokenParticle.self).first?.identifier.unique).to(equal("XRD"))
             }
             it("should serialize into correct DSON") {
-                let dson = try! atom.toDSON()
-                expect(dson.hex).to(equal(expectedDsonHex))
-                expect(dson.base64).to(equal(expecteDsonBase64))
+                let outputScenarios: [DSONOutput] = [DSONOutput.wire, DSONOutput.api, DSONOutput.persist, DSONOutput.all]
+                for output in outputScenarios {
+                    let dson = try! atom.toDSON(output: output)
+                    expect(dson.hex).to(equal(expectedDsonHex))
+                    expect(dson.base64).to(equal(expecteDsonBase64))
+                }
+            }
+            describe("DSON encoding output none") {
+                let dsonEmpty = try! atom.toDSON(output: .none)
+                
+                it("should result in approriate output for `toDSON(output: .none)`") {
+                    expect(dsonEmpty.hex).to(equal("bfff"))
+                }
+            }
+        }
+        
+        describe("Radix Hash") {
+            it("should match Java") {
+                expect(atom.radixHash.hex).to(equal("f3904297efea9b54d6484bf4605145257078967a7cefde789b62176299831d45"))
+            }
+        }
+        
+        describe("Hash Id (EUID)") {
+            it("should match Java") {
+                expect(atom.hashId).to(equal("f3904297efea9b54d6484bf460514525"))
+            }
+        }
+        
+        describe("Atom description") {
+            it("should contain the Hash Id") {
+                expect(atom.description).to(contain("f3904297efea9b54d6484bf460514525"))
             }
         }
     }

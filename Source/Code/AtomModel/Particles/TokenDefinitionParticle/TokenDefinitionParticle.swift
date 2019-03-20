@@ -43,7 +43,7 @@ public struct TokenDefinitionParticle:
         address: Address,
         metaData: MetaData = [:],
         granularity: Granularity = .default,
-        permissions: TokenPermissions = .all
+        permissions: TokenPermissions = .default
     ) {
         self.symbol = symbol
         self.name = name
