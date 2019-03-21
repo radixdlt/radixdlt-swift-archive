@@ -31,7 +31,7 @@ class AtomSignatureSpec: QuickSpec {
                 expect(identity.owner.hex).to(equal("0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"))
                 let address = Address(magic: 0x02, publicKey: identity.owner)
                 expect(address.hex).to(equal("020279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798404d542d"))
-//                expect(address.base64).to(equal("JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun"))
+                expect(address.stringValue).to(equal("JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun"))
                 let unsignedAtom = try! UnsignedAtom(atom)
                 let signedAtom = try! identity.sign(atom: unsignedAtom)
                 expect(signedAtom.signature.hex).to(equal("4228dc7cb3850cf318664997357792a126c897e91392125e2d8daa6548f1d00c5d6e3d65028568914007dde590e32bf7ec5e12230f380f62839280d34ff19e9e"))

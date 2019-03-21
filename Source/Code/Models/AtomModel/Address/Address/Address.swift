@@ -15,6 +15,7 @@ public struct Address:
     PrefixedJsonCodableByProxy,
     ExactLengthSpecifying,
     DataInitializable,
+    StringRepresentable,
     Ownable,
     RadixHashable,
     Hashable,
@@ -49,10 +50,9 @@ public struct Address:
     
     public init(base58String: Base58String) throws {
         try Address.validateLength(of: base58String)
-        try Address.isChecksummed(base58String)
+        self.base58String = try Address.isChecksummed(base58String)
         let addressData = base58String.asData
         self.publicKey = try PublicKey(data: addressData[1...addressData.count - 5])
-        self.base58String = base58String
     }
 }
 
@@ -117,10 +117,10 @@ public extension Address {
     }
 }
 
-// MARK: - CustomStringConvertible
+// MARK: - StringRepresentable
 public extension Address {
-    var description: String {
-        return base58String.value
+    var stringValue: String {
+        return base58String.stringValue
     }
 }
 
@@ -140,19 +140,21 @@ public extension Address {
         return data.toBase58String()
     }
     
-    static func isChecksummed(base58: Base58String, magic: Magic) throws {
-         let magicByte = magic.asData.bytes[0]
-        try isChecksummed(magicByte + base58)
+    static func isChecksummed(base58: Base58String, magic: Magic) throws -> Base58String {
+        let magicByte = magic.asData.bytes[0]
+        return try isChecksummed(magicByte + base58)
     }
     
     static let checksumByteCount = 4
     
-    static func isChecksummed(_ dataConvertible: DataConvertible) throws {
+    static func isChecksummed(_ dataConvertible: DataConvertible) throws -> Base58String {
         let data = dataConvertible.asData
         let checksumDropped = Data(data.dropLast(Address.checksumByteCount))
-        guard data == checksummed(checksumDropped).asData else {
+        let checksummedString = checksummed(checksumDropped)
+        guard data == checksummedString.asData else {
             throw Error.checksumMismatch
         }
+        return checksummedString
     }
     
     public enum Error: Swift.Error {
