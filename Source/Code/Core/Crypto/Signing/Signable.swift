@@ -11,3 +11,13 @@ import Foundation
 public protocol Signable {
     var signableData: Data { get }
 }
+
+public protocol SignableConvertible: Signable {
+    var signable: Signable { get }
+}
+
+public extension SignableConvertible {
+    var signableData: Data {
+        return signable.signableData
+    }
+}

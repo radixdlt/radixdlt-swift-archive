@@ -18,14 +18,10 @@ public final class Signer {
 }
 
 public extension Signer {
-    
-    static func sign(message: Message, privateKey: PrivateKey) throws -> Signature {
-        return try sign(message, privateKey: privateKey)
-    }
-    
+
     static func sign(hashedData: Data, privateKey: PrivateKey) throws -> Signature {
         let message = try Message(data: hashedData)
-        return try sign(message: message, privateKey: privateKey)
+        return try sign(message, privateKey: privateKey)
     }
     
     static func sign(unhashedData: DataConvertible, hashedBy hasher: Hashing = RadixHasher(), privateKey: PrivateKey) throws -> Signature {
@@ -35,6 +31,6 @@ public extension Signer {
     
     static func sign(text: String, encoding: String.Encoding = .utf8, privateKey: PrivateKey) throws -> Signature {
         let message = try Message(string: text, encoding: encoding)
-        return try sign(message: message, privateKey: privateKey)
+        return try sign(message, privateKey: privateKey)
     }
 }

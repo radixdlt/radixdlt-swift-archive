@@ -40,7 +40,7 @@ class PrivateKeyTests: XCTestCase {
                 
                 let message = try Message(data: expected.messageHashedUTF8Encoded)
                 
-                let signature = try Signer.sign(message: message, privateKey: privateKey)
+                let signature = try Signer.sign(message, privateKey: privateKey)
                 XCTAssertEqual(try signature.toDER().hex, expected.signature)
              
                 XCTAssertTrue(try SignatureVerifier.verifyThat(signature: signature, signedMessage: message, usingKey: publicKey))

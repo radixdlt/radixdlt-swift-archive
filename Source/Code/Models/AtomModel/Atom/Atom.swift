@@ -19,7 +19,7 @@ public struct Atom:
     RadixModelTypeStaticSpecifying,
     RadixHashable,
     RadixCodable,
-    Signable,
+    SignableConvertible,
     ArrayInitializable,
     CustomStringConvertible,
     CustomDebugStringConvertible {
@@ -142,8 +142,8 @@ public extension Atom {
         }
     }
     
-    var signableData: Data {
-        return radixHash.asData
+    var signable: Signable {
+        return Message(hash: radixHash)
     }
 }
 

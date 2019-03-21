@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct UnsignedAtom: Signable {
+public struct UnsignedAtom: SignableConvertible {
     
     public enum Error: Swift.Error {
         case atomAlreadySigned
@@ -25,8 +25,8 @@ public struct UnsignedAtom: Signable {
 }
 
 public extension UnsignedAtom {
-    var signableData: Data {
-        return unsignedAtom.signableData
+    var signable: Signable {
+        return unsignedAtom
     }
 }
 

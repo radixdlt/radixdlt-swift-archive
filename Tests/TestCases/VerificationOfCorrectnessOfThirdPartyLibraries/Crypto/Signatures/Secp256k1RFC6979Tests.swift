@@ -92,7 +92,7 @@ class Secp256k1RFC6979Tests: XCTestCase {
             let hexString = try HexString(hexString: privateKeyHex)
             let privateKey = try RadixSDK.PrivateKey(hex: hexString)
             let message = try Message(unhashed: msgText.data(using: .ascii)!, hashedBy: Sha256Hasher())
-            let signature = try Signer.sign(message: message, privateKey: privateKey)
+            let signature = try Signer.sign(message, privateKey: privateKey)
            
             let expectedSignature = try Signature(
                 r: HexString(stringLiteral: expectedSignatureR).unsignedBigInteger,

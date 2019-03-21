@@ -22,7 +22,6 @@ class AtomSignatureSpec: QuickSpec {
         describe("Radix Hash") {
             it("should match Java") {
                 expect(atom.radixHash.hex).to(equal(expectedHash))
-                expect(atom.signableData.hex).to(equal(expectedHash))
             }
         }
         describe("ECC") {
