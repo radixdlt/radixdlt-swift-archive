@@ -16,3 +16,15 @@ extension Date: ExpressibleByStringLiteral {
         self = date
     }
 }
+
+extension Date: ExpressibleByFloatLiteral {
+    public init(floatLiteral value: TimeInterval) {
+        self = TimeConverter.dateFrom(millisecondsSince1970: value)
+    }
+}
+
+extension Date: ExpressibleByIntegerLiteral {
+    public init(integerLiteral value: Int) {
+        self = TimeConverter.dateFrom(millisecondsSince1970: TimeInterval(value))
+    }
+}

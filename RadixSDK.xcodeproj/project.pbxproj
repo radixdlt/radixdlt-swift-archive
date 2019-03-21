@@ -14,6 +14,7 @@
 		E601D33A2242842500A81412 /* AtomSignatureSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3392242842400A81412 /* AtomSignatureSpec.swift */; };
 		E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33B22428C7F00A81412 /* SignedAtom.swift */; };
 		E601D33E22428C8D00A81412 /* SignedAtomVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33D22428C8D00A81412 /* SignedAtomVerifier.swift */; };
+		E601D3412243CE8E00A81412 /* EmptyAtomSignatureSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33F2243CE8B00A81412 /* EmptyAtomSignatureSpec.swift */; };
 		E6040E5D2240ED380065AEC2 /* EUIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E5C2240ED380065AEC2 /* EUIDTests.swift */; };
 		E6040E632240F8A00065AEC2 /* RadixIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E622240F8A00065AEC2 /* RadixIdentity.swift */; };
 		E6040E662240FE8C0065AEC2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E652240FE8C0065AEC2 /* Message.swift */; };
@@ -289,6 +290,7 @@
 		E601D3392242842400A81412 /* AtomSignatureSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSignatureSpec.swift; sourceTree = "<group>"; };
 		E601D33B22428C7F00A81412 /* SignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAtom.swift; sourceTree = "<group>"; };
 		E601D33D22428C8D00A81412 /* SignedAtomVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAtomVerifier.swift; sourceTree = "<group>"; };
+		E601D33F2243CE8B00A81412 /* EmptyAtomSignatureSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyAtomSignatureSpec.swift; sourceTree = "<group>"; };
 		E6040E5C2240ED380065AEC2 /* EUIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EUIDTests.swift; sourceTree = "<group>"; };
 		E6040E622240F8A00065AEC2 /* RadixIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixIdentity.swift; sourceTree = "<group>"; };
 		E6040E652240FE8C0065AEC2 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -582,6 +584,7 @@
 			isa = PBXGroup;
 			children = (
 				E601D3392242842400A81412 /* AtomSignatureSpec.swift */,
+				E601D33F2243CE8B00A81412 /* EmptyAtomSignatureSpec.swift */,
 			);
 			path = Signatures;
 			sourceTree = "<group>";
@@ -2125,6 +2128,7 @@
 				E6611F2922259E1B00AD2F83 /* NonBase58AddressSpec.swift in Sources */,
 				E6A4ABEB222070B7006C5CA8 /* TooShortDescriptionSpec.swift in Sources */,
 				E6A4ABED2220710B006C5CA8 /* TokenPermissionBadValueSpec.swift in Sources */,
+				E601D3412243CE8E00A81412 /* EmptyAtomSignatureSpec.swift in Sources */,
 				E6A4ABE522206FF0006C5CA8 /* TooLongNameSpec.swift in Sources */,
 				E6ED1A3421F879F600654105 /* HashTests.swift in Sources */,
 				E6A4ABD622206443006C5CA8 /* AtomJsonDeserializationTwoParticleGroupsSpec.swift in Sources */,
