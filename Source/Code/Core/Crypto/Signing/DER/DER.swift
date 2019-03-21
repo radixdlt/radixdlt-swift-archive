@@ -8,18 +8,6 @@
 
 import Foundation
 
-public extension DataConvertible {
-    func trimmedBytes() -> [Byte] {
-        var bytes = self.bytes
-        guard !bytes.isEmpty else {
-            return bytes
-        }
-        while bytes[0] == Byte(0x0) {
-            bytes = [Byte](bytes.dropFirst())
-        }
-        return bytes
-    }
-}
 // swiftlint:disable colon
 
 /// Data on [DER encoding][1]
@@ -51,7 +39,7 @@ public struct DER:
         }
         
         let encode: (Signature.Part) -> Data = {
-            let numberBytes = $0.bytes.trimmedBytes()
+            let numberBytes = $0.bytes
             var bytes = [Byte]()
             if numberBytes[0] > 0x7f {
                 bytes = [0x0] + numberBytes

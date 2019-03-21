@@ -69,12 +69,7 @@ public struct Signature:
 // MARK: - DataInitializable
 public extension Signature {
     init(data: Data) throws {
-        do {
-            try Signature.validateLength(of: data)
-            
-        } catch {
-            print("error: \(error)")
-        }
+        try Signature.validateLength(of: data)
         let byteCount = Signature.length / 2
         let rData = Data(data.prefix(byteCount))
         let sData = Data(data.suffix(byteCount))
@@ -83,7 +78,6 @@ public extension Signature {
             s: sData.unsignedBigInteger
         )
     }
-    
 }
 
 // MARK: - DERInitializable
