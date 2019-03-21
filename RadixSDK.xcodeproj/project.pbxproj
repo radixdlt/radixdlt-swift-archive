@@ -161,6 +161,7 @@
 		E6A4AC0D22243CA5006C5CA8 /* MinLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0C22243CA5006C5CA8 /* MinLengthSpecifying.swift */; };
 		E6A4AC0F22243CD7006C5CA8 /* ValueValidating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0E22243CD7006C5CA8 /* ValueValidating.swift */; };
 		E6A4AC1122243EDC006C5CA8 /* ValidValueInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */; };
+		E6C9FB9B2243DCE6000AAE12 /* Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C9FB9A2243DCE6000AAE12 /* Signing.swift */; };
 		E6CEE70721F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE70621F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift */; };
 		E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE70B21F5AE7800D745EC /* TestableConvenienceInitializers.swift */; };
 		E6CEE71321F5B3C000D745EC /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE71221F5B3C000D745EC /* RandomData.swift */; };
@@ -440,6 +441,7 @@
 		E6A4AC0C22243CA5006C5CA8 /* MinLengthSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinLengthSpecifying.swift; sourceTree = "<group>"; };
 		E6A4AC0E22243CD7006C5CA8 /* ValueValidating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueValidating.swift; sourceTree = "<group>"; };
 		E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidValueInitializable.swift; sourceTree = "<group>"; };
+		E6C9FB9A2243DCE6000AAE12 /* Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signing.swift; sourceTree = "<group>"; };
 		E6CEE70621F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HierarchicalDeterministicMasterSeed.swift; sourceTree = "<group>"; };
 		E6CEE70B21F5AE7800D745EC /* TestableConvenienceInitializers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableConvenienceInitializers.swift; sourceTree = "<group>"; };
 		E6CEE71221F5B3C000D745EC /* RandomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomData.swift; sourceTree = "<group>"; };
@@ -686,6 +688,7 @@
 				E601D3342242410700A81412 /* UnsignedAtom.swift */,
 				E6040E672240FE960065AEC2 /* Signable.swift */,
 				E601D3362242411400A81412 /* AtomSigning.swift */,
+				E6C9FB9A2243DCE6000AAE12 /* Signing.swift */,
 				E601D33B22428C7F00A81412 /* SignedAtom.swift */,
 				E601D33D22428C8D00A81412 /* SignedAtomVerifier.swift */,
 				E601D33022423FF900A81412 /* Signer.swift */,
@@ -2059,6 +2062,7 @@
 				E6ED1A8921F9F5BC00654105 /* UniqueParticle.swift in Sources */,
 				E6040E6D224128870065AEC2 /* DERCoding.swift in Sources */,
 				E6A4AB90221C3F64006C5CA8 /* TokenDefinitionParticle.swift in Sources */,
+				E6C9FB9B2243DCE6000AAE12 /* Signing.swift in Sources */,
 				E6D4B361223FD046004FC83A /* AnyEncodableKeyValueList.swift in Sources */,
 				E6CEE75121F6391300D745EC /* SpunParticle.swift in Sources */,
 				E6D4B33B223F9DD2004FC83A /* TimeConverter.swift in Sources */,

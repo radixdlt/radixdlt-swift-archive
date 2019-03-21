@@ -92,7 +92,7 @@ public extension TokenParticleConvertible {
 
 // MARK: - Ownable
 public extension TokenParticleConvertible {
-    var owner: PublicKey {
+    var publicKey: PublicKey {
         return address.publicKey
     }
 }

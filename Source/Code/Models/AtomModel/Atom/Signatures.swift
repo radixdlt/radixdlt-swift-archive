@@ -32,33 +32,12 @@ public struct Signatures:
 
 // MARK: - Public Methods
 public extension Signatures {
-    func containsSignature(for signable: Signable, signedBy ownable: Ownable) throws -> Bool {
-        
-//        return compactMap {
-//            try? SignatureVerifier.verifyThat(
-//                signature: $0.value,
-//                didSign: signable,
-//                usingKey: ownable.owner
-//            )
-//        }.reduce(false) { $0 || $1 }
-        
-//        do {
-//            return try contains {
-//                try SignatureVerifier.verifyThat(
-//                    signature: $0.value,
-//                    didSign: signable,
-//                    usingKey: ownable.owner
-//                )
-//            }
-//        } catch {
-//            return false
-//        }
-        
+    func containsSignature(for signable: Signable, signedBy ownable: Ownable) throws -> Bool {        
         return try contains {
             try SignatureVerifier.verifyThat(
                 signature: $0.value,
                 didSign: signable,
-                usingKey: ownable.owner
+                usingKey: ownable.publicKey
             )
         }
     }

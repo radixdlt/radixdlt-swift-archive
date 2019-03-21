@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol Ownable {
-    var owner: PublicKey { get } 
+    var publicKey: PublicKey { get }
 }

@@ -28,8 +28,8 @@ class AtomSignatureSpec: QuickSpec {
         describe("ECC") {
             it("should verify signatures from Java library") {
                 let identity = RadixIdentity(private: 1)
-                expect(identity.owner.hex).to(equal("0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"))
-                let address = Address(magic: 0x02, publicKey: identity.owner)
+                expect(identity.publicKey.hex).to(equal("0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"))
+                let address = Address(magic: 0x02, publicKey: identity.publicKey)
                 expect(address.hex).to(equal("020279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798404d542d"))
                 expect(address.stringValue).to(equal("JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun"))
                 let unsignedAtom = try! UnsignedAtom(atom)

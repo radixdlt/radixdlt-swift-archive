@@ -17,3 +17,10 @@ public extension SignedAtomVerifier {
         return try didSign(atom: atom.atom)
     }
 }
+
+// MARK: - Default Implementation
+public extension SignedAtomVerifier where Self: Ownable {
+    func didSign(atom: Atom) throws -> Bool {
+        return try atom.signatures.containsSignature(for: atom, signedBy: self)
+    }
+}

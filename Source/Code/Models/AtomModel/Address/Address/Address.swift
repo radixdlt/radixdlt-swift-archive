@@ -88,13 +88,6 @@ public extension Address {
     }
 }
 
-// MARK: - Ownable
-public extension Address {
-    var owner: PublicKey {
-        return publicKey
-    }
-}
-
 // MARK: - Convenience Init
 public extension Address {
     init(publicKey: PublicKey, universeConfig: UniverseConfig) {

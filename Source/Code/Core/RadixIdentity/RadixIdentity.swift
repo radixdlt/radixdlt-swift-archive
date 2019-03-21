@@ -12,6 +12,7 @@ import Foundation
 public struct RadixIdentity:
     AtomSigning,
     SignedAtomVerifier,
+    Signing,
     Ownable {
     // swiftlint:enable colon
   
@@ -28,25 +29,16 @@ public extension RadixIdentity {
     }
 }
 
-// MARK: - AtomSigning
-public extension RadixIdentity {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> SignedAtom {
-        let signatureId = owner.hashId
-        let signature = try Signer.sign(unsignedAtom, privateKey: keyPair.privateKey)
-        return unsignedAtom.signed(signature: signature, signatureId: signatureId)
-    }
-}
-
-// MARK: - SignedAtomVerifier
-public extension RadixIdentity {
-    func didSign(atom: Atom) throws -> Bool {
-        return try atom.signatures.containsSignature(for: atom, signedBy: self)
-    }
-}
-
 // MARK: - Ownable
 public extension RadixIdentity {
-    var owner: PublicKey {
+    var publicKey: PublicKey {
         return keyPair.publicKey
+    }
+}
+
+// MARK: - Signing
+public extension RadixIdentity {
+    var privateKey: PrivateKey {
+        return keyPair.privateKey
     }
 }
