@@ -7,7 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E601D33122423FF900A81412 /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33022423FF900A81412 /* Signer.swift */; };
+		E601D3332242402300A81412 /* SignatureVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3322242402300A81412 /* SignatureVerifier.swift */; };
+		E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3342242410700A81412 /* UnsignedAtom.swift */; };
+		E601D3372242411400A81412 /* AtomSigning.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3362242411400A81412 /* AtomSigning.swift */; };
+		E601D33A2242842500A81412 /* AtomSignatureSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3392242842400A81412 /* AtomSignatureSpec.swift */; };
+		E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33B22428C7F00A81412 /* SignedAtom.swift */; };
+		E601D33E22428C8D00A81412 /* SignedAtomVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33D22428C8D00A81412 /* SignedAtomVerifier.swift */; };
 		E6040E5D2240ED380065AEC2 /* EUIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E5C2240ED380065AEC2 /* EUIDTests.swift */; };
+		E6040E632240F8A00065AEC2 /* RadixIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E622240F8A00065AEC2 /* RadixIdentity.swift */; };
+		E6040E662240FE8C0065AEC2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E652240FE8C0065AEC2 /* Message.swift */; };
+		E6040E682240FE960065AEC2 /* Signable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E672240FE960065AEC2 /* Signable.swift */; };
+		E6040E6B2241287B0065AEC2 /* DER.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E6A2241287B0065AEC2 /* DER.swift */; };
+		E6040E6D224128870065AEC2 /* DERCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E6C224128870065AEC2 /* DERCoding.swift */; };
+		E6040E702241294C0065AEC2 /* Secp256k1.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E6F2241294C0065AEC2 /* Secp256k1.swift */; };
 		E6161013223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */; };
 		E6161016223A607B00025A54 /* DSONEncodingIntArraySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161014223A607800025A54 /* DSONEncodingIntArraySpec.swift */; };
 		E6161018223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161017223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift */; };
@@ -269,7 +282,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E601D33022423FF900A81412 /* Signer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signer.swift; sourceTree = "<group>"; };
+		E601D3322242402300A81412 /* SignatureVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureVerifier.swift; sourceTree = "<group>"; };
+		E601D3342242410700A81412 /* UnsignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsignedAtom.swift; sourceTree = "<group>"; };
+		E601D3362242411400A81412 /* AtomSigning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSigning.swift; sourceTree = "<group>"; };
+		E601D3392242842400A81412 /* AtomSignatureSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSignatureSpec.swift; sourceTree = "<group>"; };
+		E601D33B22428C7F00A81412 /* SignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAtom.swift; sourceTree = "<group>"; };
+		E601D33D22428C8D00A81412 /* SignedAtomVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAtomVerifier.swift; sourceTree = "<group>"; };
 		E6040E5C2240ED380065AEC2 /* EUIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EUIDTests.swift; sourceTree = "<group>"; };
+		E6040E622240F8A00065AEC2 /* RadixIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixIdentity.swift; sourceTree = "<group>"; };
+		E6040E652240FE8C0065AEC2 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		E6040E672240FE960065AEC2 /* Signable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signable.swift; sourceTree = "<group>"; };
+		E6040E6A2241287B0065AEC2 /* DER.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DER.swift; sourceTree = "<group>"; };
+		E6040E6C224128870065AEC2 /* DERCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DERCoding.swift; sourceTree = "<group>"; };
+		E6040E6F2241294C0065AEC2 /* Secp256k1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secp256k1.swift; sourceTree = "<group>"; };
 		E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiringThatLengthIsMultipleOfN.swift; sourceTree = "<group>"; };
 		E6161014223A607800025A54 /* DSONEncodingIntArraySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONEncodingIntArraySpec.swift; sourceTree = "<group>"; };
 		E6161017223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplexAtomFromJSONToDSON.swift; sourceTree = "<group>"; };
@@ -552,6 +578,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E601D3382242840B00A81412 /* Signatures */ = {
+			isa = PBXGroup;
+			children = (
+				E601D3392242842400A81412 /* AtomSignatureSpec.swift */,
+			);
+			path = Signatures;
+			sourceTree = "<group>";
+		};
 		E6040E572240ECB00065AEC2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -595,6 +629,83 @@
 				E6040E5C2240ED380065AEC2 /* EUIDTests.swift */,
 			);
 			path = EUID;
+			sourceTree = "<group>";
+		};
+		E6040E5E2240F76E0065AEC2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E6CEE76D21F7A5E000D745EC /* BigInteger */,
+				E6611F3A2225B54B00AD2F83 /* ArrayConvertible */,
+				E6611F332225B2B700AD2F83 /* DictionaryConvertible */,
+				E6D4B36E2240EC6F004FC83A /* EUID */,
+				E6040E5F2240F7790065AEC2 /* DataConvertible */,
+				E631DA9E21F249230063F632 /* AtomModel */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E6040E5F2240F7790065AEC2 /* DataConvertible */ = {
+			isa = PBXGroup;
+			children = (
+				E6EF45A422369ED500FA4158 /* DataInitializable */,
+				E67A715021FBC62500F4B2D0 /* StringInitializable */,
+				E6CEE75A21F7A40C00D745EC /* DataConvertible */,
+			);
+			path = DataConvertible;
+			sourceTree = "<group>";
+		};
+		E6040E602240F7CC0065AEC2 /* EncodingDecoding */ = {
+			isa = PBXGroup;
+			children = (
+				E6ED1A8A21F9FB3900654105 /* JSON */,
+				E672572F21FB8D3900BE3B4C /* ParticleType.swift */,
+				E672573321FB8D5E00BE3B4C /* RadixModelType.swift */,
+				E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */,
+				E693DAA5223198A7003720C2 /* DSON */,
+			);
+			path = EncodingDecoding;
+			sourceTree = "<group>";
+		};
+		E6040E612240F87C0065AEC2 /* RadixIdentity */ = {
+			isa = PBXGroup;
+			children = (
+				E6040E622240F8A00065AEC2 /* RadixIdentity.swift */,
+			);
+			path = RadixIdentity;
+			sourceTree = "<group>";
+		};
+		E6040E642240FE7B0065AEC2 /* Signing */ = {
+			isa = PBXGroup;
+			children = (
+				E6040E692241286F0065AEC2 /* DER */,
+				E6CEE74221F637E100D745EC /* Signature */,
+				E6040E652240FE8C0065AEC2 /* Message.swift */,
+				E601D3342242410700A81412 /* UnsignedAtom.swift */,
+				E6040E672240FE960065AEC2 /* Signable.swift */,
+				E601D3362242411400A81412 /* AtomSigning.swift */,
+				E601D33B22428C7F00A81412 /* SignedAtom.swift */,
+				E601D33D22428C8D00A81412 /* SignedAtomVerifier.swift */,
+				E601D33022423FF900A81412 /* Signer.swift */,
+				E601D3322242402300A81412 /* SignatureVerifier.swift */,
+			);
+			path = Signing;
+			sourceTree = "<group>";
+		};
+		E6040E692241286F0065AEC2 /* DER */ = {
+			isa = PBXGroup;
+			children = (
+				E6040E6A2241287B0065AEC2 /* DER.swift */,
+				E6040E6C224128870065AEC2 /* DERCoding.swift */,
+			);
+			path = DER;
+			sourceTree = "<group>";
+		};
+		E6040E6E2241293F0065AEC2 /* EllipticCurve  */ = {
+			isa = PBXGroup;
+			children = (
+				E6040E6F2241294C0065AEC2 /* Secp256k1.swift */,
+			);
+			path = "EllipticCurve ";
 			sourceTree = "<group>";
 		};
 		E620AB4021E783F600B36EC2 /* Source */ = {
@@ -675,8 +786,8 @@
 		E631DA9C21F2490F0063F632 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E6040E612240F87C0065AEC2 /* RadixIdentity */,
 				E6ED1A4F21F8E54100654105 /* Ledger */,
-				E6D4B36E2240EC6F004FC83A /* EUID */,
 				E6ED1A2A21F7CE9100654105 /* Network */,
 				E6CEE76621F7A57800D745EC /* Hash */,
 				E631DA9D21F249190063F632 /* Crypto */,
@@ -687,7 +798,8 @@
 		E631DA9D21F249190063F632 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
-				E6CEE74221F637E100D745EC /* Signature */,
+				E6040E6E2241293F0065AEC2 /* EllipticCurve  */,
+				E6040E642240FE7B0065AEC2 /* Signing */,
 				E6CEE71121F5B3B300D745EC /* Random */,
 				E6CEE70E21F5B0BC00D745EC /* Encryption */,
 				E631DAD721F5A7D40063F632 /* Wallet */,
@@ -776,6 +888,7 @@
 		E631DAAC21F24D6F0063F632 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				E601D3382242840B00A81412 /* Signatures */,
 				E6ED1A3121F879D400654105 /* Hash */,
 			);
 			path = Crypto;
@@ -928,6 +1041,7 @@
 		E67A715021FBC62500F4B2D0 /* StringInitializable */ = {
 			isa = PBXGroup;
 			children = (
+				E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */,
 				E67A715121FBC63300F4B2D0 /* StringInitializable.swift */,
 			);
 			path = StringInitializable;
@@ -936,6 +1050,12 @@
 		E693DAA5223198A7003720C2 /* DSON */ = {
 			isa = PBXGroup;
 			children = (
+				E69AB72C2237B762006153DD /* EncodableKeyValueListConvertible.swift */,
+				E69AB72E2237B774006153DD /* EncodableKeyValue.swift */,
+				E6D4B36622400E1E004FC83A /* DSONOutputting.swift */,
+				E6D4B360223FD046004FC83A /* AnyEncodableKeyValueList.swift */,
+				E6D4B35E223FD01A004FC83A /* AnyEncodableKeyValue.swift */,
+				E693DABD2232BACB003720C2 /* CBOR */,
 				E693DAC2223685F9003720C2 /* DSONPrefixSpecifying.swift */,
 				E69AB74E2239172C006153DD /* DSONEncodable.swift */,
 				E6D4B362223FF7D0004FC83A /* DSONOutput.swift */,
@@ -1579,23 +1699,21 @@
 			path = ObserverTYpe;
 			sourceTree = "<group>";
 		};
-		E6ED1A8A21F9FB3900654105 /* Parsing */ = {
+		E6ED1A8A21F9FB3900654105 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
 				E672573521FB8D8600BE3B4C /* PrefixedJson */,
-				E672572F21FB8D3900BE3B4C /* ParticleType.swift */,
-				E672573321FB8D5E00BE3B4C /* RadixModelType.swift */,
 				E6611F4E2229849000AD2F83 /* AtomModelDecodingError.swift */,
 				E6611F5622298F7600AD2F83 /* RadixJSONDecoder.swift */,
 				E6611F5822298F9000AD2F83 /* RadixJSONEncoder.swift */,
-				E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */,
 			);
-			path = Parsing;
+			path = JSON;
 			sourceTree = "<group>";
 		};
 		E6EF45A422369ED500FA4158 /* DataInitializable */ = {
 			isa = PBXGroup;
 			children = (
+				E6CEE75721F7A3EF00D745EC /* StringConvertibles */,
 				E6EF45A522369EE200FA4158 /* DataInitializable.swift */,
 			);
 			path = DataInitializable;
@@ -1604,7 +1722,8 @@
 		E6FB03BF21EC91D5002CE331 /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				E631DA9E21F249230063F632 /* AtomModel */,
+				E6040E602240F7CC0065AEC2 /* EncodingDecoding */,
+				E6040E5E2240F76E0065AEC2 /* Models */,
 				E631DA9C21F2490F0063F632 /* Core */,
 				E6FB03E021ECF175002CE331 /* Utils */,
 			);
@@ -1630,24 +1749,8 @@
 		E6FB03E021ECF175002CE331 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				E693DABD2232BACB003720C2 /* CBOR */,
-				E693DAA5223198A7003720C2 /* DSON */,
-				E6ED1A8A21F9FB3900654105 /* Parsing */,
-				E6CEE76D21F7A5E000D745EC /* BigInteger */,
 				E6FB03E121ECF186002CE331 /* Macros.swift */,
 				E631DAC821F259BE0063F632 /* MnemonicBackedUpByUser.swift */,
-				E6611F3A2225B54B00AD2F83 /* ArrayConvertible */,
-				E6611F332225B2B700AD2F83 /* DictionaryConvertible */,
-				E6EF45A422369ED500FA4158 /* DataInitializable */,
-				E67A715021FBC62500F4B2D0 /* StringInitializable */,
-				E6CEE75A21F7A40C00D745EC /* DataConvertible */,
-				E6CEE75721F7A3EF00D745EC /* StringConvertibles */,
-				E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */,
-				E69AB72C2237B762006153DD /* EncodableKeyValueListConvertible.swift */,
-				E69AB72E2237B774006153DD /* EncodableKeyValue.swift */,
-				E6D4B36622400E1E004FC83A /* DSONOutputting.swift */,
-				E6D4B360223FD046004FC83A /* AnyEncodableKeyValueList.swift */,
-				E6D4B35E223FD01A004FC83A /* AnyEncodableKeyValue.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1785,6 +1888,7 @@
 			files = (
 				E6CEE76221F7A45000D745EC /* Base64String.swift in Sources */,
 				E6CEE73221F5D4F700D745EC /* Base58String.swift in Sources */,
+				E6040E632240F8A00065AEC2 /* RadixIdentity.swift in Sources */,
 				E6A4AB92221C40A4006C5CA8 /* Name.swift in Sources */,
 				E6611F322225A1EE00AD2F83 /* StringRepresentable.swift in Sources */,
 				E631DAA821F249DB0063F632 /* PublicKey.swift in Sources */,
@@ -1796,6 +1900,7 @@
 				E6D4B349223FBAC5004FC83A /* Data+StringConversion.swift in Sources */,
 				E6CEE73421F5D50E00D745EC /* Spin.swift in Sources */,
 				E6ED1A7121F8E74F00654105 /* InMemoryAtomStore.swift in Sources */,
+				E6040E682240FE960065AEC2 /* Signable.swift in Sources */,
 				E693DAB82232B549003720C2 /* JSONPrefixSpecifying.swift in Sources */,
 				E6ED1A6921F8E6CF00654105 /* NetworkState.swift in Sources */,
 				E6CEE73B21F5D56C00D745EC /* ResourceIdentifier.swift in Sources */,
@@ -1819,6 +1924,9 @@
 				E6ED1A7C21F8E7E000654105 /* ObservableType+FilterNil.swift in Sources */,
 				E6CEE73021F5D4E000D745EC /* CharacterSet.swift in Sources */,
 				E69AB72B2237B469006153DD /* RadixCodable.swift in Sources */,
+				E6040E662240FE8C0065AEC2 /* Message.swift in Sources */,
+				E6040E6B2241287B0065AEC2 /* DER.swift in Sources */,
+				E601D3332242402300A81412 /* SignatureVerifier.swift in Sources */,
 				E672573021FB8D3900BE3B4C /* ParticleType.swift in Sources */,
 				E6CEE77121F7A64900D745EC /* RadixHash.swift in Sources */,
 				E693DAB122326528003720C2 /* TokenDefinitionParticle+Encodable.swift in Sources */,
@@ -1872,6 +1980,7 @@
 				E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */,
 				E6A4AC0F22243CD7006C5CA8 /* ValueValidating.swift in Sources */,
 				E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */,
+				E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */,
 				E6A4AB84221BFCF4006C5CA8 /* Ownable.swift in Sources */,
 				E69AB74F2239172C006153DD /* DSONEncodable.swift in Sources */,
 				E631DAD121F25A6B0063F632 /* Mnemonic+Strength.swift in Sources */,
@@ -1888,9 +1997,11 @@
 				E6ED1A7521F8E76C00654105 /* DefaultParticleStore.swift in Sources */,
 				E6D4B355223FBEE8004FC83A /* DSONPrefixedDataConvertible.swift in Sources */,
 				E693DAB6223265BA003720C2 /* TokenDefinitionParticle+Identifiable.swift in Sources */,
+				E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */,
 				E67A715621FBC71B00F4B2D0 /* ResourceType.swift in Sources */,
 				E69AB72D2237B762006153DD /* EncodableKeyValueListConvertible.swift in Sources */,
 				E69AB7272237B172006153DD /* CBORConvertible.swift in Sources */,
+				E6040E702241294C0065AEC2 /* Secp256k1.swift in Sources */,
 				E631DACB21F25A040063F632 /* Mnemonic+Generator.swift in Sources */,
 				E631DAC921F259BE0063F632 /* MnemonicBackedUpByUser.swift in Sources */,
 				E6ED1A3B21F87C4700654105 /* Shards.swift in Sources */,
@@ -1907,6 +2018,7 @@
 				E6D4B34D223FBB37004FC83A /* StringConversionMode.swift in Sources */,
 				E6CEE76C21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift in Sources */,
 				E6CEE72321F5D44300D745EC /* Address.swift in Sources */,
+				E601D33122423FF900A81412 /* Signer.swift in Sources */,
 				E6D4B337223F9D99004FC83A /* ChronoMetaData.swift in Sources */,
 				E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */,
 				E631DAA321F249910063F632 /* PrivateKey.swift in Sources */,
@@ -1916,6 +2028,7 @@
 				E631DACD21F25A1C0063F632 /* Mnemonic.swift in Sources */,
 				E6CEE74F21F638E700D745EC /* ParticleGroup.swift in Sources */,
 				E68B5C0821FBD46F00BEB049 /* Amount.swift in Sources */,
+				E601D33E22428C8D00A81412 /* SignedAtomVerifier.swift in Sources */,
 				E6A4AB9C221D5098006C5CA8 /* Planck.swift in Sources */,
 				E672573921FB8D9A00BE3B4C /* PrefixedStringWithValue.swift in Sources */,
 				E6D4B33F223FAC72004FC83A /* Hashing.swift in Sources */,
@@ -1927,6 +2040,7 @@
 				E631DAD621F5A7570063F632 /* Network.swift in Sources */,
 				E6611F4F2229849000AD2F83 /* AtomModelDecodingError.swift in Sources */,
 				E6ED1A5E21F8E5DD00654105 /* Ledger.swift in Sources */,
+				E601D3372242411400A81412 /* AtomSigning.swift in Sources */,
 				E693DABC2232B598003720C2 /* PrefixedJsonCodable.swift in Sources */,
 				E6A4AC0D22243CA5006C5CA8 /* MinLengthSpecifying.swift in Sources */,
 				E6611F352225B2C000AD2F83 /* DictionaryConvertible.swift in Sources */,
@@ -1940,6 +2054,7 @@
 				E6ED1A5321F8E56E00654105 /* NodeAction.swift in Sources */,
 				E68B5BFF21FBCD2C00BEB049 /* PrefixedJsonDecodable.swift in Sources */,
 				E6ED1A8921F9F5BC00654105 /* UniqueParticle.swift in Sources */,
+				E6040E6D224128870065AEC2 /* DERCoding.swift in Sources */,
 				E6A4AB90221C3F64006C5CA8 /* TokenDefinitionParticle.swift in Sources */,
 				E6D4B361223FD046004FC83A /* AnyEncodableKeyValueList.swift in Sources */,
 				E6CEE75121F6391300D745EC /* SpunParticle.swift in Sources */,
@@ -2014,6 +2129,7 @@
 				E6ED1A3421F879F600654105 /* HashTests.swift in Sources */,
 				E6A4ABD622206443006C5CA8 /* AtomJsonDeserializationTwoParticleGroupsSpec.swift in Sources */,
 				E6611F4D222982A700AD2F83 /* AtomJsonDeserializationInvalidSerializerValueSpec.swift in Sources */,
+				E601D33A2242842500A81412 /* AtomSignatureSpec.swift in Sources */,
 				E6A4ABD222205C13006C5CA8 /* AtomJsonDeserializationTrivialSpec.swift in Sources */,
 				E69AB7522239318B006153DD /* TokenPermissionEncodingSpec.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,

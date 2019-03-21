@@ -21,7 +21,7 @@ public struct HierarchicalDeterministicWallet {
 // MARK: - Key Derivation
 public extension HierarchicalDeterministicWallet {
     func keyPairFor(index: UInt32) throws -> KeyPair {
-        let privateKey = PrivateKey(data: try wrapped.changePrivateKey(index: index).raw)
+        let privateKey = try PrivateKey(data: try wrapped.changePrivateKey(index: index).raw)
         return KeyPair(private: privateKey)
     }
 }

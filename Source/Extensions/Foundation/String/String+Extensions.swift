@@ -8,6 +8,10 @@
 
 import Foundation
 
+public enum Direction {
+    case leading, trailing
+}
+
 public extension String {
     /// stringToFind must be at least 1 character.
     func countInstances(of stringToFind: String, options: String.CompareOptions = []) -> UInt {
@@ -37,10 +41,6 @@ public extension String {
     
     public enum Case {
         case upper, lower
-    }
-    
-    public enum Direction {
-        case leading, trailing
     }
     
     var reverse: String {
