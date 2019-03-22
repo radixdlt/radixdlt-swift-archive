@@ -16,6 +16,18 @@ public struct EllipticCurvePoint {
 }
 
 public extension EllipticCurvePoint {
+    static func decodePointFromPublicKey(_ publicKey: PublicKey) -> EllipticCurvePoint {
+        let bitcoinKitPublicKey = BitcoinKit.PublicKey(bytes: publicKey.asData, network: .mainnetBTC)
+        do {
+            let point = try PointOnCurve.decodePointFromPublicKey(bitcoinKitPublicKey)
+            return EllipticCurvePoint(point)
+        } catch {
+            incorrectImplementation("error: \(error)")
+        }
+    }
+}
+
+public extension EllipticCurvePoint {
     static func * (lhs: Scalar, rhs: EllipticCurvePoint) -> EllipticCurvePoint {
         let scalar = Scalar32Bytes(lhs)
         let point = PointOnCurve(rhs)
