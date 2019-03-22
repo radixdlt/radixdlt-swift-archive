@@ -1,6 +1,6 @@
 github "ReactiveX/RxSwift"
 github "SwiftyBeaver/SwiftyBeaver"
-github "yenom/BitcoinKit"
+github "https://github.com/Sajjon/BitcoinKit.git" "b5dc019e89067eba2ed96211cf1fa2929fa05861"
 github "attaswift/BigInt"
 github "krzyzanowskim/CryptoSwift"
 github "myfreeweb/SwiftCBOR"
