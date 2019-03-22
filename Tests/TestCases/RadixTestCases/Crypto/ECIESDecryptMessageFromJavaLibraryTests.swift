@@ -1,5 +1,5 @@
 //
-//  ECIESDecryptionMessageTests.swift
+//  ECIESDecryptMessageFromJavaLibraryTests.swift
 //  RadixSDK iOS Tests
 //
 //  Created by Alexander Cyon on 2019-03-22.
@@ -11,7 +11,7 @@ import Quick
 import Nimble
 @testable import RadixSDK
 
-class ECIESDecryptMessageTests: QuickSpec {
+class ECIESDecryptMessageFromJavaLibraryTests: QuickSpec {
     override func spec() {
         describe("ECIES decryption of encrypted message from Java Library") {
             it("should be able to decrypt message for private key 1") {

@@ -29,6 +29,7 @@
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
 		E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62C030B220491CD001F27DE /* Sequence_Extension.swift */; };
+		E62EFDA222454C7200B6DAD6 /* ECIESDecryptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDA122454C7200B6DAD6 /* ECIESDecryptMessage.swift */; };
 		E631DAA021F249620063F632 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DA9F21F249620063F632 /* KeyPair.swift */; };
 		E631DAA321F249910063F632 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAA221F249910063F632 /* PrivateKey.swift */; };
 		E631DAA821F249DB0063F632 /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAA721F249DB0063F632 /* PublicKey.swift */; };
@@ -168,7 +169,7 @@
 		E6A6431C22450FEC00CD4BFC /* ECIES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6431B22450FEC00CD4BFC /* ECIES.swift */; };
 		E6A6431E2245113600CD4BFC /* PrivateKey+ECEIS+Decrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6431D2245113600CD4BFC /* PrivateKey+ECEIS+Decrypt.swift */; };
 		E6A6432022451A2000CD4BFC /* ECIESEncryptionAndDecryptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6431F22451A2000CD4BFC /* ECIESEncryptionAndDecryptionTests.swift */; };
-		E6A643242245462C00CD4BFC /* ECIESDecryptionMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A643232245462C00CD4BFC /* ECIESDecryptionMessageTests.swift */; };
+		E6A643242245462C00CD4BFC /* ECIESDecryptMessageFromJavaLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A643232245462C00CD4BFC /* ECIESDecryptMessageFromJavaLibraryTests.swift */; };
 		E6A643262245465E00CD4BFC /* HmacTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A643252245465E00CD4BFC /* HmacTest.swift */; };
 		E6C9FB9B2243DCE6000AAE12 /* Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C9FB9A2243DCE6000AAE12 /* Signing.swift */; };
 		E6CEE70721F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE70621F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift */; };
@@ -317,6 +318,7 @@
 		E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RadixSDKTests-Info.plist"; sourceTree = "<group>"; };
 		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
 		E62C030B220491CD001F27DE /* Sequence_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence_Extension.swift; sourceTree = "<group>"; };
+		E62EFDA122454C7200B6DAD6 /* ECIESDecryptMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECIESDecryptMessage.swift; sourceTree = "<group>"; };
 		E631DA9F21F249620063F632 /* KeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
 		E631DAA221F249910063F632 /* PrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKey.swift; sourceTree = "<group>"; };
 		E631DAA721F249DB0063F632 /* PublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKey.swift; sourceTree = "<group>"; };
@@ -457,7 +459,7 @@
 		E6A6431B22450FEC00CD4BFC /* ECIES.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECIES.swift; sourceTree = "<group>"; };
 		E6A6431D2245113600CD4BFC /* PrivateKey+ECEIS+Decrypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PrivateKey+ECEIS+Decrypt.swift"; sourceTree = "<group>"; };
 		E6A6431F22451A2000CD4BFC /* ECIESEncryptionAndDecryptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECIESEncryptionAndDecryptionTests.swift; sourceTree = "<group>"; };
-		E6A643232245462C00CD4BFC /* ECIESDecryptionMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECIESDecryptionMessageTests.swift; sourceTree = "<group>"; };
+		E6A643232245462C00CD4BFC /* ECIESDecryptMessageFromJavaLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECIESDecryptMessageFromJavaLibraryTests.swift; sourceTree = "<group>"; };
 		E6A643252245465E00CD4BFC /* HmacTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HmacTest.swift; sourceTree = "<group>"; };
 		E6C9FB9A2243DCE6000AAE12 /* Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signing.swift; sourceTree = "<group>"; };
 		E6CEE70621F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HierarchicalDeterministicMasterSeed.swift; sourceTree = "<group>"; };
@@ -916,7 +918,8 @@
 				E601D3382242840B00A81412 /* Signatures */,
 				E6ED1A3121F879D400654105 /* Hash */,
 				E6A6431F22451A2000CD4BFC /* ECIESEncryptionAndDecryptionTests.swift */,
-				E6A643232245462C00CD4BFC /* ECIESDecryptionMessageTests.swift */,
+				E6A643232245462C00CD4BFC /* ECIESDecryptMessageFromJavaLibraryTests.swift */,
+				E62EFDA122454C7200B6DAD6 /* ECIESDecryptMessage.swift */,
 			);
 			path = Crypto;
 			sourceTree = "<group>";
@@ -2131,6 +2134,7 @@
 				E6A4ABD422205C6E006C5CA8 /* AtomJsonDeserializationInvalidJsonKeySpec.swift in Sources */,
 				E6A643262245465E00CD4BFC /* HmacTest.swift in Sources */,
 				E6A4ABE722207034006C5CA8 /* TooShortNameSpec.swift in Sources */,
+				E62EFDA222454C7200B6DAD6 /* ECIESDecryptMessage.swift in Sources */,
 				E6611F2B22259E2E00AD2F83 /* AddressInvalidChecksumSpec.swift in Sources */,
 				E6D325B921EF35DA00851F4E /* Secp256k1RFC6979Tests.swift in Sources */,
 				E69AB74D223912B6006153DD /* GranularitySpec.swift in Sources */,
@@ -2161,7 +2165,7 @@
 				E6A4ABE122206F33006C5CA8 /* TooShortSymbolSpec.swift in Sources */,
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
 				E6A4ABF822207EA0006C5CA8 /* BadRRI.swift in Sources */,
-				E6A643242245462C00CD4BFC /* ECIESDecryptionMessageTests.swift in Sources */,
+				E6A643242245462C00CD4BFC /* ECIESDecryptMessageFromJavaLibraryTests.swift in Sources */,
 				E6040E5D2240ED380065AEC2 /* EUIDTests.swift in Sources */,
 				E6611F2D2225A09D00AD2F83 /* GranularityNegativeSpec.swift in Sources */,
 				E6A4ABF422207E12006C5CA8 /* AtomJsonDeserializationMintedTokenBadValuesSpec.swift in Sources */,
