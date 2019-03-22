@@ -75,7 +75,7 @@ public extension PublicKey {
             incorrectImplementation("Expected compressed public key")
         }
         do {
-            try self.init(data: bitcoinKitPublicKey.raw)
+            try self.init(data: bitcoinKitPublicKey.data)
         } catch {
             incorrectImplementation("Should always be possible to create a PublicKey from a PrivateKey")
         }

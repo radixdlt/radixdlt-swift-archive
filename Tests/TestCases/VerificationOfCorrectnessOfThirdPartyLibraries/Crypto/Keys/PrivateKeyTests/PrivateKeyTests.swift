@@ -31,7 +31,7 @@ class PrivateKeyTests: XCTestCase {
         let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords)
         let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
         let privateKeyBicoinKit = try! wallet.privateKey(index: expected.hdWalletIndex)
-        let privateKey = try! PrivateKey(data: privateKeyBicoinKit.raw)
+        let privateKey = try! PrivateKey(data: privateKeyBicoinKit.data)
         let publicKey = PublicKey(private: privateKey)
         XCTAssertEqual(publicKey.description, expected.publicKey)
         

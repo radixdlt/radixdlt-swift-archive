@@ -8,12 +8,6 @@
 
 import Foundation
 
-public struct EllipticCurvePoint {
-    public typealias Scalar = BigSignedInt
-    public let x: Scalar
-    public let y: Scalar
-}
-
 internal let bitsPerByte = 8
 
 public extension PublicKey {

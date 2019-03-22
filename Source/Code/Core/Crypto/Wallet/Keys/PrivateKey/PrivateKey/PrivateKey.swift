@@ -18,7 +18,7 @@ public struct PrivateKey:
     Equatable {
     // swiftlint:enable colon
 
-    private let scalar: BigUnsignedInt
+    public let scalar: BigUnsignedInt
     
     public init(scalar: BigUnsignedInt) throws {
         if scalar == 0 {
@@ -42,6 +42,14 @@ public extension PrivateKey {
         try self.init(scalar: data.unsignedBigInteger)
     }
 }
+
+// MARK: - WIF
+public extension PrivateKey {
+    init(wif: Base58String) throws {
+        let bitcoinKitPrivateKey = try BitcoinKit.PrivateKey(wif: wif.stringValue)
+        try self.init(data: bitcoinKitPrivateKey.data)
+    }
+ }
 
 // MARK: - ExpressibleByStringLiteral
 public extension PrivateKey {

@@ -12,10 +12,6 @@ public func + (lhs: DataConvertible, rhs: Byte) -> Data {
     return Data(bytes: lhs.bytes + [rhs])
 }
 
-public func + (lhs: Byte, rhs: DataConvertible) -> Data {
-    return Data(bytes: [lhs] + rhs.bytes)
-}
-
 public func + (lhs: DataConvertible, rhs: DataConvertible) -> Data {
     let bytes = [lhs, rhs].flatMap { $0.bytes }
     return Data(bytes: bytes)

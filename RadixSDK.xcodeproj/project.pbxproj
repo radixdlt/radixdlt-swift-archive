@@ -161,6 +161,8 @@
 		E6A4AC0D22243CA5006C5CA8 /* MinLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0C22243CA5006C5CA8 /* MinLengthSpecifying.swift */; };
 		E6A4AC0F22243CD7006C5CA8 /* ValueValidating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0E22243CD7006C5CA8 /* ValueValidating.swift */; };
 		E6A4AC1122243EDC006C5CA8 /* ValidValueInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */; };
+		E6A6430B2244D38800CD4BFC /* BitcoinKit+ECMultiplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6430A2244D38800CD4BFC /* BitcoinKit+ECMultiplication.swift */; };
+		E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */; };
 		E6C9FB9B2243DCE6000AAE12 /* Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C9FB9A2243DCE6000AAE12 /* Signing.swift */; };
 		E6CEE70721F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE70621F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift */; };
 		E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE70B21F5AE7800D745EC /* TestableConvenienceInitializers.swift */; };
@@ -441,6 +443,8 @@
 		E6A4AC0C22243CA5006C5CA8 /* MinLengthSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinLengthSpecifying.swift; sourceTree = "<group>"; };
 		E6A4AC0E22243CD7006C5CA8 /* ValueValidating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueValidating.swift; sourceTree = "<group>"; };
 		E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidValueInitializable.swift; sourceTree = "<group>"; };
+		E6A6430A2244D38800CD4BFC /* BitcoinKit+ECMultiplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BitcoinKit+ECMultiplication.swift"; sourceTree = "<group>"; };
+		E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointMultiplicationTests.swift; sourceTree = "<group>"; };
 		E6C9FB9A2243DCE6000AAE12 /* Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signing.swift; sourceTree = "<group>"; };
 		E6CEE70621F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HierarchicalDeterministicMasterSeed.swift; sourceTree = "<group>"; };
 		E6CEE70B21F5AE7800D745EC /* TestableConvenienceInitializers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableConvenienceInitializers.swift; sourceTree = "<group>"; };
@@ -764,6 +768,7 @@
 		E620AB5621E7874300B36EC2 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
+				E6A6430C2244D84D00CD4BFC /* EllipticCurvePointMultiplication */,
 				E6D325B521EF358E00851F4E /* Signatures */,
 				E620AB5721E7874300B36EC2 /* Keys */,
 			);
@@ -1323,6 +1328,22 @@
 			path = Encoding;
 			sourceTree = "<group>";
 		};
+		E6A643092244D36700CD4BFC /* EllipticCurveMultiplication */ = {
+			isa = PBXGroup;
+			children = (
+				E6A6430A2244D38800CD4BFC /* BitcoinKit+ECMultiplication.swift */,
+			);
+			path = EllipticCurveMultiplication;
+			sourceTree = "<group>";
+		};
+		E6A6430C2244D84D00CD4BFC /* EllipticCurvePointMultiplication */ = {
+			isa = PBXGroup;
+			children = (
+				E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */,
+			);
+			path = EllipticCurvePointMultiplication;
+			sourceTree = "<group>";
+		};
 		E6CEE70921F5AE5300D745EC /* Convenience */ = {
 			isa = PBXGroup;
 			children = (
@@ -1535,6 +1556,7 @@
 		E6D325B021EE489A00851F4E /* BitcoinKit */ = {
 			isa = PBXGroup;
 			children = (
+				E6A643092244D36700CD4BFC /* EllipticCurveMultiplication */,
 				E6D325B121EE48A000851F4E /* Signing */,
 			);
 			path = BitcoinKit;
@@ -2017,6 +2039,7 @@
 				E6ED1A5621F8E58300654105 /* SubmitAtomAction.swift in Sources */,
 				E67A714821FBAEF500F4B2D0 /* Granularity.swift in Sources */,
 				E6EF45A622369EE200FA4158 /* DataInitializable.swift in Sources */,
+				E6A6430B2244D38800CD4BFC /* BitcoinKit+ECMultiplication.swift in Sources */,
 				E69AB75622393F2F006153DD /* AnyEncodableKeyValueListConvertible.swift in Sources */,
 				E6CEE74421F637EC00D745EC /* Signature.swift in Sources */,
 				E6D4B335223F9A2E004FC83A /* MetaDataConvertible.swift in Sources */,
@@ -2104,6 +2127,7 @@
 				E6D4B331223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift in Sources */,
 				E6611F4B2227FEDA00AD2F83 /* AtomJsonSerializationTooBigSpec.swift in Sources */,
 				E6611F2722259E0800AD2F83 /* TooLongAddressSpec.swift in Sources */,
+				E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */,
 				E68B5C0421FBCEEC00BEB049 /* ResourceIdentifierTests.swift in Sources */,
 				E6A4ABC4221EDBAA006C5CA8 /* JSONDecoder.swift in Sources */,
 				E6A4ABF622207E49006C5CA8 /* NegativePlanckSpec.swift in Sources */,
