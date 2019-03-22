@@ -8,6 +8,11 @@
 
 import Foundation
 
+/// true when optimization is set to -Onone
+var isDebug: Bool {
+    return _isDebugAssertConfiguration()
+}
+
 internal var abstract: Never {
     fatalError("Override this")
 }

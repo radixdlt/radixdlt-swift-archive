@@ -8,7 +8,14 @@
 
 import Foundation
 
-public struct KeyPair {
+// swiftlint:disable colon
+
+/// Holds an EC private key and public key
+public struct KeyPair:
+    Ownable,
+    Signing {
+    // swiftlint:enable colon
+
     public let privateKey: PrivateKey
     public let publicKey: PublicKey
     
@@ -22,5 +29,9 @@ public struct KeyPair {
 public extension KeyPair {
     public init(private privateKey: PrivateKey) {
         self.init(private: privateKey, public: PublicKey(private: privateKey))
+    }
+    
+    public init() {
+        self.init(private: PrivateKey())
     }
 }

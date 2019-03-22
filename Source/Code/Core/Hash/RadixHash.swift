@@ -9,6 +9,13 @@
 import Foundation
 import CryptoSwift
 
+public struct RadixHasher: Hashing {
+    public init() {}
+    public func hash(data: Data) -> Data {
+        return RadixHash(unhashedData: data).asData
+    }
+}
+
 // swiftlint:disable colon
 
 /// Radix hash relies on the DSON encoding of a type.

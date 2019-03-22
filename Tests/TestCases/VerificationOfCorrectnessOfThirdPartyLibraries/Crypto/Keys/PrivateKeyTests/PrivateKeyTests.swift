@@ -30,15 +30,23 @@ class PrivateKeyTests: XCTestCase {
     func testBitcoinKitPerformanceOfSignAndVerify() {
         let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords)
         let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
-        let privateKey = try! wallet.privateKey(index: expected.hdWalletIndex)
-        let publicKey = try! wallet.publicKey(index: expected.hdWalletIndex)
-        let publicKeyString = publicKey.description
-        XCTAssertEqual(publicKeyString, expected.publicKey)
+        let privateKeyBicoinKit = try! wallet.privateKey(index: expected.hdWalletIndex)
+        let privateKey = try! PrivateKey(data: privateKeyBicoinKit.data)
+        let publicKey = PublicKey(private: privateKey)
+        XCTAssertEqual(publicKey.description, expected.publicKey)
         
         measure {
-            let signatureData = try! BitcoinKit.Crypto.sign(message: expected.message, privateKey: privateKey)
-            XCTAssertEqual(signatureData.hex, expected.signature)
-            XCTAssertTrue(try! BitcoinKit.Crypto.verifySignature(signatureData, message: expected.messageHashedUTF8Encoded, publicKey: publicKey.raw))
+            do {
+                
+                let message = try Message(data: expected.messageHashedUTF8Encoded)
+                
+                let signature = try Signer.sign(message, privateKey: privateKey)
+                XCTAssertEqual(try signature.toDER().hex, expected.signature)
+             
+                XCTAssertTrue(try SignatureVerifier.verifyThat(signature: signature, signedMessage: message, usingKey: publicKey))
+            } catch {
+                XCTFail("error: \(error)")
+            }
         }
     }
  

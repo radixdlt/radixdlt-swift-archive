@@ -16,19 +16,14 @@ public struct PublicKey:
     CBORDataConvertible,
     DataInitializable,
     RadixHashable,
-    Hashable {
+    Ownable,
+    Hashable,
+    CustomStringConvertible {
 // swiftlint:enable colon
     
     public let compressedData: Data
     public init(data: Data) throws {
         self.compressedData = data
-    }
-}
-
-// MARK: - Convenience init
-public extension PublicKey {
-    init(private privateKey: PrivateKey) {
-        implementMe
     }
 }
 
@@ -57,6 +52,13 @@ public extension PublicKey {
     var asData: Data { return compressedData }
 }
 
+// MARK: - Ownable
+public extension PublicKey {
+    var publicKey: PublicKey {
+        return self
+    }
+}
+
 // MARK: - CustomStringConvertible
 public extension PublicKey {
     var description: String {
@@ -68,5 +70,22 @@ public extension PublicKey {
 public extension PublicKey {
     var radixHash: RadixHash {
         return RadixHash(unhashedData: compressedData)
+    }
+}
+
+// MARK: - BitcoinKit
+import BitcoinKit
+public extension PublicKey {
+    init(private privateKey: PrivateKey) {
+        let bitcoinKitPrivateKey = privateKey.bitcoinKitPrivateKey
+        let bitcoinKitPublicKey: BitcoinKit.PublicKey = bitcoinKitPrivateKey.publicKey()
+        guard bitcoinKitPublicKey.isCompressed else {
+            incorrectImplementation("Expected compressed public key")
+        }
+        do {
+            try self.init(data: bitcoinKitPublicKey.data)
+        } catch {
+            incorrectImplementation("Should always be possible to create a PublicKey from a PrivateKey")
+        }
     }
 }
