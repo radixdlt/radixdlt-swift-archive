@@ -30,4 +30,8 @@ public extension KeyPair {
     public init(private privateKey: PrivateKey) {
         self.init(private: privateKey, public: PublicKey(private: privateKey))
     }
+    
+    public init() {
+        self.init(private: PrivateKey())
+    }
 }

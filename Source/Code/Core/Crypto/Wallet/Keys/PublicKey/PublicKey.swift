@@ -16,6 +16,7 @@ public struct PublicKey:
     CBORDataConvertible,
     DataInitializable,
     RadixHashable,
+    Ownable,
     Hashable,
     CustomStringConvertible {
 // swiftlint:enable colon
@@ -49,6 +50,13 @@ public extension PublicKey {
 // MARK: - DataConvertible
 public extension PublicKey {
     var asData: Data { return compressedData }
+}
+
+// MARK: - Ownable
+public extension PublicKey {
+    var publicKey: PublicKey {
+        return self
+    }
 }
 
 // MARK: - CustomStringConvertible

@@ -15,3 +15,10 @@ public struct Sha256TwiceHasher: Hashing {
         return data.sha256().sha256()
     }
 }
+
+public struct Sha512TwiceHasher: Hashing {
+    public init() {}
+    public func hash(data: Data) -> Data {
+        return data.sha512().sha512()
+    }
+}

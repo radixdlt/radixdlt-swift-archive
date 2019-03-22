@@ -15,12 +15,13 @@ public struct PrivateKey:
     DataInitializable,
     DataConvertible,
     StringInitializable,
+    Signing,
     Equatable {
     // swiftlint:enable colon
-
-    public let scalar: BigUnsignedInt
+    public typealias Scalar = BigUnsignedInt
+    public let scalar: Scalar
     
-    public init(scalar: BigUnsignedInt) throws {
+    public init(scalar: Scalar) throws {
         if scalar == 0 {
             throw Error.mustBeGreaterThanZero
         }
@@ -30,6 +31,20 @@ public struct PrivateKey:
         self.scalar = scalar
     }
     
+    public static func generateNew() -> PrivateKey {
+        let byteCount = 32
+        var privateKey: PrivateKey!
+        repeat {
+            guard let randomData = try? securelyGenerateBytes(count: byteCount) else { continue }
+            privateKey = try? PrivateKey(data: randomData)
+        } while privateKey == nil
+        return privateKey
+    }
+    
+    public init() {
+        self = PrivateKey.generateNew()
+    }
+
     public enum Error: Swift.Error {
         case mustBeGreaterThanZero
         case mustBeSmallerThanCurveOrder
@@ -55,7 +70,7 @@ public extension PrivateKey {
 public extension PrivateKey {
     /// Accepts a hexadecimal string
     init(string hexString: String) throws {
-        let scalar = try BigUnsignedInt(hexString: hexString)
+        let scalar = try Scalar(hexString: hexString)
         try self.init(scalar: scalar)
     }
 }
@@ -79,6 +94,13 @@ extension PrivateKey: ExpressibleByIntegerLiteral {
 public extension PrivateKey {
     var asData: Data {
         return scalar.toHexString(mode: StringConversionMode.minimumLength(64, .prepend)).asData
+    }
+}
+
+// MARK: - Signing
+public extension PrivateKey {
+    var privateKey: PrivateKey {
+        return self
     }
 }
 
