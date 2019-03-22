@@ -12,4 +12,10 @@ public extension Ownable {
     func encrypt(_ data: DataConvertible) throws -> Data {
         return try ECIES.encrypt(data: data, using: publicKey)
     }
+    
+    func encrypt(text: String, encoding: String.Encoding = .default) throws -> Data {
+        // swiftlint:disable:next force_unwrap
+        let encoded = text.data(using: encoding)!
+        return try encrypt(encoded)
+    }
 }

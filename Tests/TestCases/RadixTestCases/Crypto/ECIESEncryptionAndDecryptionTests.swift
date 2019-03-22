@@ -19,13 +19,10 @@ class ECIESEncryptionAndDecryptionTests: QuickSpec {
 
                     let keyPair = KeyPair()
                     let message = "Hello Radix"
-                    let encoding: String.Encoding = .utf8
-                    let encodedMessage = message.data(using: encoding)!
-                    let encrypted = try keyPair.encrypt(encodedMessage)
+                    let encrypted = try keyPair.encrypt(text: message)
                     XCTAssertGreaterThan(encrypted.length, 0)
-                    let decrypted = try keyPair.decrypt(encrypted)
-                    let decodedMessage = String(data: decrypted, encoding: encoding)!
-                    XCTAssertEqual(decodedMessage, message)
+                    let decrypted = try keyPair.decryptAndDecode(encrypted)
+                    XCTAssertEqual(decrypted, message)
                 } catch {
                     XCTFail("Error: \(error)")
                 }
