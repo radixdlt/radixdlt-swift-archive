@@ -12,4 +12,8 @@ public extension Data {
     init(hex: String) {
         self.init(bytes: [Byte](hex: hex))
     }
+    
+    static var empty: Data {
+        return Data(bytes: [])
+    }
 }

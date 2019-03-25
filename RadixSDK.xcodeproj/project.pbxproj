@@ -30,6 +30,7 @@
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
 		E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62C030B220491CD001F27DE /* Sequence_Extension.swift */; };
 		E62EFDA222454C7200B6DAD6 /* ECIESDecryptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDA122454C7200B6DAD6 /* ECIESDecryptMessage.swift */; };
+		E62EFDA42248D24F00B6DAD6 /* fatalFail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDA32248D24F00B6DAD6 /* fatalFail.swift */; };
 		E631DAA021F249620063F632 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DA9F21F249620063F632 /* KeyPair.swift */; };
 		E631DAA321F249910063F632 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAA221F249910063F632 /* PrivateKey.swift */; };
 		E631DAA821F249DB0063F632 /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAA721F249DB0063F632 /* PublicKey.swift */; };
@@ -319,6 +320,7 @@
 		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
 		E62C030B220491CD001F27DE /* Sequence_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence_Extension.swift; sourceTree = "<group>"; };
 		E62EFDA122454C7200B6DAD6 /* ECIESDecryptMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECIESDecryptMessage.swift; sourceTree = "<group>"; };
+		E62EFDA32248D24F00B6DAD6 /* fatalFail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fatalFail.swift; sourceTree = "<group>"; };
 		E631DA9F21F249620063F632 /* KeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
 		E631DAA221F249910063F632 /* PrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKey.swift; sourceTree = "<group>"; };
 		E631DAA721F249DB0063F632 /* PublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKey.swift; sourceTree = "<group>"; };
@@ -1362,6 +1364,7 @@
 			children = (
 				E6CEE70A21F5AE5A00D745EC /* Crypto */,
 				E69AB74522381216006153DD /* String+JavaHashCode.swift */,
+				E62EFDA32248D24F00B6DAD6 /* fatalFail.swift */,
 			);
 			path = Convenience;
 			sourceTree = "<group>";
@@ -2176,6 +2179,7 @@
 				E6A4ABDF22206F1D006C5CA8 /* AtomJsonDeserializationTokenDefinitionIncorrectJsonSpec.swift in Sources */,
 				E616101A223AAEA300025A54 /* DsonEncodingMintedTokenParticle.swift in Sources */,
 				E69AB7372237F839006153DD /* AddressChecksumSpec.swift in Sources */,
+				E62EFDA42248D24F00B6DAD6 /* fatalFail.swift in Sources */,
 				E6161018223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift in Sources */,
 				E6611F2922259E1B00AD2F83 /* NonBase58AddressSpec.swift in Sources */,
 				E6A4ABEB222070B7006C5CA8 /* TooShortDescriptionSpec.swift in Sources */,

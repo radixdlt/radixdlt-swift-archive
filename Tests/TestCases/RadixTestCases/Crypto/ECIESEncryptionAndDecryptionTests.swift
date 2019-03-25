@@ -16,13 +16,18 @@ class ECIESEncryptionAndDecryptionTests: QuickSpec {
         describe("ECIES encryption for generated key pair") {
             it("should decrypt encrypted messages") {
                 do {
-
-                    let keyPair = KeyPair()
+                    let alice = KeyPair()
+                    let bob = KeyPair()
                     let message = "Hello Radix"
-                    let encrypted = try keyPair.encrypt(text: message)
-                    XCTAssertGreaterThan(encrypted.length, 0)
-                    let decrypted = try keyPair.decryptAndDecode(encrypted)
-                    XCTAssertEqual(decrypted, message)
+                    let encryptedByAlice = expectNoErrorToBeThrown { try alice.encrypt(text: message) }
+                    let encryptedByBob = expectNoErrorToBeThrown { try bob.encrypt(text: message) }
+                    
+                    expect { try alice.decrypt(encryptedByBob) }.to(throwError(ECIES.DecryptionError.macMismatch(expected: .empty, butGot: .empty)))
+                    expect { try bob.decrypt(encryptedByAlice) }.to(throwError(ECIES.DecryptionError.macMismatch(expected: .empty, butGot: .empty)))
+                    
+                    let decrypted = try alice.decryptAndDecode(encryptedByAlice)
+                    expect(decrypted).to(equal(message))
+                    expect(try bob.decryptAndDecode(encryptedByBob)).to(equal(decrypted))
                 } catch {
                     XCTFail("Error: \(error)")
                 }
