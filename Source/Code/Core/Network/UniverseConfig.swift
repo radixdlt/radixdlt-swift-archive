@@ -10,7 +10,14 @@ import Foundation
 
 public typealias Magic = Int64
 
-public struct UniverseConfig: Codable, CustomStringConvertible {
+// swiftlint:disable colon
+
+public struct UniverseConfig:
+    RadixModelTypeStaticSpecifying,
+    Decodable,
+    CustomStringConvertible {
+    // swiftlint:enable colon
+    
     public let magic: Magic
     public let port: Int64
     public let name: String
@@ -21,6 +28,11 @@ public struct UniverseConfig: Codable, CustomStringConvertible {
     public let genesis: Atoms
 }
 
+// MARK: - RadixModelTypeStaticSpecifying
+public extension UniverseConfig {
+    static let type: RadixModelType = .universeConfig
+}
+
 public extension UniverseConfig {
     var magicByte: Byte {
         let and = magic & Magic(bitPattern: 0xFF)
@@ -29,7 +41,7 @@ public extension UniverseConfig {
 }
 
 public extension UniverseConfig {
-    public enum UniverseType: Int, Codable {
+    public enum UniverseType: Int, Decodable {
         case `public` = 1
         case development
         

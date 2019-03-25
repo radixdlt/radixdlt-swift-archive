@@ -21,6 +21,7 @@ public struct Signature:
     StringInitializable,
     DERConvertible,
     DERInitializable,
+    Codable,
     Equatable {
 // swiftlint:enable colon
     

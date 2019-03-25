@@ -12,7 +12,7 @@ public protocol ParticleConvertible: Codable {
     var particleType: ParticleType { get }
 }
 
-public extension ParticleConvertible where Self: RadixModelTypeSpecifying {
+public extension ParticleConvertible where Self: RadixModelTypeStaticSpecifying {
     var particleType: ParticleType {
         do {
             return try ParticleType(modelType: type)

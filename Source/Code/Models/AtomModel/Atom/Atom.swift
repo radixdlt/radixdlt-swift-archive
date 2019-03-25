@@ -21,6 +21,8 @@ public struct Atom:
     RadixCodable,
     SignableConvertible,
     ArrayInitializable,
+    Codable,
+    Equatable,
     CustomStringConvertible,
     CustomDebugStringConvertible {
 // swiftlint:enable colon
