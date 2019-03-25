@@ -62,3 +62,28 @@ public extension UniverseConfig {
         }
     }
 }
+
+public extension UniverseConfig {
+    static var betanet: UniverseConfig {
+        return config(fromResource: "betanet")
+    }
+    static var sunstone: UniverseConfig {
+        return config(fromResource: "sunstone")
+    }
+}
+
+private extension UniverseConfig {
+    static func config(fromResource resource: String) -> UniverseConfig {
+        guard
+            let url = Bundle.main.url(forResource: resource, withExtension: "json") else {
+                incorrectImplementation("Config file not found: \(resource)")
+        }
+        do {
+            let data = try Data(contentsOf: url)
+            return try
+                JSONDecoder().decode(UniverseConfig.self, from: data)
+        } catch {
+            incorrectImplementation("Failed to create config from data, error: \(error)")
+        }
+    }
+}

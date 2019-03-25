@@ -56,6 +56,10 @@ public final class RadixUniverse {
 // MARK: - Public
 public extension RadixUniverse {
     
+    static func bootstrap(_ bootstrapConfig: BootstrapConfig) throws -> RadixUniverse {
+        return try bootstrap(config: bootstrapConfig.config, seeds: bootstrapConfig.seeds)
+    }
+    
     static func bootstrap(config: UniverseConfig, seeds: Observable<Node>) throws -> RadixUniverse {
         let apiClient = DefaultAPIClient()
         return try RadixUniverse(config: config, apiClient: apiClient)

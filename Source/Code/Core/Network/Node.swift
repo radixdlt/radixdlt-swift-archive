@@ -8,6 +8,15 @@
 
 import Foundation
 
+public struct FoundNode: Decodable {
+    public struct Host: Decodable {
+        // swiftlint:disable:next identifier_name
+        public let ip: String
+        public let port: Int
+    }
+    public let host: Host
+}
+
 /// Unique network node endpoint.
 public struct Node: Hashable {
     public enum Error: Swift.Error {
@@ -19,7 +28,6 @@ public struct Node: Hashable {
     
     public let isUsingSSL: Bool
     public let url: URL
-    public let request: URLRequest
     
     // swiftlint:disable:next function_body_length
     public init(location: String, useSSL: Bool, port: Int) throws {
@@ -40,6 +48,30 @@ public struct Node: Hashable {
         }
         self.url = url
         self.isUsingSSL = useSSL
-        self.request = URLRequest(url: url)
+    }
+}
+
+public extension Node {
+    
+    static func localhost(port: Int) -> Node {
+        do {
+            return try Node(location: "http://127.0.0.1", useSSL: false, port: port)
+        } catch {
+            incorrectImplementation("Error: \(error)")
+        }
+    }
+    
+    init(found: FoundNode, useSSL: Bool = true, port: Int? = nil) {
+        do {
+            try self.init(location: found.host.ip, useSSL: useSSL, port: port ?? found.host.port)
+        } catch {
+            incorrectImplementation("Error: \(error)")
+        }
+    }
+}
+
+public extension Node {
+    var request: URLRequest {
+        return URLRequest(url: url)
     }
 }

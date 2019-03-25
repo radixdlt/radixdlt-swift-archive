@@ -18,9 +18,14 @@ extension XCTestCase {
 
 class UniverseConfigBetanetJSONDecodingTest: QuickSpec {
     override func spec() {
-        describe("Universe config JSON decoding") {
+       test(config: "betanet")
+       test(config: "sunstone")
+    }
+    
+    private func test(config: String) {
+        describe("Universe \(config) JSON decoding") {
             it("should decode without problems") {
-                guard let jsonFileUrl = self.testBundle.url(forResource: "betanet", withExtension: "json") else {
+                guard let jsonFileUrl = self.testBundle.url(forResource: config, withExtension: "json") else {
                     return XCTFail("file not found")
                 }
                 
