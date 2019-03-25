@@ -123,7 +123,11 @@ public extension Signature {
         
         let rBase64 = try container.decode(Base64String.self, forKey: .r)
         let sBase64 = try container.decode(Base64String.self, forKey: .s)
-        try self.init(r: rBase64, s: sBase64)
+        
+         // TODO: When Java library ensures low value S we should call the designated initializer in order to perform validation
+//        try self.init(r: rBase64, s: sBase64)
+        self.r = rBase64.unsignedBigInteger
+        self.s = sBase64.unsignedBigInteger
     }
 }
 

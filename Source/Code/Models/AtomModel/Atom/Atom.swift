@@ -109,6 +109,10 @@ public extension Atom {
         return particleGroups.flatMap { $0.spunParticles }
     }
     
+    func particles() -> [ParticleConvertible] {
+        return spunParticles().map { $0.particle }
+    }
+    
     func messageParticles() -> [MessageParticle] {
         return spunParticles().compactMap(type: MessageParticle.self)
     }
@@ -117,7 +121,6 @@ public extension Atom {
         return spunParticles()
             .filter(spin: spin)
             .compactMap(type: P.self)
-
     }
     
     var timestamp: Date? {

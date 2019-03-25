@@ -26,3 +26,10 @@ public extension Atoms {
         self.init(atoms: elements)
     }
 }
+
+// MARK: Public
+public extension Atoms {
+    func particles() -> [ParticleConvertible] {
+        return flatMap { $0.particles() }
+    }
+}

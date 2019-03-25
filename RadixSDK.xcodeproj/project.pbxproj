@@ -31,6 +31,9 @@
 		E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62C030B220491CD001F27DE /* Sequence_Extension.swift */; };
 		E62EFDA222454C7200B6DAD6 /* ECIESDecryptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDA122454C7200B6DAD6 /* ECIESDecryptMessage.swift */; };
 		E62EFDA42248D24F00B6DAD6 /* fatalFail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDA32248D24F00B6DAD6 /* fatalFail.swift */; };
+		E62EFDAD2248F17000B6DAD6 /* UniverseConfigBetanetJSONDecodingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDAC2248F17000B6DAD6 /* UniverseConfigBetanetJSONDecodingTest.swift */; };
+		E62EFDB92248F9B600B6DAD6 /* betanet.json in Resources */ = {isa = PBXBuildFile; fileRef = E62EFDB82248F9B600B6DAD6 /* betanet.json */; };
+		E62EFDBA2248F9B600B6DAD6 /* betanet.json in Resources */ = {isa = PBXBuildFile; fileRef = E62EFDB82248F9B600B6DAD6 /* betanet.json */; };
 		E631DAA021F249620063F632 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DA9F21F249620063F632 /* KeyPair.swift */; };
 		E631DAA321F249910063F632 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAA221F249910063F632 /* PrivateKey.swift */; };
 		E631DAA821F249DB0063F632 /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAA721F249DB0063F632 /* PublicKey.swift */; };
@@ -321,6 +324,8 @@
 		E62C030B220491CD001F27DE /* Sequence_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence_Extension.swift; sourceTree = "<group>"; };
 		E62EFDA122454C7200B6DAD6 /* ECIESDecryptMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ECIESDecryptMessage.swift; sourceTree = "<group>"; };
 		E62EFDA32248D24F00B6DAD6 /* fatalFail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fatalFail.swift; sourceTree = "<group>"; };
+		E62EFDAC2248F17000B6DAD6 /* UniverseConfigBetanetJSONDecodingTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniverseConfigBetanetJSONDecodingTest.swift; sourceTree = "<group>"; };
+		E62EFDB82248F9B600B6DAD6 /* betanet.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = betanet.json; sourceTree = "<group>"; };
 		E631DA9F21F249620063F632 /* KeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
 		E631DAA221F249910063F632 /* PrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKey.swift; sourceTree = "<group>"; };
 		E631DAA721F249DB0063F632 /* PublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKey.swift; sourceTree = "<group>"; };
@@ -749,6 +754,7 @@
 		E620AB4521E785D600B36EC2 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				E62EFDB72248F9B600B6DAD6 /* UniverseConfigs */,
 				E620AB4621E785D600B36EC2 /* RadixSDK.h */,
 				E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */,
 			);
@@ -810,6 +816,35 @@
 				E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */,
 			);
 			path = Collection;
+			sourceTree = "<group>";
+		};
+		E62EFDAA2248F14700B6DAD6 /* AtomModel */ = {
+			isa = PBXGroup;
+			children = (
+				E6A4ABF022207DED006C5CA8 /* MintedTokenParticleBadValues */,
+				E6A4ABDB22206F1D006C5CA8 /* TokenDefinitionBadValues */,
+				E6A4ABD022205B91006C5CA8 /* AtomJsonDeserializationTrivialSpec.swift */,
+				E6A4ABD322205C6E006C5CA8 /* AtomJsonDeserializationInvalidJsonKeySpec.swift */,
+				E6611F4C222982A700AD2F83 /* AtomJsonDeserializationInvalidSerializerValueSpec.swift */,
+				E6A4ABD522206442006C5CA8 /* AtomJsonDeserializationTwoParticleGroupsSpec.swift */,
+			);
+			path = AtomModel;
+			sourceTree = "<group>";
+		};
+		E62EFDAB2248F15500B6DAD6 /* UniverseConfig */ = {
+			isa = PBXGroup;
+			children = (
+				E62EFDAC2248F17000B6DAD6 /* UniverseConfigBetanetJSONDecodingTest.swift */,
+			);
+			path = UniverseConfig;
+			sourceTree = "<group>";
+		};
+		E62EFDB72248F9B600B6DAD6 /* UniverseConfigs */ = {
+			isa = PBXGroup;
+			children = (
+				E62EFDB82248F9B600B6DAD6 /* betanet.json */,
+			);
+			path = UniverseConfigs;
 			sourceTree = "<group>";
 		};
 		E631DA9C21F2490F0063F632 /* Core */ = {
@@ -1272,12 +1307,8 @@
 		E6A4ABCF22205B69006C5CA8 /* Decoding */ = {
 			isa = PBXGroup;
 			children = (
-				E6A4ABF022207DED006C5CA8 /* MintedTokenParticleBadValues */,
-				E6A4ABDB22206F1D006C5CA8 /* TokenDefinitionBadValues */,
-				E6A4ABD022205B91006C5CA8 /* AtomJsonDeserializationTrivialSpec.swift */,
-				E6A4ABD322205C6E006C5CA8 /* AtomJsonDeserializationInvalidJsonKeySpec.swift */,
-				E6611F4C222982A700AD2F83 /* AtomJsonDeserializationInvalidSerializerValueSpec.swift */,
-				E6A4ABD522206442006C5CA8 /* AtomJsonDeserializationTwoParticleGroupsSpec.swift */,
+				E62EFDAB2248F15500B6DAD6 /* UniverseConfig */,
+				E62EFDAA2248F14700B6DAD6 /* AtomModel */,
 			);
 			path = Decoding;
 			sourceTree = "<group>";
@@ -1895,6 +1926,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E62EFDB92248F9B600B6DAD6 /* betanet.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1902,6 +1934,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E62EFDBA2248F9B600B6DAD6 /* betanet.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2188,6 +2221,7 @@
 				E6A4ABE522206FF0006C5CA8 /* TooLongNameSpec.swift in Sources */,
 				E6ED1A3421F879F600654105 /* HashTests.swift in Sources */,
 				E6A4ABD622206443006C5CA8 /* AtomJsonDeserializationTwoParticleGroupsSpec.swift in Sources */,
+				E62EFDAD2248F17000B6DAD6 /* UniverseConfigBetanetJSONDecodingTest.swift in Sources */,
 				E6611F4D222982A700AD2F83 /* AtomJsonDeserializationInvalidSerializerValueSpec.swift in Sources */,
 				E601D33A2242842500A81412 /* AtomSignatureSpec.swift in Sources */,
 				E6A4ABD222205C13006C5CA8 /* AtomJsonDeserializationTrivialSpec.swift in Sources */,
