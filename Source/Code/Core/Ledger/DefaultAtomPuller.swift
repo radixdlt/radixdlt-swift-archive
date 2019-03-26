@@ -23,15 +23,6 @@ public final class DefaultAtomPuller: AtomPuller {
     }
 }
 
-public extension DefaultAtomPuller {
-    convenience init(puller: (AtomPuller & AnyObject), storeAtom: @escaping StoreAtom) {
-        self.init(
-            fetcher: { [unowned puller] in puller.pull(from: $0) },
-            storeAtom: storeAtom
-        )
-    }
-}
-
 // MARK: AtomPuller
 public extension DefaultAtomPuller {
     func pull(from address: Address) -> Observable<AtomObservation> {

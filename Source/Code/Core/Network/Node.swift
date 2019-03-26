@@ -45,6 +45,12 @@ public struct Node: Hashable, Equatable {
             location.removeFirst(String.http.count)
         }
         
+        let locationAndPort = location.components(separatedBy: ":")
+        if locationAndPort.count > 1 {
+            // throw away port
+            location = locationAndPort[0]
+        }
+        
         let base = useSSL ? "wss://" : "ws://"
         let urlString =  "\(base)\(location):\(port)/rpc"
         guard let url = URL(string: urlString) else {
@@ -59,7 +65,7 @@ public extension Node {
     
     static func localhost(port: Int) -> Node {
         do {
-            return try Node(location: .localhostUrl, useSSL: false, port: port)
+            return try Node(location: Enviroment.localhost.baseURL.absoluteString, useSSL: false, port: port)
         } catch {
             incorrectImplementation("Error: \(error)")
         }

@@ -9,7 +9,7 @@
 import Foundation
 
 public enum Enviroment: String {
-    case localhost = "http://127.0.0.1:8080/api"
+    case localhost = "http://127.0.0.1:8080"
 }
 
 public extension Enviroment {

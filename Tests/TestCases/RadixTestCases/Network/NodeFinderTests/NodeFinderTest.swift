@@ -24,7 +24,7 @@ class NodeFinderTest: XCTestCase {
 
         nodeFinder.getSeed().subscribe(
             onNext: { node in
-                XCTAssertEqual(node.url, "ws://127.0.0.1:8080:8080/rpc")
+                XCTAssertEqual(node.url, "ws://127.0.0.1:8080/rpc")
                 expectation.fulfill()
         }, onError: {
             XCTFail("Error: \($0)")

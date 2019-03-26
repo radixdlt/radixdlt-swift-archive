@@ -10,22 +10,13 @@ import Foundation
 import RxSwift
 import Alamofire
 
-extension String {
-    static var localhostUrl: String {
-        return "http://127.0.0.1:8080"
-    }
-}
-
 extension URL {
     static var localhost: URL {
-        guard let localhost = URL(string: .localhostUrl) else {
-            incorrectImplementation("failed to create localhost url, are your local node running at `\(String.localhostUrl)`?")
-        }
-        return localhost
+        return Enviroment.localhost.baseURL
     }
     
     var isLocalhost: Bool {
-        return absoluteString == .localhostUrl
+        return self == URL.localhost
     }
 }
 

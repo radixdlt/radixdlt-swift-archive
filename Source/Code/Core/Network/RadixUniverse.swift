@@ -43,7 +43,7 @@ public final class RadixUniverse {
         self.ledger = ledger ?? DefaultLedger(
             atomPuller:
                 DefaultAtomPuller(
-                fetcher: apiClient.fetchAtoms,
+                fetcher: apiClient.pull,
                 storeAtom: inMemoryAtomStore.store
             ),
             atomSubmitter: apiClient,
