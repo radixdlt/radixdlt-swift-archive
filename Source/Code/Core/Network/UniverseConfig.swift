@@ -15,6 +15,7 @@ public typealias Magic = Int64
 public struct UniverseConfig:
     RadixModelTypeStaticSpecifying,
     Decodable,
+    Equatable,
     CustomStringConvertible {
     // swiftlint:enable colon
     
@@ -41,7 +42,7 @@ public extension UniverseConfig {
 }
 
 public extension UniverseConfig {
-    public enum UniverseType: Int, Decodable {
+    public enum UniverseType: Int, Decodable, Equatable {
         case `public` = 1
         case development
         

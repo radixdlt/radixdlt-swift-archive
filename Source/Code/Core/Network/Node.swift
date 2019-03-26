@@ -8,17 +8,13 @@
 
 import Foundation
 
-public struct FoundNode: Decodable {
-    public struct Host: Decodable {
-        // swiftlint:disable:next identifier_name
-        public let ip: String
-        public let port: Int
-    }
-    public let host: Host
+internal extension String {
+    static let https = "https://"
+    static let http = "http://"
 }
 
 /// Unique network node endpoint.
-public struct Node: Hashable {
+public struct Node: Hashable, Equatable {
     public enum Error: Swift.Error {
         case portTooBig
         case portNegative
@@ -40,6 +36,14 @@ public struct Node: Hashable {
         guard !location.isEmpty else {
             throw Error.locationEmpty
         }
+        var location = location
+        
+        if location.starts(with: String.https) {
+            location.removeFirst(String.https.count)
+        }
+        if location.starts(with: String.http) {
+            location.removeFirst(String.http.count)
+        }
         
         let base = useSSL ? "wss://" : "ws://"
         let urlString =  "\(base)\(location):\(port)/rpc"
@@ -55,15 +59,7 @@ public extension Node {
     
     static func localhost(port: Int) -> Node {
         do {
-            return try Node(location: "http://127.0.0.1", useSSL: false, port: port)
-        } catch {
-            incorrectImplementation("Error: \(error)")
-        }
-    }
-    
-    init(found: FoundNode, useSSL: Bool = true, port: Int? = nil) {
-        do {
-            try self.init(location: found.host.ip, useSSL: useSSL, port: port ?? found.host.port)
+            return try Node(location: .localhostUrl, useSSL: false, port: port)
         } catch {
             incorrectImplementation("Error: \(error)")
         }

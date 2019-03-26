@@ -15,6 +15,7 @@ public typealias Shard = Int64
 public struct Shards:
     RadixCodable,
     RangeExpression,
+    Equatable,
     Codable {
 // swiftlint:enable colon
     public typealias Bound = Shard

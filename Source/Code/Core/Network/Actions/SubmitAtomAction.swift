@@ -11,7 +11,7 @@ import Foundation
 public protocol SubmitAtomAction: NodeAction {
     /// The unique id representing a fetch atoms flow. That is, each type of action in a single flow instance
     /// must have the same unique id.
-    var uuui: UUID { get }
+    var uuid: UUID { get }
     
     /// The atom to submit
     var atom: Atom { get }

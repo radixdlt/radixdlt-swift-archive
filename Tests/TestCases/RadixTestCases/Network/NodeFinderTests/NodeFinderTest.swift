@@ -13,7 +13,7 @@ import XCTest
 import RxSwift
 class NodeFinderTest: XCTestCase {
     private let bag = DisposeBag()
-    private let nodeFinder =  NodeFinder(enviroment: .localhost)
+    private let nodeFinder = NodeFinder(baseURL: .localhost, port: 8080)
     
     override func setUp() {
         super.setUp()
@@ -21,9 +21,11 @@ class NodeFinderTest: XCTestCase {
     
     func testNodeFinder() {
         let expectation = XCTestExpectation(description: "Node finder localhost")
-        
-        nodeFinder.getSeed().subscribe(onNext: { nodes in
-            expectation.fulfill()
+
+        nodeFinder.getSeed().subscribe(
+            onNext: { node in
+                XCTAssertEqual(node.url, "ws://127.0.0.1:8080:8080/rpc")
+                expectation.fulfill()
         }, onError: {
             XCTFail("Error: \($0)")
             expectation.fulfill()

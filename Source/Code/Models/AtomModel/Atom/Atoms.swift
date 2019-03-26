@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Atoms: ArrayCodable {
+public struct Atoms: ArrayCodable, Equatable {
     
     public let atoms: [Atom]
     public init(atoms: [Atom] = []) {

@@ -117,10 +117,16 @@ public extension Atom {
         return spunParticles().compactMap(type: MessageParticle.self)
     }
     
-    func particles<P>(spin: Spin, type: P.Type) -> [P] where P: ParticleConvertible {
+    func particlesOfType<P>(_ type: P.Type, spin: Spin) -> [P] where P: ParticleConvertible {
         return spunParticles()
             .filter(spin: spin)
             .compactMap(type: P.self)
+    }
+    
+    func particles(spin: Spin) -> [ParticleConvertible] {
+        return spunParticles()
+            .filter(spin: spin)
+            .map { $0.particle }
     }
     
     var timestamp: Date? {
@@ -130,7 +136,8 @@ public extension Atom {
     func publicKeys() -> Set<PublicKey> {
         return spunParticles()
             .map { $0.particle }
-            .flatMap { Array($0.keyDestinations()) }
+            .flatMap { $0.shardables() }
+            .map { $0.publicKey }
             .asSet
     }
     
@@ -149,6 +156,20 @@ public extension Atom {
     
     var signable: Signable {
         return Message(hash: radixHash)
+    }
+    
+    func shards() -> Set<Shard> {
+        implementMe
+    }
+    
+    func requiredFirstShard() -> Set<Shard> {
+        if !particles(spin: .down).isEmpty {
+            return particles(spin: .down).flatMap {
+                $0.shardables().map { $0.hashId.shard }
+            }.asSet
+        } else {
+            return shards()
+        }
     }
 }
 
