@@ -11,5 +11,6 @@ import RxSwift
 
 public protocol BootstrapConfig {
     var config: UniverseConfig { get }
-    var seeds: Observable<Node> { get }
+//    var seeds: Observable<Node> { get }
+    var nodeDiscovery: NodeDiscovery { get }
 }

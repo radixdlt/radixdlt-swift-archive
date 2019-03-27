@@ -61,6 +61,7 @@
 		E62EFE15224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFE13224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift */; };
 		E62EFE17224A7AD300B6DAD6 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFE16224A7AD300B6DAD6 /* APIClient.swift */; };
 		E62EFE1B224A7EF000B6DAD6 /* DefaultAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFE1A224A7EF000B6DAD6 /* DefaultAPIClient.swift */; };
+		E62EFE1E224B739B00B6DAD6 /* WebSocketsGetLivePeersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFE1D224B739B00B6DAD6 /* WebSocketsGetLivePeersTest.swift */; };
 		E631DAA021F249620063F632 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DA9F21F249620063F632 /* KeyPair.swift */; };
 		E631DAA321F249910063F632 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAA221F249910063F632 /* PrivateKey.swift */; };
 		E631DAA821F249DB0063F632 /* PublicKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAA721F249DB0063F632 /* PublicKey.swift */; };
@@ -75,6 +76,8 @@
 		E631DADA21F5A8190063F632 /* HierarchicalDeterministicWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAD921F5A8190063F632 /* HierarchicalDeterministicWallet.swift */; };
 		E645E73821E7827D00532ACD /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E645E72E21E7827D00532ACD /* RadixSDK.framework */; };
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
+		E6550EE8224BBDBD00160267 /* NodeDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */; };
+		E6550EEA224BBDC900160267 /* NodeDiscoveryHardCoded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */; };
 		E6611EFF222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611EFE222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift */; };
 		E6611F25222584A300AD2F83 /* TooShortAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F24222584A300AD2F83 /* TooShortAddress.swift */; };
 		E6611F2722259E0800AD2F83 /* TooLongAddressSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2622259E0800AD2F83 /* TooLongAddressSpec.swift */; };
@@ -371,7 +374,6 @@
 		E62EFDE2224A4D6F00B6DAD6 /* WebSocketToNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketToNode.swift; sourceTree = "<group>"; };
 		E62EFDE5224A4DAF00B6DAD6 /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
 		E62EFDE7224A4DBF00B6DAD6 /* WebSocketStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketStatus.swift; sourceTree = "<group>"; };
-		E62EFDEB224A4DEB00B6DAD6 /* WebSockets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSockets.swift; sourceTree = "<group>"; };
 		E62EFDFD224A4EC100B6DAD6 /* RadixJsonRpcClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJsonRpcClient.swift; sourceTree = "<group>"; };
 		E62EFDFF224A4ED000B6DAD6 /* DefaultRadixJsonRpcClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRadixJsonRpcClient.swift; sourceTree = "<group>"; };
 		E62EFE0F224A74BF00B6DAD6 /* RestClientTestLivePeers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestClientTestLivePeers.swift; sourceTree = "<group>"; };
@@ -394,6 +396,8 @@
 		E645E72E21E7827D00532ACD /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E645E73721E7827D00532ACD /* RadixSDK iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RadixSDK iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6550EE4224BB02900160267 /* Int+DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataInitializable.swift"; sourceTree = "<group>"; };
+		E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscovery.swift; sourceTree = "<group>"; };
+		E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscoveryHardCoded.swift; sourceTree = "<group>"; };
 		E6611EFE222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomJsonSerializationTrivialSpec.swift; sourceTree = "<group>"; };
 		E6611F24222584A300AD2F83 /* TooShortAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooShortAddress.swift; sourceTree = "<group>"; };
 		E6611F2622259E0800AD2F83 /* TooLongAddressSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooLongAddressSpec.swift; sourceTree = "<group>"; };
@@ -935,7 +939,6 @@
 			isa = PBXGroup;
 			children = (
 				E62EFDE2224A4D6F00B6DAD6 /* WebSocketToNode.swift */,
-				E62EFDEB224A4DEB00B6DAD6 /* WebSockets.swift */,
 				E62EFDE5224A4DAF00B6DAD6 /* WebSocketEvent.swift */,
 				E62EFDE7224A4DBF00B6DAD6 /* WebSocketStatus.swift */,
 			);
@@ -1141,6 +1144,16 @@
 				E645E73721E7827D00532ACD /* RadixSDK iOS Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E6550EE6224BBD9100160267 /* NodeFinding */ = {
+			isa = PBXGroup;
+			children = (
+				E62EFDBB2249090500B6DAD6 /* NodeFinder.swift */,
+				E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */,
+				E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */,
+			);
+			path = NodeFinding;
 			sourceTree = "<group>";
 		};
 		E6611F332225B2B700AD2F83 /* DictionaryConvertible */ = {
@@ -1786,7 +1799,7 @@
 				E6ED1A2B21F7CE9C00654105 /* Node.swift */,
 				E62EFDBF22492A8300B6DAD6 /* Bootstrap.swift */,
 				E62EFDC12249368900B6DAD6 /* BootstrapConfig.swift */,
-				E62EFDBB2249090500B6DAD6 /* NodeFinder.swift */,
+				E6550EE6224BBD9100160267 /* NodeFinding */,
 				E62EFDCA2249377300B6DAD6 /* RESTClient */,
 				E62EFDC7224936EF00B6DAD6 /* Routers */,
 				E62EFDC3224936BA00B6DAD6 /* Enviroment.swift */,
@@ -2228,6 +2241,7 @@
 				E693DAB6223265BA003720C2 /* TokenDefinitionParticle+Identifiable.swift in Sources */,
 				E62EFE15224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift in Sources */,
 				E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */,
+				E6550EE8224BBDBD00160267 /* NodeDiscovery.swift in Sources */,
 				E67A715621FBC71B00F4B2D0 /* ResourceType.swift in Sources */,
 				E62EFDE1224A4D4600B6DAD6 /* PersistentChannel.swift in Sources */,
 				E69AB72D2237B762006153DD /* EncodableKeyValueListConvertible.swift in Sources */,
@@ -2248,6 +2262,7 @@
 				E62EFE17224A7AD300B6DAD6 /* APIClient.swift in Sources */,
 				E6CEE74421F637EC00D745EC /* Signature.swift in Sources */,
 				E6D4B335223F9A2E004FC83A /* MetaDataConvertible.swift in Sources */,
+				E6550EEA224BBDC900160267 /* NodeDiscoveryHardCoded.swift in Sources */,
 				E6611F44222696E900AD2F83 /* BigInt_Extension.swift in Sources */,
 				E62EFDE6224A4DAF00B6DAD6 /* WebSocketEvent.swift in Sources */,
 				E6D4B34D223FBB37004FC83A /* StringConversionMode.swift in Sources */,
@@ -2298,7 +2313,6 @@
 				E6ED1A8921F9F5BC00654105 /* UniqueParticle.swift in Sources */,
 				E6040E6D224128870065AEC2 /* DERCoding.swift in Sources */,
 				E62EFE14224A77F000B6DAD6 /* AtomQuery.swift in Sources */,
-				E62EFDEC224A4DEB00B6DAD6 /* WebSockets.swift in Sources */,
 				E6A4AB90221C3F64006C5CA8 /* TokenDefinitionParticle.swift in Sources */,
 				E6C9FB9B2243DCE6000AAE12 /* Signing.swift in Sources */,
 				E6D4B361223FD046004FC83A /* AnyEncodableKeyValueList.swift in Sources */,

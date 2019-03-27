@@ -22,9 +22,9 @@ class NodeFinderTest: XCTestCase {
     func testNodeFinder() {
         let expectation = XCTestExpectation(description: "Node finder localhost")
 
-        nodeFinder.getSeed().subscribe(
+        nodeFinder.loadNodes().subscribe(
             onNext: { node in
-                XCTAssertEqual(node.url, "ws://127.0.0.1:8080/rpc")
+                XCTAssertEqual(node[0].url, "ws://127.0.0.1:8080/rpc")
                 expectation.fulfill()
         }, onError: {
             XCTFail("Error: \($0)")

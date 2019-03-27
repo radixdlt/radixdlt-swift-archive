@@ -10,17 +10,7 @@ import Foundation
 import RxSwift
 import Alamofire
 
-extension URL {
-    static var localhost: URL {
-        return Enviroment.localhost.baseURL
-    }
-    
-    var isLocalhost: Bool {
-        return self == URL.localhost
-    }
-}
-
-public final class NodeFinder {
+public final class NodeFinder: NodeDiscovery {
     private let url: URL
     private let port: Int
     public init(baseURL url: URL, port: Int) {
@@ -31,7 +21,7 @@ public final class NodeFinder {
 
 public extension NodeFinder {
     // swiftlint:disable:next function_body_length
-    func getSeed() -> Observable<Node> {
+    func loadNodes() -> Observable<[Node]> {
         let port = self.port
         let url = self.url
         return Single<String>.create { single in
@@ -49,7 +39,9 @@ public extension NodeFinder {
                 } else {
                     return Node.init(urlString: urlString, port: port)
                 }
-        }.asObservable()
+            }.asObservable().map {
+                [$0]
+        }
     }
 }
 

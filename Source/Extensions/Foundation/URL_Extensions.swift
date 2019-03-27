@@ -36,3 +36,13 @@ extension URLRequest {
         return request
     }
 }
+
+extension URL {
+    static var localhost: URL {
+        return Enviroment.localhost.baseURL
+    }
+    
+    var isLocalhost: Bool {
+        return self == URL.localhost
+    }
+}

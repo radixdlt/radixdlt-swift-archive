@@ -11,27 +11,30 @@ import RxSwift
 
 public struct Bootstrap: BootstrapConfig {
     public let config: UniverseConfig
-    public let seeds: Observable<Node>
+    public let nodeDiscovery: NodeDiscovery
 }
 
 // MARK: - Presets
 public extension Bootstrap {
-    static var betanet: Bootstrap {
-        return Bootstrap(
-            config: .betanet,
-            seeds: Observable<Node>.of(
-                Node.localhost(port: 8080),
-                Node.localhost(port: 8081)
-        ))
-    }
     
     static var sunstone: Bootstrap {
         return Bootstrap(
             config: .sunstone,
-            seeds: NodeFinder(
+            nodeDiscovery: NodeFinder(
                 baseURL: "https://sunstone.radixdlt.com/node-finder",
                 port: 443
-            ).getSeed()
+            )
         )
     }
+    
+    static var localhost: Bootstrap {
+        return Bootstrap(
+            config: .betanet,
+            nodeDiscovery: NodeDiscoveryHardCoded(
+                Node.localhost(port: 8080),
+                Node.localhost(port: 8081)
+            )
+        )
+    }
+
 }
