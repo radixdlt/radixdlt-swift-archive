@@ -23,7 +23,7 @@ public struct Addresses:
 
 // MARK: - ArrayDecodable
 public extension Addresses {
-    public typealias Element = Address
+    typealias Element = Address
     
     var elements: [Element] {
         return addresses.asArray

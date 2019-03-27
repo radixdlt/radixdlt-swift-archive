@@ -21,13 +21,13 @@ public protocol StringRepresentable: LengthMeasurable {
 }
 
 public extension StringRepresentable {
-    public var length: Int {
+    var length: Int {
         return stringValue.length
     }
 }
 
 public extension StringRepresentable where Self: DataConvertible {
-    public var length: Int {
+    var length: Int {
         return stringValue.length
     }
 }

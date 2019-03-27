@@ -18,7 +18,7 @@ public enum ParticleType {
 }
 
 public extension ParticleType {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case notParticle
     }
 }

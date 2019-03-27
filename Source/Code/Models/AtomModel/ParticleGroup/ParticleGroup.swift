@@ -31,7 +31,7 @@ public struct ParticleGroup:
 
 // MARK: - Codable
 public extension ParticleGroup {
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case type = "serializer"
         
         case spunParticles = "particles"
@@ -45,7 +45,7 @@ public extension ParticleGroup {
         metaData = try container.decodeIfPresent(MetaData.self, forKey: .metaData) ?? [:]
     }
         
-    public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         var properties = [EncodableKeyValue<CodingKeys>]()
         if !spunParticles.isEmpty {
             properties.append(EncodableKeyValue(key: .spunParticles, value: spunParticles))
@@ -61,7 +61,7 @@ public extension ParticleGroup {
 
 // MARK: - ArrayDecodable
 public extension ParticleGroup {
-    public typealias Element = SpunParticle
+    typealias Element = SpunParticle
     var elements: [Element] {
         return spunParticles
     }

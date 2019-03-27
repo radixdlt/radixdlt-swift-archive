@@ -34,7 +34,7 @@ public extension TokenAction {
 
 // MARK: - Error
 public extension TokenAction {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case unsupportedTokenAction(String)
     }
 }

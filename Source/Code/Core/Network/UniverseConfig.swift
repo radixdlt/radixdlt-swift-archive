@@ -29,7 +29,7 @@ public extension UniverseConfig {
 }
 
 public extension UniverseConfig {
-    public enum UniverseType: Int, Codable {
+    enum UniverseType: Int, Codable {
         case `public` = 1
         case development
         

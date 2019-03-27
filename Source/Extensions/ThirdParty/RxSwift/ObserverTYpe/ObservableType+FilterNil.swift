@@ -15,7 +15,7 @@ public extension ObservableType where E: OptionalType {
      - returns: `Observable` of source `Observable`'s elements, with `nil` elements filtered out.
      */
     
-    public func filterNil() -> Observable<E.Wrapped> {
+    func filterNil() -> Observable<E.Wrapped> {
         return self.flatMap { element -> Observable<E.Wrapped> in
             guard let value = element.value else {
                 return Observable<E.Wrapped>.empty()

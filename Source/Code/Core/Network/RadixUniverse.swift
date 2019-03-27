@@ -67,7 +67,7 @@ public extension RadixUniverse {
 }
 
 public extension RadixUniverse {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case noPowToken
         case noNativeToken
     }

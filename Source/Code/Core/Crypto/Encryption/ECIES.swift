@@ -111,7 +111,7 @@ public extension ECIES {
         return encrypted
     }
     
-    public enum DecryptionError: Swift.Error {
+    enum DecryptionError: Swift.Error {
         case failedToConvertPublicKeyLengthDataToInteger
         case failedToConvertCipherTextLengthDataToInteger
         case macMismatch(expected: Data, butGot: Data)

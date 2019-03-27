@@ -37,7 +37,7 @@ public extension Base58String {
 }
 
 public extension Data {
-    public var length: Int {
+    var length: Int {
         return bytes.count
     }
 }

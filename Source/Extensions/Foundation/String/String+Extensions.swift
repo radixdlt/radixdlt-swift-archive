@@ -39,7 +39,7 @@ public extension String {
         }
     }
     
-    public enum Case {
+    enum Case {
         case upper, lower
     }
     

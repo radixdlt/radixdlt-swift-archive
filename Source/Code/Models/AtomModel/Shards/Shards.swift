@@ -27,7 +27,7 @@ public struct Shards:
 }
 
 public extension Shards {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case upperMustBeGreaterThanLower
     }
     
@@ -54,7 +54,7 @@ public extension Shards {
 // MARK: - Codable
 public extension Shards {
     
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case low
         case high
     }

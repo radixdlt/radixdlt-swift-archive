@@ -87,7 +87,7 @@ public extension EUID {
 
 // MARK: - ExpressibleByIntegerLiteral
 public extension EUID {
-    public init(integerLiteral int: Int) {
+    init(integerLiteral int: Int) {
         do {
             try self.init(value: Value(int))
         } catch {

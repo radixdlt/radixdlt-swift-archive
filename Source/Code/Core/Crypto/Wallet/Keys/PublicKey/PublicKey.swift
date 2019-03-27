@@ -29,7 +29,7 @@ public struct PublicKey:
 
 // MARK: - PrefixedJsonCodableByProxy
 public extension PublicKey {
-    public typealias Proxy = Base64String
+    typealias Proxy = Base64String
     static let jsonPrefix = JSONPrefix.bytesBase64
     var proxy: Proxy {
         return toBase64String()

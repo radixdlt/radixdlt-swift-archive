@@ -29,7 +29,7 @@ public struct TokenDefinitionIdentifier:
 
 // MARK: - PrefixedJsonDecodableByProxy
 public extension TokenDefinitionIdentifier {
-    public typealias Proxy = ResourceIdentifier
+    typealias Proxy = ResourceIdentifier
     var proxy: Proxy {
         return identifier
     }

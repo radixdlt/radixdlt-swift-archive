@@ -23,7 +23,7 @@ public extension StringConvertible {
 }
 
 public extension PrefixedJsonDecodable where Self: StringConvertible {
-    public static var jsonPrefix: JSONPrefix {
+    static var jsonPrefix: JSONPrefix {
         return .string
     }
 }
