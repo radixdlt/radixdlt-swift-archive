@@ -37,7 +37,7 @@ public extension Base58String {
 }
 
 public extension Data {
-    public var length: Int {
+    var length: Int {
         return bytes.count
     }
 }
@@ -83,7 +83,7 @@ public extension Base58String {
         var answer = BigUnsignedInt(0)
         var temp = BigUnsignedInt(1)
         for character in byteString.reversed() {
-            guard let index = alphabet.index(of: character) else {
+            guard let index = alphabet.firstIndex(of: character) else {
                 incorrectImplementation("Should always be able to convert to data")
             }
             answer += temp * BigUnsignedInt(index)

@@ -14,5 +14,5 @@ public func securelyGenerateBytes(count: Int) throws -> Data {
     let statusRaw = SecRandomCopyBytes(kSecRandomDefault, count, &randomBytes) as OSStatus
     let status = Status(status: statusRaw)
     guard status == .success else { throw status }
-    return Data(bytes: randomBytes)
+    return Data(randomBytes)
 }

@@ -10,7 +10,7 @@ import Foundation
 import BigInt
 
 public extension BigSignedInt {
-    public init(data: Data) {
+    init(data: Data) {
         let hex = data.toHexString()
         guard let bigInt = BigSignedInt(hex, radix: 16) else {
             incorrectImplementation("Should always be able to create from hex")

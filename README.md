@@ -20,7 +20,7 @@
 
 ## Getting started
 
-### 0. Install Xcode 10
+### 0. Install Xcode 10.2
 
 Install it from the [App Store](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12).
 
@@ -44,13 +44,15 @@ git clone git@github.com:radixdlt/radixdlt-swift.git && cd radixdlt-swift
 brew install carthage
 ```
 
+**Make sure that you have version 0.32 or later installed, otherwise it will not work with Xcode 10.2**
+
 #### Issues?
 If that command says that Carthage needs **linking** (maybe it was already installed but not linked) with a permissions error similar to the one below:
 ```bash
-Warning: carthage 0.31.2 is already installed, it's just not linked
+Warning: carthage 0.32 is already installed, it's just not linked
 You can use `brew link carthage` to link this version.
 $ brew link carthage
-Linking /usr/local/Cellar/carthage/0.31.2... Error: Permission denied @ dir_s_mkdir - /usr/local/Frameworks
+Linking /usr/local/Cellar/carthage/0.32... Error: Permission denied @ dir_s_mkdir - /usr/local/Frameworks
 ```
 
 Then you can fix that by running:

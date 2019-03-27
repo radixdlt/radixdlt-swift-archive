@@ -51,7 +51,7 @@ public final class WebSocketToNode: PersistentChannel, WebSocketDelegate, WebSoc
 }
 
 public extension WebSocketToNode {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case hasDisconnected
     }
     

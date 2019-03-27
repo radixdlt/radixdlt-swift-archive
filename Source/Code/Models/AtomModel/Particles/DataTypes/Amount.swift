@@ -86,7 +86,7 @@ public extension Amount {
 
 // MARK: - Error
 public extension Amount {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case cannotBeNegative
         case failedToCreateBigInt(fromString: String)
     }

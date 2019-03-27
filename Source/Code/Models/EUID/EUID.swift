@@ -87,7 +87,7 @@ public extension EUID {
 
 // MARK: - ExpressibleByIntegerLiteral
 public extension EUID {
-    public init(integerLiteral int: Int) {
+    init(integerLiteral int: Int) {
         do {
             try self.init(value: Value(int))
         } catch {
@@ -114,11 +114,8 @@ public extension EUID {
     var shard: Shard {
         let byteCount = 64
         let first64Bytes: Data = value.toData(minByteCount: byteCount).prefix(byteCount)
-        
-        return first64Bytes.withUnsafeBytes { (pointer: UnsafePointer<Shard>) -> Shard in
-            return pointer.pointee
-        }
-        
+        let first64BytesInt = Value(data: first64Bytes)
+        return Shard(first64BytesInt)
     }
 }
 

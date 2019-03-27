@@ -18,7 +18,7 @@ public struct Atoms: ArrayCodable, Equatable {
 
 // MARK: - ArrayDecodable
 public extension Atoms {
-    public typealias Element = Atom
+    typealias Element = Atom
     var elements: [Element] {
         return atoms
     }

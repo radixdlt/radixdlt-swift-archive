@@ -15,7 +15,7 @@ public struct NodeAtomSubmissionUpdate {
 }
 
 public extension NodeAtomSubmissionUpdate {
-    public enum State: Int, Equatable {
+    enum State: Int, Equatable {
         var isCompletable: Bool {
             switch self {
             case .received: return false
@@ -57,7 +57,7 @@ public struct SubmitAtomResultAction: SubmitAtomAction {
 }
 
 public extension SubmitAtomResultAction {
-    public enum Result: Int, Equatable {
+    enum Result: Int, Equatable {
         case failed
         case stored
         case collision

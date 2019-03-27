@@ -42,7 +42,7 @@ public extension UniverseConfig {
 }
 
 public extension UniverseConfig {
-    public enum UniverseType: Int, Decodable, Equatable {
+    enum UniverseType: Int, Decodable, Equatable {
         case `public` = 1
         case development
         

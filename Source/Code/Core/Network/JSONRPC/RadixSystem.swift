@@ -29,7 +29,7 @@ public struct RadixSystem:
 
 public extension RadixSystem {
     
-    public init(lowerShard: Shard, upperShard: Shard) throws {
+    init(lowerShard: Shard, upperShard: Shard) throws {
         let shards = try Shards(lower: lowerShard, upper: upperShard)
         self.init(shards: shards)
     }

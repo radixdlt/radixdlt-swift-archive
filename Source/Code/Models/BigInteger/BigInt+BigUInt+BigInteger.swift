@@ -47,7 +47,7 @@ public extension BigInt {
             }
         }
         
-        return Data.init(bytes: array)
+        return Data(array)
     }
     
     // swiftlint:disable:next function_body_length
@@ -69,7 +69,7 @@ public extension BigInt {
             }
         }
         
-        let magnitude = BigUInt.init(Data.init(bytes: dataArray))
+        let magnitude = dataArray.unsignedBigInteger
         
         self .init(sign: sign, magnitude: magnitude)
     }

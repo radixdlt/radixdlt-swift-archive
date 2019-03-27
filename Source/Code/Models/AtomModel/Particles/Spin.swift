@@ -16,7 +16,7 @@ public enum Spin: Int, Equatable, Codable, CustomStringConvertible {
 }
 
 public extension Spin {
-    public var description: String {
+    var description: String {
         switch self {
         case .neutral: return "neutral"
         case .up: return "up"

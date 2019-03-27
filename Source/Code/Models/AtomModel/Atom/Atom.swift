@@ -47,14 +47,14 @@ public struct Atom:
 // MARK: - Encodable
 public extension Atom {
     
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case type = "serializer"
         case particleGroups
         case signatures
         case metaData
     }
     
-    public init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         particleGroups = try container.decodeIfPresent(ParticleGroups.self, forKey: .particleGroups) ?? []
         signatures = try container.decodeIfPresent(Signatures.self, forKey: .signatures) ?? [:]
@@ -84,7 +84,7 @@ public extension Atom {
 
 // MARK: - ArrayInitializable
 public extension Atom {
-    public typealias Element = ParticleGroup
+    typealias Element = ParticleGroup
     init(elements particleGroups: [Element]) {
         self.init(particleGroups: ParticleGroups(particleGroups: particleGroups))
     }
@@ -175,7 +175,7 @@ public extension Atom {
 
 public extension Atom {
     static let maxSize = 60000
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case tooManyBytes(expectedAtMost: Int, butGot: Int)
     }
 }

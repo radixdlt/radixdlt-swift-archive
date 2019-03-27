@@ -24,7 +24,7 @@ class RestClientTestLivePeersTest: XCTestCase {
         
         restClient.request(router: NodeRouter.livePeers, decodeAs: [NodeRunnerData].self).subscribe(onSuccess: { nodeRunners in
             XCTAssertFalse(nodeRunners.isEmpty)
-            XCTAssertEqual(nodeRunners[0].ipAddress, "172.18.0.3")
+            XCTAssertEqual(nodeRunners[0].ipAddress.components(separatedBy: ".").count , 4)
             expectation.fulfill()
         }, onError: {
             XCTFail("Error: \($0)")

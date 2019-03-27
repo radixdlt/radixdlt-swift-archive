@@ -56,7 +56,7 @@ public extension Message {
         try self.init(string: string, encoding: .utf8)
     }
     
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case failedToEncodeMessage(encoding: String.Encoding)
     }
 }
