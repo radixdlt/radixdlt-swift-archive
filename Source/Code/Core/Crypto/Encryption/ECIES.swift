@@ -175,17 +175,3 @@ public extension ECIES {
     
 }
 // swiftlint:enable all
-
-public enum IntFromDataError: Swift.Error {
-    case incorrectByteCount(expected: Int, butGot: Int)
-}
-
-extension UInt32: DataInitializable {
-    public init(data: Data) throws {
-        let expectedByteCount = MemoryLayout<UInt32>.size
-        guard data.count == MemoryLayout<UInt32>.size else {
-            throw IntFromDataError.incorrectByteCount(expected: expectedByteCount, butGot: data.count)
-        }
-        self = data.withUnsafeBytes { $0.pointee }
-    }
-}

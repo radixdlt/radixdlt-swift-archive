@@ -9,44 +9,20 @@
 import Foundation
 
 public extension BinaryInteger {
-    var data: Data {
+    var asData: Data {
         var int = self
         return Data(bytes: &int, count: MemoryLayout<Self>.size)
     }
 }
 
-extension Int64: DataConvertible {
-    public var asData: Data {
-        return data
-    }
-}
+extension UInt8: DataConvertible {}
+extension Int8: DataConvertible {}
 
-extension Int32: DataConvertible {
-    public var asData: Data {
-        return data
-    }
-}
+extension UInt16: DataConvertible {}
+extension Int16: DataConvertible {}
 
-extension Int8: DataConvertible {
-    public var asData: Data {
-        return data
-    }
-}
+extension UInt32: DataConvertible {}
+extension Int32: DataConvertible {}
 
-extension UInt64: DataConvertible {
-    public var asData: Data {
-        return data
-    }
-}
-
-extension UInt32: DataConvertible {
-    public var asData: Data {
-        return data
-    }
-}
-
-extension UInt8: DataConvertible {
-    public var asData: Data {
-        return data
-    }
-}
+extension UInt64: DataConvertible {}
+extension Int64: DataConvertible {}
