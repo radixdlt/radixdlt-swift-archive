@@ -9,11 +9,6 @@
 import Foundation
 import RxSwift
 
-public enum Communcation {
-    case hypertext
-    case websocket
-}
-
 public final class DefaultAPIClient: APIClient {
 
     // MARK: - Node Discovery
@@ -26,13 +21,15 @@ public final class DefaultAPIClient: APIClient {
     // MARK: - Websocket
     private let jsonRpcClient: Observable<RadixJsonRpcClient>
     private let websocketStatus: Observable<WebSocketStatus>
-    
+
     private let bag = DisposeBag()
     
-    init(seeds: Observable<[Node]> = Observable.empty()) {
+    // swiftlint:disable:next function_body_length
+    init(nodeDiscovery: NodeDiscovery) {
         
         // Node discovery
-        self.nodes = Observable.merge(seeds, nodesSubject.asObservable()).filter { !$0.isEmpty }
+        let seedNodes = nodeDiscovery.loadNodes()
+        self.nodes = Observable.merge(seedNodes, nodesSubject.asObservable()).filter { !$0.isEmpty }
         
         // REST
         self.restClient = self.nodes.map {
@@ -41,17 +38,20 @@ public final class DefaultAPIClient: APIClient {
         
         // Websocket
         let webSocketToNode: Observable<WebSocketToNode> = self.nodes.map {
-            WebSocketToNode(node: $0[0])
+            WebSockets.webSocket(to: $0[0])
         }
         
         self.websocketStatus = webSocketToNode.flatMapLatest { $0.state }
         
-        self.jsonRpcClient = webSocketToNode.map {
-             DefaultRadixJsonRpcClient(persistentChannel: $0)
+        let rpcClient = webSocketToNode.map { (socketToNode: WebSocketToNode) -> RadixJsonRpcClient in
+            DefaultRadixJsonRpcClient(persistentChannel: socketToNode)
         }
+        rpcClient.subscribe().disposed(by: bag)
+        self.jsonRpcClient = rpcClient
     }
 }
 
+// MARK: - APIClient
 public extension DefaultAPIClient {
     
     func livePeers(communcation: Communcation = .websocket) -> Observable<[NodeRunnerData]> {

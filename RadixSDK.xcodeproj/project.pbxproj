@@ -53,7 +53,6 @@
 		E62EFDE3224A4D6F00B6DAD6 /* WebSocketToNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDE2224A4D6F00B6DAD6 /* WebSocketToNode.swift */; };
 		E62EFDE6224A4DAF00B6DAD6 /* WebSocketEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDE5224A4DAF00B6DAD6 /* WebSocketEvent.swift */; };
 		E62EFDE8224A4DBF00B6DAD6 /* WebSocketStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDE7224A4DBF00B6DAD6 /* WebSocketStatus.swift */; };
-		E62EFDEC224A4DEB00B6DAD6 /* WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDEB224A4DEB00B6DAD6 /* WebSockets.swift */; };
 		E62EFDFE224A4EC100B6DAD6 /* RadixJsonRpcClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDFD224A4EC100B6DAD6 /* RadixJsonRpcClient.swift */; };
 		E62EFE00224A4ED000B6DAD6 /* DefaultRadixJsonRpcClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDFF224A4ED000B6DAD6 /* DefaultRadixJsonRpcClient.swift */; };
 		E62EFE11224A74C200B6DAD6 /* RestClientTestLivePeers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFE0F224A74BF00B6DAD6 /* RestClientTestLivePeers.swift */; };
@@ -78,6 +77,11 @@
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E6550EE8224BBDBD00160267 /* NodeDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */; };
 		E6550EEA224BBDC900160267 /* NodeDiscoveryHardCoded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */; };
+		E6550EEC224BE70F00160267 /* JSONRPCRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EEB224BE70F00160267 /* JSONRPCRequest.swift */; };
+		E6550EEF224BE74B00160267 /* JSONRPCMethodGetLivePeers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EEE224BE74B00160267 /* JSONRPCMethodGetLivePeers.swift */; };
+		E6550EF3224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EF2224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift */; };
+		E6550EF5224BEE1200160267 /* WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EF4224BEE1200160267 /* WebSockets.swift */; };
+		E6550EF7224BEE2800160267 /* Communcation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EF6224BEE2800160267 /* Communcation.swift */; };
 		E6611EFF222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611EFE222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift */; };
 		E6611F25222584A300AD2F83 /* TooShortAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F24222584A300AD2F83 /* TooShortAddress.swift */; };
 		E6611F2722259E0800AD2F83 /* TooLongAddressSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2622259E0800AD2F83 /* TooLongAddressSpec.swift */; };
@@ -381,6 +385,7 @@
 		E62EFE13224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeAtomSubmissionUpdate.swift; sourceTree = "<group>"; };
 		E62EFE16224A7AD300B6DAD6 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		E62EFE1A224A7EF000B6DAD6 /* DefaultAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAPIClient.swift; sourceTree = "<group>"; };
+		E62EFE1D224B739B00B6DAD6 /* WebSocketsGetLivePeersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketsGetLivePeersTest.swift; sourceTree = "<group>"; };
 		E631DA9F21F249620063F632 /* KeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
 		E631DAA221F249910063F632 /* PrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKey.swift; sourceTree = "<group>"; };
 		E631DAA721F249DB0063F632 /* PublicKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKey.swift; sourceTree = "<group>"; };
@@ -398,6 +403,11 @@
 		E6550EE4224BB02900160267 /* Int+DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataInitializable.swift"; sourceTree = "<group>"; };
 		E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscovery.swift; sourceTree = "<group>"; };
 		E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscoveryHardCoded.swift; sourceTree = "<group>"; };
+		E6550EEB224BE70F00160267 /* JSONRPCRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRPCRequest.swift; sourceTree = "<group>"; };
+		E6550EEE224BE74B00160267 /* JSONRPCMethodGetLivePeers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRPCMethodGetLivePeers.swift; sourceTree = "<group>"; };
+		E6550EF2224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DefaultRadixJsonRpcClient+MakeRequest.swift"; sourceTree = "<group>"; };
+		E6550EF4224BEE1200160267 /* WebSockets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSockets.swift; sourceTree = "<group>"; };
+		E6550EF6224BEE2800160267 /* Communcation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Communcation.swift; sourceTree = "<group>"; };
 		E6611EFE222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomJsonSerializationTrivialSpec.swift; sourceTree = "<group>"; };
 		E6611F24222584A300AD2F83 /* TooShortAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooShortAddress.swift; sourceTree = "<group>"; };
 		E6611F2622259E0800AD2F83 /* TooLongAddressSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooLongAddressSpec.swift; sourceTree = "<group>"; };
@@ -929,6 +939,7 @@
 		E62EFDD42249393D00B6DAD6 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				E62EFE1C224B737300B6DAD6 /* WebsocketJSONRPCTests */,
 				E62EFE0E224A74AA00B6DAD6 /* RestClientTests */,
 				E62EFE0D224A74A200B6DAD6 /* NodeFinderTests */,
 			);
@@ -941,6 +952,7 @@
 				E62EFDE2224A4D6F00B6DAD6 /* WebSocketToNode.swift */,
 				E62EFDE5224A4DAF00B6DAD6 /* WebSocketEvent.swift */,
 				E62EFDE7224A4DBF00B6DAD6 /* WebSocketStatus.swift */,
+				E6550EF4224BEE1200160267 /* WebSockets.swift */,
 			);
 			path = Websockets;
 			sourceTree = "<group>";
@@ -966,8 +978,17 @@
 			children = (
 				E62EFE16224A7AD300B6DAD6 /* APIClient.swift */,
 				E62EFE1A224A7EF000B6DAD6 /* DefaultAPIClient.swift */,
+				E6550EF6224BEE2800160267 /* Communcation.swift */,
 			);
 			path = APIClient;
+			sourceTree = "<group>";
+		};
+		E62EFE1C224B737300B6DAD6 /* WebsocketJSONRPCTests */ = {
+			isa = PBXGroup;
+			children = (
+				E62EFE1D224B739B00B6DAD6 /* WebSocketsGetLivePeersTest.swift */,
+			);
+			path = WebsocketJSONRPCTests;
 			sourceTree = "<group>";
 		};
 		E631DA9C21F2490F0063F632 /* Core */ = {
@@ -1154,6 +1175,32 @@
 				E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */,
 			);
 			path = NodeFinding;
+			sourceTree = "<group>";
+		};
+		E6550EED224BE73E00160267 /* Methods */ = {
+			isa = PBXGroup;
+			children = (
+				E6550EEE224BE74B00160267 /* JSONRPCMethodGetLivePeers.swift */,
+			);
+			path = Methods;
+			sourceTree = "<group>";
+		};
+		E6550EF0224BE75F00160267 /* RPCClient */ = {
+			isa = PBXGroup;
+			children = (
+				E6550EF1224BE77000160267 /* DefaultRPCClient */,
+				E62EFDFD224A4EC100B6DAD6 /* RadixJsonRpcClient.swift */,
+			);
+			path = RPCClient;
+			sourceTree = "<group>";
+		};
+		E6550EF1224BE77000160267 /* DefaultRPCClient */ = {
+			isa = PBXGroup;
+			children = (
+				E62EFDFF224A4ED000B6DAD6 /* DefaultRadixJsonRpcClient.swift */,
+				E6550EF2224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift */,
+			);
+			path = DefaultRPCClient;
 			sourceTree = "<group>";
 		};
 		E6611F332225B2B700AD2F83 /* DictionaryConvertible */ = {
@@ -1847,8 +1894,9 @@
 			isa = PBXGroup;
 			children = (
 				E6ED1A3721F87C1800654105 /* RadixSystem.swift */,
-				E62EFDFD224A4EC100B6DAD6 /* RadixJsonRpcClient.swift */,
-				E62EFDFF224A4ED000B6DAD6 /* DefaultRadixJsonRpcClient.swift */,
+				E6550EEB224BE70F00160267 /* JSONRPCRequest.swift */,
+				E6550EED224BE73E00160267 /* Methods */,
+				E6550EF0224BE75F00160267 /* RPCClient */,
 				E62EFE12224A77EF00B6DAD6 /* AtomQuery.swift */,
 				E62EFE13224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift */,
 				E6ED1A6421F8E69000654105 /* NodeRunnerData.swift */,
@@ -2145,6 +2193,7 @@
 				E6611F392225B2E400AD2F83 /* StringDictionary.swift in Sources */,
 				E6D4B35F223FD01A004FC83A /* AnyEncodableKeyValue.swift in Sources */,
 				E6A4AC0522243C38006C5CA8 /* InvalidStringError.swift in Sources */,
+				E6550EF7224BEE2800160267 /* Communcation.swift in Sources */,
 				E6A4ABFD2223E4DA006C5CA8 /* PrefixedJsonDecodableByProxy.swift in Sources */,
 				E62EFDC022492A8300B6DAD6 /* Bootstrap.swift in Sources */,
 				E6611F3E2225B56A00AD2F83 /* ArrayDecodable.swift in Sources */,
@@ -2168,6 +2217,7 @@
 				E6A4AC0722243C54006C5CA8 /* UpperBound.swift in Sources */,
 				E62EFDE3224A4D6F00B6DAD6 /* WebSocketToNode.swift in Sources */,
 				E6A643162244F35D00CD4BFC /* Status.swift in Sources */,
+				E6550EF3224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift in Sources */,
 				E6CEE77321F7A65F00D745EC /* RadixHashable.swift in Sources */,
 				E6611F5922298F9000AD2F83 /* RadixJSONEncoder.swift in Sources */,
 				E6CEE76921F7A59700D745EC /* EUID.swift in Sources */,
@@ -2210,6 +2260,7 @@
 				E6A4AB9A221D508D006C5CA8 /* Nonce.swift in Sources */,
 				E6A4AB9E221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift in Sources */,
 				E6D4B343223FAC8B004FC83A /* Sha256TwiceHasher.swift in Sources */,
+				E6550EEC224BE70F00160267 /* JSONRPCRequest.swift in Sources */,
 				E69AB72F2237B774006153DD /* EncodableKeyValue.swift in Sources */,
 				E6D4B35B223FCE5D004FC83A /* TransferredTokenParticle.swift in Sources */,
 				E6ED1A6B21F8E6E900654105 /* AtomPullerSubmitter.swift in Sources */,
@@ -2252,6 +2303,7 @@
 				E631DAC921F259BE0063F632 /* MnemonicBackedUpByUser.swift in Sources */,
 				E6ED1A3B21F87C4700654105 /* Shards.swift in Sources */,
 				E6ED1A7821F8E78900654105 /* Optional+OptionalType.swift in Sources */,
+				E6550EEF224BE74B00160267 /* JSONRPCMethodGetLivePeers.swift in Sources */,
 				E6ED1A3821F87C1800654105 /* RadixSystem.swift in Sources */,
 				E6CEE77821F7A6B000D745EC /* SpunParticle+Sequence.swift in Sources */,
 				E6ED1A5621F8E58300654105 /* SubmitAtomAction.swift in Sources */,
@@ -2274,6 +2326,7 @@
 				E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */,
 				E62EFDE8224A4DBF00B6DAD6 /* WebSocketStatus.swift in Sources */,
 				E631DAA321F249910063F632 /* PrivateKey.swift in Sources */,
+				E6550EF5224BEE1200160267 /* WebSockets.swift in Sources */,
 				E6ED1A8121F8E87400654105 /* Atom+Sequence.swift in Sources */,
 				E6A4AC1122243EDC006C5CA8 /* ValidValueInitializable.swift in Sources */,
 				E6D1318321F7B2050014792D /* Data+Hex.swift in Sources */,
@@ -2369,6 +2422,7 @@
 				E6A4ABF222207E02006C5CA8 /* NegativeAmountSpec.swift in Sources */,
 				E69AB73D2237FC4C006153DD /* CBOREncodingPrimitivesIntSpec.swift in Sources */,
 				E6611F472227F2A300AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift in Sources */,
+				E62EFE1E224B739B00B6DAD6 /* WebSocketsGetLivePeersTest.swift in Sources */,
 				E693DAAC22319AB2003720C2 /* DSONEncodingPrimitivesBoolSpec.swift in Sources */,
 				E62EFE11224A74C200B6DAD6 /* RestClientTestLivePeers.swift in Sources */,
 				E6D4B353223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift in Sources */,

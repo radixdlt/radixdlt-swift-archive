@@ -8,25 +8,29 @@
 
 import Foundation
 import RxSwift
+import JSONRPCKit
 
 public final class DefaultRadixJsonRpcClient: RadixJsonRpcClient {
     
     /// The channel this JSON RPC client utilizes for messaging
-    private let channel: PersistentChannel
+    internal let channel: PersistentChannel
+    
+    internal let rpcRequestFactory = JSONRPCKit.BatchFactory()
     
     public init(persistentChannel: PersistentChannel) {
         self.channel = persistentChannel
     }
 }
 
+// MARK: - RadixJsonRpcClient
 public extension DefaultRadixJsonRpcClient {
     
     func getInfo() -> Single<NodeRunnerData> {
         implementMe
     }
     
-    func getLivePeers() -> Single<[NodeRunnerData]> {
-        implementMe
+    func getLivePeers() -> Observable<[NodeRunnerData]> {
+        return makeRequest(JSONRPCMethodGetLivePeers())
     }
     
     func getAtom(by hashId: EUID) -> Maybe<Atom> {

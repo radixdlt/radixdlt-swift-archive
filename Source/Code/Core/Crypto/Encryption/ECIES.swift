@@ -163,7 +163,6 @@ public extension ECIES {
         let calculatedMac = try calculateMAC(salt: keyDataM, initializationVector: iv, ephemeralPublicKey: ephemeralPublicKey, cipherText: cipherText)
         
         guard calculatedMac == mac else {
-            print("expected: \(mac.hex)\nbutGot: \(calculatedMac.hex)")
             throw DecryptionError.macMismatch(expected: mac, butGot: calculatedMac)
         }
         

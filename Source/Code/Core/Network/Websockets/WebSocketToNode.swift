@@ -13,22 +13,20 @@ import RxSwift
 public final class WebSocketToNode: PersistentChannel, WebSocketDelegate, WebSocketPongDelegate {
     
     private let stateSubject: BehaviorSubject<WebSocketStatus>
-    private let messagesSubject = PublishSubject<String>()
+    private let receivedMessagesSubject = PublishSubject<String>()
+    
+    // Received messages
     public let messages: Observable<String>
+    
+    private var queuedOutgoingMessages = [String]()
+    
     public let state: Observable<WebSocketStatus>
     private var socket: WebSocket?
     private let bag = DisposeBag()
-    
-    private let _createAndConnectSocket: (WebSocketDelegate) -> WebSocket
+    private let node: Node
     
     // swiftlint:disable:next function_body_length
-    public init(node: Node) {
-        _createAndConnectSocket = {
-            let socket = WebSocket(url: node.url)
-            socket.delegate = $0
-            return socket
-        }
-        
+    public init(node: Node, shouldConnect: Bool = true) {
         let state = BehaviorSubject<WebSocketStatus>(value: .disconnected)
         state.filter { $0 == .failed }.debounce(60, scheduler: MainScheduler.instance).subscribe(
             onNext: { _ in state.onNext(.disconnected) },
@@ -36,17 +34,24 @@ public final class WebSocketToNode: PersistentChannel, WebSocketDelegate, WebSoc
             ).disposed(by: bag)
         self.stateSubject = state
         
-        self.messages = messagesSubject.asObservable()
+        self.messages = receivedMessagesSubject.asObservable()
         self.state = stateSubject.asObservable()
+        self.node = node
+        if shouldConnect {
+            connect()
+        }
     }
     
     private func createSocket(shouldConnect: Bool) -> WebSocket {
-        // sets websocket `delegate` to `self`
-        let socket = _createAndConnectSocket(self)
-        if shouldConnect {
-            socket.connect()
+        let newSocket: WebSocket
+        defer {
+            newSocket.delegate = self
+            if shouldConnect {
+                newSocket.connect()
+            }
         }
-        return socket
+        newSocket = WebSocket(url: node.url)
+        return newSocket
     }
 }
 
@@ -56,6 +61,10 @@ public extension WebSocketToNode {
     }
     
     func sendMessage(_ message: String) {
+        guard isConnected else {
+            queuedOutgoingMessages.append(message)
+            return
+        }
         socket?.write(string: message)
     }
     
@@ -100,6 +109,11 @@ private extension WebSocketToNode {
 public extension WebSocketToNode {
     func websocketDidConnect(socket: WebSocketClient) {
         stateSubject.onNext(.connected)
+        queuedOutgoingMessages.forEach {
+            print("Sending queued message")
+            self.sendMessage($0)
+        }
+        queuedOutgoingMessages = []
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Swift.Error?) {
@@ -116,7 +130,7 @@ public extension WebSocketToNode {
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        messagesSubject.onNext(text)
+        receivedMessagesSubject.onNext(text)
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {

@@ -11,9 +11,10 @@ import Foundation
 import XCTest
 
 import RxSwift
+private let somePort = 1234
 class NodeFinderTest: XCTestCase {
     private let bag = DisposeBag()
-    private let nodeFinder = NodeFinder(baseURL: .localhost, port: 8080)
+    private let nodeFinder = NodeFinder(baseURL: .localhost, port: somePort)
     
     override func setUp() {
         super.setUp()
@@ -24,7 +25,7 @@ class NodeFinderTest: XCTestCase {
 
         nodeFinder.loadNodes().subscribe(
             onNext: { node in
-                XCTAssertEqual(node[0].url, "ws://127.0.0.1:8080/rpc")
+                XCTAssertEqual(node[0].url.absoluteString, "ws://127.0.0.1:\(somePort)/rpc")
                 expectation.fulfill()
         }, onError: {
             XCTFail("Error: \($0)")

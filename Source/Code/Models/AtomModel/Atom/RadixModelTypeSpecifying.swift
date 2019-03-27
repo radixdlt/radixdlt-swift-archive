@@ -17,3 +17,9 @@ public extension RadixModelTypeStaticSpecifying {
         return Self.type
     }
 }
+
+extension Array: RadixModelTypeStaticSpecifying where Element: RadixModelTypeStaticSpecifying {
+    public static var type: RadixModelType {
+        return Element.type
+    }
+}

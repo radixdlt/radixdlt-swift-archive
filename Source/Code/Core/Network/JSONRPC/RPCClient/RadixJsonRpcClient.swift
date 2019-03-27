@@ -11,7 +11,7 @@ import RxSwift
 
 public protocol RadixJsonRpcClient {
     func getInfo() -> Single<NodeRunnerData>
-    func getLivePeers() -> Single<[NodeRunnerData]>
+    func getLivePeers() -> Observable<[NodeRunnerData]>
     func getAtom(by hashId: EUID) -> Maybe<Atom>
     func getAtoms(query: AtomQuery) -> Observable<AtomObservation>
     func submitAtom(_ atom: Atom) -> Observable<NodeAtomSubmissionUpdate>
