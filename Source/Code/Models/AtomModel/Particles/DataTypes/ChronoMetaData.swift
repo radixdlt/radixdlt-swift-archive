@@ -35,7 +35,7 @@ public struct ChronoMetaData:
 
 // MARK: Validation
 public extension ChronoMetaData {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case noTimestampString
         case invalidTimestampString
     }

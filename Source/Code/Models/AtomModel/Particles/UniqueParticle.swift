@@ -30,7 +30,7 @@ public struct UniqueParticle:
 // MARK: Codable
 public extension UniqueParticle {
 
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case type = "serializer"
         case address, name
     }
@@ -41,7 +41,7 @@ public extension UniqueParticle {
         name = try container.decode(Name.self, forKey: .name)
     }
     
-    public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .address, value: address),
             EncodableKeyValue(key: .name, value: name)

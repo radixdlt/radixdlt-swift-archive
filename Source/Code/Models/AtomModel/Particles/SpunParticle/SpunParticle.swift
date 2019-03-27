@@ -30,7 +30,7 @@ public struct SpunParticle:
 // MARK: - Deodable
 public extension SpunParticle {
     
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case type = "serializer"
         
         case particle, spin

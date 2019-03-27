@@ -28,7 +28,7 @@ public protocol DSONEncodable {
     func toDSON(output: DSONOutput) throws -> DSON
 }
 
-public extension CBOREncodable where Self: CBOREncodable {
+public extension CBOREncodable {
     func toDSON(output: DSONOutput = .default) throws -> DSON {
         return encode().asData
     }

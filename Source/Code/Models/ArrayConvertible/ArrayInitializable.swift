@@ -26,7 +26,7 @@ public extension ArrayInitializable {
 
 // MARK: - ExpressibleByArrayLiteral
 public extension ArrayInitializable {
-    public init(arrayLiteral elements: Element...) {
+    init(arrayLiteral elements: Element...) {
         self.init(elements: elements)
     }
 }

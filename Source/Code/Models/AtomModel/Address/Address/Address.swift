@@ -65,7 +65,7 @@ public extension Address {
 
 // MARK: - PrefixedJsonDecodableByProxy
 public extension Address {
-    public typealias Proxy = Base58String
+    typealias Proxy = Base58String
     var proxy: Proxy {
         return base58String
     }
@@ -150,7 +150,7 @@ public extension Address {
         return checksummedString
     }
     
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case checksumMismatch
     }
 }

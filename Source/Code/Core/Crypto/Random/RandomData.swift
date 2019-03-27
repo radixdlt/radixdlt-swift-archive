@@ -24,6 +24,6 @@ public extension Data {
         while bytes == nil {
             bytes = randomBytes(count: byteCount)
         }
-        return Data(bytes: bytes)
+        return Data( bytes)
     }
 }

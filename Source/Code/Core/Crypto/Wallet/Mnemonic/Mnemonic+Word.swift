@@ -9,7 +9,7 @@
 import Foundation
 
 public extension Mnemonic {
-    public struct Word {
+    struct Word {
         public let value: String
         
         public init(value: String) {

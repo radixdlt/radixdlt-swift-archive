@@ -112,7 +112,7 @@ public extension Signature {
 // MARK: - Decodable
 public extension Signature {
     
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case type = "serializer"
         case r, s
     }

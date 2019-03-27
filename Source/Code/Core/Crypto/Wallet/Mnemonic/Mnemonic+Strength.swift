@@ -9,7 +9,7 @@
 import Foundation
 
 public extension Mnemonic {
-    public enum Strength: Int {
+    enum Strength: Int {
         case wordCountOf15 = 15
         case wordCountOf18 = 18
         case wordCountOf21 = 21

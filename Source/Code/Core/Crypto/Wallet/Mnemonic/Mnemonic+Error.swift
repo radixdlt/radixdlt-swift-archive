@@ -9,7 +9,7 @@
 import Foundation
 
 public extension Mnemonic {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case generatingRandomBytes
         case unexpectedWordCount
     }

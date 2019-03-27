@@ -24,7 +24,7 @@ public struct ParticleGroups:
 
 // MARK: - ArrayDecodable
 public extension ParticleGroups {
-    public typealias Element = ParticleGroup
+    typealias Element = ParticleGroup
     var elements: [Element] {
         return particleGroups
     }

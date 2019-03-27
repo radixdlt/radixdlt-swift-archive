@@ -43,7 +43,7 @@ public extension RadixHash {
 
 // MARK: - ArrayConvertible
 public extension RadixHash {
-    public typealias Element = Byte
+    typealias Element = Byte
     var elements: [Element] {
         return data.bytes
     }

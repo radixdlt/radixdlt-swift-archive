@@ -27,11 +27,11 @@ public struct KeyPair:
 
 // MARK: - Convenience
 public extension KeyPair {
-    public init(private privateKey: PrivateKey) {
+    init(private privateKey: PrivateKey) {
         self.init(private: privateKey, public: PublicKey(private: privateKey))
     }
     
-    public init() {
+    init() {
         self.init(private: PrivateKey())
     }
 }

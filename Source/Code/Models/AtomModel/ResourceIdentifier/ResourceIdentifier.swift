@@ -32,11 +32,11 @@ public struct ResourceIdentifier:
 
 // MARK: - Initializers
 public extension ResourceIdentifier {
-    public init(address: Address, type: ResourceType, symbol: Symbol) {
+    init(address: Address, type: ResourceType, symbol: Symbol) {
         self.init(address: address, type: type, unique: symbol.value)
     }
     
-    public init(address: Address, type: ResourceType, name: Name) {
+    init(address: Address, type: ResourceType, name: Name) {
         self.init(address: address, type: type, unique: name.value)
     }
 }
@@ -106,7 +106,7 @@ private extension ResourceIdentifier {
 
 // MARK: - Error
 public extension ResourceIdentifier {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case incorrectSeparatorCount(expected: Int, butGot: Int)
         case unexpectedLeadingPath
         case addressPathIsEmpty

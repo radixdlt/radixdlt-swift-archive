@@ -41,7 +41,7 @@ public struct MessageParticle:
 
 // MARK: - Convenience init
 public extension MessageParticle {
-    public init(from: Address, to: Address, message: String, includeTimeNow: Bool = true) {
+    init(from: Address, to: Address, message: String, includeTimeNow: Bool = true) {
         guard let messageData = message.data(using: .utf8) else {
             incorrectImplementation("Should always be able to encode a string")
         }
@@ -59,7 +59,7 @@ public extension MessageParticle {
 
 // MARK: Codable
 public extension MessageParticle {
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case type = "serializer"
 
         case from

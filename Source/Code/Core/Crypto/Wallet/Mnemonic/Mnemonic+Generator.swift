@@ -10,7 +10,7 @@ import Foundation
 import BitcoinKit
 
 public extension Mnemonic {
-    public struct Generator {
+    struct Generator {
         
         public let strength: Strength
         public let language: Language
@@ -34,7 +34,7 @@ public extension Mnemonic.Generator {
 
 // MARK: - From BitcoinKit
 public extension Mnemonic.Generator {
-    public func generate() throws -> Mnemonic {
+    func generate() throws -> Mnemonic {
         do {
             let words = try BitcoinKit.Mnemonic.generate(
                 strength: strength.toBitcoinKitStrength,
