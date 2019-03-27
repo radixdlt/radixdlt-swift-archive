@@ -9,10 +9,10 @@
 import Foundation
 
 public func + (lhs: DataConvertible, rhs: Byte) -> Data {
-    return Data(bytes: lhs.bytes + [rhs])
+    return Data( lhs.bytes + [rhs])
 }
 
 public func + (lhs: DataConvertible, rhs: DataConvertible) -> Data {
     let bytes = [lhs, rhs].flatMap { $0.bytes }
-    return Data(bytes: bytes)
+    return Data( bytes)
 }

@@ -59,6 +59,6 @@ public extension DataConvertible {
 // MARK: - Conformance
 extension Array: DataConvertible where Element == Byte {
     public var asData: Data {
-        return Data(bytes: self)
+        return Data(self)
     }
 }

@@ -9,7 +9,7 @@
 import Foundation
 
 public extension Mnemonic {
-    public enum Language: String {
+    enum Language: String {
         case english
     }
 }
