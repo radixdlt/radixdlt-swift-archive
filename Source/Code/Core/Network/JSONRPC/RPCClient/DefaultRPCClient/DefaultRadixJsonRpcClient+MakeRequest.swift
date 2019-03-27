@@ -26,38 +26,28 @@ internal extension DefaultRadixJsonRpcClient {
     }
 }
 
-private struct JSONKey {
-    static let result = "result"
-    static let id = "id"
-    static let method = "method"
-}
-
-private let jsonRpcMethodForWelcomeMessage = "Radix.welcome"
-
 extension PersistentChannel {
     func responseForMessage<Response>(with requestId: Int) -> Observable<Response> where Response: Decodable & RadixModelTypeStaticSpecifying {
-        return messages.map {
-            $0.data(using: .utf8)!
-        }.map { responseData -> Data? in
-                let json = try! JSONSerialization.jsonObject(with: responseData, options: []) as! JSON
-                guard (json[JSONKey.method] as? String) != jsonRpcMethodForWelcomeMessage else { return nil }
-                let requestIdInResponse = json[JSONKey.id] as! Int
-                guard requestIdInResponse == requestId else {
-                    print("Filtering out request")
-                    return nil
-                }
-                
-                guard let result = json[JSONKey.result] else {
-                    print("'\(JSONKey.result)' in JSONRPC response was empty")
-                    return nil
-                }
-                
-                let responseJson = try! JSONSerialization.data(withJSONObject: result, options: [])
-                return responseJson
-            }.filterNil()
-            .map {
-                try! RadixJSONDecoder().decode(Response.self, from: $0)
-        }
+        return messages.map { jsonString -> Data? in
+            guard !jsonString.contains(
+                """
+                    "method":"\(jsonRpcMethodForWelcomeMessage)"
+                """
+            ) else { return nil }
+            let json = jsonString.data(using: .utf8)!
+            print(jsonString)
+            return json
+        }.filterNil()
+        .map { data -> JSONRPCResponse<Response>? in
+            do {
+                return try JSONDecoder().decode(JSONRPCResponse<Response>.self, from: data)
+            } catch {
+                print("⚠️ error: \(error)")
+                return nil
+            }
+        }.filterNil()
+            .filter { $0.requestId == requestId }
+        .map { $0.result }
     }
 }
 
@@ -81,5 +71,25 @@ extension JSONRPCKit.Batch1 {
         return jsonString
     }
 }
+
+private enum JSONRPCResponseCodingKeys: String, CodingKey {
+    case result
+    case method
+    case requestId = "id"
+}
+
+private struct JSONRPCResponse<Result>: Decodable where Result: Decodable {
+    
+    let result: Result
+    let requestId: Int
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: JSONRPCResponseCodingKeys.self)
+        requestId = try container.decode(Int.self, forKey: .requestId)
+        result = try container.decode(Result.self, forKey: .result)
+    }
+}
+
+private let jsonRpcMethodForWelcomeMessage = "Radix.welcome"
 
 // swiftlint:enable:all
