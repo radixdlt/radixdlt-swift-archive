@@ -10,7 +10,7 @@ import Foundation
 
 public struct TransferredTokenParticle: TokenParticleConvertible {
     
-    public static let serializer = RadixModelType.transferredTokenParticle
+    public static let serializer = RadixModelType.transferredTokensParticle
     
     public let address: Address
     public let tokenDefinitionIdentifier: TokenDefinitionIdentifier

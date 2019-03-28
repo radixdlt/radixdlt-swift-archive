@@ -63,19 +63,19 @@ private let json = """
 					        "transfer": ":str:all"
 					    },
 					    "name": ":str:Cyon Coin",
-					    "\(RadixModelType.jsonKey)": \(RadixModelType.tokenDefinitionParticle.rawValue),
+					    "\(RadixModelType.jsonKey)": \(RadixModelType.tokenDefinitionParticle.serializerId),
 					    "description": ":str:Worst shit coin",
 					    "\(jsonKeyVersion)": \(serializerVersion)
 					},
-					"\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
+					"\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.serializerId),
 					"\(jsonKeyVersion)": \(serializerVersion)
 				}
 			],
-		   	"\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
+		   	"\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),
 			"\(jsonKeyVersion)": \(serializerVersion)
 		}
 	],
-	"\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
+	"\(RadixModelType.jsonKey)": \(RadixModelType.atom.serializerId),
 	"\(jsonKeyVersion)": \(serializerVersion)
 }
 """

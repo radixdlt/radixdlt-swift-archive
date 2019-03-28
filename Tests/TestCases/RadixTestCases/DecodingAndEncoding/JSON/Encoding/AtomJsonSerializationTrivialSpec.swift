@@ -64,18 +64,18 @@ class AtomJsonSerializationTrivialSpec: QuickSpec {
 
 private let expectedJson = """
 {
-    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.serializerId),
     "signatures": {},
     "metaData": {},
     "particleGroups": [
         {
-            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),
             "particles": [
                 {
-                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.serializerId),
                     "spin": 1,
                     "particle": {
-                        "\(RadixModelType.jsonKey)": \(RadixModelType.uniqueParticle.rawValue),
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.uniqueParticle.serializerId),
                         "name": ":str:Sajjon",
                         "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
                     }

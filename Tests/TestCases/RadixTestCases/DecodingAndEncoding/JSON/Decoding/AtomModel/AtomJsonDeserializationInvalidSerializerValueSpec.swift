@@ -29,12 +29,12 @@ class AtomJsonDeserializationInvalidSerializerValueSpec: QuickSpec {
 
 private let invalidAtomSerializerJson = """
 {
-    "\(RadixModelType.jsonKey)": \(RadixModelType.signature.rawValue),
+    "\(RadixModelType.jsonKey)": \(RadixModelType.signature.serializerId),
     "signatures": {},
     "metaData": {},
     "particleGroups": [
         {
-            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),
             "particles": [],
             "metaData": {}
         }
@@ -45,18 +45,18 @@ private let invalidAtomSerializerJson = """
 
 private let invalidTokenDefinitionParticleSerializerJson = """
 {
-    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.serializerId),
     "signatures": {},
     "metaData": {},
     "particleGroups": [
         {
-            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.rawValue),
+            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),
             "particles": [
                 {
-                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.rawValue),
+                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.serializerId),
                     "spin": 1,
                     "particle": {
-                        "\(RadixModelType.jsonKey)": \(RadixModelType.messageParticle.rawValue),
+                        "\(RadixModelType.jsonKey)": \(RadixModelType.messageParticle.serializerId),
                         "symbol": ":str:BAD",
                         "name": ":str:BadCoin",
                         "description": ":str:Some TokenDefinition",

@@ -19,13 +19,13 @@ extension String {
         return compactMap { $0.asciiValue }
     }
     
-    /// Stolen from https://stackoverflow.com/a/44413863/1311272
+    /// Found at https://stackoverflow.com/a/44413863/1311272
     func javaHashCode() -> Int32 {
-        var h : Int32 = 0
-        for i in asciiArray {
-            h = 31 &* h &+ Int32(i)
+        var hash: Int32 = 0
+        for asciiChar in asciiArray {
+            hash = 31 &* hash &+ Int32(asciiChar)
         }
-        return h
+        return hash
     }
 }
 

@@ -16,7 +16,7 @@ class RadixModelTypeSerializerSpec: QuickSpec {
     override func spec() {
         describe("Serializer value") {
             it("Should equal hashCode of uppercase name in the Java world") {
-                expect(RadixModelType.signature.rawValue).to(equal(JavaHash.from("SIGNATURE")))
+                expect(RadixModelType.signature.serializerId).to(equal(JavaHash.from("SIGNATURE")))
                 expect(-1322468736).to(equal(JavaHash.from("ADDRESSHOLDER")))
             }
         }

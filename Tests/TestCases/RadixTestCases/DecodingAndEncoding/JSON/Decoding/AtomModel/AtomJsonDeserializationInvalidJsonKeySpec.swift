@@ -25,7 +25,7 @@ class AtomJsonDeserializationInvalidJsonKeySpec: QuickSpec {
 
 private let json = """
 {
-    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.rawValue),
+    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.serializerId),
     "signatures": {},
     "met⚠️⚠️⚠️⚠️⚠️⚠️Data": {}
 }

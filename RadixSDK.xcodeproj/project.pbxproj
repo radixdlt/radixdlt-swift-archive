@@ -82,6 +82,8 @@
 		E6550EF3224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EF2224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift */; };
 		E6550EF5224BEE1200160267 /* WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EF4224BEE1200160267 /* WebSockets.swift */; };
 		E6550EF7224BEE2800160267 /* Communcation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EF6224BEE2800160267 /* Communcation.swift */; };
+		E6550EFC224CE86B00160267 /* SerializerToRadixModelTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EFB224CE86B00160267 /* SerializerToRadixModelTypeTests.swift */; };
+		E6550EFD224CE95C00160267 /* String+JavaHashCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB74522381216006153DD /* String+JavaHashCode.swift */; };
 		E6611EFF222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611EFE222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift */; };
 		E6611F25222584A300AD2F83 /* TooShortAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F24222584A300AD2F83 /* TooShortAddress.swift */; };
 		E6611F2722259E0800AD2F83 /* TooLongAddressSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2622259E0800AD2F83 /* TooLongAddressSpec.swift */; };
@@ -145,7 +147,6 @@
 		E69AB73F2237FC62006153DD /* CBOREncodingPrimitivesStringSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB73E2237FC62006153DD /* CBOREncodingPrimitivesStringSpec.swift */; };
 		E69AB7422237FC80006153DD /* DSONEncodingAddressHolderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7412237FC80006153DD /* DSONEncodingAddressHolderSpec.swift */; };
 		E69AB7442237FC91006153DD /* DSONEncodingExampleMapSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7432237FC91006153DD /* DSONEncodingExampleMapSpec.swift */; };
-		E69AB74622381216006153DD /* String+JavaHashCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB74522381216006153DD /* String+JavaHashCode.swift */; };
 		E69AB7482238F626006153DD /* DsonEncodingTokenDefinitionParticleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7472238F626006153DD /* DsonEncodingTokenDefinitionParticleSpec.swift */; };
 		E69AB74A2239117A006153DD /* CBORDictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7492239117A006153DD /* CBORDictionaryConvertible.swift */; };
 		E69AB74D223912B6006153DD /* GranularitySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB74C223912B6006153DD /* GranularitySpec.swift */; };
@@ -408,6 +409,7 @@
 		E6550EF2224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DefaultRadixJsonRpcClient+MakeRequest.swift"; sourceTree = "<group>"; };
 		E6550EF4224BEE1200160267 /* WebSockets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSockets.swift; sourceTree = "<group>"; };
 		E6550EF6224BEE2800160267 /* Communcation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Communcation.swift; sourceTree = "<group>"; };
+		E6550EFB224CE86B00160267 /* SerializerToRadixModelTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializerToRadixModelTypeTests.swift; sourceTree = "<group>"; };
 		E6611EFE222446F100AD2F83 /* AtomJsonSerializationTrivialSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomJsonSerializationTrivialSpec.swift; sourceTree = "<group>"; };
 		E6611F24222584A300AD2F83 /* TooShortAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooShortAddress.swift; sourceTree = "<group>"; };
 		E6611F2622259E0800AD2F83 /* TooLongAddressSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooLongAddressSpec.swift; sourceTree = "<group>"; };
@@ -759,6 +761,7 @@
 				E6ED1A8A21F9FB3900654105 /* JSON */,
 				E672572F21FB8D3900BE3B4C /* ParticleType.swift */,
 				E672573321FB8D5E00BE3B4C /* RadixModelType.swift */,
+				E69AB74522381216006153DD /* String+JavaHashCode.swift */,
 				E62EFDD722495AEE00B6DAD6 /* StringValue.swift */,
 				E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */,
 				E693DAA5223198A7003720C2 /* DSON */,
@@ -1077,10 +1080,9 @@
 		E631DAAA21F24D500063F632 /* RadixTestCases */ = {
 			isa = PBXGroup;
 			children = (
+				E6550EFA224CE84900160267 /* DecodingAndEncoding */,
 				E62EFDD42249393D00B6DAD6 /* Network */,
 				E6040E572240ECB00065AEC2 /* Models */,
-				E693DAA822319A63003720C2 /* DSON */,
-				E6ED1A3221F879D900654105 /* JSON */,
 				E631DAAC21F24D6F0063F632 /* Crypto */,
 			);
 			path = RadixTestCases;
@@ -1201,6 +1203,16 @@
 				E6550EF2224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift */,
 			);
 			path = DefaultRPCClient;
+			sourceTree = "<group>";
+		};
+		E6550EFA224CE84900160267 /* DecodingAndEncoding */ = {
+			isa = PBXGroup;
+			children = (
+				E693DAA822319A63003720C2 /* DSON */,
+				E6ED1A3221F879D900654105 /* JSON */,
+				E6550EFB224CE86B00160267 /* SerializerToRadixModelTypeTests.swift */,
+			);
+			path = DecodingAndEncoding;
 			sourceTree = "<group>";
 		};
 		E6611F332225B2B700AD2F83 /* DictionaryConvertible */ = {
@@ -1575,7 +1587,6 @@
 			isa = PBXGroup;
 			children = (
 				E6CEE70A21F5AE5A00D745EC /* Crypto */,
-				E69AB74522381216006153DD /* String+JavaHashCode.swift */,
 				E62EFDA32248D24F00B6DAD6 /* fatalFail.swift */,
 			);
 			path = Convenience;
@@ -2194,6 +2205,7 @@
 				E6D4B35F223FD01A004FC83A /* AnyEncodableKeyValue.swift in Sources */,
 				E6A4AC0522243C38006C5CA8 /* InvalidStringError.swift in Sources */,
 				E6550EF7224BEE2800160267 /* Communcation.swift in Sources */,
+				E6550EFD224CE95C00160267 /* String+JavaHashCode.swift in Sources */,
 				E6A4ABFD2223E4DA006C5CA8 /* PrefixedJsonDecodableByProxy.swift in Sources */,
 				E62EFDC022492A8300B6DAD6 /* Bootstrap.swift in Sources */,
 				E6611F3E2225B56A00AD2F83 /* ArrayDecodable.swift in Sources */,
@@ -2405,7 +2417,6 @@
 				E6A4ABEF22207C65006C5CA8 /* IncorrectSpinValue.swift in Sources */,
 				E69AB73B2237FC27006153DD /* DsonEncodingUniqueParticleSpec.swift in Sources */,
 				E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */,
-				E69AB74622381216006153DD /* String+JavaHashCode.swift in Sources */,
 				E69AB73F2237FC62006153DD /* CBOREncodingPrimitivesStringSpec.swift in Sources */,
 				E69AB7422237FC80006153DD /* DSONEncodingAddressHolderSpec.swift in Sources */,
 				E6A4ABE92220706E006C5CA8 /* TooLongDescriptionSpec.swift in Sources */,
@@ -2416,6 +2427,7 @@
 				E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */,
 				E68B5C0421FBCEEC00BEB049 /* ResourceIdentifierTests.swift in Sources */,
 				E6A643122244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift in Sources */,
+				E6550EFC224CE86B00160267 /* SerializerToRadixModelTypeTests.swift in Sources */,
 				E6A4ABC4221EDBAA006C5CA8 /* JSONDecoder.swift in Sources */,
 				E6A4ABF622207E49006C5CA8 /* NegativePlanckSpec.swift in Sources */,
 				E6A4ABE322206F8A006C5CA8 /* QuestionMarkInSymbol.swift in Sources */,

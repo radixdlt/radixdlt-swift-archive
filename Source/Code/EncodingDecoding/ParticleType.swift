@@ -26,10 +26,10 @@ public extension ParticleType {
 internal extension ParticleType {
     init(serializer: RadixModelType) throws {
         switch serializer {
-        case .burnedTokenParticle: self = .burnedToken
-        case .mintedTokenParticle: self = .mintedToken
+        case .burnedTokensParticle: self = .burnedToken
+        case .mintedTokensParticle: self = .mintedToken
         case .uniqueParticle: self = .unique
-        case .transferredTokenParticle: self = .transferredToken
+        case .transferredTokensParticle: self = .transferredToken
         case .messageParticle: self = .message
         case .tokenDefinitionParticle: self = .tokenDefinition
         default: throw Error.notParticle
@@ -38,11 +38,11 @@ internal extension ParticleType {
     
     var serializer: RadixModelType {
         switch self {
-        case .burnedToken: return .burnedTokenParticle
+        case .burnedToken: return .burnedTokensParticle
         case .message: return .messageParticle
-        case .mintedToken: return .mintedTokenParticle
+        case .mintedToken: return .mintedTokensParticle
         case .unique: return .uniqueParticle
-        case .transferredToken: return .transferredTokenParticle
+        case .transferredToken: return .transferredTokensParticle
         case .tokenDefinition: return .tokenDefinitionParticle
         }
     }

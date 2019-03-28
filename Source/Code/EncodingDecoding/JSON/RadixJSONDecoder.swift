@@ -20,9 +20,7 @@ public final class RadixJSONDecoder: Foundation.JSONDecoder {
             guard let modelTypeInt = jsonObject[RadixModelType.jsonKey] as? Int else {
                 throw AtomModelDecodingError.noSerializer(in: jsonObject)
             }
-            guard let modelType = RadixModelType(rawValue: modelTypeInt) else {
-                throw AtomModelDecodingError.unknownSerializer(got: modelTypeInt)
-            }
+            let modelType = try RadixModelType(serializerId: modelTypeInt)
             guard modelType == T.serializer else {
                 throw AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedSerializer: T.serializer, butGot: modelType)
             }

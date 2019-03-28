@@ -59,7 +59,7 @@ private let json = """
         "transfer": ":str:none"
     },
     "name": ":str:Proof of Work",
-    "\(RadixModelType.jsonKey)": \(RadixModelType.tokenDefinitionParticle.rawValue),
+    "\(RadixModelType.jsonKey)": \(RadixModelType.tokenDefinitionParticle.serializerId),
     "description": ":str:Radix POW",
     "\(jsonKeyVersion)": \(serializerVersion)
 }
