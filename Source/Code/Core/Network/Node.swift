@@ -77,3 +77,10 @@ public extension Node {
         return URLRequest(url: url)
     }
 }
+
+import RxSwift
+extension Node: NodeDiscovery {
+    public func loadNodes() -> Observable<[Node]> {
+        return Observable.just([self])
+    }
+}
