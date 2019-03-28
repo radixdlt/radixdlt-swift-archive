@@ -29,7 +29,7 @@ public extension Encodable where Self: EncodableKeyValueListConvertible {
         
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        if let modelTypeSpecyfing = self as? RadixModelTypeSpecifying {
+        if let modelTypeSpecyfing = self as? RadixModelTypeStaticSpecifying {
             try container.encode(modelTypeSpecyfing.type, forKey: typeKey)
         }
         

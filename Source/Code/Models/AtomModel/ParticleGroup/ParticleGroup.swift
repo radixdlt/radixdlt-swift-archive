@@ -13,7 +13,8 @@ import Foundation
 public struct ParticleGroup:
     RadixCodable,
     ArrayConvertible,
-    RadixModelTypeStaticSpecifying {
+    RadixModelTypeStaticSpecifying,
+    Codable {
  // swiftlint:enable colon
     public static let type = RadixModelType.particleGroup
     

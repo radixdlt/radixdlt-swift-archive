@@ -16,7 +16,7 @@ class AtomSignatureSpec: QuickSpec {
         let atom: Atom = model(from: json)
         describe("Deserialized Atom") {
             it("should deserialize into an Atom") {
-                expect(atom.particles(spin: .up, type: TokenDefinitionParticle.self).first?.identifier.unique).to(equal("CYON"))
+                expect(atom.particlesOfType(TokenDefinitionParticle.self, spin: .up).first?.identifier.unique).to(equal("CYON"))
             }
         }
         describe("Radix Hash") {

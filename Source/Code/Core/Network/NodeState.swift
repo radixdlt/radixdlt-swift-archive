@@ -8,13 +8,23 @@
 
 import Foundation
 
-// TODO add websocket library StarScream
-public typealias WebSocketStatus = Void
-
-public struct NodeState {
+public struct NodeState: Equatable {
     public let node: Node
     public let status: WebSocketStatus
-    public let nodeRunnerData: NodeRunnerData
-    public let version: Int
-    public let universeConfig: UniverseConfig
+    public let nodeRunnerData: NodeRunnerData?
+    public let version: Int?
+    public let universeConfig: UniverseConfig?
+    
+    public init(
+        for node: Node,
+        status: WebSocketStatus = .connected,
+        nodeRunnerData: NodeRunnerData? = nil,
+        version: Int? = nil,
+        universeConfig: UniverseConfig? = nil) {
+        self.node = node
+        self.status = status
+        self.nodeRunnerData = nodeRunnerData
+        self.version = version
+        self.universeConfig = universeConfig
+    }
 }

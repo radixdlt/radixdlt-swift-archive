@@ -18,7 +18,7 @@ public extension RadixCodable {
     func process(keyValues: [AnyEncodableKeyValue], output: DSONOutput) throws -> [AnyEncodableKeyValue] {
         var keyValues = keyValues
         keyValues.append(try AnyEncodableKeyValue(key: jsonKeyVersion, encodable: serializerVersion))
-        if let modelTypeSpecyfing = self as? RadixModelTypeSpecifying {
+        if let modelTypeSpecyfing = self as? RadixModelTypeStaticSpecifying {
             keyValues.append(try AnyEncodableKeyValue(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.type.serializerId))
         }
         

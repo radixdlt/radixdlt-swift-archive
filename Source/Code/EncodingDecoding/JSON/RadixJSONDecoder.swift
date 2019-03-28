@@ -8,22 +8,34 @@
 
 import Foundation
 
+public typealias JSON = [String: Any]
+
 public final class RadixJSONDecoder: Foundation.JSONDecoder {
     
+    // swiftlint:disable:next function_body_length
     public override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T: Decodable & RadixModelTypeStaticSpecifying {
         let jsonObjectAny = try JSONSerialization.jsonObject(with: data, options: [])
-        guard let json = jsonObjectAny as? [String: Any] else {
-            throw AtomModelDecodingError.noDictionary
+        
+        func handle(jsonObject: JSON) throws {
+            guard let modelTypeInt = jsonObject[RadixModelType.jsonKey] as? Int else {
+                throw AtomModelDecodingError.noSerializer(in: jsonObject)
+            }
+            guard let modelType = RadixModelType(rawValue: modelTypeInt) else {
+                throw AtomModelDecodingError.unknownSerializer(got: modelTypeInt)
+            }
+            guard modelType == T.type else {
+                throw AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedType: T.type, butGot: modelType)
+            }
         }
-        guard let modelTypeInt = json[RadixModelType.jsonKey] as? Int else {
-            throw AtomModelDecodingError.noSerializer
+        
+        if let json = jsonObjectAny as? JSON {
+            try handle(jsonObject: json)
+        } else if let jsonArray = jsonObjectAny as? [JSON] {
+            try jsonArray.forEach { try handle(jsonObject: $0) }
+        } else {
+            incorrectImplementation("Forgot some case..., got jsonObjectAny: <\(jsonObjectAny)>")
         }
-        guard let modelType = RadixModelType(rawValue: modelTypeInt) else {
-            throw AtomModelDecodingError.unknownSerializer(got: modelTypeInt)
-        }
-        guard modelType == T.type else {
-            throw AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedType: T.type, butGot: modelType)
-        }
+
         return try super.decode(type, from: data)
     }
     

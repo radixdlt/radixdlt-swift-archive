@@ -18,6 +18,7 @@ public struct Address:
     StringRepresentable,
     Ownable,
     RadixHashable,
+    Codable,
     Hashable,
     CustomStringConvertible {
 // swiftlint:enable colon

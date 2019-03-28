@@ -10,65 +10,22 @@ import Foundation
 import RxSwift
 
 public final class RadixUniverse {
-    public let apiClient: APIClient
-    public let config: UniverseConfig
-    public let ledger: Ledger
-    public let powToken: TokenDefinitionIdentifier
-    public let nativeToken: TokenDefinitionIdentifier
-    
-    // swiftlint:disable:next function_body_length
-    private init(config: UniverseConfig, apiClient: APIClient, ledger: Ledger? = nil) throws {
-        self.config = config
-        self.apiClient = apiClient
-        guard let powToken = config.genesis.tokenDefinition(symbol: "POW", comparison: ==) else {
-            throw Error.noPowToken
-        }
-        self.powToken = powToken
 
-        guard let nativeToken = config.genesis.tokenDefinition(symbol: "POW", comparison: !=) else {
-            throw Error.noNativeToken
-        }
-        self.nativeToken = nativeToken
-        
-        let inMemoryAtomStore = InMemoryAtomStore()
-        
-        config.genesis.atoms.forEach { atom in
-            atom.publicKeys()
-                .map { RadixUniverse.addressFrom(publicKey: $0, config: config) }
-                .forEach { address in
-                    inMemoryAtomStore.store(atom: AtomObservation.createStore(atom), for: address)
-            }
-        }
-        
-        self.ledger = ledger ?? DefaultLedger(
-            atomPuller:
-                DefaultAtomPuller(
-                fetcher: apiClient.fetchAtoms,
-                storeAtom: inMemoryAtomStore.store
-            ),
-            atomSubmitter: apiClient,
-            particleStore: DefaultParticleStore(atomStore: inMemoryAtomStore),
-            atomStore: inMemoryAtomStore
-        )
+    private let config: UniverseConfig
+    private let nodeDiscovery: NodeDiscovery
+
+    private init(config: UniverseConfig, nodeDiscovery: NodeDiscovery) {
+        self.config = config
+        self.nodeDiscovery = nodeDiscovery
     }
 }
 
 // MARK: - Public
 public extension RadixUniverse {
-    
-    static func bootstrap(config: UniverseConfig, seeds: Observable<Node>) throws -> RadixUniverse {
-        let apiClient = DefaultAPIClient()
-        return try RadixUniverse(config: config, apiClient: apiClient)
-    }
-    
-    static func addressFrom(publicKey: PublicKey, config: UniverseConfig) -> Address {
-        return Address(publicKey: publicKey, universeConfig: config)
-    }
-}
-
-public extension RadixUniverse {
-    enum Error: Swift.Error {
-        case noPowToken
-        case noNativeToken
+    convenience init(bootstrapConfig: BootstrapConfig) {
+        self.init(
+            config: bootstrapConfig.config,
+            nodeDiscovery: bootstrapConfig.nodeDiscovery
+        )
     }
 }

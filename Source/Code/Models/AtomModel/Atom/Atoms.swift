@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Atoms: ArrayCodable {
+public struct Atoms: ArrayCodable, Equatable {
     
     public let atoms: [Atom]
     public init(atoms: [Atom] = []) {
@@ -24,5 +24,12 @@ public extension Atoms {
     }
     init(elements: [Element]) {
         self.init(atoms: elements)
+    }
+}
+
+// MARK: Public
+public extension Atoms {
+    func particles() -> [ParticleConvertible] {
+        return flatMap { $0.particles() }
     }
 }

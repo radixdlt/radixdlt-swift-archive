@@ -10,9 +10,10 @@ import Foundation
 
 public protocol ParticleConvertible: Codable {
     var particleType: ParticleType { get }
+    func shardables() -> Addresses
 }
 
-public extension ParticleConvertible where Self: RadixModelTypeSpecifying {
+public extension ParticleConvertible where Self: RadixModelTypeStaticSpecifying {
     var particleType: ParticleType {
         do {
             return try ParticleType(modelType: type)
@@ -23,7 +24,8 @@ public extension ParticleConvertible where Self: RadixModelTypeSpecifying {
 }
 
 public extension ParticleConvertible {
-    func keyDestinations() -> Set<PublicKey> {
+
+    func shardables() -> Addresses {
         var addresses = Set<Address>()
         
         if let accountable = self as? Accountable {
@@ -34,7 +36,7 @@ public extension ParticleConvertible {
             addresses.insert(identifiable.identifier.address)
         }
         
-        return addresses.map { $0.publicKey }.asSet
+        return Addresses(addresses: addresses)
     }
     
     func `as`<P>(_ type: P.Type) -> P? where P: ParticleConvertible {

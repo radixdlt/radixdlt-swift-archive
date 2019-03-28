@@ -8,14 +8,28 @@
 
 import Foundation
 
-public struct NetworkState: ExpressibleByDictionaryLiteral {
+// swiftlint:disable colon
+
+public struct NetworkState:
+    DictionaryConvertible,
+    Equatable {
+    // swiftlint:enable colon
     public typealias Key = Node
     public typealias Value = NodeState
-    public let nodes: [Key: Value]
+    
+    public let nodes: Map
+    
+    public init(dictionary nodes: Map) {
+        self.nodes = nodes
+    }
+  
+    public init(nodes: Map) {
+        self.init(dictionary: nodes)
+    }
 }
 
 public extension NetworkState {
-    init(dictionaryLiteral nodes: (Key, Value)...) {
-         self.init(nodes: Dictionary(uniqueKeysWithValues: nodes))
+    var dictionary: Map {
+        return nodes
     }
 }

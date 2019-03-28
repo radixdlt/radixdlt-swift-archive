@@ -8,9 +8,21 @@
 
 import Foundation
 
-public struct RadixSystem: Codable {
-    private let shards: Shards
-    public init(shards: Shards) {
+// swiftlint:disable colon
+
+public struct RadixSystem:
+    RadixModelTypeStaticSpecifying,
+    Codable,
+    Equatable {
+    // swiftlint:enable colon
+    
+    public static let type = RadixModelType.radixSystem
+    
+    public let shards: Shards
+    
+    public init(
+        shards: Shards
+    ) {
         self.shards = shards
     }
 }

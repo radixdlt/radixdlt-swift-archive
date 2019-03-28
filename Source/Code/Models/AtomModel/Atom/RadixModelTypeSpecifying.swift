@@ -8,16 +8,18 @@
 
 import Foundation
 
-public protocol RadixModelTypeSpecifying: Codable {
-    var type: RadixModelType { get }
-}
-
-public protocol RadixModelTypeStaticSpecifying: RadixModelTypeSpecifying {
+public protocol RadixModelTypeStaticSpecifying {
     static var type: RadixModelType { get }
 }
 
 public extension RadixModelTypeStaticSpecifying {
     var type: RadixModelType {
         return Self.type
+    }
+}
+
+extension Array: RadixModelTypeStaticSpecifying where Element: RadixModelTypeStaticSpecifying {
+    public static var type: RadixModelType {
+        return Element.type
     }
 }
