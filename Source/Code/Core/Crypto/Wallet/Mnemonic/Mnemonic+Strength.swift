@@ -10,6 +10,7 @@ import Foundation
 
 public extension Mnemonic {
     enum Strength: Int {
+        case wordCountOf12 = 12
         case wordCountOf15 = 15
         case wordCountOf18 = 18
         case wordCountOf21 = 21
@@ -34,6 +35,7 @@ import BitcoinKit
 internal extension Mnemonic.Strength {
     var toBitcoinKitStrength: BitcoinKit.Mnemonic.Strength {
         switch self {
+        case .wordCountOf12: return .default
         case .wordCountOf15: return .low
         case .wordCountOf18: return .medium
         case .wordCountOf21: return .high
