@@ -70,6 +70,10 @@ public extension PrivateKey {
 public extension PrivateKey {
     /// Accepts a hexadecimal string
     init(string hexString: String) throws {
+        try self.init(hex: hexString)
+    }
+    
+    init(hex hexString: String) throws {
         let scalar = try Scalar(hexString: hexString)
         try self.init(scalar: scalar)
     }
@@ -107,6 +111,7 @@ public extension PrivateKey {
 // MARK: - BitcoinKit
 import BitcoinKit
 internal extension PrivateKey {
+
     var bitcoinKitPrivateKey: BitcoinKit.PrivateKey {
         return BitcoinKit.PrivateKey(data: asData, network: BitcoinKit.Network.mainnetBTC, isPublicKeyCompressed: true)
     }
