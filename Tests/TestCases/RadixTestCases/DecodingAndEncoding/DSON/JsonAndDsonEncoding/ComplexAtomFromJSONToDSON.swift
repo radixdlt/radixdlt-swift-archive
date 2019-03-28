@@ -17,19 +17,21 @@ class ComplexAtomFromJSONToDSONSpec: QuickSpec {
             it("should deserialize into an Atom") {
                 expect(atom.particlesOfType(MintedTokenParticle.self, spin: .up).first?.identifier.unique).to(equal("XRD"))
             }
-            it("should serialize into correct DSON") {
-                let outputScenarios: [DSONOutput] = [DSONOutput.wire, DSONOutput.api, DSONOutput.persist, DSONOutput.all]
-                for output in outputScenarios {
-                    let dson = try! atom.toDSON(output: output)
-                    expect(dson.hex).to(equal(expectedDsonHex))
-                    expect(dson.base64).to(equal(expecteDsonBase64))
-                }
-            }
-            describe("DSON encoding output none") {
-                let dsonEmpty = try! atom.toDSON(output: .none)
-                
+            
+            describe("DSON encoding") {
                 it("should result in approriate output for `toDSON(output: .none)`") {
+                    let dsonEmpty = try! atom.toDSON(output: .none)
+                
                     expect(dsonEmpty.hex).to(equal("bfff"))
+                }
+                
+                it("should serialize into correct DSON") {
+                    let outputScenarios: [DSONOutput] = [DSONOutput.wire, DSONOutput.api, DSONOutput.persist, DSONOutput.all]
+                    for output in outputScenarios {
+                        let dson = try! atom.toDSON(output: output)
+                        expect(dson.hex).to(equal(expectedDsonHex))
+                        expect(dson.base64).to(equal(expecteDsonBase64))
+                    }
                 }
             }
         }
@@ -43,12 +45,6 @@ class ComplexAtomFromJSONToDSONSpec: QuickSpec {
         describe("Hash Id (EUID)") {
             it("should match Java") {
                 expect(atom.hashId).to(equal("f3904297efea9b54d6484bf460514525"))
-            }
-        }
-        
-        describe("Atom description") {
-            it("should contain the Hash Id") {
-                expect(atom.description).to(contain("f3904297efea9b54d6484bf460514525"))
             }
         }
     }

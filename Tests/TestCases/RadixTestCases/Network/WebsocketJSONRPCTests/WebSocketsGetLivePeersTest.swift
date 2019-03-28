@@ -20,23 +20,25 @@ class WebSocketsGetLivePeersTest: XCTestCase {
     }
     
     func testLivePeersOverWS() {
-        let livePeersExp = XCTestExpectation(description: "Live Peers")
+        let expectation = XCTestExpectation(description: "Live Peers")
         
-        let apiClient = DefaultAPIClient(nodeDiscovery: NodeDiscoveryHardCoded(Node.localhost(port: 8080)))
-   
+        let apiClient = DefaultAPIClient(
+            nodeDiscovery: Node.localhost(port: 8080)
+        )
+
         let livePeers = apiClient.livePeers(communcation: .websocket)
             
-        livePeers.subscribe(onNext: { nodeRunners in
-            XCTAssertFalse(nodeRunners.isEmpty)
-            XCTAssertEqual(nodeRunners[0].ipAddress.components(separatedBy: ".").count , 4)
-            livePeersExp.fulfill()
+        livePeers.subscribe(onNext: { peers in
+            XCTAssertFalse(peers.isEmpty)
+            XCTAssertEqual(peers[0].ipAddress.components(separatedBy: ".").count , 4)
+            expectation.fulfill()
         }, onError: {
             XCTFail("⚠️ Error: \($0)")
-            livePeersExp.fulfill()
+            expectation.fulfill()
         }).disposed(by: bag)
         
 
-        wait(for: [livePeersExp], timeout: 1)
+        wait(for: [expectation], timeout: 1)
         
     }
     
