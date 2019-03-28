@@ -15,7 +15,7 @@ class AtomJsonDeserializationInvalidSerializerValueSpec: QuickSpec {
     override func spec() {
         describe("JSON deserialization - Incorrect serializer value for atom") {
             it("should fail with decoding error") {
-                expect { try decode(Atom.self, from: invalidAtomSerializerJson) }.to(throwError(AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedType: RadixModelType.atom, butGot: .signature)))
+                expect { try decode(Atom.self, from: invalidAtomSerializerJson) }.to(throwError(AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedSerializer: RadixModelType.atom, butGot: .signature)))
             }
         }
         

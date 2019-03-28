@@ -16,7 +16,7 @@ public struct UniqueParticle:
     RadixCodable {
 // swiftlint:enable colon
 
-    public static let type = RadixModelType.uniqueParticle
+    public static let serializer = RadixModelType.uniqueParticle
     public let address: Address
     public let name: Name
     
@@ -31,7 +31,7 @@ public struct UniqueParticle:
 public extension UniqueParticle {
 
     enum CodingKeys: String, CodingKey {
-        case type = "serializer"
+        case serializer
         case address, name
     }
     

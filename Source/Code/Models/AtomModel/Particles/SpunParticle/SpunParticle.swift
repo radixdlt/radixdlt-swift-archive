@@ -17,7 +17,7 @@ public struct SpunParticle:
     Codable {
 // swiftlint:enable colon
 
-    public static let type = RadixModelType.spunParticle
+    public static let serializer = RadixModelType.spunParticle
 
     public let spin: Spin
     public let particle: ParticleConvertible
@@ -31,13 +31,13 @@ public struct SpunParticle:
 public extension SpunParticle {
     
     enum CodingKeys: String, CodingKey {
-        case type = "serializer"
+        case serializer
         
         case particle, spin
     }
     
     private enum ParticleTypeKey: String, CodingKey {
-        case type = "serializer"
+        case serializer
     }
     
     // swiftlint:disable:next function_body_length
@@ -48,8 +48,8 @@ public extension SpunParticle {
 
         // Particle
         let particleNestedContainer = try container.nestedContainer(keyedBy: ParticleTypeKey.self, forKey: .particle)
-        let modelType = try particleNestedContainer.decode(RadixModelType.self, forKey: .type)
-        let particleType = try ParticleType(modelType: modelType)
+        let particleSerializer = try particleNestedContainer.decode(RadixModelType.self, forKey: .serializer)
+        let particleType = try ParticleType(serializer: particleSerializer)
         
         switch particleType {
         case .message:

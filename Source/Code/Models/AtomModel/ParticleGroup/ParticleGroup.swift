@@ -16,7 +16,7 @@ public struct ParticleGroup:
     RadixModelTypeStaticSpecifying,
     Codable {
  // swiftlint:enable colon
-    public static let type = RadixModelType.particleGroup
+    public static let serializer = RadixModelType.particleGroup
     
     public let spunParticles: [SpunParticle]
     public let metaData: MetaData
@@ -33,7 +33,7 @@ public struct ParticleGroup:
 // MARK: - Codable
 public extension ParticleGroup {
     enum CodingKeys: String, CodingKey {
-        case type = "serializer"
+        case serializer
         
         case spunParticles = "particles"
         case metaData

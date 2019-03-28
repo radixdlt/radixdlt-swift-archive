@@ -9,7 +9,7 @@
 import Foundation
 
 public enum AtomModelDecodingError: Swift.Error {
-    case jsonDecodingErrorTypeMismatch(expectedType: RadixModelType, butGot: RadixModelType)
+    case jsonDecodingErrorTypeMismatch(expectedSerializer: RadixModelType, butGot: RadixModelType)
     case noSerializer(in: JSON)
     case unknownSerializer(got: Int)
 }

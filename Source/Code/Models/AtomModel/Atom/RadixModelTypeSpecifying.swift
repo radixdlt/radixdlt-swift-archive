@@ -9,17 +9,17 @@
 import Foundation
 
 public protocol RadixModelTypeStaticSpecifying {
-    static var type: RadixModelType { get }
+    static var serializer: RadixModelType { get }
 }
 
 public extension RadixModelTypeStaticSpecifying {
-    var type: RadixModelType {
-        return Self.type
+    var serializer: RadixModelType {
+        return Self.serializer
     }
 }
 
 extension Array: RadixModelTypeStaticSpecifying where Element: RadixModelTypeStaticSpecifying {
-    public static var type: RadixModelType {
-        return Element.type
+    public static var serializer: RadixModelType {
+        return Element.serializer
     }
 }

@@ -24,7 +24,7 @@ public struct MessageParticle:
     RadixCodable {
 // swiftlint:enable colon
     
-    public static let type = RadixModelType.messageParticle
+    public static let serializer = RadixModelType.messageParticle
     
     public let from: Address
     public let to: Address
@@ -60,7 +60,7 @@ public extension MessageParticle {
 // MARK: Codable
 public extension MessageParticle {
     enum CodingKeys: String, CodingKey {
-        case type = "serializer"
+        case serializer
 
         case from
         case to

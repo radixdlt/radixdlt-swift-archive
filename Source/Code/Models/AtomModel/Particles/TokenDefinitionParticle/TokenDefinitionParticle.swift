@@ -26,7 +26,7 @@ public struct TokenDefinitionParticle:
     RadixCodable {
 // swiftlint:enable colon
     
-    public static let type = RadixModelType.tokenDefinitionParticle
+    public static let serializer = RadixModelType.tokenDefinitionParticle
     
     public let symbol: Symbol
     public let name: Name

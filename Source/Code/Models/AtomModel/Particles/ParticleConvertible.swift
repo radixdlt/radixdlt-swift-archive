@@ -16,7 +16,7 @@ public protocol ParticleConvertible: Codable {
 public extension ParticleConvertible where Self: RadixModelTypeStaticSpecifying {
     var particleType: ParticleType {
         do {
-            return try ParticleType(modelType: type)
+            return try ParticleType(serializer: serializer)
         } catch {
             incorrectImplementation("Error: \(error)")
         }

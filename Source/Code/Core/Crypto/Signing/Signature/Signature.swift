@@ -27,7 +27,7 @@ public struct Signature:
     
     public static let length = 64
     
-    public static let type = RadixModelType.signature
+    public static let serializer = RadixModelType.signature
     
     public typealias Part = BigUnsignedInt
     
@@ -114,7 +114,7 @@ public extension Signature {
 public extension Signature {
     
     enum CodingKeys: String, CodingKey {
-        case type = "serializer"
+        case serializer
         case r, s
     }
     

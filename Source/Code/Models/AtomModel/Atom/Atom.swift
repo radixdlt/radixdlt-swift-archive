@@ -27,7 +27,7 @@ public struct Atom:
     CustomDebugStringConvertible {
 // swiftlint:enable colon
     
-    public static let type = RadixModelType.atom
+    public static let serializer = RadixModelType.atom
     
     public let particleGroups: ParticleGroups
     public let signatures: Signatures
@@ -48,7 +48,7 @@ public struct Atom:
 public extension Atom {
     
     enum CodingKeys: String, CodingKey {
-        case type = "serializer"
+        case serializer
         case particleGroups
         case signatures
         case metaData

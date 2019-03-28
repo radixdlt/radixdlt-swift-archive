@@ -10,7 +10,7 @@ import Foundation
 
 public extension TokenDefinitionParticle {
     enum CodingKeys: String, CodingKey {
-        case type = "serializer"
+        case serializer
         
         case symbol, name, description, address, metaData, granularity, permissions
         

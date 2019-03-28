@@ -19,7 +19,7 @@ public extension RadixCodable {
         var keyValues = keyValues
         keyValues.append(try AnyEncodableKeyValue(key: jsonKeyVersion, encodable: serializerVersion))
         if let modelTypeSpecyfing = self as? RadixModelTypeStaticSpecifying {
-            keyValues.append(try AnyEncodableKeyValue(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.type.serializerId))
+            keyValues.append(try AnyEncodableKeyValue(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.serializer.serializerId))
         }
         
         return keyValues.sorted(by: \.key).filter { $0.allowsOutput(of: output) }

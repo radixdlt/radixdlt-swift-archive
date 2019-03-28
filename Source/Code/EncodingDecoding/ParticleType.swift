@@ -24,8 +24,8 @@ public extension ParticleType {
 }
 
 internal extension ParticleType {
-    init(modelType: RadixModelType) throws {
-        switch modelType {
+    init(serializer: RadixModelType) throws {
+        switch serializer {
         case .burnedTokenParticle: self = .burnedToken
         case .mintedTokenParticle: self = .mintedToken
         case .uniqueParticle: self = .unique
@@ -36,7 +36,7 @@ internal extension ParticleType {
         }
     }
     
-    var modelType: RadixModelType {
+    var serializer: RadixModelType {
         switch self {
         case .burnedToken: return .burnedTokenParticle
         case .message: return .messageParticle

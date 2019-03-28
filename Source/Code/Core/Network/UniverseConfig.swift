@@ -31,7 +31,7 @@ public struct UniverseConfig:
 
 // MARK: - RadixModelTypeStaticSpecifying
 public extension UniverseConfig {
-    static let type: RadixModelType = .universeConfig
+    static let serializer: RadixModelType = .universeConfig
 }
 
 public extension UniverseConfig {

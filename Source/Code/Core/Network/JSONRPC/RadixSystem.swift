@@ -16,7 +16,7 @@ public struct RadixSystem:
     Equatable {
     // swiftlint:enable colon
     
-    public static let type = RadixModelType.radixSystem
+    public static let serializer = RadixModelType.radixSystem
     
     public let shards: Shards
     

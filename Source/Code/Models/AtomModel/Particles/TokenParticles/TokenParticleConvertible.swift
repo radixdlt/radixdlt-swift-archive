@@ -40,7 +40,7 @@ where
 }
 
 public enum TokenParticleCodingKeys: String, CodingKey {
-    case type = "serializer"
+    case serializer
     case tokenDefinitionIdentifier = "tokenDefinitionReference"
     case address, granularity, nonce, planck, amount
 }

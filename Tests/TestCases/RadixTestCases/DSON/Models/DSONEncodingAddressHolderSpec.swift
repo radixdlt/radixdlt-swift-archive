@@ -34,13 +34,12 @@ class DSONEncodingAddressHolderSpec: QuickSpec {
         public let address: Address
         public enum CodingKeys: String, CodingKey {
             case address
-            case type = "serializer"
-            case version
+            case serializer
         }
         public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] { return
             [
                 EncodableKeyValue(key: .address, value: address),
-                EncodableKeyValue(key: .type, value: -1322468736),
+                EncodableKeyValue(key: .serializer, value: -1322468736)
             ]
         }
     }
