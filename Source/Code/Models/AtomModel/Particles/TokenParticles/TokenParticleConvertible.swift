@@ -16,6 +16,7 @@ public protocol TokenParticleConvertible:
     Ownable,
     Fungible,
     Identifiable,
+    Accountable,
     RadixCodable,
     RadixModelTypeStaticSpecifying
 where
@@ -93,5 +94,12 @@ public extension TokenParticleConvertible {
 public extension TokenParticleConvertible {
     var publicKey: PublicKey {
         return address.publicKey
+    }
+}
+
+// MARK: Accountable
+public extension TokenParticleConvertible {
+    var addresses: Addresses {
+        return Addresses(arrayLiteral: address)
     }
 }

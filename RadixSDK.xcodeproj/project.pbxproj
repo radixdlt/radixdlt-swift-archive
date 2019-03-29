@@ -218,6 +218,12 @@
 		E6A507EA224E20CC00128123 /* RPCResponseResultWithRequestId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507E9224E20CB00128123 /* RPCResponseResultWithRequestId.swift */; };
 		E6A507EC224E24CB00128123 /* String+IPAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507EB224E24CB00128123 /* String+IPAddress.swift */; };
 		E6A507EE224E4CF500128123 /* WebsocketTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507ED224E4CF500128123 /* WebsocketTest.swift */; };
+		E6A507F1224E6A0300128123 /* Balance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F0224E6A0300128123 /* Balance.swift */; };
+		E6A507F3224E6A4600128123 /* TokenBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F2224E6A4600128123 /* TokenBalance.swift */; };
+		E6A507F5224E6AEA00128123 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F4224E6AEA00128123 /* Token.swift */; };
+		E6A507F7224E6ECC00128123 /* ConsumableTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F6224E6ECC00128123 /* ConsumableTokens.swift */; };
+		E6A507F9224E6ED700128123 /* ConsumingTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F8224E6ED700128123 /* ConsumingTokens.swift */; };
+		E6A507FB224E6EE500128123 /* IdentifiableTokenWithGranularity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507FA224E6EE500128123 /* IdentifiableTokenWithGranularity.swift */; };
 		E6A6430B2244D38800CD4BFC /* BitcoinKit+ECMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6430A2244D38800CD4BFC /* BitcoinKit+ECMethods.swift */; };
 		E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */; };
 		E6A643122244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A643112244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift */; };
@@ -563,6 +569,12 @@
 		E6A507E9224E20CB00128123 /* RPCResponseResultWithRequestId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCResponseResultWithRequestId.swift; sourceTree = "<group>"; };
 		E6A507EB224E24CB00128123 /* String+IPAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+IPAddress.swift"; sourceTree = "<group>"; };
 		E6A507ED224E4CF500128123 /* WebsocketTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketTest.swift; sourceTree = "<group>"; };
+		E6A507F0224E6A0300128123 /* Balance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Balance.swift; sourceTree = "<group>"; };
+		E6A507F2224E6A4600128123 /* TokenBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalance.swift; sourceTree = "<group>"; };
+		E6A507F4224E6AEA00128123 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
+		E6A507F6224E6ECC00128123 /* ConsumableTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumableTokens.swift; sourceTree = "<group>"; };
+		E6A507F8224E6ED700128123 /* ConsumingTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumingTokens.swift; sourceTree = "<group>"; };
+		E6A507FA224E6EE500128123 /* IdentifiableTokenWithGranularity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableTokenWithGranularity.swift; sourceTree = "<group>"; };
 		E6A6430A2244D38800CD4BFC /* BitcoinKit+ECMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BitcoinKit+ECMethods.swift"; sourceTree = "<group>"; };
 		E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointMultiplicationTests.swift; sourceTree = "<group>"; };
 		E6A643112244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodePointFromPublicKeyTests.swift; sourceTree = "<group>"; };
@@ -1500,6 +1512,9 @@
 			isa = PBXGroup;
 			children = (
 				E6ED1A4621F892B600654105 /* TokenParticleConvertible.swift */,
+				E6A507F6224E6ECC00128123 /* ConsumableTokens.swift */,
+				E6A507FA224E6EE500128123 /* IdentifiableTokenWithGranularity.swift */,
+				E6A507F8224E6ED700128123 /* ConsumingTokens.swift */,
 				E6D4B35A223FCE5D004FC83A /* TransferredTokenParticle.swift */,
 				E6D4B35C223FCE6A004FC83A /* MintedTokenParticle.swift */,
 				E6D4B358223FCE4F004FC83A /* BurnedTokenParticle.swift */,
@@ -1632,6 +1647,16 @@
 				E6A507E9224E20CB00128123 /* RPCResponseResultWithRequestId.swift */,
 			);
 			path = RPCResponse;
+			sourceTree = "<group>";
+		};
+		E6A507EF224E69F400128123 /* Balance */ = {
+			isa = PBXGroup;
+			children = (
+				E6A507F0224E6A0300128123 /* Balance.swift */,
+				E6A507F4224E6AEA00128123 /* Token.swift */,
+				E6A507F2224E6A4600128123 /* TokenBalance.swift */,
+			);
+			path = Balance;
 			sourceTree = "<group>";
 		};
 		E6A643092244D36700CD4BFC /* EllipticCurveMethods */ = {
@@ -2013,6 +2038,7 @@
 		E6ED1A4F21F8E54100654105 /* Ledger */ = {
 			isa = PBXGroup;
 			children = (
+				E6A507EF224E69F400128123 /* Balance */,
 				E6ED1A5021F8E54900654105 /* AtomPuller.swift */,
 				E6ED1A5721F8E5A100654105 /* AtomSubmitter.swift */,
 				E6ED1A5921F8E5AD00654105 /* ParticleStore.swift */,
@@ -2351,6 +2377,7 @@
 				E67A714A21FBB1B900F4B2D0 /* TokenPermissions.swift in Sources */,
 				E693DAC3223685F9003720C2 /* DSONPrefixSpecifying.swift in Sources */,
 				E6611F5722298F7600AD2F83 /* RadixJSONDecoder.swift in Sources */,
+				E6A507F1224E6A0300128123 /* Balance.swift in Sources */,
 				E6A4AB96221D4680006C5CA8 /* Description.swift in Sources */,
 				E6A4AB9A221D508D006C5CA8 /* Nonce.swift in Sources */,
 				E6A4AB9E221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift in Sources */,
@@ -2375,6 +2402,7 @@
 				E6D4B33D223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift in Sources */,
 				E6D4B36922400F41004FC83A /* SetAlgebra+Intersecting.swift in Sources */,
 				E6ED1A4C21F8ACB700654105 /* Int+DataConvertible.swift in Sources */,
+				E6A507F9224E6ED700128123 /* ConsumingTokens.swift in Sources */,
 				E62EFDBE22490BA900B6DAD6 /* Router.swift in Sources */,
 				E6CEE71921F5B4B900D745EC /* Atom.swift in Sources */,
 				E6A6431A22450FA800CD4BFC /* PublicKey+ECEIS+Encrypt.swift in Sources */,
@@ -2448,6 +2476,7 @@
 				E693DAC12232BC6F003720C2 /* CBOR+DSONPrefix.swift in Sources */,
 				E631DAD621F5A7570063F632 /* Network.swift in Sources */,
 				E6A507E4224E209200128123 /* RPCResponse.swift in Sources */,
+				E6A507F7224E6ECC00128123 /* ConsumableTokens.swift in Sources */,
 				E6611F4F2229849000AD2F83 /* AtomModelDecodingError.swift in Sources */,
 				E6ED1A5E21F8E5DD00654105 /* Ledger.swift in Sources */,
 				E601D3372242411400A81412 /* AtomSigning.swift in Sources */,
@@ -2467,12 +2496,14 @@
 				E68B5BFF21FBCD2C00BEB049 /* PrefixedJsonDecodable.swift in Sources */,
 				E6ED1A8921F9F5BC00654105 /* UniqueParticle.swift in Sources */,
 				E6040E6D224128870065AEC2 /* DERCoding.swift in Sources */,
+				E6A507FB224E6EE500128123 /* IdentifiableTokenWithGranularity.swift in Sources */,
 				E6A507DF224E17E400128123 /* AtomSubscriptionUpdate.swift in Sources */,
 				E62EFE14224A77F000B6DAD6 /* AtomQuery.swift in Sources */,
 				E6A4AB90221C3F64006C5CA8 /* TokenDefinitionParticle.swift in Sources */,
 				E6C9FB9B2243DCE6000AAE12 /* Signing.swift in Sources */,
 				E6D4B361223FD046004FC83A /* AnyEncodableKeyValueList.swift in Sources */,
 				E6CEE75121F6391300D745EC /* SpunParticle.swift in Sources */,
+				E6A507F3224E6A4600128123 /* TokenBalance.swift in Sources */,
 				E6D4B33B223F9DD2004FC83A /* TimeConverter.swift in Sources */,
 				E6A507DB224E15DC00128123 /* AtomSubscriptionCancel.swift in Sources */,
 				E631DACF21F25A570063F632 /* Mnemonic+Word.swift in Sources */,
@@ -2484,6 +2515,7 @@
 				E62EFDCC2249378300B6DAD6 /* RESTClient.swift in Sources */,
 				E6CEE75C21F7A41A00D745EC /* DataConvertible.swift in Sources */,
 				E6CEE74A21F6384000D745EC /* MessageParticle.swift in Sources */,
+				E6A507F5224E6AEA00128123 /* Token.swift in Sources */,
 				E6ED1A6721F8E6AC00654105 /* NodeState.swift in Sources */,
 				E6ED1A7321F8E75D00654105 /* DefaultLedger.swift in Sources */,
 				E6D4B347223FBAB0004FC83A /* DataConvertible+StringConversion.swift in Sources */,

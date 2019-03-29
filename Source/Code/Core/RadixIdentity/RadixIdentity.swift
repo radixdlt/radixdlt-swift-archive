@@ -17,12 +17,12 @@ public struct RadixIdentity:
     // swiftlint:enable colon
   
     private let keyPair: KeyPair
-    
     public init(keyPair: KeyPair) {
         self.keyPair = keyPair
     }
 }
 
+// MARK: - Convenience Init
 public extension RadixIdentity {
     init(`private` privateKey: PrivateKey) {
         self.init(keyPair: KeyPair(private: privateKey))

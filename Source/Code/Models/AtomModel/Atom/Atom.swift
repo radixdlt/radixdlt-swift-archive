@@ -117,6 +117,7 @@ public extension Atom {
         return spunParticles().compactMap(type: MessageParticle.self)
     }
     
+//    func consumableTokens() -> [SpunParticle]
     func particlesOfType<P>(_ type: P.Type, spin: Spin) -> [P] where P: ParticleConvertible {
         return spunParticles()
             .filter(spin: spin)

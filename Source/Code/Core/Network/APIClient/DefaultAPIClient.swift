@@ -78,6 +78,12 @@ public extension DefaultAPIClient {
         }
     }
     
+    func balance(forAddress address: Address, token: Symbol) -> Observable<TokenBalance> {
+        return pull(from: address)
+            .map { $0.update }.filterNil()
+            .map { $0.atomEvents. }
+    }
+    
     func submit(atom: Atom) -> Observable<SubmitAtomAction> {
         implementMe
     }

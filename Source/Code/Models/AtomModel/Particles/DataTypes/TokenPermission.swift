@@ -8,13 +8,6 @@
 
 import Foundation
 
-//public enum TokenPermission {
-//    TOKEN_CREATION_ONLY,
-//    TOKEN_OWNER_ONLY,
-//    ALL,
-//    NONE
-//}
-
 // TODO should this be an optionset?
 public enum TokenPermission: String, StringInitializable, StringRepresentable, PrefixedJsonCodable {
 

@@ -21,8 +21,9 @@ public struct Granularity:
     PrefixedJsonCodable,
     CBORDataConvertible,
     StringRepresentable,
-    Equatable,
-    ExpressibleByIntegerLiteral {
+    Comparable,
+ExpressibleByIntegerLiteral {
+
 // swiftlint:enable colon
     
     public typealias Value = BigUnsignedInt
@@ -31,6 +32,13 @@ public struct Granularity:
 
     public init(value: Value) {
         self.value = value
+    }
+}
+
+// MARK: Comparable
+public extension Granularity {
+    static func < (lhs: Granularity, rhs: Granularity) -> Bool {
+        return lhs.value < rhs.value
     }
 }
 

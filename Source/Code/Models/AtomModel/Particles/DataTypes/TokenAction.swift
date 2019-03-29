@@ -11,7 +11,6 @@ import Foundation
 /// Verb version of `FungibleType`
 public enum TokenAction: String, Codable, StringInitializable, StringRepresentable, Hashable {
     case mint
-    case transfer
     case burn
 }
 

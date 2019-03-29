@@ -41,9 +41,6 @@ public struct TokenPermissions:
         guard keys.contains(.mint) else {
             throw Error.mintMissing
         }
-//        guard keys.contains(.transfer) else {
-//            throw Error.transferMissing
-//        }
         self.init(dictionary: map)
     }
 }
@@ -51,7 +48,6 @@ public struct TokenPermissions:
 public extension TokenPermissions {
     enum Error: Swift.Error {
         case mintMissing
-//        case transferMissing
         case burnMissing
     }
 }
@@ -59,7 +55,7 @@ public extension TokenPermissions {
 public extension TokenPermissions {
 
     static var all: TokenPermissions {
-        return [.mint: .all, .burn: .all, .transfer: .all]
+        return [.mint: .all, .burn: .all]
     }
     
     static var `default`: TokenPermissions = .all

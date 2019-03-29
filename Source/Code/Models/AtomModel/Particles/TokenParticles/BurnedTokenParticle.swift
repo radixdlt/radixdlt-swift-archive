@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct BurnedTokenParticle: TokenParticleConvertible {
+public struct BurnedTokenParticle: TokenParticleConvertible, ConsumingTokens {
     
     public static let serializer = RadixModelType.burnedTokensParticle
     
