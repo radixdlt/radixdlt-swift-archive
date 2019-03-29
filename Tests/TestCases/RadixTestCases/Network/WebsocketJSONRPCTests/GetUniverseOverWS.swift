@@ -15,28 +15,16 @@ import RxBlocking
 
 class GetUniverseOverWS: XCTestCase {
         
-    private let bag = DisposeBag()
     
     func testLivePeersOverWS() {
-        let expectation = XCTestExpectation(description: "Universe")
-        
         let apiClient = DefaultAPIClient(
             nodeDiscovery: Node.localhost(port: 8080)
         )
         
-        let universeConfig = apiClient.getUniverse()
+        let universeConfigObservable: Observable<UniverseConfig> = apiClient.getUniverse()
         
-        universeConfig.subscribe(onNext: { universeConfig in
-            XCTAssertEqual(universeConfig.description, "The Radix development Universe")
-            expectation.fulfill()
-        }, onError: {
-            XCTFail("⚠️ Error: \($0)")
-            expectation.fulfill()
-        }).disposed(by: bag)
-        
-        
-        wait(for: [expectation], timeout: 1)
-        
+        let universeConfig = try! universeConfigObservable.take(1).toBlocking(timeout: 1).first()!
+        XCTAssertEqual(universeConfig.description, "The Radix development Universe")
     }
 }
 

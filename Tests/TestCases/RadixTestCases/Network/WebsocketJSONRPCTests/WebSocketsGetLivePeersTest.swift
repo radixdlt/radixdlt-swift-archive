@@ -13,28 +13,20 @@ import RxSwift
 
 class WebSocketsGetLivePeersTest: XCTestCase {
 
-    private let bag = DisposeBag()
-    
     func testLivePeersOverWS() {
-        let expectation = XCTestExpectation(description: "Live Peers")
         
         let apiClient = DefaultAPIClient(
             nodeDiscovery: Node.localhost(port: 8080)
         )
 
-        let livePeers = apiClient.livePeers(communcation: .websocket)
-            
-        livePeers.subscribe(onNext: { peers in
-            XCTAssertFalse(peers.isEmpty)
-            XCTAssertEqual(peers[0].ipAddress.components(separatedBy: ".").count , 4)
-            expectation.fulfill()
-        }, onError: {
-            XCTFail("⚠️ Error: \($0)")
-            expectation.fulfill()
-        }).disposed(by: bag)
-        
+        let livePeersObservable: Observable<[NodeRunnerData]> = apiClient.livePeers(communcation: .websocket)
 
-        wait(for: [expectation], timeout: 1)
+        let livePeers: [NodeRunnerData] = try! livePeersObservable.take(1).toBlocking(timeout: 1).first()!
+        
+        XCTAssertEqual(livePeers.count, 1)
+        let livePeer = livePeers[0]
+        
+        XCTAssertTrue(livePeer.ipAddress.looksLikeAnIPAddress)
         
     }
 }

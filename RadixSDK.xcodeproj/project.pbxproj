@@ -216,6 +216,7 @@
 		E6A507E6224E20AB00128123 /* RPCResposeResultConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507E5224E20AB00128123 /* RPCResposeResultConvertible.swift */; };
 		E6A507E8224E20BF00128123 /* RPCResponseLookingLikeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507E7224E20BF00128123 /* RPCResponseLookingLikeRequest.swift */; };
 		E6A507EA224E20CC00128123 /* RPCResponseResultWithRequestId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507E9224E20CB00128123 /* RPCResponseResultWithRequestId.swift */; };
+		E6A507EC224E24CB00128123 /* String+IPAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507EB224E24CB00128123 /* String+IPAddress.swift */; };
 		E6A6430B2244D38800CD4BFC /* BitcoinKit+ECMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6430A2244D38800CD4BFC /* BitcoinKit+ECMethods.swift */; };
 		E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */; };
 		E6A643122244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A643112244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift */; };
@@ -559,6 +560,7 @@
 		E6A507E5224E20AB00128123 /* RPCResposeResultConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCResposeResultConvertible.swift; sourceTree = "<group>"; };
 		E6A507E7224E20BF00128123 /* RPCResponseLookingLikeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCResponseLookingLikeRequest.swift; sourceTree = "<group>"; };
 		E6A507E9224E20CB00128123 /* RPCResponseResultWithRequestId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCResponseResultWithRequestId.swift; sourceTree = "<group>"; };
+		E6A507EB224E24CB00128123 /* String+IPAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+IPAddress.swift"; sourceTree = "<group>"; };
 		E6A6430A2244D38800CD4BFC /* BitcoinKit+ECMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BitcoinKit+ECMethods.swift"; sourceTree = "<group>"; };
 		E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointMultiplicationTests.swift; sourceTree = "<group>"; };
 		E6A643112244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodePointFromPublicKeyTests.swift; sourceTree = "<group>"; };
@@ -1507,6 +1509,7 @@
 			children = (
 				E6D325AB21EE37DA00851F4E /* Int+Extension.swift */,
 				E6A4ABC1221ED5DF006C5CA8 /* JSONDecoder.swift */,
+				E6A507EB224E24CB00128123 /* String+IPAddress.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -2525,6 +2528,7 @@
 				E6611F472227F2A300AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift in Sources */,
 				E62EFE1E224B739B00B6DAD6 /* WebSocketsGetLivePeersTest.swift in Sources */,
 				E693DAAC22319AB2003720C2 /* DSONEncodingPrimitivesBoolSpec.swift in Sources */,
+				E6A507EC224E24CB00128123 /* String+IPAddress.swift in Sources */,
 				E62EFE11224A74C200B6DAD6 /* RestClientTestLivePeers.swift in Sources */,
 				E6D4B353223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift in Sources */,
 				E6D4B32C223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift in Sources */,

@@ -29,3 +29,32 @@ public extension AtomSubscription {
         }
     }
 }
+
+public extension AtomSubscription {
+    var start: AtomSubscriptionStart? {
+        guard case .start(let start) = self else { return nil }
+        return start
+    }
+    
+    var update: AtomSubscriptionUpdate? {
+        guard case .update(let update) = self else { return nil }
+        return update
+    }
+    
+    var cancel: AtomSubscriptionCancel? {
+        guard case .cancel(let cancel) = self else { return nil }
+        return cancel
+    }
+    
+    var isStart: Bool {
+        return start != nil
+    }
+    
+    var isUpdate: Bool {
+        return update != nil
+    }
+    
+    var isCancel: Bool {
+        return cancel != nil
+    }
+}
