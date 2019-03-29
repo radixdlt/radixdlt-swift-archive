@@ -13,7 +13,7 @@ public struct RadixIdentity:
     AtomSigning,
     SignedAtomVerifier,
     Signing,
-    Ownable {
+    PublicKeyOwner {
     // swiftlint:enable colon
   
     private let keyPair: KeyPair

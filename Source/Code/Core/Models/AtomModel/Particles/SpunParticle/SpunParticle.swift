@@ -11,7 +11,7 @@ import Foundation
 // swiftlint:disable colon
 
 /// Small container for a `Particle` and its `Spin`. The reason why we do not want to add the `Spin` as a property on the Particle itself is that it would change the Hash of the particle.
-public struct AnyParticleWithSpin:
+public struct SpunParticle:
     RadixModelTypeStaticSpecifying,
     RadixCodable,
     Codable {
@@ -28,7 +28,7 @@ public struct AnyParticleWithSpin:
 }
 
 // MARK: - Deodable
-public extension AnyParticleWithSpin {
+public extension SpunParticle {
     
     enum CodingKeys: String, CodingKey {
         case serializer
@@ -68,7 +68,7 @@ public extension AnyParticleWithSpin {
 }
 
 // MARK: - Encodable
-public extension AnyParticleWithSpin {
+public extension SpunParticle {
     
     func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         
@@ -96,13 +96,13 @@ public extension AnyParticleWithSpin {
     }
 }
 
-public extension AnyParticleWithSpin {
-    static func up(particle: ParticleConvertible) -> AnyParticleWithSpin {
-        return AnyParticleWithSpin(spin: .up, particle: particle)
+public extension SpunParticle {
+    static func up(particle: ParticleConvertible) -> SpunParticle {
+        return SpunParticle(spin: .up, particle: particle)
     }
     
-    static func down(particle: ParticleConvertible) -> AnyParticleWithSpin {
-        return AnyParticleWithSpin(spin: .down, particle: particle)
+    static func down(particle: ParticleConvertible) -> SpunParticle {
+        return SpunParticle(spin: .down, particle: particle)
     }
     
     func particle<P>(as type: P.Type) -> P? where P: ParticleConvertible {

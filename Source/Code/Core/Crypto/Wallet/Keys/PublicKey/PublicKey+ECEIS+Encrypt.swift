@@ -8,7 +8,7 @@
 
 import Foundation
 
-public extension Ownable {
+public extension PublicKeyOwner {
     func encrypt(_ data: DataConvertible) throws -> Data {
         return try ECIES.encrypt(data: data, using: publicKey)
     }

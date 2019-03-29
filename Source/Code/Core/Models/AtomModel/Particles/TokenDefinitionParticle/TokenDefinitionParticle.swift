@@ -22,8 +22,10 @@ import Foundation
 ///
 public struct TokenDefinitionParticle:
     ParticleModelConvertible,
-    Identifiable,
-    RadixCodable {
+    TokenConvertible,
+    RadixCodable,
+    RadixHashable,
+    Hashable {
 // swiftlint:enable colon
     
     public static let serializer = RadixModelType.tokenDefinitionParticle
@@ -53,4 +55,9 @@ public struct TokenDefinitionParticle:
         self.granularity = granularity
         self.permissions = permissions
     }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(radixHash)
+    }
 }
+

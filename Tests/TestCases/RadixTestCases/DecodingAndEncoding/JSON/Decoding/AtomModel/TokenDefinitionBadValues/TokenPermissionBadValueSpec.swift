@@ -29,18 +29,13 @@ class TokenPermissionBadValueSpec: AtomJsonDeserializationChangeJson {
         
         /// Scenario Extra
         describe("JSON deserialization - TokenDefinitionParticle: Lacking permission") {
-//            it("Deserialize JSON with lacking TokenPermission for action 'transfer' should throw error 'transferMissing'") {
-//                let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"burn\": \":str:pow\", \"mint\": \":str:pow\"}")
-//                expect { try decode(Atom.self, from: badJson) }.to(throwError(TokenPermissions.Error.transferMissing))
-//            }
-            
             it("Deserialize JSON with lacking TokenPermission for action 'mint' should throw error 'mintMissing'") {
-                let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"burn\": \":str:none\", \"transfer\": \":str:none\"}")
+                let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"burn\": \":str:none\" }")
                 expect { try decode(Atom.self, from: badJson) }.to(throwError(TokenPermissions.Error.mintMissing))
             }
             
             it("Deserialize JSON with lacking TokenPermission for action 'mint' should throw error 'burnMissing'") {
-                let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"mint\": \":str:none\", \"transfer\": \":str:none\"}")
+                let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"mint\": \":str:none\" }")
                 expect { try decode(Atom.self, from: badJson) }.to(throwError(TokenPermissions.Error.burnMissing))
             }
         }

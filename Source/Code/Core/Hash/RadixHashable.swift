@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol RadixHashable: DSONEncodable, Hashable {
+public protocol RadixHashable: DSONEncodable {
     var radixHash: RadixHash { get }
     var hashId: EUID { get }
 }
@@ -27,6 +27,7 @@ public extension RadixHashable {
     }
 }
 
+// MARK: - Hashable Prepare
 public extension RadixHashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(radixHash)

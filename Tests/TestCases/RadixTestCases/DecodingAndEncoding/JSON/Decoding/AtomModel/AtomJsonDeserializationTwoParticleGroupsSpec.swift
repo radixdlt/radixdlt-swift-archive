@@ -112,8 +112,7 @@ let jsonForAtomWith2ParticleGroups = """
                         "granularity": ":u20:1",
                         "permissions": {
                             "burn": ":str:none",
-                            "mint": ":str:\(TokenPermission.tokenCreationOnly.rawValue)",
-                            "transfer": ":str:none"
+                            "mint": ":str:\(TokenPermission.tokenCreationOnly.rawValue)"
                         },
                         "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
                     }

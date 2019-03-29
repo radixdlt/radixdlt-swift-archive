@@ -1,5 +1,5 @@
 //
-//  BurnedTokenParticle.swift
+//  MintedTokenParticle.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-03-18.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-public struct BurnedTokenParticle: TokenParticleConvertible, ConsumingTokens {
+public struct MintedTokenParticle: TokenParticleConvertible, ConsumableTokens {
     
-    public static let serializer = RadixModelType.burnedTokensParticle
+    public static let serializer = RadixModelType.mintedTokensParticle
     
     public let address: Address
-    public let tokenDefinitionIdentifier: TokenDefinitionIdentifier
+    public let tokenDefinitionReference: TokenDefinitionReference
     public let granularity: Granularity
     public let planck: Planck
     public let nonce: Nonce
@@ -21,17 +21,18 @@ public struct BurnedTokenParticle: TokenParticleConvertible, ConsumingTokens {
     
     public init(
         address: Address,
-        granularity: Granularity,
+        granularity: Granularity = .default,
         nonce: Nonce = Nonce(),
         planck: Planck = Planck(),
         amount: Amount,
-        tokenDefinitionIdentifier: TokenDefinitionIdentifier
+        tokenDefinitionReference: TokenDefinitionReference
         ) {
         self.address = address
         self.granularity = granularity
         self.nonce = nonce
         self.planck = planck
         self.amount = amount
-        self.tokenDefinitionIdentifier = tokenDefinitionIdentifier
+        self.tokenDefinitionReference = tokenDefinitionReference
     }
 }
+

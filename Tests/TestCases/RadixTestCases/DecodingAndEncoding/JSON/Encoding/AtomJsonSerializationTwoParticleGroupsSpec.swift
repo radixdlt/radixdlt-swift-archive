@@ -71,7 +71,7 @@ private let atom = Atom(
                     nonce: 992284943125945,
                     planck: 24805440,
                     amount: 1337,
-                    tokenDefinitionIdentifier: "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+                    tokenDefinitionReference: "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
                 )
             ),
             SpunParticle(

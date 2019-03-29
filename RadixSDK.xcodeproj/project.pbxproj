@@ -22,7 +22,6 @@
 		E6040E6B2241287B0065AEC2 /* DER.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E6A2241287B0065AEC2 /* DER.swift */; };
 		E6040E6D224128870065AEC2 /* DERCoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E6C224128870065AEC2 /* DERCoding.swift */; };
 		E6040E702241294C0065AEC2 /* Secp256k1.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6040E6F2241294C0065AEC2 /* Secp256k1.swift */; };
-		E6161013223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */; };
 		E6161016223A607B00025A54 /* DSONEncodingIntArraySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161014223A607800025A54 /* DSONEncodingIntArraySpec.swift */; };
 		E6161018223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161017223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift */; };
 		E616101A223AAEA300025A54 /* DsonEncodingMintedTokenParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6161019223AAEA300025A54 /* DsonEncodingMintedTokenParticle.swift */; };
@@ -92,21 +91,12 @@
 		E6611F2922259E1B00AD2F83 /* NonBase58AddressSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2822259E1B00AD2F83 /* NonBase58AddressSpec.swift */; };
 		E6611F2B22259E2E00AD2F83 /* AddressInvalidChecksumSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2A22259E2E00AD2F83 /* AddressInvalidChecksumSpec.swift */; };
 		E6611F2D2225A09D00AD2F83 /* GranularityNegativeSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2C2225A09D00AD2F83 /* GranularityNegativeSpec.swift */; };
-		E6611F302225A0E300AD2F83 /* ExactLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F2E2225A0DE00AD2F83 /* ExactLengthSpecifying.swift */; };
-		E6611F322225A1EE00AD2F83 /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F312225A1EE00AD2F83 /* StringRepresentable.swift */; };
-		E6611F352225B2C000AD2F83 /* DictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F342225B2C000AD2F83 /* DictionaryConvertible.swift */; };
-		E6611F372225B2D600AD2F83 /* DictionaryDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F362225B2D600AD2F83 /* DictionaryDecodable.swift */; };
-		E6611F392225B2E400AD2F83 /* StringDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F382225B2E400AD2F83 /* StringDictionary.swift */; };
-		E6611F3C2225B55C00AD2F83 /* ArrayConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3B2225B55C00AD2F83 /* ArrayConvertible.swift */; };
-		E6611F3E2225B56A00AD2F83 /* ArrayDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3D2225B56A00AD2F83 /* ArrayDecodable.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E6611F44222696E900AD2F83 /* BigInt_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F43222696E900AD2F83 /* BigInt_Extension.swift */; };
 		E6611F472227F2A300AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F452227F29F00AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift */; };
 		E6611F4B2227FEDA00AD2F83 /* AtomJsonSerializationTooBigSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F482227FD0700AD2F83 /* AtomJsonSerializationTooBigSpec.swift */; };
 		E6611F4D222982A700AD2F83 /* AtomJsonDeserializationInvalidSerializerValueSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F4C222982A700AD2F83 /* AtomJsonDeserializationInvalidSerializerValueSpec.swift */; };
 		E6611F4F2229849000AD2F83 /* AtomModelDecodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F4E2229849000AD2F83 /* AtomModelDecodingError.swift */; };
-		E6611F51222984B900AD2F83 /* RadixModelTypeSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F50222984B900AD2F83 /* RadixModelTypeSpecifying.swift */; };
-		E6611F55222984DE00AD2F83 /* ParticleModelConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F54222984DE00AD2F83 /* ParticleModelConvertible.swift */; };
 		E6611F5722298F7600AD2F83 /* RadixJSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F5622298F7600AD2F83 /* RadixJSONDecoder.swift */; };
 		E6611F5922298F9000AD2F83 /* RadixJSONEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F5822298F9000AD2F83 /* RadixJSONEncoder.swift */; };
 		E672573021FB8D3900BE3B4C /* ParticleType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672572F21FB8D3900BE3B4C /* ParticleType.swift */; };
@@ -114,22 +104,11 @@
 		E672573721FB8D8E00BE3B4C /* JSONPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */; };
 		E672573921FB8D9A00BE3B4C /* PrefixedStringWithValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573821FB8D9A00BE3B4C /* PrefixedStringWithValue.swift */; };
 		E672573C21FB8DB900BE3B4C /* String+Subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672573B21FB8DB900BE3B4C /* String+Subscript.swift */; };
-		E67A714821FBAEF500F4B2D0 /* Granularity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A714721FBAEF500F4B2D0 /* Granularity.swift */; };
-		E67A714A21FBB1B900F4B2D0 /* TokenPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A714921FBB1B900F4B2D0 /* TokenPermissions.swift */; };
-		E67A714C21FBB1DA00F4B2D0 /* TokenPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A714B21FBB1DA00F4B2D0 /* TokenPermission.swift */; };
 		E67A715421FBC65800F4B2D0 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A715321FBC65800F4B2D0 /* String+Extensions.swift */; };
-		E67A715621FBC71B00F4B2D0 /* ResourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A715521FBC71B00F4B2D0 /* ResourceType.swift */; };
 		E68B5BFF21FBCD2C00BEB049 /* PrefixedJsonDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B5BFE21FBCD2C00BEB049 /* PrefixedJsonDecodable.swift */; };
 		E68B5C0221FBCEC300BEB049 /* Base58Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B5C0121FBCEC300BEB049 /* Base58Tests.swift */; };
 		E68B5C0421FBCEEC00BEB049 /* ResourceIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B5C0321FBCEEC00BEB049 /* ResourceIdentifierTests.swift */; };
-		E68B5C0621FBD36400BEB049 /* TokenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B5C0521FBD36400BEB049 /* TokenAction.swift */; };
-		E68B5C0821FBD46F00BEB049 /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B5C0721FBD46F00BEB049 /* Amount.swift */; };
-		E68B5C0A21FBD8B000BEB049 /* MetaDataKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68B5C0921FBD8B000BEB049 /* MetaDataKey.swift */; };
 		E693DAAC22319AB2003720C2 /* DSONEncodingPrimitivesBoolSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAAB22319AB2003720C2 /* DSONEncodingPrimitivesBoolSpec.swift */; };
-		E693DAAF22326510003720C2 /* TokenDefinitionParticle+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAAE22326510003720C2 /* TokenDefinitionParticle+Decodable.swift */; };
-		E693DAB122326528003720C2 /* TokenDefinitionParticle+Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAB022326528003720C2 /* TokenDefinitionParticle+Encodable.swift */; };
-		E693DAB322326546003720C2 /* TokenDefinitionParticle+CodingKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAB222326546003720C2 /* TokenDefinitionParticle+CodingKeys.swift */; };
-		E693DAB6223265BA003720C2 /* TokenDefinitionParticle+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAB5223265BA003720C2 /* TokenDefinitionParticle+Identifiable.swift */; };
 		E693DAB82232B549003720C2 /* JSONPrefixSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAB72232B549003720C2 /* JSONPrefixSpecifying.swift */; };
 		E693DABA2232B55F003720C2 /* PrefixedJsonEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAB92232B55F003720C2 /* PrefixedJsonEncodable.swift */; };
 		E693DABC2232B598003720C2 /* PrefixedJsonCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DABB2232B598003720C2 /* PrefixedJsonCodable.swift */; };
@@ -142,7 +121,6 @@
 		E69AB72D2237B762006153DD /* EncodableKeyValueListConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB72C2237B762006153DD /* EncodableKeyValueListConvertible.swift */; };
 		E69AB72F2237B774006153DD /* EncodableKeyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB72E2237B774006153DD /* EncodableKeyValue.swift */; };
 		E69AB7312237B9A2006153DD /* CBORStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7302237B9A2006153DD /* CBORStringConvertible.swift */; };
-		E69AB7362237F832006153DD /* StringInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A715121FBC63300F4B2D0 /* StringInitializable.swift */; };
 		E69AB7372237F839006153DD /* AddressChecksumSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7332237F6D6006153DD /* AddressChecksumSpec.swift */; };
 		E69AB73B2237FC27006153DD /* DsonEncodingUniqueParticleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB73A2237FC27006153DD /* DsonEncodingUniqueParticleSpec.swift */; };
 		E69AB73D2237FC4C006153DD /* CBOREncodingPrimitivesIntSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB73C2237FC4C006153DD /* CBOREncodingPrimitivesIntSpec.swift */; };
@@ -156,21 +134,8 @@
 		E69AB7522239318B006153DD /* TokenPermissionEncodingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7512239318B006153DD /* TokenPermissionEncodingSpec.swift */; };
 		E69AB75422393D3E006153DD /* CBORArrayConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB75322393D3E006153DD /* CBORArrayConvertible.swift */; };
 		E69AB75622393F2F006153DD /* AnyEncodableKeyValueListConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB75522393F2F006153DD /* AnyEncodableKeyValueListConvertible.swift */; };
-		E6A4AB7C221BF7B3006C5CA8 /* Accountable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB7B221BF7B3006C5CA8 /* Accountable.swift */; };
-		E6A4AB7E221BF7C0006C5CA8 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB7D221BF7C0006C5CA8 /* Identifiable.swift */; };
 		E6A4AB80221BF7DD006C5CA8 /* Set+InsertContentsOf.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB7F221BF7DD006C5CA8 /* Set+InsertContentsOf.swift */; };
-		E6A4AB82221BF92A006C5CA8 /* MetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB81221BF92A006C5CA8 /* MetaData.swift */; };
-		E6A4AB84221BFCF4006C5CA8 /* Ownable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB83221BFCF4006C5CA8 /* Ownable.swift */; };
-		E6A4AB86221BFCFC006C5CA8 /* Fungible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB85221BFCFC006C5CA8 /* Fungible.swift */; };
-		E6A4AB88221BFD2C006C5CA8 /* Chronological.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB87221BFD2C006C5CA8 /* Chronological.swift */; };
 		E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB8B221C0717006C5CA8 /* DateFormatter_Extension.swift */; };
-		E6A4AB8E221C2FB3006C5CA8 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB8D221C2FB3006C5CA8 /* Symbol.swift */; };
-		E6A4AB90221C3F64006C5CA8 /* TokenDefinitionParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB8F221C3F64006C5CA8 /* TokenDefinitionParticle.swift */; };
-		E6A4AB92221C40A4006C5CA8 /* Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB91221C40A4006C5CA8 /* Name.swift */; };
-		E6A4AB96221D4680006C5CA8 /* Description.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB95221D4680006C5CA8 /* Description.swift */; };
-		E6A4AB9A221D508D006C5CA8 /* Nonce.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB99221D508D006C5CA8 /* Nonce.swift */; };
-		E6A4AB9C221D5098006C5CA8 /* Planck.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB9B221D5098006C5CA8 /* Planck.swift */; };
-		E6A4AB9E221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB9D221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift */; };
 		E6A4ABBB221EA120006C5CA8 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A4ABB9221EA120006C5CA8 /* Nimble.framework */; };
 		E6A4ABBC221EA120006C5CA8 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A4ABBA221EA120006C5CA8 /* Quick.framework */; };
 		E6A4ABC0221EBAB1006C5CA8 /* QuickSpec_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABBF221EBAB1006C5CA8 /* QuickSpec_Extension.swift */; };
@@ -195,13 +160,6 @@
 		E6A4ABF622207E49006C5CA8 /* NegativePlanckSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABF522207E49006C5CA8 /* NegativePlanckSpec.swift */; };
 		E6A4ABF822207EA0006C5CA8 /* BadRRI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABF722207EA0006C5CA8 /* BadRRI.swift */; };
 		E6A4ABFD2223E4DA006C5CA8 /* PrefixedJsonDecodableByProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABFC2223E4DA006C5CA8 /* PrefixedJsonDecodableByProxy.swift */; };
-		E6A4AC0522243C38006C5CA8 /* InvalidStringError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0422243C38006C5CA8 /* InvalidStringError.swift */; };
-		E6A4AC0722243C54006C5CA8 /* UpperBound.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0622243C54006C5CA8 /* UpperBound.swift */; };
-		E6A4AC0922243C61006C5CA8 /* MaxLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0822243C61006C5CA8 /* MaxLengthSpecifying.swift */; };
-		E6A4AC0B22243C8F006C5CA8 /* LowerBound.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0A22243C8F006C5CA8 /* LowerBound.swift */; };
-		E6A4AC0D22243CA5006C5CA8 /* MinLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0C22243CA5006C5CA8 /* MinLengthSpecifying.swift */; };
-		E6A4AC0F22243CD7006C5CA8 /* ValueValidating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC0E22243CD7006C5CA8 /* ValueValidating.swift */; };
-		E6A4AC1122243EDC006C5CA8 /* ValidValueInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */; };
 		E6A507CD224E0B3D00128123 /* JSONRPCMethodGetUniverse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507CC224E0B3D00128123 /* JSONRPCMethodGetUniverse.swift */; };
 		E6A507D0224E0EF200128123 /* JSONRPCKit_Batch_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507CF224E0EF200128123 /* JSONRPCKit_Batch_Extension.swift */; };
 		E6A507D2224E146F00128123 /* JSONRPCMethodAtomsSubscribe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507D1224E146F00128123 /* JSONRPCMethodAtomsSubscribe.swift */; };
@@ -218,12 +176,98 @@
 		E6A507EA224E20CC00128123 /* RPCResponseResultWithRequestId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507E9224E20CB00128123 /* RPCResponseResultWithRequestId.swift */; };
 		E6A507EC224E24CB00128123 /* String+IPAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507EB224E24CB00128123 /* String+IPAddress.swift */; };
 		E6A507EE224E4CF500128123 /* WebsocketTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507ED224E4CF500128123 /* WebsocketTest.swift */; };
-		E6A507F1224E6A0300128123 /* Balance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F0224E6A0300128123 /* Balance.swift */; };
 		E6A507F3224E6A4600128123 /* TokenBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F2224E6A4600128123 /* TokenBalance.swift */; };
 		E6A507F5224E6AEA00128123 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F4224E6AEA00128123 /* Token.swift */; };
-		E6A507F7224E6ECC00128123 /* ConsumableTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F6224E6ECC00128123 /* ConsumableTokens.swift */; };
-		E6A507F9224E6ED700128123 /* ConsumingTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F8224E6ED700128123 /* ConsumingTokens.swift */; };
-		E6A507FB224E6EE500128123 /* IdentifiableTokenWithGranularity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507FA224E6EE500128123 /* IdentifiableTokenWithGranularity.swift */; };
+		E6A5086B224E713F00128123 /* DataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507FF224E713F00128123 /* DataConvertible.swift */; };
+		E6A5086C224E713F00128123 /* DataConvertible+Concatenation+Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50800224E713F00128123 /* DataConvertible+Concatenation+Operators.swift */; };
+		E6A5086D224E713F00128123 /* StringConversionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50801224E713F00128123 /* StringConversionMode.swift */; };
+		E6A5086E224E713F00128123 /* Data+StringConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50802224E713F00128123 /* Data+StringConversion.swift */; };
+		E6A5086F224E713F00128123 /* DataConvertible+StringConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50803224E713F00128123 /* DataConvertible+StringConversion.swift */; };
+		E6A50870224E713F00128123 /* DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50805224E713F00128123 /* DataInitializable.swift */; };
+		E6A50871224E713F00128123 /* StringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50807224E713F00128123 /* StringRepresentable.swift */; };
+		E6A50872224E713F00128123 /* ValueValidating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50808224E713F00128123 /* ValueValidating.swift */; };
+		E6A50873224E713F00128123 /* Base64String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50809224E713F00128123 /* Base64String.swift */; };
+		E6A50874224E713F00128123 /* CharacterSetSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5080A224E713F00128123 /* CharacterSetSpecifying.swift */; };
+		E6A50875224E713F00128123 /* UpperBound.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5080B224E713F00128123 /* UpperBound.swift */; };
+		E6A50876224E713F00128123 /* RequiringThatLengthIsMultipleOfN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5080C224E713F00128123 /* RequiringThatLengthIsMultipleOfN.swift */; };
+		E6A50877224E713F00128123 /* MinLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5080D224E713F00128123 /* MinLengthSpecifying.swift */; };
+		E6A50878224E713F00128123 /* LowerBound.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5080E224E713F00128123 /* LowerBound.swift */; };
+		E6A50879224E713F00128123 /* HexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5080F224E713F00128123 /* HexString.swift */; };
+		E6A5087A224E713F00128123 /* Base58String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50810224E713F00128123 /* Base58String.swift */; };
+		E6A5087B224E713F00128123 /* InvalidStringError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50811224E713F00128123 /* InvalidStringError.swift */; };
+		E6A5087C224E713F00128123 /* MaxLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50812224E713F00128123 /* MaxLengthSpecifying.swift */; };
+		E6A5087D224E713F00128123 /* ExactLengthSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50813224E713F00128123 /* ExactLengthSpecifying.swift */; };
+		E6A5087E224E713F00128123 /* StringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50814224E713F00128123 /* StringConvertible.swift */; };
+		E6A5087F224E713F00128123 /* ValidValueInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50816224E713F00128123 /* ValidValueInitializable.swift */; };
+		E6A50880224E713F00128123 /* StringInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50817224E713F00128123 /* StringInitializable.swift */; };
+		E6A50881224E713F00128123 /* DictionaryConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50819224E713F00128123 /* DictionaryConvertible.swift */; };
+		E6A50882224E713F00128123 /* DictionaryDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5081A224E713F00128123 /* DictionaryDecodable.swift */; };
+		E6A50883224E713F00128123 /* StringDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5081B224E713F00128123 /* StringDictionary.swift */; };
+		E6A50884224E713F00128123 /* EUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5081D224E713F00128123 /* EUID.swift */; };
+		E6A50885224E713F00128123 /* Shards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50820224E713F00128123 /* Shards.swift */; };
+		E6A50886224E713F00128123 /* Signatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50822224E713F00128123 /* Signatures.swift */; };
+		E6A50887224E713F00128123 /* Atom+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50823224E713F00128123 /* Atom+Sequence.swift */; };
+		E6A50888224E713F00128123 /* Atoms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50824224E713F00128123 /* Atoms.swift */; };
+		E6A50889224E713F00128123 /* Atom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50825224E713F00128123 /* Atom.swift */; };
+		E6A5088A224E713F00128123 /* RadixModelTypeSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50826224E713F00128123 /* RadixModelTypeSpecifying.swift */; };
+		E6A5088B224E713F00128123 /* AtomObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50827224E713F00128123 /* AtomObservation.swift */; };
+		E6A5088C224E713F00128123 /* ResourceIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50829224E713F00128123 /* ResourceIdentifier.swift */; };
+		E6A5088D224E713F00128123 /* ResourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5082A224E713F00128123 /* ResourceType.swift */; };
+		E6A5088E224E713F00128123 /* Spin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5082C224E713F00128123 /* Spin.swift */; };
+		E6A5088F224E713F00128123 /* Granularity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5082E224E713F00128123 /* Granularity.swift */; };
+		E6A50890224E713F00128123 /* MetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5082F224E713F00128123 /* MetaData.swift */; };
+		E6A50891224E713F00128123 /* TokenDefinitionIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50830224E713F00128123 /* TokenDefinitionIdentifier.swift */; };
+		E6A50892224E713F00128123 /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50831224E713F00128123 /* Amount.swift */; };
+		E6A50893224E713F00128123 /* Description.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50832224E713F00128123 /* Description.swift */; };
+		E6A50894224E713F00128123 /* TokenPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50833224E713F00128123 /* TokenPermissions.swift */; };
+		E6A50895224E713F00128123 /* MetaDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50834224E713F00128123 /* MetaDataConvertible.swift */; };
+		E6A50896224E713F00128123 /* Nonce.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50835224E713F00128123 /* Nonce.swift */; };
+		E6A50897224E713F00128123 /* TokenPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50836224E713F00128123 /* TokenPermission.swift */; };
+		E6A50898224E713F00128123 /* Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50837224E713F00128123 /* Name.swift */; };
+		E6A50899224E713F00128123 /* TokenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50838224E713F00128123 /* TokenAction.swift */; };
+		E6A5089A224E713F00128123 /* KeyValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50839224E713F00128123 /* KeyValued.swift */; };
+		E6A5089B224E713F00128123 /* Planck.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5083A224E713F00128123 /* Planck.swift */; };
+		E6A5089C224E713F00128123 /* MetaDataKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5083B224E713F00128123 /* MetaDataKey.swift */; };
+		E6A5089D224E713F00128123 /* ChronoMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5083C224E713F00128123 /* ChronoMetaData.swift */; };
+		E6A5089E224E713F00128123 /* Symbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5083D224E713F00128123 /* Symbol.swift */; };
+		E6A5089F224E713F00128123 /* MintedTokenParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5083F224E713F00128123 /* MintedTokenParticle.swift */; };
+		E6A508A0224E713F00128123 /* ConsumingTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50840224E713F00128123 /* ConsumingTokens.swift */; };
+		E6A508A1224E713F00128123 /* BurnedTokenParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50841224E713F00128123 /* BurnedTokenParticle.swift */; };
+		E6A508A2224E713F00128123 /* TokenParticleConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50842224E713F00128123 /* TokenParticleConvertible.swift */; };
+		E6A508A3224E713F00128123 /* TransferredTokenParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50843224E713F00128123 /* TransferredTokenParticle.swift */; };
+		E6A508A4224E713F00128123 /* IdentifiableTokenWithGranularity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50844224E713F00128123 /* IdentifiableTokenWithGranularity.swift */; };
+		E6A508A5224E713F00128123 /* ConsumableTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50845224E713F00128123 /* ConsumableTokens.swift */; };
+		E6A508A6224E713F00128123 /* ParticleModelConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50846224E713F00128123 /* ParticleModelConvertible.swift */; };
+		E6A508A7224E713F00128123 /* SpunParticle+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50848224E713F00128123 /* SpunParticle+Sequence.swift */; };
+		E6A508A8224E713F00128123 /* SpunParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50849224E713F00128123 /* SpunParticle.swift */; };
+		E6A508A9224E713F00128123 /* UniqueParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5084A224E713F00128123 /* UniqueParticle.swift */; };
+		E6A508AA224E713F00128123 /* TokenDefinitionParticle+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5084D224E713F00128123 /* TokenDefinitionParticle+Decodable.swift */; };
+		E6A508AB224E713F00128123 /* TokenDefinitionParticle+CodingKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5084E224E713F00128123 /* TokenDefinitionParticle+CodingKeys.swift */; };
+		E6A508AC224E713F00128123 /* TokenDefinitionParticle+Encodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5084F224E713F00128123 /* TokenDefinitionParticle+Encodable.swift */; };
+		E6A508AD224E713F00128123 /* TokenDefinitionParticle+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50850224E713F00128123 /* TokenDefinitionParticle+Identifiable.swift */; };
+		E6A508AE224E713F00128123 /* TokenDefinitionParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50851224E713F00128123 /* TokenDefinitionParticle.swift */; };
+		E6A508AF224E713F00128123 /* MessageParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50852224E713F00128123 /* MessageParticle.swift */; };
+		E6A508B0224E713F00128123 /* ParticleConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50853224E713F00128123 /* ParticleConvertible.swift */; };
+		E6A508B1224E713F00128123 /* ParticleGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50855224E713F00128123 /* ParticleGroups.swift */; };
+		E6A508B2224E713F00128123 /* Addresses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50858224E713F00128123 /* Addresses.swift */; };
+		E6A508B3224E713F00128123 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5085A224E713F00128123 /* Address.swift */; };
+		E6A508B4224E713F00128123 /* ParticleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5085C224E713F00128123 /* ParticleGroup.swift */; };
+		E6A508B5224E713F00128123 /* Ownable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5085E224E713F00128123 /* Ownable.swift */; };
+		E6A508B6224E713F00128123 /* Fungible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50860224E713F00128123 /* Fungible.swift */; };
+		E6A508B7224E713F00128123 /* Accountable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50861224E713F00128123 /* Accountable.swift */; };
+		E6A508B8224E713F00128123 /* Chronological.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50862224E713F00128123 /* Chronological.swift */; };
+		E6A508B9224E713F00128123 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50863224E713F00128123 /* Identifiable.swift */; };
+		E6A508BA224E713F00128123 /* ArrayInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50865224E713F00128123 /* ArrayInitializable.swift */; };
+		E6A508BB224E713F00128123 /* ArrayConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50866224E713F00128123 /* ArrayConvertible.swift */; };
+		E6A508BC224E713F00128123 /* ArrayDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50867224E713F00128123 /* ArrayDecodable.swift */; };
+		E6A508BD224E713F00128123 /* BigInt+BigUInt+BigInteger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50869224E713F00128123 /* BigInt+BigUInt+BigInteger.swift */; };
+		E6A508BE224E713F00128123 /* BigInteger+StringConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5086A224E713F00128123 /* BigInteger+StringConversion.swift */; };
+		E6A508C0224E7C0400128123 /* SignedAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A508BF224E7C0400128123 /* SignedAmount.swift */; };
+		E6A508C2224EAD0B00128123 /* TokenDefinitionReferencing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A508C1224EAD0B00128123 /* TokenDefinitionReferencing.swift */; };
+		E6A508C4224EAD1E00128123 /* TokenConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A508C3224EAD1E00128123 /* TokenConvertible.swift */; };
+		E6A508C6224EAD5700128123 /* TokenBalances.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A508C5224EAD5700128123 /* TokenBalances.swift */; };
+		E6A508CA224EBFD000128123 /* TokenBalanceReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A508C8224EBFCD00128123 /* TokenBalanceReducerTests.swift */; };
+		E6A508CC224EE25B00128123 /* GetBalanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A508CB224EE25B00128123 /* GetBalanceTest.swift */; };
 		E6A6430B2244D38800CD4BFC /* BitcoinKit+ECMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6430A2244D38800CD4BFC /* BitcoinKit+ECMethods.swift */; };
 		E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */; };
 		E6A643122244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A643112244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift */; };
@@ -239,31 +283,12 @@
 		E6CEE70721F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE70621F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift */; };
 		E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE70B21F5AE7800D745EC /* TestableConvenienceInitializers.swift */; };
 		E6CEE71321F5B3C000D745EC /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE71221F5B3C000D745EC /* RandomData.swift */; };
-		E6CEE71921F5B4B900D745EC /* Atom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE71821F5B4B900D745EC /* Atom.swift */; };
-		E6CEE72321F5D44300D745EC /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE72221F5D44300D745EC /* Address.swift */; };
 		E6CEE73021F5D4E000D745EC /* CharacterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE72F21F5D4E000D745EC /* CharacterSet.swift */; };
-		E6CEE73221F5D4F700D745EC /* Base58String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE73121F5D4F700D745EC /* Base58String.swift */; };
-		E6CEE73421F5D50E00D745EC /* Spin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE73321F5D50E00D745EC /* Spin.swift */; };
-		E6CEE73621F5D51F00D745EC /* ParticleConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE73521F5D51F00D745EC /* ParticleConvertible.swift */; };
-		E6CEE73B21F5D56C00D745EC /* ResourceIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE73A21F5D56C00D745EC /* ResourceIdentifier.swift */; };
 		E6CEE74421F637EC00D745EC /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE74321F637EC00D745EC /* Signature.swift */; };
-		E6CEE74621F6381E00D745EC /* Signatures.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE74521F6381E00D745EC /* Signatures.swift */; };
-		E6CEE74A21F6384000D745EC /* MessageParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE74921F6384000D745EC /* MessageParticle.swift */; };
-		E6CEE74F21F638E700D745EC /* ParticleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE74E21F638E700D745EC /* ParticleGroup.swift */; };
-		E6CEE75121F6391300D745EC /* SpunParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE75021F6391300D745EC /* SpunParticle.swift */; };
 		E6CEE75421F78B1300D745EC /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */; };
 		E6CEE75521F78B2000D745EC /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */; };
-		E6CEE75921F7A3F700D745EC /* StringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE75821F7A3F700D745EC /* StringConvertible.swift */; };
-		E6CEE75C21F7A41A00D745EC /* DataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE75B21F7A41A00D745EC /* DataConvertible.swift */; };
-		E6CEE75E21F7A42900D745EC /* CharacterSetSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE75D21F7A42900D745EC /* CharacterSetSpecifying.swift */; };
-		E6CEE76021F7A43900D745EC /* HexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE75F21F7A43900D745EC /* HexString.swift */; };
-		E6CEE76221F7A45000D745EC /* Base64String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE76121F7A45000D745EC /* Base64String.swift */; };
-		E6CEE76921F7A59700D745EC /* EUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE76821F7A59700D745EC /* EUID.swift */; };
-		E6CEE76C21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE76B21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift */; };
-		E6CEE76F21F7A61B00D745EC /* BigInteger+StringConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE76E21F7A61B00D745EC /* BigInteger+StringConversion.swift */; };
 		E6CEE77121F7A64900D745EC /* RadixHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE77021F7A64900D745EC /* RadixHash.swift */; };
 		E6CEE77321F7A65F00D745EC /* RadixHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE77221F7A65F00D745EC /* RadixHashable.swift */; };
-		E6CEE77821F7A6B000D745EC /* SpunParticle+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE77721F7A6B000D745EC /* SpunParticle+Sequence.swift */; };
 		E6D1318321F7B2050014792D /* Data+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D1318221F7B2050014792D /* Data+Hex.swift */; };
 		E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D325AB21EE37DA00851F4E /* Int+Extension.swift */; };
 		E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D325B221EE48B800851F4E /* Signing+Message+Hash.swift */; };
@@ -272,25 +297,14 @@
 		E6D4B32C223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B32B223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift */; };
 		E6D4B32E223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B32D223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift */; };
 		E6D4B331223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */; };
-		E6D4B335223F9A2E004FC83A /* MetaDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B334223F9A2E004FC83A /* MetaDataConvertible.swift */; };
-		E6D4B337223F9D99004FC83A /* ChronoMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B336223F9D99004FC83A /* ChronoMetaData.swift */; };
-		E6D4B339223F9DB2004FC83A /* KeyValued.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B338223F9DB2004FC83A /* KeyValued.swift */; };
 		E6D4B33B223F9DD2004FC83A /* TimeConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */; };
 		E6D4B33D223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B33C223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift */; };
 		E6D4B33F223FAC72004FC83A /* Hashing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B33E223FAC72004FC83A /* Hashing.swift */; };
 		E6D4B341223FAC7F004FC83A /* Sha256Hasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B340223FAC7F004FC83A /* Sha256Hasher.swift */; };
 		E6D4B343223FAC8B004FC83A /* Sha256TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B342223FAC8B004FC83A /* Sha256TwiceHasher.swift */; };
-		E6D4B345223FAF52004FC83A /* ArrayInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B344223FAF52004FC83A /* ArrayInitializable.swift */; };
-		E6D4B347223FBAB0004FC83A /* DataConvertible+StringConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B346223FBAB0004FC83A /* DataConvertible+StringConversion.swift */; };
-		E6D4B349223FBAC5004FC83A /* Data+StringConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B348223FBAC5004FC83A /* Data+StringConversion.swift */; };
-		E6D4B34B223FBB12004FC83A /* DataConvertible+Concatenation+Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B34A223FBB12004FC83A /* DataConvertible+Concatenation+Operators.swift */; };
-		E6D4B34D223FBB37004FC83A /* StringConversionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B34C223FBB37004FC83A /* StringConversionMode.swift */; };
 		E6D4B353223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B352223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift */; };
 		E6D4B355223FBEE8004FC83A /* DSONPrefixedDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B354223FBEE8004FC83A /* DSONPrefixedDataConvertible.swift */; };
 		E6D4B357223FC163004FC83A /* AnyEncodableKeyValuesProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B356223FC163004FC83A /* AnyEncodableKeyValuesProcessing.swift */; };
-		E6D4B359223FCE4F004FC83A /* BurnedTokenParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B358223FCE4F004FC83A /* BurnedTokenParticle.swift */; };
-		E6D4B35B223FCE5D004FC83A /* TransferredTokenParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B35A223FCE5D004FC83A /* TransferredTokenParticle.swift */; };
-		E6D4B35D223FCE6A004FC83A /* MintedTokenParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B35C223FCE6A004FC83A /* MintedTokenParticle.swift */; };
 		E6D4B35F223FD01A004FC83A /* AnyEncodableKeyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B35E223FD01A004FC83A /* AnyEncodableKeyValue.swift */; };
 		E6D4B361223FD046004FC83A /* AnyEncodableKeyValueList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B360223FD046004FC83A /* AnyEncodableKeyValueList.swift */; };
 		E6D4B363223FF7D0004FC83A /* DSONOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B362223FF7D0004FC83A /* DSONOutput.swift */; };
@@ -298,17 +312,11 @@
 		E6D4B36922400F41004FC83A /* SetAlgebra+Intersecting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B36822400F41004FC83A /* SetAlgebra+Intersecting.swift */; };
 		E6D4B36B2240DD91004FC83A /* AddressEUIDSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B36A2240DD91004FC83A /* AddressEUIDSpec.swift */; };
 		E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2B21F7CE9C00654105 /* Node.swift */; };
-		E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */; };
 		E6ED1A3421F879F600654105 /* HashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3321F879F600654105 /* HashTests.swift */; };
 		E6ED1A3821F87C1800654105 /* RadixSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3721F87C1800654105 /* RadixSystem.swift */; };
-		E6ED1A3B21F87C4700654105 /* Shards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3A21F87C4700654105 /* Shards.swift */; };
 		E6ED1A4021F8836300654105 /* UniverseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3F21F8836300654105 /* UniverseConfig.swift */; };
 		E6ED1A4221F8872300654105 /* RadixUniverse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A4121F8872300654105 /* RadixUniverse.swift */; };
-		E6ED1A4521F8914F00654105 /* Atoms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A4421F8914F00654105 /* Atoms.swift */; };
-		E6ED1A4721F892B600654105 /* TokenParticleConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A4621F892B600654105 /* TokenParticleConvertible.swift */; };
-		E6ED1A4921F896C300654105 /* Addresses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A4821F896C300654105 /* Addresses.swift */; };
 		E6ED1A4C21F8ACB700654105 /* Int+DataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A4B21F8ACB700654105 /* Int+DataConvertible.swift */; };
-		E6ED1A4E21F8E51A00654105 /* AtomObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A4D21F8E51A00654105 /* AtomObservation.swift */; };
 		E6ED1A5121F8E54900654105 /* AtomPuller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A5021F8E54900654105 /* AtomPuller.swift */; };
 		E6ED1A5321F8E56E00654105 /* NodeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A5221F8E56E00654105 /* NodeAction.swift */; };
 		E6ED1A5621F8E58300654105 /* SubmitAtomAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A5521F8E58300654105 /* SubmitAtomAction.swift */; };
@@ -328,9 +336,6 @@
 		E6ED1A7821F8E78900654105 /* Optional+OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */; };
 		E6ED1A7C21F8E7E000654105 /* ObservableType+FilterNil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A7B21F8E7E000654105 /* ObservableType+FilterNil.swift */; };
 		E6ED1A7E21F8E83300654105 /* ObservableType+ValidAtoms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A7D21F8E83300654105 /* ObservableType+ValidAtoms.swift */; };
-		E6ED1A8121F8E87400654105 /* Atom+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A8021F8E87400654105 /* Atom+Sequence.swift */; };
-		E6ED1A8921F9F5BC00654105 /* UniqueParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A8821F9F5BC00654105 /* UniqueParticle.swift */; };
-		E6EF45A622369EE200FA4158 /* DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EF45A522369EE200FA4158 /* DataInitializable.swift */; };
 		E6FB03C921EC95E8002CE331 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C721EC95E8002CE331 /* RxSwift.framework */; };
 		E6FB03CA21EC95E8002CE331 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */; };
 		E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
@@ -372,7 +377,6 @@
 		E6040E6A2241287B0065AEC2 /* DER.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DER.swift; sourceTree = "<group>"; };
 		E6040E6C224128870065AEC2 /* DERCoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DERCoding.swift; sourceTree = "<group>"; };
 		E6040E6F2241294C0065AEC2 /* Secp256k1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secp256k1.swift; sourceTree = "<group>"; };
-		E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiringThatLengthIsMultipleOfN.swift; sourceTree = "<group>"; };
 		E6161014223A607800025A54 /* DSONEncodingIntArraySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONEncodingIntArraySpec.swift; sourceTree = "<group>"; };
 		E6161017223A998F00025A54 /* ComplexAtomFromJSONToDSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplexAtomFromJSONToDSON.swift; sourceTree = "<group>"; };
 		E6161019223AAEA300025A54 /* DsonEncodingMintedTokenParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DsonEncodingMintedTokenParticle.swift; sourceTree = "<group>"; };
@@ -442,21 +446,12 @@
 		E6611F2822259E1B00AD2F83 /* NonBase58AddressSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonBase58AddressSpec.swift; sourceTree = "<group>"; };
 		E6611F2A22259E2E00AD2F83 /* AddressInvalidChecksumSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressInvalidChecksumSpec.swift; sourceTree = "<group>"; };
 		E6611F2C2225A09D00AD2F83 /* GranularityNegativeSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GranularityNegativeSpec.swift; sourceTree = "<group>"; };
-		E6611F2E2225A0DE00AD2F83 /* ExactLengthSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExactLengthSpecifying.swift; sourceTree = "<group>"; };
-		E6611F312225A1EE00AD2F83 /* StringRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringRepresentable.swift; sourceTree = "<group>"; };
-		E6611F342225B2C000AD2F83 /* DictionaryConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryConvertible.swift; sourceTree = "<group>"; };
-		E6611F362225B2D600AD2F83 /* DictionaryDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDecodable.swift; sourceTree = "<group>"; };
-		E6611F382225B2E400AD2F83 /* StringDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDictionary.swift; sourceTree = "<group>"; };
-		E6611F3B2225B55C00AD2F83 /* ArrayConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayConvertible.swift; sourceTree = "<group>"; };
-		E6611F3D2225B56A00AD2F83 /* ArrayDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayDecodable.swift; sourceTree = "<group>"; };
 		E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+AsArray.swift"; sourceTree = "<group>"; };
 		E6611F43222696E900AD2F83 /* BigInt_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigInt_Extension.swift; sourceTree = "<group>"; };
 		E6611F452227F29F00AD2F83 /* AtomJsonSerializationTwoParticleGroupsSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomJsonSerializationTwoParticleGroupsSpec.swift; sourceTree = "<group>"; };
 		E6611F482227FD0700AD2F83 /* AtomJsonSerializationTooBigSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomJsonSerializationTooBigSpec.swift; sourceTree = "<group>"; };
 		E6611F4C222982A700AD2F83 /* AtomJsonDeserializationInvalidSerializerValueSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomJsonDeserializationInvalidSerializerValueSpec.swift; sourceTree = "<group>"; };
 		E6611F4E2229849000AD2F83 /* AtomModelDecodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomModelDecodingError.swift; sourceTree = "<group>"; };
-		E6611F50222984B900AD2F83 /* RadixModelTypeSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixModelTypeSpecifying.swift; sourceTree = "<group>"; };
-		E6611F54222984DE00AD2F83 /* ParticleModelConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleModelConvertible.swift; sourceTree = "<group>"; };
 		E6611F5622298F7600AD2F83 /* RadixJSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJSONDecoder.swift; sourceTree = "<group>"; };
 		E6611F5822298F9000AD2F83 /* RadixJSONEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJSONEncoder.swift; sourceTree = "<group>"; };
 		E672572F21FB8D3900BE3B4C /* ParticleType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleType.swift; sourceTree = "<group>"; };
@@ -464,23 +459,11 @@
 		E672573621FB8D8E00BE3B4C /* JSONPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPrefix.swift; sourceTree = "<group>"; };
 		E672573821FB8D9A00BE3B4C /* PrefixedStringWithValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixedStringWithValue.swift; sourceTree = "<group>"; };
 		E672573B21FB8DB900BE3B4C /* String+Subscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Subscript.swift"; sourceTree = "<group>"; };
-		E67A714721FBAEF500F4B2D0 /* Granularity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Granularity.swift; sourceTree = "<group>"; };
-		E67A714921FBB1B900F4B2D0 /* TokenPermissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPermissions.swift; sourceTree = "<group>"; };
-		E67A714B21FBB1DA00F4B2D0 /* TokenPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPermission.swift; sourceTree = "<group>"; };
-		E67A715121FBC63300F4B2D0 /* StringInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringInitializable.swift; sourceTree = "<group>"; };
 		E67A715321FBC65800F4B2D0 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
-		E67A715521FBC71B00F4B2D0 /* ResourceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceType.swift; sourceTree = "<group>"; };
 		E68B5BFE21FBCD2C00BEB049 /* PrefixedJsonDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixedJsonDecodable.swift; sourceTree = "<group>"; };
 		E68B5C0121FBCEC300BEB049 /* Base58Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base58Tests.swift; sourceTree = "<group>"; };
 		E68B5C0321FBCEEC00BEB049 /* ResourceIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceIdentifierTests.swift; sourceTree = "<group>"; };
-		E68B5C0521FBD36400BEB049 /* TokenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenAction.swift; sourceTree = "<group>"; };
-		E68B5C0721FBD46F00BEB049 /* Amount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Amount.swift; sourceTree = "<group>"; };
-		E68B5C0921FBD8B000BEB049 /* MetaDataKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataKey.swift; sourceTree = "<group>"; };
 		E693DAAB22319AB2003720C2 /* DSONEncodingPrimitivesBoolSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONEncodingPrimitivesBoolSpec.swift; sourceTree = "<group>"; };
-		E693DAAE22326510003720C2 /* TokenDefinitionParticle+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TokenDefinitionParticle+Decodable.swift"; sourceTree = "<group>"; };
-		E693DAB022326528003720C2 /* TokenDefinitionParticle+Encodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TokenDefinitionParticle+Encodable.swift"; sourceTree = "<group>"; };
-		E693DAB222326546003720C2 /* TokenDefinitionParticle+CodingKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TokenDefinitionParticle+CodingKeys.swift"; sourceTree = "<group>"; };
-		E693DAB5223265BA003720C2 /* TokenDefinitionParticle+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TokenDefinitionParticle+Identifiable.swift"; sourceTree = "<group>"; };
 		E693DAB72232B549003720C2 /* JSONPrefixSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPrefixSpecifying.swift; sourceTree = "<group>"; };
 		E693DAB92232B55F003720C2 /* PrefixedJsonEncodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixedJsonEncodable.swift; sourceTree = "<group>"; };
 		E693DABB2232B598003720C2 /* PrefixedJsonCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixedJsonCodable.swift; sourceTree = "<group>"; };
@@ -507,21 +490,8 @@
 		E69AB7512239318B006153DD /* TokenPermissionEncodingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenPermissionEncodingSpec.swift; sourceTree = "<group>"; };
 		E69AB75322393D3E006153DD /* CBORArrayConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBORArrayConvertible.swift; sourceTree = "<group>"; };
 		E69AB75522393F2F006153DD /* AnyEncodableKeyValueListConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodableKeyValueListConvertible.swift; sourceTree = "<group>"; };
-		E6A4AB7B221BF7B3006C5CA8 /* Accountable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accountable.swift; sourceTree = "<group>"; };
-		E6A4AB7D221BF7C0006C5CA8 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		E6A4AB7F221BF7DD006C5CA8 /* Set+InsertContentsOf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+InsertContentsOf.swift"; sourceTree = "<group>"; };
-		E6A4AB81221BF92A006C5CA8 /* MetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaData.swift; sourceTree = "<group>"; };
-		E6A4AB83221BFCF4006C5CA8 /* Ownable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ownable.swift; sourceTree = "<group>"; };
-		E6A4AB85221BFCFC006C5CA8 /* Fungible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fungible.swift; sourceTree = "<group>"; };
-		E6A4AB87221BFD2C006C5CA8 /* Chronological.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chronological.swift; sourceTree = "<group>"; };
 		E6A4AB8B221C0717006C5CA8 /* DateFormatter_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter_Extension.swift; sourceTree = "<group>"; };
-		E6A4AB8D221C2FB3006C5CA8 /* Symbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
-		E6A4AB8F221C3F64006C5CA8 /* TokenDefinitionParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDefinitionParticle.swift; sourceTree = "<group>"; };
-		E6A4AB91221C40A4006C5CA8 /* Name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Name.swift; sourceTree = "<group>"; };
-		E6A4AB95221D4680006C5CA8 /* Description.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Description.swift; sourceTree = "<group>"; };
-		E6A4AB99221D508D006C5CA8 /* Nonce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nonce.swift; sourceTree = "<group>"; };
-		E6A4AB9B221D5098006C5CA8 /* Planck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planck.swift; sourceTree = "<group>"; };
-		E6A4AB9D221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDefinitionIdentifier.swift; sourceTree = "<group>"; };
 		E6A4ABB9221EA120006C5CA8 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		E6A4ABBA221EA120006C5CA8 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		E6A4ABBF221EBAB1006C5CA8 /* QuickSpec_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSpec_Extension.swift; sourceTree = "<group>"; };
@@ -546,13 +516,6 @@
 		E6A4ABF522207E49006C5CA8 /* NegativePlanckSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NegativePlanckSpec.swift; sourceTree = "<group>"; };
 		E6A4ABF722207EA0006C5CA8 /* BadRRI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BadRRI.swift; sourceTree = "<group>"; };
 		E6A4ABFC2223E4DA006C5CA8 /* PrefixedJsonDecodableByProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixedJsonDecodableByProxy.swift; sourceTree = "<group>"; };
-		E6A4AC0422243C38006C5CA8 /* InvalidStringError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvalidStringError.swift; sourceTree = "<group>"; };
-		E6A4AC0622243C54006C5CA8 /* UpperBound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpperBound.swift; sourceTree = "<group>"; };
-		E6A4AC0822243C61006C5CA8 /* MaxLengthSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaxLengthSpecifying.swift; sourceTree = "<group>"; };
-		E6A4AC0A22243C8F006C5CA8 /* LowerBound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LowerBound.swift; sourceTree = "<group>"; };
-		E6A4AC0C22243CA5006C5CA8 /* MinLengthSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinLengthSpecifying.swift; sourceTree = "<group>"; };
-		E6A4AC0E22243CD7006C5CA8 /* ValueValidating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueValidating.swift; sourceTree = "<group>"; };
-		E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidValueInitializable.swift; sourceTree = "<group>"; };
 		E6A507CC224E0B3D00128123 /* JSONRPCMethodGetUniverse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRPCMethodGetUniverse.swift; sourceTree = "<group>"; };
 		E6A507CF224E0EF200128123 /* JSONRPCKit_Batch_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRPCKit_Batch_Extension.swift; sourceTree = "<group>"; };
 		E6A507D1224E146F00128123 /* JSONRPCMethodAtomsSubscribe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRPCMethodAtomsSubscribe.swift; sourceTree = "<group>"; };
@@ -569,12 +532,98 @@
 		E6A507E9224E20CB00128123 /* RPCResponseResultWithRequestId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCResponseResultWithRequestId.swift; sourceTree = "<group>"; };
 		E6A507EB224E24CB00128123 /* String+IPAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+IPAddress.swift"; sourceTree = "<group>"; };
 		E6A507ED224E4CF500128123 /* WebsocketTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebsocketTest.swift; sourceTree = "<group>"; };
-		E6A507F0224E6A0300128123 /* Balance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Balance.swift; sourceTree = "<group>"; };
 		E6A507F2224E6A4600128123 /* TokenBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalance.swift; sourceTree = "<group>"; };
 		E6A507F4224E6AEA00128123 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
-		E6A507F6224E6ECC00128123 /* ConsumableTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumableTokens.swift; sourceTree = "<group>"; };
-		E6A507F8224E6ED700128123 /* ConsumingTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumingTokens.swift; sourceTree = "<group>"; };
-		E6A507FA224E6EE500128123 /* IdentifiableTokenWithGranularity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableTokenWithGranularity.swift; sourceTree = "<group>"; };
+		E6A507FF224E713F00128123 /* DataConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataConvertible.swift; sourceTree = "<group>"; };
+		E6A50800224E713F00128123 /* DataConvertible+Concatenation+Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataConvertible+Concatenation+Operators.swift"; sourceTree = "<group>"; };
+		E6A50801224E713F00128123 /* StringConversionMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConversionMode.swift; sourceTree = "<group>"; };
+		E6A50802224E713F00128123 /* Data+StringConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+StringConversion.swift"; sourceTree = "<group>"; };
+		E6A50803224E713F00128123 /* DataConvertible+StringConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DataConvertible+StringConversion.swift"; sourceTree = "<group>"; };
+		E6A50805224E713F00128123 /* DataInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataInitializable.swift; sourceTree = "<group>"; };
+		E6A50807224E713F00128123 /* StringRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringRepresentable.swift; sourceTree = "<group>"; };
+		E6A50808224E713F00128123 /* ValueValidating.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueValidating.swift; sourceTree = "<group>"; };
+		E6A50809224E713F00128123 /* Base64String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base64String.swift; sourceTree = "<group>"; };
+		E6A5080A224E713F00128123 /* CharacterSetSpecifying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterSetSpecifying.swift; sourceTree = "<group>"; };
+		E6A5080B224E713F00128123 /* UpperBound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpperBound.swift; sourceTree = "<group>"; };
+		E6A5080C224E713F00128123 /* RequiringThatLengthIsMultipleOfN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequiringThatLengthIsMultipleOfN.swift; sourceTree = "<group>"; };
+		E6A5080D224E713F00128123 /* MinLengthSpecifying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinLengthSpecifying.swift; sourceTree = "<group>"; };
+		E6A5080E224E713F00128123 /* LowerBound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LowerBound.swift; sourceTree = "<group>"; };
+		E6A5080F224E713F00128123 /* HexString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexString.swift; sourceTree = "<group>"; };
+		E6A50810224E713F00128123 /* Base58String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base58String.swift; sourceTree = "<group>"; };
+		E6A50811224E713F00128123 /* InvalidStringError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvalidStringError.swift; sourceTree = "<group>"; };
+		E6A50812224E713F00128123 /* MaxLengthSpecifying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaxLengthSpecifying.swift; sourceTree = "<group>"; };
+		E6A50813224E713F00128123 /* ExactLengthSpecifying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExactLengthSpecifying.swift; sourceTree = "<group>"; };
+		E6A50814224E713F00128123 /* StringConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringConvertible.swift; sourceTree = "<group>"; };
+		E6A50816224E713F00128123 /* ValidValueInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidValueInitializable.swift; sourceTree = "<group>"; };
+		E6A50817224E713F00128123 /* StringInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringInitializable.swift; sourceTree = "<group>"; };
+		E6A50819224E713F00128123 /* DictionaryConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryConvertible.swift; sourceTree = "<group>"; };
+		E6A5081A224E713F00128123 /* DictionaryDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryDecodable.swift; sourceTree = "<group>"; };
+		E6A5081B224E713F00128123 /* StringDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringDictionary.swift; sourceTree = "<group>"; };
+		E6A5081D224E713F00128123 /* EUID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EUID.swift; sourceTree = "<group>"; };
+		E6A50820224E713F00128123 /* Shards.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shards.swift; sourceTree = "<group>"; };
+		E6A50822224E713F00128123 /* Signatures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signatures.swift; sourceTree = "<group>"; };
+		E6A50823224E713F00128123 /* Atom+Sequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Atom+Sequence.swift"; sourceTree = "<group>"; };
+		E6A50824224E713F00128123 /* Atoms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atoms.swift; sourceTree = "<group>"; };
+		E6A50825224E713F00128123 /* Atom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atom.swift; sourceTree = "<group>"; };
+		E6A50826224E713F00128123 /* RadixModelTypeSpecifying.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadixModelTypeSpecifying.swift; sourceTree = "<group>"; };
+		E6A50827224E713F00128123 /* AtomObservation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomObservation.swift; sourceTree = "<group>"; };
+		E6A50829224E713F00128123 /* ResourceIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceIdentifier.swift; sourceTree = "<group>"; };
+		E6A5082A224E713F00128123 /* ResourceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceType.swift; sourceTree = "<group>"; };
+		E6A5082C224E713F00128123 /* Spin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spin.swift; sourceTree = "<group>"; };
+		E6A5082E224E713F00128123 /* Granularity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Granularity.swift; sourceTree = "<group>"; };
+		E6A5082F224E713F00128123 /* MetaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaData.swift; sourceTree = "<group>"; };
+		E6A50830224E713F00128123 /* TokenDefinitionIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenDefinitionIdentifier.swift; sourceTree = "<group>"; };
+		E6A50831224E713F00128123 /* Amount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Amount.swift; sourceTree = "<group>"; };
+		E6A50832224E713F00128123 /* Description.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Description.swift; sourceTree = "<group>"; };
+		E6A50833224E713F00128123 /* TokenPermissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenPermissions.swift; sourceTree = "<group>"; };
+		E6A50834224E713F00128123 /* MetaDataConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataConvertible.swift; sourceTree = "<group>"; };
+		E6A50835224E713F00128123 /* Nonce.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nonce.swift; sourceTree = "<group>"; };
+		E6A50836224E713F00128123 /* TokenPermission.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenPermission.swift; sourceTree = "<group>"; };
+		E6A50837224E713F00128123 /* Name.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Name.swift; sourceTree = "<group>"; };
+		E6A50838224E713F00128123 /* TokenAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenAction.swift; sourceTree = "<group>"; };
+		E6A50839224E713F00128123 /* KeyValued.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyValued.swift; sourceTree = "<group>"; };
+		E6A5083A224E713F00128123 /* Planck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Planck.swift; sourceTree = "<group>"; };
+		E6A5083B224E713F00128123 /* MetaDataKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaDataKey.swift; sourceTree = "<group>"; };
+		E6A5083C224E713F00128123 /* ChronoMetaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChronoMetaData.swift; sourceTree = "<group>"; };
+		E6A5083D224E713F00128123 /* Symbol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Symbol.swift; sourceTree = "<group>"; };
+		E6A5083F224E713F00128123 /* MintedTokenParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MintedTokenParticle.swift; sourceTree = "<group>"; };
+		E6A50840224E713F00128123 /* ConsumingTokens.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsumingTokens.swift; sourceTree = "<group>"; };
+		E6A50841224E713F00128123 /* BurnedTokenParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurnedTokenParticle.swift; sourceTree = "<group>"; };
+		E6A50842224E713F00128123 /* TokenParticleConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenParticleConvertible.swift; sourceTree = "<group>"; };
+		E6A50843224E713F00128123 /* TransferredTokenParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferredTokenParticle.swift; sourceTree = "<group>"; };
+		E6A50844224E713F00128123 /* IdentifiableTokenWithGranularity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifiableTokenWithGranularity.swift; sourceTree = "<group>"; };
+		E6A50845224E713F00128123 /* ConsumableTokens.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsumableTokens.swift; sourceTree = "<group>"; };
+		E6A50846224E713F00128123 /* ParticleModelConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleModelConvertible.swift; sourceTree = "<group>"; };
+		E6A50848224E713F00128123 /* SpunParticle+Sequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpunParticle+Sequence.swift"; sourceTree = "<group>"; };
+		E6A50849224E713F00128123 /* SpunParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpunParticle.swift; sourceTree = "<group>"; };
+		E6A5084A224E713F00128123 /* UniqueParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniqueParticle.swift; sourceTree = "<group>"; };
+		E6A5084D224E713F00128123 /* TokenDefinitionParticle+Decodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TokenDefinitionParticle+Decodable.swift"; sourceTree = "<group>"; };
+		E6A5084E224E713F00128123 /* TokenDefinitionParticle+CodingKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TokenDefinitionParticle+CodingKeys.swift"; sourceTree = "<group>"; };
+		E6A5084F224E713F00128123 /* TokenDefinitionParticle+Encodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TokenDefinitionParticle+Encodable.swift"; sourceTree = "<group>"; };
+		E6A50850224E713F00128123 /* TokenDefinitionParticle+Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TokenDefinitionParticle+Identifiable.swift"; sourceTree = "<group>"; };
+		E6A50851224E713F00128123 /* TokenDefinitionParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenDefinitionParticle.swift; sourceTree = "<group>"; };
+		E6A50852224E713F00128123 /* MessageParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageParticle.swift; sourceTree = "<group>"; };
+		E6A50853224E713F00128123 /* ParticleConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleConvertible.swift; sourceTree = "<group>"; };
+		E6A50855224E713F00128123 /* ParticleGroups.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleGroups.swift; sourceTree = "<group>"; };
+		E6A50858224E713F00128123 /* Addresses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Addresses.swift; sourceTree = "<group>"; };
+		E6A5085A224E713F00128123 /* Address.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
+		E6A5085C224E713F00128123 /* ParticleGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleGroup.swift; sourceTree = "<group>"; };
+		E6A5085E224E713F00128123 /* Ownable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ownable.swift; sourceTree = "<group>"; };
+		E6A50860224E713F00128123 /* Fungible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fungible.swift; sourceTree = "<group>"; };
+		E6A50861224E713F00128123 /* Accountable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accountable.swift; sourceTree = "<group>"; };
+		E6A50862224E713F00128123 /* Chronological.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chronological.swift; sourceTree = "<group>"; };
+		E6A50863224E713F00128123 /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		E6A50865224E713F00128123 /* ArrayInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayInitializable.swift; sourceTree = "<group>"; };
+		E6A50866224E713F00128123 /* ArrayConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayConvertible.swift; sourceTree = "<group>"; };
+		E6A50867224E713F00128123 /* ArrayDecodable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayDecodable.swift; sourceTree = "<group>"; };
+		E6A50869224E713F00128123 /* BigInt+BigUInt+BigInteger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BigInt+BigUInt+BigInteger.swift"; sourceTree = "<group>"; };
+		E6A5086A224E713F00128123 /* BigInteger+StringConversion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BigInteger+StringConversion.swift"; sourceTree = "<group>"; };
+		E6A508BF224E7C0400128123 /* SignedAmount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAmount.swift; sourceTree = "<group>"; };
+		E6A508C1224EAD0B00128123 /* TokenDefinitionReferencing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDefinitionReferencing.swift; sourceTree = "<group>"; };
+		E6A508C3224EAD1E00128123 /* TokenConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenConvertible.swift; sourceTree = "<group>"; };
+		E6A508C5224EAD5700128123 /* TokenBalances.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalances.swift; sourceTree = "<group>"; };
+		E6A508C8224EBFCD00128123 /* TokenBalanceReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceReducerTests.swift; sourceTree = "<group>"; };
+		E6A508CB224EE25B00128123 /* GetBalanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBalanceTest.swift; sourceTree = "<group>"; };
 		E6A6430A2244D38800CD4BFC /* BitcoinKit+ECMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BitcoinKit+ECMethods.swift"; sourceTree = "<group>"; };
 		E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointMultiplicationTests.swift; sourceTree = "<group>"; };
 		E6A643112244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodePointFromPublicKeyTests.swift; sourceTree = "<group>"; };
@@ -590,30 +639,11 @@
 		E6CEE70621F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HierarchicalDeterministicMasterSeed.swift; sourceTree = "<group>"; };
 		E6CEE70B21F5AE7800D745EC /* TestableConvenienceInitializers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableConvenienceInitializers.swift; sourceTree = "<group>"; };
 		E6CEE71221F5B3C000D745EC /* RandomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomData.swift; sourceTree = "<group>"; };
-		E6CEE71821F5B4B900D745EC /* Atom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atom.swift; sourceTree = "<group>"; };
-		E6CEE72221F5D44300D745EC /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		E6CEE72F21F5D4E000D745EC /* CharacterSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterSet.swift; sourceTree = "<group>"; };
-		E6CEE73121F5D4F700D745EC /* Base58String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base58String.swift; sourceTree = "<group>"; };
-		E6CEE73321F5D50E00D745EC /* Spin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spin.swift; sourceTree = "<group>"; };
-		E6CEE73521F5D51F00D745EC /* ParticleConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleConvertible.swift; sourceTree = "<group>"; };
-		E6CEE73A21F5D56C00D745EC /* ResourceIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceIdentifier.swift; sourceTree = "<group>"; };
 		E6CEE74321F637EC00D745EC /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
-		E6CEE74521F6381E00D745EC /* Signatures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signatures.swift; sourceTree = "<group>"; };
-		E6CEE74921F6384000D745EC /* MessageParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageParticle.swift; sourceTree = "<group>"; };
-		E6CEE74E21F638E700D745EC /* ParticleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleGroup.swift; sourceTree = "<group>"; };
-		E6CEE75021F6391300D745EC /* SpunParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpunParticle.swift; sourceTree = "<group>"; };
 		E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftCBOR.framework; path = Carthage/Build/iOS/SwiftCBOR.framework; sourceTree = "<group>"; };
-		E6CEE75821F7A3F700D745EC /* StringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConvertible.swift; sourceTree = "<group>"; };
-		E6CEE75B21F7A41A00D745EC /* DataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataConvertible.swift; sourceTree = "<group>"; };
-		E6CEE75D21F7A42900D745EC /* CharacterSetSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterSetSpecifying.swift; sourceTree = "<group>"; };
-		E6CEE75F21F7A43900D745EC /* HexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexString.swift; sourceTree = "<group>"; };
-		E6CEE76121F7A45000D745EC /* Base64String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base64String.swift; sourceTree = "<group>"; };
-		E6CEE76821F7A59700D745EC /* EUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EUID.swift; sourceTree = "<group>"; };
-		E6CEE76B21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BigInt+BigUInt+BigInteger.swift"; sourceTree = "<group>"; };
-		E6CEE76E21F7A61B00D745EC /* BigInteger+StringConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BigInteger+StringConversion.swift"; sourceTree = "<group>"; };
 		E6CEE77021F7A64900D745EC /* RadixHash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixHash.swift; sourceTree = "<group>"; };
 		E6CEE77221F7A65F00D745EC /* RadixHashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixHashable.swift; sourceTree = "<group>"; };
-		E6CEE77721F7A6B000D745EC /* SpunParticle+Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpunParticle+Sequence.swift"; sourceTree = "<group>"; };
 		E6D1318221F7B2050014792D /* Data+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Hex.swift"; sourceTree = "<group>"; };
 		E6D325AB21EE37DA00851F4E /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		E6D325B221EE48B800851F4E /* Signing+Message+Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Signing+Message+Hash.swift"; sourceTree = "<group>"; };
@@ -622,25 +652,14 @@
 		E6D4B32B223C0D4D004FC83A /* AtomWithTrivialMetaDataDsonEncodingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomWithTrivialMetaDataDsonEncodingSpec.swift; sourceTree = "<group>"; };
 		E6D4B32D223C0E54004FC83A /* SimpleAtomFromJSONToDSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleAtomFromJSONToDSON.swift; sourceTree = "<group>"; };
 		E6D4B330223F9482004FC83A /* BigUnsignedIntHexConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigUnsignedIntHexConversionTests.swift; sourceTree = "<group>"; };
-		E6D4B334223F9A2E004FC83A /* MetaDataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataConvertible.swift; sourceTree = "<group>"; };
-		E6D4B336223F9D99004FC83A /* ChronoMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronoMetaData.swift; sourceTree = "<group>"; };
-		E6D4B338223F9DB2004FC83A /* KeyValued.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValued.swift; sourceTree = "<group>"; };
 		E6D4B33A223F9DD2004FC83A /* TimeConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeConverter.swift; sourceTree = "<group>"; };
 		E6D4B33C223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+ExpressibleByStringLiteral.swift"; sourceTree = "<group>"; };
 		E6D4B33E223FAC72004FC83A /* Hashing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hashing.swift; sourceTree = "<group>"; };
 		E6D4B340223FAC7F004FC83A /* Sha256Hasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sha256Hasher.swift; sourceTree = "<group>"; };
 		E6D4B342223FAC8B004FC83A /* Sha256TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sha256TwiceHasher.swift; sourceTree = "<group>"; };
-		E6D4B344223FAF52004FC83A /* ArrayInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayInitializable.swift; sourceTree = "<group>"; };
-		E6D4B346223FBAB0004FC83A /* DataConvertible+StringConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataConvertible+StringConversion.swift"; sourceTree = "<group>"; };
-		E6D4B348223FBAC5004FC83A /* Data+StringConversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+StringConversion.swift"; sourceTree = "<group>"; };
-		E6D4B34A223FBB12004FC83A /* DataConvertible+Concatenation+Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataConvertible+Concatenation+Operators.swift"; sourceTree = "<group>"; };
-		E6D4B34C223FBB37004FC83A /* StringConversionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConversionMode.swift; sourceTree = "<group>"; };
 		E6D4B352223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomTooBigDSONEncodingSpec.swift; sourceTree = "<group>"; };
 		E6D4B354223FBEE8004FC83A /* DSONPrefixedDataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONPrefixedDataConvertible.swift; sourceTree = "<group>"; };
 		E6D4B356223FC163004FC83A /* AnyEncodableKeyValuesProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodableKeyValuesProcessing.swift; sourceTree = "<group>"; };
-		E6D4B358223FCE4F004FC83A /* BurnedTokenParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurnedTokenParticle.swift; sourceTree = "<group>"; };
-		E6D4B35A223FCE5D004FC83A /* TransferredTokenParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferredTokenParticle.swift; sourceTree = "<group>"; };
-		E6D4B35C223FCE6A004FC83A /* MintedTokenParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintedTokenParticle.swift; sourceTree = "<group>"; };
 		E6D4B35E223FD01A004FC83A /* AnyEncodableKeyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodableKeyValue.swift; sourceTree = "<group>"; };
 		E6D4B360223FD046004FC83A /* AnyEncodableKeyValueList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyEncodableKeyValueList.swift; sourceTree = "<group>"; };
 		E6D4B362223FF7D0004FC83A /* DSONOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONOutput.swift; sourceTree = "<group>"; };
@@ -649,17 +668,11 @@
 		E6D4B36A2240DD91004FC83A /* AddressEUIDSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressEUIDSpec.swift; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6ED1A2B21F7CE9C00654105 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
-		E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleGroups.swift; sourceTree = "<group>"; };
 		E6ED1A3321F879F600654105 /* HashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashTests.swift; sourceTree = "<group>"; };
 		E6ED1A3721F87C1800654105 /* RadixSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixSystem.swift; sourceTree = "<group>"; };
-		E6ED1A3A21F87C4700654105 /* Shards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shards.swift; sourceTree = "<group>"; };
 		E6ED1A3F21F8836300654105 /* UniverseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniverseConfig.swift; sourceTree = "<group>"; };
 		E6ED1A4121F8872300654105 /* RadixUniverse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixUniverse.swift; sourceTree = "<group>"; };
-		E6ED1A4421F8914F00654105 /* Atoms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atoms.swift; sourceTree = "<group>"; };
-		E6ED1A4621F892B600654105 /* TokenParticleConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenParticleConvertible.swift; sourceTree = "<group>"; };
-		E6ED1A4821F896C300654105 /* Addresses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Addresses.swift; sourceTree = "<group>"; };
 		E6ED1A4B21F8ACB700654105 /* Int+DataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataConvertible.swift"; sourceTree = "<group>"; };
-		E6ED1A4D21F8E51A00654105 /* AtomObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomObservation.swift; sourceTree = "<group>"; };
 		E6ED1A5021F8E54900654105 /* AtomPuller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomPuller.swift; sourceTree = "<group>"; };
 		E6ED1A5221F8E56E00654105 /* NodeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeAction.swift; sourceTree = "<group>"; };
 		E6ED1A5521F8E58300654105 /* SubmitAtomAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAtomAction.swift; sourceTree = "<group>"; };
@@ -679,9 +692,6 @@
 		E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+OptionalType.swift"; sourceTree = "<group>"; };
 		E6ED1A7B21F8E7E000654105 /* ObservableType+FilterNil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ObservableType+FilterNil.swift"; sourceTree = "<group>"; };
 		E6ED1A7D21F8E83300654105 /* ObservableType+ValidAtoms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ObservableType+ValidAtoms.swift"; sourceTree = "<group>"; };
-		E6ED1A8021F8E87400654105 /* Atom+Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Atom+Sequence.swift"; sourceTree = "<group>"; };
-		E6ED1A8821F9F5BC00654105 /* UniqueParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueParticle.swift; sourceTree = "<group>"; };
-		E6EF45A522369EE200FA4158 /* DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataInitializable.swift; sourceTree = "<group>"; };
 		E6FB03C721EC95E8002CE331 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BitcoinKit.framework; path = Carthage/Build/iOS/BitcoinKit.framework; sourceTree = "<group>"; };
@@ -778,29 +788,6 @@
 				E6040E5C2240ED380065AEC2 /* EUIDTests.swift */,
 			);
 			path = EUID;
-			sourceTree = "<group>";
-		};
-		E6040E5E2240F76E0065AEC2 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE76D21F7A5E000D745EC /* BigInteger */,
-				E6611F3A2225B54B00AD2F83 /* ArrayConvertible */,
-				E6611F332225B2B700AD2F83 /* DictionaryConvertible */,
-				E6D4B36E2240EC6F004FC83A /* EUID */,
-				E6040E5F2240F7790065AEC2 /* DataConvertible */,
-				E631DA9E21F249230063F632 /* AtomModel */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		E6040E5F2240F7790065AEC2 /* DataConvertible */ = {
-			isa = PBXGroup;
-			children = (
-				E6EF45A422369ED500FA4158 /* DataInitializable */,
-				E67A715021FBC62500F4B2D0 /* StringInitializable */,
-				E6CEE75A21F7A40C00D745EC /* DataConvertible */,
-			);
-			path = DataConvertible;
 			sourceTree = "<group>";
 		};
 		E6040E602240F7CC0065AEC2 /* EncodingDecoding */ = {
@@ -1039,6 +1026,7 @@
 			children = (
 				E62EFE1D224B739B00B6DAD6 /* WebSocketsGetLivePeersTest.swift */,
 				E6550EFE224D48CB00160267 /* GetAtomsTests.swift */,
+				E6A508CB224EE25B00128123 /* GetBalanceTest.swift */,
 				E6550F00224D5FDB00160267 /* GetUniverseOverWS.swift */,
 				E6A507ED224E4CF500128123 /* WebsocketTest.swift */,
 			);
@@ -1048,6 +1036,7 @@
 		E631DA9C21F2490F0063F632 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E6A507FC224E713F00128123 /* Models */,
 				E6040E612240F87C0065AEC2 /* RadixIdentity */,
 				E6ED1A4F21F8E54100654105 /* Ledger */,
 				E6ED1A2A21F7CE9100654105 /* Network */,
@@ -1067,21 +1056,6 @@
 				E631DAD721F5A7D40063F632 /* Wallet */,
 			);
 			path = Crypto;
-			sourceTree = "<group>";
-		};
-		E631DA9E21F249230063F632 /* AtomModel */ = {
-			isa = PBXGroup;
-			children = (
-				E6A4AB7A221BF7A6006C5CA8 /* Protocols */,
-				E6ED1A3921F87C3400654105 /* Shards */,
-				E6ED1A2D21F7D58A00654105 /* ParticleGroups */,
-				E6CEE74D21F638D800D745EC /* ParticleGroup */,
-				E6CEE73921F5D53F00D745EC /* ResourceIdentifier */,
-				E6CEE72121F5D43A00D745EC /* Address */,
-				E6CEE71E21F5D40F00D745EC /* Atom */,
-				E6CEE71D21F5D40200D745EC /* Particles */,
-			);
-			path = AtomModel;
 			sourceTree = "<group>";
 		};
 		E631DAA121F249880063F632 /* Keys */ = {
@@ -1131,6 +1105,7 @@
 		E631DAAA21F24D500063F632 /* RadixTestCases */ = {
 			isa = PBXGroup;
 			children = (
+				E6A508C7224EBFAC00128123 /* Reducers */,
 				E6550EFA224CE84900160267 /* DecodingAndEncoding */,
 				E62EFDD42249393D00B6DAD6 /* Network */,
 				E6040E572240ECB00065AEC2 /* Models */,
@@ -1270,26 +1245,6 @@
 			path = DecodingAndEncoding;
 			sourceTree = "<group>";
 		};
-		E6611F332225B2B700AD2F83 /* DictionaryConvertible */ = {
-			isa = PBXGroup;
-			children = (
-				E6611F342225B2C000AD2F83 /* DictionaryConvertible.swift */,
-				E6611F362225B2D600AD2F83 /* DictionaryDecodable.swift */,
-				E6611F382225B2E400AD2F83 /* StringDictionary.swift */,
-			);
-			path = DictionaryConvertible;
-			sourceTree = "<group>";
-		};
-		E6611F3A2225B54B00AD2F83 /* ArrayConvertible */ = {
-			isa = PBXGroup;
-			children = (
-				E6611F3B2225B55C00AD2F83 /* ArrayConvertible.swift */,
-				E6611F3D2225B56A00AD2F83 /* ArrayDecodable.swift */,
-				E6D4B344223FAF52004FC83A /* ArrayInitializable.swift */,
-			);
-			path = ArrayConvertible;
-			sourceTree = "<group>";
-		};
 		E672573521FB8D8600BE3B4C /* PrefixedJson */ = {
 			isa = PBXGroup;
 			children = (
@@ -1312,38 +1267,6 @@
 				E67A715321FBC65800F4B2D0 /* String+Extensions.swift */,
 			);
 			path = String;
-			sourceTree = "<group>";
-		};
-		E67A714621FBAEE900F4B2D0 /* DataTypes */ = {
-			isa = PBXGroup;
-			children = (
-				E6A4AB8D221C2FB3006C5CA8 /* Symbol.swift */,
-				E6A4AB91221C40A4006C5CA8 /* Name.swift */,
-				E6A4AB95221D4680006C5CA8 /* Description.swift */,
-				E6A4AB99221D508D006C5CA8 /* Nonce.swift */,
-				E6A4AB9B221D5098006C5CA8 /* Planck.swift */,
-				E68B5C0721FBD46F00BEB049 /* Amount.swift */,
-				E68B5C0921FBD8B000BEB049 /* MetaDataKey.swift */,
-				E6A4AB81221BF92A006C5CA8 /* MetaData.swift */,
-				E6D4B338223F9DB2004FC83A /* KeyValued.swift */,
-				E6D4B336223F9D99004FC83A /* ChronoMetaData.swift */,
-				E6D4B334223F9A2E004FC83A /* MetaDataConvertible.swift */,
-				E67A714721FBAEF500F4B2D0 /* Granularity.swift */,
-				E6A4AB9D221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift */,
-				E67A714B21FBB1DA00F4B2D0 /* TokenPermission.swift */,
-				E67A714921FBB1B900F4B2D0 /* TokenPermissions.swift */,
-				E68B5C0521FBD36400BEB049 /* TokenAction.swift */,
-			);
-			path = DataTypes;
-			sourceTree = "<group>";
-		};
-		E67A715021FBC62500F4B2D0 /* StringInitializable */ = {
-			isa = PBXGroup;
-			children = (
-				E6A4AC1022243EDC006C5CA8 /* ValidValueInitializable.swift */,
-				E67A715121FBC63300F4B2D0 /* StringInitializable.swift */,
-			);
-			path = StringInitializable;
 			sourceTree = "<group>";
 		};
 		E693DAA5223198A7003720C2 /* DSON */ = {
@@ -1382,26 +1305,6 @@
 				E69AB73C2237FC4C006153DD /* CBOREncodingPrimitivesIntSpec.swift */,
 			);
 			path = Primitives;
-			sourceTree = "<group>";
-		};
-		E693DAAD223264F7003720C2 /* TokenDefinitionParticle */ = {
-			isa = PBXGroup;
-			children = (
-				E693DAB422326573003720C2 /* Codable */,
-				E6A4AB8F221C3F64006C5CA8 /* TokenDefinitionParticle.swift */,
-				E693DAB5223265BA003720C2 /* TokenDefinitionParticle+Identifiable.swift */,
-			);
-			path = TokenDefinitionParticle;
-			sourceTree = "<group>";
-		};
-		E693DAB422326573003720C2 /* Codable */ = {
-			isa = PBXGroup;
-			children = (
-				E693DAAE22326510003720C2 /* TokenDefinitionParticle+Decodable.swift */,
-				E693DAB222326546003720C2 /* TokenDefinitionParticle+CodingKeys.swift */,
-				E693DAB022326528003720C2 /* TokenDefinitionParticle+Encodable.swift */,
-			);
-			path = Codable;
 			sourceTree = "<group>";
 		};
 		E693DABD2232BACB003720C2 /* CBOR */ = {
@@ -1479,18 +1382,6 @@
 			path = JsonAndDsonEncoding;
 			sourceTree = "<group>";
 		};
-		E6A4AB7A221BF7A6006C5CA8 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				E6A4AB7B221BF7B3006C5CA8 /* Accountable.swift */,
-				E6A4AB83221BFCF4006C5CA8 /* Ownable.swift */,
-				E6A4ABFE2224286F006C5CA8 /* Fungible */,
-				E6A4AB7D221BF7C0006C5CA8 /* Identifiable.swift */,
-				E6A4AB87221BFD2C006C5CA8 /* Chronological.swift */,
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
 		E6A4AB89221C0705006C5CA8 /* Date */ = {
 			isa = PBXGroup;
 			children = (
@@ -1506,20 +1397,6 @@
 				E6A4AB8B221C0717006C5CA8 /* DateFormatter_Extension.swift */,
 			);
 			path = DateFormatter;
-			sourceTree = "<group>";
-		};
-		E6A4AB9F221D5919006C5CA8 /* TokenParticles */ = {
-			isa = PBXGroup;
-			children = (
-				E6ED1A4621F892B600654105 /* TokenParticleConvertible.swift */,
-				E6A507F6224E6ECC00128123 /* ConsumableTokens.swift */,
-				E6A507FA224E6EE500128123 /* IdentifiableTokenWithGranularity.swift */,
-				E6A507F8224E6ED700128123 /* ConsumingTokens.swift */,
-				E6D4B35A223FCE5D004FC83A /* TransferredTokenParticle.swift */,
-				E6D4B35C223FCE6A004FC83A /* MintedTokenParticle.swift */,
-				E6D4B358223FCE4F004FC83A /* BurnedTokenParticle.swift */,
-			);
-			path = TokenParticles;
 			sourceTree = "<group>";
 		};
 		E6A4ABBD221EBA9A006C5CA8 /* Foundation */ = {
@@ -1598,14 +1475,6 @@
 			path = MintedTokenParticleBadValues;
 			sourceTree = "<group>";
 		};
-		E6A4ABFE2224286F006C5CA8 /* Fungible */ = {
-			isa = PBXGroup;
-			children = (
-				E6A4AB85221BFCFC006C5CA8 /* Fungible.swift */,
-			);
-			path = Fungible;
-			sourceTree = "<group>";
-		};
 		E6A4AC0022243AC5006C5CA8 /* Encoding */ = {
 			isa = PBXGroup;
 			children = (
@@ -1652,11 +1521,321 @@
 		E6A507EF224E69F400128123 /* Balance */ = {
 			isa = PBXGroup;
 			children = (
-				E6A507F0224E6A0300128123 /* Balance.swift */,
 				E6A507F4224E6AEA00128123 /* Token.swift */,
 				E6A507F2224E6A4600128123 /* TokenBalance.swift */,
+				E6A508C5224EAD5700128123 /* TokenBalances.swift */,
 			);
 			path = Balance;
+			sourceTree = "<group>";
+		};
+		E6A507FC224E713F00128123 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E6A507FD224E713F00128123 /* DataConvertible */,
+				E6A50818224E713F00128123 /* DictionaryConvertible */,
+				E6A5081C224E713F00128123 /* EUID */,
+				E6A5081E224E713F00128123 /* AtomModel */,
+				E6A50864224E713F00128123 /* ArrayConvertible */,
+				E6A50868224E713F00128123 /* BigInteger */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E6A507FD224E713F00128123 /* DataConvertible */ = {
+			isa = PBXGroup;
+			children = (
+				E6A507FE224E713F00128123 /* DataConvertible */,
+				E6A50804224E713F00128123 /* DataInitializable */,
+				E6A50815224E713F00128123 /* StringInitializable */,
+			);
+			path = DataConvertible;
+			sourceTree = "<group>";
+		};
+		E6A507FE224E713F00128123 /* DataConvertible */ = {
+			isa = PBXGroup;
+			children = (
+				E6A507FF224E713F00128123 /* DataConvertible.swift */,
+				E6A50800224E713F00128123 /* DataConvertible+Concatenation+Operators.swift */,
+				E6A50801224E713F00128123 /* StringConversionMode.swift */,
+				E6A50802224E713F00128123 /* Data+StringConversion.swift */,
+				E6A50803224E713F00128123 /* DataConvertible+StringConversion.swift */,
+			);
+			path = DataConvertible;
+			sourceTree = "<group>";
+		};
+		E6A50804224E713F00128123 /* DataInitializable */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50805224E713F00128123 /* DataInitializable.swift */,
+				E6A50806224E713F00128123 /* StringConvertibles */,
+			);
+			path = DataInitializable;
+			sourceTree = "<group>";
+		};
+		E6A50806224E713F00128123 /* StringConvertibles */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50807224E713F00128123 /* StringRepresentable.swift */,
+				E6A50808224E713F00128123 /* ValueValidating.swift */,
+				E6A50809224E713F00128123 /* Base64String.swift */,
+				E6A5080A224E713F00128123 /* CharacterSetSpecifying.swift */,
+				E6A5080B224E713F00128123 /* UpperBound.swift */,
+				E6A5080C224E713F00128123 /* RequiringThatLengthIsMultipleOfN.swift */,
+				E6A5080D224E713F00128123 /* MinLengthSpecifying.swift */,
+				E6A5080E224E713F00128123 /* LowerBound.swift */,
+				E6A5080F224E713F00128123 /* HexString.swift */,
+				E6A50810224E713F00128123 /* Base58String.swift */,
+				E6A50811224E713F00128123 /* InvalidStringError.swift */,
+				E6A50812224E713F00128123 /* MaxLengthSpecifying.swift */,
+				E6A50813224E713F00128123 /* ExactLengthSpecifying.swift */,
+				E6A50814224E713F00128123 /* StringConvertible.swift */,
+			);
+			path = StringConvertibles;
+			sourceTree = "<group>";
+		};
+		E6A50815224E713F00128123 /* StringInitializable */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50816224E713F00128123 /* ValidValueInitializable.swift */,
+				E6A50817224E713F00128123 /* StringInitializable.swift */,
+			);
+			path = StringInitializable;
+			sourceTree = "<group>";
+		};
+		E6A50818224E713F00128123 /* DictionaryConvertible */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50819224E713F00128123 /* DictionaryConvertible.swift */,
+				E6A5081A224E713F00128123 /* DictionaryDecodable.swift */,
+				E6A5081B224E713F00128123 /* StringDictionary.swift */,
+			);
+			path = DictionaryConvertible;
+			sourceTree = "<group>";
+		};
+		E6A5081C224E713F00128123 /* EUID */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5081D224E713F00128123 /* EUID.swift */,
+			);
+			path = EUID;
+			sourceTree = "<group>";
+		};
+		E6A5081E224E713F00128123 /* AtomModel */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5081F224E713F00128123 /* Shards */,
+				E6A50821224E713F00128123 /* Atom */,
+				E6A50828224E713F00128123 /* ResourceIdentifier */,
+				E6A5082B224E713F00128123 /* Particles */,
+				E6A50854224E713F00128123 /* ParticleGroups */,
+				E6A50856224E713F00128123 /* Address */,
+				E6A5085B224E713F00128123 /* ParticleGroup */,
+				E6A5085D224E713F00128123 /* Protocols */,
+			);
+			path = AtomModel;
+			sourceTree = "<group>";
+		};
+		E6A5081F224E713F00128123 /* Shards */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50820224E713F00128123 /* Shards.swift */,
+			);
+			path = Shards;
+			sourceTree = "<group>";
+		};
+		E6A50821224E713F00128123 /* Atom */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50822224E713F00128123 /* Signatures.swift */,
+				E6A50823224E713F00128123 /* Atom+Sequence.swift */,
+				E6A50824224E713F00128123 /* Atoms.swift */,
+				E6A50825224E713F00128123 /* Atom.swift */,
+				E6A50826224E713F00128123 /* RadixModelTypeSpecifying.swift */,
+				E6A50827224E713F00128123 /* AtomObservation.swift */,
+			);
+			path = Atom;
+			sourceTree = "<group>";
+		};
+		E6A50828224E713F00128123 /* ResourceIdentifier */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50829224E713F00128123 /* ResourceIdentifier.swift */,
+				E6A5082A224E713F00128123 /* ResourceType.swift */,
+			);
+			path = ResourceIdentifier;
+			sourceTree = "<group>";
+		};
+		E6A5082B224E713F00128123 /* Particles */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5082C224E713F00128123 /* Spin.swift */,
+				E6A5082D224E713F00128123 /* DataTypes */,
+				E6A5083E224E713F00128123 /* TokenParticles */,
+				E6A50846224E713F00128123 /* ParticleModelConvertible.swift */,
+				E6A50847224E713F00128123 /* SpunParticle */,
+				E6A5084A224E713F00128123 /* UniqueParticle.swift */,
+				E6A5084B224E713F00128123 /* TokenDefinitionParticle */,
+				E6A50852224E713F00128123 /* MessageParticle.swift */,
+				E6A50853224E713F00128123 /* ParticleConvertible.swift */,
+			);
+			path = Particles;
+			sourceTree = "<group>";
+		};
+		E6A5082D224E713F00128123 /* DataTypes */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5082E224E713F00128123 /* Granularity.swift */,
+				E6A5082F224E713F00128123 /* MetaData.swift */,
+				E6A508C1224EAD0B00128123 /* TokenDefinitionReferencing.swift */,
+				E6A508C3224EAD1E00128123 /* TokenConvertible.swift */,
+				E6A50830224E713F00128123 /* TokenDefinitionIdentifier.swift */,
+				E6A50831224E713F00128123 /* Amount.swift */,
+				E6A508BF224E7C0400128123 /* SignedAmount.swift */,
+				E6A50832224E713F00128123 /* Description.swift */,
+				E6A50833224E713F00128123 /* TokenPermissions.swift */,
+				E6A50834224E713F00128123 /* MetaDataConvertible.swift */,
+				E6A50835224E713F00128123 /* Nonce.swift */,
+				E6A50836224E713F00128123 /* TokenPermission.swift */,
+				E6A50837224E713F00128123 /* Name.swift */,
+				E6A50838224E713F00128123 /* TokenAction.swift */,
+				E6A50839224E713F00128123 /* KeyValued.swift */,
+				E6A5083A224E713F00128123 /* Planck.swift */,
+				E6A5083B224E713F00128123 /* MetaDataKey.swift */,
+				E6A5083C224E713F00128123 /* ChronoMetaData.swift */,
+				E6A5083D224E713F00128123 /* Symbol.swift */,
+			);
+			path = DataTypes;
+			sourceTree = "<group>";
+		};
+		E6A5083E224E713F00128123 /* TokenParticles */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5083F224E713F00128123 /* MintedTokenParticle.swift */,
+				E6A50840224E713F00128123 /* ConsumingTokens.swift */,
+				E6A50841224E713F00128123 /* BurnedTokenParticle.swift */,
+				E6A50842224E713F00128123 /* TokenParticleConvertible.swift */,
+				E6A50843224E713F00128123 /* TransferredTokenParticle.swift */,
+				E6A50844224E713F00128123 /* IdentifiableTokenWithGranularity.swift */,
+				E6A50845224E713F00128123 /* ConsumableTokens.swift */,
+			);
+			path = TokenParticles;
+			sourceTree = "<group>";
+		};
+		E6A50847224E713F00128123 /* SpunParticle */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50848224E713F00128123 /* SpunParticle+Sequence.swift */,
+				E6A50849224E713F00128123 /* SpunParticle.swift */,
+			);
+			path = SpunParticle;
+			sourceTree = "<group>";
+		};
+		E6A5084B224E713F00128123 /* TokenDefinitionParticle */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5084C224E713F00128123 /* Codable */,
+				E6A50850224E713F00128123 /* TokenDefinitionParticle+Identifiable.swift */,
+				E6A50851224E713F00128123 /* TokenDefinitionParticle.swift */,
+			);
+			path = TokenDefinitionParticle;
+			sourceTree = "<group>";
+		};
+		E6A5084C224E713F00128123 /* Codable */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5084D224E713F00128123 /* TokenDefinitionParticle+Decodable.swift */,
+				E6A5084E224E713F00128123 /* TokenDefinitionParticle+CodingKeys.swift */,
+				E6A5084F224E713F00128123 /* TokenDefinitionParticle+Encodable.swift */,
+			);
+			path = Codable;
+			sourceTree = "<group>";
+		};
+		E6A50854224E713F00128123 /* ParticleGroups */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50855224E713F00128123 /* ParticleGroups.swift */,
+			);
+			path = ParticleGroups;
+			sourceTree = "<group>";
+		};
+		E6A50856224E713F00128123 /* Address */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50857224E713F00128123 /* Addresses */,
+				E6A50859224E713F00128123 /* Address */,
+			);
+			path = Address;
+			sourceTree = "<group>";
+		};
+		E6A50857224E713F00128123 /* Addresses */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50858224E713F00128123 /* Addresses.swift */,
+			);
+			path = Addresses;
+			sourceTree = "<group>";
+		};
+		E6A50859224E713F00128123 /* Address */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5085A224E713F00128123 /* Address.swift */,
+			);
+			path = Address;
+			sourceTree = "<group>";
+		};
+		E6A5085B224E713F00128123 /* ParticleGroup */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5085C224E713F00128123 /* ParticleGroup.swift */,
+			);
+			path = ParticleGroup;
+			sourceTree = "<group>";
+		};
+		E6A5085D224E713F00128123 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				E6A5085E224E713F00128123 /* Ownable.swift */,
+				E6A5085F224E713F00128123 /* Fungible */,
+				E6A50861224E713F00128123 /* Accountable.swift */,
+				E6A50862224E713F00128123 /* Chronological.swift */,
+				E6A50863224E713F00128123 /* Identifiable.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		E6A5085F224E713F00128123 /* Fungible */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50860224E713F00128123 /* Fungible.swift */,
+			);
+			path = Fungible;
+			sourceTree = "<group>";
+		};
+		E6A50864224E713F00128123 /* ArrayConvertible */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50865224E713F00128123 /* ArrayInitializable.swift */,
+				E6A50866224E713F00128123 /* ArrayConvertible.swift */,
+				E6A50867224E713F00128123 /* ArrayDecodable.swift */,
+			);
+			path = ArrayConvertible;
+			sourceTree = "<group>";
+		};
+		E6A50868224E713F00128123 /* BigInteger */ = {
+			isa = PBXGroup;
+			children = (
+				E6A50869224E713F00128123 /* BigInt+BigUInt+BigInteger.swift */,
+				E6A5086A224E713F00128123 /* BigInteger+StringConversion.swift */,
+			);
+			path = BigInteger;
+			sourceTree = "<group>";
+		};
+		E6A508C7224EBFAC00128123 /* Reducers */ = {
+			isa = PBXGroup;
+			children = (
+				E6A508C8224EBFCD00128123 /* TokenBalanceReducerTests.swift */,
+			);
+			path = Reducers;
 			sourceTree = "<group>";
 		};
 		E6A643092244D36700CD4BFC /* EllipticCurveMethods */ = {
@@ -1718,44 +1897,6 @@
 			path = Random;
 			sourceTree = "<group>";
 		};
-		E6CEE71D21F5D40200D745EC /* Particles */ = {
-			isa = PBXGroup;
-			children = (
-				E67A714621FBAEE900F4B2D0 /* DataTypes */,
-				E6CEE73321F5D50E00D745EC /* Spin.swift */,
-				E6CEE73521F5D51F00D745EC /* ParticleConvertible.swift */,
-				E6611F54222984DE00AD2F83 /* ParticleModelConvertible.swift */,
-				E693DAAD223264F7003720C2 /* TokenDefinitionParticle */,
-				E6A4AB9F221D5919006C5CA8 /* TokenParticles */,
-				E6CEE74921F6384000D745EC /* MessageParticle.swift */,
-				E6ED1A8821F9F5BC00654105 /* UniqueParticle.swift */,
-				E6CEE77621F7A69500D745EC /* SpunParticle */,
-			);
-			path = Particles;
-			sourceTree = "<group>";
-		};
-		E6CEE71E21F5D40F00D745EC /* Atom */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE71821F5B4B900D745EC /* Atom.swift */,
-				E6CEE74521F6381E00D745EC /* Signatures.swift */,
-				E6ED1A4421F8914F00654105 /* Atoms.swift */,
-				E6ED1A4D21F8E51A00654105 /* AtomObservation.swift */,
-				E6ED1A8021F8E87400654105 /* Atom+Sequence.swift */,
-				E6611F50222984B900AD2F83 /* RadixModelTypeSpecifying.swift */,
-			);
-			path = Atom;
-			sourceTree = "<group>";
-		};
-		E6CEE72121F5D43A00D745EC /* Address */ = {
-			isa = PBXGroup;
-			children = (
-				E6D4B333223F987B004FC83A /* Address */,
-				E6D4B332223F986D004FC83A /* Addresses */,
-			);
-			path = Address;
-			sourceTree = "<group>";
-		};
 		E6CEE72E21F5D4D600D745EC /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
@@ -1771,62 +1912,12 @@
 			path = Foundation;
 			sourceTree = "<group>";
 		};
-		E6CEE73921F5D53F00D745EC /* ResourceIdentifier */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE73A21F5D56C00D745EC /* ResourceIdentifier.swift */,
-				E67A715521FBC71B00F4B2D0 /* ResourceType.swift */,
-			);
-			path = ResourceIdentifier;
-			sourceTree = "<group>";
-		};
 		E6CEE74221F637E100D745EC /* Signature */ = {
 			isa = PBXGroup;
 			children = (
 				E6CEE74321F637EC00D745EC /* Signature.swift */,
 			);
 			path = Signature;
-			sourceTree = "<group>";
-		};
-		E6CEE74D21F638D800D745EC /* ParticleGroup */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE74E21F638E700D745EC /* ParticleGroup.swift */,
-			);
-			path = ParticleGroup;
-			sourceTree = "<group>";
-		};
-		E6CEE75721F7A3EF00D745EC /* StringConvertibles */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE73121F5D4F700D745EC /* Base58String.swift */,
-				E6CEE76121F7A45000D745EC /* Base64String.swift */,
-				E6161012223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift */,
-				E6A4AC0422243C38006C5CA8 /* InvalidStringError.swift */,
-				E6A4AC0822243C61006C5CA8 /* MaxLengthSpecifying.swift */,
-				E6611F2E2225A0DE00AD2F83 /* ExactLengthSpecifying.swift */,
-				E6A4AC0C22243CA5006C5CA8 /* MinLengthSpecifying.swift */,
-				E6A4AC0E22243CD7006C5CA8 /* ValueValidating.swift */,
-				E6CEE75821F7A3F700D745EC /* StringConvertible.swift */,
-				E6611F312225A1EE00AD2F83 /* StringRepresentable.swift */,
-				E6A4AC0622243C54006C5CA8 /* UpperBound.swift */,
-				E6A4AC0A22243C8F006C5CA8 /* LowerBound.swift */,
-				E6CEE75D21F7A42900D745EC /* CharacterSetSpecifying.swift */,
-				E6CEE75F21F7A43900D745EC /* HexString.swift */,
-			);
-			path = StringConvertibles;
-			sourceTree = "<group>";
-		};
-		E6CEE75A21F7A40C00D745EC /* DataConvertible */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE75B21F7A41A00D745EC /* DataConvertible.swift */,
-				E6D4B346223FBAB0004FC83A /* DataConvertible+StringConversion.swift */,
-				E6D4B348223FBAC5004FC83A /* Data+StringConversion.swift */,
-				E6D4B34A223FBB12004FC83A /* DataConvertible+Concatenation+Operators.swift */,
-				E6D4B34C223FBB37004FC83A /* StringConversionMode.swift */,
-			);
-			path = DataConvertible;
 			sourceTree = "<group>";
 		};
 		E6CEE76621F7A57800D745EC /* Hash */ = {
@@ -1848,24 +1939,6 @@
 				E6611F43222696E900AD2F83 /* BigInt_Extension.swift */,
 			);
 			path = BigInt;
-			sourceTree = "<group>";
-		};
-		E6CEE76D21F7A5E000D745EC /* BigInteger */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE76B21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift */,
-				E6CEE76E21F7A61B00D745EC /* BigInteger+StringConversion.swift */,
-			);
-			path = BigInteger;
-			sourceTree = "<group>";
-		};
-		E6CEE77621F7A69500D745EC /* SpunParticle */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE75021F6391300D745EC /* SpunParticle.swift */,
-				E6CEE77721F7A6B000D745EC /* SpunParticle+Sequence.swift */,
-			);
-			path = SpunParticle;
 			sourceTree = "<group>";
 		};
 		E6D325AA21EE377500851F4E /* TestExtensions */ = {
@@ -1922,36 +1995,12 @@
 			path = Signatures;
 			sourceTree = "<group>";
 		};
-		E6D4B332223F986D004FC83A /* Addresses */ = {
-			isa = PBXGroup;
-			children = (
-				E6ED1A4821F896C300654105 /* Addresses.swift */,
-			);
-			path = Addresses;
-			sourceTree = "<group>";
-		};
-		E6D4B333223F987B004FC83A /* Address */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE72221F5D44300D745EC /* Address.swift */,
-			);
-			path = Address;
-			sourceTree = "<group>";
-		};
 		E6D4B351223FBE36004FC83A /* Atom */ = {
 			isa = PBXGroup;
 			children = (
 				E6D4B352223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift */,
 			);
 			path = Atom;
-			sourceTree = "<group>";
-		};
-		E6D4B36E2240EC6F004FC83A /* EUID */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE76821F7A59700D745EC /* EUID.swift */,
-			);
-			path = EUID;
 			sourceTree = "<group>";
 		};
 		E6ED1A2A21F7CE9100654105 /* Network */ = {
@@ -1976,14 +2025,6 @@
 				E6ED1A3621F87C0400654105 /* JSONRPC */,
 			);
 			path = Network;
-			sourceTree = "<group>";
-		};
-		E6ED1A2D21F7D58A00654105 /* ParticleGroups */ = {
-			isa = PBXGroup;
-			children = (
-				E6ED1A2E21F7D59500654105 /* ParticleGroups.swift */,
-			);
-			path = ParticleGroups;
 			sourceTree = "<group>";
 		};
 		E6ED1A3121F879D400654105 /* Hash */ = {
@@ -2016,14 +2057,6 @@
 				E6ED1A6421F8E69000654105 /* NodeRunnerData.swift */,
 			);
 			path = JSONRPC;
-			sourceTree = "<group>";
-		};
-		E6ED1A3921F87C3400654105 /* Shards */ = {
-			isa = PBXGroup;
-			children = (
-				E6ED1A3A21F87C4700654105 /* Shards.swift */,
-			);
-			path = Shards;
 			sourceTree = "<group>";
 		};
 		E6ED1A4A21F8ACA300654105 /* Numbers */ = {
@@ -2098,20 +2131,10 @@
 			path = JSON;
 			sourceTree = "<group>";
 		};
-		E6EF45A422369ED500FA4158 /* DataInitializable */ = {
-			isa = PBXGroup;
-			children = (
-				E6CEE75721F7A3EF00D745EC /* StringConvertibles */,
-				E6EF45A522369EE200FA4158 /* DataInitializable.swift */,
-			);
-			path = DataInitializable;
-			sourceTree = "<group>";
-		};
 		E6FB03BF21EC91D5002CE331 /* Code */ = {
 			isa = PBXGroup;
 			children = (
 				E6040E602240F7CC0065AEC2 /* EncodingDecoding */,
-				E6040E5E2240F76E0065AEC2 /* Models */,
 				E631DA9C21F2490F0063F632 /* Core */,
 				E6FB03E021ECF175002CE331 /* Utils */,
 			);
@@ -2281,249 +2304,252 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6CEE76221F7A45000D745EC /* Base64String.swift in Sources */,
-				E6CEE73221F5D4F700D745EC /* Base58String.swift in Sources */,
 				E62EFE1B224A7EF000B6DAD6 /* DefaultAPIClient.swift in Sources */,
 				E6040E632240F8A00065AEC2 /* RadixIdentity.swift in Sources */,
-				E6A4AB92221C40A4006C5CA8 /* Name.swift in Sources */,
-				E6611F322225A1EE00AD2F83 /* StringRepresentable.swift in Sources */,
 				E631DAA821F249DB0063F632 /* PublicKey.swift in Sources */,
-				E6611F3C2225B55C00AD2F83 /* ArrayConvertible.swift in Sources */,
 				E631DAA021F249620063F632 /* KeyPair.swift in Sources */,
-				E68B5C0A21FBD8B000BEB049 /* MetaDataKey.swift in Sources */,
-				E6A4AB8E221C2FB3006C5CA8 /* Symbol.swift in Sources */,
-				E6D4B349223FBAC5004FC83A /* Data+StringConversion.swift in Sources */,
-				E6CEE73421F5D50E00D745EC /* Spin.swift in Sources */,
+				E6A5087E224E713F00128123 /* StringConvertible.swift in Sources */,
 				E6ED1A7121F8E74F00654105 /* InMemoryAtomStore.swift in Sources */,
 				E6040E682240FE960065AEC2 /* Signable.swift in Sources */,
 				E693DAB82232B549003720C2 /* JSONPrefixSpecifying.swift in Sources */,
+				E6A508A6224E713F00128123 /* ParticleModelConvertible.swift in Sources */,
 				E6ED1A6921F8E6CF00654105 /* NetworkState.swift in Sources */,
-				E6CEE73B21F5D56C00D745EC /* ResourceIdentifier.swift in Sources */,
-				E6ED1A4921F896C300654105 /* Addresses.swift in Sources */,
 				E631DADA21F5A8190063F632 /* HierarchicalDeterministicWallet.swift in Sources */,
-				E6A4AB7E221BF7C0006C5CA8 /* Identifiable.swift in Sources */,
-				E67A714C21FBB1DA00F4B2D0 /* TokenPermission.swift in Sources */,
+				E6A5089F224E713F00128123 /* MintedTokenParticle.swift in Sources */,
+				E6A50871224E713F00128123 /* StringRepresentable.swift in Sources */,
 				E6A4ABC6221EDD4A006C5CA8 /* BigUInt_Extension.swift in Sources */,
-				E693DAAF22326510003720C2 /* TokenDefinitionParticle+Decodable.swift in Sources */,
-				E6ED1A2F21F7D59500654105 /* ParticleGroups.swift in Sources */,
-				E6611F392225B2E400AD2F83 /* StringDictionary.swift in Sources */,
 				E6D4B35F223FD01A004FC83A /* AnyEncodableKeyValue.swift in Sources */,
-				E6A4AC0522243C38006C5CA8 /* InvalidStringError.swift in Sources */,
+				E6A5088B224E713F00128123 /* AtomObservation.swift in Sources */,
+				E6A5088F224E713F00128123 /* Granularity.swift in Sources */,
 				E6550EF7224BEE2800160267 /* Communcation.swift in Sources */,
+				E6A5088C224E713F00128123 /* ResourceIdentifier.swift in Sources */,
 				E6550EFD224CE95C00160267 /* String+JavaHashCode.swift in Sources */,
 				E6A4ABFD2223E4DA006C5CA8 /* PrefixedJsonDecodableByProxy.swift in Sources */,
+				E6A508AE224E713F00128123 /* TokenDefinitionParticle.swift in Sources */,
 				E62EFDC022492A8300B6DAD6 /* Bootstrap.swift in Sources */,
-				E6611F3E2225B56A00AD2F83 /* ArrayDecodable.swift in Sources */,
-				E6CEE74621F6381E00D745EC /* Signatures.swift in Sources */,
-				E6D4B345223FAF52004FC83A /* ArrayInitializable.swift in Sources */,
 				E62EFDC4224936BA00B6DAD6 /* Enviroment.swift in Sources */,
 				E672573721FB8D8E00BE3B4C /* JSONPrefix.swift in Sources */,
 				E672573C21FB8DB900BE3B4C /* String+Subscript.swift in Sources */,
 				E6ED1A7C21F8E7E000654105 /* ObservableType+FilterNil.swift in Sources */,
 				E6CEE73021F5D4E000D745EC /* CharacterSet.swift in Sources */,
 				E69AB72B2237B469006153DD /* RadixCodable.swift in Sources */,
+				E6A508BB224E713F00128123 /* ArrayConvertible.swift in Sources */,
+				E6A508BA224E713F00128123 /* ArrayInitializable.swift in Sources */,
 				E6040E662240FE8C0065AEC2 /* Message.swift in Sources */,
 				E6A507CD224E0B3D00128123 /* JSONRPCMethodGetUniverse.swift in Sources */,
 				E6040E6B2241287B0065AEC2 /* DER.swift in Sources */,
+				E6A5086E224E713F00128123 /* Data+StringConversion.swift in Sources */,
+				E6A508B7224E713F00128123 /* Accountable.swift in Sources */,
+				E6A508AF224E713F00128123 /* MessageParticle.swift in Sources */,
 				E601D3332242402300A81412 /* SignatureVerifier.swift in Sources */,
+				E6A508AC224E713F00128123 /* TokenDefinitionParticle+Encodable.swift in Sources */,
+				E6A50878224E713F00128123 /* LowerBound.swift in Sources */,
 				E672573021FB8D3900BE3B4C /* ParticleType.swift in Sources */,
+				E6A508B3224E713F00128123 /* Address.swift in Sources */,
+				E6A5089C224E713F00128123 /* MetaDataKey.swift in Sources */,
+				E6A508BD224E713F00128123 /* BigInt+BigUInt+BigInteger.swift in Sources */,
+				E6A508A1224E713F00128123 /* BurnedTokenParticle.swift in Sources */,
+				E6A50890224E713F00128123 /* MetaData.swift in Sources */,
 				E6CEE77121F7A64900D745EC /* RadixHash.swift in Sources */,
-				E693DAB122326528003720C2 /* TokenDefinitionParticle+Encodable.swift in Sources */,
-				E6ED1A4521F8914F00654105 /* Atoms.swift in Sources */,
 				E67A715421FBC65800F4B2D0 /* String+Extensions.swift in Sources */,
 				E69AB7292237B22C006153DD /* CBORDataConvertible.swift in Sources */,
-				E6A4AC0722243C54006C5CA8 /* UpperBound.swift in Sources */,
 				E62EFDE3224A4D6F00B6DAD6 /* WebSocketToNode.swift in Sources */,
+				E6A5089D224E713F00128123 /* ChronoMetaData.swift in Sources */,
 				E6A643162244F35D00CD4BFC /* Status.swift in Sources */,
+				E6A508BC224E713F00128123 /* ArrayDecodable.swift in Sources */,
 				E6A507D2224E146F00128123 /* JSONRPCMethodAtomsSubscribe.swift in Sources */,
+				E6A50896224E713F00128123 /* Nonce.swift in Sources */,
+				E6A50886224E713F00128123 /* Signatures.swift in Sources */,
 				E6A507D7224E154700128123 /* AtomSubscription.swift in Sources */,
+				E6A5086D224E713F00128123 /* StringConversionMode.swift in Sources */,
+				E6A508AA224E713F00128123 /* TokenDefinitionParticle+Decodable.swift in Sources */,
 				E6550EF3224BE78100160267 /* DefaultRadixJsonRpcClient+MakeRequest.swift in Sources */,
+				E6A508C6224EAD5700128123 /* TokenBalances.swift in Sources */,
+				E6A508A9224E713F00128123 /* UniqueParticle.swift in Sources */,
+				E6A508B5224E713F00128123 /* Ownable.swift in Sources */,
 				E6CEE77321F7A65F00D745EC /* RadixHashable.swift in Sources */,
 				E6611F5922298F9000AD2F83 /* RadixJSONEncoder.swift in Sources */,
-				E6CEE76921F7A59700D745EC /* EUID.swift in Sources */,
-				E69AB7362237F832006153DD /* StringInitializable.swift in Sources */,
+				E6A50894224E713F00128123 /* TokenPermissions.swift in Sources */,
+				E6A50881224E713F00128123 /* DictionaryConvertible.swift in Sources */,
 				E6ED1A5121F8E54900654105 /* AtomPuller.swift in Sources */,
 				E6CEE70721F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift in Sources */,
-				E6CEE75E21F7A42900D745EC /* CharacterSetSpecifying.swift in Sources */,
 				E6A507E1224E17F200128123 /* AtomEvent.swift in Sources */,
-				E6A4AC0B22243C8F006C5CA8 /* LowerBound.swift in Sources */,
-				E6D4B339223F9DB2004FC83A /* KeyValued.swift in Sources */,
 				E6CEE71321F5B3C000D745EC /* RandomData.swift in Sources */,
 				E6D4B36722400E1E004FC83A /* DSONOutputting.swift in Sources */,
 				E6D4B363223FF7D0004FC83A /* DSONOutput.swift in Sources */,
 				E62EFDD0224937CA00B6DAD6 /* DefaultRESTClient.swift in Sources */,
-				E6A4AB7C221BF7B3006C5CA8 /* Accountable.swift in Sources */,
 				E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */,
-				E6611F372225B2D600AD2F83 /* DictionaryDecodable.swift in Sources */,
+				E6A50879224E713F00128123 /* HexString.swift in Sources */,
+				E6A5088A224E713F00128123 /* RadixModelTypeSpecifying.swift in Sources */,
 				E6D4B341223FAC7F004FC83A /* Sha256Hasher.swift in Sources */,
 				E693DABA2232B55F003720C2 /* PrefixedJsonEncodable.swift in Sources */,
+				E6A50872224E713F00128123 /* ValueValidating.swift in Sources */,
 				E69AB7312237B9A2006153DD /* CBORStringConvertible.swift in Sources */,
 				E6D4B357223FC163004FC83A /* AnyEncodableKeyValuesProcessing.swift in Sources */,
-				E6ED1A4E21F8E51A00654105 /* AtomObservation.swift in Sources */,
 				E6FB03E221ECF186002CE331 /* Macros.swift in Sources */,
-				E693DAB322326546003720C2 /* TokenDefinitionParticle+CodingKeys.swift in Sources */,
-				E6611F302225A0E300AD2F83 /* ExactLengthSpecifying.swift in Sources */,
-				E6CEE76021F7A43900D745EC /* HexString.swift in Sources */,
 				E62EFDC9224936F700B6DAD6 /* NodeRouter.swift in Sources */,
-				E6A4AC0922243C61006C5CA8 /* MaxLengthSpecifying.swift in Sources */,
 				E6A4AB80221BF7DD006C5CA8 /* Set+InsertContentsOf.swift in Sources */,
 				E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */,
 				E6ED1A5A21F8E5AD00654105 /* ParticleStore.swift in Sources */,
-				E6CEE76F21F7A61B00D745EC /* BigInteger+StringConversion.swift in Sources */,
 				E6ED1A4021F8836300654105 /* UniverseConfig.swift in Sources */,
 				E6ED1A7E21F8E83300654105 /* ObservableType+ValidAtoms.swift in Sources */,
 				E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */,
 				E631DAC721F258D80063F632 /* Mnemonic+Error.swift in Sources */,
-				E67A714A21FBB1B900F4B2D0 /* TokenPermissions.swift in Sources */,
 				E693DAC3223685F9003720C2 /* DSONPrefixSpecifying.swift in Sources */,
+				E6A508A2224E713F00128123 /* TokenParticleConvertible.swift in Sources */,
 				E6611F5722298F7600AD2F83 /* RadixJSONDecoder.swift in Sources */,
-				E6A507F1224E6A0300128123 /* Balance.swift in Sources */,
-				E6A4AB96221D4680006C5CA8 /* Description.swift in Sources */,
-				E6A4AB9A221D508D006C5CA8 /* Nonce.swift in Sources */,
-				E6A4AB9E221D57F6006C5CA8 /* TokenDefinitionIdentifier.swift in Sources */,
 				E6D4B343223FAC8B004FC83A /* Sha256TwiceHasher.swift in Sources */,
+				E6A50876224E713F00128123 /* RequiringThatLengthIsMultipleOfN.swift in Sources */,
+				E6A50897224E713F00128123 /* TokenPermission.swift in Sources */,
 				E6550EEC224BE70F00160267 /* JSONRPCRequest.swift in Sources */,
+				E6A50895224E713F00128123 /* MetaDataConvertible.swift in Sources */,
 				E69AB72F2237B774006153DD /* EncodableKeyValue.swift in Sources */,
-				E6D4B35B223FCE5D004FC83A /* TransferredTokenParticle.swift in Sources */,
 				E6ED1A6B21F8E6E900654105 /* AtomPullerSubmitter.swift in Sources */,
+				E6A50882224E713F00128123 /* DictionaryDecodable.swift in Sources */,
+				E6A508C4224EAD1E00128123 /* TokenConvertible.swift in Sources */,
 				E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */,
-				E6A4AC0F22243CD7006C5CA8 /* ValueValidating.swift in Sources */,
 				E62EFDCE224937A400B6DAD6 /* RESTRequestInterceptor.swift in Sources */,
+				E6A508A4224E713F00128123 /* IdentifiableTokenWithGranularity.swift in Sources */,
+				E6A50874224E713F00128123 /* CharacterSetSpecifying.swift in Sources */,
 				E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */,
 				E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */,
-				E6A4AB84221BFCF4006C5CA8 /* Ownable.swift in Sources */,
 				E6A6431C22450FEC00CD4BFC /* ECIES.swift in Sources */,
 				E6A507E8224E20BF00128123 /* RPCResponseLookingLikeRequest.swift in Sources */,
 				E69AB74F2239172C006153DD /* DSONEncodable.swift in Sources */,
 				E62EFDDC224A42C300B6DAD6 /* Dictionary_Extensions.swift in Sources */,
 				E631DAD121F25A6B0063F632 /* Mnemonic+Strength.swift in Sources */,
-				E6CEE75921F7A3F700D745EC /* StringConvertible.swift in Sources */,
 				E69AB74A2239117A006153DD /* CBORDictionaryConvertible.swift in Sources */,
+				E6A508B0224E713F00128123 /* ParticleConvertible.swift in Sources */,
 				E6D4B33D223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift in Sources */,
 				E6D4B36922400F41004FC83A /* SetAlgebra+Intersecting.swift in Sources */,
 				E6ED1A4C21F8ACB700654105 /* Int+DataConvertible.swift in Sources */,
-				E6A507F9224E6ED700128123 /* ConsumingTokens.swift in Sources */,
+				E6A508B2224E713F00128123 /* Addresses.swift in Sources */,
 				E62EFDBE22490BA900B6DAD6 /* Router.swift in Sources */,
-				E6CEE71921F5B4B900D745EC /* Atom.swift in Sources */,
 				E6A6431A22450FA800CD4BFC /* PublicKey+ECEIS+Encrypt.swift in Sources */,
 				E631DAD321F25AA00063F632 /* Mnemonic+Language.swift in Sources */,
 				E6ED1A5C21F8E5CA00654105 /* AtomStore.swift in Sources */,
 				E6A507DD224E168300128123 /* JSONRPCClients.swift in Sources */,
-				E6A4AB88221BFD2C006C5CA8 /* Chronological.swift in Sources */,
 				E69AB75422393D3E006153DD /* CBORArrayConvertible.swift in Sources */,
 				E6ED1A7521F8E76C00654105 /* DefaultParticleStore.swift in Sources */,
+				E6A508B6224E713F00128123 /* Fungible.swift in Sources */,
+				E6A50892224E713F00128123 /* Amount.swift in Sources */,
+				E6A5089A224E713F00128123 /* KeyValued.swift in Sources */,
 				E62EFDD822495AEE00B6DAD6 /* StringValue.swift in Sources */,
 				E6D4B355223FBEE8004FC83A /* DSONPrefixedDataConvertible.swift in Sources */,
-				E693DAB6223265BA003720C2 /* TokenDefinitionParticle+Identifiable.swift in Sources */,
+				E6A5087D224E713F00128123 /* ExactLengthSpecifying.swift in Sources */,
 				E62EFE15224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift in Sources */,
 				E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */,
+				E6A50884224E713F00128123 /* EUID.swift in Sources */,
 				E6550EE8224BBDBD00160267 /* NodeDiscovery.swift in Sources */,
-				E67A715621FBC71B00F4B2D0 /* ResourceType.swift in Sources */,
+				E6A50885224E713F00128123 /* Shards.swift in Sources */,
+				E6A508AB224E713F00128123 /* TokenDefinitionParticle+CodingKeys.swift in Sources */,
+				E6A50898224E713F00128123 /* Name.swift in Sources */,
 				E62EFDE1224A4D4600B6DAD6 /* PersistentChannel.swift in Sources */,
+				E6A5086C224E713F00128123 /* DataConvertible+Concatenation+Operators.swift in Sources */,
+				E6A50893224E713F00128123 /* Description.swift in Sources */,
 				E69AB72D2237B762006153DD /* EncodableKeyValueListConvertible.swift in Sources */,
+				E6A50870224E713F00128123 /* DataInitializable.swift in Sources */,
+				E6A508A7224E713F00128123 /* SpunParticle+Sequence.swift in Sources */,
 				E62EFDC22249368900B6DAD6 /* BootstrapConfig.swift in Sources */,
+				E6A508AD224E713F00128123 /* TokenDefinitionParticle+Identifiable.swift in Sources */,
 				E6A507D9224E155A00128123 /* AtomSubscriptionStart.swift in Sources */,
+				E6A5088E224E713F00128123 /* Spin.swift in Sources */,
 				E69AB7272237B172006153DD /* CBORConvertible.swift in Sources */,
 				E6040E702241294C0065AEC2 /* Secp256k1.swift in Sources */,
+				E6A508C0224E7C0400128123 /* SignedAmount.swift in Sources */,
 				E631DACB21F25A040063F632 /* Mnemonic+Generator.swift in Sources */,
 				E631DAC921F259BE0063F632 /* MnemonicBackedUpByUser.swift in Sources */,
-				E6ED1A3B21F87C4700654105 /* Shards.swift in Sources */,
+				E6A5087B224E713F00128123 /* InvalidStringError.swift in Sources */,
 				E6ED1A7821F8E78900654105 /* Optional+OptionalType.swift in Sources */,
 				E6550EEF224BE74B00160267 /* JSONRPCMethodGetLivePeers.swift in Sources */,
 				E6ED1A3821F87C1800654105 /* RadixSystem.swift in Sources */,
-				E6CEE77821F7A6B000D745EC /* SpunParticle+Sequence.swift in Sources */,
+				E6A508A8224E713F00128123 /* SpunParticle.swift in Sources */,
 				E6A507D0224E0EF200128123 /* JSONRPCKit_Batch_Extension.swift in Sources */,
 				E6ED1A5621F8E58300654105 /* SubmitAtomAction.swift in Sources */,
-				E67A714821FBAEF500F4B2D0 /* Granularity.swift in Sources */,
-				E6EF45A622369EE200FA4158 /* DataInitializable.swift in Sources */,
 				E6A6430B2244D38800CD4BFC /* BitcoinKit+ECMethods.swift in Sources */,
 				E69AB75622393F2F006153DD /* AnyEncodableKeyValueListConvertible.swift in Sources */,
 				E62EFE17224A7AD300B6DAD6 /* APIClient.swift in Sources */,
 				E6CEE74421F637EC00D745EC /* Signature.swift in Sources */,
-				E6D4B335223F9A2E004FC83A /* MetaDataConvertible.swift in Sources */,
 				E6550EEA224BBDC900160267 /* NodeDiscoveryHardCoded.swift in Sources */,
 				E6611F44222696E900AD2F83 /* BigInt_Extension.swift in Sources */,
+				E6A508C2224EAD0B00128123 /* TokenDefinitionReferencing.swift in Sources */,
 				E62EFDE6224A4DAF00B6DAD6 /* WebSocketEvent.swift in Sources */,
-				E6D4B34D223FBB37004FC83A /* StringConversionMode.swift in Sources */,
-				E6CEE76C21F7A5C200D745EC /* BigInt+BigUInt+BigInteger.swift in Sources */,
+				E6A508BE224E713F00128123 /* BigInteger+StringConversion.swift in Sources */,
 				E6A6431E2245113600CD4BFC /* PrivateKey+ECEIS+Decrypt.swift in Sources */,
-				E6CEE72321F5D44300D745EC /* Address.swift in Sources */,
 				E6A507EA224E20CC00128123 /* RPCResponseResultWithRequestId.swift in Sources */,
 				E601D33122423FF900A81412 /* Signer.swift in Sources */,
-				E6D4B337223F9D99004FC83A /* ChronoMetaData.swift in Sources */,
 				E6A507D5224E14D500128123 /* AtomSubscriptionRequest.swift in Sources */,
+				E6A50887224E713F00128123 /* Atom+Sequence.swift in Sources */,
+				E6A508A5224E713F00128123 /* ConsumableTokens.swift in Sources */,
 				E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */,
 				E62EFDE8224A4DBF00B6DAD6 /* WebSocketStatus.swift in Sources */,
 				E631DAA321F249910063F632 /* PrivateKey.swift in Sources */,
+				E6A50880224E713F00128123 /* StringInitializable.swift in Sources */,
 				E6550EF5224BEE1200160267 /* WebSockets.swift in Sources */,
-				E6ED1A8121F8E87400654105 /* Atom+Sequence.swift in Sources */,
-				E6A4AC1122243EDC006C5CA8 /* ValidValueInitializable.swift in Sources */,
 				E6D1318321F7B2050014792D /* Data+Hex.swift in Sources */,
 				E6A643172244FE9A00CD4BFC /* SecureGenerateBytes.swift in Sources */,
 				E62EFDBC2249090500B6DAD6 /* NodeFinder.swift in Sources */,
 				E631DACD21F25A1C0063F632 /* Mnemonic.swift in Sources */,
+				E6A50888224E713F00128123 /* Atoms.swift in Sources */,
+				E6A50889224E713F00128123 /* Atom.swift in Sources */,
+				E6A5087F224E713F00128123 /* ValidValueInitializable.swift in Sources */,
 				E62EFDFE224A4EC100B6DAD6 /* RadixJsonRpcClient.swift in Sources */,
-				E6CEE74F21F638E700D745EC /* ParticleGroup.swift in Sources */,
-				E68B5C0821FBD46F00BEB049 /* Amount.swift in Sources */,
 				E601D33E22428C8D00A81412 /* SignedAtomVerifier.swift in Sources */,
-				E6A4AB9C221D5098006C5CA8 /* Planck.swift in Sources */,
+				E6A5089B224E713F00128123 /* Planck.swift in Sources */,
 				E672573921FB8D9A00BE3B4C /* PrefixedStringWithValue.swift in Sources */,
 				E6D4B33F223FAC72004FC83A /* Hashing.swift in Sources */,
 				E6ED1A6F21F8E73D00654105 /* DefaultAtomPuller.swift in Sources */,
-				E6611F55222984DE00AD2F83 /* ParticleModelConvertible.swift in Sources */,
-				E6A4AB82221BF92A006C5CA8 /* MetaData.swift in Sources */,
-				E6D4B35D223FCE6A004FC83A /* MintedTokenParticle.swift in Sources */,
+				E6A50875224E713F00128123 /* UpperBound.swift in Sources */,
 				E693DAC12232BC6F003720C2 /* CBOR+DSONPrefix.swift in Sources */,
 				E631DAD621F5A7570063F632 /* Network.swift in Sources */,
 				E6A507E4224E209200128123 /* RPCResponse.swift in Sources */,
-				E6A507F7224E6ECC00128123 /* ConsumableTokens.swift in Sources */,
 				E6611F4F2229849000AD2F83 /* AtomModelDecodingError.swift in Sources */,
+				E6A508A3224E713F00128123 /* TransferredTokenParticle.swift in Sources */,
 				E6ED1A5E21F8E5DD00654105 /* Ledger.swift in Sources */,
 				E601D3372242411400A81412 /* AtomSigning.swift in Sources */,
+				E6A50899224E713F00128123 /* TokenAction.swift in Sources */,
+				E6A5088D224E713F00128123 /* ResourceType.swift in Sources */,
 				E693DABC2232B598003720C2 /* PrefixedJsonCodable.swift in Sources */,
-				E6A4AC0D22243CA5006C5CA8 /* MinLengthSpecifying.swift in Sources */,
-				E6611F352225B2C000AD2F83 /* DictionaryConvertible.swift in Sources */,
-				E6161013223966E800025A54 /* RequiringThatLengthIsMultipleOfN.swift in Sources */,
+				E6A5086F224E713F00128123 /* DataConvertible+StringConversion.swift in Sources */,
+				E6A50877224E713F00128123 /* MinLengthSpecifying.swift in Sources */,
 				E6ED1A6D21F8E71100654105 /* Cache.swift in Sources */,
 				E6A4ABCE221EEECC006C5CA8 /* KeyedDecodingContainer+PrefixedJson+Decode.swift in Sources */,
-				E6611F51222984B900AD2F83 /* RadixModelTypeSpecifying.swift in Sources */,
+				E6A5086B224E713F00128123 /* DataConvertible.swift in Sources */,
+				E6A508A0224E713F00128123 /* ConsumingTokens.swift in Sources */,
 				E6ED1A6521F8E69000654105 /* NodeRunnerData.swift in Sources */,
 				E62EFDC6224936E000B6DAD6 /* URL_Extensions.swift in Sources */,
+				E6A50883224E713F00128123 /* StringDictionary.swift in Sources */,
 				E62EFE00224A4ED000B6DAD6 /* DefaultRadixJsonRpcClient.swift in Sources */,
-				E6D4B34B223FBB12004FC83A /* DataConvertible+Concatenation+Operators.swift in Sources */,
-				E6D4B359223FCE4F004FC83A /* BurnedTokenParticle.swift in Sources */,
 				E6ED1A5321F8E56E00654105 /* NodeAction.swift in Sources */,
 				E68B5BFF21FBCD2C00BEB049 /* PrefixedJsonDecodable.swift in Sources */,
-				E6ED1A8921F9F5BC00654105 /* UniqueParticle.swift in Sources */,
 				E6040E6D224128870065AEC2 /* DERCoding.swift in Sources */,
-				E6A507FB224E6EE500128123 /* IdentifiableTokenWithGranularity.swift in Sources */,
+				E6A5089E224E713F00128123 /* Symbol.swift in Sources */,
 				E6A507DF224E17E400128123 /* AtomSubscriptionUpdate.swift in Sources */,
 				E62EFE14224A77F000B6DAD6 /* AtomQuery.swift in Sources */,
-				E6A4AB90221C3F64006C5CA8 /* TokenDefinitionParticle.swift in Sources */,
 				E6C9FB9B2243DCE6000AAE12 /* Signing.swift in Sources */,
 				E6D4B361223FD046004FC83A /* AnyEncodableKeyValueList.swift in Sources */,
-				E6CEE75121F6391300D745EC /* SpunParticle.swift in Sources */,
+				E6A50873224E713F00128123 /* Base64String.swift in Sources */,
 				E6A507F3224E6A4600128123 /* TokenBalance.swift in Sources */,
 				E6D4B33B223F9DD2004FC83A /* TimeConverter.swift in Sources */,
+				E6A50891224E713F00128123 /* TokenDefinitionIdentifier.swift in Sources */,
 				E6A507DB224E15DC00128123 /* AtomSubscriptionCancel.swift in Sources */,
+				E6A508B9224E713F00128123 /* Identifiable.swift in Sources */,
 				E631DACF21F25A570063F632 /* Mnemonic+Word.swift in Sources */,
-				E6A4AB86221BFCFC006C5CA8 /* Fungible.swift in Sources */,
+				E6A5087C224E713F00128123 /* MaxLengthSpecifying.swift in Sources */,
+				E6A508B8224E713F00128123 /* Chronological.swift in Sources */,
 				E6A507E6224E20AB00128123 /* RPCResposeResultConvertible.swift in Sources */,
-				E68B5C0621FBD36400BEB049 /* TokenAction.swift in Sources */,
 				E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */,
 				E6A4ABC0221EBAB1006C5CA8 /* QuickSpec_Extension.swift in Sources */,
 				E62EFDCC2249378300B6DAD6 /* RESTClient.swift in Sources */,
-				E6CEE75C21F7A41A00D745EC /* DataConvertible.swift in Sources */,
-				E6CEE74A21F6384000D745EC /* MessageParticle.swift in Sources */,
 				E6A507F5224E6AEA00128123 /* Token.swift in Sources */,
 				E6ED1A6721F8E6AC00654105 /* NodeState.swift in Sources */,
 				E6ED1A7321F8E75D00654105 /* DefaultLedger.swift in Sources */,
-				E6D4B347223FBAB0004FC83A /* DataConvertible+StringConversion.swift in Sources */,
 				E693DAC522368607003720C2 /* DSONPrefix.swift in Sources */,
-				E6CEE73621F5D51F00D745EC /* ParticleConvertible.swift in Sources */,
+				E6A5087A224E713F00128123 /* Base58String.swift in Sources */,
+				E6A508B4224E713F00128123 /* ParticleGroup.swift in Sources */,
+				E6A508B1224E713F00128123 /* ParticleGroups.swift in Sources */,
 				E6ED1A5821F8E5A100654105 /* AtomSubmitter.swift in Sources */,
 				E6ED1A4221F8872300654105 /* RadixUniverse.swift in Sources */,
-				E6ED1A4721F892B600654105 /* TokenParticleConvertible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2534,6 +2560,8 @@
 				E69AB7482238F626006153DD /* DsonEncodingTokenDefinitionParticleSpec.swift in Sources */,
 				E6550EFF224D48CB00160267 /* GetAtomsTests.swift in Sources */,
 				E6A4ABD422205C6E006C5CA8 /* AtomJsonDeserializationInvalidJsonKeySpec.swift in Sources */,
+				E6A508CC224EE25B00128123 /* GetBalanceTest.swift in Sources */,
+				E6A508CA224EBFD000128123 /* TokenBalanceReducerTests.swift in Sources */,
 				E6A643262245465E00CD4BFC /* HmacTest.swift in Sources */,
 				E6A4ABE722207034006C5CA8 /* TooShortNameSpec.swift in Sources */,
 				E6550F01224D5FDB00160267 /* GetUniverseOverWS.swift in Sources */,

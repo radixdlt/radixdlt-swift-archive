@@ -9,6 +9,6 @@
 import Foundation
 
 public protocol IdentifiableTokenWithGranularity {
-    var tokenDefinitionIdentifier: TokenDefinitionIdentifier { get }
+    var tokenDefinitionReference: TokenDefinitionReference { get }
     var granularity: Granularity { get }
 }

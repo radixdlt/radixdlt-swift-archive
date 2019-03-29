@@ -13,7 +13,7 @@ public protocol AtomSigning {
 }
 
 // MARK: - Default Implementation
-public extension AtomSigning where Self: Signing, Self: Ownable {
+public extension AtomSigning where Self: Signing, Self: PublicKeyOwner {
     func sign(atom unsignedAtom: UnsignedAtom) throws -> SignedAtom {
         let signatureId = publicKey.hashId
         let signature = try Signer.sign(unsignedAtom, privateKey: privateKey)

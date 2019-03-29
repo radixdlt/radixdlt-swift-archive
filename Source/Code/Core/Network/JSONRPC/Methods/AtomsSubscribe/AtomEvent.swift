@@ -61,6 +61,22 @@ public extension AtomEvent {
     }
 }
 
+public extension AtomEvent {
+    var store: AtomEvent? {
+        guard type == .store else {
+            return nil
+        }
+        return self
+    }
+    
+    var delete: AtomEvent? {
+        guard type == .delete else {
+            return nil
+        }
+        return self
+    }
+}
+
 // MARK: RadixModelTypeStaticSpecifying
 public extension AtomEvent {
     static let serializer = RadixModelType.atomEvent

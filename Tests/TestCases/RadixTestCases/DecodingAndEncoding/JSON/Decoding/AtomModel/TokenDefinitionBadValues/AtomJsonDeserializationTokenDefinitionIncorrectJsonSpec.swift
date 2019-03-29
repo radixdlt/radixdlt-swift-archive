@@ -117,8 +117,7 @@ private let tokenDefintionJson = """
                         "granularity": ":u20:1",
                         "permissions": {
                             "burn": ":str:none",
-                            "mint": ":str:none",
-                            "transfer": ":str:none"
+                            "mint": ":str:none"
                         },
                         "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
                     }

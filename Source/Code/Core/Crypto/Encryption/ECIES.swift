@@ -64,11 +64,11 @@ public extension ECIES {
     static let byteCountMac = 32
     static let byteCountCipherTextLength = MemoryLayout<UInt32>.size
     
-    static func encrypt(data dataConvertible: DataConvertible, using ownable: Ownable) throws -> Data {
+    static func encrypt(data dataConvertible: DataConvertible, using publicKeyOwner: PublicKeyOwner) throws -> Data {
         let data = dataConvertible.asData
         // 0. Here follows ECEIS algorithm (steps copied from Radix DLT Java library)
         // 1. The destination is this publicKey
-        let point = EllipticCurvePoint.decodePointFromPublicKey(ownable.publicKey)
+        let point = EllipticCurvePoint.decodePointFromPublicKey(publicKeyOwner.publicKey)
         
         // 2. Generate 16 random bytes using a secure random number generator. Call them IV
         // swiftlint:disable:next identifier_name

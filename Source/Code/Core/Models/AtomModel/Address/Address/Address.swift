@@ -17,6 +17,7 @@ public struct Address:
     DataInitializable,
     StringRepresentable,
     Ownable,
+    PublicKeyOwner,
     RadixHashable,
     Codable,
     Hashable,
@@ -115,6 +116,13 @@ public extension Address {
 public extension Address {
     var stringValue: String {
         return base58String.stringValue
+    }
+}
+
+// MARK: - Ownable
+public extension Address {
+    var address: Address {
+        return self
     }
 }
 

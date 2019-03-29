@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol ParticleConvertible: Codable {
+public protocol ParticleConvertible: RadixHashable, Codable {
     var particleType: ParticleType { get }
     func shardables() -> Addresses
 }

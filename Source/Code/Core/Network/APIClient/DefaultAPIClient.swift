@@ -78,10 +78,16 @@ public extension DefaultAPIClient {
         }
     }
     
-    func balance(forAddress address: Address, token: Symbol) -> Observable<TokenBalance> {
+    func balance(forAddress address: Address, token: TokenDefinitionReference) -> Observable<TokenBalance> {
         return pull(from: address)
             .map { $0.update }.filterNil()
-            .map { $0.atomEvents. }
+            .map { $0.atomEvents.compactMap { $0.store } }
+            .map { $0.map { $0.atom.tokensBalances() } }
+            .scan(TokenBalances(), accumulator: ({ (tokenBalance: TokenBalances, tokenBalances: [TokenBalances]) -> TokenBalances in
+                try tokenBalances.reduce(tokenBalance, { try $0.merging(with: $1) })
+            })).map {
+                $0.balanceOrZero(of: token, address: address)
+        }
     }
     
     func submit(atom: Atom) -> Observable<SubmitAtomAction> {

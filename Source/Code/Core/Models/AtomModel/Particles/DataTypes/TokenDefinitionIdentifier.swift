@@ -1,5 +1,5 @@
 //
-//  TokenDefinitionIdentifier.swift
+//  TokenDefinitionReference.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-02-20.
@@ -11,9 +11,9 @@ import Foundation
 // swiftlint:disable colon
 
 /// A subset of `ResourceIdentifier` which `type == .tokens`
-public struct TokenDefinitionIdentifier:
+public struct TokenDefinitionReference:
     PrefixedJsonCodableByProxy,
-    Identifiable,
+    TokenDefinitionReferencing,
     Hashable,
     CustomStringConvertible {
 // swiftlint:enable colon
@@ -28,7 +28,7 @@ public struct TokenDefinitionIdentifier:
 }
 
 // MARK: - PrefixedJsonDecodableByProxy
-public extension TokenDefinitionIdentifier {
+public extension TokenDefinitionReference {
     typealias Proxy = ResourceIdentifier
     var proxy: Proxy {
         return identifier
@@ -39,14 +39,14 @@ public extension TokenDefinitionIdentifier {
 }
 
 // MARK: - StringInitializable
-public extension TokenDefinitionIdentifier {
+public extension TokenDefinitionReference {
     init(string: String) throws {
         let identifier = try ResourceIdentifier(string: string)
         try self.init(identifier: identifier)
     }
 }
 
-public extension TokenDefinitionIdentifier {
+public extension TokenDefinitionReference {
     init(identifier: ResourceIdentifier) throws {
         let symbol = try Symbol(string: identifier.unique)
         self.init(address: identifier.address, symbol: symbol)
@@ -54,28 +54,35 @@ public extension TokenDefinitionIdentifier {
 }
 
 // MARK: - Public
-public extension TokenDefinitionIdentifier {
+public extension TokenDefinitionReference {
     var identifier: ResourceIdentifier {
         return ResourceIdentifier(address: address, type: .tokens, symbol: symbol)
     }
 }
 
 // MARK: - Hashable
-public extension TokenDefinitionIdentifier {
+public extension TokenDefinitionReference {
     func hash(into hasher: inout Hasher) {
         hasher.combine(description)
     }
 }
 
+// MARK: - TokenDefinitionReferencing
+public extension TokenDefinitionReference {
+    var tokenDefinitionReference: TokenDefinitionReference {
+        return self
+    }
+}
+
 // MARK: - CustomStringConvertible
-public extension TokenDefinitionIdentifier {
+public extension TokenDefinitionReference {
     var description: String {
         return identifier.identifier
     }
 }
 
 // MARK: - Decodable
-public extension TokenDefinitionIdentifier {
+public extension TokenDefinitionReference {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rri = try container.decode(ResourceIdentifier.self)

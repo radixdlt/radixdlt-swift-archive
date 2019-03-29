@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Token {
+public struct Token: TokenConvertible, Hashable {
     public let symbol: Symbol
     public let name: Name
     public let address: Address

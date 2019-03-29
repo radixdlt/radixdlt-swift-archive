@@ -14,6 +14,27 @@ public extension Sequence where Element: Hashable {
     }
 }
 
+public extension Array where Element: Hashable {
+    enum ArrayToSetError: Swift.Error {
+        case arrayContainedDuplicates
+    }
+    func toSet() throws -> Set<Element> {
+        let set = asSet
+        guard set.count == self.count else {
+            throw ArrayToSetError.arrayContainedDuplicates
+        }
+        return set
+    }
+}
+
+public extension Sequence {
+    func group<Key>(by keyPath: KeyPath<Element, Key>) -> [Key: [Element]] where Key: Hashable {
+        return Dictionary(grouping: self, by: {
+            $0[keyPath: keyPath]
+        })
+    }
+}
+
 public enum Order {
     case asending
     case descending

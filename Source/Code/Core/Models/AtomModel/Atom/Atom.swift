@@ -22,7 +22,7 @@ public struct Atom:
     SignableConvertible,
     ArrayInitializable,
     Codable,
-    Equatable,
+    Hashable,
     CustomStringConvertible,
     CustomDebugStringConvertible {
 // swiftlint:enable colon
@@ -117,7 +117,16 @@ public extension Atom {
         return spunParticles().compactMap(type: MessageParticle.self)
     }
     
-//    func consumableTokens() -> [SpunParticle]
+    func tokensBalances() -> TokenBalances {
+        let tokenBalances = spunParticles().compactMap { (spunParticle: SpunParticle) -> TokenBalance? in
+            guard let consumable = spunParticle.particle as? ConsumableTokens else {
+                return nil
+            }
+            return TokenBalance(consumable: consumable, spin: spunParticle.spin)
+        }
+        return TokenBalances(balances: tokenBalances)
+    }
+    
     func particlesOfType<P>(_ type: P.Type, spin: Spin) -> [P] where P: ParticleConvertible {
         return spunParticles()
             .filter(spin: spin)

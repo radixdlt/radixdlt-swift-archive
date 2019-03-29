@@ -25,13 +25,13 @@ public extension Sequence where Element == Atom {
         return spunParticles(spin: .up).compactMap(type: type)
     }
     
-    func tokenDefinition(where matchCriteria: (TokenDefinitionIdentifier) -> Bool) -> TokenDefinitionIdentifier? {
+    func tokenDefinition(where matchCriteria: (TokenDefinitionReference) -> Bool) -> TokenDefinitionReference? {
         return upParticles(type: TokenDefinitionParticle.self)
-            .compactMap { try? TokenDefinitionIdentifier(identifier: $0.identifier) }
+            .compactMap { try? TokenDefinitionReference(identifier: $0.identifier) }
             .first(where: matchCriteria)
     }
     
-    func tokenDefinition(symbol: Symbol, comparison: (Symbol, Symbol) -> Bool) -> TokenDefinitionIdentifier? {
+    func tokenDefinition(symbol: Symbol, comparison: (Symbol, Symbol) -> Bool) -> TokenDefinitionReference? {
         return tokenDefinition {
             comparison($0.symbol, symbol)
         }

@@ -13,7 +13,7 @@ public struct TransferredTokenParticle: TokenParticleConvertible, ConsumableToke
     public static let serializer = RadixModelType.transferredTokensParticle
     
     public let address: Address
-    public let tokenDefinitionIdentifier: TokenDefinitionIdentifier
+    public let tokenDefinitionReference: TokenDefinitionReference
     public let granularity: Granularity
     public let planck: Planck
     public let nonce: Nonce
@@ -25,13 +25,13 @@ public struct TransferredTokenParticle: TokenParticleConvertible, ConsumableToke
         nonce: Nonce = Nonce(),
         planck: Planck = Planck(),
         amount: Amount,
-        tokenDefinitionIdentifier: TokenDefinitionIdentifier
+        tokenDefinitionReference: TokenDefinitionReference
         ) {
         self.address = address
         self.granularity = granularity
         self.nonce = nonce
         self.planck = planck
         self.amount = amount
-        self.tokenDefinitionIdentifier = tokenDefinitionIdentifier
+        self.tokenDefinitionReference = tokenDefinitionReference
     }
 }

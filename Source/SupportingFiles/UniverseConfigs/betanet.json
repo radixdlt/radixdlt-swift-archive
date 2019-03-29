@@ -40,7 +40,6 @@
                         "granularity": ":u20:1",
                         "permissions": {
                             "burn": ":str:none",
-                            "transfer": ":str:none",
                             "mint": ":str:token_creation_only"
                         },
                         "name": ":str:Rads",

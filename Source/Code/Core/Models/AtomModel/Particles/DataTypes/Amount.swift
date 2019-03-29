@@ -15,8 +15,9 @@ public struct Amount:
     PrefixedJsonCodable,
     StringRepresentable,
     CBORDataConvertible,
-    Equatable,
-    ExpressibleByIntegerLiteral {
+    SignedAmount,
+    Comparable,
+ExpressibleByIntegerLiteral {
 // swiftlint:enable colon
     public static let subunitsDenominatorDecimalExponent: Int = 18
     public static let subunitsDenominator = BigUnsignedInt(10).power(Amount.subunitsDenominatorDecimalExponent)
@@ -24,9 +25,34 @@ public struct Amount:
     public typealias Value = BigUnsignedInt
     
     public let value: Value
+    public let isPositive = true
     
     public init(value: Value) {
         self.value = value
+    }
+}
+
+// MARK: - Public Methods
+
+public extension Amount {
+    
+    static var zero: Amount {
+        return Amount(value: 0)
+    }
+    
+    func negated() -> SignedAmount {
+        return NegativeAmount(magnitude: value)
+    }
+    
+    var signedAmount: BigSignedInt {
+        return BigSignedInt(sign: .plus, magnitude: value)
+    }
+}
+
+// MARK: - Comparable
+public extension Amount {
+    static func < (lhs: Amount, rhs: Amount) -> Bool {
+        return lhs.value < rhs.value
     }
 }
 
