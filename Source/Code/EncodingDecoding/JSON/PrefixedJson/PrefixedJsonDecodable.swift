@@ -18,6 +18,12 @@ public extension PrefixedJsonDecodable where Self: StringRepresentable {
     }
 }
 
+public extension PrefixedJsonDecodable where Self: StringInitializable {
+    static var jsonPrefix: JSONPrefix {
+        return .string
+    }
+}
+
 public extension PrefixedJsonDecodable {
     init(prefixedString: PrefixedStringWithValue) throws {
         guard prefixedString.jsonPrefix == Self.jsonPrefix else {

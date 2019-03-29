@@ -83,6 +83,6 @@ private let expected = (
     wif: "cPS3DcP8WFCwJnyeqHDF8LkLNCeqEP3PaNm6QvbnZ9mbJ7wKNP5w",
     publicKey: "025b29b14985d1e22fa22146072c643f449b5ebc0117cea585625c75270baf9fcf",
     message: messageText,
-    messageHashedUTF8Encoded: Crypto.sha256(messageText.data(using: .utf8)!),
+    messageHashedUTF8Encoded: Crypto.sha256(messageText.toData()),
     signature: "3045022100d91b331dd05b4e0c298c6b408a1697a47053156b07e6113e97bef396fe5eaeb702202f14d9f28e207338f752fe6921835645848f310f9fe86040032b5c61e69add64"
 )

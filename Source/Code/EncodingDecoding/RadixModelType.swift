@@ -9,6 +9,8 @@
 import Foundation
 
 public enum RadixModelType: String, Codable, CaseIterable {
+    case atomEvent
+    
     case signature
     case nodeRunnerData = "PEER"
     case radixSystem = "SYSTEM"

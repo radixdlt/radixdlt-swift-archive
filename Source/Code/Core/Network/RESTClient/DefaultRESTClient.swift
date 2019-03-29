@@ -43,7 +43,7 @@ public extension DefaultRESTClient {
                 .responseDecodable { (response: DataResponse<D>) -> Void in
                     switch response.result {
                     case .failure(let error):
-                        print("⚠️ error: \(error)")
+                        log.error(error)
                         single(.error(error))
                     case .success(let model):
                         single(.success(model))

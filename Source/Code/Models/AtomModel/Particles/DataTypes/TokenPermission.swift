@@ -8,11 +8,17 @@
 
 import Foundation
 
+//public enum TokenPermission {
+//    TOKEN_CREATION_ONLY,
+//    TOKEN_OWNER_ONLY,
+//    ALL,
+//    NONE
+//}
+
 // TODO should this be an optionset?
 public enum TokenPermission: String, StringInitializable, StringRepresentable, PrefixedJsonCodable {
-    case pow = "pow"
-    case genesisOnly = "genesis_only"
-    case sameAtomOnly = "same_atom_only"
+
+    case tokenCreationOnly = "token_creation_only"
     case tokenOwnerOnly = "token_owner_only"
     case all = "all"
     case none = "none"

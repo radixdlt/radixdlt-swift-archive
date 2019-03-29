@@ -31,6 +31,7 @@ class SerializerTests: XCTestCase {
         doTest(.mintedTokensParticle, 1745075425)
         doTest(.transferredTokensParticle, 1311280198)
         doTest(.uniqueParticle, 1446890290)
+        doTest(.atomEvent, -1784097847)
         
         XCTAssertEqual(tested.count, RadixModelType.allCases.count)
     }

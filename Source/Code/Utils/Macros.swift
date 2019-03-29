@@ -8,6 +8,15 @@
 
 import Foundation
 
+import SwiftyBeaver
+internal let log: SwiftyBeaver.Type = {
+    let log = SwiftyBeaver.self
+    let console = ConsoleDestination()
+    console.minLevel = .debug
+    log.addDestination(console)
+    return log
+}()
+
 /// true when optimization is set to -Onone
 var isDebug: Bool {
     return _isDebugAssertConfiguration()

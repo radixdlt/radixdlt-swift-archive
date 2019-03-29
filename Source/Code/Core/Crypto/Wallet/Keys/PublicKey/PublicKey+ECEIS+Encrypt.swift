@@ -14,8 +14,6 @@ public extension Ownable {
     }
     
     func encrypt(text: String, encoding: String.Encoding = .default) throws -> Data {
-        // swiftlint:disable:next force_unwrap
-        let encoded = text.data(using: encoding)!
-        return try encrypt(encoded)
+        return try encrypt(text.toData(encodingForced: encoding))
     }
 }

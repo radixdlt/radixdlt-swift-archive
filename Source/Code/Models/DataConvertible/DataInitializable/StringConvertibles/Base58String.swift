@@ -49,7 +49,7 @@ public extension Base58String {
     init(data: Data) {
         let bytes = data.bytes
         var x = data.unsignedBigInteger
-        let alphabet = String.base58Alphabet.data(using: .utf8)!
+        let alphabet = String.base58Alphabet.toData()
         let radix = BigUnsignedInt(alphabet.count)
         
         var answer = [UInt8]()
@@ -64,11 +64,8 @@ public extension Base58String {
         let prefix = Array(bytes.prefix(while: {$0 == 0})).map { _ in alphabet[0] }
         answer.append(contentsOf: prefix)
         answer.reverse()
-        
-        guard let base58String = String(bytes: answer, encoding: .utf8) else {
-            incorrectImplementation("Should always be able to create a Base58 string from data.")
-        }
-        self.init(validated: base58String)
+    
+        self.init(validated: String(data: answer.asData))
     }
 }
 
@@ -76,7 +73,7 @@ public extension Base58String {
 public extension Base58String {
     var asData: Data {
     
-        let alphabet = String.base58Alphabet.data(using: .utf8)!
+        let alphabet = String.base58Alphabet.toData()
         let radix = BigUnsignedInt(alphabet.count)
         let byteString = [UInt8](value.utf8)
         
@@ -84,7 +81,7 @@ public extension Base58String {
         var temp = BigUnsignedInt(1)
         for character in byteString.reversed() {
             guard let index = alphabet.firstIndex(of: character) else {
-                incorrectImplementation("Should always be able to convert to data")
+                incorrectImplementation("Should contain character")
             }
             answer += temp * BigUnsignedInt(index)
             temp *= radix

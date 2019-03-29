@@ -33,8 +33,7 @@ class UniverseConfigBetanetJSONDecodingTest: QuickSpec {
                     let data = try Data(contentsOf: jsonFileUrl)
                     let config = try JSONDecoder().decode(UniverseConfig.self, from: data)
                     expect(config.magicByte).to(equal(0x02))
-                    expect(config.genesis.count).to(equal(3))
-                    expect(config.genesis.particles().count).to(equal(4))
+                    expect(config.genesis.isEmpty).to(equal(false))
                 } catch {
                     XCTFail("failed to parse file, error: \(error)")
                 }

@@ -42,9 +42,7 @@ public struct MessageParticle:
 // MARK: - Convenience init
 public extension MessageParticle {
     init(from: Address, to: Address, message: String, includeTimeNow: Bool = true) {
-        guard let messageData = message.data(using: .utf8) else {
-            incorrectImplementation("Should always be able to encode a string")
-        }
+        let messageData = message.toData()
         let metaData: MetaData = includeTimeNow ? .timeNow : [:]
         self.init(from: from, to: to, payload: messageData, metaData: metaData)
     }
@@ -95,10 +93,7 @@ public extension MessageParticle {
 }
 
 public extension MessageParticle {
-    var textMessage: String? {
-        guard let text = String(data: payload, encoding: .utf8) else {
-            return nil
-        }
-        return text
+    var textMessage: String {
+        return String(data: payload)
     }
 }

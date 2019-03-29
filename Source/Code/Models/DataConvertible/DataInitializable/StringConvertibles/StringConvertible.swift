@@ -59,7 +59,3 @@ public extension StringConvertible {
         self.init(validated: try Self.validate(string))
     }
 }
-
-//extension StringConvertible {
-//
-//}

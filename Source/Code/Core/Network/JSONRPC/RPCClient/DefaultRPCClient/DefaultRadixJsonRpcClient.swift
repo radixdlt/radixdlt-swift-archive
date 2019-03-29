@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import JSONRPCKit
 
-public final class DefaultRadixJsonRpcClient: RadixJsonRpcClient {
+public final class DefaultRadixJsonRpcClient {
     
     /// The channel this JSON RPC client utilizes for messaging
     internal let channel: PersistentChannel
@@ -19,6 +19,10 @@ public final class DefaultRadixJsonRpcClient: RadixJsonRpcClient {
     
     public init(persistentChannel: PersistentChannel) {
         self.channel = persistentChannel
+    }
+    
+    deinit {
+        log.warning("Deinit (might be relevant until life cycle is proper fixed)")
     }
 }
 
@@ -33,12 +37,17 @@ public extension DefaultRadixJsonRpcClient {
         return makeRequest(JSONRPCMethodGetLivePeers())
     }
     
+    func getUniverse() -> Observable<UniverseConfig> {
+        return makeRequest(JSONRPCMethodGetUniverse())
+    }
+    
     func getAtom(by hashId: EUID) -> Maybe<Atom> {
         implementMe
     }
     
-    func getAtoms(query: AtomQuery) -> Observable<AtomObservation> {
-        implementMe
+    func getAtoms(query: AtomQuery) -> Observable<AtomSubscription> {
+        let rpcRequest = JSONRPCMethodAtomsSubscribe(query: query)
+        return makeRequest(rpcRequest)
     }
     
     func submitAtom(_ atom: Atom) -> Observable<NodeAtomSubmissionUpdate> {

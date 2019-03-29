@@ -20,7 +20,7 @@ class AtomJsonDeserializationChangeJson: QuickSpec {
         return tokenDefintionJson
     }
     
-    lazy var jsonData = self.jsonString().data(using: .utf8)!
+    lazy var jsonData = self.jsonString().toData()
     
     func replaceValueInParticle(for key: TokenDefinitionParticle.CodingKeys, with replacement: Any) -> String {
       return replaceValueInParticle(for: key.stringValue, with: replacement)
@@ -83,7 +83,7 @@ private extension AtomJsonDeserializationChangeJson {
         
         // JSON to String
         let data = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-        let prettyJson = String(data: data, encoding: .utf8)!
+        let prettyJson = String(data: data)
             .replacingOccurrences(of: "\\\"", with: "\"")
             .replacingOccurrences(of: "\"{", with: "{")
             .replacingOccurrences(of: "}\"", with: "}")

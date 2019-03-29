@@ -9,22 +9,18 @@
 import Foundation
 import RxSwift
 
-public final class DefaultAPIClient: APIClient {
+public final class DefaultAPIClient {
 
     // MARK: - Node Discovery
     private let nodesSubject = PublishSubject<[Node]>()
     private let nodes: Observable<[Node]>
 
     // MARK: - REST
-    private let restClient: Observable<RESTClient>
+    private let restClient: Observable<DefaultRESTClient>
     
     // MARK: - Websocket
-    private let jsonRpcClient: Observable<RadixJsonRpcClient>
-    private let websocketStatus: Observable<WebSocketStatus>
+    private let jsonRpcClient: Observable<DefaultRadixJsonRpcClient>
 
-    private let bag = DisposeBag()
-    
-    // swiftlint:disable:next function_body_length
     init(nodeDiscovery: NodeDiscovery) {
         
         // Node discovery
@@ -37,17 +33,22 @@ public final class DefaultAPIClient: APIClient {
         }
         
         // Websocket
-        let webSocketToNode: Observable<WebSocketToNode> = self.nodes.map {
+        self.jsonRpcClient = self.nodes.map {
             WebSockets.webSocket(to: $0[0])
+        }.map { (socketToNode: WebSocketToNode) -> DefaultRadixJsonRpcClient in
+            JSONRPCClients.rpcClient(websocket: socketToNode)
         }
-        
-        self.websocketStatus = webSocketToNode.flatMapLatest { $0.state }
-        
-        let rpcClient = webSocketToNode.map { (socketToNode: WebSocketToNode) -> RadixJsonRpcClient in
-            DefaultRadixJsonRpcClient(persistentChannel: socketToNode)
-        }
-        rpcClient.subscribe().disposed(by: bag)
-        self.jsonRpcClient = rpcClient
+    }
+    
+    deinit {
+        log.warning("Deinit (might be relevant until life cycle is proper fixed)")
+    }
+}
+
+// MARK: - Connect to new node
+public extension DefaultAPIClient {
+    func connectToNode(_ node: Node) {
+        nodesSubject.onNext([node])
     }
 }
 
@@ -61,8 +62,16 @@ public extension DefaultAPIClient {
         }
     }
     
-    func pull(from address: Address) -> Observable<AtomObservation> {
-        implementMe
+    func getUniverse() -> Observable<UniverseConfig> {
+        return jsonRpcClient.flatMapLatest { $0.getUniverse() }
+    }
+    
+    func pull(from address: Address) -> Observable<AtomSubscription> {
+        let atomsQuery = AtomQuery(address: address)
+        return jsonRpcClient.flatMapLatest {
+            $0.getAtoms(query: atomsQuery)
+                .asObservable()
+        }
     }
     
     func submit(atom: Atom) -> Observable<SubmitAtomAction> {

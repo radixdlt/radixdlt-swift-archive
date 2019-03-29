@@ -8,6 +8,12 @@
 
 import Foundation
 
-public enum WebSocketStatus: Int, Equatable {
+public enum WebSocketStatus: String, Equatable, CustomStringConvertible {
     case connected, disconnected, failed, closing, connecting
+}
+
+extension CustomStringConvertible where Self: RawRepresentable, Self.RawValue == String {
+    public var description: String {
+        return rawValue
+    }
 }

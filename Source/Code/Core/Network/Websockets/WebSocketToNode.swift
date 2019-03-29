@@ -23,23 +23,32 @@ public final class WebSocketToNode: PersistentChannel, WebSocketDelegate, WebSoc
     public let state: Observable<WebSocketStatus>
     private var socket: WebSocket?
     private let bag = DisposeBag()
-    private let node: Node
+    internal let node: Node
     
     // swiftlint:disable:next function_body_length
     public init(node: Node, shouldConnect: Bool = true) {
+        defer {
+            if shouldConnect {
+                connect()
+            }
+        }
+        
         let state = BehaviorSubject<WebSocketStatus>(value: .disconnected)
-        state.filter { $0 == .failed }.debounce(60, scheduler: MainScheduler.instance).subscribe(
-            onNext: { _ in state.onNext(.disconnected) },
-            onError: { _ in state.onNext(.disconnected) }
+        
+        state.filter { $0 == .failed }
+            .debounce(60, scheduler: MainScheduler.instance)
+            .subscribe(
+                onNext: { _ in state.onNext(.disconnected) },
+                onError: { _ in state.onNext(.disconnected) }
             ).disposed(by: bag)
+        
         self.stateSubject = state
+        self.node = node
         
         self.messages = receivedMessagesSubject.asObservable()
         self.state = stateSubject.asObservable()
-        self.node = node
-        if shouldConnect {
-            connect()
-        }
+        
+        self.state.subscribe(onNext: { log.info("WS status -> `\($0)`") }).disposed(by: bag)
     }
     
     private func createSocket(shouldConnect: Bool) -> WebSocket {
@@ -52,6 +61,11 @@ public final class WebSocketToNode: PersistentChannel, WebSocketDelegate, WebSoc
         }
         newSocket = WebSocket(url: node.url)
         return newSocket
+    }
+    
+    deinit {
+        log.warning("Deinit (might be relevant until life cycle is proper fixed)")
+        close()
     }
 }
 
@@ -104,19 +118,23 @@ private extension WebSocketToNode {
             return false
         }
     }
+    
+    func sendQueued() {
+        queuedOutgoingMessages.forEach {
+            log.verbose("Sending queued message:\n\"\"\"\($0)\n\"\"\"\n")
+            self.sendMessage($0)
+        }
+        queuedOutgoingMessages = []
+    }
 }
 
 public extension WebSocketToNode {
     func websocketDidConnect(socket: WebSocketClient) {
         stateSubject.onNext(.connected)
-        queuedOutgoingMessages.forEach {
-            print("Sending queued message")
-            self.sendMessage($0)
-        }
-        queuedOutgoingMessages = []
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Swift.Error?) {
+        log.warning("Websocket closed")
         guard !isClosing else {
             self.socket = nil
             return stateSubject.onNext(.disconnected)
@@ -130,15 +148,20 @@ public extension WebSocketToNode {
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        receivedMessagesSubject.onNext(text)
+        if text.contains("Radix.welcome") {
+            log.verbose("Received welcome message, which we ignore, proceed sending queued")
+            sendQueued()
+        } else {
+            receivedMessagesSubject.onNext(text)
+        }
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        print("Socket: \(socket) did receive data.")
+        log.info("Socket did receive data.")
     }
     
     func websocketDidReceivePong(socket: WebSocketClient, data: Data?) {
-        print("Socket: \(socket) got pong")
+        log.info("Socket got pong")
     }
     
 }

@@ -68,10 +68,7 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
                     let messsageParticle = atom.particleGroups.firstParticle(ofType: MessageParticle.self)!
                     
                     it("Its payload is a text message to us") {
-                        guard let message = messsageParticle.textMessage else {
-                            return fail("should have a message")
-                        }
-                        expect(message).to(equal("Hello Radix!"))
+                        expect(messsageParticle.textMessage).to(equal("Hello Radix!"))
                     }
                 }
             }
@@ -115,7 +112,7 @@ let jsonForAtomWith2ParticleGroups = """
                         "granularity": ":u20:1",
                         "permissions": {
                             "burn": ":str:none",
-                            "mint": ":str:pow",
+                            "mint": ":str:\(TokenPermission.tokenCreationOnly.rawValue)",
                             "transfer": ":str:none"
                         },
                         "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"

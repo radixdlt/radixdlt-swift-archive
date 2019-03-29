@@ -35,10 +35,7 @@ public struct Message:
 
 public extension Message {
     init(string: String, encoding: String.Encoding) throws {
-        guard let encoded = string.data(using: encoding) else {
-            throw Error.failedToEncodeMessage(encoding: encoding)
-        }
-        try self.init(data: encoded)
+        try self.init(data: string.toData(encodingForced: encoding))
     }
     
     init(hash: RadixHash) {
@@ -53,7 +50,7 @@ public extension Message {
 // MARK: - StringInitializable
 public extension Message {
     init(string: String) throws {
-        try self.init(string: string, encoding: .utf8)
+        try self.init(string: string, encoding: .default)
     }
     
     enum Error: Swift.Error {

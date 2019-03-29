@@ -8,7 +8,9 @@
 
 import Foundation
 
-// All websockets are created and managed here
+// TODO Fix memory life cycle in a way that does not requires this singleton
+
+/// All websockets are created and managed here
 public final class WebSockets {
     public static let shared = WebSockets()
     private var webSockets = [Node: WebSocketToNode]()

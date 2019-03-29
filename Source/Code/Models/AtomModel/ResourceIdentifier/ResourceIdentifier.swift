@@ -51,7 +51,7 @@ public extension ResourceIdentifier {
 // MARK: - DSONPrefixedDataConvertible
 public extension ResourceIdentifier {
     var dborEncodedData: Data {
-        return identifier.data(using: .utf8)!
+        return identifier.toData()
     }
 }
 

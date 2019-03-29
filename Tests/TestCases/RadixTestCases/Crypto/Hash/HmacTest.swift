@@ -26,8 +26,7 @@ class ECIESHmacCalculationTests: QuickSpec {
                 let keyM = bytes32
                 let iv = bytes16
                 let cipherText = "A super duper mega secret string"
-                let encoding: String.Encoding = .utf8
-                let cipherTextEncoded = cipherText.data(using: encoding)!
+                let cipherTextEncoded = cipherText.toData()
                 expect(cipherText.length).to(equal(32))
                 
                 let mac = try! ECIES.calculateMAC(salt: keyM, initializationVector: iv, ephemeralPublicKey: publicKey, cipherText: cipherTextEncoded)
