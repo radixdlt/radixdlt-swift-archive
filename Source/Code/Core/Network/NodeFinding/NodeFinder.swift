@@ -20,7 +20,6 @@ public final class NodeFinder: NodeDiscovery {
 }
 
 public extension NodeFinder {
-    // swiftlint:disable:next function_body_length
     func loadNodes() -> Observable<[Node]> {
         let port = self.port
         let url = self.url

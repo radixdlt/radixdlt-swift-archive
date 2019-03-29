@@ -29,7 +29,6 @@ public struct PrefixedStringWithValue:
     public let stringValue: String
     public let jsonPrefix: JSONPrefix
     
-    // swiftlint:disable:next function_body_length
     public init(string: String) throws {
         var prefix: JSONPrefix?
         for jsonPrefix in JSONPrefix.allCases {

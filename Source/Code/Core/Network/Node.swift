@@ -25,7 +25,6 @@ public struct Node: Hashable, Equatable {
     public let isUsingSSL: Bool
     public let url: URL
     
-    // swiftlint:disable:next function_body_length
     public init(location: String, useSSL: Bool, port: Int) throws {
         guard port >= 0 else {
             throw Error.portNegative

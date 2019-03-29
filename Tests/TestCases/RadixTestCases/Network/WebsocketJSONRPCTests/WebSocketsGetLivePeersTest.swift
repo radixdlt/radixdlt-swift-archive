@@ -11,22 +11,16 @@ import Foundation
 import XCTest
 import RxSwift
 
-class WebSocketsGetLivePeersTest: XCTestCase {
-
+class WebSocketsGetLivePeersTest: WebsocketTest {
+    
     func testLivePeersOverWS() {
-        
-        let apiClient = DefaultAPIClient(
-            nodeDiscovery: Node.localhost(port: 8080)
-        )
-
+        guard let apiClient = makeApiClient() else { return }
         let livePeersObservable: Observable<[NodeRunnerData]> = apiClient.livePeers(communcation: .websocket)
-
+        
         let livePeers: [NodeRunnerData] = try! livePeersObservable.take(1).toBlocking(timeout: 1).first()!
         
         XCTAssertEqual(livePeers.count, 1)
         let livePeer = livePeers[0]
-        
         XCTAssertTrue(livePeer.ipAddress.looksLikeAnIPAddress)
-        
     }
 }

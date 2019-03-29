@@ -50,7 +50,6 @@ public extension BigInt {
         return Data(array)
     }
     
-    // swiftlint:disable:next function_body_length
     init(_ data: Data) {
         var dataArray = Array(data)
         var sign: BigInt.Sign = BigInt.Sign.plus

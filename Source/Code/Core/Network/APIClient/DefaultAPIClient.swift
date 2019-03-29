@@ -20,6 +20,7 @@ public final class DefaultAPIClient {
     
     // MARK: - Websocket
     private let jsonRpcClient: Observable<DefaultRadixJsonRpcClient>
+    public let websocketStatus: Observable<WebSocketStatus>
 
     init(nodeDiscovery: NodeDiscovery) {
         
@@ -33,9 +34,12 @@ public final class DefaultAPIClient {
         }
         
         // Websocket
-        self.jsonRpcClient = self.nodes.map {
+        let websocket = self.nodes.map {
             WebSockets.webSocket(to: $0[0])
-        }.map { (socketToNode: WebSocketToNode) -> DefaultRadixJsonRpcClient in
+        }
+        self.websocketStatus = websocket.flatMapLatest { $0.state }
+        
+        self.jsonRpcClient = websocket.map { (socketToNode: WebSocketToNode) -> DefaultRadixJsonRpcClient in
             JSONRPCClients.rpcClient(websocket: socketToNode)
         }
     }

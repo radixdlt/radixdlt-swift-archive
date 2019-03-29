@@ -40,7 +40,6 @@ public extension SpunParticle {
         case serializer
     }
     
-    // swiftlint:disable:next function_body_length
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -71,7 +70,6 @@ public extension SpunParticle {
 // MARK: - Encodable
 public extension SpunParticle {
     
-    // swiftlint:disable:next function_body_length
     func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         
         let encodableParticle: EncodableKeyValue<CodingKeys>

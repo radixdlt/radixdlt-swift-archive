@@ -13,14 +13,11 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-class GetAtomsTests: XCTestCase {
+class GetAtomsTests: WebsocketTest {
     
     func testGetAtoms() {
-        let apiClient = DefaultAPIClient(
-            nodeDiscovery: Node.localhost(port: 8080)
-        )
-        
-        let atomSubscriptionsObservable: Observable<AtomSubscription> = apiClient.pull(from: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor")
+        guard let apiClient = makeApiClient() else { return }
+        let atomSubscriptionsObservable = apiClient.pull(from: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor")
        
         // `take()` operator is absolutely crucial, read "Waiting on non-completing sequences": http://rx-marin.com/post/rxblocking-part1/
         let atomSubscriptions: [AtomSubscription] = try! atomSubscriptionsObservable.take(3).toBlocking(timeout: 1).toArray()

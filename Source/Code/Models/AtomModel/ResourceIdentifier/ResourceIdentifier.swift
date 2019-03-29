@@ -64,7 +64,6 @@ public extension ResourceIdentifier {
 
 // MARK: - StringInitializable
 public extension ResourceIdentifier {
-    // swiftlint:disable:next function_body_length
     init(string: String) throws {
         let components = string.components(separatedBy: ResourceIdentifier.separator)
         let componentCount = components.count

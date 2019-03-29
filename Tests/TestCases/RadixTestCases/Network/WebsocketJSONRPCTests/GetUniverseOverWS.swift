@@ -13,18 +13,13 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-class GetUniverseOverWS: XCTestCase {
-        
+class GetUniverseOverWS: WebsocketTest {
     
-    func testLivePeersOverWS() {
-        let apiClient = DefaultAPIClient(
-            nodeDiscovery: Node.localhost(port: 8080)
-        )
-        
-        let universeConfigObservable: Observable<UniverseConfig> = apiClient.getUniverse()
-        
-        let universeConfig = try! universeConfigObservable.take(1).toBlocking(timeout: 1).first()!
+    func testGetUniverse() {
+        guard let apiClient = makeApiClient() else { return }
+        let universeConfig = try! apiClient.getUniverse().take(1).toBlocking(timeout: 1).first()!
         XCTAssertEqual(universeConfig.description, "The Radix development Universe")
     }
+    
 }
 

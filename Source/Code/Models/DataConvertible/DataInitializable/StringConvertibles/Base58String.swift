@@ -45,7 +45,6 @@ public extension Data {
 // MARK: - DataInitializable
 public extension Base58String {
     
-    // swiftlint:disable:next function_body_length
     init(data: Data) {
         let bytes = data.bytes
         var x = data.unsignedBigInteger

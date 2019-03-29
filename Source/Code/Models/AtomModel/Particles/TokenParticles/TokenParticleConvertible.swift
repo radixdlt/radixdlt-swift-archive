@@ -47,7 +47,6 @@ public enum TokenParticleCodingKeys: String, CodingKey {
 
 // MARK: Decodable
 public extension TokenParticleConvertible {
-    // swiftlint:disable:next function_body_length
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
    

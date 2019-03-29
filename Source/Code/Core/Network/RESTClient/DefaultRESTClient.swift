@@ -35,7 +35,6 @@ public extension DefaultRESTClient {
         }
     }
     
-    // swiftlint:disable:next function_body_length
     func request<D>(_ makeRequest: @escaping () -> Alamofire.DataRequest) -> Single<D> where D: Decodable {
         return Single<D>.create { single in
             let dataRequest: Alamofire.DataRequest = makeRequest()

@@ -25,7 +25,6 @@ public final class WebSocketToNode: PersistentChannel, WebSocketDelegate, WebSoc
     private let bag = DisposeBag()
     internal let node: Node
     
-    // swiftlint:disable:next function_body_length
     public init(node: Node, shouldConnect: Bool = true) {
         defer {
             if shouldConnect {
@@ -33,16 +32,16 @@ public final class WebSocketToNode: PersistentChannel, WebSocketDelegate, WebSoc
             }
         }
         
-        let state = BehaviorSubject<WebSocketStatus>(value: .disconnected)
+        let stateSubject = BehaviorSubject<WebSocketStatus>(value: .disconnected)
         
-        state.filter { $0 == .failed }
+        stateSubject.filter { $0 == .failed }
             .debounce(60, scheduler: MainScheduler.instance)
             .subscribe(
-                onNext: { _ in state.onNext(.disconnected) },
-                onError: { _ in state.onNext(.disconnected) }
-            ).disposed(by: bag)
+                onNext: { _ in stateSubject.onNext(.disconnected) },
+                onError: { _ in stateSubject.onNext(.disconnected) }
+        ).disposed(by: bag)
         
-        self.stateSubject = state
+        self.stateSubject = stateSubject
         self.node = node
         
         self.messages = receivedMessagesSubject.asObservable()
@@ -75,7 +74,7 @@ public extension WebSocketToNode {
     }
     
     func sendMessage(_ message: String) {
-        guard isConnected else {
+        guard isReady else {
             queuedOutgoingMessages.append(message)
             return
         }
@@ -92,9 +91,15 @@ public extension WebSocketToNode {
         case .none, .disconnected?, .failed?:
             stateSubject.onNext(.connecting)
             socket = createSocket(shouldConnect: true)
-        case .closing?, .connected?, .connecting?: return
+        case .closing?, .connected?, .connecting?, .ready?: return
         }
         
+    }
+}
+
+public extension WebSocketToNode {
+    var isReady: Bool {
+        return hasStatus(.ready)
     }
 }
 
@@ -107,10 +112,10 @@ private extension WebSocketToNode {
         return hasStatus(.closing)
     }
     
-    var isConnected: Bool {
-        return hasStatus(.connected)
-    }
-    
+//    var isConnected: Bool {
+//        return hasStatus(.connected)
+//    }
+
     func hasStatus(_ status: WebSocketStatus) -> Bool {
         do {
             return try stateSubject.value() == status
@@ -149,7 +154,8 @@ public extension WebSocketToNode {
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if text.contains("Radix.welcome") {
-            log.verbose("Received welcome message, which we ignore, proceed sending queued")
+            log.info("Received welcome message, which we ignore, proceed sending queued")
+            stateSubject.onNext(.ready)
             sendQueued()
         } else {
             receivedMessagesSubject.onNext(text)

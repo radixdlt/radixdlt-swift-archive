@@ -31,7 +31,6 @@ public struct DER:
         self.derEncodedData = data
     }
     
-    // swiftlint:disable:next function_body_length
     public init(signature: Signature) {
         
         let byteCount: (DataConvertible) -> Data = {

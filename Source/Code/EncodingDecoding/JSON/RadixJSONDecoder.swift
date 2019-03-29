@@ -12,7 +12,6 @@ public typealias JSON = [String: Any]
 
 public final class RadixJSONDecoder: Foundation.JSONDecoder {
     
-    // swiftlint:disable:next function_body_length
     public override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T: Decodable & RadixModelTypeStaticSpecifying {
         let jsonObjectAny = try JSONSerialization.jsonObject(with: data, options: [])
         
