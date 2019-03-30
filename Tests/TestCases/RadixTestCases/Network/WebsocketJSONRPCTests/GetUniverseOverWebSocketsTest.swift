@@ -13,7 +13,7 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-class GetUniverseOverWS: WebsocketTest {
+class GetUniverseOverWebSocketsTest: WebsocketTest {
     
     func testGetUniverse() {
         guard let apiClient = makeApiClient() else { return }

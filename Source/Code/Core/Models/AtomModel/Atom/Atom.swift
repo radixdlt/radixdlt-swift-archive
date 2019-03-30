@@ -117,14 +117,14 @@ public extension Atom {
         return spunParticles().compactMap(type: MessageParticle.self)
     }
     
-    func tokensBalances() -> TokenBalances {
+    func tokensBalances() -> [TokenBalance] {
         let tokenBalances = spunParticles().compactMap { (spunParticle: SpunParticle) -> TokenBalance? in
             guard let consumable = spunParticle.particle as? ConsumableTokens else {
                 return nil
             }
             return TokenBalance(consumable: consumable, spin: spunParticle.spin)
         }
-        return TokenBalances(balances: tokenBalances)
+        return tokenBalances
     }
     
     func particlesOfType<P>(_ type: P.Type, spin: Spin) -> [P] where P: ParticleConvertible {

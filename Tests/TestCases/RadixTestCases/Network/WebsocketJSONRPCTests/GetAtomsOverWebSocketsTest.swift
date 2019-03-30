@@ -13,9 +13,9 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-class GetAtomsTests: WebsocketTest {
+class GetAtomsOverWebSocketsTest: WebsocketTest {
     
-    func testGetAtoms() {
+    func testGetAtomsOverWebsockets() {
         guard let apiClient = makeApiClient() else { return }
         let atomSubscriptionsObservable = apiClient.pull(from: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor")
        

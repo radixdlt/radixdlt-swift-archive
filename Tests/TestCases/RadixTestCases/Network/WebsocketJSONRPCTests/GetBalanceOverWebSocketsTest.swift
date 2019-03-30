@@ -14,9 +14,9 @@ import RxTest
 import RxBlocking
 
 
-class GetBalanceTest: WebsocketTest {
+class GetBalanceOverWebSocketsTest: WebsocketTest {
     
-    func testGetBalance() {
+    func testGetBalanceOverWS() {
         guard let apiClient = makeApiClient() else { return }
         
         let atomSubscriptionsObservable = apiClient.balance(forAddress: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor", token: TokenDefinitionReference(address: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor", symbol: "XRD"))

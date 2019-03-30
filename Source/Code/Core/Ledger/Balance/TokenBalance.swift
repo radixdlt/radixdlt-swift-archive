@@ -26,6 +26,10 @@ public struct TokenBalance: Hashable, TokenDefinitionReferencing {
             tokenDefinitionReference: consumable.tokenDefinitionReference
         )
     }
+    
+    public init(spunConsumable: SpunConsumable) {
+        self.init(consumable: spunConsumable.any, spin: spunConsumable.spin)
+    }
 }
 
 public extension TokenBalance {

@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 import RxSwift
 
-class WebSocketsGetLivePeersTest: WebsocketTest {
+class GetLivePeersOverWebSocketsTest: WebsocketTest {
     
     func testLivePeersOverWS() {
         guard let apiClient = makeApiClient() else { return }

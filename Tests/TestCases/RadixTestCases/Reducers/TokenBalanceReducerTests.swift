@@ -9,77 +9,76 @@
 import Foundation
 @testable import RadixSDK
 import XCTest
-
-public enum SpinTransition {
-    case neutralToUp
-    case upToDown
-    case revertDownToUp
-    case revertUpToNeutral
-    
-    var spinTo: Spin {
-        switch self {
-        case .neutralToUp: return .up
-        case .upToDown: return .down
-        case .revertDownToUp: return .up
-        case .revertUpToNeutral: return .neutral
-        }
-    }
-}
-
-
-
-public struct TransitionedParticle {
-    let particle: ParticleConvertible
-    let spinTransition: SpinTransition
-    
-    var spinTo: Spin {
-       return spinTransition.spinTo
-    }
-}
-
-public extension TransitionedParticle {
-    static func neutralToUp(particle: ParticleConvertible) -> TransitionedParticle {
-        return TransitionedParticle(particle: particle, spinTransition: .neutralToUp)
-    }
-    
-    static func upToDown(particle: ParticleConvertible) -> TransitionedParticle {
-        return TransitionedParticle(particle: particle, spinTransition: .upToDown)
-    }
-    
-    static func revertDownToUp(particle: ParticleConvertible) -> TransitionedParticle {
-        return TransitionedParticle(particle: particle, spinTransition: .revertDownToUp)
-    }
-    
-    static func revertUpToNeutral(particle: ParticleConvertible) -> TransitionedParticle {
-        return TransitionedParticle(particle: particle, spinTransition: .revertUpToNeutral)
-    }
-}
-
-public struct TokenBalanceReducer {
-    func reduce(
-        balances: TokenBalances = [:],
-        transitionedParticle: TransitionedParticle
-    ) -> TokenBalances {
-        guard let consumable = transitionedParticle.particle as? ConsumableTokens else {
-            return balances
-        }
-        return balances.adding(consumable: consumable, spin: transitionedParticle.spinTo)
-    }
-}
+import RxTest
+import RxBlocking
+import RxSwift
 
 class TokenBalanceReducerTests: XCTestCase {
     func testSimpleBalance() {
-        let token = TokenDefinitionReference(address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei", symbol: "XRD")
-        
-        let minted = MintedTokenParticle(
-            address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
-            amount: 10,
-            tokenDefinitionReference: token
-        )
-     
+        let minted = mintedToken(10)
         let reducer = TokenBalanceReducer()
-        let balances = reducer.reduce(transitionedParticle: TransitionedParticle.neutralToUp(particle: minted))
-        let balance = balances[token]
+        let balances = reducer.reduce(minted)
+        let balance = balances[xrd]
         XCTAssertEqual(balance?.amount.signedAmount, 10)
+    }
+    
+    func testMultipleMintedTokens() {
+        let bag = DisposeBag()
+        // Initializes test scheduler. Test scheduler implements virtual time that is detached from local machine clock
+        // This enables running the simulation as fast as possible and proving that all events have been handled.
+        let scheduler = TestScheduler(initialClock: 0)
+        let observer = scheduler.createObserver(SpunConsumable.self)
+        
+        // Creates a mock hot observable sequence. The sequence will emit events at designated times,
+        // no matter if there are observers subscribed or not (that's what hot means).
+        // This observable sequence will also record all subscriptions made during its lifetime (`subscriptions` property).
+        scheduler.createHotObservable([
+            .next(210, mintedToken(3)),
+            .next(220, mintedToken(5)),
+            .next(230, mintedToken(11)),
+            .completed(500)
+        ]).subscribe(observer).disposed(by: bag)
+        
+        // `start` method will by default:
+        // * Run the simulation and record all events using observer referenced by `res`.
+        // * Subscribe at virtual time 200
+        // * Dispose subscription at virtual time 1000
+        scheduler.start()
+        let spunConsumables: [SpunConsumable] = observer.events.compactMap { $0.value.element }
+        let reducer = TokenBalanceReducer()
+        let balances = reducer.reduce(spunConsumables: spunConsumables)
+
+        guard let xrdBalance = balances[xrd] else { return XCTFail("Should not be nil") }
+        XCTAssertEqual(xrdBalance.amount.signedAmount.magnitude, 19)
+        XCTAssertLessThan(xrdBalance.amount.signedAmount.magnitude, 20)
+        XCTAssertGreaterThan(xrdBalance.amount.signedAmount.magnitude, 18)
+    }
+}
+
+
+private let address: Address = "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+private let xrd = TokenDefinitionReference(address: address, symbol: "XRD")
+
+private extension TokenBalanceReducerTests {
+    func mintedToken(_ amount: Amount, spin: Spin = .up) -> SpunConsumable {
+        return SpunConsumable(
+            spin: spin,
+            any: MintedTokenParticle(
+                address: address,
+                amount: amount,
+                tokenDefinitionReference: xrd
+            )
+        )
+    }
+    
+    func transferredToken(_ amount: Amount, spin: Spin = .up) -> SpunConsumable {
+        return SpunConsumable(
+            spin: spin,
+            any: TransferredTokenParticle(
+                address: address,
+                amount: amount,
+                tokenDefinitionReference: xrd
+            )
+        )
     }
 }
