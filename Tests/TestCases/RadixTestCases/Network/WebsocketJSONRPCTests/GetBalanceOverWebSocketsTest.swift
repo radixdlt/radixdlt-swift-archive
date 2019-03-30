@@ -13,7 +13,6 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-
 class GetBalanceOverWebSocketsTest: WebsocketTest {
     
     func testGetBalanceOverWS() {
@@ -25,6 +24,5 @@ class GetBalanceOverWebSocketsTest: WebsocketTest {
         let balance: TokenBalance = try! atomSubscriptionsObservable.take(1).toBlocking(timeout: 1).first()!
         
         XCTAssertEqual(balance.amount.signedAmount.description, "1000000000000000000000000000")
-       
     }
 }
