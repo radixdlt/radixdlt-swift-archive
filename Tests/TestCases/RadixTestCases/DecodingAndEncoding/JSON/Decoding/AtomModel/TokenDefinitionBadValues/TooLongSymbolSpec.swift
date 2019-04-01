@@ -21,7 +21,7 @@ class TooLongSymbolSpec: AtomJsonDeserializationChangeJson {
                 expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: InvalidStringError.self) {
                     switch $0 {
                     case .tooManyCharacters(let expectedAtMost, let butGot):
-                        expect(expectedAtMost).to(equal(16))
+                        expect(expectedAtMost).to(equal(14))
                         expect(butGot).to(equal(17))
                     default: fail("wrong error")
                     }

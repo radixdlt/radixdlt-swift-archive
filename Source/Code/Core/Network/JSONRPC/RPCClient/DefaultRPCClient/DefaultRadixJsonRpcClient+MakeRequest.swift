@@ -36,7 +36,6 @@ extension Result: Decodable where Success: Decodable, Failure == RPCError {
             self = .success(try container.decode(Success.self))
         } catch {
             self = .failure(try container.decode(RPCError.self))
-            
         }
     }
 }

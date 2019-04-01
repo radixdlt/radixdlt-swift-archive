@@ -45,17 +45,10 @@ public struct Atom:
 }
 
 public extension ParticleConvertible {
-    func wrapInAtom(spin: Spin = .up) throws -> Atom {
+    func wrapInAtom(spin: Spin = .up, magic: Magic) throws -> Atom {
         let atom = Atom(particle: self)
         let hash = atom.radixHash
-        log.error(hash.hex)
-        let proofOfWork = try ProofOfWork.work(seed: hash.asData, magic: 63799298)
-        do {
-            try proofOfWork.prove()
-        } catch {
-            log.error("bad error: \(error)")
-        }
-        
+        let proofOfWork = try ProofOfWork.work(seed: hash.asData, magic: magic)
         return atom.withProofOfWork(proofOfWork)
     }
 }

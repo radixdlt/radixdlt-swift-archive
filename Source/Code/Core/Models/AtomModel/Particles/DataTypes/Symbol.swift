@@ -27,7 +27,7 @@ public struct Symbol:
 // swiftlint:enable colon
     
     public static let minLength = 1
-    public static let maxLength = 16
+    public static let maxLength = 14
     public static let allowedCharacters = CharacterSet.numbersAndUppercaseAtoZ
     
     public let value: String

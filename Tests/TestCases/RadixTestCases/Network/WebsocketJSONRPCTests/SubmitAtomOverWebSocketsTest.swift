@@ -20,15 +20,18 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
         
         let identity = RadixIdentity(private: 1)
         let address = Address(publicKey: identity.publicKey)
+        
+        let randomString = String(UUID().uuidString.replacingOccurrences(of: "-", with: "") .prefix(14))
+        let randomSymbol = try! Symbol(string: randomString)
 
         let tokenDefinitionParticle = TokenDefinitionParticle(
-            symbol: "CCC",
+            symbol: randomSymbol,
             name: "Cyon",
             description: "Cyon Crypto Coin is the worst shit coin",
             address: address
         )
         
-        let atomToSubmit = try! tokenDefinitionParticle.wrapInAtom()
+        let atomToSubmit = try! tokenDefinitionParticle.wrapInAtom(magic: 63799298)
 
         let submitObservable = apiClient.submit(atom: atomToSubmit)
         
@@ -37,22 +40,14 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
              atomSubscriptions = try submitObservable.take(2).toBlocking(timeout: 3).toArray()
         } catch { return XCTFail("failed to send atom, error: \(error)") }
 
-        XCTAssertEqual(atomSubscriptions.count, 3)
+        XCTAssertEqual(atomSubscriptions.count, 2)
         let as1 = atomSubscriptions[0]
         let as2 = atomSubscriptions[1]
-        let as3 = atomSubscriptions[2]
         XCTAssertTrue(as1.isStart)
         XCTAssertTrue(as2.isUpdate)
-        XCTAssertTrue(as3.isUpdate)
 
-        let u1 = as2.update!
-        let u2 = as3.update!
+        let u1 = as2.update!.subscriptionFromSubmissionsUpdate!
 
-        XCTAssertFalse(u1.isHead)
-        XCTAssertFalse(u1.atomEvents.isEmpty)
-        let atom = u1.atomEvents[0].atom
-        XCTAssertNotNil(atom.particlesOfType(MintedTokenParticle.self, spin: .up))
-        XCTAssertTrue(u2.isHead)
-        XCTAssertTrue(u2.atomEvents.isEmpty)
+        XCTAssertEqual(u1.value, .stored)
     }
 }

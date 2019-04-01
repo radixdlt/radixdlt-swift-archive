@@ -33,8 +33,8 @@ class GetAtomsOverWebSocketsTest: WebsocketTest {
         XCTAssertTrue(as2.isUpdate)
         XCTAssertTrue(as3.isUpdate)
         
-        let u1 = as2.update!
-        let u2 = as3.update!
+        let u1 = as2.update!.subscriptionUpdate!
+        let u2 = as3.update!.subscriptionUpdate!
         
         XCTAssertFalse(u1.isHead)
         XCTAssertFalse(u1.atomEvents.isEmpty)
