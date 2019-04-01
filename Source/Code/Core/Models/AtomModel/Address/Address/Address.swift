@@ -45,7 +45,7 @@ public struct Address:
     public let base58String: Base58String
     public let publicKey: PublicKey
     
-    public init(magic: Magic, publicKey: PublicKey) {
+    public init(magic: Magic = 0x02, publicKey: PublicKey) {
         self.publicKey = publicKey
         self.base58String = Address.checksummed(from: publicKey, magic: magic)
     }

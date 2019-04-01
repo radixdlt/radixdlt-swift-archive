@@ -26,16 +26,14 @@ public extension AtomSubscriptionRequest {
 }
 
 // MARK: - Subscriber Id Generator
-public extension AtomSubscriptionRequest {
-    class SubscriptionIdIncrementingGenerator {
-        private var lastId: Int = 0
-        private func getIdAndIncrease() -> Int {
-            defer { lastId += 1 }
-            return lastId
-        }
-        private static let shared = SubscriptionIdIncrementingGenerator()
-        public class func next() -> String {
-            return shared.getIdAndIncrease().description
-        }
+public final class SubscriptionIdIncrementingGenerator {
+    private var lastId: Int = 0
+    private func getIdAndIncrease() -> Int {
+        defer { lastId += 1 }
+        return lastId
+    }
+    private static let shared = SubscriptionIdIncrementingGenerator()
+    public class func next() -> String {
+        return shared.getIdAndIncrease().description
     }
 }

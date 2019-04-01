@@ -51,4 +51,5 @@ public extension MetaDataKey {
 // MARK: - Presets
 public extension MetaDataKey {
     static let timestamp = MetaDataKey("timestamp")
+    static let proofOfWork = MetaDataKey("powNonce")
 }

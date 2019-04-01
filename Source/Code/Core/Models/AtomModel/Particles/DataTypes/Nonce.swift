@@ -13,16 +13,30 @@ import Foundation
 /// A random value between [Int.min...Int.max]
 public struct Nonce:
     CBORConvertible,
+    CustomStringConvertible,
     Codable,
     Equatable,
     ExpressibleByIntegerLiteral {
 // swiftlint:enable colon
     
     public typealias Value = Int64
-    public let value: Value
+    public private(set) var value: Value
     
     public init() {
         value = Int64.random(in: Value.min...Value.max)
+    }
+}
+
+public extension Nonce {
+    static func += (nonce: inout Nonce, increment: Value) {
+        nonce.value += increment
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension Nonce {
+    var description: String {
+        return value.description
     }
 }
 

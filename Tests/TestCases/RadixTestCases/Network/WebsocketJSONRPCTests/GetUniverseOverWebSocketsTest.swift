@@ -19,6 +19,7 @@ class GetUniverseOverWebSocketsTest: WebsocketTest {
         guard let apiClient = makeApiClient() else { return }
         let universeConfig = try! apiClient.getUniverse().take(1).toBlocking(timeout: 1).first()!
         XCTAssertEqual(universeConfig.description, "The Radix development Universe")
+        XCTAssertEqual(universeConfig.magic, 63799298)
     }
     
 }

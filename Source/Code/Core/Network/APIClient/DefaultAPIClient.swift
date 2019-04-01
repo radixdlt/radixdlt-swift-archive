@@ -85,7 +85,9 @@ public extension DefaultAPIClient {
         }
     }
     
-    func submit(atom: Atom) -> Observable<SubmitAtomAction> {
-        implementMe
+    func submit(atom: Atom) -> Observable<AtomSubscription> {
+        return jsonRpcClient.flatMapLatest {
+            $0.submitAtom(atom)
+        }
     }
 }

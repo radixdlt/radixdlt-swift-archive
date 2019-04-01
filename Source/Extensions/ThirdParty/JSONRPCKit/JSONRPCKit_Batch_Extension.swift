@@ -24,7 +24,23 @@ extension JSONRPCKit.Batch1 {
         let encoder = RadixJSONEncoder()
         do {
             let data = try encoder.encode(self)
-            return String(data: data)
+            var jsonString = String(data: data)
+            //
+            // BEWARE! Here be dragons!
+            //
+            // This is the ugliest hack ever...
+            // We would like to append the json key-value pair `"version": 100`, in the JSON
+            // but that requires each CodingKey enum to declare `version`, which makes HAVE To
+            // implement a custom `init(from decoder: Decoder) throws` init, since we do not have
+            // stored property version (and dont want to) in our models.
+            // This hack appends this JSON key-value pair before sending to the API if
+            // the JSON key-value pair `"serializer": <ID>` is present.
+            let needle = "\"\(RadixModelType.jsonKey)"
+            
+            let replacment = "\"\(jsonKeyVersion)\": \(serializerVersion), \(needle)"
+            
+            jsonString = jsonString.replacingOccurrences(of: needle, with: replacment)
+            return jsonString
         } catch {
             incorrectImplementation("Should be able to encode `self` to JSON string")
         }

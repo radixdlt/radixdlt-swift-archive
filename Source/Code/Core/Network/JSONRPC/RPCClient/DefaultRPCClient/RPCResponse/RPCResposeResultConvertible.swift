@@ -8,7 +8,15 @@
 
 import Foundation
 
-internal protocol RPCResposeResultConvertible: Decodable {
+protocol PotentiallyRequestIdentifiable {
+    var requestIdIfPresent: Int? { get }
+}
+
+extension PotentiallyRequestIdentifiable {
+    var requestIdIfPresent: Int? { return nil }
+}
+
+internal protocol RPCResposeResultConvertible: Decodable, PotentiallyRequestIdentifiable {
     associatedtype Model: Decodable
     var model: Model { get }
 }

@@ -13,3 +13,8 @@ internal struct RPCResponseResultWithRequestId<Result>: Decodable, RPCResposeRes
     let id: Int
     var model: Result { return result }
 }
+
+// MARK: - PotentiallyRequestIdentifiable
+extension RPCResponseResultWithRequestId {
+    var requestIdIfPresent: Int? { return id }
+}

@@ -50,7 +50,8 @@ public extension DefaultRadixJsonRpcClient {
         return makeRequest(rpcRequest)
     }
     
-    func submitAtom(_ atom: Atom) -> Observable<NodeAtomSubmissionUpdate> {
-        implementMe
+    func submitAtom(_ atom: Atom) -> Observable<AtomSubscription> {
+        let rpcRequest = JSONRPCMethodSubmitAtomAndSubscribe(atom: atom)
+        return makeRequest(rpcRequest)
     }
 }

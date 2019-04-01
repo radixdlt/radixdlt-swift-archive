@@ -44,6 +44,53 @@ public struct Atom:
     }
 }
 
+public extension ParticleConvertible {
+    func wrapInAtom(spin: Spin = .up) throws -> Atom {
+        let atom = Atom(particle: self)
+        let hash = atom.radixHash
+        log.error(hash.hex)
+        let proofOfWork = try ProofOfWork.work(seed: hash.asData, magic: 63799298)
+        do {
+            try proofOfWork.prove()
+        } catch {
+            log.error("bad error: \(error)")
+        }
+        
+        return atom.withProofOfWork(proofOfWork)
+    }
+}
+
+public extension MetaDataConvertible {
+    func withProofOfWork(_ proof: ProofOfWork) -> Self {
+        return inserting(value: proof.nonceAsString, forKey: .proofOfWork)
+    }
+}
+
+// MARK: - Convenience Init
+public extension Atom {
+    
+    func withProofOfWork(_ proof: ProofOfWork) -> Atom {
+        let atom = Atom(
+            metaData: metaData.withProofOfWork(proof),
+            signatures: signatures,
+            particleGroups: particleGroups
+        )
+        return atom
+    }
+    
+    init(particle: ParticleConvertible, spin: Spin = .up) {
+        self.init(
+            particleGroups: [
+                ParticleGroup(
+                    spunParticles: [
+                        SpunParticle(spin: spin, particle: particle)
+                    ]
+                )
+            ]
+        )
+    }
+}
+
 // MARK: - Encodable
 public extension Atom {
     
@@ -96,6 +143,7 @@ public extension Atom {
         return "Atom(\(hashId))"
     }
 }
+
 // MARK: - CustomDebugStringConvertible
 public extension Atom {
     var debugDescription: String {

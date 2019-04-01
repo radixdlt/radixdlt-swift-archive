@@ -75,6 +75,10 @@ internal enum RPCResponse<ResultOrParam>: Decodable, RPCResposeResultConvertible
     case resultLookingLikeRequest(RPCResponseLookingLikeRequest<ResultOrParam>)
 }
 
+public enum RPCError: String, Swift.Error, Decodable {
+    case foobar
+}
+
 // MARK: - RPCResposeResultConvertible
 extension RPCResponse {
     var model: ResultOrParam {
