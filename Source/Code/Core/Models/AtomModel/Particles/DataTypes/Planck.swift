@@ -22,8 +22,9 @@ public struct Planck:
     let value: Value
     
     public init() {
-        let secondsSince1970 = Value(Date().timeIntervalSince1970)
-        value = secondsSince1970/60 + 60
+        let millisecondsSince1970 = Value(TimeConverter.millisecondsFrom(date: Date()))
+        let msPerMinute = Value(60000)
+        value = millisecondsSince1970/msPerMinute + msPerMinute
     }
 }
 

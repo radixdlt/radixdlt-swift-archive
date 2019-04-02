@@ -47,7 +47,7 @@ public extension ProofOfWork {
         guard numberOfLeadingZeros > 0 else {
             throw Error.tooFewLeadingZeros(expectedAtLeast: 1, butGot: numberOfLeadingZeros)
         }
-        let numberOfBits = expectedByteCountOfSeed * 8
+        let numberOfBits = expectedByteCountOfSeed * Int.bitsPerByte
         guard numberOfLeadingZeros <= numberOfBits else {
             throw Error.tooFewLeadingZeros(expectedAtLeast: 1, butGot: numberOfLeadingZeros)
         }
@@ -102,4 +102,8 @@ private extension Nonce {
         assert(nonce8Bytes.count == 8)
         return nonce8Bytes
     }
+}
+
+public extension Int {
+    static var bitsPerByte = 8
 }
