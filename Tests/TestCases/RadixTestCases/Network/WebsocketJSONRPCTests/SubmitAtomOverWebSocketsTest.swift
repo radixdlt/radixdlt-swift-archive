@@ -28,17 +28,18 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
             address: address
         )
         
-        let mintedTokenParticle = MintedTokenParticle(address: address, amount: 1000, tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference)
+        let mintedTokenParticle = MintedTokenParticle(
+            address: address,
+            amount: 1000,
+            tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference
+        )
         
-  
-        let atomWithoutPow: Atom = [
+        let atom = try! Atom(particleGroups: [
             tokenDefinitionParticle.withSpin().wrapInGroup(),
             mintedTokenParticle.withSpin().wrapInGroup()
-        ]
+        ]).withProofOfWork(magic: 63799298)
         
-        let atomToSubmit = try! atomWithoutPow.withProofOfWork(magic: 63799298)
-
-        let submitObservable = apiClient.submit(atom: atomToSubmit)
+        let submitObservable = apiClient.submit(atom: atom)
         
         let atomSubscriptions: [AtomSubscription]
         do {
