@@ -27,6 +27,12 @@ public extension RadixIdentity {
     init(`private` privateKey: PrivateKey) {
         self.init(keyPair: KeyPair(private: privateKey))
     }
+    
+    init() {
+        // Generate a new PrivateKey
+        let privateKey = PrivateKey()
+        self.init(private: privateKey)
+    }
 }
 
 // MARK: - Ownable

@@ -8,11 +8,18 @@
 
 import Foundation
 
+public extension ParticleConvertible {
+    func withSpin(_ spin: Spin = .up) -> SpunParticle {
+        return SpunParticle(spin: spin, particle: self)
+    }
+}
+
 // swiftlint:disable colon
 /// Grouping of Particles relating to each other also holding some metadata
 public struct ParticleGroup:
     RadixCodable,
     ArrayConvertible,
+    ArrayInitializable,
     RadixModelTypeStaticSpecifying,
     Codable {
  // swiftlint:enable colon

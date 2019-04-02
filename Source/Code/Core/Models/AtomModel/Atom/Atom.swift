@@ -62,6 +62,11 @@ public extension MetaDataConvertible {
 // MARK: - Convenience Init
 public extension Atom {
     
+    func withProofOfWork(magic: Magic) throws -> Atom {
+        let pow = try ProofOfWork.work(atom: self, magic: magic)
+        return withProofOfWork(pow)
+    }
+    
     func withProofOfWork(_ proof: ProofOfWork) -> Atom {
         let atom = Atom(
             metaData: metaData.withProofOfWork(proof),

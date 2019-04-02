@@ -27,6 +27,12 @@ public struct SpunParticle:
     }
 }
 
+public extension SpunParticle {
+    func wrapInGroup() -> ParticleGroup {
+        return ParticleGroup(spunParticles: [self])
+    }
+}
+
 // MARK: - Deodable
 public extension SpunParticle {
     

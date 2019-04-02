@@ -36,6 +36,11 @@ public extension ProofOfWork {
     
     static let expectedByteCountOfSeed = 32
     
+    static func work(atom: Atom, magic: Magic, numberOfLeadingZeros: UInt8 = 16) throws -> ProofOfWork {
+        
+        return try work(seed: atom.radixHash.asData, magic: magic, numberOfLeadingZeros: numberOfLeadingZeros)
+    }
+    
     // swiftlint:disable:next function_body_length
     static func work(seed: Data, magic: Magic, numberOfLeadingZeros: UInt8 = 16) throws -> ProofOfWork {
         let numberOfLeadingZeros = Int(numberOfLeadingZeros)

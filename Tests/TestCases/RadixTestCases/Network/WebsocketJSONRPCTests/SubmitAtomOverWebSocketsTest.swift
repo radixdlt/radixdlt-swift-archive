@@ -15,29 +15,34 @@ import RxBlocking
 
 class SubmitAtomOverWebSocketsTest: WebsocketTest {
     
-    func testSubmitAtomOverWebsockets() {
+    func testTokenDefinitionParticle() {
         guard let apiClient = makeApiClient() else { return }
         
-        let identity = RadixIdentity(private: 1)
+        let identity = RadixIdentity()
         let address = Address(publicKey: identity.publicKey)
         
-        let randomString = String(UUID().uuidString.replacingOccurrences(of: "-", with: "") .prefix(14))
-        let randomSymbol = try! Symbol(string: randomString)
-
         let tokenDefinitionParticle = TokenDefinitionParticle(
-            symbol: randomSymbol,
+            symbol: "CCC",
             name: "Cyon",
             description: "Cyon Crypto Coin is the worst shit coin",
             address: address
         )
         
-        let atomToSubmit = try! tokenDefinitionParticle.wrapInAtom(magic: 63799298)
+        let mintedTokenParticle = MintedTokenParticle(address: address, amount: 1000, tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference)
+        
+  
+        let atomWithoutPow: Atom = [
+            tokenDefinitionParticle.withSpin().wrapInGroup(),
+            mintedTokenParticle.withSpin().wrapInGroup()
+        ]
+        
+        let atomToSubmit = try! atomWithoutPow.withProofOfWork(magic: 63799298)
 
         let submitObservable = apiClient.submit(atom: atomToSubmit)
         
         let atomSubscriptions: [AtomSubscription]
         do {
-             atomSubscriptions = try submitObservable.take(2).toBlocking(timeout: 3).toArray()
+             atomSubscriptions = try submitObservable.take(2).toBlocking(timeout: 4).toArray()
         } catch { return XCTFail("failed to send atom, error: \(error)") }
 
         XCTAssertEqual(atomSubscriptions.count, 2)
