@@ -189,14 +189,6 @@ public extension Atom {
         return metaData.timestamp
     }
     
-    func publicKeys() -> Set<PublicKey> {
-        return spunParticles()
-            .map { $0.particle }
-            .flatMap { $0.shardables() }
-            .map { $0.publicKey }
-            .asSet
-    }
-    
     func withSignature(_ signature: Signature, signatureId: EUID) -> SignedAtom {
         let atom = Atom(
             metaData: metaData,
@@ -212,20 +204,6 @@ public extension Atom {
     
     var signable: Signable {
         return Message(hash: radixHash)
-    }
-    
-    func shards() -> Set<Shard> {
-        implementMe
-    }
-    
-    func requiredFirstShard() -> Set<Shard> {
-        if !particles(spin: .down).isEmpty {
-            return particles(spin: .down).flatMap {
-                $0.shardables().map { $0.hashId.shard }
-            }.asSet
-        } else {
-            return shards()
-        }
     }
 }
 

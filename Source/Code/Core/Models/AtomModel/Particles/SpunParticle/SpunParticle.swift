@@ -110,8 +110,4 @@ public extension SpunParticle {
     static func down(particle: ParticleConvertible) -> SpunParticle {
         return SpunParticle(spin: .down, particle: particle)
     }
-    
-    func particle<P>(as type: P.Type) -> P? where P: ParticleConvertible {
-        return particle.as(P.self)
-    }
 }
