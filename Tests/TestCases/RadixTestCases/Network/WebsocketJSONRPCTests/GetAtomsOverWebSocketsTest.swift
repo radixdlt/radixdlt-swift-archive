@@ -39,7 +39,7 @@ class GetAtomsOverWebSocketsTest: WebsocketTest {
         XCTAssertFalse(u1.isHead)
         XCTAssertFalse(u1.atomEvents.isEmpty)
         let atom = u1.atomEvents[0].atom
-        XCTAssertNotNil(atom.particlesOfType(MintedTokenParticle.self, spin: .up))
+        XCTAssertNotNil(atom.particlesOfType(UnallocatedTokensParticle.self, spin: .up))
         XCTAssertTrue(u2.isHead)
         XCTAssertTrue(u2.atomEvents.isEmpty)
     }

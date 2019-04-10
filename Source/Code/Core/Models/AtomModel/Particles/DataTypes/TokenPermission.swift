@@ -8,8 +8,15 @@
 
 import Foundation
 
-// TODO should this be an optionset?
-public enum TokenPermission: String, StringInitializable, StringRepresentable, PrefixedJsonCodable {
+/// Permissions controlling who can perform `TokenTransitions` such as `burn` or `mint` tokens.
+///
+/// - seeAlso:
+/// `TokenTransition`
+///
+public enum TokenPermission: String,
+    StringInitializable,
+    StringRepresentable,
+    PrefixedJsonCodable {
 
     case tokenCreationOnly = "token_creation_only"
     case tokenOwnerOnly = "token_owner_only"

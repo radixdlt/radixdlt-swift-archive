@@ -14,6 +14,7 @@ public extension TokenDefinitionParticle {
     func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .symbol, value: symbol),
+            EncodableKeyValue(key: .icon, ifPresent: BytesValue(dataIfPresent: icon)),
             EncodableKeyValue(key: .description, value: description),
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .permissions, value: permissions),

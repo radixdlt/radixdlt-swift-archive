@@ -28,22 +28,24 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
             address: address
         )
         
-        let mintedTokenParticle = MintedTokenParticle(
-            address: address,
+        let mintedTokenParticle = UnallocatedTokensParticle(
             amount: 1000,
             tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference
         )
         
-        let atom = try! Atom(particleGroups: [
+        let atom = Atom(particleGroups: [
             tokenDefinitionParticle.withSpin().wrapInGroup(),
             mintedTokenParticle.withSpin().wrapInGroup()
-        ]).withProofOfWork(magic: 63799298)
+        ])
         
-        let submitObservable = apiClient.submit(atom: atom)
+        let unsignedAtom = try! UnsignedAtom(atom)
+        let signedAtom = try! identity.sign(atom: unsignedAtom)
+        
+        let submitObservable = apiClient.submit(atom: try! signedAtom.atom.withProofOfWork(magic: 63799298))
         
         let atomSubscriptions: [AtomSubscription]
         do {
-             atomSubscriptions = try submitObservable.take(2).toBlocking(timeout: 4).toArray()
+             atomSubscriptions = try submitObservable.take(2).toBlocking(timeout: 1).toArray()
         } catch { return XCTFail("failed to send atom, error: \(error)") }
 
         XCTAssertEqual(atomSubscriptions.count, 2)
@@ -55,5 +57,36 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
         let u1 = as2.update!.subscriptionFromSubmissionsUpdate!
 
         XCTAssertEqual(u1.value, .stored)
+    }
+}
+
+
+// MARK: - Convenience Init
+extension TransferrableTokensParticle {
+    init(
+        amount: Amount,
+        address: Address,
+        symbol: Symbol,
+        tokenAddress: Address? = nil,
+        permissions: TokenPermissions = .default,
+        granularity: Granularity = .default,
+        nonce: Nonce = Nonce(),
+        planck: Planck = Planck()
+        ) {
+        
+        let tokenDefinitionReference = TokenDefinitionReference(
+            address: tokenAddress ?? address,
+            symbol: symbol
+        )
+        
+        self.init(
+            amount: amount,
+            address: address,
+            tokenDefinitionReference: tokenDefinitionReference,
+            permissions: permissions,
+            granularity: granularity,
+            nonce: nonce,
+            planck: planck
+        )
     }
 }

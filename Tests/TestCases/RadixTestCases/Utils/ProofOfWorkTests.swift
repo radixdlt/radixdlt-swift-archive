@@ -25,13 +25,13 @@ class ProofOfWorkTest: XCTestCase {
         }
     }
     
-    func test16LeadingZerosDeadbeefSeed() {
+    func test4LeadingZerosDeadbeefSeed() {
         let magic: Magic = 12345
         let seed: HexString = "deadbeef00000000deadbeef00000000deadbeef00000000deadbeef00000000"
         do {
-            let pow = try ProofOfWork.work(seed: seed.asData, magic: magic, numberOfLeadingZeros: 16)
+            let pow = try ProofOfWork.work(seed: seed.asData, magic: magic, numberOfLeadingZeros: 4)
             try pow.prove()
-            XCTAssertEqual(pow.nonceAsString, "241709")
+            XCTAssertEqual(pow.nonceAsString, "30")
         } catch {
             XCTFail("POW fail, error: \(error)")
             

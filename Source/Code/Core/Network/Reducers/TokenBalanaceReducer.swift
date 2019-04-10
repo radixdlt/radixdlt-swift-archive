@@ -16,31 +16,33 @@ public struct TokenBalanceReducer {
     }
 }
 
+public typealias SpunTransferrable = SpunParticle<TransferrableTokensParticle>
+
 public extension TokenBalanceReducer {
-    func reduce(spunParticles: [SpunParticle]) -> BalancePerToken {
-        let tokenBalances = spunParticles.compactMap { (spunParticle: SpunParticle) -> TokenBalance? in
-            guard let consumable = spunParticle.particle as? ConsumableTokens else {
+    func reduce(spunParticles: [AnySpunParticle]) -> BalancePerToken {
+        let tokenBalances = spunParticles.compactMap { (spunParticle: AnySpunParticle) -> TokenBalance? in
+            guard let transferrableTokensParticle = spunParticle.particle as? TransferrableTokensParticle else {
                 return nil
             }
-            return TokenBalance(consumable: consumable, spin: spunParticle.spin)
+            return TokenBalance(transferrable: transferrableTokensParticle, spin: spunParticle.spin)
         }
         return reduce(tokenBalances: tokenBalances)
     }
     
-    func reduce(spunConsumables: [SpunConsumable]) -> BalancePerToken {
-        let tokenBalances = spunConsumables.map {
-            return TokenBalance(spunConsumable: $0)
+    func reduce(spunTransferrable: [SpunTransferrable]) -> BalancePerToken {
+        let tokenBalances = spunTransferrable.map {
+            return TokenBalance(spunTransferrable: $0)
         }
         return reduce(tokenBalances: tokenBalances)
     }
-    
-    func reduce(_ spunConsumable: SpunConsumable) -> BalancePerToken {
-        let tokenBalance = TokenBalance(spunConsumable: spunConsumable)
+
+    func reduce(_ spunTransferrable: SpunTransferrable) -> BalancePerToken {
+        let tokenBalance = TokenBalance(spunTransferrable: spunTransferrable)
         return reduce(tokenBalances: [tokenBalance])
     }
     
-    func reduce(_ consumable: ConsumableTokens, spin: Spin) -> BalancePerToken {
-        let tokenBalance = TokenBalance(consumable: consumable, spin: spin)
+    func reduce(_ transferrableTokensParticle: TransferrableTokensParticle, spin: Spin) -> BalancePerToken {
+        let tokenBalance = TokenBalance(transferrable: transferrableTokensParticle, spin: spin)
         return reduce(tokenBalances: [tokenBalance])
     }
     
@@ -72,9 +74,9 @@ public extension TokenBalanceReducer {
         return reduce(balanceForTokens: balanceForTokens)
     }
     
-    func reduce(spunConsumables: Observable<SpunConsumable>) -> Observable<BalancePerToken> {
+    func reduce(spunTransferrable: Observable<SpunTransferrable>) -> Observable<BalancePerToken> {
         return reduce(tokenBalance:
-            spunConsumables.map { TokenBalance(spunConsumable: $0) }
+            spunTransferrable.map { TokenBalance(spunTransferrable: $0) }
         )
     }
     
@@ -90,3 +92,4 @@ public extension TokenBalanceReducer {
         })
     }
 }
+

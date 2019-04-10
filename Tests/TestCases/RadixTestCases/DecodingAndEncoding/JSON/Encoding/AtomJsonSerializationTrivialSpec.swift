@@ -19,9 +19,9 @@ class AtomToDsonSpec: QuickSpec {
                 let dsonHex = dson.hex
                 expect(dsonHex).to(equal("bf686d65746144617461bf6974696d657374616d706d31323334353637383930313233ff6a73657269616c697a65721a001ed1516776657273696f6e1864ff"))
                 
-                expect(dsonHex).to(contain(try! Atom.CodingKeys.metaData.rawValue.toDSON().hex))
-                expect(dsonHex).toNot(contain(try! Atom.CodingKeys.signatures.rawValue.toDSON().hex))
-                expect(dsonHex).toNot(contain(try! Atom.CodingKeys.particleGroups.rawValue.toDSON().hex))
+                expect(dsonHex).to(contain(try! Atom.CodingKeys.metaData.rawValue.toDSON(output: .all).hex))
+                expect(dsonHex).toNot(contain(try! Atom.CodingKeys.signatures.rawValue.toDSON(output: .all).hex))
+                expect(dsonHex).toNot(contain(try! Atom.CodingKeys.particleGroups.rawValue.toDSON(output: .all).hex))
             }
         }
     }
@@ -36,7 +36,7 @@ class AtomJsonSerializationTrivialSpec: QuickSpec {
             let atom = Atom(
                 particleGroups: [
                     ParticleGroup(spunParticles: [
-                        SpunParticle(
+                        AnySpunParticle(
                             spin: .up,
                             particle: UniqueParticle(
                                 address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",

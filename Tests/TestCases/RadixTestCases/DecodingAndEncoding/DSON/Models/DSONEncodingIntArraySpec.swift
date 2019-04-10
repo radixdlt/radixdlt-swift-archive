@@ -18,7 +18,7 @@ class DSONEncodingIntArraySpec: QuickSpec {
             describe("Array") {
                 let intArray: [Int] = [1, 2, 3, 4]
                 let cbor = CBOR.array(intArray.map { CBOR(integerLiteral: $0) }).encode()
-                let dson = try! intArray.toDSON()
+                let dson = try! intArray.toDSON(output: .all)
                 
                 it("should start with `0b100` and number of items") {
                     expect(cbor.hex).to(equal("8401020304"))

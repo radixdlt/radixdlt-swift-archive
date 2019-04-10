@@ -8,12 +8,26 @@
 
 import Foundation
 
-public protocol TokenDefinitionReferencing: Identifiable {
+public protocol TokenDefinitionReferencing: Identifiable, Accountable, Ownable {
     var tokenDefinitionReference: TokenDefinitionReference { get }
 }
 
 public extension TokenDefinitionReferencing {
     var identifier: ResourceIdentifier {
         return tokenDefinitionReference.identifier
+    }
+}
+
+// MARK: - Ownable
+public extension TokenDefinitionReferencing {
+    var address: Address {
+        return tokenDefinitionReference.address
+    }
+}
+
+// MARK: - Accountable
+public extension TokenDefinitionReferencing {
+    var addresses: Addresses {
+        return Addresses(address)
     }
 }

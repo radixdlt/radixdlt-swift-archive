@@ -8,12 +8,12 @@
 
 import Foundation
 
-public extension Sequence where Element == SpunParticle {
+public extension Sequence where Element == AnySpunParticle {
     func compactMap<P>(type: P.Type) -> [P] where P: ParticleConvertible {
         return compactMap { $0.particle as? P }
     }
     
-    func filter(spin: Spin) -> [SpunParticle] {
+    func filter(spin: Spin) -> [AnySpunParticle] {
         return filter { $0.spin == spin }
     }
 }

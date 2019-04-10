@@ -13,7 +13,7 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-class WebsocketTest: XCTest {
+class WebsocketTest: XCTestCase {
 
     private let disposeBag = DisposeBag()
     

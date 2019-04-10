@@ -29,7 +29,11 @@ public protocol DSONEncodable {
 }
 
 public extension CBOREncodable {
-    func toDSON(output: DSONOutput = .default) throws -> DSON {
+    func toDSON(output: DSONOutput) throws -> DSON {
         return encode().asData
     }
 }
+
+extension Bool: DSONEncodable {}
+extension String: DSONEncodable {}
+extension UInt64: DSONEncodable {}

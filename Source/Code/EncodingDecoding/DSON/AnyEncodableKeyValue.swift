@@ -9,21 +9,38 @@
 import Foundation
 
 /// A fully type-erased container of a keyed-value that is DSONEncodable
-public struct AnyEncodableKeyValue: DSONOutputSpecifying {
-    public let key: String
-    public let dsonEncodedValue: DSON
-    public let output: DSONOutput
+public struct AnyEncodableKeyValue {
+    
+    internal let key: String
+    private let dsonEncodedValue: DSON
+    private let output: DSONOutput
+    
     init(key unencodedKey: String, encoded dsonEncodedValue: DSON, output: DSONOutput) {
         self.key = unencodedKey
         self.dsonEncodedValue = dsonEncodedValue
         self.output = output
     }
-    
-    init<Value>(key: String, encodable: Value, output: DSONOutput = .default) throws where Value: DSONEncodable {
-        self.init(key: key, encoded: try encodable.toDSON(output: output), output: output)
+}
+
+public extension AnyEncodableKeyValue {
+    func allowsOutput(of other: DSONOutput) -> Bool {
+        return output.allowsOutput(of: other)
     }
     
-    public func cborEncodedKey() -> [UInt8] {
+    func cborEncoded() -> [UInt8] {
+        return cborEncodedKey() + dsonEncodedValue
+    }
+}
+
+private extension AnyEncodableKeyValue {
+    func cborEncodedKey() -> [UInt8] {
         return CBOR.utf8String(key).encode()
+    }
+}
+
+// MARK: - Convenience Init
+public extension AnyEncodableKeyValue {
+    init<Value>(key: String, encodable: Value, output: DSONOutput) throws where Value: DSONEncodable {
+        self.init(key: key, encoded: try encodable.toDSON(output: output), output: output)
     }
 }

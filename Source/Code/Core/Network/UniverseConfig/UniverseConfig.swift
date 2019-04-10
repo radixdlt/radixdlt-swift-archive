@@ -15,6 +15,8 @@ public typealias Port = Int64
 
 public struct UniverseConfig:
     RadixModelTypeStaticSpecifying,
+    RadixCodable,
+    RadixHashable,
     Decodable,
     Equatable,
     CustomStringConvertible {
@@ -28,14 +30,22 @@ public struct UniverseConfig:
     public let timestamp: Date
     public let creator: PublicKey
     public let genesis: Atoms
+    public let planck: Planck
+    
+    /// Only used for tests
+    internal let hashIdFromApiUsedForTesting: EUID?
 }
 
 // MARK: - Decodable
 public extension UniverseConfig {
     
-    enum CodingKeys: CodingKey {
+    enum CodingKeys: String, CodingKey {
         case serializer
         case magic, port, name, description, type, timestamp, creator, genesis
+        case planck
+        
+        // TEST ONLY
+        case hashIdFromApiUsedForTesting = "hid"
     }
     
     init(from decoder: Decoder) throws {
@@ -49,6 +59,28 @@ public extension UniverseConfig {
         timestamp = TimeConverter.dateFrom(millisecondsSince1970: timestampMillis)
         creator = try container.decode(PublicKey.self, forKey: .creator)
         genesis = try container.decode(Atoms.self, forKey: .genesis)
+        
+        planck = try container.decode(Planck.self, forKey: .planck)
+        
+        // TESTING ONLY
+        hashIdFromApiUsedForTesting = try container.decodeIfPresent(EUID.self, forKey: .hashIdFromApiUsedForTesting)
+    }
+}
+
+// MARK: Encodable
+public extension UniverseConfig {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        return [
+            EncodableKeyValue(key: .magic, value: magic, output: .allButHash),
+            EncodableKeyValue(key: .planck, value: planck),
+            EncodableKeyValue(key: .port, value: port),
+            EncodableKeyValue(key: .name, value: name),
+            EncodableKeyValue(key: .description, value: description),
+            EncodableKeyValue(key: .timestamp, value: TimeConverter.millisecondsFrom(date: timestamp)),
+            EncodableKeyValue(key: .creator, value: creator),
+            EncodableKeyValue(key: .type, value: type),
+            EncodableKeyValue(key: .genesis, value: genesis)
+        ]
     }
 }
 
@@ -64,50 +96,3 @@ public extension UniverseConfig {
     }
 }
 
-public extension UniverseConfig {
-    enum UniverseType: Int, Decodable, Equatable {
-        case `public` = 1
-        case development
-        
-        public enum CodingKeys: String, CodingKey {
-            case `public` = "RADIX_PUBLIC"
-            case development = "RADIX_DEVELOPMENT"
-        }
-        
-        var ordinalValue: Int {
-            return rawValue
-        }
-        
-        var name: String {
-            switch self {
-            case .public: return CodingKeys.public.rawValue
-            case .development: return CodingKeys.development.rawValue
-            }
-        }
-    }
-}
-
-public extension UniverseConfig {
-    static var betanet: UniverseConfig {
-        return config(fromResource: "betanet")
-    }
-    static var sunstone: UniverseConfig {
-        return config(fromResource: "sunstone")
-    }
-}
-
-private extension UniverseConfig {
-    static func config(fromResource resource: String) -> UniverseConfig {
-        guard
-            let url = Bundle.main.url(forResource: resource, withExtension: "json") else {
-                incorrectImplementation("Config file not found: \(resource)")
-        }
-        do {
-            let data = try Data(contentsOf: url)
-            return try
-                JSONDecoder().decode(UniverseConfig.self, from: data)
-        } catch {
-            incorrectImplementation("Failed to create config from data, error: \(error)")
-        }
-    }
-}
