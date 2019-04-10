@@ -26,7 +26,7 @@ public extension Spin {
 }
 
 extension Spin: DSONEncodable {
-    public func toDSON(output: DSONOutput = .default) throws -> DSON {
-        return try CBOR(integerLiteral: rawValue).toDSON()
+    public func toDSON(output: DSONOutput) throws -> DSON {
+        return try CBOR(integerLiteral: rawValue).toDSON(output: output)
     }
 }

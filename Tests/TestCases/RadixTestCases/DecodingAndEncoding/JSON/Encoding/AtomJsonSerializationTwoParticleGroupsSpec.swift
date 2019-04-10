@@ -48,7 +48,7 @@ private let atom = Atom(
     ],
     particleGroups: [
         ParticleGroup(spunParticles: [
-            SpunParticle(
+            AnySpunParticle(
                 spin: .up,
                 particle: TokenDefinitionParticle(
                     symbol: "CCC",
@@ -63,18 +63,14 @@ private let atom = Atom(
                     permissions: .all
                 )
             ),
-            SpunParticle(
+            AnySpunParticle(
                 spin: .up,
-                particle: MintedTokenParticle(
-                    address: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-                    granularity: 1,
-                    nonce: 992284943125945,
-                    planck: 24805440,
+                particle: UnallocatedTokensParticle(
                     amount: 1337,
                     tokenDefinitionReference: "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
                 )
             ),
-            SpunParticle(
+            AnySpunParticle(
                 spin: .up,
                 particle: MessageParticle(
                     from: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
@@ -82,7 +78,7 @@ private let atom = Atom(
                     message: "Hello Radix!"
                 )
             ),
-            SpunParticle(
+            AnySpunParticle(
                 spin: .up,
                 particle: UniqueParticle(
                     address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",

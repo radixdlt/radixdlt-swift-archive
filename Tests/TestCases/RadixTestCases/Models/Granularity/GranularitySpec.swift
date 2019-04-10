@@ -24,9 +24,9 @@ class GranularitySpec: QuickSpec {
             
             it("should be possible to DSON encode UInt256") {
                 let gran1: Granularity = 1
-                expect(try! gran1.toDSON().hex).to(equal("5821050000000000000000000000000000000000000000000000000000000000000001"))
+                expect(try! gran1.toDSON(output: .all).hex).to(equal("5821050000000000000000000000000000000000000000000000000000000000000001"))
                 let gran2: Granularity = "1000000000000000000000000000"
-                expect(try! gran2.toDSON().hex).to(equal("5821050000000000000000000000000000000000000000033b2e3c9fd0803ce8000000"))
+                expect(try! gran2.toDSON(output: .all).hex).to(equal("5821050000000000000000000000000000000000000000033b2e3c9fd0803ce8000000"))
             }
             
         }

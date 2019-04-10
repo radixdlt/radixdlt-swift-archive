@@ -8,10 +8,6 @@
 
 import Foundation
 
-public protocol PublicKeyOwner {
-    var publicKey: PublicKey { get }
-}
-
 public protocol Ownable {
     var address: Address { get }
 }

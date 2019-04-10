@@ -30,7 +30,7 @@ public extension AnyEncodableKeyValueListConvertible {
         
         return [
             CBOR.encodeMapStreamStart(),
-            keyValues.flatMap { $0.cborEncodedKey() + $0.dsonEncodedValue },
+            keyValues.flatMap { $0.cborEncoded() },
             CBOR.encodeStreamEnd()
         ].flatMap { $0 }.asData
     }

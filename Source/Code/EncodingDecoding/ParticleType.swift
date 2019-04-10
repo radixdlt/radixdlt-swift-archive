@@ -11,9 +11,8 @@ import Foundation
 public enum ParticleType {
     case message
     case tokenDefinition
-    case burnedToken
-    case mintedToken
-    case transferredToken
+    case unallocated
+    case transferrable
     case unique
 }
 
@@ -26,10 +25,9 @@ public extension ParticleType {
 internal extension ParticleType {
     init(serializer: RadixModelType) throws {
         switch serializer {
-        case .burnedTokensParticle: self = .burnedToken
-        case .mintedTokensParticle: self = .mintedToken
+        case .unallocatedTokensParticle: self = .unallocated
         case .uniqueParticle: self = .unique
-        case .transferredTokensParticle: self = .transferredToken
+        case .transferrableTokensParticle: self = .transferrable
         case .messageParticle: self = .message
         case .tokenDefinitionParticle: self = .tokenDefinition
         default: throw Error.notParticle
@@ -38,11 +36,10 @@ internal extension ParticleType {
     
     var serializer: RadixModelType {
         switch self {
-        case .burnedToken: return .burnedTokensParticle
+        case .unallocated: return .unallocatedTokensParticle
         case .message: return .messageParticle
-        case .mintedToken: return .mintedTokensParticle
         case .unique: return .uniqueParticle
-        case .transferredToken: return .transferredTokensParticle
+        case .transferrable: return .transferrableTokensParticle
         case .tokenDefinition: return .tokenDefinitionParticle
         }
     }

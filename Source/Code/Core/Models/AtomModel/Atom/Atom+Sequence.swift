@@ -13,7 +13,7 @@ public extension Sequence where Element == Atom {
         return flatMap({ $0.particleGroups })
     }
     
-    func spunParticles(spin: Spin? = nil) -> [SpunParticle] {
+    func spunParticles(spin: Spin? = nil) -> [AnySpunParticle] {
         let particles = particleGroups().flatMap { $0.spunParticles }
         guard let spin = spin else {
             return particles

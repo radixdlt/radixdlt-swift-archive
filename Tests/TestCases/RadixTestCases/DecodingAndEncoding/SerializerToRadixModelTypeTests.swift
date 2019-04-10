@@ -26,10 +26,9 @@ class SerializerTests: XCTestCase {
         doTest(.udpNodeRunnerData, 151517315)
         doTest(.universeConfig, 492321349)
         doTest(.messageParticle, -1254222995)
+        doTest(.unallocatedTokensParticle, -1709707314)
         doTest(.tokenDefinitionParticle, -1135093134)
-        doTest(.burnedTokensParticle, 1180201038)
-        doTest(.mintedTokensParticle, 1745075425)
-        doTest(.transferredTokensParticle, 1311280198)
+        doTest(.transferrableTokensParticle, 24893441)
         doTest(.uniqueParticle, 1446890290)
         doTest(.atomEvent, -1784097847)
         

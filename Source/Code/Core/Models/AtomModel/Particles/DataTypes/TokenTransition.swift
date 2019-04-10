@@ -1,5 +1,5 @@
 //
-//  TokenAction.swift
+//  TokenTransition.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-01-25.
@@ -8,32 +8,36 @@
 
 import Foundation
 
-/// Verb version of `FungibleType`
-public enum TokenAction: String, Codable, StringInitializable, StringRepresentable, Hashable {
+public enum TokenTransition: String,
+    StringInitializable,
+    StringRepresentable,
+    Codable,
+    Hashable {
+    
     case mint
     case burn
 }
 
 // MARK: - StringInitializable
-public extension TokenAction {
+public extension TokenTransition {
     init(string: String) throws {
-        guard let type = TokenAction(rawValue: string) else {
-            throw Error.unsupportedTokenAction(string)
+        guard let type = TokenTransition(rawValue: string) else {
+            throw Error.unsupportedTokenTransition(string)
         }
         self = type
     }
 }
 
 // MARK: CustomStringConvertible
-public extension TokenAction {
+public extension TokenTransition {
     var description: String {
         return rawValue
     }
 }
 
 // MARK: - Error
-public extension TokenAction {
+public extension TokenTransition {
     enum Error: Swift.Error {
-        case unsupportedTokenAction(String)
+        case unsupportedTokenTransition(String)
     }
 }

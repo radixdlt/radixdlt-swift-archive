@@ -14,8 +14,8 @@ public struct AnyEncodableKeyValueList: AnyEncodableKeyValueListConvertible {
     private let _keyValues: (DSONOutput) throws -> [AnyEncodableKeyValue]
     
     init<K>(keyValues: [EncodableKeyValue<K>]) throws where K: CodingKey {
-        _keyValues = { _ in
-            return try keyValues.map { try $0.toAnyEncodableKeyValue() }
+        _keyValues = { overridingDsonOutput in
+            return try keyValues.map { try $0.toAnyEncodableKeyValue(output: overridingDsonOutput) }
         }
     }
 }

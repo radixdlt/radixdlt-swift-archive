@@ -15,23 +15,23 @@ import RxSwift
 
 class TokenBalanceReducerTests: XCTestCase {
     func testSimpleBalance() {
-        let minted = mintedToken(10)
         let reducer = TokenBalanceReducer()
-        let balances = reducer.reduce(minted)
+        let balances = reducer.reduce(transferrable(10))
+        
         let balance = balances[xrd]
         XCTAssertEqual(balance?.amount.signedAmount, 10)
     }
     
     func testMultipleMintedTokens() {
         
-        let spunConsumables: [SpunConsumable] = [
-            mintedToken(3),
-            mintedToken(5),
-            mintedToken(11)
+        let spunTransferrable: [SpunTransferrable] = [
+            transferrable(3),
+            transferrable(5),
+            transferrable(11)
         ]
     
         let reducer = TokenBalanceReducer()
-        let balances = reducer.reduce(spunConsumables: spunConsumables)
+        let balances = reducer.reduce(spunTransferrable: spunTransferrable)
 
         guard let xrdBalance = balances[xrd] else { return XCTFail("Should not be nil") }
         XCTAssertEqual(xrdBalance.amount.signedAmount.magnitude, 19)
@@ -43,23 +43,13 @@ class TokenBalanceReducerTests: XCTestCase {
 private let address: Address = "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
 private let xrd = TokenDefinitionReference(address: address, symbol: "XRD")
 
-private func mintedToken(_ amount: Amount, spin: Spin = .up) -> SpunConsumable {
-    return SpunConsumable(
-        spin: spin,
-        any: MintedTokenParticle(
-            address: address,
-            amount: amount,
-            tokenDefinitionReference: xrd
-        )
-    )
-}
 
-private func transferredToken(_ amount: Amount, spin: Spin = .up) -> SpunConsumable {
-    return SpunConsumable(
+private func transferrable(_ amount: Amount, spin: Spin = .up) -> SpunTransferrable {
+    return SpunTransferrable(
         spin: spin,
-        any: TransferredTokenParticle(
-            address: address,
+        particle: TransferrableTokensParticle(
             amount: amount,
+            address: address,
             tokenDefinitionReference: xrd
         )
     )

@@ -38,6 +38,11 @@
                BlueprintName = "RadixSDK iOS Tests"
                ReferencedContainer = "container:RadixSDK.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "WebsocketTest">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

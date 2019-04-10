@@ -9,8 +9,8 @@
 import Foundation
 
 public extension ParticleConvertible {
-    func withSpin(_ spin: Spin = .up) -> SpunParticle {
-        return SpunParticle(spin: spin, particle: self)
+    func withSpin(_ spin: Spin = .up) -> AnySpunParticle {
+        return AnySpunParticle(spin: spin, particle: self)
     }
 }
 
@@ -25,11 +25,11 @@ public struct ParticleGroup:
  // swiftlint:enable colon
     public static let serializer = RadixModelType.particleGroup
     
-    public let spunParticles: [SpunParticle]
+    public let spunParticles: [AnySpunParticle]
     public let metaData: MetaData
     
     public init(
-        spunParticles: [SpunParticle],
+        spunParticles: [AnySpunParticle],
         metaData: MetaData = [:]
     ) {
         self.spunParticles = spunParticles
@@ -49,7 +49,7 @@ public extension ParticleGroup {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        spunParticles = try container.decode([SpunParticle].self, forKey: .spunParticles)
+        spunParticles = try container.decode([AnySpunParticle].self, forKey: .spunParticles)
         metaData = try container.decodeIfPresent(MetaData.self, forKey: .metaData) ?? [:]
     }
         
@@ -69,7 +69,7 @@ public extension ParticleGroup {
 
 // MARK: - ArrayDecodable
 public extension ParticleGroup {
-    typealias Element = SpunParticle
+    typealias Element = AnySpunParticle
     var elements: [Element] {
         return spunParticles
     }

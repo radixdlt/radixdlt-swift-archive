@@ -16,7 +16,7 @@ public protocol EncodableKeyValueListConvertible: AnyEncodableKeyValueListConver
 // MARK: - AnyEncodableKeyValueListConvertible
 public extension EncodableKeyValueListConvertible {
     func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue] {
-        return try encodableKeyValues().map { try $0.toAnyEncodableKeyValue() }
+        return try encodableKeyValues().map { try $0.toAnyEncodableKeyValue(output: output) }
     }
 }
 

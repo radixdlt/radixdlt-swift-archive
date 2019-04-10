@@ -25,9 +25,10 @@ public struct TokenPermissions:
     DictionaryCodable,
     CBORDictionaryConvertible,
     Equatable {
+    
 // swiftlint:enable colon
     
-    public typealias Key = TokenAction
+    public typealias Key = TokenTransition
     public typealias Value = TokenPermission
     public let dictionary: [Key: Value]
     public init(dictionary: Map) {

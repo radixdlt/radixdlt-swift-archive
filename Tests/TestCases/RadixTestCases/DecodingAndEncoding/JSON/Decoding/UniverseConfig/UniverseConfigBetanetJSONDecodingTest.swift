@@ -18,8 +18,8 @@ extension XCTestCase {
 
 class UniverseConfigBetanetJSONDecodingTest: QuickSpec {
     override func spec() {
-       test(config: "betanet")
-       test(config: "sunstone")
+        test(config: "betanet")
+        //       test(config: "sunstone")
     }
     
     private func test(config: String) {
@@ -32,8 +32,10 @@ class UniverseConfigBetanetJSONDecodingTest: QuickSpec {
                 do {
                     let data = try Data(contentsOf: jsonFileUrl)
                     let config = try JSONDecoder().decode(UniverseConfig.self, from: data)
-                    expect(config.magicByte).to(equal(0x02))
-                    expect(config.genesis.isEmpty).to(equal(false))
+                    guard let hashIdFromApiUsedForTesting = config.hashIdFromApiUsedForTesting else {
+                        return
+                    }
+                    expect(config.hashId).to(equal(hashIdFromApiUsedForTesting))
                 } catch {
                     XCTFail("failed to parse file, error: \(error)")
                 }

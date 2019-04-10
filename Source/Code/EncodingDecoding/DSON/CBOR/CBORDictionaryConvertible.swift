@@ -21,7 +21,7 @@ public protocol CBORDictionaryConvertible:
 
 // MARK: - AnyEncodableKeyValueListConvertible
 public extension CBORDictionaryConvertible where Key: StringRepresentable {
-    func anyEncodableKeyValues(output: DSONOutput = .default) throws -> [AnyEncodableKeyValue] {
+    func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue] {
         return try dictionary.map {
             AnyEncodableKeyValue(
                 key: $0.key.stringValue,
@@ -40,18 +40,18 @@ public extension CBORDictionaryConvertible {
 }
 
 public extension CBORDictionaryConvertible where Value: StringRepresentable {
-    func valueDSONEncode(_ value: Value, output: DSONOutput = .default) throws -> DSON {
+    func valueDSONEncode(_ value: Value, output: DSONOutput) throws -> DSON {
         return try CBOR(stringLiteral: value.stringValue).toDSON(output: output)
     }
 }
 
 public extension CBORDictionaryConvertible where Value: DSONEncodable {
-    func valueDSONEncode(_ value: Value, output: DSONOutput = .default) throws -> DSON {
+    func valueDSONEncode(_ value: Value, output: DSONOutput) throws -> DSON {
         return try value.toDSON(output: output)
     }
 }
 
-/// Ugly hack to resolve "candidate exactly matches" error since compiler is unable to distinguish between implementation `where Value: StringRepresentable` and `where Value: DSONEncodable`
+// Ugly hack to resolve "candidate exactly matches" error since compiler is unable to distinguish between implementation `where Value: StringRepresentable` and `where Value: DSONEncodable`
 public extension CBORDictionaryConvertible where Value == String {
     func valueDSONEncode(_ value: Value, output: DSONOutput) throws -> DSON {
         return try CBOR(stringLiteral: value).toDSON(output: output)

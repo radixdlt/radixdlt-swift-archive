@@ -28,9 +28,9 @@ class TokenPermissionEncodingSpec: QuickSpec {
                 let dsonHex = try! permissions.toDSON().hex
                 it("its values are not prefixed with :str:") {
                     expect(dsonHex).to(contain(
-                        ["burn", "all"].map { try! $0.toDSON().hex }.joined()
+                        ["burn", "all"].map { try! $0.toDSON(output: .all).hex }.joined()
                     ))
-                    expect(dsonHex).toNot(contain(try! ":str:all".toDSON().hex))
+                    expect(dsonHex).toNot(contain(try! ":str:all".toDSON(output: .all).hex))
                 }
             }
         }

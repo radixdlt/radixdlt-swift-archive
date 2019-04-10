@@ -13,20 +13,20 @@ public protocol DSONArrayConvertible: DSONEncodable, ArrayConvertible {
 }
 
 public extension DSONArrayConvertible where Element: DSONEncodable {
-    func dsonEncodeElement(_ element: Element, output: DSONOutput = .default) throws -> DSON {
+    func dsonEncodeElement(_ element: Element, output: DSONOutput) throws -> DSON {
         return try element.toDSON(output: output)
     }
 }
 
 // MARK: - DSONEncodable
 public extension DSONArrayConvertible where Element: DSONEncodable {
-    func toDSON(output: DSONOutput = .default) throws -> DSON {
+    func toDSON(output: DSONOutput) throws -> DSON {
         return try [Element](self).toDSON(output: output)
     }
 }
 
 extension Array: DSONEncodable where Element: DSONEncodable {
-    public func toDSON(output: DSONOutput = .default) throws -> DSON {
+    public func toDSON(output: DSONOutput) throws -> DSON {
         var array = try count.encode() + self.flatMap { try $0.toDSON(output: output) }
         // Bit mask for CBOR major type 4 (array): 0b100 << 1 <=> 0b1000
         array[0] |= 0b100_00000

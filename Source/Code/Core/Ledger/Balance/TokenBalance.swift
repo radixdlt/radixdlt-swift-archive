@@ -19,16 +19,16 @@ public struct TokenBalance: Hashable, TokenDefinitionReferencing {
         self.tokenDefinitionReference = tokenDefinitionReference
     }
     
-    public init(consumable: ConsumableTokens, spin: Spin) {
+    public init(transferrable: TransferrableTokensParticle, spin: Spin) {
         self.init(
-            amount: spin * consumable.amount,
-            address: consumable.address,
-            tokenDefinitionReference: consumable.tokenDefinitionReference
+            amount: spin * transferrable.amount,
+            address: transferrable.address,
+            tokenDefinitionReference: transferrable.tokenDefinitionReference
         )
     }
     
-    public init(spunConsumable: SpunConsumable) {
-        self.init(consumable: spunConsumable.any, spin: spunConsumable.spin)
+    public init(spunTransferrable: SpunTransferrable) {
+        self.init(transferrable: spunTransferrable.particle, spin: spunTransferrable.spin)
     }
 }
 

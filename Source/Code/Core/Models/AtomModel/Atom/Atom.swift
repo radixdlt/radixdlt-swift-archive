@@ -81,7 +81,7 @@ public extension Atom {
             particleGroups: [
                 ParticleGroup(
                     spunParticles: [
-                        SpunParticle(spin: spin, particle: particle)
+                        AnySpunParticle(spin: spin, particle: particle)
                     ]
                 )
             ]
@@ -110,7 +110,7 @@ public extension Atom {
         let properties = [
             EncodableKeyValue<CodingKeys>(key: .metaData, value: metaData),
             EncodableKeyValue(key: .particleGroups, nonEmpty: particleGroups.particleGroups),
-            EncodableKeyValue(key: .signatures, nonEmpty: signatures, output: [.api, .wire, .persist])
+            EncodableKeyValue(key: .signatures, nonEmpty: signatures, output: .allButHash)
         ].compactMap { $0 }
 
         let atomSize = try AnyEncodableKeyValueList(keyValues: properties).toDSON().asData.length
@@ -151,7 +151,7 @@ public extension Atom {
 
 public extension Atom {
     
-    func spunParticles() -> [SpunParticle] {
+    func spunParticles() -> [AnySpunParticle] {
         return particleGroups.flatMap { $0.spunParticles }
     }
     
@@ -164,11 +164,11 @@ public extension Atom {
     }
     
     func tokensBalances() -> [TokenBalance] {
-        let tokenBalances = spunParticles().compactMap { (spunParticle: SpunParticle) -> TokenBalance? in
-            guard let consumable = spunParticle.particle as? ConsumableTokens else {
+        let tokenBalances = spunParticles().compactMap { (spunParticle: AnySpunParticle) -> TokenBalance? in
+            guard let transferrableTokensParticle = spunParticle.particle as? TransferrableTokensParticle else {
                 return nil
             }
-            return TokenBalance(consumable: consumable, spin: spunParticle.spin)
+            return TokenBalance(transferrable: transferrableTokensParticle, spin: spunParticle.spin)
         }
         return tokenBalances
     }

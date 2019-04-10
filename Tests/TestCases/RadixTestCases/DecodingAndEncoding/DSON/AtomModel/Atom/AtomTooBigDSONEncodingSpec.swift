@@ -32,14 +32,10 @@ class AtomTooBigDSONEncodingSpec: QuickSpec {
         
     }
 }
-private let oneThousandParticles = [SpunParticle](repeating: spunTokenParticle, count: 1000)
-private let spunTokenParticle = SpunParticle(
+private let oneThousandParticles = [AnySpunParticle](repeating: spunTokenParticle, count: 1000)
+private let spunTokenParticle = AnySpunParticle(
     spin: .up,
-    particle: MintedTokenParticle(
-        address: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-        granularity: 1,
-        nonce: 992284943125945,
-        planck: 24805440,
+    particle: UnallocatedTokensParticle(
         amount: 1337,
         tokenDefinitionReference: "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
     )

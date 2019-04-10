@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol TokenConvertible: TokenDefinitionReferencing, Ownable {
+public protocol TokenConvertible: TokenDefinitionReferencing {
     var symbol: Symbol { get }
     var name: Name { get }
     var address: Address { get }

@@ -18,10 +18,10 @@ public extension RadixCodable {
     func process(keyValues: [AnyEncodableKeyValue], output: DSONOutput) throws -> [AnyEncodableKeyValue] {
         var keyValues = keyValues
         
-        keyValues.append(try AnyEncodableKeyValue(key: jsonKeyVersion, encodable: serializerVersion))
+        keyValues.append(try AnyEncodableKeyValue(key: jsonKeyVersion, encodable: serializerVersion, output: .all))
         
         if let modelTypeSpecyfing = self as? RadixModelTypeStaticSpecifying {
-            keyValues.append(try AnyEncodableKeyValue(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.serializer.serializerId))
+            keyValues.append(try AnyEncodableKeyValue(key: RadixModelType.jsonKey, encodable: modelTypeSpecyfing.serializer.serializerId, output: .all))
         }
         
         return keyValues.sorted(by: \.key).filter { $0.allowsOutput(of: output) }

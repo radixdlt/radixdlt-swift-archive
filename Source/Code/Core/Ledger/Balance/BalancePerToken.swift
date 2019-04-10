@@ -40,13 +40,13 @@ public extension BalancePerToken {
         }
     }
     
-    mutating func add(consumable: ConsumableTokens, spin: Spin) {
-        dictionary[consumable.tokenDefinitionReference] = TokenBalance(consumable: consumable, spin: spin)
+    mutating func add(transferrable: TransferrableTokensParticle, spin: Spin) {
+        dictionary[transferrable.tokenDefinitionReference] = TokenBalance(transferrable: transferrable, spin: spin)
     }
     
-    func adding(consumable: ConsumableTokens, spin: Spin) -> BalancePerToken {
+    func adding(transferrable: TransferrableTokensParticle, spin: Spin) -> BalancePerToken {
         var copy = self
-        copy.add(consumable: consumable, spin: spin)
+        copy.add(transferrable: transferrable, spin: spin)
         return copy
     }
     
