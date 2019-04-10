@@ -77,6 +77,9 @@
 		E631DADA21F5A8190063F632 /* HierarchicalDeterministicWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAD921F5A8190063F632 /* HierarchicalDeterministicWallet.swift */; };
 		E640F636225DFBF800855256 /* BytesValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F635225DFBF800855256 /* BytesValue.swift */; };
 		E640F638225DFC3D00855256 /* PublicKeyOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F637225DFC3D00855256 /* PublicKeyOwner.swift */; };
+		E640F63A225E1C4F00855256 /* SigninAtomWithPowResultsInSameDsonAsWithoutPowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F639225E1C4F00855256 /* SigninAtomWithPowResultsInSameDsonAsWithoutPowTests.swift */; };
+		E640F63C225E21E600855256 /* Int+BitsPerByte.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63B225E21E600855256 /* Int+BitsPerByte.swift */; };
+		E640F63F225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */; };
 		E645E73821E7827D00532ACD /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E645E72E21E7827D00532ACD /* RadixSDK.framework */; };
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E6550EE8224BBDBD00160267 /* NodeDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */; };
@@ -422,6 +425,9 @@
 		E631DAD921F5A8190063F632 /* HierarchicalDeterministicWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HierarchicalDeterministicWallet.swift; sourceTree = "<group>"; };
 		E640F635225DFBF800855256 /* BytesValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BytesValue.swift; sourceTree = "<group>"; };
 		E640F637225DFC3D00855256 /* PublicKeyOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyOwner.swift; sourceTree = "<group>"; };
+		E640F639225E1C4F00855256 /* SigninAtomWithPowResultsInSameDsonAsWithoutPowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninAtomWithPowResultsInSameDsonAsWithoutPowTests.swift; sourceTree = "<group>"; };
+		E640F63B225E21E600855256 /* Int+BitsPerByte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+BitsPerByte.swift"; sourceTree = "<group>"; };
+		E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProofOfWork+NumberOfLeadingZeros.swift"; sourceTree = "<group>"; };
 		E645E72E21E7827D00532ACD /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E645E73721E7827D00532ACD /* RadixSDK iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RadixSDK iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6550EE4224BB02900160267 /* Int+DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataInitializable.swift"; sourceTree = "<group>"; };
@@ -1151,6 +1157,15 @@
 				E6CEE70621F5A8B700D745EC /* HierarchicalDeterministicMasterSeed.swift */,
 			);
 			path = HierarchicalDeterministicWallet;
+			sourceTree = "<group>";
+		};
+		E640F63D225E22F600855256 /* ProofOfWork */ = {
+			isa = PBXGroup;
+			children = (
+				E6A508D92251100800128123 /* ProofOfWork.swift */,
+				E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */,
+			);
+			path = ProofOfWork;
 			sourceTree = "<group>";
 		};
 		E645E72421E7827D00532ACD = {
@@ -2010,6 +2025,7 @@
 			isa = PBXGroup;
 			children = (
 				E6D4B352223FBE4D004FC83A /* AtomTooBigDSONEncodingSpec.swift */,
+				E640F639225E1C4F00855256 /* SigninAtomWithPowResultsInSameDsonAsWithoutPowTests.swift */,
 			);
 			path = Atom;
 			sourceTree = "<group>";
@@ -2072,6 +2088,7 @@
 			isa = PBXGroup;
 			children = (
 				E6ED1A4B21F8ACB700654105 /* Int+DataConvertible.swift */,
+				E640F63B225E21E600855256 /* Int+BitsPerByte.swift */,
 				E6550EE4224BB02900160267 /* Int+DataInitializable.swift */,
 				E6A508E02251244000128123 /* BinaryInteger+RoundToMultipleOF.swift */,
 			);
@@ -2083,7 +2100,7 @@
 			children = (
 				E6A507EF224E69F400128123 /* Balance */,
 				E6ED1A5721F8E5A100654105 /* AtomSubmitter.swift */,
-				E6A508D92251100800128123 /* ProofOfWork.swift */,
+				E640F63D225E22F600855256 /* ProofOfWork */,
 			);
 			path = Ledger;
 			sourceTree = "<group>";
@@ -2469,6 +2486,7 @@
 				E6CEE74421F637EC00D745EC /* Signature.swift in Sources */,
 				E6550EEA224BBDC900160267 /* NodeDiscoveryHardCoded.swift in Sources */,
 				E6A508C2224EAD0B00128123 /* TokenDefinitionReferencing.swift in Sources */,
+				E640F63C225E21E600855256 /* Int+BitsPerByte.swift in Sources */,
 				E62EFDE6224A4DAF00B6DAD6 /* WebSocketEvent.swift in Sources */,
 				E6A508BE224E713F00128123 /* BigInteger+StringConversion.swift in Sources */,
 				E6A6431E2245113600CD4BFC /* PrivateKey+ECEIS+Decrypt.swift in Sources */,
@@ -2488,6 +2506,7 @@
 				E6A50888224E713F00128123 /* Atoms.swift in Sources */,
 				E6A50889224E713F00128123 /* Atom.swift in Sources */,
 				E6A5087F224E713F00128123 /* ValidValueInitializable.swift in Sources */,
+				E640F63F225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift in Sources */,
 				E62EFDFE224A4EC100B6DAD6 /* RadixJsonRpcClient.swift in Sources */,
 				E601D33E22428C8D00A81412 /* SignedAtomVerifier.swift in Sources */,
 				E6A5089B224E713F00128123 /* Planck.swift in Sources */,
@@ -2560,6 +2579,7 @@
 				E69071FF225CD1D800D300A9 /* AtomJsonDeserializationTwoParticleGroupsSpec.swift in Sources */,
 				E6A508D4224FB68700128123 /* TestScheduler.swift in Sources */,
 				E6907202225CD1D800D300A9 /* TooShortNameSpec.swift in Sources */,
+				E640F63A225E1C4F00855256 /* SigninAtomWithPowResultsInSameDsonAsWithoutPowTests.swift in Sources */,
 				E6A508D8224FBE6E00128123 /* SubmitAtomOverWebSocketsTest.swift in Sources */,
 				E69AB74D223912B6006153DD /* GranularitySpec.swift in Sources */,
 				E69AB73B2237FC27006153DD /* DsonEncodingUniqueParticleSpec.swift in Sources */,

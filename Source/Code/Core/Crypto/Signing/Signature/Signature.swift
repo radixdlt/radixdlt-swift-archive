@@ -22,6 +22,7 @@ public struct Signature:
     DERConvertible,
     DERInitializable,
     Codable,
+    CustomStringConvertible,
     Equatable {
 // swiftlint:enable colon
     
@@ -85,6 +86,13 @@ public extension Signature {
 public extension Signature {
     init(der: DER) throws {
         try self.init(data: der.decoded())
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension Signature {
+    var description: String {
+        return [r, s].map { $0.hex }.joined()
     }
 }
 

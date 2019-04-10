@@ -55,8 +55,6 @@ public extension DSONOutput {
 
 public extension DSONOutput {
     func allowsOutput(of other: DSONOutput) -> Bool {
-        print("Self: \(self)")
-        print("allowsOutput(of: \(other)")
         return isIntersecting(other)
     }
 }

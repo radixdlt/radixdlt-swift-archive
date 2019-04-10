@@ -9,6 +9,7 @@
 import Foundation
 
 public struct ProofOfWork: CustomStringConvertible {
+    
     private let seed: Data
     private let targetHex: HexString
     private let magic: Magic
@@ -22,11 +23,15 @@ public struct ProofOfWork: CustomStringConvertible {
     }
 }
 
+// MARK: - Public
 public extension ProofOfWork {
     var nonceAsString: String {
         return nonce.description
     }
-    
+}
+
+// MARK: CustomStringConvertible
+public extension ProofOfWork {
     var description: String {
         return nonceAsString
     }
@@ -36,66 +41,67 @@ public extension ProofOfWork {
     
     static let expectedByteCountOfSeed = 32
     
-    static func work(atom: Atom, magic: Magic, numberOfLeadingZeros: UInt8 = 16) throws -> ProofOfWork {
-        
-        return try work(seed: atom.radixHash.asData, magic: magic, numberOfLeadingZeros: numberOfLeadingZeros)
-    }
-    
-    // swiftlint:disable:next function_body_length
-    static func work(seed: Data, magic: Magic, numberOfLeadingZeros: UInt8 = 16) throws -> ProofOfWork {
-        let numberOfLeadingZeros = Int(numberOfLeadingZeros)
-        guard numberOfLeadingZeros > 0 else {
-            throw Error.tooFewLeadingZeros(expectedAtLeast: 1, butGot: numberOfLeadingZeros)
-        }
-        let numberOfBits = expectedByteCountOfSeed * Int.bitsPerByte
-        guard numberOfLeadingZeros <= numberOfBits else {
-            throw Error.tooFewLeadingZeros(expectedAtLeast: 1, butGot: numberOfLeadingZeros)
-        }
+    static func work(seed: Data, magic: Magic, numberOfLeadingZeros: NumberOfLeadingZeros = .default) throws -> ProofOfWork {
+
         guard seed.length == expectedByteCountOfSeed else {
             throw Error.workInputIncorrectLengthOfSeed(expectedByteCountOf: expectedByteCountOfSeed, butGot: seed.length)
         }
+        
+        let numberOfBits = expectedByteCountOfSeed * Int.bitsPerByte
         var bitArray = BitArray(repeating: .one, count: numberOfBits)
-        for index in 0..<numberOfLeadingZeros {
+        
+        for index in 0..<Int(numberOfLeadingZeros.numberOfLeadingZeros) {
             bitArray[index] = .zero
         }
+        
         let target = bitArray.asData
-        let targetHex = target.hex
+        let targetHex = bitArray.hex
         var nonce: Nonce = 0
-        let magic4Bytes = magicTo4BigEndianBytes(magic)
-        let base: Data = magic4Bytes + seed
+        let base: Data = magicTo4BigEndianBytes(magic) + seed
         var hex: String
         repeat {
             nonce += 1
             let unhashed = base + nonce.as8BytesBigEndian
             hex = RadixHash(unhashedData: unhashed).hex
         } while hex > targetHex
+        
         return ProofOfWork(seed: seed, targetHex: target.toHexString(), magic: magic, nonce: nonce)
     }
     
     func prove() throws {
-        let magic4Bytes = ProofOfWork.magicTo4BigEndianBytes(magic)
-        let unhashed: Data = magic4Bytes + seed + nonce.as8BytesBigEndian
+        let unhashed: Data = ProofOfWork.magicTo4BigEndianBytes(magic) + seed + nonce.as8BytesBigEndian
         let hashHex = RadixHash(unhashedData: unhashed).hex
         guard hashHex <= targetHex.hex else {
             throw Error.expected(hex: hashHex, toBeLessThanOrEqualToTargetHex: targetHex.hex)
         }
     }
-    
-    private static func magicTo4BigEndianBytes(_ magic: Magic) -> [Byte] {
+}
+
+// MARK: - Error
+public extension ProofOfWork {
+    enum Error: Swift.Error {
+        case workInputIncorrectLengthOfSeed(expectedByteCountOf: Int, butGot: Int)
+        case expected(hex: String, toBeLessThanOrEqualToTargetHex: String)
+    }
+}
+
+// MARK: - Convenience
+public extension ProofOfWork {
+    static func work(atom: Atom, magic: Magic, numberOfLeadingZeros: NumberOfLeadingZeros = .default) throws -> ProofOfWork {
+        return try work(seed: atom.radixHash.asData, magic: magic, numberOfLeadingZeros: numberOfLeadingZeros)
+    }
+}
+
+// MARK: - Endianess (Matching Java library ByteStream `putInt`)
+private extension ProofOfWork {
+    static func magicTo4BigEndianBytes(_ magic: Magic) -> [Byte] {
         let magic4Bytes = CFSwapInt32HostToBig(UInt32(magic)).bytes
         assert(magic4Bytes.count == 4)
         return magic4Bytes
     }
-    
-    enum Error: Swift.Error {
-        case tooFewLeadingZeros(expectedAtLeast: Int, butGot: Int)
-        case tooManyLeadingZeros(expectedAtMost: Int, butGot: Int)
-        case workInputIncorrectLengthOfSeed(expectedByteCountOf: Int, butGot: Int)
-        case expected(hex: String, toBeLessThanOrEqualToTargetHex: String)
-    }
-
 }
 
+// MARK: - Endianess (Matching Java library ByteStream `putLong`)
 private extension Nonce {
     var as8BytesBigEndian: [Byte] {
         let nonce8Bytes = CFSwapInt64HostToBig(UInt64(value)).bytes
@@ -104,6 +110,3 @@ private extension Nonce {
     }
 }
 
-public extension Int {
-    static var bitsPerByte = 8
-}
