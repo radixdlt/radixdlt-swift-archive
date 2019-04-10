@@ -14,7 +14,7 @@ public typealias CBOR = SwiftCBOR.CBOR
 public extension CBOR {
     static func int64(_ int: Int64) -> CBOR {
         if int < 0 {
-            return CBOR.negativeInt(UInt64(abs(int)))
+            return CBOR.negativeInt(UInt64(abs(int)-1))
         } else {
             return CBOR.unsignedInt(UInt64(int))
         }

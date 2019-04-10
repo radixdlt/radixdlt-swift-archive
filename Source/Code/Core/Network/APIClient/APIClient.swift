@@ -9,4 +9,4 @@
 import Foundation
 import RxSwift
 
-public protocol APIClient: AtomPullerSubmitter {}
+//public protocol APIClient: AtomPullerSubmitter {}

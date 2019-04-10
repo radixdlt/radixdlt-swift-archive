@@ -58,5 +58,5 @@ function_parameter_count:
   - 5 # error
 
 function_body_length:
-  - 10 # warning
-  - 20 # error
+  - 20 # warning
+  - 30 # error

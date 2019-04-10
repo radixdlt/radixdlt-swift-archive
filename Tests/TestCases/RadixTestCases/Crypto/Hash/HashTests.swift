@@ -12,7 +12,7 @@ import XCTest
 class HashTests: XCTestCase {
 
     func testSha256Twice() {
-        let data = "Hello Radix".data(using: .utf8)!
+        let data = "Hello Radix".toData()
         let hasher = Sha256Hasher()
         let singleHash = hasher.hash(data: data)
         let twice = hasher.hash(data: singleHash)

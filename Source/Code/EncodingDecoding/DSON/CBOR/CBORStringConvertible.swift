@@ -16,3 +16,12 @@ public extension CBORStringConvertible {
         return CBOR(stringLiteral: stringValue)
     }
 }
+
+public protocol CBORStringRepresentable: StringRepresentable, CBORConvertible {}
+
+// MARK: - CBORConvertible
+public extension CBORStringRepresentable {
+    func toCBOR() -> CBOR {
+        return CBOR(stringLiteral: stringValue)
+    }
+}

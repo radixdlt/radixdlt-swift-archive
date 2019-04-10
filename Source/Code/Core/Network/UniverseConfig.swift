@@ -9,6 +9,7 @@
 import Foundation
 
 public typealias Magic = Int64
+public typealias Port = Int64
 
 // swiftlint:disable colon
 
@@ -20,7 +21,7 @@ public struct UniverseConfig:
     // swiftlint:enable colon
     
     public let magic: Magic
-    public let port: Int64
+    public let port: Port
     public let name: String
     public let description: String
     public let type: UniverseType
@@ -29,9 +30,31 @@ public struct UniverseConfig:
     public let genesis: Atoms
 }
 
+// MARK: - Decodable
+public extension UniverseConfig {
+    
+    enum CodingKeys: CodingKey {
+        case serializer
+        case magic, port, name, description, type, timestamp, creator, genesis
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        magic = try container.decode(Magic.self, forKey: .magic)
+        port = try container.decode(Port.self, forKey: .port)
+        name = try container.decode(StringValue.self, forKey: .name).stringValue
+        description = try container.decode(StringValue.self, forKey: .description).stringValue
+        type = try container.decode(UniverseType.self, forKey: .type)
+        let timestampMillis = try container.decode(TimeInterval.self, forKey: .timestamp)
+        timestamp = TimeConverter.dateFrom(millisecondsSince1970: timestampMillis)
+        creator = try container.decode(PublicKey.self, forKey: .creator)
+        genesis = try container.decode(Atoms.self, forKey: .genesis)
+    }
+}
+
 // MARK: - RadixModelTypeStaticSpecifying
 public extension UniverseConfig {
-    static let type: RadixModelType = .universeConfig
+    static let serializer: RadixModelType = .universeConfig
 }
 
 public extension UniverseConfig {

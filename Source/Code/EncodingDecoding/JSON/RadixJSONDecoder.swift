@@ -12,7 +12,6 @@ public typealias JSON = [String: Any]
 
 public final class RadixJSONDecoder: Foundation.JSONDecoder {
     
-    // swiftlint:disable:next function_body_length
     public override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T: Decodable & RadixModelTypeStaticSpecifying {
         let jsonObjectAny = try JSONSerialization.jsonObject(with: data, options: [])
         
@@ -20,11 +19,9 @@ public final class RadixJSONDecoder: Foundation.JSONDecoder {
             guard let modelTypeInt = jsonObject[RadixModelType.jsonKey] as? Int else {
                 throw AtomModelDecodingError.noSerializer(in: jsonObject)
             }
-            guard let modelType = RadixModelType(rawValue: modelTypeInt) else {
-                throw AtomModelDecodingError.unknownSerializer(got: modelTypeInt)
-            }
-            guard modelType == T.type else {
-                throw AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedType: T.type, butGot: modelType)
+            let modelType = try RadixModelType(serializerId: modelTypeInt)
+            guard modelType == T.serializer else {
+                throw AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedSerializer: T.serializer, butGot: modelType)
             }
         }
         

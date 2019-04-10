@@ -8,7 +8,9 @@
 
 import Foundation
 
-/// Stolen from: https://gist.github.com/Jugale/2daaec0715d4f6d7347534d42bfa7110
+// swiftlint:disable all
+
+/// Taken from from: https://gist.github.com/Jugale/2daaec0715d4f6d7347534d42bfa7110
 struct DERDecoder {
     
     internal final class SimpleScanner {
@@ -113,7 +115,7 @@ struct DERDecoder {
         })
     }
     
-    // swiftlint:disable function_body_length
+  
     private static func decode(data: Data) -> [ASN1Object]? {
         
         let scanner = SimpleScanner(data: data)
@@ -177,3 +179,5 @@ extension Int {
         return Data(hex: hex)
     }
 }
+
+// swiftlint:enable all

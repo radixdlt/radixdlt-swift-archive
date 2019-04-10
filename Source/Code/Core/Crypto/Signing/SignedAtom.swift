@@ -30,16 +30,4 @@ public struct SignedAtom {
         self.signatureId = signatureId
         self.signature = signature
     }
-    
-    public init(atom: Atom, signature: Signature) throws {
-        guard !atom.signatures.isEmpty else {
-            throw Error.atomIsNotSigned
-        }
-        guard let signatureId = atom.signatures.firstKeyForValue(signature) else {
-            throw Error.atomSignaturesDoesNotContainId
-        }
-        self.atom = atom
-        self.signatureId = signatureId
-        self.signature = signature
-    }
 }

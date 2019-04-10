@@ -23,14 +23,14 @@ public extension EncodableKeyValueListConvertible {
 // MARK: - Swift.Encodable (JSON)
 public extension Encodable where Self: EncodableKeyValueListConvertible {
     func encode(to encoder: Encoder) throws {
-        guard let typeKey = CodingKeys(stringValue: RadixModelType.jsonKey) else {
-            incorrectImplementation("You MUST declare a CodingKey having the string value \(RadixModelType.jsonKey) in your encodable model.")
+        guard let serializerValueCodingKey = CodingKeys(stringValue: RadixModelType.jsonKey) else {
+            incorrectImplementation("You MUST declare a CodingKey having the string value `\(RadixModelType.jsonKey)` in your encodable model.")
         }
         
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        if let modelTypeSpecyfing = self as? RadixModelTypeStaticSpecifying {
-            try container.encode(modelTypeSpecyfing.type, forKey: typeKey)
+        if let modelTypeSpecifying = self as? RadixModelTypeStaticSpecifying {
+            try container.encode(modelTypeSpecifying.serializer, forKey: serializerValueCodingKey)
         }
         
         try encodableKeyValues().forEach {

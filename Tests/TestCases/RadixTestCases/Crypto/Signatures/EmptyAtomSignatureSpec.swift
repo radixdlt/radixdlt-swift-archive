@@ -21,7 +21,7 @@ class EmptyAtomSignatureSpec: QuickSpec {
         }
         describe("ECC") {
             it("should match Java signature") {
-                let privateKey = try! PrivateKey(data: Sha256Hasher().hash(data: "Radix".data(using: .utf8)!))
+                let privateKey = try! PrivateKey(data: Sha256Hasher().hash(data: "Radix".toData()))
                 let signature = try! Signer.sign(atom, privateKey: privateKey)
                 expect(signature.r.hex).to(equal("a16a6928b53af3a441f7248407e53f898ee7bda2911658d530306d3485d98f65"))
                 expect(signature.s.hex).to(equal("7173a93790ce2b550ad484582c879bb7fea3113891b3ad9dca6a5b31471a580c"))

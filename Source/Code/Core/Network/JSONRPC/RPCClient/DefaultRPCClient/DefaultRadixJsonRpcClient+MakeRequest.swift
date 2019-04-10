@@ -10,86 +10,65 @@ import Foundation
 import RxSwift
 import JSONRPCKit
 
-// swiftlint:disable all
-// THIS IS A PROOF OF CONCEPT that well be refactored
 internal extension DefaultRadixJsonRpcClient {
     
-    func makeRequest<Request, Response>(_ request: Request) -> Observable<Response> where Request: JSONRPCKit.Request, Response == Request.Response, Response: RadixModelTypeStaticSpecifying {
-        
+    func makeRequest<Request, Response>(_ request: Request) -> Observable<Response> where Request: JSONRPCKit.Request, Response == Request.Response {
         let batch = rpcRequestFactory.create(request)
         let requestId = batch.requestId
         let jsonString = batch.jsonString
-        
         channel.sendMessage(jsonString)
         
-        return channel.responseForMessage(with: requestId)
+        return channel.responseForMessage(with: requestId).flatMapLatest { (result: RPCResult<Response>) -> Observable<Response> in
+            switch result {
+            case .success(let success): return Observable.just(success.model)
+            case .failure(let error): return Observable.error(error)
+            }
+        }
+    }
+}
+
+internal typealias RPCResult<Model: Decodable> = Swift.Result<RPCResponse<Model>, RPCError>
+
+extension Result: Decodable where Success: Decodable, Failure == RPCError {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        do {
+            self = .success(try container.decode(Success.self))
+        } catch {
+            self = .failure(try container.decode(RPCError.self))
+        }
     }
 }
 
 extension PersistentChannel {
-    func responseForMessage<Response>(with requestId: Int) -> Observable<Response> where Response: Decodable & RadixModelTypeStaticSpecifying {
-        return messages.map { jsonString -> Data? in
-            guard !jsonString.contains(
-                """
-                    "method":"\(jsonRpcMethodForWelcomeMessage)"
-                """
-            ) else { return nil }
-            let json = jsonString.data(using: .utf8)!
-            print(jsonString)
-            return json
-        }.filterNil()
-        .map { data -> JSONRPCResponse<Response>? in
-            do {
-                return try JSONDecoder().decode(JSONRPCResponse<Response>.self, from: data)
-            } catch {
-                print("⚠️ error: \(error)")
-                return nil
+    func responseForMessage<Model>(with requestId: Int) -> Observable<RPCResult<Model>> where Model: Decodable {
+        return messages
+            .map { $0.toData() }
+            .map { try? JSONDecoder().decode(RPCResult<Model>.self, from: $0) }
+            .filterNil()
+            .ifNeededFilterOnRequestId(requestId)
+    }
+}
+
+extension ObservableType where E: PotentiallyRequestIdentifiable {
+    func ifNeededFilterOnRequestId(_ requestId: Int) -> Observable<E> {
+        // If response contains id, filter on it
+        return self.asObservable().map { element -> E? in
+            if let elementRequestId = element.requestIdIfPresent {
+                guard elementRequestId == requestId else {
+                    return nil
+                }
             }
+            return element
         }.filterNil()
-            .filter { $0.requestId == requestId }
-        .map { $0.result }
     }
 }
 
-extension JSONRPCKit.Batch1 {
-    var requestId: Int {
-        guard let requestIdEnum = batchElement.id else {
-            incorrectImplementation("Should have a request Id")
-        }
-        switch requestIdEnum {
-        case .number(let requestIdInteger): return requestIdInteger
-        case .string: incorrectImplementation("Please use Integers")
+extension RPCResult: PotentiallyRequestIdentifiable where Success: RPCResposeResultConvertible {
+    var requestIdIfPresent: Int? {
+        switch self {
+        case .success(let success): return success.requestIdIfPresent
+        case .failure: return nil
         }
     }
-    
-    var jsonString: String {
-        let encoder = RadixJSONEncoder()
-        let data = try! encoder.encode(self)
-        guard let jsonString = String(data: data, encoding: .utf8) else {
-            incorrectImplementation("Should always be able to get string from JSON")
-        }
-        return jsonString
-    }
 }
-
-private enum JSONRPCResponseCodingKeys: String, CodingKey {
-    case result
-    case method
-    case requestId = "id"
-}
-
-private struct JSONRPCResponse<Result>: Decodable where Result: Decodable {
-    
-    let result: Result
-    let requestId: Int
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: JSONRPCResponseCodingKeys.self)
-        requestId = try container.decode(Int.self, forKey: .requestId)
-        result = try container.decode(Result.self, forKey: .result)
-    }
-}
-
-private let jsonRpcMethodForWelcomeMessage = "Radix.welcome"
-
-// swiftlint:enable:all

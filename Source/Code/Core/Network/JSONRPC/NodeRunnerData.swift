@@ -39,7 +39,7 @@ public class NodeRunnerData:
         self.system = system
     }
     
-    public class var type: RadixModelType {
+    public class var serializer: RadixModelType {
         return .nodeRunnerData
     }
     
@@ -76,7 +76,7 @@ public extension NodeRunnerData {
 }
 
 public final class UDPNodeRunnerData: NodeRunnerData {
-    public override class var type: RadixModelType {
+    public override class var serializer: RadixModelType {
         return .udpNodeRunnerData
     }
 }

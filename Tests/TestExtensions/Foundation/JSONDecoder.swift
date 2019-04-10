@@ -21,6 +21,5 @@ func model<D>(from jsonString: String, _ file: String = #file, _ line: Int = #li
 
 @discardableResult
 func decode<D>(_ type: D.Type, from jsonString: String) throws -> D where D: Decodable & RadixModelTypeStaticSpecifying {
-    let json = jsonString.data(using: .utf8)!
-    return try RadixJSONDecoder().decode(D.self, from: json)
+    return try RadixJSONDecoder().decode(D.self, from: jsonString.toData())
 }

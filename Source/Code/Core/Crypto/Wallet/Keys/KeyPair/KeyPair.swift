@@ -12,7 +12,7 @@ import Foundation
 
 /// Holds an EC private key and public key
 public struct KeyPair:
-    Ownable,
+    PublicKeyOwner,
     Signing {
     // swiftlint:enable colon
 

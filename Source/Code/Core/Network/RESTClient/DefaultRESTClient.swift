@@ -35,7 +35,6 @@ public extension DefaultRESTClient {
         }
     }
     
-    // swiftlint:disable:next function_body_length
     func request<D>(_ makeRequest: @escaping () -> Alamofire.DataRequest) -> Single<D> where D: Decodable {
         return Single<D>.create { single in
             let dataRequest: Alamofire.DataRequest = makeRequest()
@@ -43,7 +42,7 @@ public extension DefaultRESTClient {
                 .responseDecodable { (response: DataResponse<D>) -> Void in
                     switch response.result {
                     case .failure(let error):
-                        print("⚠️ error: \(error)")
+                        log.error(error)
                         single(.error(error))
                     case .success(let model):
                         single(.success(model))

@@ -16,7 +16,7 @@ public struct PublicKey:
     CBORDataConvertible,
     DataInitializable,
     RadixHashable,
-    Ownable,
+    PublicKeyOwner,
     Hashable,
     CustomStringConvertible {
 // swiftlint:enable colon

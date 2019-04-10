@@ -68,4 +68,18 @@ public extension String {
             return reverse.trimming(character: toRemove, direction: .leading).reverse
         }
     }
+    
+    init(data: Data, encodingForced: String.Encoding = .default) {
+        guard let string = String(data: data, encoding: encodingForced) else {
+            incorrectImplementation("Should always be able to get string from data")
+        }
+        self = string
+    }
+    
+    func toData(encodingForced: String.Encoding = .default) -> Data {
+        guard let encodedData = self.data(using: encodingForced) else {
+            incorrectImplementation("Should always be able to encode string to data")
+        }
+        return encodedData
+    }
 }
