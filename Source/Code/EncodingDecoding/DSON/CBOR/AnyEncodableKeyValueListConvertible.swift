@@ -12,6 +12,13 @@ public protocol AnyEncodableKeyValueListConvertible: DSONEncodable {
     func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue]
 }
 
+// MARK: - AnyEncodableKeyValueListConvertible
+public extension EncodableKeyValueListConvertible {
+    func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue] {
+        return try encodableKeyValues().map { try $0.toAnyEncodableKeyValue(output: output) }
+    }
+}
+
 // MARK: - DSONEncodable
 public extension AnyEncodableKeyValueListConvertible {
     
@@ -22,7 +29,6 @@ public extension AnyEncodableKeyValueListConvertible {
     /// 0xff (encodeStreamEnd)
     func toDSON(output: DSONOutput = .default) throws -> DSON {
         var keyValues = try anyEncodableKeyValues(output: output)
-        keyValues = keyValues.filter { $0.allowsOutput(of: output) }
         
         if let processor = self as? AnyEncodableKeyValuesProcessing {
             keyValues = try processor.process(keyValues: keyValues, output: output)

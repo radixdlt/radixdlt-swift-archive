@@ -28,20 +28,22 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
             address: address
         )
         
-        let mintedTokenParticle = UnallocatedTokensParticle(
+        let unallocated = UnallocatedTokensParticle(
             amount: 1000,
             tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference
         )
         
         let atom = Atom(particleGroups: [
             tokenDefinitionParticle.withSpin().wrapInGroup(),
-            mintedTokenParticle.withSpin().wrapInGroup()
+            unallocated.withSpin().wrapInGroup()
         ])
         
-        let unsignedAtom = try! UnsignedAtom(atom)
-        let signedAtom = try! identity.sign(atom: unsignedAtom)
         
-        let submitObservable = apiClient.submit(atom: try! signedAtom.atom.withProofOfWork(magic: 63799298))
+        let atowWithPOW = try! atom.withProofOfWork(magic: 63799298)
+        
+        let signedAtom = try! identity.sign(atom: UnsignedAtom(atowWithPOW))
+        
+        let submitObservable = apiClient.submit(atom: signedAtom.atom)
         
         let atomSubscriptions: [AtomSubscription]
         do {
@@ -56,7 +58,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
 
         let u1 = as2.update!.subscriptionFromSubmissionsUpdate!
 
-        XCTAssertEqual(u1.value, .stored)
+        XCTAssertEqual(u1.value, .stored, "ValidationError, Atom signed with identity having address: \(address)")
     }
 }
 

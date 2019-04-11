@@ -32,13 +32,6 @@ public extension CBORDictionaryConvertible where Key: StringRepresentable {
     }
 }
 
-// MARK: - AnyEncodableKeyValuesProcessing
-public extension CBORDictionaryConvertible {
-    func process(keyValues: [AnyEncodableKeyValue], output: DSONOutput) throws -> [AnyEncodableKeyValue] {
-        return keyValues.sorted(by: \.key).filter { $0.allowsOutput(of: output) }
-    }
-}
-
 public extension CBORDictionaryConvertible where Value: StringRepresentable {
     func valueDSONEncode(_ value: Value, output: DSONOutput) throws -> DSON {
         return try CBOR(stringLiteral: value.stringValue).toDSON(output: output)

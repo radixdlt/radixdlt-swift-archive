@@ -44,3 +44,14 @@ public extension MetaDataConvertible {
         return .timestamp(Date())
     }
 }
+
+// MARK: - AnyEncodableKeyValuesProcessing
+// We need to filter out `MetaDataKey.proofOfWork` for DSON
+public extension MetaDataConvertible {
+    var postProcess: Process {
+        return { proccessed, output in
+            guard output == .hash else { return proccessed }
+            return proccessed.filter { $0.key != MetaDataKey.proofOfWork.stringValue }
+        }
+    }
+}

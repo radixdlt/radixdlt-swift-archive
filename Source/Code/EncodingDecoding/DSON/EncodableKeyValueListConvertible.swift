@@ -8,16 +8,9 @@
 
 import Foundation
 
-public protocol EncodableKeyValueListConvertible: AnyEncodableKeyValueListConvertible {
+public protocol EncodableKeyValueListConvertible {
     associatedtype CodingKeys: CodingKey
     func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>]
-}
-
-// MARK: - AnyEncodableKeyValueListConvertible
-public extension EncodableKeyValueListConvertible {
-    func anyEncodableKeyValues(output: DSONOutput) throws -> [AnyEncodableKeyValue] {
-        return try encodableKeyValues().map { try $0.toAnyEncodableKeyValue(output: output) }
-    }
 }
 
 // MARK: - Swift.Encodable (JSON)

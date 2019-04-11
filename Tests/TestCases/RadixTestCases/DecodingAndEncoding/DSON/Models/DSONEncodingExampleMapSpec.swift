@@ -23,8 +23,8 @@ class DSONEncodingExampleMapSpec: QuickSpec {
             case b
         }
         
-        public func process(keyValues: [AnyEncodableKeyValue], output: DSONOutput) throws -> [AnyEncodableKeyValue] {
-            return keyValues
+        public var preProcess: Process {
+            return { values, _ in return values }
         }
         
         public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {

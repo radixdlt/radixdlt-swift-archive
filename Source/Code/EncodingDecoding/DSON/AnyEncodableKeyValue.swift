@@ -9,7 +9,7 @@
 import Foundation
 
 /// A fully type-erased container of a keyed-value that is DSONEncodable
-public struct AnyEncodableKeyValue {
+public struct AnyEncodableKeyValue: Hashable {
     
     internal let key: String
     private let dsonEncodedValue: DSON
@@ -19,6 +19,12 @@ public struct AnyEncodableKeyValue {
         self.key = unencodedKey
         self.dsonEncodedValue = dsonEncodedValue
         self.output = output
+    }
+}
+
+public extension AnyEncodableKeyValue {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(key)
     }
 }
 
