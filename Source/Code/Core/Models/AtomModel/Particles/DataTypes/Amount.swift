@@ -40,6 +40,10 @@ public extension Amount {
         return Amount(value: 0)
     }
     
+    static var maxValue256Bits: Amount {
+        return Amount(value: Value(2).power(256) - 1)
+    }
+    
     func negated() -> SignedAmount {
         return NegativeAmount(magnitude: value)
     }

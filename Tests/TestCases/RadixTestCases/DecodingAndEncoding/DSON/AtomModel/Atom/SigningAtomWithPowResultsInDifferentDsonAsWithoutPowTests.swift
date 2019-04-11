@@ -1,5 +1,5 @@
 //
-//  SigninAtomWithPowResultsInSameDsonAsWithoutPowTests.swift
+//  SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift
 //  RadixSDK iOS Tests
 //
 //  Created by Alexander Cyon on 2019-04-10.
@@ -11,13 +11,13 @@ import Foundation
 import XCTest
 
 
-class SigninAtomWithPowResultsInSameDsonAsWithoutPowTests: XCTestCase {
+class SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests: XCTestCase {
     
     private let numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = 1
     private let magic: Magic = 1337
     private let identity = RadixIdentity()
     private lazy var atom: Atom = {
-        let address = Address(publicKey: identity.publicKey)
+        let address = Address(magic: magic, publicKey: identity.publicKey)
         
         let tokenDefinitionParticle = TokenDefinitionParticle(
             symbol: "XRD",
@@ -33,7 +33,7 @@ class SigninAtomWithPowResultsInSameDsonAsWithoutPowTests: XCTestCase {
     func testThatOrderOfSigningAndPowDoesNotMatter() {
         let signedAtomWithoutPow = try! identity.sign(atom: UnsignedAtom(atom))
         let signedAtomWithPow = try! identity.sign(atom: UnsignedAtom(atom.withProofOfWork(magic: magic, numberOfLeadingZeros: numberOfLeadingZeros)))
-        XCTAssertEqual(signedAtomWithoutPow.signature, signedAtomWithPow.signature)
+        XCTAssertNotEqual(signedAtomWithoutPow.signature, signedAtomWithPow.signature)
     }
     
     func testThatPowIsIncludedInDsonOutputAllButExcludedInDsonOutputHash() {
@@ -51,12 +51,12 @@ class SigninAtomWithPowResultsInSameDsonAsWithoutPowTests: XCTestCase {
         let atomWithoutPowDsonHash = try! atom.toDSON(output: .hash)
         let atomWithPowDsonHash = try! atomWithPow.toDSON(output: .hash)
         
-        XCTAssertEqual(atomWithoutPowDsonHash, atomWithPowDsonHash)
+        XCTAssertNotEqual(atomWithoutPowDsonHash, atomWithPowDsonHash)
         
         let proofOfWorkDsonString = try! MetaDataKey.proofOfWork.stringValue.toDSON(output: .all).hex
 
         XCTAssertTrue(atomWithPowDsonAll.hex.contains(proofOfWorkDsonString))
-        XCTAssertFalse(atomWithPowDsonHash.hex.contains(proofOfWorkDsonString))
+        XCTAssertTrue(atomWithPowDsonHash.hex.contains(proofOfWorkDsonString))
     }
 }
 

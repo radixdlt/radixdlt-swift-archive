@@ -15,11 +15,13 @@ import RxBlocking
 
 class SubmitAtomOverWebSocketsTest: WebsocketTest {
     
+    private let magic: Magic = 63799298
+    
     func testTokenDefinitionParticle() {
         guard let apiClient = makeApiClient() else { return }
         
         let identity = RadixIdentity()
-        let address = Address(publicKey: identity.publicKey)
+        let address = Address(magic: magic, publicKey: identity.publicKey)
         
         let tokenDefinitionParticle = TokenDefinitionParticle(
             symbol: "CCC",
@@ -27,19 +29,21 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
             description: "Cyon Crypto Coin is the worst shit coin",
             address: address
         )
-        
+                
         let unallocated = UnallocatedTokensParticle(
-            amount: 1000,
+            amount: .maxValue256Bits,
             tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference
         )
         
         let atom = Atom(particleGroups: [
-            tokenDefinitionParticle.withSpin().wrapInGroup(),
-            unallocated.withSpin().wrapInGroup()
+            ParticleGroup([
+                tokenDefinitionParticle.withSpin(),
+                unallocated.withSpin()
+            ])
         ])
         
         
-        let atowWithPOW = try! atom.withProofOfWork(magic: 63799298)
+        let atowWithPOW = try! atom.withProofOfWork(magic: magic)
         
         let signedAtom = try! identity.sign(atom: UnsignedAtom(atowWithPOW))
         
@@ -57,8 +61,10 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
         XCTAssertTrue(as2.isUpdate)
 
         let u1 = as2.update!.subscriptionFromSubmissionsUpdate!
+        
+        XCTAssertNotEqual(atom.hashId, signedAtom.atom.hashId)
 
-        XCTAssertEqual(u1.value, .stored, "ValidationError, Atom signed with identity having address: \(address)")
+        XCTAssertEqual(u1.value, .stored, "ValidationError, Atom signed with identity having address: \(address), publicKey: \(identity.publicKey)")
     }
 }
 

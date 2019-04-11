@@ -101,7 +101,7 @@ public extension Signatures {
      
         let dictToEnc = [String: Signature](uniqueKeysWithValues: dictionary.map {
             (
-                $0.key.toHexString().stringValue,
+                $0.key.toHexString().stringValue.lowercased(),
                 $0.value
             )
         })

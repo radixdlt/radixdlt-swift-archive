@@ -16,7 +16,8 @@ public struct PrivateKey:
     DataConvertible,
     StringInitializable,
     Signing,
-    Equatable {
+    Equatable,
+    CustomDebugStringConvertible {
     // swiftlint:enable colon
     public typealias Scalar = BigUnsignedInt
     public let scalar: Scalar
@@ -79,21 +80,6 @@ public extension PrivateKey {
     }
 }
 
-// MARK: - ExpressibleByIntegerLiteral
-/* For testing only. Do NOT use Int64 to create a private key */
-extension PrivateKey: ExpressibleByIntegerLiteral {
-    public init(integerLiteral value: Int) {
-        guard isDebug else {
-            incorrectImplementation("Do NOT use an Int to initialize a private key, that is not secure!")
-        }
-        do {
-            try self.init(scalar: BigUnsignedInt(value))
-        } catch {
-            incorrectImplementation("Bad value sent, error: \(error)")
-        }
-    }
-}
-
 // MARK: - DataConvertible
 public extension PrivateKey {
     var asData: Data {
@@ -105,6 +91,13 @@ public extension PrivateKey {
 public extension PrivateKey {
     var privateKey: PrivateKey {
         return self
+    }
+}
+
+// MARK: - CustomDebugStringConvertible
+public extension PrivateKey {
+    var debugDescription: String {
+        return asData.hex
     }
 }
 
