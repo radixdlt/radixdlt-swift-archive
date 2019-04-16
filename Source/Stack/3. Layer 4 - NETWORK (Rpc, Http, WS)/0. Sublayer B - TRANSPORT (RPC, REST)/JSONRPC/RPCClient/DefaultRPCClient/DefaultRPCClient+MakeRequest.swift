@@ -35,7 +35,9 @@ extension FullDuplexCommunicationChannel {
         return resultForMessage(with: requestId).flatMapLatest { (result: RPCResult<Model>) -> Observable<Model> in
             switch result {
             case .success(let rpcResponse): return Observable.just(rpcResponse.model)
-            case .failure(let error): return Observable.error(error)
+            case .failure(let error):
+                log.error("RPC error: \(error)")
+                return Observable.error(error)
             }
         }
     }
@@ -48,7 +50,7 @@ extension FullDuplexCommunicationChannel {
                 //                        assert(!Thread.isMainThread, "Should not perform network requests on MainThread, check `subscribeOn`")
                 do {
                     let result = try JSONDecoder().decode(RPCResult<Model>.self, from: $0)
-                    log.warning("Parsed result from RPC:\n<\(result)>\n")
+                    log.verbose("Parsed result from RPC:<\n\(result)\n>")
                     return result
                 } catch {
                     incorrectImplementation("Error: \(error)")
@@ -60,7 +62,7 @@ extension FullDuplexCommunicationChannel {
             /// Perform work ("subscription code") on `background` thread.
             /// SeeAlso: http://rx-marin.com/post/observeon-vs-subscribeon/
             .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-//            .ifNeededFilterOnRequestId(requestId)
+            .ifNeededFilterOnRequestId(requestId)
     }
 }
 

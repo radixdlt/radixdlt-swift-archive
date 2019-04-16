@@ -27,7 +27,7 @@ class URLFormatterTests: XCTestCase {
     func testCorrectHttpsUrl() {
         let host = "0.0.0.0"
         do {
-            let formattedUrl = try URLFormatter.format(ipAddress: host, port: 123, protocol: .hypertext(appendPath: true))
+            let formattedUrl = try URLFormatter.format(url: Host(ipAddress: host, port: 123), protocol: .hypertext)
             let url = formattedUrl.url
             XCTAssertEqual(url.host, host)
             XCTAssertEqual(url.port, 123)
@@ -51,7 +51,7 @@ class URLFormatterTests: XCTestCase {
     func testLocalhost() {
         let host: String = .localhost
         do {
-            let formattedUrl = try URLFormatter.format(ipAddress: host, port: 123, protocol: .hypertext(appendPath: true), useSSL: false)
+            let formattedUrl = try URLFormatter.format(url: Host(ipAddress: host, port: 123), protocol: .hypertext, useSSL: false)
             let url = formattedUrl.url
             XCTAssertEqual(url.host, host)
             XCTAssertEqual(url.port, 123)
@@ -65,10 +65,10 @@ class URLFormatterTests: XCTestCase {
     func testCorrectHttpUrl() {
         let host = "255.255.255.255"
         do {
-            let formattedUrl = try URLFormatter.format(ipAddress: host, port: 237, protocol: .hypertext(appendPath: true), useSSL: false)
+            let formattedUrl = try URLFormatter.format(url: Host(ipAddress: host, port: 123), protocol: .hypertext, useSSL: false)
             let url = formattedUrl.url
             XCTAssertEqual(url.host, host)
-            XCTAssertEqual(url.port, 237)
+            XCTAssertEqual(url.port, 123)
             XCTAssertEqual(url.scheme, "http")
             XCTAssertEqual(url.path, "/api")
         } catch {
@@ -79,7 +79,7 @@ class URLFormatterTests: XCTestCase {
     func testCorrectWssUrl() {
         let host = "127.0.0.1"
         do {
-            let formattedUrl = try URLFormatter.format(ipAddress: host, port: 65000, protocol: .websockets(appendPath: true))
+            let formattedUrl = try URLFormatter.format(url: Host(ipAddress: host, port: 65000), protocol: .websockets)
             let url = formattedUrl.url
             XCTAssertEqual(url.host, host)
             XCTAssertEqual(url.port, 65000)
@@ -93,7 +93,7 @@ class URLFormatterTests: XCTestCase {
     func testCorrectWsUrl() {
         let host = "1.255.255.1"
         do {
-            let formattedUrl = try URLFormatter.format(ipAddress: host, port: 1, protocol: .websockets(appendPath: true), useSSL: false)
+            let formattedUrl = try URLFormatter.format(url: Host(ipAddress: host, port: 1), protocol: .websockets, useSSL: false)
             let url = formattedUrl.url
             XCTAssertEqual(url.host, host)
             XCTAssertEqual(url.port, 1)

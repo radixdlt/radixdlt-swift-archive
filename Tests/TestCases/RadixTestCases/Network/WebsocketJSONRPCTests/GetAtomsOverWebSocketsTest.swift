@@ -17,7 +17,7 @@ class GetAtomsOverWebSocketsTest: WebsocketTest {
     
     func testGetAtomsOverWebsockets() {
         guard let rpcClient = makeRpcClient() else { return }
-        guard let atomSubscriptions = rpcClient.getAtoms(for: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor").blockingArrayTakeFirst(3) else { return }
+        guard let atomSubscriptions = rpcClient.getAtoms(for: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor").blockingArrayTakeFirst(3, timeout: 5) else { return }
         
         XCTAssertEqual(atomSubscriptions.count, 3)
         let as1 = atomSubscriptions[0]

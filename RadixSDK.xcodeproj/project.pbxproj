@@ -81,6 +81,12 @@
 		E640F63F225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */; };
 		E645E73821E7827D00532ACD /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E645E72E21E7827D00532ACD /* RadixSDK.framework */; };
 		E6474AAD2265D4DC009C4FDC /* Observable+ToBlockingFirst.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AAC2265D4DC009C4FDC /* Observable+ToBlockingFirst.swift */; };
+		E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474ABC2266140E009C4FDC /* IsConnectedToLocalhost.swift */; };
+		E6474ABF2266146F009C4FDC /* URLConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474ABE2266146F009C4FDC /* URLConvertible.swift */; };
+		E6474AC122661483009C4FDC /* FormattedURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AC022661483009C4FDC /* FormattedURL.swift */; };
+		E6474AC42266149F009C4FDC /* Host+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AC32266149F009C4FDC /* Host+Decodable.swift */; };
+		E6474AC6226614C2009C4FDC /* Host+Localhost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AC5226614C2009C4FDC /* Host+Localhost.swift */; };
+		E6474AC8226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AC7226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift */; };
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E6550EE8224BBDBD00160267 /* NodeDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */; };
 		E6550EEA224BBDC900160267 /* NodeDiscoveryHardCoded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */; };
@@ -443,6 +449,12 @@
 		E645E72E21E7827D00532ACD /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E645E73721E7827D00532ACD /* RadixSDK iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RadixSDK iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6474AAC2265D4DC009C4FDC /* Observable+ToBlockingFirst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+ToBlockingFirst.swift"; sourceTree = "<group>"; };
+		E6474ABC2266140E009C4FDC /* IsConnectedToLocalhost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsConnectedToLocalhost.swift; sourceTree = "<group>"; };
+		E6474ABE2266146F009C4FDC /* URLConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConvertible.swift; sourceTree = "<group>"; };
+		E6474AC022661483009C4FDC /* FormattedURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedURL.swift; sourceTree = "<group>"; };
+		E6474AC32266149F009C4FDC /* Host+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Host+Decodable.swift"; sourceTree = "<group>"; };
+		E6474AC5226614C2009C4FDC /* Host+Localhost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Host+Localhost.swift"; sourceTree = "<group>"; };
+		E6474AC7226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Host+ExpressibleByStringLiteral.swift"; sourceTree = "<group>"; };
 		E6550EE4224BB02900160267 /* Int+DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataInitializable.swift"; sourceTree = "<group>"; };
 		E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscovery.swift; sourceTree = "<group>"; };
 		E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscoveryHardCoded.swift; sourceTree = "<group>"; };
@@ -1207,6 +1219,17 @@
 			path = RxSwift;
 			sourceTree = "<group>";
 		};
+		E6474AC22266148E009C4FDC /* Host */ = {
+			isa = PBXGroup;
+			children = (
+				E689DBB8225F958100340CF3 /* Host.swift */,
+				E6474AC32266149F009C4FDC /* Host+Decodable.swift */,
+				E6474AC5226614C2009C4FDC /* Host+Localhost.swift */,
+				E6474AC7226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift */,
+			);
+			path = Host;
+			sourceTree = "<group>";
+		};
 		E6550EE6224BBD9100160267 /* Node+Discovery */ = {
 			isa = PBXGroup;
 			children = (
@@ -1568,8 +1591,10 @@
 		E689DBB7225F957900340CF3 /* Host */ = {
 			isa = PBXGroup;
 			children = (
-				E689DBB8225F958100340CF3 /* Host.swift */,
+				E6474AC22266148E009C4FDC /* Host */,
 				E6166BEC2260CD5D003A9442 /* Port.swift */,
+				E6474ABE2266146F009C4FDC /* URLConvertible.swift */,
+				E6474AC022661483009C4FDC /* FormattedURL.swift */,
 			);
 			path = Host;
 			sourceTree = "<group>";
@@ -2144,6 +2169,7 @@
 			children = (
 				E6CEE70A21F5AE5A00D745EC /* Crypto */,
 				E62EFDA32248D24F00B6DAD6 /* fatalFail.swift */,
+				E6474ABC2266140E009C4FDC /* IsConnectedToLocalhost.swift */,
 			);
 			path = Convenience;
 			sourceTree = "<group>";
@@ -2555,6 +2581,7 @@
 				E6A50896224E713F00128123 /* Nonce.swift in Sources */,
 				E6A50886224E713F00128123 /* Signatures.swift in Sources */,
 				E6A507D7224E154700128123 /* AtomSubscription.swift in Sources */,
+				E6474AC6226614C2009C4FDC /* Host+Localhost.swift in Sources */,
 				E6A5086D224E713F00128123 /* StringConversionMode.swift in Sources */,
 				E6A508AA224E713F00128123 /* TokenDefinitionParticle+Decodable.swift in Sources */,
 				E6A508C6224EAD5700128123 /* BalancePerToken.swift in Sources */,
@@ -2576,11 +2603,13 @@
 				E6A5088A224E713F00128123 /* RadixModelTypeSpecifying.swift in Sources */,
 				E6D4B341223FAC7F004FC83A /* Sha256Hasher.swift in Sources */,
 				E693DABA2232B55F003720C2 /* PrefixedJsonEncodable.swift in Sources */,
+				E6474AC122661483009C4FDC /* FormattedURL.swift in Sources */,
 				E6A50872224E713F00128123 /* ValueValidating.swift in Sources */,
 				E69AB7312237B9A2006153DD /* CBORStringConvertible.swift in Sources */,
 				E6D4B357223FC163004FC83A /* AnyEncodableKeyValuesProcessing.swift in Sources */,
 				E6FB03E221ECF186002CE331 /* Macros.swift in Sources */,
 				E62EFDC9224936F700B6DAD6 /* NodeRouter.swift in Sources */,
+				E6474AC42266149F009C4FDC /* Host+Decodable.swift in Sources */,
 				E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */,
 				E6ED1A4021F8836300654105 /* UniverseConfig.swift in Sources */,
 				E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */,
@@ -2725,6 +2754,7 @@
 				E6D4B361223FD046004FC83A /* AnyEncodableKeyValueList.swift in Sources */,
 				E6A50873224E713F00128123 /* Base64String.swift in Sources */,
 				E6A507F3224E6A4600128123 /* TokenBalance.swift in Sources */,
+				E6474AC8226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift in Sources */,
 				E6D4B33B223F9DD2004FC83A /* TimeConverter.swift in Sources */,
 				E6A50891224E713F00128123 /* TokenDefinitionIdentifier.swift in Sources */,
 				E6A507DB224E15DC00128123 /* AtomSubscriptionCancel.swift in Sources */,
@@ -2737,6 +2767,7 @@
 				E6A4ABC0221EBAB1006C5CA8 /* QuickSpec_Extension.swift in Sources */,
 				E62EFDCC2249378300B6DAD6 /* HTTPClient.swift in Sources */,
 				E6A507F5224E6AEA00128123 /* Token.swift in Sources */,
+				E6474ABF2266146F009C4FDC /* URLConvertible.swift in Sources */,
 				E693DAC522368607003720C2 /* DSONPrefix.swift in Sources */,
 				E6A5087A224E713F00128123 /* Base58String.swift in Sources */,
 				E6A508B4224E713F00128123 /* ParticleGroup.swift in Sources */,
@@ -2763,6 +2794,7 @@
 				E6D325B921EF35DA00851F4E /* Secp256k1RFC6979Tests.swift in Sources */,
 				E69071FF225CD1D800D300A9 /* AtomJsonDeserializationTwoParticleGroupsSpec.swift in Sources */,
 				E6A508D4224FB68700128123 /* TestScheduler.swift in Sources */,
+				E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */,
 				E6907202225CD1D800D300A9 /* TooShortNameSpec.swift in Sources */,
 				E640F63A225E1C4F00855256 /* SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift in Sources */,
 				E6A508D8224FBE6E00128123 /* SubmitAtomOverWebSocketsTest.swift in Sources */,

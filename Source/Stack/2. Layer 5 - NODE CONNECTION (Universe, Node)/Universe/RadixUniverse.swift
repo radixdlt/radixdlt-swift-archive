@@ -26,16 +26,15 @@ public extension RadixUniverse {
     static var sunstone: RadixUniverse {
         return RadixUniverse(
             config: .sunstone,
-            nodeDiscovery: NodeFinder(
-                bootstrapNodeUrl: "https://sunstone.radixdlt.com/node-finder"
-            )
+            nodeDiscovery: NodeFinder.sunstone
         )
     }
     
     static var localhost: RadixUniverse {
         return RadixUniverse(
             config: .betanet,
-            nodeDiscovery: NodeDiscoveryHardCoded(urls: [
+            // swiftlint:disable:next force_try
+            nodeDiscovery: try! NodeDiscoveryHardCoded(hosts: [
                 "localhost:8080",
                 "localhost:8081"
             ])

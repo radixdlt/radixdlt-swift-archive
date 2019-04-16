@@ -16,7 +16,11 @@ import RxBlocking
 
 extension NodeDiscoveryHardCoded {
     static var localhost: NodeDiscoveryHardCoded {
-        return NodeDiscoveryHardCoded(urls: [URLFormatter.localhost])
+        do {
+            return try NodeDiscoveryHardCoded(hosts: [Host.local()])
+        } catch {
+            incorrectImplementation("Error: \(error)")
+        }
     }
 }
 
@@ -27,9 +31,10 @@ class WebsocketTest: XCTestCase {
     func makeRpcClient(
         nodeDiscovery: NodeDiscovery = NodeDiscoveryHardCoded.localhost,
         timeout: TimeInterval = 1,
-        failOnNoConnection: Bool = false,
+        failOnNoConnection: Bool? = nil,
         _ function: String = #function, _ file: String = #file
     ) -> RPCClient? {
+        let failOnNoConnection = failOnNoConnection ?? isConnectedToLocalhost
         
         func fail(error: Error? = nil) -> RPCClient? {
             var errorDescriptionOrEmpty = ""
@@ -67,9 +72,10 @@ class WebsocketTest: XCTestCase {
     func makeApplicationClient(
         nodeDiscovery: NodeDiscovery = NodeDiscoveryHardCoded.localhost,
         timeout: TimeInterval = 1,
-        failOnNoConnection: Bool = false,
+        failOnNoConnection: Bool? = nil,
         _ function: String = #function, _ file: String = #file
         ) -> RadixApplicationClient? {
+        let failOnNoConnection = failOnNoConnection ?? isConnectedToLocalhost
         
         func fail(error: Error? = nil) -> RadixApplicationClient? {
             var errorDescriptionOrEmpty = ""

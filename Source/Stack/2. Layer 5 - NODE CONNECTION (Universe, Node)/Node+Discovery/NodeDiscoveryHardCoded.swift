@@ -12,8 +12,10 @@ import RxSwift
 public struct NodeDiscoveryHardCoded: NodeDiscovery {
     private let urls: [FormattedURL]
     
-    public init(urls: [FormattedURL]) {
-        self.urls = urls
+    public init(hosts: [Host]) throws {
+        self.urls = try hosts.map {
+            try URLFormatter.format(url: $0, protocol: .hypertext, useSSL: !$0.isLocal)
+        }
     }
 }
 
@@ -32,8 +34,8 @@ public extension NodeDiscoveryHardCoded {
                         .map {
                             return try Node(
                                 info: $0,
-                                websocketsUrl: try URLFormatter.format(url: nodeUrl, protocol: .websockets(appendPath: true), useSSL: !nodeUrl.isLocal),
-                                httpUrl: try URLFormatter.format(url: nodeUrl, protocol: .hypertext(appendPath: true), useSSL: !nodeUrl.isLocal)
+                                websocketsUrl: try URLFormatter.format(url: nodeUrl, protocol: .websockets, useSSL: !nodeUrl.isLocal),
+                                httpUrl: try URLFormatter.format(url: nodeUrl, protocol: .hypertext, useSSL: !nodeUrl.isLocal)
                             )
                     }
                 }

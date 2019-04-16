@@ -21,14 +21,23 @@ public final class NodeFinder: NodeDiscovery {
     private let httpClient: DefaultHTTPClient
     
     public init(
-        bootstrapNodeUrl: FormattedURL,
-        websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(host: $0, protocol: .hypertext(appendPath: true)) },
-        httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(host: $0, protocol: .hypertext(appendPath: true)) }
+        bootstrapNode: FormattedURL,
+        websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
+        httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
         ) {
-        self.bootstrapNodeUrl = bootstrapNodeUrl
+        self.bootstrapNodeUrl = bootstrapNode
         self.websocketsUrlFormatter = websocketsUrlFormatter
         self.httpUrlFormatter = httpUrlFormatter
         self.httpClient = DefaultHTTPClient(baseURL: bootstrapNodeUrl)
+    }
+    
+    public convenience init(
+        bootstrapHost: Host,
+        websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
+        httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
+        ) throws {
+        let bootstrapNodeURL = try URLFormatter.format(url: bootstrapHost, protocol: .hypertext, appendPath: false, useSSL: true)
+        self.init(bootstrapNode: bootstrapNodeURL, websocketsUrlFormatter: websocketsUrlFormatter, httpUrlFormatter: httpUrlFormatter)
     }
     
     deinit {
@@ -39,7 +48,8 @@ public final class NodeFinder: NodeDiscovery {
 public extension NodeFinder {
     func loadNodes() -> Observable<[Node]> {
         return httpClient.findNode()
-            .map { try URLFormatter.format(ipAddress: $0, port: 443, protocol: .hypertext(appendPath: true), useSSL: true) }.asObservable()
+            .map { try Host(ipAddress: $0, port: 443) }
+            .map { try URLFormatter.format(url: $0, protocol: .hypertext, useSSL: true) }.asObservable()
             .flatMapLatest { (nodeIp: FormattedURL) -> Observable<[Node]> in
                 RESTClientsRetainer.restClient(urlToNode: nodeIp).getLivePeers().asObservable()
                     .ifEmpty(throw: Error.noConnectionsForBootstrapNode(url: nodeIp.url))
@@ -57,7 +67,8 @@ public extension NodeFinder {
 
 public extension NodeFinder {
     static var sunstone: NodeFinder {
-        return NodeFinder(bootstrapNodeUrl: "https://sunstone.radixdlt.com")
+        // swiftlint:disable:next force_try
+        return try! NodeFinder(bootstrapHost: "https://sunstone.radixdlt.com")
     }
 }
 

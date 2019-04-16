@@ -8,110 +8,41 @@
 
 import Foundation
 
-public struct FormattedURL: Hashable, Equatable, ExpressibleByStringLiteral {
-    public let url: URL
-    public let isUsingSSL: Bool
-    public let host: Host
-    public let communication: URLFormatter.CommuncationProtocol
-
-    fileprivate init(
-            url: URL,
-            host: Host,
-            communication: URLFormatter.CommuncationProtocol,
-            useSSL: Bool
-    ) {
-        self.host = host
-        self.communication = communication
-        self.url = url
-        self.isUsingSSL = useSSL
-    }
-}
-
-public extension FormattedURL {
-    init(stringLiteral value: String) {
-        guard
-                let components = URLComponents(string: value),
-                let host = components.host,
-                let scheme = components.scheme
-                else {
-            fatalError("Failed to create URLComponents")
-        }
-        let portInt: Int = components.port ?? 443
-        let useSSL = scheme.contains("ps") || scheme.contains("ss")
-        let isWebsockets = scheme.contains("ws")
-        do {
-            let port = try Port(unvalidated: portInt)
-            let host = try Host(ipAddress: host, port: port)
-            self = try URLFormatter.format(host: host, protocol: isWebsockets ? .websockets(appendPath: false) : .hypertext(appendPath: false), useSSL: useSSL)
-        } catch {
-            fatalError("Bad string passed: `\(value)`, error: `\(error)`")
-        }
-    }
-}
-
-public extension FormattedURL {
-    var isLocal: Bool {
-        return host.isLocal
-    }
-}
-
 public struct URLFormatter {}
 
 // MARK: - Public
 public extension URLFormatter {
 
-    static func format(host: Host, `protocol`: CommuncationProtocol, useSSL: Bool = true) throws -> FormattedURL {
-        if host.isLocal && useSSL {
+    static func format(
+        url urlConvertible: URLConvertible,
+        `protocol`: CommuncationProtocol,
+        appendPath: Bool = true,
+        useSSL: Bool = true
+    ) throws -> FormattedURL {
+        
+        if urlConvertible.isLocal && useSSL {
             throw Error.sslIsUnsupportedForLocalhost
         }
+        
         var urlComponents = URLComponents()
-        urlComponents.host = try validating(isOnlyHost: host.ipAddress)
-        if let path = `protocol`.path {
-            urlComponents.path = path
+        urlComponents.host = try validating(isOnlyHost: urlConvertible.host)
+        if appendPath {
+            urlComponents.path = `protocol`.path
         }
-        urlComponents.port = Int(host.port.port)
+        urlComponents.port = Int(urlConvertible.port.port)
         urlComponents.scheme = `protocol`.scheme(useSSL: useSSL)
 
         guard let formattedUrl = urlComponents.url else {
             throw `protocol`.failedToCreateUrl(from: urlComponents.description)
         }
-        return FormattedURL(url: formattedUrl, host: host, communication: `protocol`, useSSL: useSSL)
-    }
-
-    static func format(url: FormattedURL, `protocol`: CommuncationProtocol, useSSL: Bool = true) throws -> FormattedURL {
-        return try format(host: url.host, protocol: `protocol`, useSSL: useSSL)
-    }
-}
-
-// MARK: - Convenience
-public extension URLFormatter {
-
-//    static func format(url: URL, port: Port? = nil, `protocol`: CommuncationProtocol, useSSL: Bool = true) throws -> URL {
-//
-//        let host: String
-//        if let hostFromUrlString = try? validating(isOnlyHost: url.absoluteString) {
-//            host = hostFromUrlString
-//        } else if let hostFromUrl = url.host {
-//            host = hostFromUrl
-//        } else if case let absolute = url.absoluteString, absolute == .localhost {
-//            host = .localhost
-//        } else {
-//            throw `protocol`.failedToCreateUrl(from: url.absoluteString)
-//        }
-//        return try format(host: host, port: port, protocol: `protocol`, useSSL: useSSL)
-//    }
-
-    /// Swift.URL ignores `:<port>` part of strings, thus re
-    static func format(ipAddress: String, port: Port, `protocol`: CommuncationProtocol, useSSL: Bool = true) throws -> FormattedURL {
-        let host = try Host(ipAddress: ipAddress, port: port)
-        return try format(host: host, protocol: `protocol`, useSSL: useSSL)
+        return FormattedURL(url: formattedUrl, host: urlConvertible.host, port: urlConvertible.port, isUsingSSL: useSSL)
     }
 }
 
 public extension URLFormatter {
     static var localhost: FormattedURL {
         do {
-            return try URLFormatter.format(host: .local(port: 8080), protocol: .hypertext(appendPath: true), useSSL: false)
+            return try URLFormatter.format(url: Host.local(port: 8080), protocol: .hypertext, useSSL: false)
         } catch {
             incorrectImplementation("Failed to create localhost client, error: \(error)")
         }
@@ -119,7 +50,7 @@ public extension URLFormatter {
 }
 
 // MARK: - Private
-private extension URLFormatter {
+extension URLFormatter {
     
     static func validating(isOnlyHost urlString: String) throws -> String {
         guard onlyHost(string: urlString) else {
@@ -160,8 +91,8 @@ public extension URLFormatter {
 
 public extension URLFormatter {
     enum CommuncationProtocol: Equatable, Hashable {
-        case websockets(appendPath: Bool)
-        case hypertext(appendPath: Bool)
+        case websockets
+        case hypertext
     }
 }
 
@@ -189,14 +120,10 @@ private extension URLFormatter.CommuncationProtocol {
         }
     }
     
-    var path: String? {
+    var path: String {
         switch self {
-        case .hypertext(let appendPath):
-            guard appendPath else { return nil }
-            return "/api"
-        case .websockets(let appendPath):
-            guard appendPath else { return nil }
-            return "/rpc"
+        case .hypertext: return "/api"
+        case .websockets: return "/rpc"
         }
     }
     
