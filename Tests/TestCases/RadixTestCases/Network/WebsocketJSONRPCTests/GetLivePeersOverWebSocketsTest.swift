@@ -10,17 +10,16 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 import RxSwift
+import RxTest
 
 class GetLivePeersOverWebSocketsTest: WebsocketTest {
     
     func testLivePeersOverWS() {
-        guard let apiClient = makeApiClient() else { return }
-        let livePeersObservable: Observable<[NodeRunnerData]> = apiClient.livePeers(communcation: .websocket)
-        
-        let livePeers: [NodeRunnerData] = try! livePeersObservable.take(1).toBlocking(timeout: 1).first()!
+        guard let rpcClient = makeRpcClient() else { return }
+        guard let livePeers = rpcClient.getLivePeers().blockingTakeFirst() else { return }
         
         XCTAssertEqual(livePeers.count, 1)
         let livePeer = livePeers[0]
-        XCTAssertTrue(livePeer.ipAddress.looksLikeAnIPAddress)
+        XCTAssertFalse(livePeer.host.ipAddress.isEmpty)
     }
 }

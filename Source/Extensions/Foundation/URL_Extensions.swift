@@ -38,11 +38,11 @@ extension URLRequest {
 }
 
 extension URL {
-    static var localhost: URL {
-        return Enviroment.localhost.baseURL
-    }
-    
     var isLocalhost: Bool {
-        return self == URL.localhost
+        let isLocalhost = absoluteString.contains(String.localhost)
+        return isLocalhost
+    }
+    static var localhost: URL {
+        return URL(stringLiteral: String.localhost)
     }
 }

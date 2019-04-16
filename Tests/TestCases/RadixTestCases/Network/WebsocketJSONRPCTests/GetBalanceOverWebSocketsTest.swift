@@ -15,13 +15,18 @@ import RxBlocking
 
 class GetBalanceOverWebSocketsTest: WebsocketTest {
     
+    private var address: Address!
+    private var xrd: TokenDefinitionReference!
+    
+    override func setUp() {
+        super.setUp()
+        self.address = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
+        self.xrd = TokenDefinitionReference(address: address, symbol: "XRD")
+    }
+    
     func testGetBalanceOverWS() {
-        guard let apiClient = makeApiClient() else { return }
-        
-        let atomSubscriptionsObservable = apiClient.balance(forAddress: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor", token: TokenDefinitionReference(address: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor", symbol: "XRD"))
-        
-        // `take()` operator is absolutely crucial, read "Waiting on non-completing sequences": http://rx-marin.com/post/rxblocking-part1/
-        let balance: TokenBalance = try! atomSubscriptionsObservable.take(1).toBlocking(timeout: 1).first()!
+        guard let applicationClient = makeApplicationClient() else { return }
+        guard let balance =  applicationClient.getBalances(for: address, ofToken: xrd).blockingTakeFirst() else { return }
         
         XCTAssertEqual(balance.amount.signedAmount.description, "1000000000000000000000000000")
     }

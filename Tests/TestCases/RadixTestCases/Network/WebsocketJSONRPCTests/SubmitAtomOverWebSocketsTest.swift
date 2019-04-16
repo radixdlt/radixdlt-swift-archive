@@ -17,8 +17,10 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
     
     private let magic: Magic = 63799298
     
-    func testTokenDefinitionParticle() {
-        guard let apiClient = makeApiClient() else { return }
+    private var signedAtom: SignedAtom!
+    
+    override func setUp() {
+        super.setUp()
         
         let identity = RadixIdentity()
         let address = Address(magic: magic, publicKey: identity.publicKey)
@@ -29,7 +31,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
             description: "Cyon Crypto Coin is the worst shit coin",
             address: address
         )
-                
+        
         let unallocated = UnallocatedTokensParticle(
             amount: .maxValue256Bits,
             tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference
@@ -39,21 +41,17 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
             ParticleGroup([
                 tokenDefinitionParticle.withSpin(),
                 unallocated.withSpin()
+                ])
             ])
-        ])
-        
         
         let atowWithPOW = try! atom.withProofOfWork(magic: magic)
+        self.signedAtom = try! identity.sign(atom: UnsignedAtom(atowWithPOW))
+    }
+    
+    func testTokenDefinitionParticle() {
+        guard let rpcClient = makeRpcClient() else { return }
+        guard let atomSubscriptions = rpcClient.submitAtom(signedAtom.atom).blockingArrayTakeFirst(2) else { return }
         
-        let signedAtom = try! identity.sign(atom: UnsignedAtom(atowWithPOW))
-        
-        let submitObservable = apiClient.submit(atom: signedAtom.atom)
-        
-        let atomSubscriptions: [AtomSubscription]
-        do {
-             atomSubscriptions = try submitObservable.take(2).toBlocking(timeout: 1).toArray()
-        } catch { return XCTFail("failed to send atom, error: \(error)") }
-
         XCTAssertEqual(atomSubscriptions.count, 2)
         let as1 = atomSubscriptions[0]
         let as2 = atomSubscriptions[1]
@@ -61,10 +59,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
         XCTAssertTrue(as2.isUpdate)
 
         let u1 = as2.update!.subscriptionFromSubmissionsUpdate!
-        
-        XCTAssertNotEqual(atom.hashId, signedAtom.atom.hashId)
-
-        XCTAssertEqual(u1.value, .stored, "ValidationError, Atom signed with identity having address: \(address), publicKey: \(identity.publicKey)")
+        XCTAssertEqual(u1.value, .stored)
     }
 }
 

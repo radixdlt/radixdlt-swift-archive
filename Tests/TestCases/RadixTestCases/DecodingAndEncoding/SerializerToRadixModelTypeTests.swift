@@ -18,7 +18,7 @@ class SerializerTests: XCTestCase {
             XCTAssertEqual(modelType.serializerId, expected)
         }
         doTest(.signature, -434788200)
-        doTest(.nodeRunnerData, 2451810)
+        doTest(.nodeInfo, 2451810)
         doTest(.radixSystem, -1833998801)
         doTest(.atom, 2019665)
         doTest(.particleGroup, -67058791)
