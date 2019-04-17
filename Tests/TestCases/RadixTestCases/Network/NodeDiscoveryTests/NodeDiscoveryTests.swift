@@ -37,6 +37,25 @@ class NodeDiscoveryTests: XCTestCase {
         XCTAssertEqual(node.websocketsUrl.url.absoluteString, "ws://localhost:8080/rpc")
     }
     
+    func testBadNetworkDetails() {
+        
+        let subject = PublishSubject<NodeNetworkDetails>()
+        
+        let nodeDiscovery = try! NodeDiscoveryHardCoded(
+            hosts: [Host.local()],
+            networkDetailsRequestingFactory: { _ in
+                return MockedNetworkDetailsRequester(subject: subject)
+            }
+        )
+        subject.onError(MockedError.incompatibleJson)
+        XCTAssertThrowsError(try nodeDiscovery.loadNodes().toBlocking(timeout: 1).first(), "Should throw error when receiving error from API") { error in
+            guard let networkError = error as? MockedError else {
+                return XCTFail("Wrong error")
+            }
+            XCTAssertEqual(networkError, MockedError.incompatibleJson)
+        }
+    }
+    
     func testNodeFinder() {
         let nodeFinder: NodeFinder = .sunstone
         guard let nodes = nodeFinder.loadNodes().blockingTakeFirst() else { return }
@@ -55,3 +74,37 @@ class NodeDiscoveryTests: XCTestCase {
     }
     
 }
+
+struct MockedNetworkDetailsRequester: NodeNetworkDetailsRequesting {
+    private let single: SingleWanted<NodeNetworkDetails>
+    init(_ single: SingleWanted<NodeNetworkDetails>) {
+        self.single = single
+    }
+    init(subject: PublishSubject<NodeNetworkDetails>) {
+        self.init(subject.asObservable())
+    }
+    func networkDetails() -> SingleWanted<NodeNetworkDetails> {
+        return single
+    }
+}
+
+private enum MockedError: Swift.Error, Equatable {
+    case incompatibleJson
+}
+
+//final class MockedHTTPClient: HTTPClient {
+//    func request<D>(router: Router, decodeAs type: D.Type) -> Observable<D> where D : Decodable {
+//        abstract
+//    }
+//
+//    func loadContent(of page: String) -> SingleWanted<String> {
+//        abstract
+//    }
+//}
+//
+//final class MockedRestClient: RESTClient, HTTPClientOwner {
+//    let httpClient: HTTPClient
+//    init(httpClient: HTTPClient) {
+//        self.httpClient = httpClient
+//    }
+//}

@@ -40,7 +40,9 @@ public extension NodeFinder {
     func loadNodes() -> Observable<[Node]> {
         return restClient.findNode()
             .flatMapLatest { (nodeIp: FormattedURL) -> Observable<[Node]> in
-                RESTClientsRetainer.restClient(urlToNode: nodeIp).getLivePeers().asObservable()
+                RESTClientsRetainer.restClient(urlToNode: nodeIp)
+                    .getLivePeers()
+                    .asObservable()
                     .ifEmpty(throw: Error.noConnectionsForBootstrapNode(url: nodeIp.url))
                     .map { [unowned self] in try $0.map {
                         try Node(

@@ -9,13 +9,20 @@
 import Foundation
 import RxSwift
 
-public struct NodeDiscoveryHardCoded: NodeDiscovery {
+public final class NodeDiscoveryHardCoded: NodeDiscovery {
     private let urls: [FormattedURL]
     
-    public init(hosts: [Host]) throws {
+    public typealias MakeNetworkDetailsRequester = (FormattedURL) -> NodeNetworkDetailsRequesting
+    private let makeNetworkDetailsRequester: MakeNetworkDetailsRequester
+    
+    public init(
+        hosts: [Host],
+        networkDetailsRequestingFactory: @escaping MakeNetworkDetailsRequester = { RESTClientsRetainer.restClient(urlToNode: $0) }
+    ) throws {
         self.urls = try hosts.map {
             try URLFormatter.format(url: $0, protocol: .hypertext, useSSL: !$0.isLocal)
         }
+        self.makeNetworkDetailsRequester = networkDetailsRequestingFactory
     }
 }
 
@@ -25,8 +32,8 @@ public extension NodeDiscoveryHardCoded {
     func loadNodes() -> Observable<[Node]> {
         return Observable<[FormattedURL]>.just(urls)
             .flatMap { (nodeUrls: [FormattedURL]) -> Observable<[Node]> in
-                let nodeObservables: [Observable<Node>] = nodeUrls.map { (nodeUrl: FormattedURL) -> Observable<Node> in
-                    RESTClientsRetainer.restClient(urlToNode: nodeUrl)
+                let nodeObservables: [Observable<Node>] = nodeUrls.map { [unowned self] (nodeUrl: FormattedURL) -> Observable<Node> in
+                    self.makeNetworkDetailsRequester(nodeUrl)
                         .networkDetails()
                         .map { $0.tcp }
                         .asObservable()
