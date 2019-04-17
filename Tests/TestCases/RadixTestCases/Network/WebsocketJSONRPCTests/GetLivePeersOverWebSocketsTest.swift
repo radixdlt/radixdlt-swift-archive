@@ -14,14 +14,14 @@ import RxTest
 
 class GetLivePeersOverWebSocketsTest: WebsocketTest {
     
-//    func testLivePeersOverWS() {
-//        guard let rpcClient = makeRpcClient() else { return }
-//        guard let livePeers = rpcClient.getLivePeers().blockingTakeFirst() else { return }
-//
-//        XCTAssertEqual(livePeers.count, 1)
-//        let livePeer = livePeers[0]
-//        XCTAssertFalse(livePeer.host.ipAddress.isEmpty)
-//    }
+    func testLivePeersOverWS() {
+        guard let rpcClient = makeRpcClient() else { return }
+        guard let livePeers = rpcClient.getLivePeers().blockingTakeFirst() else { return }
+
+        XCTAssertEqual(livePeers.count, 1)
+        let livePeer = livePeers[0]
+        XCTAssertFalse(livePeer.host.ipAddress.isEmpty)
+    }
     
     // This is kind of a test of my mock
     func testLivePeersMockedGoodJson() {
@@ -70,6 +70,10 @@ struct MockedRPCClient: RPCClient, FullDuplexCommunicating {
     }
     
     func getLivePeers() -> SingleWanted<[NodeInfo]> {
+        return channel.responseForMessage(with: nil)
+    }
+    
+    func getUniverseConfig() -> SingleWanted<UniverseConfig> {
         return channel.responseForMessage(with: nil)
     }
 }
