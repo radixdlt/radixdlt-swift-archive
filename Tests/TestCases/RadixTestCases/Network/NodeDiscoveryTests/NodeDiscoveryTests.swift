@@ -37,7 +37,7 @@ class NodeDiscoveryTests: XCTestCase {
         XCTAssertEqual(node.websocketsUrl.url.absoluteString, "ws://localhost:8080/rpc")
     }
     
-    func testBadNetworkDetails() {
+    func testBadNode() {
         
         let subject = PublishSubject<NodeNetworkDetails>()
         
@@ -88,7 +88,7 @@ struct MockedNetworkDetailsRequester: NodeNetworkDetailsRequesting {
     }
 }
 
-private enum MockedError: Swift.Error, Equatable {
+enum MockedError: Swift.Error, Equatable {
     case incompatibleJson
 }
 
