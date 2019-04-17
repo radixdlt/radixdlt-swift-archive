@@ -22,7 +22,7 @@ class AtomTooBigDSONEncodingSpec: QuickSpec {
                 expect { try _ = atom.toDSON() }.to(throwError(errorType: Atom.Error.self) {
                     switch $0 {
                     case .tooManyBytes(let expectedAtMost, let butGot):
-                        let maxSize = Atom.maxSize
+                        let maxSize = Atom.maxSizeOfDSONEncodedAtomInBytes
                         expect(expectedAtMost).to(equal(maxSize))
                         expect(butGot).to(beGreaterThan(maxSize))
                     }

@@ -26,6 +26,7 @@ public struct TokenDefinitionParticle:
     TokenConvertible,
     RadixCodable,
     RadixHashable,
+    DSONEncodable,
     Hashable {
 // swiftlint:enable colon
     

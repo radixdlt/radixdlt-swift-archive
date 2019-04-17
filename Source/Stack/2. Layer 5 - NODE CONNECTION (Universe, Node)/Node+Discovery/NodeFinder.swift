@@ -14,30 +14,20 @@ public final class NodeFinder: NodeDiscovery {
     public typealias UseSSL = Bool
     public typealias URLFormatting = (Host) throws -> FormattedURL
     
-    private let bootstrapNodeUrl: FormattedURL
     private let websocketsUrlFormatter: URLFormatting
     private let httpUrlFormatter: URLFormatting
     
-    private let httpClient: DefaultHTTPClient
+    private let restClient: RESTClient
     
     public init(
-        bootstrapNode: FormattedURL,
+        restClient: RESTClient,
         websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
         httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
         ) {
-        self.bootstrapNodeUrl = bootstrapNode
+        
         self.websocketsUrlFormatter = websocketsUrlFormatter
         self.httpUrlFormatter = httpUrlFormatter
-        self.httpClient = DefaultHTTPClient(baseURL: bootstrapNodeUrl)
-    }
-    
-    public convenience init(
-        bootstrapHost: Host,
-        websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
-        httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
-        ) throws {
-        let bootstrapNodeURL = try URLFormatter.format(url: bootstrapHost, protocol: .hypertext, appendPath: false, useSSL: true)
-        self.init(bootstrapNode: bootstrapNodeURL, websocketsUrlFormatter: websocketsUrlFormatter, httpUrlFormatter: httpUrlFormatter)
+        self.restClient = restClient
     }
     
     deinit {
@@ -45,11 +35,10 @@ public final class NodeFinder: NodeDiscovery {
     }
 }
 
+// MARK: - NodeDiscovery
 public extension NodeFinder {
     func loadNodes() -> Observable<[Node]> {
-        return httpClient.findNode()
-            .map { try Host(ipAddress: $0, port: 443) }
-            .map { try URLFormatter.format(url: $0, protocol: .hypertext, useSSL: true) }.asObservable()
+        return restClient.findNode()
             .flatMapLatest { (nodeIp: FormattedURL) -> Observable<[Node]> in
                 RESTClientsRetainer.restClient(urlToNode: nodeIp).getLivePeers().asObservable()
                     .ifEmpty(throw: Error.noConnectionsForBootstrapNode(url: nodeIp.url))
@@ -78,25 +67,32 @@ public extension NodeFinder {
     }
 }
 
-public extension ObservableType where E: LengthMeasurable {
-    func ifEmpty<ErrorType>(throw errorIfEmpty: ErrorType) -> Observable<E> where ErrorType: Swift.Error {
-        return asObservable().map { lengthMeasurable in
-            guard let nonEmpty = lengthMeasurable.nilIfEmpty() else {
-                throw errorIfEmpty
-            }
-            return nonEmpty
-        }
+// MARK: - Convenience Init
+public extension NodeFinder {
+    
+    convenience init(
+        bootstrapNode: FormattedURL,
+        websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
+        httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
+        ) {
+        
+        let restClient = DefaultRESTClient(url: bootstrapNode)
+        
+        self.init(
+            restClient: restClient,
+            websocketsUrlFormatter: websocketsUrlFormatter,
+            httpUrlFormatter: httpUrlFormatter
+        )
     }
-}
-
-public extension ObservableType where E: Sequence {
-    func first<ErrorType>(ifEmptyThrow errorIfEmpty: ErrorType) -> Observable<E.Element> where ErrorType: Swift.Error {
-        return asObservable().map { sequence in
-            let array = [E.Element](sequence)
-            guard let nonEmpty = array.nilIfEmpty() else {
-                throw errorIfEmpty
-            }
-            return nonEmpty[0]
-        }
+    
+    convenience init(
+        bootstrapHost: Host,
+        websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
+        httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
+        ) throws {
+        
+        let bootstrapNodeURL = try URLFormatter.format(url: bootstrapHost, protocol: .hypertext, appendPath: false, useSSL: true)
+        
+        self.init(bootstrapNode: bootstrapNodeURL, websocketsUrlFormatter: websocketsUrlFormatter, httpUrlFormatter: httpUrlFormatter)
     }
 }

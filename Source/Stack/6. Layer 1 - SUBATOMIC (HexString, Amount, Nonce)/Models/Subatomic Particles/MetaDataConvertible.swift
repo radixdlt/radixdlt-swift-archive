@@ -43,4 +43,8 @@ public extension MetaDataConvertible {
     static var timeNow: Self {
         return .timestamp(Date())
     }
+
+    func withProofOfWork(_ proof: ProofOfWork) -> Self {
+        return inserting(value: proof.nonceAsString, forKey: .proofOfWork)
+    }
 }

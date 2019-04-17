@@ -19,6 +19,7 @@ public struct Address:
     Ownable,
     PublicKeyOwner,
     RadixHashable,
+    DSONEncodable,
     Codable,
     Hashable,
     CustomStringConvertible {

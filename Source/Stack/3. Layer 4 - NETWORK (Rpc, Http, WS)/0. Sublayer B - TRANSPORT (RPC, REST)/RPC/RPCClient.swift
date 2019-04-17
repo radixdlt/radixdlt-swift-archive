@@ -12,7 +12,6 @@ import RxSwift
 // swiftlint:disable colon opening_brace
 
 public protocol RPCClient:
-    FullDuplexCommunicating,
     NodeInfoRequesting,
     LivePeersRequesting,
     UniverseConfigRequesting,
@@ -21,5 +20,4 @@ public protocol RPCClient:
 {
     // swiftlint:enable colon opening_brace
     
-    var channel: FullDuplexCommunicationChannel { get }
 }

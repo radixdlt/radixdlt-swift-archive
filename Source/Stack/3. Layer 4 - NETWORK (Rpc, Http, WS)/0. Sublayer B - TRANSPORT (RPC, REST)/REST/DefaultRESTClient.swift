@@ -9,10 +9,9 @@
 import Foundation
 import RxSwift
 
-public final class DefaultRESTClient: RESTClient {
+public final class DefaultRESTClient: RESTClient, HTTPClientOwner {
 
-    // Internal for testing only
-    internal let httpClient: HTTPClient
+    public let httpClient: HTTPClient
     
     public init(url: FormattedURL) {
         self.httpClient = DefaultHTTPClient(baseURL: url)
@@ -26,17 +25,5 @@ public final class DefaultRESTClient: RESTClient {
 public extension DefaultRESTClient {
     convenience init(node: Node) {
         self.init(url: node.httpUrl)
-    }
-}
-
-// MARK: - RESTClient
-public extension DefaultRESTClient {
-    
-    func networkDetails() -> Observable<NodeNetworkDetails> {
-        return httpClient.request(.network)
-    }
-    
-    func getLivePeers() -> SingleWanted<[NodeInfo]> {
-        return httpClient.request(.getLivePeers)
     }
 }

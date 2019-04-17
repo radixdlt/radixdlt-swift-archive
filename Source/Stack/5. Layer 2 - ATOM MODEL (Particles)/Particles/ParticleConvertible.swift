@@ -9,7 +9,7 @@
 import Foundation
 
 /// An abstract type bundling together particles
-public protocol ParticleConvertible: RadixHashable, Codable {
+public protocol ParticleConvertible: RadixHashable, DSONEncodable, Codable {
     var particleType: ParticleType { get }
 }
 

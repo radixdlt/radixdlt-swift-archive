@@ -10,8 +10,8 @@ import Foundation
 import RxSwift
 
 public protocol NodeInteraction {
-    func subscribe(to address: Address) ->  Observable<AtomSubscription> // Observable<AtomUpdate>
-    func submit(atom: Atom) -> Observable<AtomSubscription> // Observable<AtomUpdate>
+    func subscribe(to address: Address) -> Observable<[AtomUpdate]>
+    func submit(atom: SignedAtom) -> Completable
     func unsubscribe(from address: Address) -> Completable
     func unsubscribeAll() -> Completable
 }

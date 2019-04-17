@@ -17,7 +17,9 @@ class AtomJsonDeserializationUnallocatedTokenBadValuesSpec: AtomJsonDeserializat
             {
                 "\(RadixModelType.jsonKey)": \(RadixModelType.atom.serializerId),
                 "signatures": {},
-                "metaData": {},
+                "metaData": {
+                    "timestamp": ":str:1488326400000"
+                },
                 "particleGroups": [
                     {
                         "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),

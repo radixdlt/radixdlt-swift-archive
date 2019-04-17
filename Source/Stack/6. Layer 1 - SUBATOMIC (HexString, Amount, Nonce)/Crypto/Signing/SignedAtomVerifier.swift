@@ -9,18 +9,16 @@
 import Foundation
 
 public protocol SignedAtomVerifier {
-    func didSign(atom: Atom) throws -> Bool
-}
-
-public extension SignedAtomVerifier {
-    func didSign(atom: SignedAtom) throws -> Bool {
-        return try didSign(atom: atom.atom)
-    }
+    func didSign(atom: SignedAtom) throws -> Bool
 }
 
 // MARK: - Default Implementation
 public extension SignedAtomVerifier where Self: PublicKeyOwner {
-    func didSign(atom: Atom) throws -> Bool {
-        return try atom.signatures.containsSignature(for: atom, signedBy: self)
+    func didSign(atom: SignedAtom) throws -> Bool {
+        return try SignatureVerifier.verifyThat(
+            signature: atom.signature,
+            didSign: atom,
+            usingKey: self.publicKey
+        )
     }
 }

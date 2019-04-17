@@ -31,7 +31,9 @@ private let invalidAtomSerializerJson = """
 {
     "\(RadixModelType.jsonKey)": \(RadixModelType.signature.serializerId),
     "signatures": {},
-    "metaData": {},
+    "metaData": {
+        "timestamp": ":str:1488326400000"
+    },
     "particleGroups": [
         {
             "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),
@@ -47,7 +49,9 @@ private let invalidTokenDefinitionParticleSerializerJson = """
 {
     "\(RadixModelType.jsonKey)": \(RadixModelType.atom.serializerId),
     "signatures": {},
-    "metaData": {},
+    "metaData": {
+        "timestamp": ":str:1488326400000"
+    },
     "particleGroups": [
         {
             "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),

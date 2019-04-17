@@ -23,4 +23,22 @@ public extension ObservableType where E: OptionalType {
             return Observable<E.Wrapped>.just(value)
         }
     }
+    
+    func ifNil(throw error: Error) -> Observable<E.Wrapped> {
+        return self.flatMap { element -> Observable<E.Wrapped> in
+            guard let value = element.value else {
+                return Observable<E.Wrapped>.error(error)
+            }
+            return Observable<E.Wrapped>.just(value)
+        }
+    }
+    
+    func ifNilKill(_ message: String) -> Observable<E.Wrapped> {
+        return self.flatMap { element -> Observable<E.Wrapped> in
+            guard let value = element.value else {
+                incorrectImplementation(message)
+            }
+            return Observable<E.Wrapped>.just(value)
+        }
+    }
 }

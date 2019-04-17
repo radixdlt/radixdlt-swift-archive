@@ -15,7 +15,7 @@ import RxBlocking
 extension Observable {
     
     // Sometimes an interval of `1` results in timeout...
-    func blockingTakeFirst(timeout: RxTimeInterval = 2, failOnTimeoutOrNil: Bool? = nil) -> E? {
+    func blockingTakeFirst(timeout: RxTimeInterval? = 2, failOnTimeoutOrNil: Bool? = nil) -> E? {
         let failOnTimeoutOrNil = failOnTimeoutOrNil ?? isConnectedToLocalhost
         // `take()` operator is absolutely crucial, read "Waiting on non-completing sequences": http://rx-marin.com/post/rxblocking-part1/
         let blocked = take(1).toBlocking(timeout: timeout)
@@ -39,7 +39,7 @@ extension Observable {
     }
     
     // Sometimes an interval of `1` results in timeout...
-    func blockingArrayTakeFirst(_ takeCount: Int = 1, timeout: RxTimeInterval = 2, failOnTimeoutOrNil: Bool? = nil) -> [E]? {
+    func blockingArrayTakeFirst(_ takeCount: Int = 1, timeout: RxTimeInterval? = 2, failOnTimeoutOrNil: Bool? = nil) -> [E]? {
         let failOnTimeoutOrNil = failOnTimeoutOrNil ?? isConnectedToLocalhost
         // `take()` operator is absolutely crucial, read "Waiting on non-completing sequences": http://rx-marin.com/post/rxblocking-part1/
         let blocked = take(takeCount).toBlocking(timeout: timeout)

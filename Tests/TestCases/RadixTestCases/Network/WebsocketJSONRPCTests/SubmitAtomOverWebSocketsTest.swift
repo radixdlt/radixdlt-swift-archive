@@ -17,12 +17,12 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
     
     private let magic: Magic = 63799298
     
-    private var signedAtom: SignedAtom!
+    private var atom: Atom!
+    private let identity = RadixIdentity()
     
     override func setUp() {
         super.setUp()
         
-        let identity = RadixIdentity()
         let address = Address(magic: magic, publicKey: identity.publicKey)
         
         let tokenDefinitionParticle = TokenDefinitionParticle(
@@ -37,20 +37,25 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
             tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference
         )
         
-        let atom = Atom(particleGroups: [
+        atom = Atom(particleGroups: [
             ParticleGroup([
                 tokenDefinitionParticle.withSpin(),
                 unallocated.withSpin()
                 ])
             ])
-        
-        let atowWithPOW = try! atom.withProofOfWork(magic: magic)
-        self.signedAtom = try! identity.sign(atom: UnsignedAtom(atowWithPOW))
     }
     
     func testTokenDefinitionParticle() {
+        guard let pow = ProofOfWork.work(atom: atom, magic: magic) else { return XCTFail("timeout") }
+        let atowWithPOW = try! ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
+        let unsignedAtom = try! UnsignedAtom(atomWithPow: atowWithPOW)
+        let signedAtom = try! identity.sign(atom: unsignedAtom)
+        
         guard let rpcClient = makeRpcClient() else { return }
-        guard let atomSubscriptions = rpcClient.submitAtom(signedAtom.atom).blockingArrayTakeFirst(2) else { return }
+        guard let atomSubscriptions = rpcClient.submit(
+            atom: signedAtom,
+            subscriberId: SubscriptionIdIncrementingGenerator.next()
+        ).blockingArrayTakeFirst(2) else { return }
         
         XCTAssertEqual(atomSubscriptions.count, 2)
         let as1 = atomSubscriptions[0]

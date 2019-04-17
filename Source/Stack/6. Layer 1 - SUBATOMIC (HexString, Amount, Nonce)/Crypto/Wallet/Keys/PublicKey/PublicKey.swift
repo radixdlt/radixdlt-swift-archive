@@ -16,6 +16,7 @@ public struct PublicKey:
     CBORDataConvertible,
     DataInitializable,
     RadixHashable,
+    DSONEncodable,
     PublicKeyOwner,
     Hashable,
     CustomStringConvertible {

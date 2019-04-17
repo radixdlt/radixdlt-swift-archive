@@ -30,19 +30,6 @@ public struct Signatures:
     }
 }
 
-// MARK: - Public Methods
-public extension Signatures {
-    func containsSignature(for signable: Signable, signedBy publicKeyOwner: PublicKeyOwner) throws -> Bool {
-        return try contains {
-            try SignatureVerifier.verifyThat(
-                signature: $0.value,
-                didSign: signable,
-                usingKey: publicKeyOwner.publicKey
-            )
-        }
-    }
-}
-
 // MARK: - Collection
 public extension Signatures {
     typealias Element = Dictionary<Key, Value>.Element

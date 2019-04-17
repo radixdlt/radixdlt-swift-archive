@@ -30,17 +30,13 @@ class SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests: XCTestCase {
     }()
     
     
-    func testThatOrderOfSigningAndPowDoesNotMatter() {
-        let signedAtomWithoutPow = try! identity.sign(atom: UnsignedAtom(atom))
-        let signedAtomWithPow = try! identity.sign(atom: UnsignedAtom(atom.withProofOfWork(magic: magic, numberOfLeadingZeros: numberOfLeadingZeros)))
-        XCTAssertNotEqual(signedAtomWithoutPow.signature, signedAtomWithPow.signature)
-    }
-    
     func testThatPowIsIncludedInDsonOutputAllButExcludedInDsonOutputHash() {
-        let atomWithPow = try! atom.withProofOfWork(magic: magic, numberOfLeadingZeros: numberOfLeadingZeros)
-        
+        guard let pow = ProofOfWork.work(atom: atom, magic: magic, numberOfLeadingZeros: numberOfLeadingZeros) else {
+            return XCTFail("no pow")
+        }
+        let atomWithPow = try! ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
         let atomWithoutPowDsonAll = try! atom.toDSON(output: .all)
-        let atomWithPowDsonAll = try! atomWithPow.toDSON(output: .all)
+        let atomWithPowDsonAll = try! atomWithPow.atom.toDSON(output: .all)
         
         XCTAssertNotEqual(
             atomWithoutPowDsonAll,
@@ -49,7 +45,7 @@ class SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests: XCTestCase {
         )
         
         let atomWithoutPowDsonHash = try! atom.toDSON(output: .hash)
-        let atomWithPowDsonHash = try! atomWithPow.toDSON(output: .hash)
+        let atomWithPowDsonHash = try! atomWithPow.atom.toDSON(output: .hash)
         
         XCTAssertNotEqual(atomWithoutPowDsonHash, atomWithPowDsonHash)
         

@@ -26,11 +26,14 @@ public extension DefaultRadixApplicationClient {
 
 public extension DefaultRadixApplicationClient {
     func getBalances(for address: Address) -> Observable<BalancePerToken> {
-        let atomEvents = nodeInteractor.subscribe(to: address)
-            .map { $0.update }.filterNil()
-            .map { $0.subscriptionUpdate }.filterNil()
-            .map { $0.atomEvents }
-        return TokenBalanceReducer().reduce(atomEvents: atomEvents)
+        let atoms = nodeInteractor.subscribe(to: address)
+            .map { (atomUpdates: [AtomUpdate]) -> [Atom] in
+                return atomUpdates.compactMap {
+                    guard $0.action == .store else { return nil }
+                    return $0.atom
+                }
+        }
+        return TokenBalanceReducer().reduce(atoms: atoms)
     }
     
     func makeTransaction(_ transaction: Transaction) -> Completable {

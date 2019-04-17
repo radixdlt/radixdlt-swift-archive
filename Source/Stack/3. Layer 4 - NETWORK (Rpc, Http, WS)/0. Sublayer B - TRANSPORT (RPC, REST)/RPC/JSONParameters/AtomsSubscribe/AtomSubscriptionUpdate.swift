@@ -44,6 +44,16 @@ public struct AtomSubscriptionUpdateSubscribe: Decodable {
     public let isHead: Bool
 }
 
+public extension AtomSubscriptionUpdateSubscribe {
+    func toAtomUpdates() -> [AtomUpdate] {
+        return atomEvents.enumerated().map {
+            let atomEvent = $0.element
+            let isHead = $0.offset == atomEvents.endIndex
+            return AtomUpdate(action: atomEvent.type, atom: atomEvent.atom, isHead: isHead)
+        }
+    }
+}
+
 public struct AtomSubscriptionUpdateSubmitAndSubscribe: Decodable {
     public let subscriberId: String
     public let value: State

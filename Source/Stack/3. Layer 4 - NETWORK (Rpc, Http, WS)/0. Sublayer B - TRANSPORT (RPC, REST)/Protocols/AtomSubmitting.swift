@@ -10,5 +10,5 @@ import Foundation
 import RxSwift
 
 public protocol AtomSubmitting {
-    func submitAtom(_ atom: Atom) -> Observable<AtomSubscription>
+    func submit(atom: SignedAtom, subscriberId: SubscriberId) -> Observable<AtomSubscription>
 }

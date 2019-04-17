@@ -44,18 +44,21 @@ public extension DefaultHTTPClient {
         }
     }
     
-    func findNode() -> SingleWanted<String> {
+    func loadContent(of page: String) -> SingleWanted<String> {
         return Observable.deferred { [unowned alamofireSession] in
             return Observable<String>.create { observer in
-                let dataTask = alamofireSession.request("/node-finder").responseString { response in
+                let dataTask = alamofireSession.request(page).responseString { response in
                     switch response.result {
-                    case .failure(let error): observer.onError(error)
-                    case .success(let string): observer.onNext(string)
+                    case .failure(let error):
+                        observer.onError(error)
+                    case .success(let string):
+                        observer.onNext(string)
+                        observer.onCompleted()
                     }
                 }
                 return Disposables.create { dataTask.cancel() }
             }
-        }     /// Perform callbacks (code within `subscribe(onNext:` blocks) on MainThread
+            }     /// Perform callbacks (code within `subscribe(onNext:` blocks) on MainThread
             .observeOn(MainScheduler.instance)
             
             /// Perform work ("subscription code") on `background` thread.

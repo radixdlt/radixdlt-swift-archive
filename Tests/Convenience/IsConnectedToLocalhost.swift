@@ -18,8 +18,8 @@ var isConnectedToLocalhost: Bool = {
         .synchronousDataTask(request: request)
     if let error = error {
         print("Connect to localhost error: \(error)")
-    } else if let data = data {
-        print("Data from localhost: \(String(data: data))")
+    } else if let _ = data {
+        print("Connected to localhost")
         isConnected = true
     }
     return isConnected

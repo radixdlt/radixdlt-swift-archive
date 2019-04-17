@@ -62,11 +62,8 @@ public extension TokenBalanceReducer {
 // MARK: - Rx
 public extension TokenBalanceReducer {
     
-    func reduce(atomEvents: Observable<[AtomEvent]>) -> Observable<BalancePerToken> {
-        let storeEventsOnly = atomEvents.map { $0.compactMap { $0.store } }
-        let atomArray: Observable<[Atom]> = storeEventsOnly.map { $0.map { $0.atom } }
-        let atoms: Observable<Atom> = atomArray.flatMapLatest { Observable.from($0) }
-        return reduce(atoms: atoms)
+    func reduce(atoms: Observable<[Atom]>) -> Observable<BalancePerToken> {
+        return reduce(atoms: atoms.flatMapLatest { Observable.from($0) })
     }
     
     func reduce(atoms: Observable<Atom>) -> Observable<BalancePerToken> {

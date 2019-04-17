@@ -9,13 +9,6 @@
 import Foundation
 import RxSwift
 
-/// In Javascript see `RadixAtomUpdate` in Java see `AtomObservation`
-public struct AtomUpdate {
-    public let action: AtomEvent.Type
-    public let atom: Atom
-    public let isHead: Bool
-}
-
 public protocol AtomQuerying {
-    func getAtoms(for address: Address) -> Observable<AtomSubscription>
+    func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription>
 }

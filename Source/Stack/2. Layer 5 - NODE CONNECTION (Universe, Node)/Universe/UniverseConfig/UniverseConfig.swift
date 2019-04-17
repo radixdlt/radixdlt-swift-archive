@@ -16,6 +16,7 @@ public struct UniverseConfig:
     RadixModelTypeStaticSpecifying,
     RadixCodable,
     RadixHashable,
+    DSONEncodable,
     Decodable,
     Equatable,
     CustomStringConvertible {

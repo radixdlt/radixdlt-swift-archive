@@ -11,6 +11,8 @@ import RxSwift
 
 public protocol HTTPClient {
     func request<D>(router: Router, decodeAs type: D.Type) -> SingleWanted<D> where D: Decodable
+    
+    func loadContent(of page: String) -> SingleWanted<String>
 }
 
 public extension HTTPClient {

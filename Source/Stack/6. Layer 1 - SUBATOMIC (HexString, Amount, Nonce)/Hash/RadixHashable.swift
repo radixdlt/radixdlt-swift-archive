@@ -8,12 +8,12 @@
 
 import Foundation
 
-public protocol RadixHashable: DSONEncodable {
+public protocol RadixHashable {
     var radixHash: RadixHash { get }
     var hashId: EUID { get }
 }
 
-public extension RadixHashable {
+public extension RadixHashable where Self: DSONEncodable {
     var radixHash: RadixHash {
         do {
             return RadixHash(unhashedData: try toDSON(output: .hash))

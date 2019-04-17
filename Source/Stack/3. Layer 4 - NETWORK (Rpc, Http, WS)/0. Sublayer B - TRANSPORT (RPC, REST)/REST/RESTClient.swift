@@ -8,6 +8,4 @@
 
 import Foundation
 
-public protocol RESTClient: NodeNetworkDetailsRequesting, LivePeersRequesting {
-//    var httpClient: HTTPClient { get }
-}
+public protocol RESTClient: NodeNetworkDetailsRequesting, LivePeersRequesting, NodeAddressRequesting {}
