@@ -9,23 +9,23 @@
 import Foundation
 
 public enum RadixModelType: String, Codable, CaseIterable {
-    case atomEvent = "api.atom_event"
-    case signature = "crypto.ecdsa_signature"
-    case nodeInfo = "network.peer"
-    case radixSystem = "api.system"
-    case atom = "radix.atom"
-    case particleGroup = "radix.particle_group"
-    case spunParticle = "radix.spun_particle"
-    case udpNodeInfo = "network.udp_peer"
-    case tcpNodeInfo = "network.tcp_peer"
-    case universeConfig = "radix.universe"
+    case atomEvent                      = "api.atom_event"
+    case signature                      = "crypto.ecdsa_signature"
+    case nodeInfo                       = "network.peer"
+    case radixSystem                    = "api.system"
+    case atom                           = "radix.atom"
+    case particleGroup                  = "radix.particle_group"
+    case spunParticle                   = "radix.spun_particle"
+    case udpNodeInfo                    = "network.udp_peer"
+    case tcpNodeInfo                    = "network.tcp_peer"
+    case universeConfig                 = "radix.universe"
 
     // MARK: - Particles
-    case messageParticle = "radix.particles.message"
-    case tokenDefinitionParticle = "radix.particles.token_definition"
-    case unallocatedTokensParticle = "radix.particles.unallocated_tokens"
-    case transferrableTokensParticle = "radix.particles.transferrable_tokens"
-    case uniqueParticle = "radix.particles.unique"
+    case messageParticle                = "radix.particles.message"
+    case tokenDefinitionParticle        = "radix.particles.token_definition"
+    case unallocatedTokensParticle      = "radix.particles.unallocated_tokens"
+    case transferrableTokensParticle    = "radix.particles.transferrable_tokens"
+    case uniqueParticle                 = "radix.particles.unique"
 }
 
 public extension RadixModelType {
