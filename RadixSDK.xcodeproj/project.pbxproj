@@ -105,6 +105,7 @@
 		E6474AF9226794D5009C4FDC /* AtomicCreating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AF8226794D5009C4FDC /* AtomicCreating.swift */; };
 		E6474AFB226795D6009C4FDC /* AtomConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AFA226795D6009C4FDC /* AtomConvertible.swift */; };
 		E6474AFD226796DD009C4FDC /* DictionaryConvertibleMutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AFC226796DD009C4FDC /* DictionaryConvertibleMutable.swift */; };
+		E64BFF8A226879C100501726 /* ProofOfWorkWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF89226879C100501726 /* ProofOfWorkWorker.swift */; };
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E6550EE8224BBDBD00160267 /* NodeDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */; };
 		E6550EEA224BBDC900160267 /* NodeDiscoveryHardCoded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */; };
@@ -486,6 +487,7 @@
 		E6474AF8226794D5009C4FDC /* AtomicCreating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomicCreating.swift; sourceTree = "<group>"; };
 		E6474AFA226795D6009C4FDC /* AtomConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomConvertible.swift; sourceTree = "<group>"; };
 		E6474AFC226796DD009C4FDC /* DictionaryConvertibleMutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryConvertibleMutable.swift; sourceTree = "<group>"; };
+		E64BFF89226879C100501726 /* ProofOfWorkWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProofOfWorkWorker.swift; sourceTree = "<group>"; };
 		E6550EE4224BB02900160267 /* Int+DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataInitializable.swift"; sourceTree = "<group>"; };
 		E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscovery.swift; sourceTree = "<group>"; };
 		E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscoveryHardCoded.swift; sourceTree = "<group>"; };
@@ -1210,6 +1212,7 @@
 			children = (
 				E6A508D92251100800128123 /* ProofOfWork.swift */,
 				E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */,
+				E64BFF89226879C100501726 /* ProofOfWorkWorker.swift */,
 			);
 			path = ProofOfWork;
 			sourceTree = "<group>";
@@ -2756,6 +2759,7 @@
 				E6A6431E2245113600CD4BFC /* PrivateKey+ECEIS+Decrypt.swift in Sources */,
 				E6A507EA224E20CC00128123 /* RPCResponseResultWithRequestId.swift in Sources */,
 				E601D33122423FF900A81412 /* Signer.swift in Sources */,
+				E64BFF8A226879C100501726 /* ProofOfWorkWorker.swift in Sources */,
 				E6A507D5224E14D500128123 /* AtomSubscriptionRequest.swift in Sources */,
 				E6A50887224E713F00128123 /* Atom+Sequence.swift in Sources */,
 				E672573421FB8D5E00BE3B4C /* RadixModelType.swift in Sources */,
