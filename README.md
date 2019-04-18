@@ -111,91 +111,95 @@ to help with understanding of the different layers and trying to ease separation
 // LAYER 7: APPLICATION - High-level APIs, e.g. DTOs: `Payment`, `ChatMessage`, `TokenBalances`
 protocol RadixApplicationClient {
 	
-	var nodeInteractor: NodeInteraction { get }
-	
-	func getBalances(for address: Address) -> Observable<BalancePerToken>
-	func makeTransaction(_ transaction: Transaction) -> Completable
-	func sendChatMessage(_ message: ChatMessage) -> Completable
+  var nodeInteractor: NodeInteraction { get }
+  
+  func getBalances(for address: Address) -> Observable<BalancePerToken>
+  func makeTransaction(_ transaction: Transaction) -> Completable
+  func sendChatMessage(_ message: ChatMessage) -> Completable
 }
 
 // LAYER 6: LEDGER (Submit & Subscribe atoms)
 protocol NodeInteraction {
 
-	var connectionToNode: NodeConnection { get }
+  var connectionToNode: NodeConnection { get }
 
-	func subscribe(to address: Address) -> Observable<AtomUpdate>
-	func submit(atom: Atom) -> Observable<AtomUpdate>
-	func unsubscribe(from address: Address) -> Completable
-	func unsubscribeAll() -> Completable
+  func subscribe(to address: Address) -> Observable<AtomUpdate>
+  func submit(atom: Atom) -> Observable<AtomUpdate>
+  func unsubscribe(from address: Address) -> Completable
+  func unsubscribeAll() -> Completable
 }
 
 // LAYER 5:  NODE CONNECTION - Universe, Node
 protocol NodeConnection {
-	var node: Node { get }
-	var rpcClient: RPCClient { get }
-	var restClient: RESTClient { get }
+  var node: Node { get }
+  var rpcClient: RPCClient { get }
+  var restClient: RESTClient { get }
 }
 
 // LAYER 4: NETWORK (Rpc, Http, WS)
 // Sublayer B TRANSPORT (RPC, REST)
 protocol RPCClient {
 
-	var channel: FullDuplexCommunicationChannel { get }  
+  var channel: FullDuplexCommunicationChannel { get }  
 
-	func getInfo() -> Single<NodeRunnerData>
-	func getLivePeers() -> Single<[NodeRunnerData]>
-	func getUniverseConfig() -> Single<UniverseConfig>
+  func getInfo() -> Single<NodeRunnerData>
+  func getLivePeers() -> Single<[NodeRunnerData]>
+  func getUniverseConfig() -> Single<UniverseConfig>
 
-	func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription>
-	func submit(atom: SignedAtom, subscriberId: SubscriberId) -> Observable<AtomSubscription>
+  func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription>
+  func submit(atom: SignedAtom, subscriberId: SubscriberId) -> Observable<AtomSubscription>
 }
 
 protocol RESTClient {
 
-	var httpClient: HTTPClient { get }
+  var httpClient: HTTPClient { get }
 
-	func getLivePeers() -> Single<[NodeRunnerData]>
-	func getUniverseConfig() -> Single<UniverseConfig>
+  func getLivePeers() -> Single<[NodeRunnerData]>
+  func getUniverseConfig() -> Single<UniverseConfig>
 }
 
 // Sublayer A NETWORK (Websocket, HTTP)
 protocol FullDuplexCommunicationChannel {
 
-	func sendMessage(_ message: String)
-	var messages: Observable<String> { get }
+  func sendMessage(_ message: String)
+  var messages: Observable<String> { get }
 }
 
 protocol HTTPClient {
-	func request<Response>(router: Router) -> Observable<Response>
+  func request<Response>(router: Router) -> Observable<Response>
 }
 
 protocol Router {
-	var path: URL
-	var method: HTTPMethod
+  var path: URL
+  var method: HTTPMethod
 }
 
 // LAYER 3: CHEMISTRY (Atom builders & reducers)
 protocol TokenBalanceReducer {
-	func reduce(atoms: Observable<Atom>) -> Observable<TokenBalances>
+  func reduce(atoms: Observable<Atom>) -> Observable<TokenBalances>
 }
 
 protocol PaymentBuilder {
-	func pay(address: Address, amount: Amount, of token: Token, signedBy signer: Signer) -> SignedAtomWithProofOfWork
+  func pay(address: Address, amount: Amount, of token: Token, signedBy signer: Signer) -> SignedAtomWithProofOfWork
 }
 
 // LAYER 2: ATOM MODEL - Particles
 struct Atom {
-	let particleGroups: [ParticleGroup]
+  let particleGroups: [ParticleGroup]
 }
+
 struct ParticleGroup {
-	let anySpunParticles: [AnySpunParticles]
+  let anySpunParticles: [AnySpunParticles]
 }
+
 struct AnySpunParticles {
-	let spin: Spin
-	let particle: Particle // TokenDefinitionParticle, UnallocatedTokensParticle, TransferrableTokens, MessageParticle etc..
+  let spin: Spin
+  // TokenDefinitionParticle, UnallocatedTokensParticle, TransferrableTokens, MessageParticle etc..
+  let particle: Particle 
 }
+
 enum Spin {
-	case up, down
+  case up, down
 }
 
 // LAYER 1: SUBATOMIC - Primitive DTOs (e.g. HexString, Amount, Nonce)
