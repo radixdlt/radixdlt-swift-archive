@@ -52,7 +52,6 @@ public extension RPCMethod {
             let request = AtomSubmitAndSubscribeRequest(atom: atom, subscriberId: subscriberId)
             return innerEncode(request)
         case .getUniverse, .getInfo, .getLivePeers:
-            // API requires "params" to be present, so instead of `nil`
             return { keyedEncodingContainer in
                 // We MUST encode some params, if nil, an empty array should be used, which element conforms to `Encodable`,
                 // arbitrarily we chose [Int]

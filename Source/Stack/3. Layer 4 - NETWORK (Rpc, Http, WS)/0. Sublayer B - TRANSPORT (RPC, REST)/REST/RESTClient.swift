@@ -8,4 +8,12 @@
 
 import Foundation
 
-public protocol RESTClient: NodeNetworkDetailsRequesting, LivePeersRequesting, NodeAddressRequesting {}
+// swiftlint:disable colon opening_brace
+
+public protocol RESTClient:
+    NodeNetworkDetailsRequesting,
+    LivePeersRequesting,
+    NodeAddressRequesting
+{
+    // swiftlint:enable colon opening_brace
+}

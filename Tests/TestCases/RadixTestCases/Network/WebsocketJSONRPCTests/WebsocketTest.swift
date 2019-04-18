@@ -46,7 +46,7 @@ class WebsocketTest: XCTestCase {
             return nil
         }
         
-        let rpcObservable =  nodeDiscovery.loadNodes().map {
+        let rpcObservable = nodeDiscovery.loadNodes().map {
                 WebSockets.webSocket(to: $0[0])
             }.map { (socketToNode: WebSocketToNode) -> DefaultRPCClient in
                 JSONRPCClients.rpcClient(websocket: socketToNode)

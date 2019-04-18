@@ -19,5 +19,4 @@ public protocol RPCClient:
     AtomSubmitting
 {
     // swiftlint:enable colon opening_brace
-    
 }

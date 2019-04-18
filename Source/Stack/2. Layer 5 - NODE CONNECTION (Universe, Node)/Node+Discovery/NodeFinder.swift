@@ -23,7 +23,7 @@ public final class NodeFinder: NodeDiscovery {
         restClient: RESTClient,
         websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
         httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
-        ) {
+    ) {
         
         self.websocketsUrlFormatter = websocketsUrlFormatter
         self.httpUrlFormatter = httpUrlFormatter
@@ -92,7 +92,7 @@ public extension NodeFinder {
         websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
         httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
         ) throws {
-        
+    
         let bootstrapNodeURL = try URLFormatter.format(url: bootstrapHost, protocol: .hypertext, appendPath: false, useSSL: true)
         
         self.init(bootstrapNode: bootstrapNodeURL, websocketsUrlFormatter: websocketsUrlFormatter, httpUrlFormatter: httpUrlFormatter)

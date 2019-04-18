@@ -105,7 +105,7 @@ In Xcode run the tests by pressing `CMD` + `U`, verify that everything is workin
 
 ### Stack
 Some rough, inaccurate attempt to map components within this library to the [OSI Model](https://en.wikipedia.org/wiki/OSI_model)
-to help with understanding of the different layers and trying to separation of concerns.
+to help with understanding of the different layers and trying to ease separation of concern.
 
 ```swift
 // LAYER 7: APPLICATION - High-level APIs, e.g. DTOs: `Payment`, `ChatMessage`, `TokenBalances`
@@ -121,7 +121,7 @@ protocol RadixApplicationClient {
 // LAYER 6: LEDGER (Submit & Subscribe atoms)
 protocol NodeInteraction {
 
-	var connectedToNode: NodeConnection { get }
+	var connectionToNode: NodeConnection { get }
 
 	func subscribe(to address: Address) -> Observable<AtomUpdate>
 	func submit(atom: Atom) -> Observable<AtomUpdate>
@@ -129,7 +129,7 @@ protocol NodeInteraction {
 	func unsubscribeAll() -> Completable
 }
 
-// LAYER 5: NODE CONNECTION - Universe, Node
+// LAYER 5:  NODE CONNECTION - Universe, Node
 protocol NodeConnection {
 	var node: Node { get }
 	var rpcClient: RPCClient { get }
@@ -146,8 +146,8 @@ protocol RPCClient {
 	func getInfo() -> Single<NodeRunnerData>
 	func getLivePeers() -> Single<[NodeRunnerData]>
 	func getUniverseConfig() -> Single<UniverseConfig>
-	func getAtoms(query: AtomQuery) -> Observable<AtomSubscript>
-	func submitAtom(_ atom: Atom) -> Observable<NodeAtomSubmissionUpdate>
+	func subscribe(to address: Address) -> Observable<AtomSubscription>
+	func submitAtom(_ atom: Atom) -> Observable<AtomSubscription>
 }
 
 protocol RESTClient {

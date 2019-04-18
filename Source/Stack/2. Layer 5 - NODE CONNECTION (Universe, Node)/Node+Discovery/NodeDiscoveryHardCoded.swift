@@ -46,7 +46,6 @@ public extension NodeDiscoveryHardCoded {
                             )
                     }
                 }
-                // [Observable<Node>] -> Observable<[Node]>
                 return Observable.combineLatest(nodeObservables) { $0 }
         }
     }

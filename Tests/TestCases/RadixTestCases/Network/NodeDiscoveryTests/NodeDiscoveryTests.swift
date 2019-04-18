@@ -91,20 +91,3 @@ struct MockedNetworkDetailsRequester: NodeNetworkDetailsRequesting {
 enum MockedError: Swift.Error, Equatable {
     case incompatibleJson
 }
-
-//final class MockedHTTPClient: HTTPClient {
-//    func request<D>(router: Router, decodeAs type: D.Type) -> Observable<D> where D : Decodable {
-//        abstract
-//    }
-//
-//    func loadContent(of page: String) -> SingleWanted<String> {
-//        abstract
-//    }
-//}
-//
-//final class MockedRestClient: RESTClient, HTTPClientOwner {
-//    let httpClient: HTTPClient
-//    init(httpClient: HTTPClient) {
-//        self.httpClient = httpClient
-//    }
-//}
