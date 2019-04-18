@@ -113,7 +113,7 @@ protocol RadixApplicationClient {
 	
 	var nodeInteractor: NodeInteraction { get }
 	
-    func getBalances(for address: Address) -> Observable<BalancePerToken>
+	func getBalances(for address: Address) -> Observable<BalancePerToken>
 	func makeTransaction(_ transaction: Transaction) -> Completable
 	func sendChatMessage(_ message: ChatMessage) -> Completable
 }
@@ -146,8 +146,8 @@ protocol RPCClient {
 	func getLivePeers() -> Single<[NodeRunnerData]>
 	func getUniverseConfig() -> Single<UniverseConfig>
 
-    func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription>
-    func submit(atom: SignedAtom, subscriberId: SubscriberId) -> Observable<AtomSubscription>
+	func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription>
+	func submit(atom: SignedAtom, subscriberId: SubscriberId) -> Observable<AtomSubscription>
 }
 
 protocol RESTClient {
