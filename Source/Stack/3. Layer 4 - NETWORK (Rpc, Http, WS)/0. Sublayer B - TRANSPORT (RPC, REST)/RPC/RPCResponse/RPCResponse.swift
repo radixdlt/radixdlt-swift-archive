@@ -35,7 +35,7 @@ import Foundation
 ///             "atomEvents": [
 ///             {
 ///             "atom": { /* ATOM OMITTED FOR SAKE OF BREVITY */ },
-///             "serializer": -1784097847,
+///             "serializer": "radix.atom",
 ///             "type": ":str:store",
 ///             "version": 100
 ///             }

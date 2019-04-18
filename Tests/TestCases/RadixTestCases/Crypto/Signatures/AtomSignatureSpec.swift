@@ -59,19 +59,19 @@ private let json = """
 					        "mint": ":str:all",
 					    },
 					    "name": ":str:Cyon Coin",
-					    "\(RadixModelType.jsonKey)": \(RadixModelType.tokenDefinitionParticle.serializerId),
+					    "\(RadixModelType.jsonKey)": "\(RadixModelType.tokenDefinitionParticle.serializerId)",
 					    "description": ":str:Worst shit coin",
 					    "\(jsonKeyVersion)": \(serializerVersion)
 					},
-					"\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.serializerId),
+					"\(RadixModelType.jsonKey)": "\(RadixModelType.spunParticle.serializerId)",
 					"\(jsonKeyVersion)": \(serializerVersion)
 				}
 			],
-		   	"\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),
+		   	"\(RadixModelType.jsonKey)": "\(RadixModelType.particleGroup.serializerId)",
 			"\(jsonKeyVersion)": \(serializerVersion)
 		}
 	],
-	"\(RadixModelType.jsonKey)": \(RadixModelType.atom.serializerId),
+	"\(RadixModelType.jsonKey)": "\(RadixModelType.atom.serializerId)",
 	"\(jsonKeyVersion)": \(serializerVersion)
 }
 """

@@ -79,20 +79,20 @@ private let goodJsonUniverseConfig = """
 									"bytes": ":byt:UmFkaXguLi4ganVzdCBpbWFnaW5lIQ==",
 									"from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 									"hid": ":uid:f369e27c5796edb8b256102369427e64",
-									"serializer": -1254222995,
+									"serializer": "\(RadixModelType.messageParticle.serializerId)",
 									"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 									"version": 100
 								},
-								"serializer": -993052100,
+								"serializer": "\(RadixModelType.spunParticle.serializerId)",
 								"spin": 1,
 								"version": 100
 							}
 						],
-						"serializer": -67058791,
+						"serializer": "\(RadixModelType.particleGroup.serializerId)",
 						"version": 100
 					},
 				],
-				"serializer": 2019665,
+				"serializer": "\(RadixModelType.atom.serializerId)",
 				"shards": [
 					6245273567170682628
 				],
@@ -101,7 +101,7 @@ private let goodJsonUniverseConfig = """
 						"hid": ":uid:649ed100c51e281718a6fb63b279ab99",
 						"r": ":byt:MXBivsvqy2a+g2LYD8M0TfuUPM7PYoOlLNQvOpOwSXU=",
 						"s": ":byt:4gaMu5HkTA/79V91SYXkEul6esGUGTtXh09GGxblOMA=",
-						"serializer": -434788200,
+						"serializer": "\(RadixModelType.signature.serializerId)",
 						"version": 100
 					}
 				}
@@ -112,7 +112,7 @@ private let goodJsonUniverseConfig = """
 		"name": ":str:Radix Devnet",
 		"planck": 60000,
 		"port": 30000,
-		"serializer": 492321349,
+		"serializer": "radix.universe",
 		"timestamp": 1488326400000,
 		"type": 2,
 		"version": 100

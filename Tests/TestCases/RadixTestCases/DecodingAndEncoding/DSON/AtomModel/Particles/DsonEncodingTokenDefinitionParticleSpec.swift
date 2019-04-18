@@ -59,7 +59,7 @@ private let json = """
         "mint": ":str:\(TokenPermission.tokenCreationOnly.rawValue)"
     },
     "name": ":str:Proof of Work",
-    "\(RadixModelType.jsonKey)": \(RadixModelType.tokenDefinitionParticle.serializerId),
+    "\(RadixModelType.jsonKey)": "\(RadixModelType.tokenDefinitionParticle.serializerId)",
     "description": ":str:Radix POW",
     "\(jsonKeyVersion)": \(serializerVersion)
 }

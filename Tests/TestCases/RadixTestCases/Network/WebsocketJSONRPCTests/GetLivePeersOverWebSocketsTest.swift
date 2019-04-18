@@ -16,7 +16,7 @@ class GetLivePeersOverWebSocketsTest: WebsocketTest {
     
     func testLivePeersOverWS() {
         guard let rpcClient = makeRpcClient() else { return }
-        guard let livePeers = rpcClient.getLivePeers().blockingTakeFirst() else { return }
+        guard let livePeers = rpcClient.getLivePeers().blockingTakeFirst(timeout: 1) else { return }
 
         XCTAssertEqual(livePeers.count, 1)
         let livePeer = livePeers[0]
@@ -29,7 +29,7 @@ class GetLivePeersOverWebSocketsTest: WebsocketTest {
         let mockedWebsocket = MockedWebsocket(subject: subject)
         let mockedRpcClient = MockedRPCClient(channel: mockedWebsocket)
         subject.onNext(goodJsonLivePeers)
-        let livePeers = try! mockedRpcClient.getLivePeers().take(1).toBlocking(timeout: 2).first()!
+        let livePeers = try! mockedRpcClient.getLivePeers().take(1).toBlocking(timeout: 1).first()!
         
         XCTAssertEqual(livePeers.count, 1)
         let livePeer = livePeers[0]
@@ -89,7 +89,7 @@ private let goodJsonLivePeers = """
 				"ip": ":str:172.18.0.3",
 				"port": 30000
 			},
-			"serializer": 2451810,
+			"serializer": "\(RadixModelType.nodeInfo.serializerId)",
 			"system": {
 				"agent": {
 					"name": ":str:/Radix:/2700000",
@@ -103,7 +103,7 @@ private let goodJsonLivePeers = """
 				"nid": ":uid:fb04c011af5ad0bbbc0f0bf1f8591e0f",
 				"planck": 25925352,
 				"port": 30000,
-				"serializer": -1833998801,
+				"serializer": "\(RadixModelType.radixSystem.serializerId)",
 				"shards": {
 					"high": 9223372036854775807,
 					"low": -9223372036854775808

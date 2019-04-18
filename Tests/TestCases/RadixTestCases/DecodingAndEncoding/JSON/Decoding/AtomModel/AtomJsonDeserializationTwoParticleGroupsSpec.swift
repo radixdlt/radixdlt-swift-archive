@@ -78,10 +78,10 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
 
 let jsonForAtomWith2ParticleGroups = """
 {
-    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.serializerId),
+    "\(RadixModelType.jsonKey)": "\(RadixModelType.atom.serializerId)",
     "signatures": {
         "71c3c2fc9fee73b13cad082800a6d0de":{
-            "\(RadixModelType.jsonKey)": \(RadixModelType.signature.serializerId),
+            "\(RadixModelType.jsonKey)": "\(RadixModelType.signature.serializerId)",
             "r":":byt:JRULGkmWzxVx0AtO8NYmZ0Aqbi6hG/Vj6GeoB3TvHAX=",
             "s":":byt:KbKCyHw9GYP6EyjbyQackXtF4Hj7CgX2fmTltg5VX9H="
         }
@@ -92,16 +92,16 @@ let jsonForAtomWith2ParticleGroups = """
     },
     "particleGroups": [
         {
-            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),
+            "\(RadixModelType.jsonKey)": "\(RadixModelType.particleGroup.serializerId)",
             "metaData": {
                 "timestamp": ":str:1546300800",
             },
             "particles": [
                 {
-                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.serializerId),
+                    "\(RadixModelType.jsonKey)": "\(RadixModelType.spunParticle.serializerId)",
                     "spin": 1,
                     "particle": {
-                        "\(RadixModelType.jsonKey)": \(RadixModelType.tokenDefinitionParticle.serializerId),
+                        "\(RadixModelType.jsonKey)": "\(RadixModelType.tokenDefinitionParticle.serializerId)",
                         "symbol": ":str:CCC",
                         "name": ":str:Cyon",
                         "description": ":str:Cyon Crypto Coin is the worst shit coin",
@@ -118,10 +118,10 @@ let jsonForAtomWith2ParticleGroups = """
                     }
                 },
                 {
-                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.serializerId),
+                    "\(RadixModelType.jsonKey)": "\(RadixModelType.spunParticle.serializerId)",
                     "spin": 1,
                     "particle": {
-                        "\(RadixModelType.jsonKey)": \(RadixModelType.uniqueParticle.serializerId),
+                        "\(RadixModelType.jsonKey)": "\(RadixModelType.uniqueParticle.serializerId)",
                         "name": ":str:Sajjon",
                         "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
                     }
@@ -129,16 +129,16 @@ let jsonForAtomWith2ParticleGroups = """
             ]
         },
         {
-            "\(RadixModelType.jsonKey)": \(RadixModelType.particleGroup.serializerId),
+            "\(RadixModelType.jsonKey)": "\(RadixModelType.particleGroup.serializerId)",
             "metaData": {
                 "timestamp": ":str:1546300800",
             },
             "particles": [
                 {
-                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.serializerId),
+                    "\(RadixModelType.jsonKey)": "\(RadixModelType.spunParticle.serializerId)",
                     "spin": 1,
                     "particle": {
-                        "\(RadixModelType.jsonKey)": \(RadixModelType.unallocatedTokensParticle.serializerId),
+                        "\(RadixModelType.jsonKey)": "\(RadixModelType.unallocatedTokensParticle.serializerId)",
                         "granularity": ":u20:1",
                         "nonce": 992284943125945,
                         "permissions": {
@@ -150,10 +150,10 @@ let jsonForAtomWith2ParticleGroups = """
                     }
                 },
                 {
-                    "\(RadixModelType.jsonKey)": \(RadixModelType.spunParticle.serializerId),
+                    "\(RadixModelType.jsonKey)": "\(RadixModelType.spunParticle.serializerId)",
 	                "spin": 1,
 					"particle": {
-						"\(RadixModelType.jsonKey)": \(RadixModelType.messageParticle.serializerId),
+						"\(RadixModelType.jsonKey)": "\(RadixModelType.messageParticle.serializerId)",
 						"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 						"from": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
 						"bytes": ":byt:SGVsbG8gUmFkaXgh",

@@ -48,7 +48,6 @@ public extension ProofOfWork {
     }
 }
 
-
 // MARK: - Error
 public extension ProofOfWork {
     enum Error: Swift.Error {

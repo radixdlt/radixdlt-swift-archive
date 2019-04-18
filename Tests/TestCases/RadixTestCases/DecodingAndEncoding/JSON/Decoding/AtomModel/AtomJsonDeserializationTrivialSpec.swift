@@ -15,7 +15,7 @@ class AtomJsonDeserializationTrivialSpec: QuickSpec {
     override func spec() {
         let json = """
 {
-    "\(RadixModelType.jsonKey)": \(RadixModelType.atom.serializerId),
+    "\(RadixModelType.jsonKey)": "\(RadixModelType.atom.serializerId)",
     "metaData": {
         "timestamp": ":str:1488326400000"
     }
