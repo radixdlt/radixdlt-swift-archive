@@ -9,30 +9,30 @@
 import Foundation
 
 public enum RadixModelType: String, Codable, CaseIterable {
-    case atomEvent
-    
-    case signature
-    case nodeInfo = "PEER"
-    case radixSystem = "SYSTEM"
-    case atom
-    case particleGroup
-    case spunParticle
-    case udpNodeRunnerData = "UDPPEER"
-    case universeConfig = "UNIVERSE"
+    case atomEvent = "api.atom_event"
+    case signature = "crypto.ecdsa_signature"
+    case nodeInfo = "network.peer"
+    case radixSystem = "api.system"
+    case atom = "radix.atom"
+    case particleGroup = "radix.particle_group"
+    case spunParticle = "radix.spun_particle"
+    case udpNodeInfo = "network.udp_peer"
+    case tcpNodeInfo = "network.tcp_peer"
+    case universeConfig = "radix.universe"
 
     // MARK: - Particles
-    case messageParticle
-    case tokenDefinitionParticle
-    case unallocatedTokensParticle
-    case transferrableTokensParticle
-    case uniqueParticle = "UNIQUEIDPARTICLE"
+    case messageParticle = "radix.particles.message"
+    case tokenDefinitionParticle = "radix.particles.token_definition"
+    case unallocatedTokensParticle = "radix.particles.unallocated_tokens"
+    case transferrableTokensParticle = "radix.particles.transferrable_tokens"
+    case uniqueParticle = "radix.particles.unique"
 }
 
 public extension RadixModelType {
     
-    init(serializerId: Int) throws {
-        guard let serializer = RadixModelType.precomputed.first(where: { $0.value == serializerId })?.key else {
-            throw AtomModelDecodingError.unknownSerializer(got: serializerId)
+    init(serializerId potentialSerializerId: String) throws {
+        guard let serializer = RadixModelType(rawValue: potentialSerializerId) else {
+            throw AtomModelDecodingError.unknownSerializer(got: potentialSerializerId)
         }
         
         self = serializer
@@ -40,7 +40,7 @@ public extension RadixModelType {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let serializerId = try container.decode(Int.self)
+        let serializerId = try container.decode(String.self)
         try self.init(serializerId: serializerId)
     }
     
@@ -49,24 +49,15 @@ public extension RadixModelType {
         try container.encode(serializerId)
     }
     
-    var serializerId: Int {
-        guard let serializerId = RadixModelType.precomputed[self] else {
-            incorrectImplementation("Check precomputed calculations")
-        }
-        return serializerId
+    var serializerId: String {
+        return rawValue
     }
-    
-    private static var precomputed: [RadixModelType: Int] = {
-        return [RadixModelType: Int](uniqueKeysWithValues: RadixModelType.allCases.map {
-            ($0, JavaHash.from($0.rawValue.uppercased()))
-        })
-    }()
     
     static let jsonKey = "serializer"
 }
 
 extension RadixModelType: CBORConvertible {
     public func toCBOR() -> CBOR {
-        return CBOR(integerLiteral: serializerId)
+        return CBOR(stringLiteral: serializerId)
     }
 }
