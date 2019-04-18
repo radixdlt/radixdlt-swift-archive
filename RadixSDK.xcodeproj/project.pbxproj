@@ -59,7 +59,6 @@
 		E62EFDE8224A4DBF00B6DAD6 /* WebSocketStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDE7224A4DBF00B6DAD6 /* WebSocketStatus.swift */; };
 		E62EFDFE224A4EC100B6DAD6 /* RPCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDFD224A4EC100B6DAD6 /* RPCClient.swift */; };
 		E62EFE14224A77F000B6DAD6 /* AtomQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFE12224A77EF00B6DAD6 /* AtomQuery.swift */; };
-		E62EFE15224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFE13224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift */; };
 		E62EFE1E224B739B00B6DAD6 /* GetLivePeersOverWebSocketsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFE1D224B739B00B6DAD6 /* GetLivePeersOverWebSocketsTest.swift */; };
 		E631DAA021F249620063F632 /* KeyPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DA9F21F249620063F632 /* KeyPair.swift */; };
 		E631DAA321F249910063F632 /* PrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAA221F249910063F632 /* PrivateKey.swift */; };
@@ -441,7 +440,6 @@
 		E62EFDE7224A4DBF00B6DAD6 /* WebSocketStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketStatus.swift; sourceTree = "<group>"; };
 		E62EFDFD224A4EC100B6DAD6 /* RPCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCClient.swift; sourceTree = "<group>"; };
 		E62EFE12224A77EF00B6DAD6 /* AtomQuery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomQuery.swift; sourceTree = "<group>"; };
-		E62EFE13224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeAtomSubmissionUpdate.swift; sourceTree = "<group>"; };
 		E62EFE1D224B739B00B6DAD6 /* GetLivePeersOverWebSocketsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetLivePeersOverWebSocketsTest.swift; sourceTree = "<group>"; };
 		E631DA9F21F249620063F632 /* KeyPair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPair.swift; sourceTree = "<group>"; };
 		E631DAA221F249910063F632 /* PrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKey.swift; sourceTree = "<group>"; };
@@ -1508,7 +1506,6 @@
 				E6ED1A5721F8E5A100654105 /* AtomSubmitting.swift */,
 				E6474AD122661F03009C4FDC /* FullDuplexCommunicating.swift */,
 				E689DBA7225F887300340CF3 /* AtomQuerying.swift */,
-				E62EFE13224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift */,
 				E6474ACB22661DDE009C4FDC /* HTTPClientOwner.swift */,
 				E689DBA1225F87F200340CF3 /* NodeInfoRequesting.swift */,
 				E6474ACD22661E04009C4FDC /* NodeAddressRequesting.swift */,
@@ -2720,7 +2717,6 @@
 				E60253FF225CA1C2004B2F94 /* UnallocatedTokensParticle.swift in Sources */,
 				E6D4B355223FBEE8004FC83A /* DSONPrefixedDataConvertible.swift in Sources */,
 				E6A5087D224E713F00128123 /* ExactLengthSpecifying.swift in Sources */,
-				E62EFE15224A77F000B6DAD6 /* NodeAtomSubmissionUpdate.swift in Sources */,
 				E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */,
 				E689DBA2225F87F200340CF3 /* NodeInfoRequesting.swift in Sources */,
 				E6A50884224E713F00128123 /* EUID.swift in Sources */,

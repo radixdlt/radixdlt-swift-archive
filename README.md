@@ -138,7 +138,6 @@ protocol NodeConnection {
 
 // LAYER 4: NETWORK (Rpc, Http, WS)
 // Sublayer B TRANSPORT (RPC, REST)
-
 protocol RPCClient {
 
 	var channel: FullDuplexCommunicationChannel { get }  
@@ -146,8 +145,9 @@ protocol RPCClient {
 	func getInfo() -> Single<NodeRunnerData>
 	func getLivePeers() -> Single<[NodeRunnerData]>
 	func getUniverseConfig() -> Single<UniverseConfig>
-	func subscribe(to address: Address) -> Observable<AtomSubscription>
-	func submitAtom(_ atom: Atom) -> Observable<AtomSubscription>
+
+    func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription>
+    func submit(atom: SignedAtom, subscriberId: SubscriberId) -> Observable<AtomSubscription>
 }
 
 protocol RESTClient {
@@ -176,7 +176,7 @@ protocol Router {
 
 // LAYER 3: CHEMISTRY (Atom builders & reducers)
 protocol TokenBalanceReducer {
-	func reduce(atoms: Observable<AtomObservation>) -> Observable<TokenBalances>
+	func reduce(atoms: Observable<Atom>) -> Observable<TokenBalances>
 }
 
 protocol PaymentBuilder {
