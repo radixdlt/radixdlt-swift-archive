@@ -16,7 +16,8 @@ import RxSwift
 
 extension TestScheduler {
     
-    
+    typealias ObservableHandler<Element> = (Observable<Element>) -> Void
+
     /// Run the simulation and record all events using observer returned by this function.
     /// Subscribe at virtual time 0
     /// Dispose subscription at virtual time 1000
@@ -24,15 +25,18 @@ extension TestScheduler {
         created: TestTime = 0,
         subscribed: TestTime = 0,
         disposed: TestTime = 1000,
-        createRecored: @escaping () -> TestableObservable<Element>
+        createRecored: @escaping () -> TestableObservable<Element>,
+        observableHandler: ObservableHandler<Element>? = nil
         ) -> TestableObserver<Element> {
-        
+
         return self.start(created: created, subscribed: subscribed, disposed: disposed) {
-            createRecored().asObservable()
+            let observables = createRecored().asObservable()
+            observableHandler?(observables)
+            return observables
         }
-        
+
     }
-    
+
     /// Run the simulation and record all events using observer returned by this function.
     /// Subscribe at virtual time 0
     /// Dispose subscription at virtual time 1000
@@ -41,25 +45,27 @@ extension TestScheduler {
         subscribed: TestTime = 0,
         disposed: TestTime = 1000,
         type: CreateHotOrCold = .hot,
-        recorded recordedEvents: [Recorded<Event<Element>>]
+        recorded recordedEvents: [Recorded<Event<Element>>],
+        observableHandler: ObservableHandler<Element>? = nil
         ) -> TestableObserver<Element> {
-        
+
         return self.start(
             created: created,
             subscribed: subscribed,
             disposed: disposed,
             createRecored: {
                 type.create(scheduler: self, recordedEvents: recordedEvents)
-        })
+        }, observableHandler: observableHandler)
     }
-    
+
     static func schedule<Element>(
         initialClock: TestTime = 0,
         created: TestTime = 0,
         subscribed: TestTime = 0,
         disposed: TestTime = 1000,
         type: CreateHotOrCold = .hot,
-        recorded recordedEvents: [Recorded<Event<Element>>]
+        recorded recordedEvents: [Recorded<Event<Element>>],
+        observableHandler: ObservableHandler<Element>? = nil
     ) -> TestableObserver<Element> {
         
         return TestScheduler(initialClock: initialClock).start(
@@ -67,7 +73,8 @@ extension TestScheduler {
             subscribed: subscribed,
             disposed: disposed,
             type: type,
-            recorded: recordedEvents
+            recorded: recordedEvents,
+            observableHandler: observableHandler
         )
     }
         

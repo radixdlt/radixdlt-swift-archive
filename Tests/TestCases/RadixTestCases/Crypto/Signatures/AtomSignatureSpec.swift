@@ -20,24 +20,18 @@ class AtomSignatureSpec: QuickSpec {
             }
         }
         
-        // Commented out since Atom model is unstable and thus dson and hashes changes frequently
-//        describe("Radix Hash") {
-//            it("should match Java") {
-//                expect(atom.radixHash.hex).to(equal(expectedHash))
-//            }
-//        }
         describe("ECC") {
-            it("should verify signatures from Java library") {
+            it("should verify signatures signatures") {
                 let identity = RadixIdentity(private: 1)
                 expect(identity.publicKey.hex).to(equal("0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"))
                 let address = Address(magic: 0x02, publicKey: identity.publicKey)
                 expect(address.hex).to(equal("020279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798404d542d"))
                 expect(address.stringValue).to(equal("JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun"))
-                let unsignedAtom = try! UnsignedAtom(atom)
+                let pow = ProofOfWork.work(atom: atom, magic: 123)!
+                let atomWithPow = try! ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
+                let unsignedAtom = try! UnsignedAtom(atomWithPow: atomWithPow)
                 let signedAtom = try! identity.sign(atom: unsignedAtom)
                 
-                // Commented out since Atom model is unstable and thus dson and hashes changes frequently
-//                expect(signedAtom.signature.hex).to(equal(expectedSignatureHex))
                 expect(try! identity.didSign(atom: signedAtom)).to(beTrue())
 
             }
@@ -45,9 +39,6 @@ class AtomSignatureSpec: QuickSpec {
     }
 }
 
-private let expectedSignatureHex = "4228dc7cb3850cf318664997357792a126c897e91392125e2d8daa6548f1d00c5d6e3d65028568914007dde590e32bf7ec5e12230f380f62839280d34ff19e9e"
-
-private let expectedHash = "9fb46d3c4a3bbb2058de863a70281232403b126abdaf79bcb37bd43d0b9a40ab"
 
 private let json = """
 {

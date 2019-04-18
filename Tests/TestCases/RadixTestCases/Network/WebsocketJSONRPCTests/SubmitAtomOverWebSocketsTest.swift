@@ -15,11 +15,15 @@ import RxBlocking
 
 class SubmitAtomOverWebSocketsTest: WebsocketTest {
     
-    func testTokenDefinitionParticle() {
-        guard let apiClient = makeApiClient() else { return }
+    private let magic: Magic = 63799298
+    
+    private var atom: Atom!
+    private let identity = RadixIdentity()
+    
+    override func setUp() {
+        super.setUp()
         
-        let identity = RadixIdentity()
-        let address = Address(publicKey: identity.publicKey)
+        let address = Address(magic: magic, publicKey: identity.publicKey)
         
         let tokenDefinitionParticle = TokenDefinitionParticle(
             symbol: "CCC",
@@ -28,26 +32,31 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
             address: address
         )
         
-        let mintedTokenParticle = UnallocatedTokensParticle(
-            amount: 1000,
+        let unallocated = UnallocatedTokensParticle(
+            amount: .maxValue256Bits,
             tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference
         )
         
-        let atom = Atom(particleGroups: [
-            tokenDefinitionParticle.withSpin().wrapInGroup(),
-            mintedTokenParticle.withSpin().wrapInGroup()
-        ])
-        
-        let unsignedAtom = try! UnsignedAtom(atom)
+        atom = Atom(particleGroups: [
+            ParticleGroup([
+                tokenDefinitionParticle.withSpin(),
+                unallocated.withSpin()
+                ])
+            ])
+    }
+    
+    func testTokenDefinitionParticle() {
+        guard let pow = ProofOfWork.work(atom: atom, magic: magic) else { return XCTFail("timeout") }
+        let atowWithPOW = try! ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
+        let unsignedAtom = try! UnsignedAtom(atomWithPow: atowWithPOW)
         let signedAtom = try! identity.sign(atom: unsignedAtom)
         
-        let submitObservable = apiClient.submit(atom: try! signedAtom.atom.withProofOfWork(magic: 63799298))
+        guard let rpcClient = makeRpcClient() else { return }
+        guard let atomSubscriptions = rpcClient.submit(
+            atom: signedAtom,
+            subscriberId: SubscriptionIdIncrementingGenerator.next()
+        ).blockingArrayTakeFirst(2) else { return }
         
-        let atomSubscriptions: [AtomSubscription]
-        do {
-             atomSubscriptions = try submitObservable.take(2).toBlocking(timeout: 1).toArray()
-        } catch { return XCTFail("failed to send atom, error: \(error)") }
-
         XCTAssertEqual(atomSubscriptions.count, 2)
         let as1 = atomSubscriptions[0]
         let as2 = atomSubscriptions[1]
@@ -55,7 +64,6 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
         XCTAssertTrue(as2.isUpdate)
 
         let u1 = as2.update!.subscriptionFromSubmissionsUpdate!
-
         XCTAssertEqual(u1.value, .stored)
     }
 }
