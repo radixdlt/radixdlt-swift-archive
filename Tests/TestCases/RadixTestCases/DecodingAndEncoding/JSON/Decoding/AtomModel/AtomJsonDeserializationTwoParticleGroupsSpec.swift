@@ -155,6 +155,7 @@ let jsonForAtomWith2ParticleGroups = """
 					"particle": {
 						"\(RadixModelType.jsonKey)": "\(RadixModelType.messageParticle.serializerId)",
 						"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                        "nonce": 528772579907706,
 						"from": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
 						"bytes": ":byt:SGVsbG8gUmFkaXgh",
 						"metaData": {

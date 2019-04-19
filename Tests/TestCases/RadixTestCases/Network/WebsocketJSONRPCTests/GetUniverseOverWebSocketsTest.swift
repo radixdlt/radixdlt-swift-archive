@@ -80,6 +80,7 @@ private let goodJsonUniverseConfig = """
 									"from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 									"hid": ":uid:f369e27c5796edb8b256102369427e64",
 									"serializer": "\(RadixModelType.messageParticle.serializerId)",
+                                    "nonce": 528772579907706,
 									"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 									"version": 100
 								},

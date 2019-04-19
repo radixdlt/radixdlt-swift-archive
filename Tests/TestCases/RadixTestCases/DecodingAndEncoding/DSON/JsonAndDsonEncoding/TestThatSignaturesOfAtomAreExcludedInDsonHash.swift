@@ -76,6 +76,7 @@ private let json = """
 						"hid": ":uid:f369e27c5796edb8b256102369427e64",
 						"bytes": ":byt:UmFkaXguLi4ganVzdCBpbWFnaW5lIQ==",
 						"serializer": "\(RadixModelType.messageParticle.serializerId)",
+                        "nonce": 528772579907706,
 						"from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 						"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 						"version": 100
