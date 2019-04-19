@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 // MARK: - MakeRequest
-internal extension RPCClient where Self: FullDuplexCommunicating {
+internal extension FullDuplexCommunicating {
     
     func makeRequest<ResultFromResponse>(method: RPCMethod) -> Observable<ResultFromResponse> where ResultFromResponse: Decodable {
         let rpcRequest = RPCRequest(method: method)

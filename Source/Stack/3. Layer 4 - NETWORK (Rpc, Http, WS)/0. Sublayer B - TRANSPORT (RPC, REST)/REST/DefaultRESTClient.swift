@@ -13,8 +13,8 @@ public final class DefaultRESTClient: RESTClient, HTTPClientOwner {
 
     public let httpClient: HTTPClient
     
-    public init(url: FormattedURL) {
-        self.httpClient = DefaultHTTPClient(baseURL: url)
+    public init(httpClient: HTTPClient) {
+        self.httpClient = httpClient
     }
     
     deinit {
@@ -23,6 +23,11 @@ public final class DefaultRESTClient: RESTClient, HTTPClientOwner {
 }
 
 public extension DefaultRESTClient {
+    
+    convenience init(url: FormattedURL) {
+        self.init(httpClient: DefaultHTTPClient(baseURL: url))
+    }
+    
     convenience init(node: Node) {
         self.init(url: node.httpUrl)
     }

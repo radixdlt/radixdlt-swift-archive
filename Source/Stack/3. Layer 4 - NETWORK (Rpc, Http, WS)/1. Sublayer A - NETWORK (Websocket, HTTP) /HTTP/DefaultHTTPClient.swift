@@ -50,20 +50,23 @@ public extension DefaultHTTPClient {
                 let dataTask = alamofireSession.request(page).responseString { response in
                     switch response.result {
                     case .failure(let error):
+                        log.error(error)
                         observer.onError(error)
                     case .success(let string):
+                        log.verbose(string)
                         observer.onNext(string)
                         observer.onCompleted()
                     }
                 }
                 return Disposables.create { dataTask.cancel() }
             }
-            }     /// Perform callbacks (code within `subscribe(onNext:` blocks) on MainThread
-            .observeOn(MainScheduler.instance)
+        }
+            /// Perform callbacks (code within `subscribe(onNext:` blocks) on MainThread
+        .observeOn(MainScheduler.instance)
             
-            /// Perform work ("subscription code") on `background` thread.
-            /// SeeAlso: http://rx-marin.com/post/observeon-vs-subscribeon/
-            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+        /// Perform work ("subscription code") on `background` thread.
+        /// SeeAlso: http://rx-marin.com/post/observeon-vs-subscribeon/
+        .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
     }
     
     enum Error: Swift.Error {
@@ -73,6 +76,7 @@ public extension DefaultHTTPClient {
 
 // MARK: - Private
 private extension DefaultHTTPClient {
+    // swiftlint:disable:next function_body_length
     func request<D>(_ makeRequest: @escaping (Alamofire.Session) -> Alamofire.DataRequest) -> SingleWanted<D> where D: Decodable {
         return Observable<D>.deferred { [weak alamofireSession] in
             return Observable.create { observer in
@@ -83,25 +87,34 @@ private extension DefaultHTTPClient {
                 }
                 let dataRequest: Alamofire.DataRequest = makeRequest(alamofireSession)
                     .validate()
+                    .responseString { $0.responseString.printIfPresent() }
                     .responseDecodable { (response: DataResponse<D>) -> Void in
-                        // This assert is commented out since our unit tests are using `toBlocking()` which switches to MainThread
-//                        assert(!Thread.isMainThread, "Should not perform network requests on MainThread, check `subscribeOn`")
                         switch response.result {
                         case .failure(let error):
                             log.error(error)
                             observer.onError(error)
                         case .success(let model):
+                            log.verbose(model)
                             observer.onNext(model)
+                            observer.onCompleted()
                         }
                 }
                 return Disposables.create { dataRequest.cancel() }
-                }
-            } /// Perform callbacks (code within `subscribe(onNext:` blocks) on MainThread
-            .observeOn(MainScheduler.instance)
+            }
+        } /// Perform callbacks (code within `subscribe(onNext:` blocks) on MainThread
+        .observeOn(MainScheduler.instance)
             
-            /// Perform work ("subscription code") on `background` thread.
-            /// SeeAlso: http://rx-marin.com/post/observeon-vs-subscribeon/
-            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+        /// Perform work ("subscription code") on `background` thread.
+        /// SeeAlso: http://rx-marin.com/post/observeon-vs-subscribeon/
+        .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+    }
+}
 
+private extension Alamofire.DataResponse where Value == String {
+    var responseString: String? {
+        switch result {
+        case .failure: return nil
+        case .success(let stringValue): return stringValue
+        }
     }
 }

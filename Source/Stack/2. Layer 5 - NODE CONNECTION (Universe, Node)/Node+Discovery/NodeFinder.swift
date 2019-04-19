@@ -13,21 +13,31 @@ import Alamofire
 public final class NodeFinder: NodeDiscovery {
     public typealias UseSSL = Bool
     public typealias URLFormatting = (Host) throws -> FormattedURL
-    
+    public typealias MakeFindNodeRequester = (FormattedURL) -> NodeAddressRequesting
+    public typealias MakeLivePeersRequester = (FormattedURL) -> LivePeersRequesting
+    private let makeFindNodeRequester: MakeFindNodeRequester
+    private let makeLivePeersRequester: MakeLivePeersRequester
     private let websocketsUrlFormatter: URLFormatting
     private let httpUrlFormatter: URLFormatting
     
-    private let restClient: RESTClient
+    private let nodeFindingURL: FormattedURL
     
     public init(
-        restClient: RESTClient,
-        websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
-        httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
+        nodeFindingURL: FormattedURL,
+        makeFindNodeRequester: MakeFindNodeRequester? = nil,
+        makeLivePeersRequester: MakeLivePeersRequester? = nil,
+        websocketsUrlFormatter: URLFormatting? = nil,
+        httpUrlFormatter: URLFormatting? = nil
     ) {
+        self.nodeFindingURL = nodeFindingURL
+
+        self.websocketsUrlFormatter = websocketsUrlFormatter ?? { try URLFormatter.format(url: $0, protocol: .websockets) }
+
+        self.httpUrlFormatter = httpUrlFormatter ?? { try URLFormatter.format(url: $0, protocol: .hypertext) }
+
+        self.makeFindNodeRequester = makeFindNodeRequester ?? { RESTClientsRetainer.restClient(urlToNode: $0) }
         
-        self.websocketsUrlFormatter = websocketsUrlFormatter
-        self.httpUrlFormatter = httpUrlFormatter
-        self.restClient = restClient
+        self.makeLivePeersRequester = makeLivePeersRequester ?? { RESTClientsRetainer.restClient(urlToNode: $0) }
     }
     
     deinit {
@@ -38,21 +48,24 @@ public final class NodeFinder: NodeDiscovery {
 // MARK: - NodeDiscovery
 public extension NodeFinder {
     func loadNodes() -> Observable<[Node]> {
-        return restClient.findNode()
-            .flatMapLatest { (nodeIp: FormattedURL) -> Observable<[Node]> in
-                RESTClientsRetainer.restClient(urlToNode: nodeIp)
+        func mapToNode(infos: [NodeInfo]) throws -> [Node] {
+            return try infos.map {
+                try Node(
+                    info: $0,
+                    websocketsUrl: try websocketsUrlFormatter($0.host),
+                    httpUrl: try httpUrlFormatter($0.host)
+                )
+            }
+        }
+        return makeFindNodeRequester(nodeFindingURL)
+            .findNode()
+            .flatMapLatest { [unowned self] (nodeIp: FormattedURL) -> Observable<[Node]> in
+                self.makeLivePeersRequester(nodeIp)
                     .getLivePeers()
                     .asObservable()
                     .ifEmpty(throw: Error.noConnectionsForBootstrapNode(url: nodeIp.url))
-                    .map { [unowned self] in try $0.map {
-                        try Node(
-                            info: $0,
-                            websocketsUrl: try self.websocketsUrlFormatter($0.host),
-                            httpUrl: try self.httpUrlFormatter($0.host)
-                        )
-                    }
-                }
-        }.debug()
+                    .map(mapToNode)
+        }
     }
 }
 
@@ -73,28 +86,21 @@ public extension NodeFinder {
 public extension NodeFinder {
     
     convenience init(
-        bootstrapNode: FormattedURL,
-        websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
-        httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
-        ) {
-        
-        let restClient = DefaultRESTClient(url: bootstrapNode)
+        bootstrapHost: Host,
+        makeFindNodeRequester: MakeFindNodeRequester? = nil,
+        makeLivePeersRequester: MakeLivePeersRequester? = nil,
+        websocketsUrlFormatter: URLFormatting? = nil,
+        httpUrlFormatter: URLFormatting? = nil
+        ) throws {
+    
+        let nodeFindingURL = try URLFormatter.format(url: bootstrapHost, protocol: .hypertext, appendPath: false, useSSL: true)
         
         self.init(
-            restClient: restClient,
+            nodeFindingURL: nodeFindingURL,
+            makeFindNodeRequester: makeFindNodeRequester,
+            makeLivePeersRequester: makeLivePeersRequester,
             websocketsUrlFormatter: websocketsUrlFormatter,
             httpUrlFormatter: httpUrlFormatter
         )
-    }
-    
-    convenience init(
-        bootstrapHost: Host,
-        websocketsUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .websockets) },
-        httpUrlFormatter: @escaping URLFormatting = { try URLFormatter.format(url: $0, protocol: .hypertext) }
-        ) throws {
-    
-        let bootstrapNodeURL = try URLFormatter.format(url: bootstrapHost, protocol: .hypertext, appendPath: false, useSSL: true)
-        
-        self.init(bootstrapNode: bootstrapNodeURL, websocketsUrlFormatter: websocketsUrlFormatter, httpUrlFormatter: httpUrlFormatter)
     }
 }

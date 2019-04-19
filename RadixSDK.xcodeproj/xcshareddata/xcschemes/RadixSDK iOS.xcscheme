@@ -40,6 +40,63 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "AtomSignatureSpec">
+               </Test>
+               <Test
+                  Identifier = "AtomTooBigDSONEncodingSpec">
+               </Test>
+               <Test
+                  Identifier = "GetAtomsOverWebSocketsTest">
+               </Test>
+               <Test
+                  Identifier = "GetBalanceOverWebSocketsTest">
+               </Test>
+               <Test
+                  Identifier = "GetLivePeersOverWebSocketsTest">
+               </Test>
+               <Test
+                  Identifier = "GetUniverseOverWebSocketsTest">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testIncorrectIP()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testLoadNodesMockedBadJson()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testLoadNodesMockedGoodJson()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testLocalHost()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testNodeFinder()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testNodeFinderBadURL()">
+               </Test>
+               <Test
+                  Identifier = "PointMultiplicationTests">
+               </Test>
+               <Test
+                  Identifier = "PrivateKeyTests">
+               </Test>
+               <Test
+                  Identifier = "ProofOfWorkTest">
+               </Test>
+               <Test
+                  Identifier = "Secp256k1RFC6979Tests">
+               </Test>
+               <Test
+                  Identifier = "SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests">
+               </Test>
+               <Test
+                  Identifier = "SubmitAtomOverWebSocketsTest">
+               </Test>
+               <Test
+                  Identifier = "TestSigDson">
+               </Test>
+               <Test
                   Identifier = "WebsocketTest">
                </Test>
             </SkippedTests>
