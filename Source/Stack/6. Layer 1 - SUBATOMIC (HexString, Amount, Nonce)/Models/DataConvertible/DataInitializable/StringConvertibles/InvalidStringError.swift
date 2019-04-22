@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum InvalidStringError: Swift.Error {
+public enum InvalidStringError: Swift.Error, Equatable {
     case invalidCharacters(expectedCharacters: CharacterSet, butGot: String)
     case tooManyCharacters(expectedAtMost: Int, butGot: Int)
     case tooFewCharacters(expectedAtLeast: Int, butGot: Int)

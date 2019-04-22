@@ -24,7 +24,7 @@ public extension TokenConvertible {
 
 // MARK: - TokenDefinitionReferencing
 public extension TokenConvertible {
-    var tokenDefinitionReference: TokenDefinitionReference {
-        return TokenDefinitionReference(address: address, symbol: symbol)
+    var tokenDefinitionReference: ResourceIdentifier {
+        return ResourceIdentifier(address: address, name: name)
     }
 }

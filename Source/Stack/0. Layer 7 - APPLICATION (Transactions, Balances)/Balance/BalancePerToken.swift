@@ -9,7 +9,7 @@
 import Foundation
 
 public struct BalancePerToken: DictionaryConvertible {
-    public typealias Key = TokenDefinitionReference
+    public typealias Key = ResourceIdentifier
     public typealias Value = TokenBalance
     public var dictionary: Map
     public init(dictionary: Map = [:]) {

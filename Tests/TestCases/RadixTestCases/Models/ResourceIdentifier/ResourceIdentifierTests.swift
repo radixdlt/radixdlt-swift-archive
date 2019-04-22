@@ -19,17 +19,14 @@ class ResourceIdentifierSpec: QuickSpec {
         let address: Address = "JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6"
         describe("Resource Identifier") {
             describe("Of type tokens") {
-                let identifier = ResourceIdentifier(address: address, type: .tokens, name: "Ada")
-                it("should have the correct type") {
-                    expect(identifier.type).to(equal(.tokens))
-                }
+                let identifier = ResourceIdentifier(address: address, name: "Ada")
                 
-                it("should have the correct unique") {
-                    expect(identifier.unique).to(equal("Ada"))
+                it("should have the correct name") {
+                    expect(identifier.name).to(equal("Ada"))
                 }
                 
                 it("should have the correct identifier") {
-                    expect(identifier.identifier).to(equal("/\(address.base58)/tokens/Ada"))
+                    expect(identifier.identifier).to(equal("/JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6/Ada"))
                 }
             }
         }

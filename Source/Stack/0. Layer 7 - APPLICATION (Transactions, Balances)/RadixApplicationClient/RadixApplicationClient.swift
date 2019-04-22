@@ -17,7 +17,7 @@ public protocol RadixApplicationClient {
 }
 
 public extension RadixApplicationClient {
-    func getBalances(for address: Address, ofToken token: TokenDefinitionReference) -> Observable<TokenBalance> {
+    func getBalances(for address: Address, ofToken token: ResourceIdentifier) -> Observable<TokenBalance> {
         return getBalances(for: address).map {
             $0.balanceOrZero(of: token, address: address)
         }

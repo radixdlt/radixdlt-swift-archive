@@ -32,10 +32,20 @@ class UniverseConfigBetanetJSONDecodingTest: QuickSpec {
                 do {
                     let data = try Data(contentsOf: jsonFileUrl)
                     let config = try JSONDecoder().decode(UniverseConfig.self, from: data)
-                    guard let hashIdFromApiUsedForTesting = config.hashIdFromApiUsedForTesting else {
-                        return
+                    
+                    // Waiting on bug fix for Jackson: https://github.com/cbor/cbor.github.io/issues/49
+                    // The Java lib produces incorrect hashId for any data containing a Message particle
+                    // which serializer `"radix.particles.message"` gets incorrectly CBOR encoded.
+                    
+//                    guard let hashIdFromApiUsedForTesting = config.hashIdFromApiUsedForTesting else {
+//                        return
+//                    }
+//                    expect(config.hashId).to(equal(hashIdFromApiUsedForTesting))
+                    expect(config.hashId.hex).to(equal("e5027d7370ee2dbf94b931c35d2e96ce"))
+                    guard let rriParticle = config.genesis.particles().compactMap({ $0 as? ResourceIdentifierParticle }).first else {
+                        return XCTFail("No RRI particle")
                     }
-                    expect(config.hashId).to(equal(hashIdFromApiUsedForTesting))
+                    expect(rriParticle.resourceIdentifier.name).to(equal("XRD"))
                 } catch {
                     XCTFail("failed to parse file, error: \(error)")
                 }

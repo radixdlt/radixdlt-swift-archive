@@ -16,12 +16,12 @@ import RxBlocking
 class GetBalanceOverWebSocketsTest: WebsocketTest {
     
     private var address: Address!
-    private var xrd: TokenDefinitionReference!
+    private var xrd: ResourceIdentifier!
     
     override func setUp() {
         super.setUp()
         self.address = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
-        self.xrd = TokenDefinitionReference(address: address, symbol: "XRD")
+        self.xrd = ResourceIdentifier(address: address, name: "XRD")
     }
     
     func testGetBalanceOverWS() {

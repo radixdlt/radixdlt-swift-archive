@@ -126,7 +126,7 @@ private let json = """
 						"serializer": "\(RadixModelType.unallocatedTokensParticle.serializerId)",
 						"version": 100,
 						"nonce": 352745977011091,
-						"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+						"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"
 					},
 					"version": 100
 				}
@@ -152,7 +152,7 @@ private let json = """
 						"serializer": "\(RadixModelType.unallocatedTokensParticle.serializerId)",
 						"version": 100,
 						"nonce": 352745977011091,
-								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"
 							},
 							"version": 100
 						},
@@ -171,7 +171,7 @@ private let json = """
 								"serializer": "\(RadixModelType.unallocatedTokensParticle.serializerId)",
 								"version": 100,
 								"nonce": 352745977021922,
-								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"
 							},
 							"version": 100
 						},
@@ -191,7 +191,7 @@ private let json = """
 								"serializer": "\(RadixModelType.transferrableTokensParticle.serializerId)",
 								"version": 100,
 								"nonce": 352745977020188,
-								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD",
+								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
 								"planck": 24805440
 							},
 							"version": 100

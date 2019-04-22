@@ -8,7 +8,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// The Name for a specific Radix Token, e.g. "Rad" for the token with the symbol "XRD". Constrained to a specific length, for the formal definition of these constraints read [RIP - Tokens][1].
 ///
@@ -21,8 +21,10 @@ public struct Name:
     PrefixedJsonCodable,
     CBORStringConvertible,
     MinLengthSpecifying,
-    MaxLengthSpecifying {
-// swiftlint:enable colon
+    MaxLengthSpecifying,
+    Throwing
+{
+// swiftlint:enable colon opening_brace
     
     public static let minLength = 2
     public static let maxLength = 64
@@ -36,6 +38,11 @@ public struct Name:
             fatalError("Passed unvalid string, error: \(error)")
         }
     }
+}
+
+// MARK: - Throwing
+public extension Name {
+    typealias Error = InvalidStringError
 }
 
 // MARK: - CustomStringConvertible

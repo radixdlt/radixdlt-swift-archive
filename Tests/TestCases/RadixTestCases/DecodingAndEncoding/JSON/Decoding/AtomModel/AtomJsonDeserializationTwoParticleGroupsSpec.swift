@@ -146,7 +146,7 @@ let jsonForAtomWith2ParticleGroups = """
                             "burn": ":str:none"
                         },
                         "amount": ":u20:1000000000000000000000000000",
-                        "tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+                        "tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"
                     }
                 },
                 {

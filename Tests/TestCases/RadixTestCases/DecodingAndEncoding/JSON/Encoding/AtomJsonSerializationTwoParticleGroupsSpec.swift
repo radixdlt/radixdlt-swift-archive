@@ -66,7 +66,7 @@ private let atom = Atom(
                 spin: .up,
                 particle: UnallocatedTokensParticle(
                     amount: 1337,
-                    tokenDefinitionReference: "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+                    tokenDefinitionReference: "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"
                 )
             ),
             AnySpunParticle(

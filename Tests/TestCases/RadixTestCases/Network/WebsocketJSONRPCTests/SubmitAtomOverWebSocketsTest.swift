@@ -37,6 +37,8 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
             tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference
         )
         
+//        let rriParticle = ResourceIdentifierParticle(resourceIdentifier: <#T##ResourceIdentifier#>, nonce: <#T##Nonce#>)
+        
         atom = Atom(particleGroups: [
             ParticleGroup([
                 tokenDefinitionParticle.withSpin(),
@@ -82,7 +84,7 @@ extension TransferrableTokensParticle {
         planck: Planck = Planck()
         ) {
         
-        let tokenDefinitionReference = TokenDefinitionReference(
+        let tokenDefinitionReference = ResourceIdentifier(
             address: tokenAddress ?? address,
             symbol: symbol
         )

@@ -103,6 +103,7 @@
 		E6474AFB226795D6009C4FDC /* AtomConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AFA226795D6009C4FDC /* AtomConvertible.swift */; };
 		E6474AFD226796DD009C4FDC /* DictionaryConvertibleMutable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AFC226796DD009C4FDC /* DictionaryConvertibleMutable.swift */; };
 		E64BFF8A226879C100501726 /* ProofOfWorkWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF89226879C100501726 /* ProofOfWorkWorker.swift */; };
+		E64BFF8D2268985800501726 /* ResourceIdentifierParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF8C2268985800501726 /* ResourceIdentifierParticle.swift */; };
 		E64BFF902268A5CE00501726 /* MockedNetworkDetailsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF8F2268A5CE00501726 /* MockedNetworkDetailsRequester.swift */; };
 		E64BFF922269B8D400501726 /* MockedHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF912269B8D400501726 /* MockedHTTPClient.swift */; };
 		E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF932269B96A00501726 /* Optional+Debug.swift */; };
@@ -254,7 +255,6 @@
 		E6A5088E224E713F00128123 /* Spin.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5082C224E713F00128123 /* Spin.swift */; };
 		E6A5088F224E713F00128123 /* Granularity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5082E224E713F00128123 /* Granularity.swift */; };
 		E6A50890224E713F00128123 /* MetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5082F224E713F00128123 /* MetaData.swift */; };
-		E6A50891224E713F00128123 /* TokenDefinitionIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50830224E713F00128123 /* TokenDefinitionIdentifier.swift */; };
 		E6A50892224E713F00128123 /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50831224E713F00128123 /* Amount.swift */; };
 		E6A50893224E713F00128123 /* Description.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50832224E713F00128123 /* Description.swift */; };
 		E6A50894224E713F00128123 /* TokenPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50833224E713F00128123 /* TokenPermissions.swift */; };
@@ -481,6 +481,7 @@
 		E6474AFA226795D6009C4FDC /* AtomConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomConvertible.swift; sourceTree = "<group>"; };
 		E6474AFC226796DD009C4FDC /* DictionaryConvertibleMutable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryConvertibleMutable.swift; sourceTree = "<group>"; };
 		E64BFF89226879C100501726 /* ProofOfWorkWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProofOfWorkWorker.swift; sourceTree = "<group>"; };
+		E64BFF8C2268985800501726 /* ResourceIdentifierParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceIdentifierParticle.swift; sourceTree = "<group>"; };
 		E64BFF8F2268A5CE00501726 /* MockedNetworkDetailsRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedNetworkDetailsRequester.swift; sourceTree = "<group>"; };
 		E64BFF912269B8D400501726 /* MockedHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedHTTPClient.swift; sourceTree = "<group>"; };
 		E64BFF932269B96A00501726 /* Optional+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Debug.swift"; sourceTree = "<group>"; };
@@ -632,7 +633,6 @@
 		E6A5082C224E713F00128123 /* Spin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spin.swift; sourceTree = "<group>"; };
 		E6A5082E224E713F00128123 /* Granularity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Granularity.swift; sourceTree = "<group>"; };
 		E6A5082F224E713F00128123 /* MetaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetaData.swift; sourceTree = "<group>"; };
-		E6A50830224E713F00128123 /* TokenDefinitionIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenDefinitionIdentifier.swift; sourceTree = "<group>"; };
 		E6A50831224E713F00128123 /* Amount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Amount.swift; sourceTree = "<group>"; };
 		E6A50832224E713F00128123 /* Description.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Description.swift; sourceTree = "<group>"; };
 		E6A50833224E713F00128123 /* TokenPermissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenPermissions.swift; sourceTree = "<group>"; };
@@ -1312,6 +1312,14 @@
 			path = Protocools;
 			sourceTree = "<group>";
 		};
+		E64BFF8B2268984500501726 /* ResourceIdentifierParticle */ = {
+			isa = PBXGroup;
+			children = (
+				E64BFF8C2268985800501726 /* ResourceIdentifierParticle.swift */,
+			);
+			path = ResourceIdentifierParticle;
+			sourceTree = "<group>";
+		};
 		E64BFF8E2268A5BF00501726 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1521,7 +1529,6 @@
 				E6A5082F224E713F00128123 /* MetaData.swift */,
 				E6A508C1224EAD0B00128123 /* TokenDefinitionReferencing.swift */,
 				E6A508C3224EAD1E00128123 /* TokenConvertible.swift */,
-				E6A50830224E713F00128123 /* TokenDefinitionIdentifier.swift */,
 				E6A50831224E713F00128123 /* Amount.swift */,
 				E6A508BF224E7C0400128123 /* SignedAmount.swift */,
 				E6A50832224E713F00128123 /* Description.swift */,
@@ -1544,6 +1551,7 @@
 		E689DB98225F83DB00340CF3 /* Particles */ = {
 			isa = PBXGroup;
 			children = (
+				E64BFF8B2268984500501726 /* ResourceIdentifierParticle */,
 				E689DB9C225F842400340CF3 /* UnallocatedTokensParticle */,
 				E6A5084B224E713F00128123 /* TokenDefinitionParticle */,
 				E689DB99225F840700340CF3 /* TransferrableTokensParticle */,
@@ -2742,6 +2750,7 @@
 				E6ED1A3821F87C1800654105 /* RadixSystem.swift in Sources */,
 				E6A508A8224E713F00128123 /* AnySpunParticle.swift in Sources */,
 				E6A6430B2244D38800CD4BFC /* BitcoinKit+ECMethods.swift in Sources */,
+				E64BFF8D2268985800501726 /* ResourceIdentifierParticle.swift in Sources */,
 				E69AB75622393F2F006153DD /* AnyEncodableKeyValueListConvertible.swift in Sources */,
 				E6CEE74421F637EC00D745EC /* Signature.swift in Sources */,
 				E689DBA6225F882800340CF3 /* UniverseConfigRequesting.swift in Sources */,
@@ -2812,7 +2821,6 @@
 				E6A507F3224E6A4600128123 /* TokenBalance.swift in Sources */,
 				E6474AC8226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift in Sources */,
 				E6D4B33B223F9DD2004FC83A /* TimeConverter.swift in Sources */,
-				E6A50891224E713F00128123 /* TokenDefinitionIdentifier.swift in Sources */,
 				E6A507DB224E15DC00128123 /* AtomSubscriptionCancel.swift in Sources */,
 				E6A508B9224E713F00128123 /* Identifiable.swift in Sources */,
 				E631DACF21F25A570063F632 /* Mnemonic+Word.swift in Sources */,

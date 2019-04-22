@@ -18,7 +18,7 @@ public struct UnallocatedTokensParticle:
     // swiftlint:enable colon
     public static let serializer = RadixModelType.unallocatedTokensParticle
     
-    public let tokenDefinitionReference: TokenDefinitionReference
+    public let tokenDefinitionReference: ResourceIdentifier
     public let granularity: Granularity
     public let nonce: Nonce
     public let amount: Amount
@@ -26,7 +26,7 @@ public struct UnallocatedTokensParticle:
     
     public init(
         amount: Amount,
-        tokenDefinitionReference: TokenDefinitionReference,
+        tokenDefinitionReference: ResourceIdentifier,
         permissions: TokenPermissions = .default,
         granularity: Granularity = .default,
         nonce: Nonce = Nonce()
@@ -55,7 +55,7 @@ public extension UnallocatedTokensParticle {
         let nonce = try container.decode(Nonce.self, forKey: .nonce)
         let amount = try container.decode(Amount.self, forKey: .amount)
         let permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
-        let tokenDefinitionReference = try container.decode(TokenDefinitionReference.self, forKey: .tokenDefinitionReference)
+        let tokenDefinitionReference = try container.decode(ResourceIdentifier.self, forKey: .tokenDefinitionReference)
         
         self.init(
             amount: amount,
@@ -74,7 +74,7 @@ public extension UnallocatedTokensParticle {
             EncodableKeyValue(key: .permissions, value: permissions),
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .nonce, value: nonce),
-            EncodableKeyValue(key: .tokenDefinitionReference, value: identifier),
+            EncodableKeyValue(key: .tokenDefinitionReference, value: tokenDefinitionReference),
             EncodableKeyValue(key: .amount, value: amount)
         ]
     }
