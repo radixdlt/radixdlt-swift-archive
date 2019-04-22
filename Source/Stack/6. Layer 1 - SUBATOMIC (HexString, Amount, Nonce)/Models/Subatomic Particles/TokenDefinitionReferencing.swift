@@ -8,14 +8,23 @@
 
 import Foundation
 
-public protocol TokenDefinitionReferencing: Identifiable, Accountable, Ownable {
-    var tokenDefinitionReference: TokenDefinitionReference { get }
-}
+// swiftlint:disable colon opening_brace
 
-public extension TokenDefinitionReferencing {
-    var identifier: ResourceIdentifier {
-        return tokenDefinitionReference.identifier
-    }
+/// A type that references a `TokenDefinitionParticle` using a `ResourceIdentifier`.
+///
+/// Although this protocol looks very similar to `Identifiable` - which also has
+/// a `ResourceIdentifier` property, they are used differently. This is the counterpart
+/// of `Identifiable`, a type referencing an `Identifiable` type.
+///
+/// - seeAlso: `Identifiable`
+/// - seeAlso: `ResourceIdentifier`
+/// - seeAlso: `TokenDefinitionParticle`
+public protocol TokenDefinitionReferencing:
+    Accountable,
+    Ownable
+{
+    // swiftlint:enable colon opening_brace
+    var tokenDefinitionReference: ResourceIdentifier { get }
 }
 
 // MARK: - Ownable

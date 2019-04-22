@@ -22,6 +22,7 @@ public enum RadixModelType: String, Codable, CaseIterable {
 
     // MARK: - Particles
     case messageParticle                = "radix.particles.message"
+    case resourceIdentifierParticle     = "radix.particles.rri"
     case tokenDefinitionParticle        = "radix.particles.token_definition"
     case unallocatedTokensParticle      = "radix.particles.unallocated_tokens"
     case transferrableTokensParticle    = "radix.particles.transferrable_tokens"

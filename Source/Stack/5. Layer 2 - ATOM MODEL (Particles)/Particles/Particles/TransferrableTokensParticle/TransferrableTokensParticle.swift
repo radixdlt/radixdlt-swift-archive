@@ -23,7 +23,7 @@ public struct TransferrableTokensParticle:
     public static let serializer = RadixModelType.transferrableTokensParticle
     
     public let address: Address
-    public let tokenDefinitionReference: TokenDefinitionReference
+    public let tokenDefinitionReference: ResourceIdentifier
     public let granularity: Granularity
     public let planck: Planck
     public let nonce: Nonce
@@ -33,7 +33,7 @@ public struct TransferrableTokensParticle:
     public init(
         amount: Amount,
         address: Address,
-        tokenDefinitionReference: TokenDefinitionReference,
+        tokenDefinitionReference: ResourceIdentifier,
         permissions: TokenPermissions = .default,
         granularity: Granularity = .default,
         nonce: Nonce = Nonce(),
@@ -68,7 +68,7 @@ public extension TransferrableTokensParticle {
         let nonce = try container.decode(Nonce.self, forKey: .nonce)
         let planck = try container.decode(Planck.self, forKey: .planck)
         let amount = try container.decode(Amount.self, forKey: .amount)
-        let tokenDefinitionReference = try container.decode(TokenDefinitionReference.self, forKey: .tokenDefinitionReference)
+        let tokenDefinitionReference = try container.decode(ResourceIdentifier.self, forKey: .tokenDefinitionReference)
         
         self.init(
             amount: amount,
@@ -88,7 +88,7 @@ public extension TransferrableTokensParticle {
         return [
             EncodableKeyValue(key: .address, value: address),
             EncodableKeyValue(key: .amount, value: amount),
-            EncodableKeyValue(key: .tokenDefinitionReference, value: identifier),
+            EncodableKeyValue(key: .tokenDefinitionReference, value: tokenDefinitionReference),
             EncodableKeyValue(key: .permissions, value: permissions),
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .nonce, value: nonce),

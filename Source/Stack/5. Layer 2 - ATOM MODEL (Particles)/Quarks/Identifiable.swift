@@ -8,6 +8,16 @@
 
 import Foundation
 
-public protocol Identifiable {
+/// A type that is identifiable using a `ResourceIdentifier`.
+///
+/// Although this protocol looks very similar to `TokenDefinitionReferencing` - which also has
+/// a `ResourceIdentifier` property, they are used differently. This type
+/// is defining an identifiable type, whereas `TokenDefinitionReferencing`
+/// references this type.
+///
+/// - seeAlso: `TokenDefinitionReferencing`
+/// - seeAlso: `ResourceIdentifier`
+/// - seeAlso: `TokenDefinitionParticle`
+public protocol Identifiable: Hashable {
     var identifier: ResourceIdentifier { get }
 }

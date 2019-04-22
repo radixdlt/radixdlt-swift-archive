@@ -11,9 +11,9 @@ import Foundation
 public struct TokenBalance: Hashable, TokenDefinitionReferencing {
     public let amount: SignedAmount
     public let address: Address
-    public let tokenDefinitionReference: TokenDefinitionReference
+    public let tokenDefinitionReference: ResourceIdentifier
     
-    public init(amount: SignedAmount, address: Address, tokenDefinitionReference: TokenDefinitionReference) {
+    public init(amount: SignedAmount, address: Address, tokenDefinitionReference: ResourceIdentifier) {
         self.amount = amount
         self.address = address
         self.tokenDefinitionReference = tokenDefinitionReference

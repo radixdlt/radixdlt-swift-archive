@@ -67,6 +67,8 @@ public extension AnySpunParticle {
             particle = try container.decode(TokenDefinitionParticle.self, forKey: .particle)
         case .unique:
             particle = try container.decode(UniqueParticle.self, forKey: .particle)
+        case .resourceIdentifier:
+            particle = try container.decode(ResourceIdentifierParticle.self, forKey: .particle)
         }
     }
 }
@@ -87,6 +89,8 @@ public extension AnySpunParticle {
             encodableParticle = EncodableKeyValue(key: .particle, value: unallocatedTokenParticle)
         } else if let uniqueParticle = particle as? UniqueParticle {
             encodableParticle = EncodableKeyValue(key: .particle, value: uniqueParticle)
+        } else if let resourceIdentifierParticle = particle as? ResourceIdentifierParticle {
+            encodableParticle = EncodableKeyValue(key: .particle, value: resourceIdentifierParticle)
         } else {
             incorrectImplementation("Forgot some particle type")
         }

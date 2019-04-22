@@ -52,7 +52,6 @@ public extension UniqueParticle {
 
 public extension UniqueParticle {
     var identifier: ResourceIdentifier {
-        
-        return ResourceIdentifier(address: address, type: .unique, name: name)
+        return ResourceIdentifier(address: address, name: name)
     }
 }

@@ -76,6 +76,7 @@ private let json = """
 						"hid": ":uid:f369e27c5796edb8b256102369427e64",
 						"bytes": ":byt:UmFkaXguLi4ganVzdCBpbWFnaW5lIQ==",
 						"serializer": "\(RadixModelType.messageParticle.serializerId)",
+                        "nonce": 528772579907706,
 						"from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 						"to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
 						"version": 100
@@ -125,7 +126,7 @@ private let json = """
 						"serializer": "\(RadixModelType.unallocatedTokensParticle.serializerId)",
 						"version": 100,
 						"nonce": 352745977011091,
-						"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+						"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"
 					},
 					"version": 100
 				}
@@ -151,7 +152,7 @@ private let json = """
 						"serializer": "\(RadixModelType.unallocatedTokensParticle.serializerId)",
 						"version": 100,
 						"nonce": 352745977011091,
-								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"
 							},
 							"version": 100
 						},
@@ -170,7 +171,7 @@ private let json = """
 								"serializer": "\(RadixModelType.unallocatedTokensParticle.serializerId)",
 								"version": 100,
 								"nonce": 352745977021922,
-								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD"
+								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"
 							},
 							"version": 100
 						},
@@ -190,7 +191,7 @@ private let json = """
 								"serializer": "\(RadixModelType.transferrableTokensParticle.serializerId)",
 								"version": 100,
 								"nonce": 352745977020188,
-								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/tokens/XRD",
+								"tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
 								"planck": 24805440
 							},
 							"version": 100

@@ -16,28 +16,25 @@ public struct ResourceIdentifier:
     PrefixedJsonCodable,
     StringRepresentable,
     DSONPrefixedDataConvertible,
-    Equatable {
+    Hashable {
 // swiftlint:enable colon
 
     public let address: Address
-    public let type: ResourceType
-    public let unique: String
+    public let name: String
     
-    public init(address: Address, type: ResourceType, unique: String) {
+    public init(address: Address, name: String) {
         self.address = address
-        self.type = type
-        self.unique = unique
+        self.name = name
     }
 }
 
 // MARK: - Initializers
 public extension ResourceIdentifier {
-    init(address: Address, type: ResourceType, symbol: Symbol) {
-        self.init(address: address, type: type, unique: symbol.value)
+    init(address: Address, name: Name) {
+        self.init(address: address, name: name.value)
     }
-    
-    init(address: Address, type: ResourceType, name: Name) {
-        self.init(address: address, type: type, unique: name.value)
+    init(address: Address, symbol: Symbol) {
+        self.init(address: address, name: symbol.value)
     }
 }
 
@@ -77,17 +74,12 @@ public extension ResourceIdentifier {
             throw Error.addressPathIsEmpty
         }
 
-        let typePath = components[ResourceIdentifier.typeIndex]
-        guard let type = ResourceType(rawValue: typePath) else {
-            throw Error.unsupportedResourceType(got: typePath)
-        }
-        
-        guard case let uniquePath = components[ResourceIdentifier.uniqueIndex], !uniquePath.isEmpty else {
-            throw Error.uniquePathEmpty
+        guard case let namePath = components[ResourceIdentifier.nameIndex], !namePath.isEmpty else {
+            throw Error.namePathEmpty
         }
         
         do {
-            self.init(address: try Address(string: addressPath), type: type, unique: uniquePath)
+            self.init(address: try Address(string: addressPath), name: namePath)
         } catch let addressError as Address.Error {
             throw Error.badAddress(error: addressError)
         }
@@ -96,11 +88,10 @@ public extension ResourceIdentifier {
 
 // MARK: - Private
 private extension ResourceIdentifier {
-    static let componentCount = 4
+    static let componentCount = 3
     static let separator = "/"
     static let addressIndex = 1
-    static let typeIndex = 2
-    static let uniqueIndex = 3
+    static let nameIndex = 2
 }
 
 // MARK: - Error
@@ -109,8 +100,7 @@ public extension ResourceIdentifier {
         case incorrectSeparatorCount(expected: Int, butGot: Int)
         case unexpectedLeadingPath
         case addressPathIsEmpty
-        case uniquePathEmpty
-        case unsupportedResourceType(got: String)
+        case namePathEmpty
         case badAddress(error: Address.Error)
     }
 }
@@ -126,8 +116,7 @@ public extension ResourceIdentifier {
         return [
             "",
             address.base58String.value,
-            type.rawValue,
-            unique
+            name
         ].joined(separator: ResourceIdentifier.separator)
     }
 }

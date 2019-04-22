@@ -41,7 +41,7 @@ class TokenBalanceReducerTests: XCTestCase {
 }
 
 private let address: Address = "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
-private let xrd = TokenDefinitionReference(address: address, symbol: "XRD")
+private let xrd = ResourceIdentifier(address: address, name: "XRD")
 
 
 private func transferrable(_ amount: Amount, spin: Spin = .up) -> SpunTransferrable {
