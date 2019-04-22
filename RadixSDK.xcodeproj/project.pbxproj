@@ -177,6 +177,7 @@
 		E693DAC12232BC6F003720C2 /* CBOR+DSONPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAC02232BC6F003720C2 /* CBOR+DSONPrefix.swift */; };
 		E693DAC3223685F9003720C2 /* DSONPrefixSpecifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAC2223685F9003720C2 /* DSONPrefixSpecifying.swift */; };
 		E693DAC522368607003720C2 /* DSONPrefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693DAC422368607003720C2 /* DSONPrefix.swift */; };
+		E696AAD8226DEB8A00D19ED6 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD7226DEB8A00D19ED6 /* Magic.swift */; };
 		E69AB7272237B172006153DD /* CBORConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7262237B172006153DD /* CBORConvertible.swift */; };
 		E69AB7292237B22C006153DD /* CBORDataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB7282237B22C006153DD /* CBORDataConvertible.swift */; };
 		E69AB72B2237B469006153DD /* RadixCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69AB72A2237B469006153DD /* RadixCodable.swift */; };
@@ -555,6 +556,7 @@
 		E693DAC02232BC6F003720C2 /* CBOR+DSONPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CBOR+DSONPrefix.swift"; sourceTree = "<group>"; };
 		E693DAC2223685F9003720C2 /* DSONPrefixSpecifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONPrefixSpecifying.swift; sourceTree = "<group>"; };
 		E693DAC422368607003720C2 /* DSONPrefix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DSONPrefix.swift; sourceTree = "<group>"; };
+		E696AAD7226DEB8A00D19ED6 /* Magic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Magic.swift; sourceTree = "<group>"; };
 		E69AB7262237B172006153DD /* CBORConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBORConvertible.swift; sourceTree = "<group>"; };
 		E69AB7282237B22C006153DD /* CBORDataConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBORDataConvertible.swift; sourceTree = "<group>"; };
 		E69AB72A2237B469006153DD /* RadixCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixCodable.swift; sourceTree = "<group>"; };
@@ -794,6 +796,7 @@
 				E6ED1A3F21F8836300654105 /* UniverseConfig.swift */,
 				E6025401225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift */,
 				E6025403225CC413004B2F94 /* UniverseConfig+Presets.swift */,
+				E696AAD7226DEB8A00D19ED6 /* Magic.swift */,
 			);
 			path = UniverseConfig;
 			sourceTree = "<group>";
@@ -2615,6 +2618,7 @@
 				E6A50878224E713F00128123 /* LowerBound.swift in Sources */,
 				E672573021FB8D3900BE3B4C /* ParticleType.swift in Sources */,
 				E6A508B3224E713F00128123 /* Address.swift in Sources */,
+				E696AAD8226DEB8A00D19ED6 /* Magic.swift in Sources */,
 				E6A5089C224E713F00128123 /* MetaDataKey.swift in Sources */,
 				E689DB85225F656400340CF3 /* DefaultRadixApplicationClient.swift in Sources */,
 				E6A508BD224E713F00128123 /* BigInt+BigUInt+BigInteger.swift in Sources */,

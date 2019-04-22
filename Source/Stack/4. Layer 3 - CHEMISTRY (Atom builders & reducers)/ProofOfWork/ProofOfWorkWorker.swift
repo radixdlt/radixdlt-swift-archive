@@ -92,11 +92,11 @@ private extension ProofOfWorkWorker {
         let target = bitArray.asData
         let targetHex = bitArray.hex
         var nonce: Nonce = 0
-        let base: Data = magic.magicTo4BigEndianBytes + seed
+        let base: Data = magic.toFourBigEndianBytes() + seed
         var hex: String
         repeat {
             nonce += 1
-            let unhashed = base + nonce.as8BytesBigEndian
+            let unhashed = base + nonce.toEightBigEndianBytes()
             hex = RadixHash(unhashedData: unhashed).hex
         } while hex > targetHex
         

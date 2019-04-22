@@ -8,8 +8,6 @@
 
 import Foundation
 
-public typealias Magic = Int64
-
 // swiftlint:disable colon
 
 public struct UniverseConfig:
@@ -91,8 +89,7 @@ public extension UniverseConfig {
 
 public extension UniverseConfig {
     var magicByte: Byte {
-        let and = magic & Magic(bitPattern: 0xFF)
-        return and.asData[0]
+        return magic.byte
     }
 }
 
