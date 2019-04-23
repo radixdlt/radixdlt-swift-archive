@@ -21,11 +21,11 @@ public struct UnallocatedTokensParticle:
     public let tokenDefinitionReference: ResourceIdentifier
     public let granularity: Granularity
     public let nonce: Nonce
-    public let amount: Amount
+    public let amount: PositiveAmount
     public let permissions: TokenPermissions
     
     public init(
-        amount: Amount,
+        amount: PositiveAmount,
         tokenDefinitionReference: ResourceIdentifier,
         permissions: TokenPermissions = .default,
         granularity: Granularity = .default,
@@ -53,7 +53,7 @@ public extension UnallocatedTokensParticle {
         
         let granularity = try container.decode(Granularity.self, forKey: .granularity)
         let nonce = try container.decode(Nonce.self, forKey: .nonce)
-        let amount = try container.decode(Amount.self, forKey: .amount)
+        let amount = try container.decode(PositiveAmount.self, forKey: .amount)
         let permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
         let tokenDefinitionReference = try container.decode(ResourceIdentifier.self, forKey: .tokenDefinitionReference)
         

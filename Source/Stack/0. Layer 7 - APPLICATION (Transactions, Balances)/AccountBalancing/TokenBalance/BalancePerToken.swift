@@ -61,6 +61,6 @@ public extension BalancePerToken {
     }
     
     func balanceOrZero(of token: Key, address: Address) -> TokenBalance {
-        return valueFor(key: token) ?? TokenBalance(amount: Amount.zero, address: address, tokenDefinitionReference: token)
+        return valueFor(key: token) ?? TokenBalance(amount: .zero, address: address, tokenDefinitionReference: token)
     }
 }

@@ -47,7 +47,7 @@ public extension TokenBalance {
             throw Error.tokenDefinitionReferenceMismatch
         }
         
-        let newAmount = other.amount + amount
+        let newAmount: SignedAmount = other.amount + amount
         
         return TokenBalance(
             amount: newAmount,
@@ -65,12 +65,5 @@ public extension TokenBalance {
     
     static func == (lhs: TokenBalance, rhs: TokenBalance) -> Bool {
         return lhs.tokenDefinitionReference == rhs.tokenDefinitionReference && lhs.address == rhs.address
-    }
-}
-
-public func * (spin: Spin, amount: Amount) -> SignedAmount {
-    switch spin {
-    case .down, .neutral: return amount.negated()
-    case .up: return amount
     }
 }

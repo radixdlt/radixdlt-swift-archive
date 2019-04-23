@@ -19,8 +19,8 @@ public extension BigInteger {
         }
     }
     
-    func toDecimalString(uppercased: Bool = true) -> String {
-        return toString(uppercased: uppercased, radix: 10)
+    func toDecimalString() -> String {
+        return toString(radix: 10)
     }
     
     func toString(uppercased: Bool = true, radix: Int) -> String {

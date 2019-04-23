@@ -19,7 +19,7 @@ class TokenBalanceReducerTests: XCTestCase {
         let balances = reducer.reduce(transferrable(10))
         
         let balance = balances[xrd]
-        XCTAssertEqual(balance?.amount.signedAmount, 10)
+        XCTAssertEqual(balance?.amount, 10)
     }
     
     func testMultipleMintedTokens() {
@@ -34,9 +34,9 @@ class TokenBalanceReducerTests: XCTestCase {
         let balances = reducer.reduce(spunTransferrable: spunTransferrable)
 
         guard let xrdBalance = balances[xrd] else { return XCTFail("Should not be nil") }
-        XCTAssertEqual(xrdBalance.amount.signedAmount.magnitude, 19)
-        XCTAssertLessThan(xrdBalance.amount.signedAmount.magnitude, 20)
-        XCTAssertGreaterThan(xrdBalance.amount.signedAmount.magnitude, 18)
+        XCTAssertEqual(xrdBalance.amount, 19)
+        XCTAssertLessThan(xrdBalance.amount, 20)
+        XCTAssertGreaterThan(xrdBalance.amount, 18)
     }
 }
 
@@ -44,7 +44,7 @@ private let address: Address = "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uM
 private let xrd = ResourceIdentifier(address: address, name: "XRD")
 
 
-private func transferrable(_ amount: Amount, spin: Spin = .up) -> SpunTransferrable {
+private func transferrable(_ amount: PositiveAmount, spin: Spin = .up) -> SpunTransferrable {
     return SpunTransferrable(
         spin: spin,
         particle: TransferrableTokensParticle(

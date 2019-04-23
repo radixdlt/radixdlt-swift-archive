@@ -164,3 +164,12 @@ public extension Address {
         case checksumMismatch
     }
 }
+
+public extension UniverseConfig {
+    var rads: TokenDefinitionParticle {
+        guard let radTokenDefinition = genesis.particles().compactMap({ $0 as? TokenDefinitionParticle }).first(where: { $0.name == .rad }) else {
+            incorrectImplementation("Config should contain TokenDefinitionParticle for \(Name.rad)")
+        }
+        return radTokenDefinition
+    }
+}

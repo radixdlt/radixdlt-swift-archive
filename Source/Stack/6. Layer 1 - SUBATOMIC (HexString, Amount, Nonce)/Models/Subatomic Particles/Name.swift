@@ -51,3 +51,10 @@ public extension Name {
         return value.description
     }
 }
+
+// MARK: - Known Presets
+public extension Name {
+    static var rad: Name {
+        return "Rad"
+    }
+}
