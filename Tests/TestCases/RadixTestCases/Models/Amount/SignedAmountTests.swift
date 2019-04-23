@@ -28,6 +28,14 @@ class SignedAmountTests: XCTestCase {
         XCTAssertEqual(a.description, "0")
     }
     
+    func testBigSignedInt() {
+        // Int64
+        let a: SignedAmount = "100000000000000000000000000000000000000000000000000000"
+        let b: SignedAmount = 1
+        XCTAssertEqual(a + b, "100000000000000000000000000000000000000000000000000001")
+    }
+    
+    
     func testNegatedNegative() {
         let a: SignedAmount = -2
         let negated: SignedAmount = a.negated()

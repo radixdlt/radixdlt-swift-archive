@@ -9,7 +9,9 @@
 import Foundation
 
 public struct SignedAmount: Amount, SignedNumeric {
+    
     public typealias Magnitude = BigSignedInt
+    
     public let magnitude: Magnitude
     public init(validated: Magnitude) {
         self.magnitude = validated

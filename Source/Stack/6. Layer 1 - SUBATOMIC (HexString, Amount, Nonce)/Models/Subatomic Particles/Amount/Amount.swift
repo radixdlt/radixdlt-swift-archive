@@ -20,7 +20,7 @@ public protocol Amount:
     Numeric,
     Comparable
 where
-    Magnitude: BinaryInteger & DataConvertible & StringRepresentable & StringInitializable
+    Magnitude: BigInteger & StringRepresentable & StringInitializable
 {
     // swiftlint:enable colon opening_brace
 
@@ -46,7 +46,7 @@ public extension Amount {
         self.init(validated: fromSource)
     }
 }
-private var overflowed = false
+
 // MARK: - Numeric Operators
 public extension Amount {
     
@@ -101,16 +101,17 @@ public func * <A>(spin: Spin, amount: A) -> SignedAmount where A: Amount {
 
 // MARK: - Private Helper
 private extension Amount {
+    
     static func calculate(
         _ lhs: Self,
         _ rhs: Self,
         willOverflowIf overflowCheck: @autoclosure () -> Bool = { false }(),
-        operation: (Magnitude, Magnitude) -> Magnitude) -> Self {
-       
-        let willOverflow = overflowCheck()
-        precondition(willOverflow == false, "Overflow")
+        operation: (Magnitude, Magnitude) -> Magnitude
+    ) -> Self {
+        precondition(overflowCheck() == false, "Overflow")
         return Self(validated: operation(lhs.magnitude, rhs.magnitude))
     }
+    
 }
 
 // MARK: - Comparable

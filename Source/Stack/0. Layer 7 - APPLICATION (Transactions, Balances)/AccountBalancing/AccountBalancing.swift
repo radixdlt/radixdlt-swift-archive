@@ -16,6 +16,7 @@ public protocol AccountBalancing {
 
 // MARK: - Default Implementation
 public extension AccountBalancing {
+ 
     func getBalances(for address: Address, ofToken token: ResourceIdentifier) -> Observable<TokenBalance> {
         return getBalances(for: address).map {
             $0.balanceOrZero(of: token, address: address)

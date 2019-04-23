@@ -10,11 +10,14 @@ import Foundation
 
 /// A strictly positive integer representing some amount, e.g. amount of tokens to transfer.
 public struct PositiveAmount: Amount, UnsignedNumeric, Throwing {
+    
     public typealias Magnitude = BigUnsignedInt
     public let magnitude: Magnitude
+    
     public init(validated: Magnitude) {
         self.magnitude = validated
     }
+    
     public init(validating unvalidated: Magnitude) throws {
         if unvalidated == 0 {
             throw Error.amountCannotBeZero
