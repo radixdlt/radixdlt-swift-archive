@@ -26,7 +26,7 @@ public struct ProofOfWork: CustomStringConvertible {
 // MARK: - Prove
 public extension ProofOfWork {
     func prove() throws {
-        let unhashed: Data = magic.magicTo4BigEndianBytes + seed + nonce.as8BytesBigEndian
+        let unhashed: Data = magic.toFourBigEndianBytes() + seed + nonce.toEightBigEndianBytes()
         let hashHex = RadixHash(unhashedData: unhashed).hex
         guard hashHex <= targetHex.hex else {
             throw Error.expected(hex: hashHex, toBeLessThanOrEqualToTargetHex: targetHex.hex)
@@ -58,8 +58,8 @@ public extension ProofOfWork {
 
 internal extension Magic {
     // MARK: - Endianess (Matching Java library ByteStream `putInt`)
-    var magicTo4BigEndianBytes: [Byte] {
-        let magic4Bytes = CFSwapInt32HostToBig(UInt32(self)).bytes
+    func toFourBigEndianBytes() -> [Byte] {
+        let magic4Bytes = CFSwapInt32HostToBig(UInt32(value)).bytes
         assert(magic4Bytes.count == 4)
         return magic4Bytes
     }
@@ -67,7 +67,7 @@ internal extension Magic {
 
 // MARK: - Endianess (Matching Java library ByteStream `putLong`)
 internal extension Nonce {
-    var as8BytesBigEndian: [Byte] {
+    func toEightBigEndianBytes() -> [Byte] {
         let nonce8Bytes = CFSwapInt64HostToBig(UInt64(value)).bytes
         assert(nonce8Bytes.count == 8)
         return nonce8Bytes

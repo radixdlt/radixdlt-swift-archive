@@ -27,11 +27,11 @@ public struct TransferrableTokensParticle:
     public let granularity: Granularity
     public let planck: Planck
     public let nonce: Nonce
-    public let amount: Amount
+    public let amount: PositiveAmount
     public let permissions: TokenPermissions
     
     public init(
-        amount: Amount,
+        amount: PositiveAmount,
         address: Address,
         tokenDefinitionReference: ResourceIdentifier,
         permissions: TokenPermissions = .default,
@@ -67,7 +67,7 @@ public extension TransferrableTokensParticle {
         let granularity = try container.decode(Granularity.self, forKey: .granularity)
         let nonce = try container.decode(Nonce.self, forKey: .nonce)
         let planck = try container.decode(Planck.self, forKey: .planck)
-        let amount = try container.decode(Amount.self, forKey: .amount)
+        let amount = try container.decode(PositiveAmount.self, forKey: .amount)
         let tokenDefinitionReference = try container.decode(ResourceIdentifier.self, forKey: .tokenDefinitionReference)
         
         self.init(

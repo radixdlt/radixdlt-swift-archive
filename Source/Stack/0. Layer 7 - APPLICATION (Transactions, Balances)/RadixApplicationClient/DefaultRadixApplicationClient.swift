@@ -9,9 +9,9 @@
 import Foundation
 import RxSwift
 
-public final class DefaultRadixApplicationClient: RadixApplicationClient {
+public final class DefaultRadixApplicationClient: RadixApplicationClient, NodeInteracting {
 
-    private let nodeInteractor: NodeInteraction
+    public let nodeInteractor: NodeInteraction
     
     public init(nodeInteractor: NodeInteraction) {
         self.nodeInteractor = nodeInteractor
@@ -21,26 +21,5 @@ public final class DefaultRadixApplicationClient: RadixApplicationClient {
 public extension DefaultRadixApplicationClient {
     convenience init(node: Node) {
         self.init(nodeInteractor: DefaultNodeInteraction(node: node))
-    }
-}
-
-public extension DefaultRadixApplicationClient {
-    func getBalances(for address: Address) -> Observable<BalancePerToken> {
-        let atoms = nodeInteractor.subscribe(to: address)
-            .map { (atomUpdates: [AtomUpdate]) -> [Atom] in
-                return atomUpdates.compactMap {
-                    guard $0.action == .store else { return nil }
-                    return $0.atom
-                }
-        }
-        return TokenBalanceReducer().reduce(atoms: atoms)
-    }
-    
-    func makeTransaction(_ transaction: Transaction) -> Completable {
-        implementMe
-    }
-    
-    func sendChatMessage(_ message: ChatMessage) -> Completable {
-        implementMe
     }
 }

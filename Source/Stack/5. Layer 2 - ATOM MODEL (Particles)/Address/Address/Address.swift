@@ -131,7 +131,7 @@ public extension Address {
 public extension Address {
     
     static func checksummed(from dataConvertible: DataConvertible, magic: Magic) -> Base58String {
-        let magicByte = magic.asData.bytes[0]
+        let magicByte = magic.bytes[0]
         return checksummed(magicByte + dataConvertible.asData)
     }
     
@@ -144,7 +144,7 @@ public extension Address {
     }
     
     static func isChecksummed(base58: Base58String, magic: Magic) throws -> Base58String {
-        let magicByte = magic.asData.bytes[0]
+        let magicByte = magic.bytes[0]
         return try isChecksummed(magicByte + base58)
     }
     
@@ -162,5 +162,14 @@ public extension Address {
     
     enum Error: Swift.Error {
         case checksumMismatch
+    }
+}
+
+public extension UniverseConfig {
+    var rads: TokenDefinitionParticle {
+        guard let radTokenDefinition = genesis.particles().compactMap({ $0 as? TokenDefinitionParticle }).first(where: { $0.name == .rad }) else {
+            incorrectImplementation("Config should contain TokenDefinitionParticle for \(Name.rad)")
+        }
+        return radTokenDefinition
     }
 }

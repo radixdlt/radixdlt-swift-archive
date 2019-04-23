@@ -23,3 +23,11 @@ public extension Token {
         self.granularity = particle.granularity
     }
 }
+
+// MARK: - Known Tokens
+public extension Token {
+    
+    static func rad(inUniverse universeConfig: UniverseConfig) -> Token {
+        return Token(particle: universeConfig.rads)
+    }
+}

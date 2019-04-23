@@ -74,7 +74,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
 // MARK: - Convenience Init
 extension TransferrableTokensParticle {
     init(
-        amount: Amount,
+        amount: PositiveAmount,
         address: Address,
         symbol: Symbol,
         tokenAddress: Address? = nil,

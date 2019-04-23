@@ -9,17 +9,4 @@
 import Foundation
 import RxSwift
 
-public protocol RadixApplicationClient {
-    
-    func getBalances(for address: Address) -> Observable<BalancePerToken>
-    func makeTransaction(_ transaction: Transaction) -> Completable
-    func sendChatMessage(_ message: ChatMessage) -> Completable
-}
-
-public extension RadixApplicationClient {
-    func getBalances(for address: Address, ofToken token: ResourceIdentifier) -> Observable<TokenBalance> {
-        return getBalances(for: address).map {
-            $0.balanceOrZero(of: token, address: address)
-        }
-    }
-}
+public typealias RadixApplicationClient = Transacting & AccountBalancing

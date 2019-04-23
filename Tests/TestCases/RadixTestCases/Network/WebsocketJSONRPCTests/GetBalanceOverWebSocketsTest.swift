@@ -28,6 +28,6 @@ class GetBalanceOverWebSocketsTest: WebsocketTest {
         guard let applicationClient = makeApplicationClient() else { return }
         guard let balance =  applicationClient.getBalances(for: address, ofToken: xrd).blockingTakeFirst() else { return }
         
-        XCTAssertEqual(balance.amount.signedAmount.description, "1000000000000000000000000000")
+        XCTAssertEqual(balance.amount.description, "1000000000000000000000000000")
     }
 }
