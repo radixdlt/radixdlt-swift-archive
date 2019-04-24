@@ -86,7 +86,7 @@ public extension AtomicCreating where Self: Atomic {
             EncodableKeyValue<CodingKeys>(key: .metaData, value: metaData),
             EncodableKeyValue(key: .particleGroups, nonEmpty: particleGroups.particleGroups),
             EncodableKeyValue(key: .signatures, nonEmpty: signatures, output: .allButHash)
-            ].compactMap { $0 }
+        ].compactMap { $0 }
         
         let atomSize = try AnyEncodableKeyValueList(keyValues: properties).toDSON().asData.length
         
@@ -97,6 +97,7 @@ public extension AtomicCreating where Self: Atomic {
         return properties
     }
 }
+
 // MARK: - ArrayInitializable
 public extension AtomicCreating {
     init(elements particleGroups: [Element]) {

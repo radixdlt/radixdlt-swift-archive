@@ -127,7 +127,6 @@ private extension WebSocketToNode {
     
     func sendQueued() {
         queuedOutgoingMessages.forEach {
-            log.verbose("Sending queued message:\n\"\"\"\($0)\n\"\"\"\n")
             self.sendMessage($0)
         }
         queuedOutgoingMessages = []

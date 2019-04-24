@@ -22,6 +22,21 @@ public struct ResourceIdentifierParticle:
     public let resourceIdentifier: ResourceIdentifier
     public let nonce: Nonce
     
+    public init(
+        resourceIdentifier: ResourceIdentifier,
+        nonce: Nonce = Nonce()
+    ) {
+        self.resourceIdentifier = resourceIdentifier
+        self.nonce = nonce
+    }
+    
+}
+
+// MARK: - From TokenDefinitionParticle
+public extension ResourceIdentifierParticle {
+    init(token: TokenDefinitionParticle) {
+        self.init(resourceIdentifier: token.tokenDefinitionReference)
+    }
 }
 
 // MARK: - Deodable

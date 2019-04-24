@@ -10,13 +10,6 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class TestSigDson: XCTestCase {
-    func testThatSignaturesAreOmittedFromDsonHash() {
-        let atom = try! JSONDecoder().decode(Atom.self, from: json.toData())
-        XCTAssertEqual(atom.hashId.hex, "4de0f8a2f14a1dfda9eec97314558ff4")
-    }
-}
-
 class TestOptionSetRemoving: XCTestCase {
     func testRemoving() {
         var outputAll = DSONOutput.all

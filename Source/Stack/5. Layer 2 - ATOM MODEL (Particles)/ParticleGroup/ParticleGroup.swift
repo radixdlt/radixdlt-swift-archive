@@ -14,18 +14,21 @@ public extension ParticleConvertible {
     }
 }
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
+
 /// Grouping of Particles relating to each other also holding some metadata
 public struct ParticleGroup:
     RadixCodable,
     ArrayConvertible,
     ArrayInitializable,
     RadixModelTypeStaticSpecifying,
-    Codable {
- // swiftlint:enable colon
+    Codable
+{
+    // swiftlint:enable colon opening_brace
+    
     public static let serializer = RadixModelType.particleGroup
     
-    public let spunParticles: [AnySpunParticle]
+    public private(set) var spunParticles: [AnySpunParticle]
     public let metaData: MetaData
     
     public init(
@@ -75,5 +78,12 @@ public extension ParticleGroup {
     }
     init(elements: [Element]) {
         self.init(spunParticles: elements)
+    }
+}
+
+// MARK: - Appending Particles
+public extension ParticleGroup {
+    static func += (group: inout ParticleGroup, spunParticle: AnySpunParticle) {
+        group.spunParticles.append(spunParticle)
     }
 }

@@ -35,9 +35,9 @@ private extension RPCRequest {
             // stored property version (and dont want to) in our models.
             // This hack appends this JSON key-value pair before sending to the API if
             // the JSON key-value pair `"serializer": <ID>` is present.
-            let needle = "\"\(RadixModelType.jsonKey)"
+            let needle = #""\#(RadixModelType.jsonKey)""#
             
-            let replacment = "\"\(jsonKeyVersion)\": \(serializerVersion), \(needle)"
+            let replacment = #""\#(jsonKeyVersion)": \#(serializerVersion), \#(needle)"#
             
             jsonString = jsonString.replacingOccurrences(of: needle, with: replacment)
             return jsonString

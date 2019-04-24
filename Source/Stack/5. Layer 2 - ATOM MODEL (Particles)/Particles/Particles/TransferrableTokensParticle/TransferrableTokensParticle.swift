@@ -49,6 +49,21 @@ public struct TransferrableTokensParticle:
     }
 }
 
+// MARK: - From TokenDefinitionParticle
+public extension TransferrableTokensParticle {
+    init(
+        token: TokenDefinitionParticle,
+        amount: PositiveAmount) {
+        self.init(
+            amount: amount,
+            address: token.address,
+            tokenDefinitionReference: token.tokenDefinitionReference,
+            permissions: token.permissions,
+            granularity: token.granularity
+        )
+    }
+}
+
 // MARK: Decodable
 public extension TransferrableTokensParticle {
     

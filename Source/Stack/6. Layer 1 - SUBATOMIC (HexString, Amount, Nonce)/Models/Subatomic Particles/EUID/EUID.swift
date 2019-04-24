@@ -123,11 +123,3 @@ public extension EUID {
 public extension EUID {
     static let jsonPrefix: JSONPrefix = .euidHex
 }
-
-// MARK: - Encodable
-public extension EUID {
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(toHexString())
-    }
-}

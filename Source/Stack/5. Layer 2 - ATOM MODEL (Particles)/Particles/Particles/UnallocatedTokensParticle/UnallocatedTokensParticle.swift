@@ -39,6 +39,20 @@ public struct UnallocatedTokensParticle:
     }
 }
 
+// MARK: - From TokenDefinitionParticle
+public extension UnallocatedTokensParticle {
+    init(
+        token: TokenDefinitionParticle,
+        amount: PositiveAmount) {
+        self.init(
+            amount: amount,
+            tokenDefinitionReference: token.tokenDefinitionReference,
+            permissions: token.permissions,
+            granularity: token.granularity
+        )
+    }
+}
+
 // MARK: Decodable
 public extension UnallocatedTokensParticle {
     

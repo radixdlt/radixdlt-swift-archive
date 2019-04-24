@@ -11,6 +11,6 @@ import Foundation
 // MARK: - Identifiable
 public extension TokenDefinitionParticle {
     var identifier: ResourceIdentifier {
-        return ResourceIdentifier(address: address, name: name)
+        return ResourceIdentifier(address: address, symbol: symbol)
     }
 }

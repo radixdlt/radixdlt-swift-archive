@@ -30,9 +30,6 @@ public struct ResourceIdentifier:
 
 // MARK: - Initializers
 public extension ResourceIdentifier {
-    init(address: Address, name: Name) {
-        self.init(address: address, name: name.value)
-    }
     init(address: Address, symbol: Symbol) {
         self.init(address: address, name: symbol.value)
     }

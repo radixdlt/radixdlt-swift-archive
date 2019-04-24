@@ -1,5 +1,5 @@
 //
-//  AtomQuerying.swift
+//  AtomsByAddressSubscribing.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-04-11.
@@ -9,6 +9,6 @@
 import Foundation
 import RxSwift
 
-public protocol AtomQuerying {
+public protocol AtomsByAddressSubscribing {
     func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription>
 }

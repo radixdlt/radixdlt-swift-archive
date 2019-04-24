@@ -54,10 +54,6 @@ private let atom = Atom(
                     name: "Cyon",
                     description: "Cyon Crypto Coin is the worst shit coin",
                     address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
-                    metaData: [
-                        .timestamp: "1551345320000",
-                        "foo": "bar"
-                    ],
                     granularity: 1,
                     permissions: .all
                 )

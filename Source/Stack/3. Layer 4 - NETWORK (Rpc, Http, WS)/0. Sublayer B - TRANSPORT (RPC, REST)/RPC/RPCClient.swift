@@ -15,7 +15,7 @@ public protocol RPCClient:
     NodeInfoRequesting,
     LivePeersRequesting,
     UniverseConfigRequesting,
-    AtomQuerying,
+    AtomsByAddressSubscribing,
     AtomSubmitting
 {
     // swiftlint:enable colon opening_brace

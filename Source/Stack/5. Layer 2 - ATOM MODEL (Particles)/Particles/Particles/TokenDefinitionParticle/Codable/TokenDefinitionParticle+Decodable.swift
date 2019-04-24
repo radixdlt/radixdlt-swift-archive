@@ -17,7 +17,6 @@ public extension TokenDefinitionParticle {
         name = try container.decode(Name.self, forKey: .name)
         description = try container.decode(Description.self, forKey: .description)
         address = try container.decode(Address.self, forKey: .address)
-        metaData = try container.decodeIfPresent(MetaData.self, forKey: .metaData) ?? [:]
         granularity = try container.decode(Granularity.self, forKey: .granularity)
         permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
         icon = try container.decodeIfPresent(BytesValue.self, forKey: .icon)?.data

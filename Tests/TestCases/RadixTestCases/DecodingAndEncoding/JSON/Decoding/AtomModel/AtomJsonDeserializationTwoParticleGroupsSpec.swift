@@ -44,13 +44,7 @@ class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
                     it("has a description") {
                         expect(tokenDefinitionParticle.description).to(equal("Cyon Crypto Coin is the worst shit coin"))
                     }
-                    
-                    describe("Its non-empty metadata") {
-                        let metaData = tokenDefinitionParticle.metaData
-                        it("contains two values") {
-                            expect(metaData).to(haveCount(2))
-                        }
-                    }
+        
                 }
                 describe("The ParticleGroup's UniqueParticle") {
                     let uniqueParticle = atom.particleGroups.firstParticle(ofType: UniqueParticle.self)!
@@ -123,6 +117,7 @@ let jsonForAtomWith2ParticleGroups = """
                     "particle": {
                         "\(RadixModelType.jsonKey)": "\(RadixModelType.uniqueParticle.serializerId)",
                         "name": ":str:Sajjon",
+                        "nonce": 528772579907706,
                         "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
                     }
                 }
