@@ -17,8 +17,6 @@ class AtomToDsonSpec: QuickSpec {
                 let atom = Atom(metaData: .timestamp("1234567890123"))
                 let dson = try! atom.toDSON()
                 let dsonHex = dson.hex
-                expect(dsonHex).to(equal("bf63686964510227dd7d5d5eb67521093ec0366bcb4c7c686d65746144617461bf6974696d657374616d706d31323334353637383930313233ff6a73657269616c697a65726a72616469782e61746f6d6776657273696f6e1864ff"))
-                
                 expect(dsonHex).to(contain(try! Atom.CodingKeys.metaData.rawValue.toDSON(output: .all).hex))
                 expect(dsonHex).toNot(contain(try! Atom.CodingKeys.signatures.rawValue.toDSON(output: .all).hex))
                 expect(dsonHex).toNot(contain(try! Atom.CodingKeys.particleGroups.rawValue.toDSON(output: .all).hex))

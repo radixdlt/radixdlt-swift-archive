@@ -19,6 +19,7 @@ public extension ParticleConvertible {
 /// Grouping of Particles relating to each other also holding some metadata
 public struct ParticleGroup:
     RadixCodable,
+    RadixHashable,
     ArrayConvertible,
     ArrayInitializable,
     RadixModelTypeStaticSpecifying,

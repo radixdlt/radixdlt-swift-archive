@@ -16,6 +16,7 @@ import Foundation
 public struct Signature:
     RadixModelTypeStaticSpecifying,
     RadixCodable,
+    RadixHashable,
     DataConvertible,
     ExactLengthSpecifying,
     StringInitializable,

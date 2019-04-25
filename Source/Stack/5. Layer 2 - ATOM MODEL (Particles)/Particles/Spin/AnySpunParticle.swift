@@ -14,6 +14,7 @@ import Foundation
 public struct AnySpunParticle:
     RadixModelTypeStaticSpecifying,
     RadixCodable,
+    RadixHashable,
     Codable {
 // swiftlint:enable colon
 
