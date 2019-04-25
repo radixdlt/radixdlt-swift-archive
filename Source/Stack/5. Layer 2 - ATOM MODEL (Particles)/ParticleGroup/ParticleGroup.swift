@@ -44,7 +44,7 @@ public struct ParticleGroup:
 // MARK: - Codable
 public extension ParticleGroup {
     enum CodingKeys: String, CodingKey {
-        case serializer
+        case serializer, version
         
         case spunParticles = "particles"
         case metaData

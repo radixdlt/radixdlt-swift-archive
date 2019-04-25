@@ -123,7 +123,7 @@ public extension Signature {
 public extension Signature {
     
     enum CodingKeys: String, CodingKey {
-        case serializer
+        case serializer, version
         case r, s
     }
     

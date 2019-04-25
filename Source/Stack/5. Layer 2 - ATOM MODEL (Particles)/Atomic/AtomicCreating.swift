@@ -46,7 +46,7 @@ public extension AtomicCreating {
 
 // MARK: - AtomCodingKeys
 public enum AtomCodingKeys: String, CodingKey {
-    case serializer
+    case serializer, version
     case particleGroups
     case signatures
     case metaData

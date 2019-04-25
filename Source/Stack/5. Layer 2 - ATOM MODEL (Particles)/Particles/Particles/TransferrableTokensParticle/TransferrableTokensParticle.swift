@@ -68,7 +68,7 @@ public extension TransferrableTokensParticle {
 public extension TransferrableTokensParticle {
     
     enum CodingKeys: String, CodingKey {
-        case serializer
+        case serializer, version
         case tokenDefinitionReference
         case address, granularity, nonce, planck, amount, permissions
     }

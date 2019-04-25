@@ -38,9 +38,8 @@ public struct UniverseConfig:
 public extension UniverseConfig {
     
     enum CodingKeys: String, CodingKey {
-        case serializer
-        case magic, port, name, description, type, timestamp, creator, genesis
-        case planck
+        case serializer, version
+        case magic, port, name, description, type, timestamp, creator, genesis, planck
         
         // TEST ONLY
         case hashIdFromApiUsedForTesting = "hid"

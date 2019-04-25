@@ -42,7 +42,7 @@ public extension ResourceIdentifierParticle {
 // MARK: - Deodable
 public extension ResourceIdentifierParticle {
     enum CodingKeys: String, CodingKey {
-        case serializer
+        case serializer, version
         case resourceIdentifier = "rri"
         case alwaysZeroNonce = "nonce"
     }
