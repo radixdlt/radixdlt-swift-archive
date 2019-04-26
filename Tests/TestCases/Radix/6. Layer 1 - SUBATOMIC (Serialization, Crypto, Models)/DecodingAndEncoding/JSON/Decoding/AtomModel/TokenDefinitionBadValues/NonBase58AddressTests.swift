@@ -1,5 +1,5 @@
 //
-//  NonBase58AddressSpec.swift
+//  NonBase58AddressTests.swift
 //  RadixSDK iOS Tests
 //
 //  Created by Alexander Cyon on 2019-02-26.

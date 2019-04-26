@@ -1,5 +1,5 @@
 //
-//  QuestionMarkInSymbolSpec.swift
+//  TooShortSymbolTests.swift
 //  RadixSDK iOS Tests
 //
 //  Created by Alexander Cyon on 2019-02-22.
@@ -9,19 +9,18 @@
 @testable import RadixSDK
 import XCTest
 
-class QuestionMarkInSymbolTests: AtomJsonDeserializationChangeJson {
+class TooShortSymbolTests: AtomJsonDeserializationChangeJson {
     
-    func testJsonDecodingSymbolBadChars() {
-        
+    func testJsonDecodingSymbolTooShort() {
         // GIVEN
-        let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:BAD?")
+        let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:")
         
         XCTAssertThrowsSpecificError(
             // WHEN
             // I try decoding the bad json string into an Atom
             try decode(Atom.self, jsonString: badJson),
             // THEN
-            InvalidStringError.invalidCharacters(expectedCharacters: CharacterSet.numbersAndUppercaseAtoZ, butGot: "?"),
+            PrefixedStringWithValue.Error.noValueFound,
             "Decoding should fail to deserialize JSON with empty symbol"
         )
     }

@@ -1,5 +1,5 @@
 //
-//  AtomJsonDeserializationTrivialSpec.swift
+//  AtomJsonDeserializationTrivialTests.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-02-22.

@@ -1,5 +1,5 @@
 //
-//  EmptyAtomSignatureSpec.swift
+//  EmptyAtomSignatureTests.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-03-21.

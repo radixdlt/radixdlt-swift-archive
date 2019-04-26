@@ -1,5 +1,5 @@
 //
-//  AddressChecksumSpec.swift
+//  AddressChecksumTests.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-03-12.

@@ -1,5 +1,5 @@
 //
-//  GranularityNegativeSpec.swift
+//  GranularityNegativeTests.swift
 //  RadixSDK iOS Tests
 //
 //  Created by Alexander Cyon on 2019-02-26.
