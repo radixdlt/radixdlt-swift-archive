@@ -53,8 +53,15 @@ public enum AtomCodingKeys: String, CodingKey {
 }
 
 // MARK: - Throwing
-public enum AtomError: Swift.Error {
+public enum AtomError: Swift.Error, Equatable {
     case tooManyBytes(expectedAtMost: Int, butGot: Int)
+}
+public extension AtomError {
+    static func == (lhs: AtomError, rhs: AtomError) -> Bool {
+        switch (lhs, rhs) {
+        case (.tooManyBytes, .tooManyBytes): return true
+        }
+    }
 }
 
 // MARK: - Decodable

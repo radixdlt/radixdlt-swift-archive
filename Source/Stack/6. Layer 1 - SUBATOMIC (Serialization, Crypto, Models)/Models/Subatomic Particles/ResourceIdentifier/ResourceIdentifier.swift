@@ -60,18 +60,18 @@ public extension ResourceIdentifier {
 public extension ResourceIdentifier {
     init(string: String) throws {
         let components = string.components(separatedBy: ResourceIdentifier.separator)
-        let componentCount = components.count
+        let componentCount = components.count - 1 // ignoring the empty string
         guard componentCount == ResourceIdentifier.componentCount else {
-            throw Error.incorrectSeparatorCount(expected: ResourceIdentifier.componentCount, butGot: componentCount)
+            throw Error.incorrectComponentCount(expected: ResourceIdentifier.componentCount, butGot: componentCount)
         }
         guard components[0].isEmpty else {
             throw Error.unexpectedLeadingPath
         }
-        guard case let addressPath = components[ResourceIdentifier.addressIndex], !addressPath.isEmpty else {
+        guard case let addressPath = components[ResourceIdentifier.Index.address.rawValue], !addressPath.isEmpty else {
             throw Error.addressPathIsEmpty
         }
 
-        guard case let namePath = components[ResourceIdentifier.nameIndex], !namePath.isEmpty else {
+        guard case let namePath = components[ResourceIdentifier.Index.name.rawValue], !namePath.isEmpty else {
             throw Error.namePathEmpty
         }
         
@@ -85,16 +85,19 @@ public extension ResourceIdentifier {
 
 // MARK: - Private
 private extension ResourceIdentifier {
-    static let componentCount = 3
+    /// Expect the string: "/address/name", with two separator, to result in these three components: [<ADDRESS>, <NAME/SYMBOL>], not counting the actual first component being the empty string
+    static let componentCount = Index.allCases.count
     static let separator = "/"
-    static let addressIndex = 1
-    static let nameIndex = 2
+    enum Index: Int, CaseIterable {
+        case address = 1
+        case name
+    }
 }
 
 // MARK: - Error
 public extension ResourceIdentifier {
-    enum Error: Swift.Error {
-        case incorrectSeparatorCount(expected: Int, butGot: Int)
+    enum Error: Swift.Error, Equatable {
+        case incorrectComponentCount(expected: Int, butGot: Int)
         case unexpectedLeadingPath
         case addressPathIsEmpty
         case namePathEmpty

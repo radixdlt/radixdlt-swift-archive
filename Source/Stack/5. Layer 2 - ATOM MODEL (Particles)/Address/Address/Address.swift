@@ -160,7 +160,7 @@ public extension Address {
         return checksummedString
     }
     
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case checksumMismatch
     }
 }

@@ -67,7 +67,7 @@ public extension PrefixedStringWithValue {
 
 // MARK: - Error
 public extension PrefixedStringWithValue {
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case noPrefixFoundAtStart
         case noPrefixFound
         case noValueFound

@@ -41,9 +41,12 @@ class GetLivePeersOverWebSocketsTest: WebsocketTest {
         let mockedWebsocket = MockedWebsocket(subject: subject)
         let mockedRpcClient = MockedRPCClient(channel: mockedWebsocket)
         subject.onNext(badJsonLivePeers)
-        XCTAssertThrowsError(try mockedRpcClient.getLivePeers().take(1).toBlocking(timeout: 1).first(), "Should throw error when receiving error from API") { error in
-            XCTAssertTrue(error is DecodingError)
-        }
+
+        XCTAssertThrowsSpecificError(
+            try mockedRpcClient.getLivePeers().take(1).toBlocking(timeout: 1).first(),
+            DecodingError.expectedStringButGotDictionary,
+            "Should throw error when receiving error from API"
+        )
     }
     
 }

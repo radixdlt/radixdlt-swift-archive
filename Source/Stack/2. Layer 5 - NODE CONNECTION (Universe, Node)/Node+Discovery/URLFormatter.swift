@@ -81,7 +81,7 @@ extension URLFormatter {
 
 // MARK: - Error
 public extension URLFormatter {
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case sslIsUnsupportedForLocalhost
         case nonHostStringPassed(url: String)
         case failedToCreateURLForWebsockets(from: String)
