@@ -202,7 +202,7 @@ enum Spin {
   case up, down
 }
 
-// LAYER 1: SUBATOMIC - Primitive DTOs (e.g. HexString, Amount, Nonce)
+// LAYER 1: SUBATOMIC - Serialization, Crypto, Models (HexString, Amount)
 struct HexString {}
 struct Base58String {}
 struct Base64String {}
