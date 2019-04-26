@@ -17,7 +17,7 @@ public typealias TouchType = UITouch.TouchType
 #endif
 
 /// Abstraction of an active user decision
-public class UserAction {
+public class UserInputAction {
     public init(touchType _: TouchType) {
         // require touch to initiate this abstraction of an active user decision
         #if DEBUG
@@ -30,4 +30,4 @@ public class UserAction {
     }
 }
 
-public class MnemonicBackedUpByUser: UserAction {}
+public class MnemonicBackedUpByUser: UserInputAction {}

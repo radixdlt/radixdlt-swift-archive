@@ -28,7 +28,7 @@ public extension UniverseConfigRequesting where Self: FullDuplexCommunicating {
     }
 }
 
-public extension AtomQuerying where Self: FullDuplexCommunicating {
+public extension AtomsByAddressSubscribing where Self: FullDuplexCommunicating {
     func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription> {
         return makeRequest(method: .subscribe(to: address, subscriberId: subscriberId))
     }

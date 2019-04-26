@@ -13,7 +13,7 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-extension AtomQuerying {
+extension AtomsByAddressSubscribing {
     func subscribe(to address: Address) -> Observable<AtomSubscription> {
         return subscribe(to: address, subscriberId: SubscriptionIdIncrementingGenerator.next())
     }

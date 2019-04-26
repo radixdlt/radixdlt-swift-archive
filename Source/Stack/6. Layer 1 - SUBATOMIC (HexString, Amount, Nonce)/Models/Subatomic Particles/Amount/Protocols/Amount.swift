@@ -8,8 +8,6 @@
 
 import Foundation
 
-public protocol UnsignedNumeric {}
-
 // swiftlint:disable colon opening_brace
 
 /// Base protocol for `PositiveAmount` and `SignedAmount`
@@ -28,18 +26,20 @@ where
     
     init(validated: Magnitude)
     init(validating: Magnitude) throws
-    init<A>(amount: A) where A: Amount
     
     func negated() -> SignedAmount
-    var abs: PositiveAmount { get }
+    var abs: NonNegativeAmount { get }
+}
+
+// MARK: - Default
+public extension Amount {
+    init(validating valid: Magnitude) throws {
+        self.init(validated: valid)
+    }
 }
 
 // MARK: - Numeric Init
 public extension Amount {
-    
-    init<A>(amount: A) where A: Amount {
-        self.init(validated: Magnitude(amount.magnitude))
-    }
     
     init?<T>(exactly source: T) where T: BinaryInteger {
         guard let fromSource = Magnitude(exactly: source) else { return nil }
@@ -95,7 +95,7 @@ public extension Amount {
 public func * <A>(spin: Spin, amount: A) -> SignedAmount where A: Amount {
     switch spin {
     case .down, .neutral: return amount.negated()
-    case .up: return SignedAmount(amount: amount)
+    case .up: return SignedAmount(validated: SignedAmount.Magnitude(amount.magnitude))
     }
 }
 

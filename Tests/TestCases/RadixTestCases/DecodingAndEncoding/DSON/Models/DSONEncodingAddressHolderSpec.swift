@@ -23,7 +23,7 @@ class DSONEncodingAddressHolderSpec: QuickSpec {
         public let address: Address
         public enum CodingKeys: String, CodingKey {
             case address
-            case serializer
+            case serializer, version
         }
         public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] { return
             [

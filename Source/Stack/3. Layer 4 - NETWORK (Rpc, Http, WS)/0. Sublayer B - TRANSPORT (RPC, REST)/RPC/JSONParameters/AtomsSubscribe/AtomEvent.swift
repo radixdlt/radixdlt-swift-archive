@@ -48,7 +48,7 @@ public extension AtomEvent.AtomEventType {
 public extension AtomEvent {
     
     enum CodingKeys: String, CodingKey {
-        case serializer
+        case serializer, version
         
         case type
         case atom

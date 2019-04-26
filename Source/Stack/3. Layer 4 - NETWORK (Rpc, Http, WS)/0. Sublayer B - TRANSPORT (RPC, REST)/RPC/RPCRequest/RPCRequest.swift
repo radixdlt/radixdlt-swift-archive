@@ -24,7 +24,7 @@ public struct RPCRequest: Encodable {
 // MARK: - Convenience Init
 public extension RPCRequest {
     init(method: RPCMethod) {
-        self.init(rpcMethod: method.method, encodeParams: method.encodeParams(key: .parameters))
+        self.init(rpcMethod: method.method.rawValue, encodeParams: method.encodeParams(key: .parameters))
     }
 }
 

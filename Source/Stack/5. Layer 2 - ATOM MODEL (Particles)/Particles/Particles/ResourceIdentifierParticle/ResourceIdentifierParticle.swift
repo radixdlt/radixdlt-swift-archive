@@ -20,22 +20,36 @@ public struct ResourceIdentifierParticle:
     // swiftlint:enable colon opening_brace
 
     public let resourceIdentifier: ResourceIdentifier
-    public let nonce: Nonce
     
+    /// This is in fact not really a `Nonce`, it is the only case where the value always should be zero.
+    public let alwaysZeroNonce: Nonce = 0
+    
+    public init(
+        resourceIdentifier: ResourceIdentifier
+    ) {
+        self.resourceIdentifier = resourceIdentifier
+    }
+    
+}
+
+// MARK: - From TokenDefinitionParticle
+public extension ResourceIdentifierParticle {
+    init(token: TokenDefinitionParticle) {
+        self.init(resourceIdentifier: token.tokenDefinitionReference)
+    }
 }
 
 // MARK: - Deodable
 public extension ResourceIdentifierParticle {
     enum CodingKeys: String, CodingKey {
-        case serializer
+        case serializer, version
         case resourceIdentifier = "rri"
-        case nonce
+        case alwaysZeroNonce = "nonce"
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         resourceIdentifier = try container.decode(ResourceIdentifier.self, forKey: .resourceIdentifier)
-        nonce = try container.decode(Nonce.self, forKey: .nonce)
     }
 }
 
@@ -43,7 +57,7 @@ public extension ResourceIdentifierParticle {
 public extension ResourceIdentifierParticle {
     func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
-            EncodableKeyValue(key: .nonce, value: nonce),
+            EncodableKeyValue(key: .alwaysZeroNonce, value: alwaysZeroNonce),
             EncodableKeyValue(key: .resourceIdentifier, value: resourceIdentifier)
         ]
     }

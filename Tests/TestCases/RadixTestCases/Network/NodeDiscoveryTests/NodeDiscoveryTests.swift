@@ -30,7 +30,7 @@ class NodeDiscoveryTests: XCTestCase {
     
     // This is kind of a test of my mock
     func testLoadNodesMockedGoodJson() {
-        let mockedResponses = ReplaySubject<String>.create(bufferSize: 2)
+        let mockedResponses = ReplaySubject<String>.create(bufferSize: 1)
         let mockedFindNode = MockedFindNodeRequester(observable: mockedResponses.asObserver().map { _ in FormattedURL.empty  })
         let mockedRestClient = DefaultRESTClient(httpClient: MockedHTTPClient(httpResponse: mockedResponses.asObservable()))
         
@@ -39,7 +39,6 @@ class NodeDiscoveryTests: XCTestCase {
             makeFindNodeRequester: { _ in mockedFindNode },
             makeLivePeersRequester: { _ in mockedRestClient }
         )
-        mockedResponses.onNext("35.111.222.212")
         mockedResponses.onNext(goodJsonNodes)
         guard let nodes = nodeFinder.loadNodes().blockingTakeFirst() else { return }
         XCTAssertFalse(nodes.isEmpty)

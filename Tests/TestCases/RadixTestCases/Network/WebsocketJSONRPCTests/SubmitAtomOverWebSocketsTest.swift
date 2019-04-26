@@ -25,26 +25,17 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
         
         let address = Address(magic: magic, publicKey: identity.publicKey)
         
-        let tokenDefinitionParticle = TokenDefinitionParticle(
-            symbol: "CCC",
+        let createTokenAction = CreateTokenAction(
+            creator: address,
             name: "Cyon",
+            symbol: "CCC",
             description: "Cyon Crypto Coin is the worst shit coin",
-            address: address
+            supplyType: .fixed
         )
-        
-        let unallocated = UnallocatedTokensParticle(
-            amount: .maxValue256Bits,
-            tokenDefinitionReference: tokenDefinitionParticle.tokenDefinitionReference
-        )
-        
-//        let rriParticle = ResourceIdentifierParticle(resourceIdentifier: <#T##ResourceIdentifier#>, nonce: <#T##Nonce#>)
-        
-        atom = Atom(particleGroups: [
-            ParticleGroup([
-                tokenDefinitionParticle.withSpin(),
-                unallocated.withSpin()
-                ])
-            ])
+ 
+        let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
+ 
+        atom = Atom(particleGroups: particleGroups)
     }
     
     func testTokenDefinitionParticle() {
@@ -67,36 +58,5 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
 
         let u1 = as2.update!.subscriptionFromSubmissionsUpdate!
         XCTAssertEqual(u1.value, .stored)
-    }
-}
-
-
-// MARK: - Convenience Init
-extension TransferrableTokensParticle {
-    init(
-        amount: PositiveAmount,
-        address: Address,
-        symbol: Symbol,
-        tokenAddress: Address? = nil,
-        permissions: TokenPermissions = .default,
-        granularity: Granularity = .default,
-        nonce: Nonce = Nonce(),
-        planck: Planck = Planck()
-        ) {
-        
-        let tokenDefinitionReference = ResourceIdentifier(
-            address: tokenAddress ?? address,
-            symbol: symbol
-        )
-        
-        self.init(
-            amount: amount,
-            address: address,
-            tokenDefinitionReference: tokenDefinitionReference,
-            permissions: permissions,
-            granularity: granularity,
-            nonce: nonce,
-            planck: planck
-        )
     }
 }

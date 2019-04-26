@@ -14,6 +14,7 @@ import Foundation
 public struct AnySpunParticle:
     RadixModelTypeStaticSpecifying,
     RadixCodable,
+    RadixHashable,
     Codable {
 // swiftlint:enable colon
 
@@ -37,13 +38,13 @@ public extension AnySpunParticle {
 public extension AnySpunParticle {
     
     enum CodingKeys: String, CodingKey {
-        case serializer
+        case serializer, version
         
         case particle, spin
     }
     
     private enum ParticleTypeKey: String, CodingKey {
-        case serializer
+        case serializer, version
     }
     
     init(from decoder: Decoder) throws {

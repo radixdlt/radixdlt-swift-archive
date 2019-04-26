@@ -20,7 +20,11 @@ public extension Encodable where Self: EncodableKeyValueListConvertible {
             incorrectImplementation("You MUST declare a CodingKey having the string value `\(RadixModelType.jsonKey)` in your encodable model.")
         }
         
+        guard let serializerVersionCodingKey = CodingKeys(stringValue: jsonKeyVersion) else {
+            incorrectImplementation("You MUST declare a CodingKey having the string value `\(jsonKeyVersion)` in your encodable model.")
+        }
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(serializerVersion, forKey: serializerVersionCodingKey)
         
         if let modelTypeSpecifying = self as? RadixModelTypeStaticSpecifying {
             try container.encode(modelTypeSpecifying.serializer, forKey: serializerValueCodingKey)

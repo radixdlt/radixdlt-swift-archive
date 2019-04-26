@@ -23,10 +23,15 @@ public extension EncodableKeyValueListConvertible {
 public extension AnyEncodableKeyValueListConvertible {
     
     /// Radix type "map", according to this: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding
+    ///
     /// Format is this:
-    /// 0xbf (encodeMapStreamStart)
-    /// [propertyName (CBOREncoded) + propertyValue (CBOREncoded)] for each property
-    /// 0xff (encodeStreamEnd)
+    ///
+    /// ```
+    /// 0xbf // encodeMapStreamStart
+    /// properties.forEach { CBOREncoded(name, value) }
+    /// 0xff // encodeStreamEnd
+    /// ```
+    ///
     func toDSON(output: DSONOutput = .default) throws -> DSON {
         var keyValues = try anyEncodableKeyValues(output: output)
         

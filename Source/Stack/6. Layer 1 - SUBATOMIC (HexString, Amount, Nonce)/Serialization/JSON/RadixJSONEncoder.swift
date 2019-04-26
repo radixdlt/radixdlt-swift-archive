@@ -10,7 +10,7 @@ import Foundation
 
 public final class RadixJSONEncoder: Foundation.JSONEncoder {
     
-    convenience init(outputFormat: Foundation.JSONEncoder.OutputFormatting = .sortedKeys) {
+    convenience init(outputFormat: Foundation.JSONEncoder.OutputFormatting = [.sortedKeys, .prettyPrinted]) {
         self.init()
         self.outputFormatting = outputFormat
     }

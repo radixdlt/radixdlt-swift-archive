@@ -22,17 +22,30 @@ public enum RPCMethod {
     case submitAndSubscribe(atom: SignedAtom, subscriberId: SubscriberId)
 }
 
+public enum RPCRequestMethod: String {
+    case subscribe              = "Atoms.subscribe"
+    case getLivePeers           = "Network.getLivePeers"
+    case getInfo                = "Network.getInfo"
+    case getUniverse            = "Universe.getUniverse"
+    case submitAndSubscribe     = "Universe.submitAtomAndSubscribe"
+}
+
+public enum RPCResponseMethod: String {
+    case subscribeUpdate = "Atoms.subscribeUpdate"
+    case submitAndSubscribe = "AtomSubmissionState.onNext"
+}
+
 public extension RPCMethod {
     
     typealias EncodeValue<K: CodingKey> = (inout KeyedEncodingContainer<K>) throws -> Void
     
-    var method: String {
+    var method: RPCRequestMethod {
         switch self {
-        case .subscribe: return "Atoms.subscribe"
-        case .getLivePeers: return "Network.getLivePeers"
-        case .getInfo: return "Network.getInfo"
-        case .getUniverse: return "Universe.getUniverse"
-        case .submitAndSubscribe: return "Universe.submitAtomAndSubscribe"
+        case .subscribe: return .subscribe
+        case .getLivePeers: return .getLivePeers
+        case .getInfo: return .getInfo
+        case .getUniverse: return .getUniverse
+        case .submitAndSubscribe: return .submitAndSubscribe
         }
     }
     

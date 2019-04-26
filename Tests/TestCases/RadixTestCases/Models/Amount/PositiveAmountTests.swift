@@ -60,7 +60,7 @@ class PostiveAmountTests: XCTestCase {
     
     func testAbs() {
         let a: PositiveAmount = 3
-        XCTAssertEqual(a.abs, a)
+        XCTAssertEqual(a.abs.magnitude, a.magnitude)
     }
     
     func testThatZeroThrows() {

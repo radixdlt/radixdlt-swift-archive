@@ -73,3 +73,39 @@ public extension BigInt {
         self .init(sign: sign, magnitude: magnitude)
     }
 }
+
+// MARK: - BigUnsignedInt + StringInitializable
+extension BigUnsignedInt: StringInitializable {
+    
+    public init(string: String) throws {
+        guard let fromString = BigUnsignedInt(string, radix: 10) else {
+            throw InvalidStringError.invalidCharacters(expectedCharacters: CharacterSet.decimalDigits, butGot: string)
+        }
+        self = fromString
+    }
+}
+
+// MARK: - BigUnsignedInt + StringRepresentable
+extension BigUnsignedInt: StringRepresentable {
+    public var stringValue: String {
+        return self.toDecimalString()
+    }
+}
+
+// MARK: - BigSignedInt + StringInitializable
+extension BigSignedInt: StringInitializable {
+    
+    public init(string: String) throws {
+        guard let fromString = BigSignedInt(string, radix: 10) else {
+            throw InvalidStringError.invalidCharacters(expectedCharacters: CharacterSet.decimalDigits, butGot: string)
+        }
+        self = fromString
+    }
+}
+
+// MARK: - BigSignedInt + StringRepresentable
+extension BigSignedInt: StringRepresentable {
+    public var stringValue: String {
+        return self.toDecimalString()
+    }
+}

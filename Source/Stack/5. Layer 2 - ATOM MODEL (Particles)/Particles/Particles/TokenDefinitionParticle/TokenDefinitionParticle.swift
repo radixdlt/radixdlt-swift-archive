@@ -36,7 +36,6 @@ public struct TokenDefinitionParticle:
     public let name: Name
     public let description: Description
     public let address: Address
-    public let metaData: MetaData
     public let granularity: Granularity
     public let permissions: TokenPermissions
     public let icon: Data?
@@ -46,7 +45,6 @@ public struct TokenDefinitionParticle:
         name: Name,
         description: Description,
         address: Address,
-        metaData: MetaData = [:],
         granularity: Granularity = .default,
         permissions: TokenPermissions = .default,
         icon: Data? = nil
@@ -55,7 +53,6 @@ public struct TokenDefinitionParticle:
         self.name = name
         self.description = description
         self.address = address
-        self.metaData = metaData
         self.granularity = granularity
         self.permissions = permissions
         self.icon = icon
@@ -66,5 +63,19 @@ public struct TokenDefinitionParticle:
 public extension TokenDefinitionParticle {
     func hash(into hasher: inout Hasher) {
         hasher.combine(radixHash)
+    }
+}
+
+// MARK: - From CreateTokenAction
+public extension TokenDefinitionParticle {
+    init(createTokenAction action: CreateTokenAction) {
+        self.init(
+            symbol: action.symbol,
+            name: action.name,
+            description: action.description,
+            address: action.creator,
+            granularity: action.granularity,
+            permissions: action.supplyType.tokenPermissions
+        )
     }
 }

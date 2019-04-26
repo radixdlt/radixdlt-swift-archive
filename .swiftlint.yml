@@ -23,8 +23,8 @@ type_name:
     warning: 3
     error: 2
   max_length:
-    warning: 45
-    error:  50
+    warning: 50
+    error:  60
 
 file_length:
   warning: 200

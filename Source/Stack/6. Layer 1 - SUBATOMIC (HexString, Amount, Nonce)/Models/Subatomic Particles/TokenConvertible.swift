@@ -25,6 +25,6 @@ public extension TokenConvertible {
 // MARK: - TokenDefinitionReferencing
 public extension TokenConvertible {
     var tokenDefinitionReference: ResourceIdentifier {
-        return ResourceIdentifier(address: address, name: name)
+        return ResourceIdentifier(address: address, symbol: symbol)
     }
 }

@@ -19,8 +19,7 @@ public extension TokenDefinitionParticle {
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .permissions, value: permissions),
             EncodableKeyValue(key: .address, value: address),
-            EncodableKeyValue(key: .name, value: name),
-            EncodableKeyValue(key: .metaData, nonEmpty: metaData)
+            EncodableKeyValue(key: .name, value: name)
         ].compactMap { $0 }
     }
 }
