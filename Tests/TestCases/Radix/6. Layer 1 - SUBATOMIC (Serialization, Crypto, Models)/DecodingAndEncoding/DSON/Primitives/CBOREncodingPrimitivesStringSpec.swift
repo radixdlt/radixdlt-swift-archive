@@ -7,18 +7,14 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class CBOREncodingPrimitivesStringSpec: QuickSpec {
+class CBOREncodingPrimitivesStringTests: XCTestCase {
     
-    override func spec() {
-        describe("DSON encoding") {
-            describe("String = Radix") {
-                it("should result in the appropriate data") {
-                    expect("Radix".cborEncodedHexString()).to(equal("655261646978"))
-                }
-            }
-        }
+    func testCborEncodingOfString() {
+        XCTAssertEqual(
+            "Radix".cborEncodedHexString(),
+            "655261646978" // http://cbor.me/
+        )
     }
 }

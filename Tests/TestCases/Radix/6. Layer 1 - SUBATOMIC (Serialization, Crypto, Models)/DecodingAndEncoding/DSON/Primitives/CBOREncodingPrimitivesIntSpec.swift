@@ -7,25 +7,16 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
 
-class CBOREncodingPrimitivesIntSpec: QuickSpec {
+class CBOREncodingPrimitivesIntTests: XCTestCase {
     
-    override func spec() {
-        describe("DSON encoding") {
-            describe("Int = 10") {
-                it("should result in the appropriate data") {
-                    expect(10.cborEncodedHexString()).to(equal("0a"))
-                }
-            }
-            
-            describe("Int = -1") {
-                it("should result in the appropriate data") {
-                    expect(Int(-1).cborEncodedHexString()).to(equal("20"))
-                }
-            }
-        }
+    func testCBOREncodingPositiveInt() {
+        XCTAssertEqual(10.cborEncodedHexString(), "0a")
+    }
+    
+    func testCBOREncodingNegativeInt() {
+        XCTAssertEqual(Int(-1).cborEncodedHexString(), "20")
     }
 }

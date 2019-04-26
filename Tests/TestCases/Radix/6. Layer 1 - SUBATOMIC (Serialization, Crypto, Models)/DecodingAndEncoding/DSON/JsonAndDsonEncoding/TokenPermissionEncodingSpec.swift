@@ -8,31 +8,42 @@
 
 import Foundation
 @testable import RadixSDK
-import Quick
-import Nimble
+import XCTest
 
-class TokenPermissionEncodingSpec: QuickSpec {
-    override func spec() {
-        describe("Encoding of TokenPermission") {
-            let permissions = TokenPermissions.all
-            describe("to JSON") {
-                let jsonString = String(
-                    data: try! JSONEncoder().encode(permissions),
-                    encoding: .utf8
-                )!
-                it("its values are prefixed with :str:") {
-                    expect(jsonString).to(contain(":str:all"))
-                }
-            }
-            describe("to Dson") {
-                let dsonHex = try! permissions.toDSON().hex
-                it("its values are not prefixed with :str:") {
-                    expect(dsonHex).to(contain(
-                        ["burn", "all"].map { try! $0.toDSON(output: .all).hex }.joined()
-                    ))
-                    expect(dsonHex).toNot(contain(try! ":str:all".toDSON(output: .all).hex))
-                }
-            }
-        }
+class TokenPermissionEncodingTests: XCTestCase {
+
+    
+    func testJsonEncodedIsPrefixed() {
+        // GIVEN
+        // TokenPermissions
+        let permissions = TokenPermissions.all
+        
+        // WHEN
+        // JSON encoding
+        guard let jsonString = jsonStringOrFail(permissions) else { return }
+        
+        // THEN
+        // The string is prefixed with ":str:"
+        XCTAssertContains(jsonString, ":str:all")
+    }
+    
+    func testDsonEncodedIsNotPrefixed() {
+        // GIVEN
+        // TokenPermissions
+        let permissions = TokenPermissions.all
+        
+        // WHEN
+        // DSON encoding
+        guard let dsonHex = dsonHexStringOrFail(permissions, output: .all) else { return }
+        
+        // THEN
+        // The string is not prefixed with ":str:"
+        XCTAssertNotContains(dsonHex, ":str:all")
+        // ... but contains DSON hex for "burn" and "all"
+        XCTAssertContains(
+            dsonHex,
+             ["burn", "all"].compactMap { dsonHexStringOrFail($0, output: .all) }.joined()
+        )
     }
 }
+

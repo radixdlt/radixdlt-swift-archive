@@ -7,18 +7,25 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class AddressEUIDSpec: QuickSpec {
+class AddressEUIDTests: XCTestCase {
     
-    override func spec() {
-        let address = try! Address(base58String: "JHB89drvftPj6zVCNjnaijURk8D8AMFw4mVja19aoBGmRXWchnJ")
-        describe("Address EUID") {
-            it("Should equal the value from Java library") {
-                expect(address.hashId).to(equal("8cfef50ea6a767813631490f9a94f73f"))
-                
-            }
-        }
+    func testHashIdOfAddress() {
+        // GIVEN
+        // An address
+        let address: Address = "JHB89drvftPj6zVCNjnaijURk8D8AMFw4mVja19aoBGmRXWchnJ"
+        
+        // WHEN
+        // I calculate it's hashId ("hid")
+        let hashId = address.hashId
+        
+        // THEN
+        // It equals the one produces by the Java lib
+        XCTAssertEqual(
+            hashId,
+            "8cfef50ea6a767813631490f9a94f73f",
+            "Should equal the value from Java library"
+        )
     }
 }

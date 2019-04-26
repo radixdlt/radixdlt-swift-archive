@@ -7,43 +7,43 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
-
+import XCTest
 
 /// DSON encoding of example map from: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding
-class DSONEncodingExampleMapSpec: QuickSpec {
+class DSONEncodingExampleMapTests: XCTestCase {
     
-    public struct ExampleMap: RadixCodable {
-        let a: Int = 1
-        let b: Int = 2
+    func testDsonEncodingOfSimpleMap() {
+        // GIVEN
+        // An simple map
+        let exampleMap = ExampleMap()
         
-        public enum CodingKeys: String, CodingKey {
-            case a
-            case b
-        }
+        // WHEN
+        // I try to DSON encode it
+        guard let dsonHex = dsonHexStringOrFail(exampleMap) else { return }
         
-        public var preProcess: Process {
-            return { values, _ in return values }
-        }
-        
-        public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-            return [
-                EncodableKeyValue(key: .a, value: a),
-                EncodableKeyValue(key: .b, value: b)
-            ]
-        }
+        // THEN
+        // It should equal the expected result of "Radix Type" `map`, the table in the link provided above
+        XCTAssertEqual(dsonHex, "bf616101616202ff")
+    }
+}
+
+private struct ExampleMap: RadixCodable {
+    let a: Int = 1
+    let b: Int = 2
+    
+    public enum CodingKeys: String, CodingKey {
+        case a
+        case b
     }
     
-    override func spec() {
-        let exampleMap = ExampleMap()
-        describe("DSON encoding - ExampleMap") {
-            it("should result in the appropriate data") {
-                let exampleMapDsonEncoded = try! exampleMap.toDSON()
-                expect(exampleMapDsonEncoded.hex)
-                    .to(equal("bf616101616202ff"))
-                
-            }
-        }
+    public var preProcess: Process {
+        return { values, _ in return values }
+    }
+    
+    public func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        return [
+            EncodableKeyValue(key: .a, value: a),
+            EncodableKeyValue(key: .b, value: b)
+        ]
     }
 }

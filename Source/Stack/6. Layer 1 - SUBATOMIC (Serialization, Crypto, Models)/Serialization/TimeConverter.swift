@@ -14,6 +14,12 @@ public final class TimeConverter {
         return millisecondsFrom(date: date).description
     }
     
+    static func readableStringFrom(date: Date, dateStyle: DateFormatter.Style = .long) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = dateStyle
+        return formatter.string(from: date)
+    }
+    
     static func millisecondsFrom(date: Date) -> UInt64 {
         let seconds = date.timeIntervalSince1970
         let milliseconds = seconds * 1000

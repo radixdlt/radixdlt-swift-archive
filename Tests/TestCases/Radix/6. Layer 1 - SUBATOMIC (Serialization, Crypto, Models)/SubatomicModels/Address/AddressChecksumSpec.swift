@@ -7,19 +7,28 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class AddressChecksumSpec: QuickSpec {
+class AddressChecksumTests: XCTestCase {
     
-    override func spec() {
-        let publicKey = try! PublicKey(hexString: "03000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F")
+    func testAddressChecksum() {
+        
+        // GIVEN
+        // A public key
+        guard let publicKey = XCTAssertNotThrows(
+            try PublicKey(hexString: "03000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F")
+            ) else { return }
+        
+        // WHEN
+        // I create an address from the public key
         let address = Address(magic: 0x02, publicKey: publicKey)
-        describe("Address Checksum") {
-            it("Should be appended to publickey") {
-                expect(address.hex).to(equal("0203000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f175341a9"))
-                
-            }
-        }
+     
+        // THEN
+        // a checksum is added to the address
+        XCTAssertEqual(
+            address.hex,
+            "0203000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f175341a9",
+            "It should append checksum"
+        )
     }
 }

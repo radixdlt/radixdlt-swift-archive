@@ -9,26 +9,17 @@
 import XCTest
 @testable import RadixSDK
 
-@testable import RadixSDK
-import Nimble
-import Quick
-
-class ResourceIdentifierSpec: QuickSpec {
+class ResourceIdentifierTests: XCTestCase {
     
-    override func spec() {
+    func testResourceIdentifierString() {
+        // GIVEN
+        // An address
         let address: Address = "JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6"
-        describe("Resource Identifier") {
-            describe("Of type tokens") {
-                let identifier = ResourceIdentifier(address: address, name: "Ada")
-                
-                it("should have the correct name") {
-                    expect(identifier.name).to(equal("Ada"))
-                }
-                
-                it("should have the correct identifier") {
-                    expect(identifier.identifier).to(equal("/JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6/Ada"))
-                }
-            }
-        }
+        // WHEN
+        // A create a RRI for the address and some name
+        let identifier = ResourceIdentifier(address: address, name: "Ada")
+        // THEN
+        // I get the expected symbol
+        XCTAssertEqual(identifier.identifier, "/JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6/Ada")
     }
 }

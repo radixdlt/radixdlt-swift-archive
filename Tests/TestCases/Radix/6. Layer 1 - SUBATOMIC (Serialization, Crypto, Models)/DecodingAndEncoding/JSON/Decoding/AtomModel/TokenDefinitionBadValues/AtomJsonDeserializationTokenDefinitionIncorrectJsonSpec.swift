@@ -7,14 +7,11 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
 private let debugPrintJson = false
 
-typealias JSON = [String: Any]
-
-class AtomJsonDeserializationChangeJson: QuickSpec {
+class AtomJsonDeserializationChangeJson: XCTestCase {
     
     func jsonString() -> String {
         return tokenDefintionJson

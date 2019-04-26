@@ -7,70 +7,43 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class AtomJsonDeserializationTwoParticleGroupsSpec: QuickSpec {
+class AtomJsonDeserializationTwoParticleGroupsTests: XCTestCase {
         
-    override func spec() {
-        /// Scenario 3
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - Non trivial Atom") {
-            let atom: Atom = model(from: jsonForAtomWith2ParticleGroups)
-            describe("Its non empty Signature") {
-                let signature = atom.signatures["71c3c2fc9fee73b13cad082800a6d0de"]!
-                it("should contain a BigInteger r") {
-                    expect(signature.r).to(equal(BigUnsignedInt(hex: "25150b1a4996cf1571d00b4ef0d62667402a6e2ea11bf563e867a80774ef1c05")))
-                }
-            }
-            describe("Its non empty metadata") {
-                let metaData = atom.metaData
-                it("Should have a valid timestamp") {
-                    expect(metaData.timestamp).to(beNotNil())
-                }
-            }
-            describe("Its non empty ParticleGroup") {
-                describe("The ParticleGroup's TokenDefinitionParticle") {
-                    let tokenDefinitionParticle = atom.particleGroups.firstParticle(ofType: TokenDefinitionParticle.self)!
-                    
-                    it("has a name") {
-                        expect(tokenDefinitionParticle.name).to(equal("Cyon"))
-                    }
-                    
-                    it("has a symbol") {
-                        expect(tokenDefinitionParticle.symbol).to(equal("CCC"))
-                    }
-                    
-                    it("has a description") {
-                        expect(tokenDefinitionParticle.description).to(equal("Cyon Crypto Coin is the worst shit coin"))
-                    }
+    func testJsonDecodingAtomWithTwoParticleGroups() {
+        // GIVEN
+        // Json for an atom
+        let jsonString = jsonForAtomWith2ParticleGroups
         
-                }
-                describe("The ParticleGroup's UniqueParticle") {
-                    let uniqueParticle = atom.particleGroups.firstParticle(ofType: UniqueParticle.self)!
-                    
-                    it("has a name") {
-                        expect(uniqueParticle.name).to(equal("Sajjon"))
-                    }
-                    
-                    it("has an address") {
-                        expect(uniqueParticle.address).to(equal("JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"))
-                    }
-                 
-                }
-                describe("The ParticleGroup's MessageParticke") {
-                    let messsageParticle = atom.particleGroups.firstParticle(ofType: MessageParticle.self)!
-                    
-                    it("Its payload is a text message to us") {
-                        expect(messsageParticle.textMessage).to(equal("Hello Radix!"))
-                    }
-                }
-            }
+        // WHEN
+        // I decode said json string into an Atom
+        
+        guard let atom = decodeOrFail(jsonString: jsonString, to: Atom.self) else { return }
+        
+        // THEN
+        // It has a MessageParticle
+        guard let messageParticle = atom.particlesOfType(MessageParticle.self, spin: .up).first else {
+            return XCTFail("Expected prescene of a MessageParticle")
         }
+        XCTAssertEqual(messageParticle.textMessage, "Hello Radix!")
+        
+        // It has a TokenDefinitionParticle
+        guard let tokenDefinitionParticle = atom.particlesOfType(TokenDefinitionParticle.self, spin: .up).first else {
+            return XCTFail("Expected prescene of a TokenDefinitionParticle")
+        }
+        XCTAssertEqual(tokenDefinitionParticle.symbol, "CCC")
+        
+        
+        // It has a UniqueParticle
+        guard let uniqueParticle = atom.particlesOfType(UniqueParticle.self, spin: .up).first else {
+            return XCTFail("Expected prescene of a UniqueParticle")
+        }
+        XCTAssertEqual(uniqueParticle.name, "Sajjon")
     }
 }
 
-let jsonForAtomWith2ParticleGroups = """
+private let jsonForAtomWith2ParticleGroups = """
 {
     "\(RadixModelType.jsonKey)": "\(RadixModelType.atom.serializerId)",
     "signatures": {

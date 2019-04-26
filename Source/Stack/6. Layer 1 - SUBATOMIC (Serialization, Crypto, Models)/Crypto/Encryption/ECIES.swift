@@ -7,47 +7,9 @@
 //
 
 import Foundation
-
-import Foundation
 import CryptoSwift
 
 // swiftlint:disable all
-public final class Crypt {
-    
-    public enum Operation {
-        case encrypt
-        case decrypt
-    }
-}
-
-public extension Crypt {
-    static func encrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
-        return try crypt(operation: .encrypt, initializationVector: iv, data: data, keyE: keyE)
-    }
-    
-    static func decrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
-        return try crypt(operation: .decrypt, initializationVector: iv, data: data, keyE: keyE)
-    }
-}
-
-private extension Crypt {
-    static func crypt(operation: Operation, initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
-        let aes = try AES(key: keyE.bytes, blockMode: CBC(iv: iv.bytes), padding: Padding.pkcs7)
-        switch operation {
-        case .decrypt: return try aes.decrypt(data.bytes).asData
-        case .encrypt: return try aes.encrypt(data.bytes).asData
-        }
-    }
-}
-
-extension Data {
-    /// Mutates current data and returns the first `byteCount` bytes that was dropped
-    mutating func droppedFirst(_ byteCount: Int) -> Data {
-        let dropped = prefix(byteCount)
-        self = dropFirst(byteCount)
-        return Data(dropped)
-    }
-}
 
 /// Encrypt and Decrypt data using ECIES (Elliptic Curve Integrated Encryption Scheme) (subset of DHIES): https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme
 public final class ECIES {}
@@ -107,11 +69,23 @@ public extension ECIES {
             let bigEndianInt32Bytes = CFSwapInt32HostToBig(cipherTextLength)
             return bigEndianInt32Bytes.asData
         }
-        let encrypted: Data = iv + Byte(ephermalKeyPair.publicKey.length).asData + ephermalKeyPair.publicKey.asData + encodeCipherTextLength() + cipherText + macData
+        let ephermalPublicKeyLength = Byte(ephermalKeyPair.publicKey.length).asData
+        let ephermalPublicKey = ephermalKeyPair.publicKey.asData
+        let cipherTextLength = encodeCipherTextLength()
+        
+        let encrypted: Data = [
+            iv,
+            ephermalPublicKeyLength,
+            ephermalPublicKey,
+            cipherTextLength,
+            cipherText,
+            macData
+        ].reduce(Data(), +)
+        
         return encrypted
     }
     
-    enum DecryptionError: Swift.Error {
+    enum DecryptionError: Swift.Error, Equatable {
         case failedToConvertPublicKeyLengthDataToInteger
         case failedToConvertCipherTextLengthDataToInteger
         case macMismatch(expected: Data, butGot: Data)
@@ -163,6 +137,8 @@ public extension ECIES {
         let calculatedMac = try calculateMAC(salt: keyDataM, initializationVector: iv, ephemeralPublicKey: ephemeralPublicKey, cipherText: cipherText)
         
         guard calculatedMac == mac else {
+            log.verbose("Expected MAC:\n<\(mac.hex)>")
+            log.verbose("Calculated MAC:\n<\(calculatedMac.hex)>")
             throw DecryptionError.macMismatch(expected: mac, butGot: calculatedMac)
         }
         
@@ -171,6 +147,56 @@ public extension ECIES {
         
         return decrypted
     }
-    
 }
+
+// MARK: ECIES.DecryptionError + Equatable
+extension ECIES.DecryptionError {
+    public static func == (lhs: ECIES.DecryptionError, rhs: ECIES.DecryptionError) -> Bool {
+        switch (lhs, rhs) {
+        case (.macMismatch, .macMismatch): return true
+        case (.failedToConvertCipherTextLengthDataToInteger, .failedToConvertCipherTextLengthDataToInteger): return true
+        case (.failedToConvertPublicKeyLengthDataToInteger, .failedToConvertPublicKeyLengthDataToInteger): return true
+        default: return false
+        }
+    }
+}
+
+
+extension Data {
+    /// Mutates current data and returns the first `byteCount` bytes that was dropped
+    mutating func droppedFirst(_ byteCount: Int) -> Data {
+        let dropped = prefix(byteCount)
+        self = dropFirst(byteCount)
+        return Data(dropped)
+    }
+}
+
+public final class Crypt {
+    
+    public enum Operation {
+        case encrypt
+        case decrypt
+    }
+}
+
+public extension Crypt {
+    static func encrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
+        return try crypt(operation: .encrypt, initializationVector: iv, data: data, keyE: keyE)
+    }
+    
+    static func decrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
+        return try crypt(operation: .decrypt, initializationVector: iv, data: data, keyE: keyE)
+    }
+}
+
+private extension Crypt {
+    static func crypt(operation: Operation, initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
+        let aes = try AES(key: keyE.bytes, blockMode: CBC(iv: iv.bytes), padding: Padding.pkcs7)
+        switch operation {
+        case .decrypt: return try aes.decrypt(data.bytes).asData
+        case .encrypt: return try aes.encrypt(data.bytes).asData
+        }
+    }
+}
+
 // swiftlint:enable all

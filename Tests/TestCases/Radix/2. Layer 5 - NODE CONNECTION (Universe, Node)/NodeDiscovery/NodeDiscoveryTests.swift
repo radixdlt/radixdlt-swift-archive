@@ -56,9 +56,11 @@ class NodeDiscoveryTests: XCTestCase {
         )
         mockedResponses.onNext("35.111.222.212")
         mockedResponses.onNext(badJsonNodes)
-        XCTAssertThrowsError(try nodeFinder.loadNodes().take(1).toBlocking(timeout: 1).first(), "Should throw decoding error") { error in
-            XCTAssertTrue(error is DecodingError)
-        }
+
+        XCTAssertThrowsSpecificError(
+            try nodeFinder.loadNodes().take(1).toBlocking(timeout: 1).first(),
+            DecodingError.invalidJSON
+        )
     }
     
     func testIncorrectIP() {

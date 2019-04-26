@@ -7,26 +7,29 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class AtomJsonDeserializationInvalidJsonKeySpec: QuickSpec {
+class AtomJsonDeserializationInvalidJsonKeyTests: XCTestCase {
     
-    override func spec() {
-        /// Scenario 2
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - Incorrect JSON Key") {
-            it("should fail with decoding error") {
-                expect { try decode(Atom.self, from: json) }.to(throwError(errorType: DecodingError.self))
-            }
-        }
+    func testJsonDecodingIncorrectJsonKey() {
+        // GIVEN
+        let badJson = jsonWithIncorrectJsonKey
+        
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try JSON decoding
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            DecodingError.keyNotFound(Atom.CodingKeys.metaData),
+            "I should see an error amount missing JSON key"
+        )
     }
 }
 
-private let json = """
+private let jsonWithIncorrectJsonKey = """
 {
     "\(RadixModelType.jsonKey)": "\(RadixModelType.atom.serializerId)",
     "signatures": {},
-    "met⚠️⚠️⚠️⚠️⚠️⚠️Data": {}
+    "⚠️meta⚠️Data⚠️": {}
 }
 """

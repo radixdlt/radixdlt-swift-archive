@@ -7,26 +7,21 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class NonBase58AddressSpec: AtomJsonDeserializationChangeJson {
+class NonBase58AddressTests: AtomJsonDeserializationChangeJson {
     
-    override func spec() {
-        /// Scenario 18
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - TokenDefinitionParticle: invalid Base58 in address") {
-            let badJson = self.replaceValueInParticle(for: .address, with: ":adr:J0dWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCea")
-            
-            it("should fail to deserialize JSON with a non base58 string as address since it contains a zero") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: InvalidStringError.self) {
-                    switch $0 {
-                    case .invalidCharacters(_, let butGot):
-                        expect(butGot).to(equal("0"))
-                    default: fail("wrong error")
-                    }
-                })
-            }
-        }
+    func testJsonDecodingInvalidBase58InAddress() {
+        // GIVEN
+        let badJson = self.replaceValueInParticle(for: .address, with: ":adr:J?????8zD2BMW?????cKAFx1?????UqBSsq?????kkVD7?????a")
+
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            InvalidStringError.invalidCharacters(expectedCharacters: Base58String.allowedCharacters, butGot: "?"),
+            "Decoding should fail to deserialize JSON with address containing '?'"
+        )
     }
 }

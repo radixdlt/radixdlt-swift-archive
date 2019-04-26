@@ -7,13 +7,30 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class AtomJsonDeserializationTrivialSpec: QuickSpec {
+class AtomJsonDeserializationTrivialTests: XCTestCase {
     
-    override func spec() {
-        let json = """
+    func testJsonDecodingTrivialAtom() {
+        // GIVEN
+        // A json string for an atom with just metadata
+        let jsonString = jsonStringAtomWithJustMetaData
+        
+        // WHEN
+        // I try decoding it into an Atom
+        guard let atom = decodeOrFail(jsonString: jsonString, to: Atom.self) else { return }
+        
+        // THEN
+        // The decoded Atom should contain a MetaData timestamp
+        XCTAssertEqual(
+            TimeConverter.readableStringFrom(date: atom.metaData.timestamp, dateStyle: .full),
+            "Wednesday, March 1, 2017"
+        )
+    }
+}
+
+
+private let jsonStringAtomWithJustMetaData = """
 {
     "\(RadixModelType.jsonKey)": "\(RadixModelType.atom.serializerId)",
     "metaData": {
@@ -21,20 +38,3 @@ class AtomJsonDeserializationTrivialSpec: QuickSpec {
     }
 }
 """
-        /// Scenario 1
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - Trivial Atom") {
-            let atom: Atom = model(from: json)
-            
-            it("should contain empty Signatures") {
-                expect(atom.signatures).to(beEmpty())
-            }
-            
-            it("should contain empty ParticleGroups") {
-                expect(atom.particleGroups).to(beEmpty())
-            }
-        }
-    }
-}
-
-

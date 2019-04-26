@@ -7,17 +7,20 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class BadRRI: AtomJsonDeserializationUnallocatedTokenBadValuesSpec {
-    override func spec() {
-        describe("JSON deserialization - MintedTokenParticle: bad RadixResourceIdentifier") {
-            let badJson = self.replaceValueInTokenParticle(for: .tokenDefinitionReference, with: ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor")
-            
-            it("should fail to deserialize JSON with a UnallocatedTokensParticle with") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(ResourceIdentifier.Error.incorrectSeparatorCount(expected: 2, butGot: 1)))
-            }
-        }
+class BadRRITests: AtomJsonDeserializationUnallocatedTokenBadValuesTests {
+    func testJsonDecodingRRIBad() {
+        // GIVEN
+        let badJson = self.replaceValueInTokenParticle(for: .tokenDefinitionReference, with: ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor")
+
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            ResourceIdentifier.Error.incorrectComponentCount(expected: 2, butGot: 1),
+            "Decoding should fail to deserialize JSON with an RRI without name/symbol"
+        )
     }
 }

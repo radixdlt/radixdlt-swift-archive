@@ -7,26 +7,21 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class IncorrectSpinValue: AtomJsonDeserializationChangeJson {
+class IncorrectSpinValueTests: AtomJsonDeserializationChangeJson {
     
-    override func spec() {
-        /// Scenario 12
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - TokenDefinitionParticle: Bad int value for spin") {
-            let badJson = self.replaceSpinForSpunParticle(spin: 2)
-            
-            it("should fail to deserialize JSON with a particle of spin 2") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: DecodingError.self) {
-                    switch $0 {
-                    case .dataCorrupted(let context):
-                        expect(context.debugDescription).to(contain("Cannot initialize Spin from invalid Int value 2"))
-                    default: fail("wrong error")
-                    }
-                })
-            }
-        }
+    func testDsonDecodingSpinValueInvalid() {
+        // GIVEN
+        let badJson = self.replaceSpinForSpunParticle(spin: 2)
+
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            DecodingError.dataCorrupted(description: "Cannot initialize Spin from invalid Int value 2"),
+            "Decoding should fail to deserialize JSON with a too short name"
+        )
     }
 }

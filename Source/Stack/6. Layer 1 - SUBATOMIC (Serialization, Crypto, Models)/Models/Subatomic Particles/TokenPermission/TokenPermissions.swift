@@ -47,7 +47,7 @@ public struct TokenPermissions:
 }
 
 public extension TokenPermissions {
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case mintMissing
         case burnMissing
     }

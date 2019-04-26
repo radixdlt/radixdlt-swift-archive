@@ -7,31 +7,15 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class AtomJsonSerializationTwoParticleGroupsSpec: QuickSpec {
+class AtomJsonSerializationTwoParticleGroupsTests: XCTestCase {
     
-    override func spec() {
-        /// Scenario 2
-        /// https://radixdlt.atlassian.net/browse/RLAU-943
-        describe("JSON serialization - Two ParticleGroups each containing one particle") {
-            it("should result in the appropriate non trivial JSON") {
-                do {
-                    let json = try RadixJSONEncoder(outputFormat: .prettyPrinted).encode(atom)
-                    let jsonString = String(data: json)
-                    expect(jsonString).to(contain("Sajjon"))
-                    let atomFromJSON = try RadixJSONDecoder().decode(Atom.self, from: jsonString.toData())
-                    expect(atomFromJSON).to(equal(atom))
-                } catch let encodingError as EncodingError {
-                    fail("unexpected EncodingError: \(encodingError)")
-                } catch let decodingError as DecodingError {
-                    fail("unexpected DecodingError: \(decodingError)")
-                } catch {
-                    fail("unexpected error")
-                }
-            }
-        }
+    func testJsonEncodingOfAtomWithTwoParticleGroups() {
+        guard let jsonString = jsonStringOrFail(atom) else { return }
+        XCTAssertContains(jsonString, "Sajjon")
+        guard let atomFromJson = decodeOrFail(jsonString: jsonString, to: Atom.self) else { return }
+        XCTAssertEqual(atomFromJson, atom)
         
     }
 }

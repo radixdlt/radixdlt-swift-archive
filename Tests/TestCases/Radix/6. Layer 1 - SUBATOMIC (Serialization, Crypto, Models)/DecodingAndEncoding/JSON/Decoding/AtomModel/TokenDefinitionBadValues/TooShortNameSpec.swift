@@ -7,27 +7,21 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class TooShortNameSpec: AtomJsonDeserializationChangeJson {
+class TooShortNameTests: AtomJsonDeserializationChangeJson {
     
-    override func spec() {
-        /// Scenario 8
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - TokenDefinitionParticle: too short name") {
-            let badJson = self.replaceValueInParticle(for: .name, with: ":str:B")
-            
-            it("should fail to deserialize JSON with a too short name") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: InvalidStringError.self) {
-                    switch $0 {
-                    case .tooFewCharacters(let expectedAtLeast, let butGot):
-                        expect(expectedAtLeast).to(equal(2))
-                        expect(butGot).to(equal(1))
-                    default: fail("wrong error")
-                    }
-                })
-            }
-        }
+    func testJsonDecodingNameTooShort() {
+        // GIVEN
+        let badJson = self.replaceValueInParticle(for: .name, with: ":str:B")
+
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            InvalidStringError.tooFewCharacters(expectedAtLeast: 2, butGot: 1),
+            "Decoding should fail to deserialize JSON with a too short name"
+        )
     }
 }

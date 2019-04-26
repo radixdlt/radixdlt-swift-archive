@@ -1,5 +1,5 @@
 //
-//  AtomJsonDeserializationUnallocatedTokenBadValuesSpec.swift
+//  AtomJsonDeserializationUnallocatedTokenBadValuesTests.swift
 //  RadixSDK iOS Tests
 //
 //  Created by Alexander Cyon on 2019-02-22.
@@ -7,10 +7,9 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class AtomJsonDeserializationUnallocatedTokenBadValuesSpec: AtomJsonDeserializationChangeJson {
+class AtomJsonDeserializationUnallocatedTokenBadValuesTests: AtomJsonDeserializationChangeJson {
         
     override func jsonString() -> String {
         return """

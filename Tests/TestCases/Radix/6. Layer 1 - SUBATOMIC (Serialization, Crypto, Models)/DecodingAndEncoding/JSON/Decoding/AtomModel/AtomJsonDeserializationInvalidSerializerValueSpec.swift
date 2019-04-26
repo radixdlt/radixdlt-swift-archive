@@ -7,23 +7,19 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class AtomJsonDeserializationInvalidSerializerValueSpec: QuickSpec {
-    
-    override func spec() {
-        describe("JSON deserialization - Incorrect serializer value for atom") {
-            it("should fail with decoding error") {
-                expect { try decode(Atom.self, from: invalidAtomSerializerJson) }.to(throwError(AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedSerializer: RadixModelType.atom, butGot: .signature)))
-            }
-        }
+class AtomJsonDeserializationInvalidSerializerValueTests: XCTestCase {
+
+    func testJsonDecodingOfAtomSerializerIncorrect() {
+        // GIVEN
+        let badJson = invalidAtomSerializerJson
         
-        describe("JSON deserialization - Incorrect serializer value for TokenDefinitionParticle") {
-            it("should fail with decoding error") {
-                expect { try decode(Atom.self, from: invalidTokenDefinitionParticleSerializerJson) }.to(throwError(errorType: DecodingError.self))
-            }
-        }
+        XCTAssertThrowsSpecificError(
+            try decode(Atom.self, jsonString: badJson),
+            AtomModelDecodingError.jsonDecodingErrorTypeMismatch(expectedSerializer: RadixModelType.atom, butGot: .signature),
+            "JSON decoding should fail with when serializer for Atom is incorrect"
+        )
     }
 }
 
@@ -38,42 +34,6 @@ private let invalidAtomSerializerJson = """
         {
             "\(RadixModelType.jsonKey)": "\(RadixModelType.particleGroup.serializerId)",
             "particles": [],
-            "metaData": {}
-        }
-    ]
-}
-"""
-
-
-private let invalidTokenDefinitionParticleSerializerJson = """
-{
-    "\(RadixModelType.jsonKey)": "\(RadixModelType.atom.serializerId)",
-    "signatures": {},
-    "metaData": {
-        "timestamp": ":str:1488326400000"
-    },
-    "particleGroups": [
-        {
-            "\(RadixModelType.jsonKey)": "\(RadixModelType.particleGroup.serializerId)",
-            "particles": [
-                {
-                    "\(RadixModelType.jsonKey)": "\(RadixModelType.spunParticle.serializerId)",
-                    "spin": 1,
-                    "particle": {
-                        "\(RadixModelType.jsonKey)": "\(RadixModelType.messageParticle.serializerId)",
-                        "symbol": ":str:BAD",
-                        "name": ":str:BadCoin",
-                        "description": ":str:Some TokenDefinition",
-                        "metaData": {},
-                        "granularity": ":u20:1",
-                        "permissions": {
-                            "burn": ":str:none",
-                            "mint": ":str:none"
-                        },
-                        "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
-                    }
-                }
-            ],
             "metaData": {}
         }
     ]

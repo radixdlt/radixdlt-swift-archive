@@ -43,7 +43,7 @@ public extension TokenPermission {
 
 // MARK: - Error
 public extension TokenPermission {
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case unsupportedPermission(String)
     }
 }

@@ -7,25 +7,21 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class GranularityNegativeSpec: AtomJsonDeserializationChangeJson {
+class GranularityNegativeTests: AtomJsonDeserializationChangeJson {
     
-    override func spec() {
-        /// Scenario 16
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - TokenDefinitionParticle: negative granularity") {
-            let badJson = self.replaceValueInParticle(for: .granularity, with: ":u20:-1")
-            
-            it("should fail to deserialize JSON with negative granulariy") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: Granularity.Error.self) {
-                    switch $0 {
-                    case .failedToCreateBigInt(let negativeAmountString):
-                        expect(negativeAmountString).to(equal("-1"))
-                    }
-                })
-            }
-        }
+    func testJsonDecodingGranularityNegative() {
+        // GIVEN
+        let badJson = self.replaceValueInParticle(for: .granularity, with: ":u20:-1")
+        
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            Granularity.Error.failedToCreateBigInt(fromString: "-1"),
+            "Decoding should fail to deserialize JSON with negative granulariy"
+        )
     }
 }

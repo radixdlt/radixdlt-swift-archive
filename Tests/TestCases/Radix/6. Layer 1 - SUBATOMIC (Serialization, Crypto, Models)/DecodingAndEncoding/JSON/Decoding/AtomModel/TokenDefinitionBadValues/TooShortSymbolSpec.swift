@@ -7,19 +7,21 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class TooShortSymbolSpec: AtomJsonDeserializationChangeJson {
+class TooShortSymbolTests: AtomJsonDeserializationChangeJson {
     
-    override func spec() {
-        /// Scenario 5
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - TokenDefinitionParticle: too short symbol") {
-            let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:")
-            it("should fail to deserialize JSON with empty symbol") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(PrefixedStringWithValue.Error.noValueFound))
-            }
-        }
+    func testJsonDecodingSymbolTooShort() {
+        // GIVEN
+        let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:")
+        
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            PrefixedStringWithValue.Error.noValueFound,
+            "Decoding should fail to deserialize JSON with empty symbol"
+        )
     }
 }

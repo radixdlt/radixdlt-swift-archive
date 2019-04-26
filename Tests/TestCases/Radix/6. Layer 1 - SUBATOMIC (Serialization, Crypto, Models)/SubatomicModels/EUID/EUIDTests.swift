@@ -7,26 +7,31 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class EUIDSpec: QuickSpec {
+class EUIDTests: XCTestCase {
     
-    override func spec() {
-        describe("EUID") {
-            describe("verification of values") {
-                it("should be possible to instantiate with Data of length 16") {
-                    expect { try EUID(Data( [Byte](repeating: 0x01, count: 16))) }.toNot(throwError())
-                }
-                it("should not be possible to instantiate with too short Data") {
-                    expect { try EUID(Data( [Byte](repeating: 0x01, count: 15))) }
-                        .to(throwError(InvalidStringError.tooFewCharacters(expectedAtLeast: 16, butGot: 15)))
-                }
-                it("should not be possible to instantiate with too long Data") {
-                    expect { try EUID(Data( [Byte](repeating: 0x01, count: 17))) }
-                        .to(throwError(InvalidStringError.tooManyCharacters(expectedAtMost: 16, butGot: 17)))
-                }
-            }
-        }
+    func testEUIDFrom16Bytes() {
+        XCTAssertNotThrowsAndEqual(
+            try EUID(Data([Byte](repeating: 0x01, count: 16))),
+            "01010101010101010101010101010101",
+            "Should have possible to create EUID from 16 bytes"
+        )
+    }
+    
+    func testEUIDFrom15BytesThrowsError() {
+        XCTAssertThrowsSpecificError(
+            try EUID(Data([Byte](repeating: 0x01, count: 15))),
+            InvalidStringError.tooFewCharacters(expectedAtLeast: 16, butGot: 15),
+            "Should have possible to create EUID from 16 bytes"
+        )
+    }
+    
+    func testEUIDFrom16BytesThrowsError() {
+        XCTAssertThrowsSpecificError(
+            try EUID(Data([Byte](repeating: 0x01, count: 17))),
+            InvalidStringError.tooManyCharacters(expectedAtMost: 16, butGot: 17),
+            "Should have possible to create EUID from 16 bytes"
+        )
     }
 }

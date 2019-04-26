@@ -8,20 +8,21 @@
 
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class AddressInvalidChecksumSpec: AtomJsonDeserializationChangeJson {
+class AddressInvalidChecksumTests: AtomJsonDeserializationChangeJson {
     
-    override func spec() {
-        /// Scenario 19
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - TokenDefinitionParticle: invalid checksum in address") {
-            let badJson = self.replaceValueInParticle(for: .address, with: ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCea")
-            
-            it("should fail to deserialize JSON with an invalid checksum in address") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(Address.Error.checksumMismatch))
-            }
-        }
+    func testJsonDecodingAddressInvalidChecksum() {
+        // GIVEN
+        let badJson = self.replaceValueInParticle(for: .address, with: ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCea")
+
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            Address.Error.checksumMismatch,
+            "Decoding should fail to deserialize JSON with an invalid checksum in address"
+        )
     }
 }

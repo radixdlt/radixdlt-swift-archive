@@ -8,8 +8,23 @@
 
 import Foundation
 
-public enum AtomModelDecodingError: Swift.Error {
+public enum AtomModelDecodingError: Swift.Error, Equatable {
     case jsonDecodingErrorTypeMismatch(expectedSerializer: RadixModelType, butGot: RadixModelType)
     case noSerializer(in: JSON)
     case unknownSerializer(got: String)
+}
+
+// MARK: Equatable
+public extension AtomModelDecodingError {
+    static func == (lhs: AtomModelDecodingError, rhs: AtomModelDecodingError) -> Bool {
+        switch (lhs, rhs) {
+        case (
+            .jsonDecodingErrorTypeMismatch(let lhsExpected, let lhsGot),
+            .jsonDecodingErrorTypeMismatch(let rhsExpected, let rhsGot)):
+            return lhsExpected == rhsExpected && lhsGot == rhsGot
+        case (.noSerializer, noSerializer): return true
+        case (.unknownSerializer, .unknownSerializer): return true
+        default: return false
+        }
+    }
 }

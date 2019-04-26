@@ -94,7 +94,7 @@ public extension Granularity {
 
 // MARK: - Error
 public extension Granularity {
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case failedToCreateBigInt(fromString: String)
     }
 }

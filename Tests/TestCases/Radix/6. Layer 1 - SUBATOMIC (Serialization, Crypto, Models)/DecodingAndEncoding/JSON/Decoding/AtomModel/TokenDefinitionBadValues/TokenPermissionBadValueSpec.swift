@@ -7,37 +7,49 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class TokenPermissionBadValueSpec: AtomJsonDeserializationChangeJson {
+class TokenPermissionBadValueTests: AtomJsonDeserializationChangeJson {
     
-    override func spec() {
-        /// Scenario 11
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - TokenDefinitionParticle: Bad permission value") {
-            let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"burn\": \":str:foobar\"}")
-            it("should fail to deserialize JSON with a foobar permission") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: TokenPermission.Error.self) {
-                    switch $0 {
-                    case .unsupportedPermission(let name):
-                        expect(name).to(equal("foobar"))
-                    }
-                })
-            }
-        }
+    func testJsonDecodingTokenDefinitionParticleBadPermissionsValue() {
+        // GIVEN
+        let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"burn\": \":str:foobar\"}")
         
-        /// Scenario Extra
-        describe("JSON deserialization - TokenDefinitionParticle: Lacking permission") {
-            it("Deserialize JSON with lacking TokenPermission for action 'mint' should throw error 'mintMissing'") {
-                let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"burn\": \":str:none\" }")
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(TokenPermissions.Error.mintMissing))
-            }
-            
-            it("Deserialize JSON with lacking TokenPermission for action 'mint' should throw error 'burnMissing'") {
-                let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"mint\": \":str:none\" }")
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(TokenPermissions.Error.burnMissing))
-            }
-        }
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            TokenPermission.Error.unsupportedPermission("foobar"),
+            "Decoding should fail to deserialize JSON with a 'foobar' permission"
+        )
+    }
+    
+    func testJsonDecodingTokenDefinitionParticlePermissionsMissingMint() {
+        // GIVEN
+        let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"burn\": \":str:none\" }")
+        
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            TokenPermissions.Error.mintMissing,
+            "Decoding should fail to deserialize JSON with permission missing mint"
+        )
+    }
+        
+    func testJsonDecodingTokenDefinitionParticlePermissionsMissingBurn() {
+        // GIVEN
+        let badJson = self.replaceValueInParticle(for: .permissions, with: "{ \"mint\": \":str:none\" }")
+        
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            TokenPermissions.Error.burnMissing,
+            "Decoding should fail to deserialize JSON with permission missing burn"
+        )
     }
 }

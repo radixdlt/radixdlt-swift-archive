@@ -7,27 +7,22 @@
 //
 
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class QuestionMarkInSymbolSpec: AtomJsonDeserializationChangeJson {
+class QuestionMarkInSymbolTests: AtomJsonDeserializationChangeJson {
     
-    override func spec() {
-        /// Scenario 6
-        /// https://radixdlt.atlassian.net/browse/RLAU-567
-        describe("JSON deserialization - TokenDefinitionParticle: Symbol bad chars") {
-            let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:BAD?")
-            
-            it("should fail to deserialize JSON with empty symbol") {
-                expect { try decode(Atom.self, from: badJson) }.to(throwError(errorType: InvalidStringError.self) {
-                    switch $0 {
-                    case .invalidCharacters(let expectedCharacters, let butGot):
-                        expect(expectedCharacters).to(equal(CharacterSet.numbersAndUppercaseAtoZ))
-                        expect(butGot).to(equal("?"))
-                    default: fail("wrong error")
-                    }
-                })
-            }
-        }
+    func testJsonDecodingSymbolBadChars() {
+        
+        // GIVEN
+        let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:BAD?")
+        
+        XCTAssertThrowsSpecificError(
+            // WHEN
+            // I try decoding the bad json string into an Atom
+            try decode(Atom.self, jsonString: badJson),
+            // THEN
+            InvalidStringError.invalidCharacters(expectedCharacters: CharacterSet.numbersAndUppercaseAtoZ, butGot: "?"),
+            "Decoding should fail to deserialize JSON with empty symbol"
+        )
     }
 }

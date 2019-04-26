@@ -8,27 +8,61 @@
 
 import Foundation
 @testable import RadixSDK
-import Nimble
-import Quick
+import XCTest
 
-class GranularitySpec: QuickSpec {
-    override func spec() {
-        describe("Granularity of 1 to hex") {
-            it("It should contain 63 leading zeros") {
-                let gran: Granularity = 1
-                let hexString = gran.asData.hex
-                expect(hexString).to(equal("0000000000000000000000000000000000000000000000000000000000000001"))
-            }
-            
-            
-            
-            it("should be possible to DSON encode UInt256") {
-                let gran1: Granularity = 1
-                expect(try! gran1.toDSON(output: .all).hex).to(equal("5821050000000000000000000000000000000000000000000000000000000000000001"))
-                let gran2: Granularity = "1000000000000000000000000000"
-                expect(try! gran2.toDSON(output: .all).hex).to(equal("5821050000000000000000000000000000000000000000033b2e3c9fd0803ce8000000"))
-            }
-            
-        }
+class GranularityTests: XCTestCase {
+    func testGranularityToHex() {
+        // GIVEN
+        // A Granularity of 1
+        let granularityOfOne: Granularity = 1
+        
+        // WHEN
+        // I convert it into hex
+        let granularityOfOneAsHex = granularityOfOne.hex
+        
+        // THEN
+        // Its length is 64
+        XCTAssertEqual(
+            granularityOfOneAsHex.count,
+            64,
+            "Encoding must be 64 chars long"
+        )
+        // and is value is 1 with 63 leading zeros
+        XCTAssertEqual(
+            granularityOfOneAsHex,
+            "0000000000000000000000000000000000000000000000000000000000000001"
+        )
+    }
+    
+    func testDsonEncodeGranularityOfOne() {
+        // GIVEN
+        // A Granularity of 1
+        let granularityOfOne: Granularity = 1
+        // WHEN
+        // I DSON encode that
+        guard let dsonHex = dsonHexStringOrFail(granularityOfOne) else { return }
+        
+        // THEN
+        // I get the same results as Java lib
+        XCTAssertEqual(
+            dsonHex,
+            "5821050000000000000000000000000000000000000000000000000000000000000001"
+        )
+    }
+    
+    func testDsonEncodeGranularityBig() {
+        // GIVEN
+        // A big granularity
+        let granularity: Granularity = "1000000000000000000000000000"
+        // WHEN
+        // I DSON encode that
+        guard let dsonHex = dsonHexStringOrFail(granularity) else { return }
+        
+        // THEN
+        // I get the same results as Java lib
+        XCTAssertEqual(
+            dsonHex,
+            "5821050000000000000000000000000000000000000000033b2e3c9fd0803ce8000000"
+        )
     }
 }
