@@ -19,13 +19,14 @@ extension ProofOfWork {
         atom: Atom,
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
-        timeout: RxTimeInterval? = nil
+        timeout: RxTimeInterval? = nil,
+        _ function: String = #function, _ file: String = #file
         ) -> ProofOfWork? {
         return work(
             seed: atom.radixHash.asData,
             magic: magic,
             numberOfLeadingZeros: numberOfLeadingZeros,
-            timeout: timeout
+            timeout: timeout, function, file
         )
     }
     
@@ -33,10 +34,11 @@ extension ProofOfWork {
         seed: Data,
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
-        timeout: RxTimeInterval? = nil
+        timeout: RxTimeInterval? = nil,
+        _ function: String = #function, _ file: String = #file
         ) -> ProofOfWork? {
         let observable = ProofOfWorkWorker().work(seed: seed, magic: magic, numberOfLeadingZeros: numberOfLeadingZeros)
-        return observable.blockingTakeFirst(timeout: timeout, failOnTimeoutOrNil: true)
+        return observable.blockingTakeFirst(timeout: timeout, failOnTimeout: true, failOnNil: true, function: function, file: file)
     }
 }
 

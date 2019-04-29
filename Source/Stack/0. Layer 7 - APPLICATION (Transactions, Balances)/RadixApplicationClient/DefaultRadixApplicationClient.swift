@@ -12,14 +12,24 @@ import RxSwift
 public final class DefaultRadixApplicationClient: RadixApplicationClient, NodeInteracting {
 
     public let nodeInteractor: NodeInteraction
+    public let identity: RadixIdentity
     
-    public init(nodeInteractor: NodeInteraction) {
+    private init(nodeInteractor: NodeInteraction, identity: RadixIdentity) {
         self.nodeInteractor = nodeInteractor
+        self.identity = identity
     }
 }
 
 public extension DefaultRadixApplicationClient {
-    convenience init(node: Node) {
-        self.init(nodeInteractor: DefaultNodeInteraction(node: node))
+    
+    convenience init(_ nodeDiscovery: NodeDiscovery, identity: RadixIdentity) {
+        self.init(
+            nodeInteractor: DefaultNodeInteraction(nodeDiscovery),
+            identity: identity
+        )
+    }
+    
+    convenience init(node: NodeDiscoveryHardCoded, identity: RadixIdentity) {
+        self.init(node, identity: identity)
     }
 }

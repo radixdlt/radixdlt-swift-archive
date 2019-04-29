@@ -25,8 +25,8 @@ class GetBalanceOverWebSocketsTest: WebsocketTest {
     }
     
     func testGetBalanceOverWS() {
-        guard let applicationClient = makeApplicationClient() else { return }
-        guard let balance =  applicationClient.getBalances(for: address, ofToken: xrd).blockingTakeFirst() else { return }
+        let application = DefaultRadixApplicationClient(node: .localhost, identity: 1)
+        guard let balance =  application.getBalances(for: address, ofToken: xrd).blockingTakeFirst() else { return }
         
         XCTAssertEqual(balance.amount.description, "1000000000000000000000000000")
     }
