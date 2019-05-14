@@ -24,10 +24,24 @@ public extension AccountBalancing {
     }
 }
 
+public extension AccountBalancing where Self: IdentityHolder {
+    func getMyBalances() -> Observable<BalancePerToken> {
+        let myAddress = identity.address
+        return getBalances(for: myAddress)
+    }
+    
+    func getMyBalance(of tokenIdentifier: ResourceIdentifier) -> Observable<TokenBalance> {
+        let myAddress = identity.address
+        return getMyBalances().map {
+            $0.balanceOrZero(of: tokenIdentifier, address: myAddress)
+        }
+    }
+}
+
 // MARK: - AccountBalancing + NodeInteracting
-public extension AccountBalancing where Self: NodeInteracting {
+public extension AccountBalancing where Self: NodeInteractingSubscribe {
     func getBalances(for address: Address) -> Observable<BalancePerToken> {
-        let atoms = nodeInteractor.subscribe(to: address)
+        let atoms = nodeSubscriber.subscribe(to: address)
             .map { (atomUpdates: [AtomUpdate]) -> [Atom] in
                 return atomUpdates.compactMap {
                     guard $0.action == .store else { return nil }

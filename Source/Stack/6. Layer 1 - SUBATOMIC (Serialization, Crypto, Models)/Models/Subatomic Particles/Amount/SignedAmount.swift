@@ -28,11 +28,22 @@ public extension SignedAmount {
     var abs: NonNegativeAmount {
         return NonNegativeAmount(validated: NonNegativeAmount.Magnitude(Swift.abs(magnitude)))
     }
+    
+    var sign: AmountSign {
+        return AmountSign(signedInt: magnitude)
+    }
 }
 
 // MARK: - Zero
 public extension SignedAmount {
     static var zero: SignedAmount {
         return SignedAmount(validated: 0)
+    }
+}
+
+// MARK: - From Amount
+public extension SignedAmount {
+    init<A>(amount: A) where A: Amount {
+        self.init(validated: Magnitude(amount.magnitude))
     }
 }

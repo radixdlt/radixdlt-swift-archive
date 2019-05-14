@@ -22,6 +22,13 @@ public struct ParticleGroups:
     }
 }
 
+// MARK: - Convenience
+public extension ParticleGroups {
+    init(groups: ParticleGroup...) {
+        self.init(particleGroups: groups)
+    }
+}
+
 // MARK: - ArrayDecodable
 public extension ParticleGroups {
     typealias Element = ParticleGroup
@@ -30,17 +37,5 @@ public extension ParticleGroups {
     }
     init(elements: [Element]) {
         self.init(particleGroups: elements)
-    }
-}
-
-public extension Sequence where Element == ParticleGroup {
-    func firstParticle<P>(ofType type: P.Type) -> P? {
-        return compactMap { $0.firstParticle(ofType: type) }.first
-    }
-}
-
-public extension ParticleGroup {
-    func firstParticle<P>(ofType type: P.Type) -> P? {
-        return spunParticles.compactMap { $0.particle as? P }.first
     }
 }

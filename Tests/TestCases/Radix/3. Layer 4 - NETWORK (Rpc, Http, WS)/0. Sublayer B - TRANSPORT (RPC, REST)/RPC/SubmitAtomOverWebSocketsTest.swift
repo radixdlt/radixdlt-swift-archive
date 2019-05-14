@@ -18,7 +18,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
     private let magic: Magic = 63799298
     
     private var atom: Atom!
-    private let identity = RadixIdentity()
+    private lazy var identity = RadixIdentity(magic: magic)
     
     override func setUp() {
         super.setUp()

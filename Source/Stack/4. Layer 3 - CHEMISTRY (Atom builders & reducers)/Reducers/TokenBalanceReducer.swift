@@ -63,30 +63,13 @@ public extension TokenBalanceReducer {
 public extension TokenBalanceReducer {
     
     func reduce(atoms: Observable<[Atom]>) -> Observable<BalancePerToken> {
-        return reduce(atoms: atoms.flatMapLatest { Observable.from($0) })
-    }
-    
-    func reduce(atoms: Observable<Atom>) -> Observable<BalancePerToken> {
-        let balanceForTokens: Observable<BalancePerToken> = atoms.map { BalancePerToken(reducing: $0.tokensBalances()) }
-        return reduce(balanceForTokens: balanceForTokens)
-    }
-    
-    func reduce(spunTransferrable: Observable<SpunTransferrable>) -> Observable<BalancePerToken> {
-        return reduce(tokenBalance:
-            spunTransferrable.map { TokenBalance(spunTransferrable: $0) }
-        )
-    }
-    
-    func reduce(tokenBalance: Observable<TokenBalance>) -> Observable<BalancePerToken> {
-        return reduce(balanceForTokens:
-            tokenBalance.map { BalancePerToken(reducing: [$0]) }
-        )
-    }
-    
-    func reduce(balanceForTokens: Observable<BalancePerToken>) -> Observable<BalancePerToken> {
-        return balanceForTokens.scan(initial, accumulator: { (soFar: BalancePerToken, next: BalancePerToken) -> BalancePerToken in
-            return soFar.merging(with: next)
-        })
+        return atoms.map { atomArray -> [TokenBalance] in
+            atomArray.flatMap { atom in
+                atom.tokensBalances()
+            }
+        }.map { (tokenBalances: [TokenBalance]) -> BalancePerToken in
+            return self.reduce(tokenBalances: tokenBalances)
+        }
     }
 }
 

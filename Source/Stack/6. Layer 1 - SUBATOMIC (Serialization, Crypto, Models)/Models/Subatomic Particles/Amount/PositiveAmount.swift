@@ -30,6 +30,7 @@ public struct PositiveAmount: NonNegativeAmountConvertible, Throwing {
 public extension PositiveAmount {
     enum Error: Swift.Error, Equatable {
         case amountCannotBeZero
+        case amountCannotBeNegative
     }
 }
 
@@ -37,5 +38,17 @@ public extension PositiveAmount {
 public extension PositiveAmount {
     init(nonNegative: NonNegativeAmount) throws {
         try self.init(validating: nonNegative.magnitude)
+    }
+}
+
+// MARK: - From SignedAmount
+public extension PositiveAmount {
+    init(signedAmount: SignedAmount) throws {
+        switch signedAmount.amountAndSign {
+        case .positive(let positive):
+            self.init(validated: positive)
+        case .zero: throw Error.amountCannotBeZero
+        case .negative: throw Error.amountCannotBeNegative
+        }
     }
 }

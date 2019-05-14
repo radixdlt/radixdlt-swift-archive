@@ -29,6 +29,10 @@ public extension NonNegativeAmountConvertible {
     var abs: NonNegativeAmount {
         return NonNegativeAmount(validated: magnitude)
     }
+    
+    var sign: AmountSign {
+        return AmountSign(unsignedInt: magnitude)
+    }
 }
 
 public extension NonNegativeAmountConvertible {
@@ -40,3 +44,4 @@ public extension NonNegativeAmountConvertible {
     static var subunitsDenominatorDecimalExponent: Int { return 18 }
     static var subunitsDenominator: Magnitude { return Magnitude(10).power(Self.subunitsDenominatorDecimalExponent) }
 }
+

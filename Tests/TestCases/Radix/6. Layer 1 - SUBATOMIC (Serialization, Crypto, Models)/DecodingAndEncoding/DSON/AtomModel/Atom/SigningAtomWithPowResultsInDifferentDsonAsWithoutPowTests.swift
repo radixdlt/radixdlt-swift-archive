@@ -15,7 +15,7 @@ class SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests: XCTestCase {
     
     private let numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = 1
     private let magic: Magic = 1337
-    private let identity = RadixIdentity()
+    private lazy var identity = RadixIdentity(magic: magic)
     private lazy var atom: Atom = {
         let address = Address(magic: magic, publicKey: identity.publicKey)
         

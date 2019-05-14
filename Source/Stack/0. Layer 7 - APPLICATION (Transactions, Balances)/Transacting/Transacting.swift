@@ -11,12 +11,12 @@ import RxSwift
 
 /// Type that is can make transactions of different types between Radix accounts
 public protocol Transacting {
-    func makeTransaction(_ transaction: Transaction) -> Completable
+    func transfer(tokens: TransferTokenAction) -> Completable
 }
 
 // MARK: - Transacting + NodeInteracting => Default Impl
-public extension Transacting where Self: NodeInteracting {
-    func makeTransaction(_ transaction: Transaction) -> Completable {
+public extension Transacting where Self: NodeInteractingSubmit {
+    func transfer(tokens: TransferTokenAction) -> Completable {
         implementMe
     }
 }

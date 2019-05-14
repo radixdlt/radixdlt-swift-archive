@@ -27,6 +27,7 @@ where
     init(validated: Magnitude)
     init(validating: Magnitude) throws
     
+    var sign: AmountSign { get } 
     func negated() -> SignedAmount
     var abs: NonNegativeAmount { get }
 }

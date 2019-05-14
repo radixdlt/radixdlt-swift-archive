@@ -8,6 +8,16 @@
 
 import Foundation
 
-public protocol NodeInteracting {
-    var nodeInteractor: NodeInteraction { get }
+public protocol NodeInteractingSubscribe {
+    var nodeSubscriber: NodeInteractionSubscribing { get }
 }
+
+public protocol NodeInteractingUnubscribe {
+   var nodeUnsubscriber: NodeInteractionUnsubscribing { get }
+}
+
+public protocol NodeInteractingSubmit {
+   var nodeSubmitter: NodeInteractionSubmitting { get }
+}
+
+public typealias NodeInteracting = NodeInteractingSubscribe & NodeInteractingUnubscribe & NodeInteractingSubmit

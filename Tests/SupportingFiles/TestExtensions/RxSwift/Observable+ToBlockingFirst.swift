@@ -20,11 +20,48 @@ extension Observable {
         failOnNil: Bool = true,
         function: String = #function,
         file: String = #file
-    ) -> E? {
+        ) -> E? {
         
+        return blockingTake(
+            at: .first,
+            timeout: timeout,
+            failOnTimeout: failOnTimeout,
+            failOnNil: failOnNil,
+            function: function,
+            file: file
+        )
+    }
+    
+    func blockingTakeLast(
+        timeout: RxTimeInterval? = 2,
+        failOnTimeout: Bool = true,
+        failOnNil: Bool = true,
+        function: String = #function,
+        file: String = #file
+        ) -> E? {
+        
+        return blockingTake(
+            at: .last,
+            timeout: timeout,
+            failOnTimeout: failOnTimeout,
+            failOnNil: failOnNil,
+            function: function,
+            file: file
+        )
+    }
+    
+    func blockingTake(
+        at takeElementAt: ElementAt,
+        timeout: RxTimeInterval? = 2,
+        failOnTimeout: Bool = true,
+        failOnNil: Bool = true,
+        function: String = #function,
+        file: String = #file
+        ) -> E? {
         return take(1)
             .toBlocking(timeout: timeout)
-            .getFirstElement(
+            .getElement(
+                at: takeElementAt,
                 timeout: timeout,
                 failOnTimeout: failOnTimeout && isConnectedToLocalhost(),
                 failOnNil: failOnNil,
@@ -55,8 +92,14 @@ extension Observable {
     }
 }
 
+enum ElementAt {
+    case first
+    case last
+}
+
 private extension BlockingObservable {
-    func getFirstElement(
+    func getElement(
+        at getElementAt: ElementAt = .first,
         timeout: RxTimeInterval? = 2,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
@@ -65,7 +108,13 @@ private extension BlockingObservable {
     ) -> E? {
         let description = "\(function) in \(file)"
         do {
-            let element = try self.first()
+            let element: E?
+            switch getElementAt {
+            case .first:
+                element = try self.first()
+            case .last:
+                element = try self.last()
+            }
             if failOnNil {
                 XCTAssertNotNil(element, "Element should not be nil, \(description)")
             }

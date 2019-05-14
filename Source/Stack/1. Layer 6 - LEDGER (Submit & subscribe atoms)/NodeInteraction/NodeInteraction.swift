@@ -9,9 +9,20 @@
 import Foundation
 import RxSwift
 
-public protocol NodeInteraction {
+public protocol NodeInteractionSubscribing {
     func subscribe(to address: Address) -> Observable<[AtomUpdate]>
-    func submit(atom: SignedAtom) -> Completable
+}
+
+public protocol NodeInteractionUnsubscribing {
     func unsubscribe(from address: Address) -> Completable
     func unsubscribeAll() -> Completable
 }
+
+public protocol NodeInteractionSubmitting {
+    func submit(atom: SignedAtom) -> Completable
+}
+
+public typealias NodeInteraction =
+    NodeInteractionSubscribing &
+    NodeInteractionUnsubscribing &
+    NodeInteractionSubmitting

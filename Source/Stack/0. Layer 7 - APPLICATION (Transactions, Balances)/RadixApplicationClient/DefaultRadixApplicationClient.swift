@@ -9,18 +9,41 @@
 import Foundation
 import RxSwift
 
-public final class DefaultRadixApplicationClient: RadixApplicationClient, NodeInteracting {
+public protocol IdentityHolder {
+    var identity: RadixIdentity { get }
+}
 
-    public let nodeInteractor: NodeInteraction
+public final class DefaultRadixApplicationClient: RadixApplicationClient, IdentityHolder, NodeInteracting {
+
+    public let nodeSubscriber: NodeInteractionSubscribing
+    public let nodeUnsubscriber: NodeInteractionUnsubscribing
+    public let nodeSubmitter: NodeInteractionSubmitting
+    
     public let identity: RadixIdentity
     
-    private init(nodeInteractor: NodeInteraction, identity: RadixIdentity) {
-        self.nodeInteractor = nodeInteractor
+    public init(
+        nodeSubscriber: NodeInteractionSubscribing,
+        nodeUnsubscriber: NodeInteractionUnsubscribing,
+        nodeSubmitter: NodeInteractionSubmitting,
+        identity: RadixIdentity
+    ) {
+        self.nodeSubscriber = nodeSubscriber
+        self.nodeUnsubscriber = nodeUnsubscriber
+        self.nodeSubmitter = nodeSubmitter
         self.identity = identity
     }
 }
 
 public extension DefaultRadixApplicationClient {
+    
+    convenience init(nodeInteractor: NodeInteraction, identity: RadixIdentity) {
+        self.init(
+            nodeSubscriber: nodeInteractor,
+            nodeUnsubscriber: nodeInteractor,
+            nodeSubmitter: nodeInteractor,
+            identity: identity
+        )
+    }
     
     convenience init(_ nodeDiscovery: NodeDiscovery, identity: RadixIdentity) {
         self.init(

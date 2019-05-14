@@ -21,6 +21,7 @@ public protocol DictionaryConvertible:
     init(dictionary: Map)
     init(validate: Map) throws
     subscript(key: Key) -> Value? { get }
+    func merging(with other: Self, uniquingKeysWith combine: (Value, Value) throws -> Value) rethrows -> Self
 }
 
 // MARK: Default Implementation
@@ -44,6 +45,13 @@ public extension DictionaryConvertible {
     
     func contains(where predicate: ((key: Key, value: Value)) throws -> Bool) rethrows -> Bool {
         return try dictionary.contains(where: predicate)
+    }
+
+    func merging(with other: Self, uniquingKeysWith combine: (Value, Value) throws -> Value) rethrows -> Self {
+        
+        let mergedDictionary = try dictionary.merging(other.dictionary, uniquingKeysWith: combine)
+        
+        return Self(dictionary: mergedDictionary)
     }
 }
 
