@@ -33,9 +33,8 @@ public extension Array {
 // MARK: - TransferTokenActionToParticleGroupsMapper
 public extension DefaultTransferTokenActionToParticleGroupsMapper {
     
-    func particleGroups(for transfer: TransferTokenAction, state: TokenBalanceState) throws -> ParticleGroups {
-        let tokenBalance = state.balanceOrZero(of: transfer.tokenResourceIdentifier, address: transfer.sender)
-
+    func particleGroups(for transfer: Action, currentBalance tokenBalance: TokenBalance) throws -> ParticleGroups {
+ 
         guard
             let balance = try? PositiveAmount(signedAmount: tokenBalance.amount),
             balance >= transfer.amount

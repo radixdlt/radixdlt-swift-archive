@@ -46,7 +46,6 @@ public struct TokenBalance: Hashable, TokenDefinitionReferencing {
     }
     
     public init(spunTransferrable: SpunTransferrable) {
-        log.error("Creating TokenBalance from SpunTransferrable, amount: \(spunTransferrable.particle.amount), spin: \(spunTransferrable.spin)")
         self.init(transferrable: spunTransferrable.particle, spin: spunTransferrable.spin)
     }
 }

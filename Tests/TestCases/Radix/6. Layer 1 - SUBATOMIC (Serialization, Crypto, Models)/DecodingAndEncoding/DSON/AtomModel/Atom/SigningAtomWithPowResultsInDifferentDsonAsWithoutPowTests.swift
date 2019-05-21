@@ -36,7 +36,7 @@ class SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests: XCTestCase {
         }
         let atomWithPow = try! ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
         let atomWithoutPowDsonAll = try! atom.toDSON(output: .all)
-        let atomWithPowDsonAll = try! atomWithPow.atom.toDSON(output: .all)
+        let atomWithPowDsonAll = try! atomWithPow.toDSON(output: .all)
         
         XCTAssertNotEqual(
             atomWithoutPowDsonAll,
@@ -45,7 +45,7 @@ class SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests: XCTestCase {
         )
         
         let atomWithoutPowDsonHash = try! atom.toDSON(output: .hash)
-        let atomWithPowDsonHash = try! atomWithPow.atom.toDSON(output: .hash)
+        let atomWithPowDsonHash = try! atomWithPow.toDSON(output: .hash)
         
         XCTAssertNotEqual(atomWithoutPowDsonHash, atomWithPowDsonHash)
         

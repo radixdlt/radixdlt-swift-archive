@@ -39,3 +39,10 @@ public extension ParticleGroups {
         self.init(particleGroups: elements)
     }
 }
+
+// MARK: - To Atom
+public extension ParticleGroups {
+    func wrapInAtom() -> Atom {
+        return Atom(metaData: .timeNow, particleGroups: self)
+    }
+}

@@ -11,7 +11,7 @@ import Foundation
 import RxSwift
 
 struct MockedNodeSubmitting: NodeInteractionSubmitting {
-    func submit(atom: SignedAtom) -> Completable {
+    func submit(atom: SignedAtom) -> CompletableWanted {
         abstract
     }
 }

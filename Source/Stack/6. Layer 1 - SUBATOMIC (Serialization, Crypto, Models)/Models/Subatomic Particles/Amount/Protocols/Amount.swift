@@ -16,7 +16,8 @@ public protocol Amount:
     StringRepresentable,
     CBORDataConvertible,
     Numeric,
-    Comparable
+    Comparable,
+    Hashable
 where
     Magnitude: BigInteger & StringRepresentable & StringInitializable
 {

@@ -9,4 +9,4 @@
 import Foundation
 import RxSwift
 
-public typealias RadixApplicationClient = Transacting & AccountBalancing
+public typealias RadixApplicationClient = Transacting & AccountBalancing & TokenCreating

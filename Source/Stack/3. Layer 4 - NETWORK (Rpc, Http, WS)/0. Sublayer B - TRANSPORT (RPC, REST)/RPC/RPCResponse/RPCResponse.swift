@@ -75,10 +75,6 @@ internal enum RPCResponse<ResultOrParam>: Decodable, RPCResposeResultConvertible
     case resultLookingLikeRequest(RPCResponseLookingLikeRequest<ResultOrParam>)
 }
 
-public enum RPCError: String, Swift.Error, Decodable {
-    case foobar
-}
-
 // MARK: - RPCResposeResultConvertible
 extension RPCResponse {
     var model: ResultOrParam {
@@ -98,13 +94,33 @@ extension RPCResponse {
 
 // MARK: - Decodable
 extension RPCResponse {
+
+    enum CodingKeys: String, CodingKey {
+        case result, params
+    }
+    
     init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        do {
-            self = .resultWithRequestId(try container.decode(RPCResponseResultWithRequestId<ResultOrParam>.self))
-        } catch {
-            self = .resultLookingLikeRequest(try container.decode(RPCResponseLookingLikeRequest<ResultOrParam>.self))
-            
+        let keyedContainer = try decoder.container(keyedBy: CodingKeys.self)
+        let singleValueContainer = try decoder.singleValueContainer()
+        
+        if keyedContainer.contains(.params) {
+            do {
+                self = .resultLookingLikeRequest(try singleValueContainer.decode(RPCResponseLookingLikeRequest<ResultOrParam>.self))
+            } catch let decodingError as DecodingError {
+                throw decodingError
+            } catch {
+                incorrectImplementation("Unexpected and unhandled error trying to decode JSON into `RPCResponseLookingLikeRequest`: \(error)")
+            }
+        } else if keyedContainer.contains(.result) {
+            do {
+              self = .resultWithRequestId(try singleValueContainer.decode(RPCResponseResultWithRequestId<ResultOrParam>.self))
+            } catch let decodingError as DecodingError {
+                throw decodingError
+            } catch {
+                incorrectImplementation("Unexpected and unhandled error trying to decode JSON into `RPCResponseResultWithRequestId`: \(error)")
+            }
+        } else {
+            incorrectImplementation("Error decoding `RPCResponse`, found neither json key `\(CodingKeys.result.stringValue)`, nor `\(CodingKeys.params.stringValue)`")
         }
     }
 }

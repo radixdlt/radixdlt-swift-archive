@@ -17,4 +17,14 @@ where
     State == TokenBalanceState
 {
     // swiftlint:enable colon opening_brace
+    func particleGroups(for action: Action, currentBalance: TokenBalance) throws -> ParticleGroups
+}
+
+public extension TransferTokenActionToParticleGroupsMapper {
+    func particleGroups(for action: Action, state: State) throws -> ParticleGroups {
+        let rri = action.tokenResourceIdentifier
+        let sender = action.sender
+        let currentBalance = state.balanceOrZero(of: rri, address: sender)
+        return try particleGroups(for: action, currentBalance: currentBalance)
+    }
 }

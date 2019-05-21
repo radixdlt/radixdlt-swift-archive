@@ -18,7 +18,7 @@ extension FullDuplexCommunicationChannel {
                 log.verbose("RPC received model: \(rpcResponse.model)")
                 return Observable.just(rpcResponse.model)
             case .failure(let error):
-                log.error("RPC error: \(error)")
+                log.error(error)
                 return Observable.error(error)
             }
         }

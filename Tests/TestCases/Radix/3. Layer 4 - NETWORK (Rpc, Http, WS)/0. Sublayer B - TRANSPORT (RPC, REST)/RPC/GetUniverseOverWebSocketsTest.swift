@@ -43,7 +43,7 @@ class GetUniverseOverWebSocketsTest: WebsocketTest {
         
         XCTAssertThrowsSpecificError(
             try mockedRpcClient.getUniverseConfig().take(1).toBlocking(timeout: 1).first(),
-            DecodingError.expectedStringButGotDictionary,
+             RPCError.failedToDecodeResponse(DecodingError.keyNotFound(UniverseConfig.CodingKeys.magic)),
             "Should throw error when receiving error from API"
         )
     }

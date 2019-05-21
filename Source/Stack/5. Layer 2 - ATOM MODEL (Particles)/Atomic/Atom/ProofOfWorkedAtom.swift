@@ -8,43 +8,41 @@
 
 import Foundation
 
-public struct ProofOfWorkedAtom: AtomConvertible, SignableConvertible {
+// swiftlint:disable colon opening_brace
+
+public struct ProofOfWorkedAtom:
+    AtomContainer,
+    Throwing
+{
+    // swiftlint:enable colon opening_brace
     
-    public enum Error: Swift.Error {
-        case atomAlreadyContainedPow(powNonce: String)
-        case atomDoesNotContainPow
-    }
-    
-    public let atom: Atom
+    public let wrappedAtom: Atom
     
     public init(atomWithoutPow: Atomic, proofOfWork: ProofOfWork) throws {
         if let existingPowNonce = atomWithoutPow.metaData[.proofOfWork] {
             throw Error.atomAlreadyContainedPow(powNonce: existingPowNonce)
         }
         
-        self.atom = atomWithoutPow.withProofOfWork(proofOfWork)
+        self.wrappedAtom = atomWithoutPow.withProofOfWork(proofOfWork)
     }
     
     public init(atomWithPow: Atomic) throws {
         guard atomWithPow.metaData.valueFor(key: .proofOfWork) != nil else {
             throw Error.atomDoesNotContainPow
         }
-        self.atom = Atom(atomic: atomWithPow)
+        self.wrappedAtom = Atom(atomic: atomWithPow)
     }
 }
 
-// MARK: - AtomConvertible
+// MARK: - Throwing
 public extension ProofOfWorkedAtom {
-    var atomic: Atomic { return atom }
-}
-
-// MARK: - SignableConvertible
-public extension ProofOfWorkedAtom {
-    var signable: Signable {
-        return atom.signable
+    enum Error: Swift.Error {
+        case atomAlreadyContainedPow(powNonce: String)
+        case atomDoesNotContainPow
     }
 }
 
+// MARK: - Atomic + PoW
 private extension Atomic {
     func withProofOfWork(_ proof: ProofOfWork) -> Atom {
         let atom = Atom(

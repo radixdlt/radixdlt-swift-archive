@@ -13,6 +13,11 @@ import RxTest
 import RxBlocking
 import RxSwift
 
+extension RxTimeInterval {
+    static var enoughForPOW: RxTimeInterval {
+        return 30
+    }
+}
 
 extension TestScheduler {
     

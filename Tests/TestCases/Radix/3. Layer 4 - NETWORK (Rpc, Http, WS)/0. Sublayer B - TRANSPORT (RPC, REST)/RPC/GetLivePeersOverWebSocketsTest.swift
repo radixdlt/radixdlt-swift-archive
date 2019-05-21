@@ -44,7 +44,7 @@ class GetLivePeersOverWebSocketsTest: WebsocketTest {
 
         XCTAssertThrowsSpecificError(
             try mockedRpcClient.getLivePeers().take(1).toBlocking(timeout: 1).first(),
-            DecodingError.expectedStringButGotDictionary,
+            RPCError.failedToDecodeResponse(DecodingError.keyNotFound(NodeInfo.CodingKeys.system)),
             "Should throw error when receiving error from API"
         )
     }

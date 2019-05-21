@@ -57,7 +57,6 @@ public extension Atomic {
     }
     
     func tokensBalances() -> [TokenBalance] {
-        log.error("SpunParticles count: #\(self.spunParticles().count)")
         return spunParticles().compactMap {
             $0.mapToSpunParticle(with: TransferrableTokensParticle.self)
         }.map {

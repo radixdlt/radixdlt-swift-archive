@@ -13,6 +13,12 @@ public protocol RadixHashable {
     var hashId: EUID { get }
 }
 
+public extension RadixHashable {
+    var hashId: EUID {
+        return radixHash.toEUID()
+    }
+}
+
 public extension RadixHashable where Self: DSONEncodable {
     var radixHash: RadixHash {
         do {
@@ -20,10 +26,6 @@ public extension RadixHashable where Self: DSONEncodable {
         } catch {
             incorrectImplementation("Should always be able to hash, error: \(error)")
         }
-    }
-    
-    var hashId: EUID {
-        return radixHash.toEUID()
     }
 }
 

@@ -14,7 +14,7 @@ import Foundation
 /// - seeAlso:
 /// `ParticleGroup`
 ///
-public struct Atom: Atomic, AtomicCreating, AtomConvertible {
+public struct Atom: Atomic, ExpressibleBySubatomicParts {
     
     public let particleGroups: ParticleGroups
     public let signatures: Signatures
@@ -28,12 +28,5 @@ public struct Atom: Atomic, AtomicCreating, AtomConvertible {
         self.particleGroups = particleGroups
         self.signatures = signatures
         self.metaData = metaData
-    }
-}
-
-// MARK: - AtomConvertible
-public extension Atom {
-    var atomic: Atomic {
-        return self
     }
 }

@@ -8,7 +8,11 @@
 
 import Foundation
 
-public enum AtomSubscriptionUpdate: Decodable {
+public protocol SubscriptionUpdate: Decodable {
+    var subscriberId: String { get }
+}
+
+public enum AtomSubscriptionUpdate: SubscriptionUpdate {
     case subscribe(AtomSubscriptionUpdateSubscribe)
     case submitAndSubscribe(AtomSubscriptionUpdateSubmitAndSubscribe)
     
@@ -23,6 +27,14 @@ public enum AtomSubscriptionUpdate: Decodable {
 }
 
 public extension AtomSubscriptionUpdate {
+    
+    var subscriberId: String {
+        switch self {
+        case .submitAndSubscribe(let sas): return sas.subscriberId
+        case .subscribe(let sub): return sub.subscriberId
+        }
+    }
+    
     var subscriptionUpdate: AtomSubscriptionUpdateSubscribe? {
         switch self {
         case .subscribe(let subscribeUpdate): return subscribeUpdate
@@ -36,9 +48,18 @@ public extension AtomSubscriptionUpdate {
         default: return nil
         }
     }
+    
+    func mapTo<U: SubscriptionUpdateValue>(type: U.Type) -> U? {
+        switch self {
+        case .submitAndSubscribe(let sas): return sas as? U
+        case .subscribe(let sub): return sub as? U
+        }
+    }
 }
 
-public struct AtomSubscriptionUpdateSubscribe: Decodable {
+public protocol SubscriptionUpdateValue: SubscriptionUpdate {}
+
+public struct AtomSubscriptionUpdateSubscribe: SubscriptionUpdateValue {
     public let atomEvents: [AtomEvent]
     public let subscriberId: String
     public let isHead: Bool
@@ -49,12 +70,12 @@ public extension AtomSubscriptionUpdateSubscribe {
         return atomEvents.enumerated().map {
             let atomEvent = $0.element
             let isHead = $0.offset == atomEvents.endIndex
-            return AtomUpdate(action: atomEvent.type, atom: atomEvent.atom, isHead: isHead)
+            return AtomUpdate(atom: atomEvent.atom, action: atomEvent.type, isHead: isHead)
         }
     }
 }
 
-public struct AtomSubscriptionUpdateSubmitAndSubscribe: Decodable {
+public struct AtomSubscriptionUpdateSubmitAndSubscribe: SubscriptionUpdateValue {
     public let subscriberId: String
     public let value: State
     

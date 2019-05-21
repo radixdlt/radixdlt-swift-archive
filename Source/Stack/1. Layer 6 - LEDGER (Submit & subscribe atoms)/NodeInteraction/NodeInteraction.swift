@@ -14,12 +14,12 @@ public protocol NodeInteractionSubscribing {
 }
 
 public protocol NodeInteractionUnsubscribing {
-    func unsubscribe(from address: Address) -> Completable
-    func unsubscribeAll() -> Completable
+    func unsubscribe(from address: Address) -> CompletableWanted
+    func unsubscribeAll() -> CompletableWanted
 }
 
 public protocol NodeInteractionSubmitting {
-    func submit(atom: SignedAtom) -> Completable
+    func submit(atom: SignedAtom) -> CompletableWanted
 }
 
 public typealias NodeInteraction =

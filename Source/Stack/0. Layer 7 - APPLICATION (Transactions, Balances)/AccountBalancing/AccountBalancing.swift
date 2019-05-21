@@ -47,7 +47,7 @@ public extension AccountBalancing where Self: NodeInteractingSubscribe {
                     guard $0.action == .store else { return nil }
                     return $0.atom
                 }
-        }
+            }
         return TokenBalanceReducer().reduce(atoms: atoms)
     }
 }

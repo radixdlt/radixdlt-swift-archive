@@ -19,7 +19,8 @@ extension Observable {
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
-        file: String = #file
+        file: String = #file,
+        line: Int = #line
         ) -> E? {
         
         return blockingTake(
@@ -28,7 +29,8 @@ extension Observable {
             failOnTimeout: failOnTimeout,
             failOnNil: failOnNil,
             function: function,
-            file: file
+            file: file,
+            line: line
         )
     }
     
@@ -37,7 +39,8 @@ extension Observable {
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
-        file: String = #file
+        file: String = #file,
+        line: Int = #line
         ) -> E? {
         
         return blockingTake(
@@ -46,7 +49,8 @@ extension Observable {
             failOnTimeout: failOnTimeout,
             failOnNil: failOnNil,
             function: function,
-            file: file
+            file: file,
+            line: line
         )
     }
     
@@ -56,7 +60,8 @@ extension Observable {
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
-        file: String = #file
+        file: String = #file,
+        line: Int = #line
         ) -> E? {
         return take(1)
             .toBlocking(timeout: timeout)
@@ -66,7 +71,8 @@ extension Observable {
                 failOnTimeout: failOnTimeout && isConnectedToLocalhost(),
                 failOnNil: failOnNil,
                 function: function,
-                file: file
+                file: file,
+                line: line
         )
     }
     
@@ -76,7 +82,8 @@ extension Observable {
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
-        file: String = #file
+        file: String = #file,
+        line: Int = #line
     ) -> [E]? {
         
         return take(takeCount)
@@ -86,7 +93,8 @@ extension Observable {
                 failOnTimeout: failOnTimeout && isConnectedToLocalhost(),
                 failOnNil: failOnNil,
                 function: function,
-                file: file
+                file: file,
+                line: line
             )
         
     }
@@ -104,9 +112,10 @@ private extension BlockingObservable {
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
-        file: String = #file
+        file: String = #file,
+        line: Int = #line
     ) -> E? {
-        let description = "\(function) in \(file)"
+        let description = "\(function) in \(file), at line: \(line)"
         do {
             let element: E?
             switch getElementAt {
@@ -124,8 +133,10 @@ private extension BlockingObservable {
                 XCTFail("Timeout, \(description)")
             }
             return nil
+        } catch RxError.moreThanOneElement {
+            fatalError("RxError.moreThanOneElement, \(description)")
         } catch {
-            fatalError("Unexpected error thrown: \(error)")
+            fatalError("Unexpected error thrown: \(error), \(description)")
         }
     }
     
@@ -134,9 +145,10 @@ private extension BlockingObservable {
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
-        file: String = #file
+        file: String = #file,
+        line: Int = #line
         ) -> [E]? {
-        let description = "\(function) in \(file)"
+        let description = "\(function) in \(file), at line: \(line)"
         do {
             let array = try self.toArray()
             if failOnNil {
@@ -149,7 +161,7 @@ private extension BlockingObservable {
             }
             return nil
         } catch {
-            fatalError("Unexpected error thrown: \(error)")
+            fatalError("Unexpected error thrown: \(error), \(description)")
         }
     }
 }

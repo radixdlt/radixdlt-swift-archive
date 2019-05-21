@@ -17,13 +17,13 @@ public struct TransferTokenAction: UserAction {
     public let tokenResourceIdentifier: ResourceIdentifier
     
     public init(
-        from sender: Address,
-        to recipient: Address,
+        from sender: Ownable,
+        to recipient: Ownable,
         amount: PositiveAmount,
         tokenResourceIdentifier: ResourceIdentifier
     ) {
-        self.sender = sender
-        self.recipient = recipient
+        self.sender = sender.address
+        self.recipient = recipient.address
         self.amount = amount
         self.tokenResourceIdentifier = tokenResourceIdentifier
     }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// The smallest non-divisible amount of subunits one can have is introduced. For the formal definition read [RIP - Tokens][1].
 ///
@@ -22,9 +22,11 @@ public struct Granularity:
     CBORDataConvertible,
     StringRepresentable,
     Comparable,
-ExpressibleByIntegerLiteral {
+    Hashable,
+    ExpressibleByIntegerLiteral
+{
 
-// swiftlint:enable colon
+// swiftlint:enable colon opening_brace
     
     public typealias Value = BigUnsignedInt
     

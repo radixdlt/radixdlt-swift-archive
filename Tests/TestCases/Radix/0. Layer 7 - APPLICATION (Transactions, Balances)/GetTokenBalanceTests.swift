@@ -13,7 +13,8 @@ import RxSwift
 class GetTokenBalanceTests: XCTestCase {
 
     func testThatOrderOfAtomsDoesNotMatterForBalanceCalculation() {
-        let identity = RadixIdentity(private: 1, magic: 1)
+        let magic: Magic = 1
+        let identity = RadixIdentity(private: 1, magic: magic)
         let myAddress = identity.address
 
         let atomCount = 3
@@ -25,12 +26,12 @@ class GetTokenBalanceTests: XCTestCase {
             nodeSubscriber: mockedSubscribing,
             nodeUnsubscriber: MockedNodeUnsubscribing(),
             nodeSubmitter: MockedNodeSubmitting(),
-            identity: identity
+            identity: identity,
+            magic: magic
         )
         
         func atomUpdate(amount: PositiveAmount, spin: Spin, isHead: Bool = false) -> AtomUpdate {
             return AtomUpdate(
-                action: .store,
                 atom: atomTransferrable(amount, address: myAddress, spin: spin),
                 isHead: isHead)
         }
@@ -41,7 +42,7 @@ class GetTokenBalanceTests: XCTestCase {
            atomUpdate(amount: 1, spin: .up, isHead: true)
         ])
         
-        guard let downUpUpBalance = application.getMyBalance(of: xrd).blockingTakeLast() else { return }
+        guard let downUpUpBalance = application.getMyBalance(of: xrd).blockingTakeFirst() else { return }
         
         replaySubject.onNext([
             atomUpdate(amount: 1, spin: .up),
@@ -49,7 +50,7 @@ class GetTokenBalanceTests: XCTestCase {
             atomUpdate(amount: 1, spin: .up, isHead: true)
             ])
 
-        guard let upDownUpBalance = application.getMyBalance(of: xrd).blockingTakeLast() else { return }
+        guard let upDownUpBalance = application.getMyBalance(of: xrd).blockingTakeFirst() else { return }
 
         XCTAssertAllEqual(
             downUpUpBalance.amount,
