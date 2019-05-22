@@ -11,6 +11,7 @@ import XCTest
 import RxSwift
 import RxTest
 import RxBlocking
+@testable import RadixSDK
 
 extension Observable {
     
@@ -135,6 +136,8 @@ private extension BlockingObservable {
             return nil
         } catch RxError.moreThanOneElement {
             fatalError("RxError.moreThanOneElement, \(description)")
+        } catch let rpcError as RPCError {
+            fatalError("rpcError: \(rpcError)")
         } catch {
             fatalError("Unexpected error thrown: \(error), \(description)")
         }

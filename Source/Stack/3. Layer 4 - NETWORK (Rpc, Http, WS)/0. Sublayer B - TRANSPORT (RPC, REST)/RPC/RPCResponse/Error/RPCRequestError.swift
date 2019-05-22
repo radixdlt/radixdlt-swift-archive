@@ -43,10 +43,14 @@ public extension RPCRequestError {
     var description: String {
         var radixInfoString = ""
         if let radixErrorInfo = radixErrorInfo {
-            radixInfoString = ", info: '\(radixErrorInfo)'"
+            radixInfoString = ", info: \(radixErrorInfo)"
         }
-        return """
-            RPC error '\(code)' - '\(message)'\(radixInfoString)
-        """
+        return "\(code.nameAndCode): \"\(message)\"\(radixInfoString)"
+    }
+}
+
+private extension RPCErrorCode {
+    var nameAndCode: String {
+        return "\(self) (\(rawValue))"
     }
 }

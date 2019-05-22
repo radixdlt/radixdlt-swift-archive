@@ -17,4 +17,3 @@ public enum RPCErrorCode: Int, Swift.Error, Decodable, Equatable {
     case invalidParams = -32602 // 1042 = out of range, 1043 = unauthorixed
     case internalError = -32603 // 1046 = limit exceeded
 }
-

@@ -17,10 +17,10 @@ extension Result: Decodable where Success: Decodable, Failure == RPCError {
     }
     
     public init(from decoder: Decoder) throws {
-        let cont = try decoder.container(keyedBy: CodingKeys.self)
+        let keyedContainer = try decoder.container(keyedBy: CodingKeys.self)
         let singleValueContainer = try decoder.singleValueContainer()
         
-        if cont.contains(.params) || cont.contains(.result) {
+        if keyedContainer.contains(.params) || keyedContainer.contains(.result) {
             do {
                 self = .success(try singleValueContainer.decode(Success.self))
             } catch let decodingError as DecodingError {
@@ -28,7 +28,7 @@ extension Result: Decodable where Success: Decodable, Failure == RPCError {
             } catch {
                 incorrectImplementation("Covered by RPCResponse `init(from: Decoder)`")
             }
-        } else if cont.contains(.error) {
+        } else if keyedContainer.contains(.error) {
             do {
                 self = .failure(try singleValueContainer.decode(RPCError.self))
             } catch {

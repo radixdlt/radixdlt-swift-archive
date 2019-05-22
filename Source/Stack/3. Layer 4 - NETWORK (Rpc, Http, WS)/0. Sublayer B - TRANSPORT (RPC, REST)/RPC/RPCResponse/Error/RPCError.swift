@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum RPCError: Swift.Error, Decodable, Equatable {
+public enum RPCError: Swift.Error, Decodable, Equatable, CustomStringConvertible {
     case requestError(RPCRequestError)
     
     /// Received response containing `"params"` or `"result"`, thus a valid response, but failed to decode it into a model.
@@ -35,6 +35,18 @@ public extension RPCError {
             self = .metaError(decodingError)
         } catch {
             incorrectImplementation("Forgot some scenario, got non `DecodingError`: \(error)")
+        }
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension RPCError {
+    var description: String {
+        switch self {
+        case .failedToDecodeResponse(let decodingError): return "Recived non error response from API, but failed to decode it: \(decodingError)"
+        case .metaError(let decodingError): return "Recived specific API error, but failed to parse it, meta error: \(decodingError)"
+        case .unrecognizedJson(let jsonString): return "Error parsing unrecognized json: `\(jsonString)`"
+        case .requestError(let requestError): return "Request error: `\(requestError)`"
         }
     }
 }
