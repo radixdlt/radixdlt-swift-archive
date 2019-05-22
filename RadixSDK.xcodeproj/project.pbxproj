@@ -22,9 +22,6 @@
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
 		E6296C8B2292EF6000753FD5 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C8A2292EF6000753FD5 /* AnyDecodable.swift */; };
 		E6296C8D229455CB00753FD5 /* StringAnyDictionary+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C8C229455CB00753FD5 /* StringAnyDictionary+Decodable.swift */; };
-		E6296C902294565500753FD5 /* Subscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C8F2294565500753FD5 /* Subscriptions.swift */; };
-		E6296C922294566B00753FD5 /* PendingSubmissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C912294566B00753FD5 /* PendingSubmissions.swift */; };
-		E6296C942294568E00753FD5 /* PublicKeyHashIdToSubscriberId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C932294568E00753FD5 /* PublicKeyHashIdToSubscriberId.swift */; };
 		E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62C030B220491CD001F27DE /* Sequence_Extension.swift */; };
 		E62EFDB92248F9B600B6DAD6 /* betanet.json in Resources */ = {isa = PBXBuildFile; fileRef = E62EFDB82248F9B600B6DAD6 /* betanet.json */; };
 		E62EFDBA2248F9B600B6DAD6 /* betanet.json in Resources */ = {isa = PBXBuildFile; fileRef = E62EFDB82248F9B600B6DAD6 /* betanet.json */; };
@@ -443,9 +440,6 @@
 		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
 		E6296C8A2292EF6000753FD5 /* AnyDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
 		E6296C8C229455CB00753FD5 /* StringAnyDictionary+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringAnyDictionary+Decodable.swift"; sourceTree = "<group>"; };
-		E6296C8F2294565500753FD5 /* Subscriptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscriptions.swift; sourceTree = "<group>"; };
-		E6296C912294566B00753FD5 /* PendingSubmissions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingSubmissions.swift; sourceTree = "<group>"; };
-		E6296C932294568E00753FD5 /* PublicKeyHashIdToSubscriberId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyHashIdToSubscriberId.swift; sourceTree = "<group>"; };
 		E62C030B220491CD001F27DE /* Sequence_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence_Extension.swift; sourceTree = "<group>"; };
 		E62EFDB82248F9B600B6DAD6 /* betanet.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = betanet.json; sourceTree = "<group>"; };
 		E62EFDBB2249090500B6DAD6 /* NodeFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeFinder.swift; sourceTree = "<group>"; };
@@ -973,9 +967,6 @@
 			isa = PBXGroup;
 			children = (
 				E6166BE32260AF5A003A9442 /* DefaultNodeInteraction.swift */,
-				E6296C8F2294565500753FD5 /* Subscriptions.swift */,
-				E6296C932294568E00753FD5 /* PublicKeyHashIdToSubscriberId.swift */,
-				E6296C912294566B00753FD5 /* PendingSubmissions.swift */,
 			);
 			path = DefaultNodeInteraction;
 			sourceTree = "<group>";
@@ -3139,11 +3130,9 @@
 				E6E2792F2271CD1C0067D46E /* Secp256k1.swift in Sources */,
 				E696AAD0226DE6F700D19ED6 /* Transacting.swift in Sources */,
 				E6E2794C2271CD1C0067D46E /* PrefixedJsonDecodable.swift in Sources */,
-				E6296C922294566B00753FD5 /* PendingSubmissions.swift in Sources */,
 				E6474AC42266149F009C4FDC /* Host+Decodable.swift in Sources */,
 				E6474AF4226793E0009C4FDC /* AtomUpdate.swift in Sources */,
 				E6E279562271CD1C0067D46E /* CBORDictionaryConvertible.swift in Sources */,
-				E6296C902294565500753FD5 /* Subscriptions.swift in Sources */,
 				E6E2795E2271CD1C0067D46E /* CBOR+DSONPrefix.swift in Sources */,
 				E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */,
 				E6ED1A4021F8836300654105 /* UniverseConfig.swift in Sources */,
@@ -3325,7 +3314,6 @@
 				E6F5483F22771E5200EE6311 /* UserAction.swift in Sources */,
 				E6E279332271CD1C0067D46E /* Mnemonic+Word.swift in Sources */,
 				E6A507F3224E6A4600128123 /* TokenBalance.swift in Sources */,
-				E6296C942294568E00753FD5 /* PublicKeyHashIdToSubscriberId.swift in Sources */,
 				E672564B228AEBE0004631F1 /* TokenCreating.swift in Sources */,
 				E6474AC8226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift in Sources */,
 				E6E2798E2271CD1C0067D46E /* DataInitializable.swift in Sources */,

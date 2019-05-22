@@ -18,7 +18,8 @@ public struct ResourceIdentifier:
     PrefixedJsonCodable,
     StringRepresentable,
     DSONPrefixedDataConvertible,
-    Hashable
+    Hashable,
+    CustomStringConvertible
 {
   
 // swiftlint:enable colon opening_brace
@@ -57,6 +58,13 @@ public extension ResourceIdentifier {
 public extension ResourceIdentifier {
     var stringValue: String {
         return identifier
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension ResourceIdentifier {
+    var description: String {
+        return "$/\(address.short)/\(name)$"
     }
 }
 
@@ -122,12 +130,5 @@ public extension ResourceIdentifier {
             address.base58String.value,
             name
         ].joined(separator: ResourceIdentifier.separator)
-    }
-}
-
-// MARK: CustomStringConvertible
-extension ResourceIdentifier {
-    public var description: String {
-        return identifier
     }
 }

@@ -37,13 +37,12 @@ where
         
         let rri = transferTokenAction.tokenResourceIdentifier
         let powWorker = ProofOfWorkWorker()
-        
-        return getMyBalance(of: rri)
+        return getBalances(for: transferTokenAction.sender, ofToken: rri)
             .map { balance -> ParticleGroups in
                 try actionToParticleGroupsMapper.particleGroups(for: transferTokenAction, currentBalance: balance)
             }.map { particleGroups -> Atom in
                 particleGroups.wrapInAtom()
-            }.flatMap { atom -> Observable<ProofOfWorkedAtom> in
+            }.flatMapLatest { atom -> Observable<ProofOfWorkedAtom> in
                 powWorker.work(atom: atom, magic: self.magic).map {
                     try ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: $0)
                 }
@@ -51,7 +50,7 @@ where
                 try UnsignedAtom(atomWithPow: proofOfWorkAtom)
             }.map { unsignedAtom -> SignedAtom in
                 try self.sign(atom: unsignedAtom)
-            }.flatMap { (signedAtom: SignedAtom) -> CompletableWanted in
+            }.flatMapLatest { (signedAtom: SignedAtom) -> CompletableWanted in
                 self.nodeSubmitter.submit(atom: signedAtom)
         }
     }

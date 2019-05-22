@@ -25,9 +25,9 @@ private var isConnectedToLocalhost: Bool = {
     let (data, response, error) = URLSession(configuration: .default)
         .synchronousDataTask(request: request)
     if let error = error {
-        print("Not connect to localhost, error: \(error)")
+        print("⚠️ Not connect to localhost, error: \(error)")
     } else if let _ = data {
-        print("Connected to localhost")
+        print("📡 Connected to localhost")
         isConnected = true
     }
     return isConnected

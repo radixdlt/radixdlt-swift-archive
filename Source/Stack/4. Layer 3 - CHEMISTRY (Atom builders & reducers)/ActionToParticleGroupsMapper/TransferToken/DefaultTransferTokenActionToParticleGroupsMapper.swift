@@ -43,6 +43,7 @@ public extension DefaultTransferTokenActionToParticleGroupsMapper {
         }
       
         var (particleGroup, remainder) = transferToRecipientInParticleGroupWithRemainder(tokenBalance: tokenBalance, transfer: transfer)
+        
         guard let tokensToRecipient = particleGroup.firstParticle(ofType: TransferrableTokensParticle.self, spin: .up) else {
             incorrectImplementation("Should have created a Transfer to the recipient")
         }
@@ -70,16 +71,17 @@ private extension DefaultTransferTokenActionToParticleGroupsMapper {
         assert(!tokenConsumables.isEmpty, "No consumables, the implementation of `TokenBalance` is incorrect.")
         
         var consumerQuantity: PositiveAmount = 0
-        let isTransactionAmountCovered = { consumerQuantity >= transfer.amount }()
+        let checkIfTransactionAmountIsCovered = { consumerQuantity >= transfer.amount }
         
         var consumedTokens = [AnySpunParticle]()
         
-        for unspentToken in tokenConsumables where !isTransactionAmountCovered {
+        for unspentToken in tokenConsumables where !checkIfTransactionAmountIsCovered() {
             consumerQuantity += unspentToken.amount
             consumedTokens += unspentToken.withSpin(.down)
         }
         
-        assert(isTransactionAmountCovered, "The implementation of this function is incorrect, we should have asserted that we had balance enough earlier in this function")
+        assert(checkIfTransactionAmountIsCovered(), "The implementation of this function is incorrect, we should have asserted that we had balance enough earlier in this function")
+        
         let permissions = tokenConsumables[0].permissions
         let granularity = tokenConsumables[0].granularity
         

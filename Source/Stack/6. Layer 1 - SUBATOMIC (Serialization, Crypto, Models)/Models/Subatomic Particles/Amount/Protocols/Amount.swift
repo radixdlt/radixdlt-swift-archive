@@ -17,7 +17,8 @@ public protocol Amount:
     CBORDataConvertible,
     Numeric,
     Comparable,
-    Hashable
+    Hashable,
+    CustomStringConvertible
 where
     Magnitude: BigInteger & StringRepresentable & StringInitializable
 {
@@ -170,6 +171,6 @@ public extension Amount {
 // MARK: - CustomStringConvertible
 public extension Amount {
     var description: String {
-        return stringValue
+        return amountAndSign.description
     }
 }

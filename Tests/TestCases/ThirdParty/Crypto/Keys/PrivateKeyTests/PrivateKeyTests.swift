@@ -56,7 +56,7 @@ class PrivateKeyTests: XCTestCase {
             magic: magic,
             publicKey: identity.publicKey
         )
-        XCTAssertEqual(address.description, "JEqnJtuyrXLkEDRT6ADTGSMe6etWyKNVdffC5icSh4hWhJYcvCx")
+        XCTAssertEqual(address.full, "JEqnJtuyrXLkEDRT6ADTGSMe6etWyKNVdffC5icSh4hWhJYcvCx")
         let publicKey = PublicKey(private: privateKey)
         XCTAssertEqual(publicKey.description, expected.publicKey)
         
