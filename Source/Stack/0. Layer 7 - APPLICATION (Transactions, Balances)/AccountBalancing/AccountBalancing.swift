@@ -41,13 +41,19 @@ public extension AccountBalancing where Self: IdentityHolder {
 // MARK: - AccountBalancing + NodeInteracting
 public extension AccountBalancing where Self: NodeInteractingSubscribe {
     func getBalances(for address: Address) -> Observable<BalancePerToken> {
-        let atoms = nodeSubscriber.subscribe(to: address)
-            .map { (atomUpdates: [AtomUpdate]) -> [Atom] in
-                return atomUpdates.compactMap {
-                    guard $0.action == .store else { return nil }
-                    return $0.atom
-                }
+        return nodeSubscriber.subscribe(to: address)
+            .storedAtomsOnly()
+            .map { TokenBalanceReducer().reduce(atoms: $0) }
+    }
+}
+
+private extension ObservableType where E == [AtomUpdate] {
+    func storedAtomsOnly() -> Observable<[Atom]> {
+        return self.asObservable().map { (atomUpdates: [AtomUpdate]) -> [Atom] in
+            return atomUpdates.compactMap {
+                guard $0.action == .store else { return nil }
+                return $0.atom
             }
-        return TokenBalanceReducer().reduce(atoms: atoms)
+        }
     }
 }

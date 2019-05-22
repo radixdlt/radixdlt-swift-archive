@@ -19,6 +19,11 @@ public struct TokenBalanceReducer {
 public typealias SpunTransferrable = SpunParticle<TransferrableTokensParticle>
 
 public extension TokenBalanceReducer {
+    
+    func reduce(atoms: [Atom]) -> BalancePerToken {
+        return reduce(tokenBalances: atoms.flatMap { $0.tokensBalances() })
+    }
+    
     func reduce(spunParticles: [AnySpunParticle]) -> BalancePerToken {
         let tokenBalances = spunParticles.compactMap { (spunParticle: AnySpunParticle) -> TokenBalance? in
             guard let transferrableTokensParticle = spunParticle.particle as? TransferrableTokensParticle else {
@@ -58,18 +63,3 @@ public extension TokenBalanceReducer {
         return balancePerTokens.reduce(initial, { $0.merging(with: $1) })
     }
 }
-
-// MARK: - Rx
-public extension TokenBalanceReducer {
-    
-    func reduce(atoms: Observable<[Atom]>) -> Observable<BalancePerToken> {
-        return atoms.map { atomArray -> [TokenBalance] in
-            atomArray.flatMap { atom in
-                atom.tokensBalances()
-            }
-        }.map { (tokenBalances: [TokenBalance]) -> BalancePerToken in
-            return self.reduce(tokenBalances: tokenBalances)
-        }
-    }
-}
-
