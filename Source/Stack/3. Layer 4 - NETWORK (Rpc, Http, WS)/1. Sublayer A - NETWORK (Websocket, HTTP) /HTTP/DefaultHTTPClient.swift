@@ -53,7 +53,7 @@ public extension DefaultHTTPClient {
                         log.error(error)
                         observer.onError(error)
                     case .success(let string):
-                        log.verbose(string)
+                        log.debug(string)
                         observer.onNext(string)
                         observer.onCompleted()
                     }
@@ -94,7 +94,7 @@ private extension DefaultHTTPClient {
                             log.error(error)
                             observer.onError(error)
                         case .success(let model):
-                            log.verbose(model)
+                            log.debug(model)
                             observer.onNext(model)
                             observer.onCompleted()
                         }

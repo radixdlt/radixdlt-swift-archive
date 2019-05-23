@@ -12,14 +12,6 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
-private let magic: Magic = 63799298
-
-private extension RadixIdentity {
-    init() {
-        self.init(magic: magic)
-    }
-}
-
 class TransferTokensTests: XCTestCase {
     
     override func setUp() {
@@ -66,30 +58,38 @@ class TransferTokensTests: XCTestCase {
             "Bob's balance should equal 0"
         )
         
-        // AND WHEN
-        // Alice sends 10 coins to Bob
-        let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
-        
-        switch application.transfer(tokens: transfer).toBlocking(timeout: 2).materialize() {
-        case .completed: break // great!
-        case .failed(_, let error): XCTFail("Transfer failed - error: \(error)")
-        }
-
-        // ...and we update the balances
-        guard let alicesBalanceOfHerCoinAfterTx = application.getMyBalance(of: rri).blockingTakeLast() else { return }
-        guard let bobsBalanceOfAliceCoinAfterTx = application.getBalances(for: bob.address, ofToken: rri).blockingTakeLast() else { return }
-
-        // THEN
-        XCTAssertEqual(
-            alicesBalanceOfHerCoinAfterTx.amount,
-            20,
-            "Alice's balance should equal `20`"
-        )
-        XCTAssertEqual(
-            bobsBalanceOfAliceCoinAfterTx.amount,
-            10,
-            "Bob's balance should equal 10"
-        )
+//        // AND WHEN
+//        // Alice sends 10 coins to Bob
+//        let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
+//        
+//        switch application.transfer(tokens: transfer).toBlocking(timeout: 2).materialize() {
+//        case .completed: break // great!
+//        case .failed(_, let error): XCTFail("Transfer failed - error: \(error)")
+//        }
+//
+//        // ...and we update the balances
+//        guard let alicesBalanceOfHerCoinAfterTx = application.getMyBalance(of: rri).blockingTakeLast() else { return }
+//        guard let bobsBalanceOfAliceCoinAfterTx = application.getBalances(for: bob.address, ofToken: rri).blockingTakeLast() else { return }
+//
+//        // THEN
+//        XCTAssertEqual(
+//            alicesBalanceOfHerCoinAfterTx.amount,
+//            20,
+//            "Alice's balance should equal `20`"
+//        )
+//        XCTAssertEqual(
+//            bobsBalanceOfAliceCoinAfterTx.amount,
+//            10,
+//            "Bob's balance should equal 10"
+//        )
     }
     
+}
+
+private let magic: Magic = 63799298
+
+private extension RadixIdentity {
+    init() {
+        self.init(magic: magic)
+    }
 }

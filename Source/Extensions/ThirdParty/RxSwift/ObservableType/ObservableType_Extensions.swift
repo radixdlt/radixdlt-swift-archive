@@ -33,15 +33,21 @@ public extension ObservableType where E: Sequence {
 }
 
 extension ObservableType where E: PotentiallyRequestIdentifiable {
-    func ifNeededFilterOnRequestId(_ requestId: Int) -> Observable<E> {
+    func ifNeededFilterOnRequestId(_ requestId: Int?) -> Observable<E> {
+        
+        guard let requestId = requestId else {
+            return self.asObservable()
+        }
+        
         // If response contains id, filter on it
         return self.asObservable().map { element -> E? in
             if let elementRequestId = element.requestIdIfPresent {
                 guard elementRequestId == requestId else {
+                    log.warning("Request id mismatch (`\(elementRequestId)` != `\(requestId)`), thus omitting/ignoring element: \(element)")
                     return nil
                 }
             }
             return element
-            }.filterNil()
+        }.filterNil()
     }
 }

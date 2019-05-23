@@ -15,7 +15,7 @@ import RxSwift
 
 extension RxTimeInterval {
     static var enoughForPOW: RxTimeInterval {
-        return 30
+        return 9
     }
 }
 
