@@ -94,7 +94,7 @@ private extension DefaultHTTPClient {
                             log.error(error)
                             observer.onError(error)
                         case .success(let model):
-                            log.debug(model)
+                            log.verbose(model)
                             observer.onNext(model)
                             observer.onCompleted()
                         }

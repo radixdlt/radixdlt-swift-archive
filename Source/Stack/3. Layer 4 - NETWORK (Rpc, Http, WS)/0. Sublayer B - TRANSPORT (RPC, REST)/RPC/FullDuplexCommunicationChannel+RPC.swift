@@ -23,23 +23,9 @@ extension FullDuplexCommunicationChannel {
         return messages
             .map { $0.toData() }
             .map {
-                log.debug("STARTED DECODING RESULT (into \(type(of: Model.self))")
-                do {
-                    let result = try JSONDecoder().decode(RPCResult<Model>.self, from: $0)
-                    log.debug("FINISHED PARSING RESULT from RPC:<\n\(result)\n>")
-                    return result
-                } catch {
-                    log.error("FINISHED DECODING RESULT error: \(error)")
-                    throw error
-                }
-                
+               try JSONDecoder().decode(RPCResult<Model>.self, from: $0)
             }.ifNeededFilterOnRequestId(requestId)
-            
-            /// Perform callbacks (code within `subscribe(onNext:` blocks) on MainThread
-            .observeOn(MainScheduler.instance)
-            
-            /// Perform work ("subscription code") on `background` thread.
-            /// SeeAlso: http://rx-marin.com/post/observeon-vs-subscribeon/
-            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .subscribeOn(MainScheduler.instance)
     }
 }
