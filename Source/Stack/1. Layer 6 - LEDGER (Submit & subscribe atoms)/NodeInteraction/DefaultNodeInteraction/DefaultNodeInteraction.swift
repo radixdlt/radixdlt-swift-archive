@@ -57,7 +57,6 @@ public extension DefaultNodeInteraction {
     }
 }
 
-
 // MARK: - Error
 public extension DefaultNodeInteraction {
     enum Error: Swift.Error {

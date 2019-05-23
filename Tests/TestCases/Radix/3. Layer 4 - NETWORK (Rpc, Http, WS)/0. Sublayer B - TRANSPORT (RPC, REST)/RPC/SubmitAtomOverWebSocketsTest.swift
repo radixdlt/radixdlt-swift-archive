@@ -39,7 +39,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
     }
     
     func testTokenDefinitionParticle() {
-        guard let pow = ProofOfWork.work(atom: atom, magic: magic) else { return XCTFail("timeout") }
+        guard let pow = ProofOfWork.work(atom: atom, magic: magic) else { return }
         let atowWithPOW = try! ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
         let unsignedAtom = try! UnsignedAtom(atomWithPow: atowWithPOW)
         let signedAtom = try! identity.sign(atom: unsignedAtom)

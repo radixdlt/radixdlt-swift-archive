@@ -61,7 +61,7 @@ class TransferTokensTests: XCTestCase {
 //        // AND WHEN
 //        // Alice sends 10 coins to Bob
 //        let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
-//        
+//
 //        switch application.transfer(tokens: transfer).toBlocking(timeout: 2).materialize() {
 //        case .completed: break // great!
 //        case .failed(_, let error): XCTFail("Transfer failed - error: \(error)")
