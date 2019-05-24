@@ -194,7 +194,7 @@ to help with understanding of the different layers and trying to ease separation
 | 4     | [Network](#layer-4---network)           		| Network (Websocket, HTTP) and transport (RPC, REST)                   	| `RPCClient`, `RESTClient`, `WebsocketToNode                       |
 | 3     | [Chemistry](#layer-3---chemistry)       		| Mapping user action to atoms and reducing atoms to state (e.g. balance) 	| `CreateTokenAction`, `TransferTokenAction`, `TokenBalanceReducer` |
 | 2     | [Atom Model](#layer-2---atom-model)     		| Radix multi-purpose "transaction" packaged in the `Atom`.               	| `Atom`, `ParticleGroup`, `Spin` and particles                     |
-| 1     | [Subatomic]((#layer-1---subatomic))     		| (De- &) serialization, crypto and models.                               	|  `DSONEncodable`, ECC, `HexString`, `Amount` etc...               |
+| 1     | [Subatomic](#layer-1---subatomic)     		| (De- &) serialization, crypto and models.                               	|  `DSONEncodable`, ECC, `HexString`, `Amount` etc...               |
 
 #### Layer 7 - Application
 High level application API for creating tokens, transferring tokens and fetching account balance, and more.
