@@ -16,7 +16,85 @@
 - [License](#license)
 
 ## Features
-* TBD
+⚠️👷🏾‍♀️ The Swift library is not production yet, its under construction 🚜⚠️  
+
+This is a **sneak peak** of the **coming** Application Layer API
+
+### Radix Application
+
+The `RadixApplicationClient` is the API layer this library exposes to you as a client developer. It allows to create and transfer tokens and also to fetch balances for a certain Radix address.
+
+```swift
+typealias RadixApplicationClient = Transacting & AccountBalancing & TokenCreating
+
+protocol TokenCreating {
+    func create(token: CreateTokenAction) -> Single<ResourceIdentifier>
+}
+
+protocol Transacting {
+    func transfer(tokens: TransferTokenAction) -> Completable
+}
+
+protocol AccountBalancing {
+    func getBalances(for address: Address) -> Observable<AccountBalances>
+    func getBalances(for address: Address, ofToken token: ResourceIdentifier) -> Observable<AccountBalanceOf>
+}
+```
+
+### Usage
+
+Here are some example usages. The code below is an exerpt of an existing the unit test [`TransferTokensTests.swift`](https://github.com/radixdlt/radixdlt-swift/blob/atom_subscription_balance/Tests/TestCases/Radix/0.%20Layer%207%20-%20APPLICATION%20(Transactions%2C%20Balances)/TransferTokensTests.swift)
+
+#### Create Token
+
+```swift
+let alice = RadixIdentity()
+
+
+// Instantiate a RadixApplicationClient connecting to a `localhost` in this example, with Alice identity
+let application = DefaultRadixApplicationClient(node: .localhost, identity: alice)
+
+// Alice defines her own token
+let createToken = CreateTokenAction(
+    creator: alice.address,
+    name: "Alice Coin",
+    symbol: "AC",
+    description: "Best coin",
+    supplyType: .fixed,
+    initialSupply: 30
+)
+
+// Alice creates a new token with an initial supply of 30
+application.create(token: createToken)
+```
+
+#### Get token balance
+
+```swift
+let bob = RadixIdentity()
+
+var alicesBalanceOfHerCoin = application.getMyBalance(of: rri)
+var bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rri)
+
+assert(alicesBalanceOfHerCoin.balance == 30, "Alice's balance should equal `30`(initialSupply)")
+assert(bobsBalanceOfAliceCoin.balance == 0, "Bob's balance should equal `0`")
+```
+
+#### Transfer tokens
+
+```swift
+// Alice sends 10 coins to Bob
+let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
+
+application.transfer(tokens: transfer).take(1)
+
+alicesBalanceOfHerCoin = application.getMyBalance(of: rri)
+bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rri)
+
+assert(alicesBalanceOfHerCoin.balance == 20, "Alice's balance should equal `20`")
+assert(bobsBalanceOfAliceCoin.balance == 10, "Bob's balance should equal `10`")
+
+```
 
 ## Getting started
 
