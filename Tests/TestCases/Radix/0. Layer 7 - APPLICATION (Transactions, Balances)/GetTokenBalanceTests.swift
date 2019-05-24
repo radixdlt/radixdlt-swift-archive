@@ -12,7 +12,6 @@ import RxSwift
 
 class GetTokenBalanceTests: XCTestCase {
     
-    // RLAU-1119 AC: 0
     func testGetTokenBalance() {
         // GIVEN
         // a Radix Application
@@ -40,9 +39,7 @@ class GetTokenBalanceTests: XCTestCase {
         )
     }
 
-    // AC: 1
     func testThatOrderOfAtomsDoesNotMatterForBalanceCalculation() {
-        // GIVEN
         let identity = RadixIdentity()
         let myAddress = identity.address
 
@@ -77,7 +74,6 @@ class GetTokenBalanceTests: XCTestCase {
         )
     }
     
-    // AC: 2
     func testIncrease() {
         let alice = RadixIdentity()
         let myAddress = alice.address

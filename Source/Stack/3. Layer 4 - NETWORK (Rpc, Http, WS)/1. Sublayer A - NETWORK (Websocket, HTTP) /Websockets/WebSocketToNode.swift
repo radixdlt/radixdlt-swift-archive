@@ -47,7 +47,7 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
         self.messages = receivedMessagesSubject.asObservable()
         self.state = stateSubject.asObservable()
         
-        self.state.subscribe(onNext: { log.info("WS status -> `\($0)`") }).disposed(by: bag)
+        self.state.subscribe(onNext: { log.debug("WS status -> `\($0)`") }).disposed(by: bag)
     }
     
     private func createSocket(shouldConnect: Bool) -> WebSocket {
@@ -78,7 +78,8 @@ public extension WebSocketToNode {
             queuedOutgoingMessages.append(message)
             return
         }
-        log.debug("Sending message:\n<\(message)>")
+        log.debug("Sending message of length: #\(message.count) chars")
+        log.verbose("Sending message:\n<\(message)>")
         socket?.write(string: message)
     }
     
@@ -154,7 +155,7 @@ public extension WebSocketToNode {
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if text.contains("Radix.welcome") {
-            log.info("Received welcome message, which we ignore, proceed sending queued")
+            log.debug("Received welcome message, which we ignore, proceed sending queued")
             stateSubject.onNext(.ready)
             sendQueued()
         } else {

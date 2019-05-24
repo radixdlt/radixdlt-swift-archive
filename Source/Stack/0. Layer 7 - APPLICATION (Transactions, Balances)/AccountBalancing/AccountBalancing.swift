@@ -56,6 +56,7 @@ public extension AccountBalancing where Self: IdentityHolder {
 // MARK: - AccountBalancing + NodeInteracting
 public extension AccountBalancing where Self: NodeInteractingSubscribe {
     func getBalances(for address: Address) -> Observable<AccountBalances> {
+        log.info("Getting balances for address: \(address)")
         return nodeSubscriber.subscribe(to: address)
             .storedAtomsOnly()
             .map { $0.flatMap { $0.tokensBalances() }.filter { $0.address == address } }

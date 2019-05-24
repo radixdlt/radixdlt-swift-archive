@@ -35,6 +35,7 @@ public extension ProofOfWorkWorker {
                         case .failure(let error):
                             observer.onError(error)
                         case .success(let pow):
+                            log.info("POW done")
                             observer.onNext(pow)
                             observer.onCompleted()
                         }

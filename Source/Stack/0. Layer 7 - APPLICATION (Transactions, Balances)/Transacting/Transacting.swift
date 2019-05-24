@@ -33,6 +33,9 @@ where
     // swiftlint:enable opening_brace
     
     func transfer(tokens transferTokenAction: TransferTokenAction) -> CompletableWanted {
+        
+        log.info("\(transferTokenAction.sender.address) sends \(transferTokenAction.amount) of \(transferTokenAction.tokenResourceIdentifier) to \(transferTokenAction.recipient.address)")
+        
         let actionToParticleGroupsMapper = DefaultTransferTokenActionToParticleGroupsMapper()
         
         let rri = transferTokenAction.tokenResourceIdentifier

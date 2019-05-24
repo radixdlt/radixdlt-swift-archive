@@ -60,25 +60,31 @@ class TransferTokensTests: XCTestCase {
         
         // AND WHEN
         // Alice sends 10 coins to Bob
-        let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
+        let txAmount: PositiveAmount = 10
+        let transfer = TransferTokenAction(from: alice, to: bob, amount: txAmount, tokenResourceIdentifier: rri)
 
-        switch application.transfer(tokens: transfer).take(1).toBlocking(timeout: RxTimeInterval.enoughForPOW).materialize() {
-        case .completed: print("Successfully sent coins to Bob"); break
-        case .failed(_, let error): XCTFail("Transfer failed - error: \(error)")
-        }
+        XCTAssertTrue(
+            application.transfer(tokens: transfer).take(1)
+                .toBlocking(timeout: nil)
+                .materialize()
+                .wasSuccessful
+            ,
+            "Should be able to send coins to Bob"
+        )
+     
+        print("💸: 🙋🏾‍♀️→ \(txAmount)💰 →🙋🏼‍♂️")
 
         // ...and we update the balances
         guard let alicesBalanceOfHerCoinAfterTx = application.getMyBalance(of: rri).blockingTakeLast() else { return }
         guard let bobsBalanceOfAliceCoinAfterTx = application.getBalances(for: bob.address, ofToken: rri).blockingTakeLast() else { return }
 
-        // RLAU-1119 AC: 3
         // THEN
         XCTAssertEqual(
             alicesBalanceOfHerCoinAfterTx.balance.amount,
             20,
             "Alice's balance should equal `20`"
         )
-        // RLAU-1119 AC: 4
+        
         XCTAssertEqual(
             bobsBalanceOfAliceCoinAfterTx.balance.amount,
             10,

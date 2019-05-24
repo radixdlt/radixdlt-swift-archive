@@ -12,7 +12,6 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-// RLAU 1092
 class SubscriptionTests: WebsocketTest {
     
     override func setUp() {
@@ -20,7 +19,6 @@ class SubscriptionTests: WebsocketTest {
         continueAfterFailure = false
     }
     
-    // AC0
     func testSubscribeToAtomsForAddress() {
         // GIVEN
         // A node interaction ("Ledger")
@@ -39,7 +37,6 @@ class SubscriptionTests: WebsocketTest {
 
     }
     
-    // AC1
     func testCancelSubsription() {
         // GIVEN
         // A node interaction ("Ledger")
@@ -63,7 +60,6 @@ class SubscriptionTests: WebsocketTest {
         )
     }
     
-    // AC3
     func testSubscribingUsingSameIdTwice() {
         // GIVEN
         // A node

@@ -24,6 +24,9 @@ where
 {
     // swiftlint:enable opening_brace
     func create(token createToken: CreateTokenAction) -> SingleWanted<ResourceIdentifier> {
+        
+        log.info("\(createToken.creator) creates new token: \(createToken.identifier)")
+        
         let actionToParticleGroupsMapper = DefaultCreateTokenActionToParticleGroupsMapper()
         
         let atom = actionToParticleGroupsMapper.particleGroups(for: createToken).wrapInAtom()

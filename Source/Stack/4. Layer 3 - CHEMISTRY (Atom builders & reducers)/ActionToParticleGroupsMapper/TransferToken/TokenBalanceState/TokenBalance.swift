@@ -37,16 +37,9 @@ public struct TokenBalance: Hashable, TokenDefinitionReferencing {
     }
     
     public init(transferrable: TransferrableTokensParticle, spin: Spin) {
-        
         let consumables: Consumables = spin == .up ? [transferrable.hashId: transferrable] : [:]
-  
         let amount = spin * transferrable.amount
-        
-        if spin == .down {
-            print("amount: \(amount)")
-            assert(amount.isNegative)
-        }
-        
+   
         self.init(
             amount: amount,
             address: transferrable.address,
