@@ -22,7 +22,7 @@ This is a **sneak peak** of the **coming** Application Layer API
 
 ### Radix Application
 
-The `RadixApplicationClient` is the API layer this library exposes to you as a client developer. It allows to create and transfer tokens and also to fetch balances for a certain Radix address.
+The `RadixApplicationClient` is the API layer this library exposes to you as a client developer. It will allow you to create and transfer tokens and also to fetch balances for a certain Radix address.
 
 ```swift
 typealias RadixApplicationClient = Transacting & AccountBalancing & TokenCreating
