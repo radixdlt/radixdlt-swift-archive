@@ -43,7 +43,7 @@ protocol AccountBalancing {
 
 ### Usage
 
-Here are some example usages. The code below is an exerpt of an existing the unit test [`TransferTokensTests.swift`](https://github.com/radixdlt/radixdlt-swift/blob/atom_subscription_balance/Tests/TestCases/Radix/0.%20Layer%207%20-%20APPLICATION%20(Transactions%2C%20Balances)/TransferTokensTests.swift)
+Here are some example usages. The code below is an exerpt of an existing the unit test [`TransferTokensTests.swift`](https://github.com/radixdlt/radixdlt-swift/blob/master/Tests/TestCases/Radix/0.%20Layer%207%20-%20APPLICATION%20(Transactions%2C%20Balances)/TransferTokensTests.swift)
 
 #### Create Token
 
