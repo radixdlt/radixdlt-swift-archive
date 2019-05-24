@@ -43,13 +43,14 @@ protocol AccountBalancing {
 
 ### Usage
 
-Here are some example usages. The code below is an exerpt of an existing the unit test [`TransferTokensTests.swift`](https://github.com/radixdlt/radixdlt-swift/blob/master/Tests/TestCases/Radix/0.%20Layer%207%20-%20APPLICATION%20(Transactions%2C%20Balances)/TransferTokensTests.swift)
+Here are some example usages. The code below is an excerpt of an existing the unit test [`TransferTokensTests.swift`](https://github.com/radixdlt/radixdlt-swift/blob/master/Tests/TestCases/Radix/0.%20Layer%207%20-%20APPLICATION%20(Transactions%2C%20Balances)/TransferTokensTests.swift)
+
+(In the Swift code below, for the sake of readability, we have written out the result as if the API's were synchronous. As you saw in above these methods they are asynchronous returning `Observables`, so we have omitted the appropriate [`toBlocking`](https://github.com/ReactiveX/RxSwift/blob/master/RxBlocking/ObservableConvertibleType+Blocking.swift) call.)
 
 #### Create Token
 
 ```swift
 let alice = RadixIdentity()
-
 
 // Instantiate a RadixApplicationClient connecting to a `localhost` in this example, with Alice identity
 let application = DefaultRadixApplicationClient(node: .localhost, identity: alice)
@@ -185,108 +186,36 @@ In Xcode run the tests by pressing `CMD` + `U`, verify that everything is workin
 Some rough, inaccurate attempt to map components within this library to the [OSI Model](https://en.wikipedia.org/wiki/OSI_model)
 to help with understanding of the different layers and trying to ease separation of concern.
 
-```swift
-// LAYER 7: APPLICATION - High-level APIs, e.g. DTOs: `Payment`, `ChatMessage`, `TokenBalances`
-protocol RadixApplicationClient {
-	
-  var nodeInteractor: NodeInteraction { get }
-  
-  func getBalances(for address: Address) -> Observable<BalancePerToken>
-  func makeTransaction(_ transaction: Transaction) -> Completable
-  func sendChatMessage(_ message: ChatMessage) -> Completable
-}
+| LEVEL | NAME                                         | FUNCTION                                                                   | COMPONENTS                                                        |
+|-------|----------------------------------------------|----------------------------------------------------------------------------|-------------------------------------------------------------------|
+| 7     | [Application](#layer-7--application)         | Transfer & create token, account balance | `ApplicationClient`, `RadixIdentity`                         |
+| 6     | [Ledger](#layer-6--ledger)                   | Subscribing to and submission of atoms          | `NodeInteraction`, `AtomUpdate`                                   |
+| 5     | [Node Con.](#layer-5--node-connection) | Connection to a node's RPC and REST API's                                  | `Node`, `NodeConnection`, `Universe`                         |
+| 4     | [Network](#layer-4--network)                 | Network (Websocket, HTTP) and transport (RPC, REST)                   | `RPCClient`, `RESTClient`, `WebsocketToNode                       |
+| 3     | [Chemistry](#layer-3--chemistry)             | Mapping user action to atoms and reducing atoms to state (e.g. balance)    | `CreateTokenAction`, `TransferTokenAction`, `TokenBalanceReducer` |
+| 2     | [Atom Model](#layer-2--atom-model)           | Radix multi-purpose "transaction" packaged in the `Atom`.                  | `Atom`, `ParticleGroup`, `Spin` and particles                     |
+| 1     | [Subatomic]((#layer-1--subatomic))           | (De- &) serialization, crypto and models.                                  |  `DSONEncodable`, ECC, `HexString`, `Amount` etc...               |
 
-// LAYER 6: LEDGER (Submit & Subscribe atoms)
-protocol NodeInteraction {
+#### Layer 7 - Application
+High level application API for creating tokens, transferring tokens and fetching account balance, and more.
 
-  var connectionToNode: NodeConnection { get }
+#### Layer 6 - Ledger
+Subscribe to atoms for a certain Radix address and submit new atoms to the ledger.
 
-  func subscribe(to address: Address) -> Observable<AtomUpdate>
-  func submit(atom: Atom) -> Observable<AtomUpdate>
-  func unsubscribe(from address: Address) -> Completable
-  func unsubscribeAll() -> Completable
-}
+#### Layer 5 - Node Connection
+Connect to a Node and access its RPC and REST API's, please see the [API docs here](https://docs.radixdlt.com/node-api/) for a list of existing API's/
 
-// LAYER 5:  NODE CONNECTION - Universe, Node
-protocol NodeConnection {
-  var node: Node { get }
-  var rpcClient: RPCClient { get }
-  var restClient: RESTClient { get }
-}
+#### Layer 4 - Network
+Networking (Websocket, HTTP) and transport (RPC, REST).
 
-// LAYER 4: NETWORK (Rpc, Http, WS)
-// Sublayer B TRANSPORT (RPC, REST)
-protocol RPCClient {
+#### Layer 3 - Chemistry
+Mapping user actions to particles used to instantiate Atoms. Reduce atoms into state, such as account balance.
 
-  var channel: FullDuplexCommunicationChannel { get }  
+#### Layer 2 - Atom Model
+The Atom Model, consisting of `ParticleGroup`'s, which in turn consists of `Particle`'s. Read about the [Atom model here](https://docs.radixdlt.com/alpha/learn/architecture/atom-structure).
 
-  func getInfo() -> Single<NodeRunnerData>
-  func getLivePeers() -> Single<[NodeRunnerData]>
-  func getUniverseConfig() -> Single<UniverseConfig>
-
-  func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription>
-  func submit(atom: SignedAtom, subscriberId: SubscriberId) -> Observable<AtomSubscription>
-}
-
-protocol RESTClient {
-
-  var httpClient: HTTPClient { get }
-
-  func getLivePeers() -> Single<[NodeRunnerData]>
-  func getUniverseConfig() -> Single<UniverseConfig>
-}
-
-// Sublayer A NETWORK (Websocket, HTTP)
-protocol FullDuplexCommunicationChannel {
-
-  func sendMessage(_ message: String)
-  var messages: Observable<String> { get }
-}
-
-protocol HTTPClient {
-  func request<Response>(router: Router) -> Observable<Response>
-}
-
-protocol Router {
-  var path: URL
-  var method: HTTPMethod
-}
-
-// LAYER 3: CHEMISTRY (Atom builders & reducers)
-protocol TokenBalanceReducer {
-  func reduce(atoms: Observable<Atom>) -> Observable<TokenBalances>
-}
-
-protocol PaymentBuilder {
-  func pay(address: Address, amount: Amount, of token: Token, signedBy signer: Signer) -> SignedAtomWithProofOfWork
-}
-
-// LAYER 2: ATOM MODEL - Particles
-struct Atom {
-  let particleGroups: [ParticleGroup]
-}
-
-struct ParticleGroup {
-  let anySpunParticles: [AnySpunParticles]
-}
-
-struct AnySpunParticles {
-  let spin: Spin
-  // TokenDefinitionParticle, UnallocatedTokensParticle, TransferrableTokens, MessageParticle etc..
-  let particle: Particle 
-}
-
-enum Spin {
-  case up, down
-}
-
-// LAYER 1: SUBATOMIC - Serialization, Crypto, Models (HexString, Amount)
-struct HexString {}
-struct Base58String {}
-struct Base64String {}
-struct Amount {}
-struct Nonce {}
-```
+#### Layer 1 - Subatomic
+Serialization and deserialization, cryptography and subatomic parts, making up the particles and also other low level DTO's such as `HexString`, `Base58String`.
 
 ## Design choices
 
