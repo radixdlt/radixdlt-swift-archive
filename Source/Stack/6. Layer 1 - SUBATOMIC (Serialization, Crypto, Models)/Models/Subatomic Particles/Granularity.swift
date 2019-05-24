@@ -23,6 +23,7 @@ public struct Granularity:
     StringRepresentable,
     Comparable,
     Hashable,
+    CustomStringConvertible,
     ExpressibleByIntegerLiteral
 {
 
@@ -90,7 +91,7 @@ public extension Granularity {
 // MARK: - CustomStringConvertible
 public extension Granularity {
     var description: String {
-        return value.description
+        return value.toDecimalString()
     }
 }
 

@@ -23,6 +23,14 @@ public final class DefaultNodeInteraction: NodeInteraction {
 // MARK: - NodeInteractionSubscribing
 public extension DefaultNodeInteraction {
     
+    /// TODO change this:
+    // For each update we received 2 messages with `AtomSubscriptionUpdateSubscribe`
+    // The first one, containing the atoms, having `isHead: false`
+    // The second one, containing no atoms, having `isHead: true`
+    // With the current solution we map those two `AtomSubscriptionUpdateSubscribe`
+    // into two `onNext` events, which element is an array of `AtomUpdate`,
+    // The first message resulting in a non empty array, the second message
+    // being an empty array, which is kind of weird. Change this!
     func subscribe(to address: Address) -> Observable<[AtomUpdate]> {
         let id = SubscriptionIdIncrementingGenerator.next()
         return rpcClient.flatMapLatest { $0.subscribe(to: address, subscriberId: id) }

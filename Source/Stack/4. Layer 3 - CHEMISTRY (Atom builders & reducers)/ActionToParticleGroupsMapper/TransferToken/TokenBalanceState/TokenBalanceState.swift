@@ -1,5 +1,5 @@
 //
-//  TokenBalanceState.swift
+//  BalancePerToken.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-03-29.
@@ -8,9 +8,7 @@
 
 import Foundation
 
-public typealias BalancePerToken = TokenBalanceState
-
-public struct TokenBalanceState: ApplicationState, DictionaryConvertible {
+public struct BalancePerToken: ApplicationState, DictionaryConvertible {
     public typealias Key = ResourceIdentifier
     public typealias Value = TokenBalance
     public var dictionary: Map

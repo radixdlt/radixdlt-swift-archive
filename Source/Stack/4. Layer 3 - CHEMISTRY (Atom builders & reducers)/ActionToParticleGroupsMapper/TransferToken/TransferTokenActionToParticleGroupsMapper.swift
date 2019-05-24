@@ -14,7 +14,7 @@ public protocol TransferTokenActionToParticleGroupsMapper:
     StatefulActionToParticleGroupsMapper
 where
     Action == TransferTokenAction,
-    State == TokenBalanceState
+    State == BalancePerToken
 {
     // swiftlint:enable colon opening_brace
     func particleGroups(for action: Action, currentBalance: TokenBalance) throws -> ParticleGroups

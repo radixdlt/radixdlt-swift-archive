@@ -48,40 +48,40 @@ class TransferTokensTests: XCTestCase {
         
         // THEN
         XCTAssertEqual(
-            alicesBalanceOfHerCoin.amount,
+            alicesBalanceOfHerCoin.balance.amount,
             30,
             "Alice's balance should equal `30` (initialSupply)"
         )
         XCTAssertEqual(
-            bobsBalanceOfAliceCoin.amount,
+            bobsBalanceOfAliceCoin.balance.amount,
             0,
             "Bob's balance should equal 0"
         )
         
-//        // AND WHEN
-//        // Alice sends 10 coins to Bob
-//        let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
-//
-//        switch application.transfer(tokens: transfer).toBlocking(timeout: 2).materialize() {
-//        case .completed: break // great!
-//        case .failed(_, let error): XCTFail("Transfer failed - error: \(error)")
-//        }
-//
-//        // ...and we update the balances
-//        guard let alicesBalanceOfHerCoinAfterTx = application.getMyBalance(of: rri).blockingTakeLast() else { return }
-//        guard let bobsBalanceOfAliceCoinAfterTx = application.getBalances(for: bob.address, ofToken: rri).blockingTakeLast() else { return }
-//
-//        // THEN
-//        XCTAssertEqual(
-//            alicesBalanceOfHerCoinAfterTx.amount,
-//            20,
-//            "Alice's balance should equal `20`"
-//        )
-//        XCTAssertEqual(
-//            bobsBalanceOfAliceCoinAfterTx.amount,
-//            10,
-//            "Bob's balance should equal 10"
-//        )
+        // AND WHEN
+        // Alice sends 10 coins to Bob
+        let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
+
+        switch application.transfer(tokens: transfer).take(1).toBlocking(timeout: RxTimeInterval.enoughForPOW).materialize() {
+        case .completed: print("Successfully sent coins to Bob"); break
+        case .failed(_, let error): XCTFail("Transfer failed - error: \(error)")
+        }
+
+        // ...and we update the balances
+        guard let alicesBalanceOfHerCoinAfterTx = application.getMyBalance(of: rri).blockingTakeLast() else { return }
+        guard let bobsBalanceOfAliceCoinAfterTx = application.getBalances(for: bob.address, ofToken: rri).blockingTakeLast() else { return }
+
+        // THEN
+        XCTAssertEqual(
+            alicesBalanceOfHerCoinAfterTx.balance.amount,
+            20,
+            "Alice's balance should equal `20`"
+        )
+        XCTAssertEqual(
+            bobsBalanceOfAliceCoinAfterTx.balance.amount,
+            10,
+            "Bob's balance should equal 10"
+        )
     }
     
 }

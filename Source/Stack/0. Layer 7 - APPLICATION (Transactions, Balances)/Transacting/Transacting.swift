@@ -38,6 +38,8 @@ where
         let rri = transferTokenAction.tokenResourceIdentifier
         let powWorker = ProofOfWorkWorker()
         return getBalances(for: transferTokenAction.sender, ofToken: rri)
+            .take(1)
+            .map { $0.balance }
             .map { balance -> ParticleGroups in
                 try actionToParticleGroupsMapper.particleGroups(for: transferTokenAction, currentBalance: balance)
             }.map { particleGroups -> Atom in

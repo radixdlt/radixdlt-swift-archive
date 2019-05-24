@@ -67,7 +67,10 @@ public extension DefaultTransferTokenActionToParticleGroupsMapper {
 // MARK: - Private Helpers
 private extension DefaultTransferTokenActionToParticleGroupsMapper {
     func transferToRecipientInParticleGroupWithRemainder(tokenBalance: TokenBalance, transfer: TransferTokenAction) -> (group: ParticleGroup, remainder: PositiveAmount?) {
-        let tokenConsumables: [TransferrableTokensParticle] = tokenBalance.unconsumedTransferrable.values.filter { $0.tokenDefinitionReference == transfer.tokenResourceIdentifier }
+        
+        let tokenConsumables: [TransferrableTokensParticle] = tokenBalance.unconsumedTransferrable.values
+            .filter { $0.tokenDefinitionReference == transfer.tokenResourceIdentifier }
+        
         assert(!tokenConsumables.isEmpty, "No consumables, the implementation of `TokenBalance` is incorrect.")
         
         var consumerQuantity: PositiveAmount = 0
@@ -85,12 +88,12 @@ private extension DefaultTransferTokenActionToParticleGroupsMapper {
         let permissions = tokenConsumables[0].permissions
         let granularity = tokenConsumables[0].granularity
         
-        let group = ParticleGroup(spunParticles: [
-            [TransferrableTokensParticle.toRecipient(in: transfer, permissions: permissions, granularity: granularity).withSpin(.up)],
-            consumedTokens
-        ].flatMap { $0 })
-        let remainder = try? PositiveAmount(signedAmount: tokenBalance.amount - SignedAmount(amount: consumerQuantity))
-        return (group: group, remainder: remainder)
+        let toRecipient = TransferrableTokensParticle.toRecipient(in: transfer, permissions: permissions, granularity: granularity).withSpin(.up)
+        
+        let toRecipientParticleGroup = ParticleGroup(toRecipient + consumedTokens)
+        
+        let remainder = try? PositiveAmount(signedAmount: SignedAmount(amount: consumerQuantity) - SignedAmount(amount: transfer.amount))
+        return (group: toRecipientParticleGroup, remainder: remainder)
     }
 }
 
@@ -128,3 +131,16 @@ private extension TransferrableTokensParticle {
     }
 }
 
+extension Array {
+    static func + (array: [Element], element: Element) -> [Element] {
+        var mutable = array
+        mutable.append(element)
+        return mutable
+    }
+    
+    static func + (element: Element, array: [Element]) -> [Element] {
+        var mutable = [element]
+        mutable.append(contentsOf: array)
+        return mutable
+    }
+}

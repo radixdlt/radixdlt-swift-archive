@@ -8,14 +8,18 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// A KeyValue-d Collection
 public protocol DictionaryConvertible:
     KeyValued,
     LengthMeasurable,
-    Collection {
-// swiftlint:enable colon
+    Collection,
+    CustomStringConvertible
+{
+    
+// swiftlint:enable colon opening_brace
+    
     typealias Map = [Key: Value]
     var dictionary: Map { get }
     init(dictionary: Map)
@@ -58,6 +62,15 @@ public extension DictionaryConvertible {
 public extension DictionaryConvertible where Value: Equatable {
     func firstKeyForValue(_ needle: Value) -> Key? {
         return dictionary.firstKeyForValue(needle)
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension DictionaryConvertible {
+    var description: String {
+        return dictionary.map {
+            "\($0.key): \($0.value)"
+        }.joined(separator: ", ")
     }
 }
 

@@ -16,12 +16,11 @@ class GetTokenBalanceTests: XCTestCase {
     func testGetTokenBalance() {
         // GIVEN
         // a Radix Application
-        let identity = RadixIdentity()
-        let (replaySubject, application) = applicationWithMockedSubscriber(identity: identity)
+        let (replaySubject, application) = applicationWithMockedSubscriber()
         
         func atomUpdate(amount: PositiveAmount, spin: Spin, isHead: Bool = false) -> AtomUpdate {
             return AtomUpdate(
-                atom: atomTransferrable(amount, address: identity.address, spin: spin),
+                atom: atomTransferrable(amount, address: xrdAddress, spin: spin),
                 isHead: isHead)
         }
         
@@ -34,10 +33,10 @@ class GetTokenBalanceTests: XCTestCase {
         guard let balance = application.getBalances(for: xrdAddress, ofToken: xrd).blockingTakeFirst() else { return }
 
         XCTAssertEqual(
-            balance.amount,
+            balance.balance.amount,
             7,
             // THEN
-            "My balance is 7"
+            "Xrd balance is 7"
         )
     }
 
@@ -71,8 +70,8 @@ class GetTokenBalanceTests: XCTestCase {
         guard let upDownUpBalance = application.getMyBalance(of: xrd).blockingTakeFirst() else { return }
 
         XCTAssertAllEqual(
-            downUpUpBalance.amount,
-            upDownUpBalance.amount,
+            downUpUpBalance.balance.amount,
+            upDownUpBalance.balance.amount,
             1
         )
     }
@@ -96,7 +95,7 @@ class GetTokenBalanceTests: XCTestCase {
         
         guard let aliceStartBalance = application.getMyBalance(of: xrd).blockingTakeFirst() else { return }
         
-        XCTAssertEqual(aliceStartBalance.amount, 0)
+        XCTAssertEqual(aliceStartBalance.balance.amount, 0)
         
         replaySubject.onNext([
             atomUpdate(amount: 3, spin: .up, isHead: true)
@@ -104,13 +103,13 @@ class GetTokenBalanceTests: XCTestCase {
         
         guard let aliceNewBalance = application.getMyBalance(of: xrd).blockingTakeFirst() else { return }
         
-        XCTAssertEqual(aliceNewBalance.amount, 3)
+        XCTAssertEqual(aliceNewBalance.balance.amount, 3)
         
     }
 }
 
 private extension GetTokenBalanceTests {
-    func applicationWithMockedSubscriber(identity: RadixIdentity, bufferSize: Int = 1) -> (subject: ReplaySubject<[AtomUpdate]>, app: DefaultRadixApplicationClient) {
+    func applicationWithMockedSubscriber(identity: RadixIdentity = RadixIdentity(), bufferSize: Int = 1) -> (subject: ReplaySubject<[AtomUpdate]>, app: DefaultRadixApplicationClient) {
         let replaySubject = ReplaySubject<[AtomUpdate]>.create(bufferSize: bufferSize)
         
         let application = DefaultRadixApplicationClient(

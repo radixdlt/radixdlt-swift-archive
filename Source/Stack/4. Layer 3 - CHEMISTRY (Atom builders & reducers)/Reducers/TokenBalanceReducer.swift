@@ -20,10 +20,6 @@ public typealias SpunTransferrable = SpunParticle<TransferrableTokensParticle>
 
 public extension TokenBalanceReducer {
     
-    func reduce(atoms: [Atom]) -> BalancePerToken {
-        return reduce(tokenBalances: atoms.flatMap { $0.tokensBalances() })
-    }
-    
     func reduce(spunParticles: [AnySpunParticle]) -> BalancePerToken {
         let tokenBalances = spunParticles.compactMap { (spunParticle: AnySpunParticle) -> TokenBalance? in
             guard let transferrableTokensParticle = spunParticle.particle as? TransferrableTokensParticle else {

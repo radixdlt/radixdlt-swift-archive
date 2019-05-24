@@ -10,10 +10,20 @@ import Foundation
 
 public protocol DictionaryConvertibleMutable: DictionaryConvertible {
     var dictionary: [Key: Value] { get set }
+    
+    subscript(key: Key) -> Value? { get }
     mutating func valueForKey(key: Key, ifAbsent createValue: () -> Value) -> Value
     
     @discardableResult
     mutating func removeValue(forKey key: Key) -> Value?
+}
+
+// MARK: - Subscript
+public extension DictionaryConvertibleMutable {
+    subscript(key: Key) -> Value? {
+        get { return dictionary[key] }
+        set { dictionary[key] = newValue }
+    }
 }
 
 public extension DictionaryConvertibleMutable {

@@ -22,6 +22,7 @@
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
 		E6296C8B2292EF6000753FD5 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C8A2292EF6000753FD5 /* AnyDecodable.swift */; };
 		E6296C8D229455CB00753FD5 /* StringAnyDictionary+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C8C229455CB00753FD5 /* StringAnyDictionary+Decodable.swift */; };
+		E6296C962296F2FB00753FD5 /* SubscriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C952296F2FB00753FD5 /* SubscriptionTests.swift */; };
 		E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62C030B220491CD001F27DE /* Sequence_Extension.swift */; };
 		E62EFDB92248F9B600B6DAD6 /* betanet.json in Resources */ = {isa = PBXBuildFile; fileRef = E62EFDB82248F9B600B6DAD6 /* betanet.json */; };
 		E62EFDBA2248F9B600B6DAD6 /* betanet.json in Resources */ = {isa = PBXBuildFile; fileRef = E62EFDB82248F9B600B6DAD6 /* betanet.json */; };
@@ -440,6 +441,7 @@
 		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
 		E6296C8A2292EF6000753FD5 /* AnyDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
 		E6296C8C229455CB00753FD5 /* StringAnyDictionary+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringAnyDictionary+Decodable.swift"; sourceTree = "<group>"; };
+		E6296C952296F2FB00753FD5 /* SubscriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTests.swift; sourceTree = "<group>"; };
 		E62C030B220491CD001F27DE /* Sequence_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence_Extension.swift; sourceTree = "<group>"; };
 		E62EFDB82248F9B600B6DAD6 /* betanet.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = betanet.json; sourceTree = "<group>"; };
 		E62EFDBB2249090500B6DAD6 /* NodeFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeFinder.swift; sourceTree = "<group>"; };
@@ -2771,6 +2773,7 @@
 		E6E27A092271CE250067D46E /* 1. Layer 6 - LEDGER (Submit & subscribe atoms) */ = {
 			isa = PBXGroup;
 			children = (
+				E6296C952296F2FB00753FD5 /* SubscriptionTests.swift */,
 			);
 			path = "1. Layer 6 - LEDGER (Submit & subscribe atoms)";
 			sourceTree = "<group>";
@@ -3359,6 +3362,7 @@
 				E6E27A422271CE250067D46E /* TokenPermissionEncodingTests.swift in Sources */,
 				E6E27A512271CE250067D46E /* ProofOfWorkTests.swift in Sources */,
 				E6E27A4D2271CE250067D46E /* EUIDTests.swift in Sources */,
+				E6296C962296F2FB00753FD5 /* SubscriptionTests.swift in Sources */,
 				E6725643228AB367004631F1 /* MockedSubmitter.swift in Sources */,
 				E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */,
 				E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */,

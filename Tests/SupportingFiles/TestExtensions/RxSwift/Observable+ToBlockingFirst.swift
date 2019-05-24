@@ -16,6 +16,7 @@ import RxBlocking
 extension Observable {
     
     func blockingTakeFirst(
+        _ takeCount: Int = 1,
         timeout: RxTimeInterval? = 2,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
@@ -25,6 +26,7 @@ extension Observable {
         ) -> E? {
         
         return blockingTake(
+            takeCount,
             at: .first,
             timeout: timeout,
             failOnTimeout: failOnTimeout,
@@ -36,6 +38,7 @@ extension Observable {
     }
     
     func blockingTakeLast(
+        _ takeCount: Int = 1,
         timeout: RxTimeInterval? = 2,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
@@ -45,6 +48,7 @@ extension Observable {
         ) -> E? {
         
         return blockingTake(
+            takeCount,
             at: .last,
             timeout: timeout,
             failOnTimeout: failOnTimeout,
@@ -56,6 +60,7 @@ extension Observable {
     }
     
     func blockingTake(
+        _ takeCount: Int = 1,
         at takeElementAt: ElementAt,
         timeout: RxTimeInterval? = 2,
         failOnTimeout: Bool = true,
@@ -64,7 +69,7 @@ extension Observable {
         file: String = #file,
         line: Int = #line
         ) -> E? {
-        return take(1)
+        return take(takeCount)
             .toBlocking(timeout: timeout)
             .getElement(
                 at: takeElementAt,
@@ -139,7 +144,8 @@ private extension BlockingObservable {
         } catch let rpcError as RPCError {
             fatalError("rpcError: \(rpcError)")
         } catch {
-            fatalError("Unexpected error thrown: \(error), \(description)")
+            XCTFail("Unexpected error thrown: \(error), \(description)")
+            return nil
         }
     }
     
