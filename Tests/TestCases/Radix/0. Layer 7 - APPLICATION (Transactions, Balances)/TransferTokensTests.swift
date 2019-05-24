@@ -71,17 +71,21 @@ class TransferTokensTests: XCTestCase {
         guard let alicesBalanceOfHerCoinAfterTx = application.getMyBalance(of: rri).blockingTakeLast() else { return }
         guard let bobsBalanceOfAliceCoinAfterTx = application.getBalances(for: bob.address, ofToken: rri).blockingTakeLast() else { return }
 
+        // RLAU-1119 AC: 3
         // THEN
         XCTAssertEqual(
             alicesBalanceOfHerCoinAfterTx.balance.amount,
             20,
             "Alice's balance should equal `20`"
         )
+        // RLAU-1119 AC: 4
         XCTAssertEqual(
             bobsBalanceOfAliceCoinAfterTx.balance.amount,
             10,
             "Bob's balance should equal 10"
         )
+        
+        
     }
     
 }

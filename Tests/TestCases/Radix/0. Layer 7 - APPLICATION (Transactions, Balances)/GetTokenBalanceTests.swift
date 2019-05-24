@@ -40,6 +40,7 @@ class GetTokenBalanceTests: XCTestCase {
         )
     }
 
+    // AC: 1
     func testThatOrderOfAtomsDoesNotMatterForBalanceCalculation() {
         // GIVEN
         let identity = RadixIdentity()
@@ -76,9 +77,8 @@ class GetTokenBalanceTests: XCTestCase {
         )
     }
     
+    // AC: 2
     func testIncrease() {
-        // GIVEN
-        
         let alice = RadixIdentity()
         let myAddress = alice.address
         let (replaySubject, application) = applicationWithMockedSubscriber(identity: alice)
@@ -104,8 +104,8 @@ class GetTokenBalanceTests: XCTestCase {
         guard let aliceNewBalance = application.getMyBalance(of: xrd).blockingTakeFirst() else { return }
         
         XCTAssertEqual(aliceNewBalance.balance.amount, 3)
-        
     }
+ 
 }
 
 private extension GetTokenBalanceTests {
