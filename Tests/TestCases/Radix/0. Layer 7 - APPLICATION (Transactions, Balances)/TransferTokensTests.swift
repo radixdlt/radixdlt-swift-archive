@@ -41,7 +41,7 @@ class TransferTokensTests: XCTestCase {
 
         // WHEN
         // Alice creates a new token with an initial supply of 30
-        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: RxTimeInterval.enoughForPOW) else { return }
+        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: nil) else { return }
         XCTAssertEqual(rri.name, "AC")
         guard let alicesBalanceOfHerCoin = application.getMyBalance(of: rri).blockingTakeFirst() else { return }
         guard let bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rri).blockingTakeFirst() else { return }

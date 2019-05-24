@@ -20,6 +20,16 @@ public enum RPCError: Swift.Error, Decodable, Equatable, CustomStringConvertible
     case metaError(DecodingError)
 }
 
+public extension RPCError {
+    static func requestErrorCode(_ code: RPCErrorCode) -> RPCError {
+        return .requestError(.code(code))
+    }
+    
+    static func subscriberIdAlreadyInUse(_ subscriberId: SubscriberId) -> RPCError {
+        return .requestError(RPCRequestError.subscriberIdAlreadyInUse(subscriberId))
+    }
+}
+
 // MARK: - Decodable
 public extension RPCError {
     

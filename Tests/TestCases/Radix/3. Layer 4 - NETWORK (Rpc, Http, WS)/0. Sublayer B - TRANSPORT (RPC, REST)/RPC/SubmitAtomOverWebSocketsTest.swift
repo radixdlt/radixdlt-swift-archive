@@ -53,7 +53,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
         XCTAssertEqual(atomSubscriptions.count, 2)
         let as1 = atomSubscriptions[0]
         let as2 = atomSubscriptions[1]
-        XCTAssertTrue(as1.isStart)
+        XCTAssertTrue(as1.isStartOrCancel)
         XCTAssertTrue(as2.isUpdate)
 
         let u1 = as2.update!.subscriptionFromSubmissionsUpdate!

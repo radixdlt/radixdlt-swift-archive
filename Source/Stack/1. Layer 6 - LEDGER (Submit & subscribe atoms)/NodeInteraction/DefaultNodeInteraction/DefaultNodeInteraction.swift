@@ -9,10 +9,32 @@
 import Foundation
 import RxSwift
 
+public struct AddressToSubscriberId: DictionaryConvertibleMutable, ExpressibleByDictionaryLiteral {
+    public typealias Key = Address
+    public typealias Value = [SubscriberId]
+    public typealias Map = [Key: Value]
+    public var dictionary: Map
+    public init(dictionary: Map) {
+        self.dictionary = dictionary
+    }
+    
+    mutating func add(subscriptionId: SubscriberId, for address: Address) {
+        var existingSubscriptions = valueForKey(key: address, ifAbsent: { [SubscriberId]() })
+        existingSubscriptions.append(subscriptionId)
+        self[address] = existingSubscriptions
+    }
+    
+    mutating func removeSubsciptionIds(for address: Address) {
+        self.removeValue(forKey: address)
+    }
+}
+
 public final class DefaultNodeInteraction: NodeInteraction {
 
     private let futureNodeConnection: Observable<NodeConnection>
     private let rpcClient: Observable<RPCClient>
+    private var addressToSubscriberId: AddressToSubscriberId = [:]
+    private var subscriptionsFromSubmit = [SubscriberId]()
 
     public init(_ nodeDiscovery: NodeDiscovery) {
         self.futureNodeConnection = DefaultNodeConnection.byNodeDiscovery(nodeDiscovery).map { $0 }
@@ -33,6 +55,7 @@ public extension DefaultNodeInteraction {
     // being an empty array, which is kind of weird. Change this!
     func subscribe(to address: Address) -> Observable<[AtomUpdate]> {
         let id = SubscriptionIdIncrementingGenerator.next()
+        addressToSubscriberId.add(subscriptionId: id, for: address)
         return rpcClient.flatMapLatest { $0.subscribe(to: address, subscriberId: id) }
             .assertSubscriptionStarted()
             .mapToUpdateTypeElseReturnEmpty(type: AtomSubscriptionUpdateSubscribe.self)
@@ -45,6 +68,7 @@ public extension DefaultNodeInteraction {
     
     func submit(atom: SignedAtom) -> CompletableWanted {
         let id = SubscriptionIdIncrementingGenerator.next()
+        subscriptionsFromSubmit.append(id)
         return rpcClient.flatMap { $0.submit(atom: atom, subscriberId: id) }
             .assertSubscriptionStarted()
             .mapToUpdateTypeElseReturnEmpty(type: AtomSubscriptionUpdateSubmitAndSubscribe.self)
@@ -57,11 +81,62 @@ public extension DefaultNodeInteraction {
 public extension DefaultNodeInteraction {
     
     func unsubscribe(from address: Address) -> CompletableWanted {
-        implementMe
+        
+        guard let subscriberIdsForAddress = addressToSubscriberId[address] else {
+            return Observable.just(())
+        }
+        
+        return unsubscribeAll(subscriptions: subscriberIdsForAddress) {
+            self.addressToSubscriberId.removeSubsciptionIds(for: address)
+        }
     }
     
     func unsubscribeAll() -> CompletableWanted {
-        implementMe
+        return Observable.merge(
+            
+            // Remove subscription using addresses
+            Observable.from(addressToSubscriberId.keys.map {
+                self.unsubscribe(from: $0)
+            }).merge(),
+            
+            // Remove subscription from submissions
+            self.unsubscribeAll(subscriptions: subscriptionsFromSubmit) {
+                self.subscriptionsFromSubmit = []
+            }
+        )
+    }
+}
+
+private extension DefaultNodeInteraction {
+    
+    typealias RemoveSingleReference = (SubscriberId) -> Void
+    typealias RemoveAllReferences = () -> Void
+    
+    func unsubscribeAll(
+        subscriptions: [SubscriberId],
+        removeSingleReference: RemoveSingleReference? = nil,
+        removeAllReferences: RemoveAllReferences? = nil
+    ) -> CompletableWanted {
+        
+        return Observable.from(subscriptions.map {
+            self.unsubscribe(subscription: $0, removeSingleReference: removeSingleReference)
+        }).merge()
+            .do(onNext: { removeAllReferences?() })
+    }
+    
+    func unsubscribe(
+        subscription: SubscriberId,
+        removeSingleReference: RemoveSingleReference? = nil
+    ) -> CompletableWanted {
+        return rpcClient.flatMap {
+            $0.unsubscribe(subscriberId: subscription).mapToVoid()
+        }.do(onNext: { removeSingleReference?(subscription) })
+    }
+}
+
+extension ObservableType {
+    func mapToVoid() -> Observable<Void> {
+        return map { _ in }
     }
 }
 
@@ -78,7 +153,7 @@ public extension DefaultNodeInteraction {
 extension ObservableType where E == AtomSubscription {
     func assertSubscriptionStarted() -> Observable<E> {
         return asObservable().flatMap { (atomSubscription: AtomSubscription) -> Observable<AtomSubscription> in
-            if let start = atomSubscription.start, start.success == false {
+            if let start = atomSubscription.startOrCancel, start.success == false {
                 return Observable.error(DefaultNodeInteraction.Error.failedToStartSubscribeToNode)
             } else {
                 return Observable.just(atomSubscription)

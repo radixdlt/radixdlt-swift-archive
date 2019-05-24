@@ -16,6 +16,7 @@ import Foundation
 ///
 public enum RPCMethod {
     case subscribe(to: Address, subscriberId: SubscriberId)
+    case unsubscribe(subscriberId: SubscriberId)
     case getLivePeers
     case getInfo
     case getUniverse
@@ -24,6 +25,7 @@ public enum RPCMethod {
 
 public enum RPCRequestMethod: String {
     case subscribe              = "Atoms.subscribe"
+    case unsubscribe            = "Atoms.cancel"
     case getLivePeers           = "Network.getLivePeers"
     case getInfo                = "Network.getInfo"
     case getUniverse            = "Universe.getUniverse"
@@ -42,6 +44,7 @@ public extension RPCMethod {
     var method: RPCRequestMethod {
         switch self {
         case .subscribe: return .subscribe
+        case .unsubscribe: return .unsubscribe
         case .getLivePeers: return .getLivePeers
         case .getInfo: return .getInfo
         case .getUniverse: return .getUniverse
@@ -61,6 +64,9 @@ public extension RPCMethod {
         case .subscribe(let address, let subscriberId):
             let atomSubscriptionRequest = AtomSubscriptionRequest(address: address, subscriberId: subscriberId)
             return innerEncode(atomSubscriptionRequest)
+        case .unsubscribe(let subscriberId):
+            let unsubscriptionRequest = UnsubscriptionRequest(subscriberId: subscriberId)
+            return innerEncode(unsubscriptionRequest)
         case .submitAndSubscribe(let atom, let subscriberId):
             let request = AtomSubmitAndSubscribeRequest(atom: atom, subscriberId: subscriberId)
             return innerEncode(request)

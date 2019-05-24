@@ -24,3 +24,12 @@ public extension AtomSubscriptionRequest {
         self.init(query: AtomQuery(address: address), subscriberId: subscriberId)
     }
 }
+
+
+public struct UnsubscriptionRequest: Encodable {
+    public let subscriberId: SubscriberId
+    
+    public init(subscriberId: SubscriberId) {
+        self.subscriberId = subscriberId
+    }
+}

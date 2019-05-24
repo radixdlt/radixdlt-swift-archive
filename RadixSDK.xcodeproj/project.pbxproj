@@ -122,8 +122,7 @@
 		E6A4ABC6221EDD4A006C5CA8 /* BigUInt_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABC5221EDD4A006C5CA8 /* BigUInt_Extension.swift */; };
 		E6A507D5224E14D500128123 /* AtomSubscriptionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507D4224E14D500128123 /* AtomSubscriptionRequest.swift */; };
 		E6A507D7224E154700128123 /* AtomSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507D6224E154700128123 /* AtomSubscription.swift */; };
-		E6A507D9224E155A00128123 /* AtomSubscriptionStart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507D8224E155A00128123 /* AtomSubscriptionStart.swift */; };
-		E6A507DB224E15DC00128123 /* AtomSubscriptionCancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507DA224E15DC00128123 /* AtomSubscriptionCancel.swift */; };
+		E6A507D9224E155A00128123 /* AtomSubscriptionStartOrCancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507D8224E155A00128123 /* AtomSubscriptionStartOrCancel.swift */; };
 		E6A507DD224E168300128123 /* RPCClientsRetainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507DC224E168300128123 /* RPCClientsRetainer.swift */; };
 		E6A507DF224E17E400128123 /* AtomSubscriptionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507DE224E17E400128123 /* AtomSubscriptionUpdate.swift */; };
 		E6A507E1224E17F200128123 /* AtomEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507E0224E17F200128123 /* AtomEvent.swift */; };
@@ -543,8 +542,7 @@
 		E6A4ABC5221EDD4A006C5CA8 /* BigUInt_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigUInt_Extension.swift; sourceTree = "<group>"; };
 		E6A507D4224E14D500128123 /* AtomSubscriptionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSubscriptionRequest.swift; sourceTree = "<group>"; };
 		E6A507D6224E154700128123 /* AtomSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSubscription.swift; sourceTree = "<group>"; };
-		E6A507D8224E155A00128123 /* AtomSubscriptionStart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSubscriptionStart.swift; sourceTree = "<group>"; };
-		E6A507DA224E15DC00128123 /* AtomSubscriptionCancel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSubscriptionCancel.swift; sourceTree = "<group>"; };
+		E6A507D8224E155A00128123 /* AtomSubscriptionStartOrCancel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSubscriptionStartOrCancel.swift; sourceTree = "<group>"; };
 		E6A507DC224E168300128123 /* RPCClientsRetainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCClientsRetainer.swift; sourceTree = "<group>"; };
 		E6A507DE224E17E400128123 /* AtomSubscriptionUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSubscriptionUpdate.swift; sourceTree = "<group>"; };
 		E6A507E0224E17F200128123 /* AtomEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomEvent.swift; sourceTree = "<group>"; };
@@ -1604,10 +1602,9 @@
 			isa = PBXGroup;
 			children = (
 				E6A507D6224E154700128123 /* AtomSubscription.swift */,
-				E6A507D8224E155A00128123 /* AtomSubscriptionStart.swift */,
+				E6A507D8224E155A00128123 /* AtomSubscriptionStartOrCancel.swift */,
 				E6A507DE224E17E400128123 /* AtomSubscriptionUpdate.swift */,
 				E6A507E0224E17F200128123 /* AtomEvent.swift */,
-				E6A507DA224E15DC00128123 /* AtomSubscriptionCancel.swift */,
 			);
 			path = AtomsSubscribe;
 			sourceTree = "<group>";
@@ -3212,7 +3209,7 @@
 				E6A508AD224E713F00128123 /* TokenDefinitionParticle+Identifiable.swift in Sources */,
 				E6E2793F2271CD1C0067D46E /* Sha256Hasher.swift in Sources */,
 				E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */,
-				E6A507D9224E155A00128123 /* AtomSubscriptionStart.swift in Sources */,
+				E6A507D9224E155A00128123 /* AtomSubscriptionStartOrCancel.swift in Sources */,
 				E6A5088E224E713F00128123 /* Spin.swift in Sources */,
 				E6E279902271CD1C0067D46E /* ValueValidating.swift in Sources */,
 				E6E2796F2271CD1C0067D46E /* Granularity.swift in Sources */,
@@ -3320,7 +3317,6 @@
 				E672564B228AEBE0004631F1 /* TokenCreating.swift in Sources */,
 				E6474AC8226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift in Sources */,
 				E6E2798E2271CD1C0067D46E /* DataInitializable.swift in Sources */,
-				E6A507DB224E15DC00128123 /* AtomSubscriptionCancel.swift in Sources */,
 				E6A508B9224E713F00128123 /* Identifiable.swift in Sources */,
 				E6E279402271CD1C0067D46E /* Sha256TwiceHasher.swift in Sources */,
 				E6474AE822663F68009C4FDC /* RequestIdGenerator.swift in Sources */,

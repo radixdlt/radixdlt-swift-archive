@@ -34,7 +34,7 @@ class GetAtomsOverWebSocketsTest: WebsocketTest {
         let as1 = atomSubscriptions[0]
         let as2 = atomSubscriptions[1]
         let as3 = atomSubscriptions[2]
-        XCTAssertTrue(as1.isStart)
+        XCTAssertTrue(as1.isStartOrCancel)
         XCTAssertTrue(as2.isUpdate)
         XCTAssertTrue(as3.isUpdate)
         

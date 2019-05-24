@@ -18,8 +18,24 @@ public struct RPCRequestError: Swift.Error,
     // swiftlint:enable opening_brace
     
     public let code: RPCErrorCode
-    public let message: String
+    public let message: String?
     public let radixErrorInfo: SubscriptionError?
+    
+    public init(code: RPCErrorCode, message: String? = nil, info: SubscriptionError? = nil) {
+        self.code = code
+        self.message = message
+        self.radixErrorInfo = info
+    }
+}
+
+public extension RPCRequestError {
+    static func code(_ errorCode: RPCErrorCode) -> RPCRequestError {
+        return RPCRequestError(code: errorCode)
+    }
+    
+    static func subscriberIdAlreadyInUse(_ subscriberId: SubscriberId) -> RPCRequestError {
+         return RPCRequestError(code: .serverError, message: "Subscriber + \(subscriberId) already exists.")
+    }
 }
 
 // MARK: - Decodable
@@ -45,7 +61,27 @@ public extension RPCRequestError {
         if let radixErrorInfo = radixErrorInfo {
             radixInfoString = ", info: \(radixErrorInfo)"
         }
-        return "\(code.nameAndCode): \"\(message)\"\(radixInfoString)"
+        var messageString = ""
+        if let message = message {
+            messageString = ": \"\(message)\""
+        }
+        return "\(code.nameAndCode)\(messageString)\(radixInfoString)"
+    }
+}
+
+public extension RPCRequestError {
+    static func == (lhs: RPCRequestError, rhs: RPCRequestError) -> Bool {
+        let codesMatches = lhs.code == rhs.code
+        let messagesMatches: Bool = {
+            switch (lhs.message, rhs.message) {
+            case (.some(let lhsMessage), .some(let rhsMessage)): return lhsMessage == rhsMessage
+            case (.none, .none): return true
+            case (.some, .none): return false
+            case (.none, .some): return false
+            }
+        }()
+        
+        return codesMatches && messagesMatches
     }
 }
 
