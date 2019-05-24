@@ -57,16 +57,14 @@ public extension Atomic {
     }
     
     func tokensBalances() -> [TokenBalance] {
-        let tokenBalances = spunParticles().compactMap { (spunParticle: AnySpunParticle) -> TokenBalance? in
-            guard let transferrableTokensParticle = spunParticle.particle as? TransferrableTokensParticle else {
-                return nil
-            }
-            return TokenBalance(transferrable: transferrableTokensParticle, spin: spunParticle.spin)
+        return spunParticles().compactMap {
+            $0.mapToSpunParticle(with: TransferrableTokensParticle.self)
+        }.map {
+            TokenBalance(spunTransferrable: $0)
         }
-        return tokenBalances
     }
     
-    func particlesOfType<P>(_ type: P.Type, spin: Spin) -> [P] where P: ParticleConvertible {
+    func particlesOfType<P>(_ type: P.Type, spin: Spin? = nil) -> [P] where P: ParticleConvertible {
         return spunParticles()
             .filter(spin: spin)
             .compactMap(type: P.self)

@@ -17,7 +17,8 @@ class AtomSignatureTests: XCTestCase {
         
         // GIVEN
         // A RadixIdentity `alice`
-        let alice: RadixIdentity = 1
+        let magic: Magic = 1
+        let alice = RadixIdentity(private: 1, magic: magic)
         
         // ... a simple Atom
         let atom = Atom(metaData: .timeNow)
@@ -48,7 +49,7 @@ class AtomSignatureTests: XCTestCase {
         )
         
         // and Given another identity for Bob
-        let bob: RadixIdentity = 2
+        let bob = RadixIdentity(private: 2, magic: magic)
         
         XCTAssertNotThrowsAndEqual(
             // WHEN

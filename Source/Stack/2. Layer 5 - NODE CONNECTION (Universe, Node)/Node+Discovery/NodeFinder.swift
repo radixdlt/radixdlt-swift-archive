@@ -91,7 +91,7 @@ public extension NodeFinder {
         makeLivePeersRequester: MakeLivePeersRequester? = nil,
         websocketsUrlFormatter: URLFormatting? = nil,
         httpUrlFormatter: URLFormatting? = nil
-        ) throws {
+    ) throws {
     
         let nodeFindingURL = try URLFormatter.format(url: bootstrapHost, protocol: .hypertext, appendPath: false, useSSL: true)
         

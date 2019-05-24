@@ -1,5 +1,5 @@
 //
-//  LookupableTokenBalance.swift
+//  BalancePerToken.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-03-29.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct BalancePerToken: DictionaryConvertible {
+public struct BalancePerToken: ApplicationState, DictionaryConvertible {
     public typealias Key = ResourceIdentifier
     public typealias Value = TokenBalance
     public var dictionary: Map
@@ -22,6 +22,10 @@ public struct BalancePerToken: DictionaryConvertible {
 }
 
 public extension BalancePerToken {
+    
+    static var zeroBalances: BalancePerToken {
+        return [:]
+    }
     
     static func reduce(_ balances: [TokenBalance]) -> Map {
         return Map(balances.map { ($0.tokenDefinitionReference, $0) }, uniquingKeysWith: BalancePerToken.conflictResolver)

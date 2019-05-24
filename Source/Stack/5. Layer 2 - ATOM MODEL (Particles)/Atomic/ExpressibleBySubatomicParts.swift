@@ -1,5 +1,5 @@
 //
-//  AtomicCreating.swift
+//  ExpressibleBySubatomicParts.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-04-17.
@@ -10,7 +10,7 @@ import Foundation
 
 // swiftlint:disable colon opening_brace
 
-public protocol AtomicCreating:
+public protocol ExpressibleBySubatomicParts:
     ArrayInitializable,
     Throwing,
     RadixHashable,
@@ -34,7 +34,7 @@ where
     )
 }
 
-public extension AtomicCreating {
+public extension ExpressibleBySubatomicParts {
     init(atomic: Atomic) {
         self.init(
             metaData: atomic.metaData,
@@ -65,7 +65,7 @@ public extension AtomError {
 }
 
 // MARK: - Decodable
-public extension AtomicCreating {
+public extension ExpressibleBySubatomicParts {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -82,7 +82,7 @@ public extension AtomicCreating {
         )
     }
 }
-public extension AtomicCreating where Self: Atomic {
+public extension ExpressibleBySubatomicParts where Self: Atomic {
     // MARK: - Encodable
     static var maxSizeOfDSONEncodedAtomInBytes: Int {
         return 60000
@@ -106,14 +106,14 @@ public extension AtomicCreating where Self: Atomic {
 }
 
 // MARK: - ArrayInitializable
-public extension AtomicCreating {
+public extension ExpressibleBySubatomicParts {
     init(elements particleGroups: [Element]) {
         self.init(particleGroups: ParticleGroups(particleGroups: particleGroups))
     }
 }
 
 // MARK: - Convenience
-public extension AtomicCreating {
+public extension ExpressibleBySubatomicParts {
     init(
         metaData: ChronoMetaData = .timeNow,
         signatures: Signatures = [:],

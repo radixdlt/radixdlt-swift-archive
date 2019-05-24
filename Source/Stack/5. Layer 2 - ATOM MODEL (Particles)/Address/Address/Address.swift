@@ -116,7 +116,27 @@ public extension Address {
 // MARK: - StringRepresentable
 public extension Address {
     var stringValue: String {
+        return full
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension Address {
+    
+    var full: String {
         return base58String.stringValue
+    }
+    
+    var description: String {
+        return "<\(short)>"
+    }
+    
+    var short: String {
+        return [
+            stringValue.prefix(4),
+            "...",
+            stringValue.suffix(4)
+        ].joined()
     }
 }
 

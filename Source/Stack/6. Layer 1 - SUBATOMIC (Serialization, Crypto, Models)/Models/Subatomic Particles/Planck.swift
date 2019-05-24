@@ -15,6 +15,7 @@ public struct Planck:
     CBORConvertible,
     Codable,
     Equatable,
+    CustomStringConvertible,
     ExpressibleByIntegerLiteral {
 // swiftlint:enable colon
     
@@ -39,6 +40,13 @@ public extension Planck {
 public extension Planck {
     init(integerLiteral value: Value) {
         self.value = value
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension Planck {
+    var description: String {
+        return value.description
     }
 }
 

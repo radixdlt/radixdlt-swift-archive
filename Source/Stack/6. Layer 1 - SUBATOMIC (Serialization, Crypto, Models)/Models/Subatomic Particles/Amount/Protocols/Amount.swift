@@ -16,7 +16,9 @@ public protocol Amount:
     StringRepresentable,
     CBORDataConvertible,
     Numeric,
-    Comparable
+    Comparable,
+    Hashable,
+    CustomStringConvertible
 where
     Magnitude: BigInteger & StringRepresentable & StringInitializable
 {
@@ -27,6 +29,7 @@ where
     init(validated: Magnitude)
     init(validating: Magnitude) throws
     
+    var sign: AmountSign { get } 
     func negated() -> SignedAmount
     var abs: NonNegativeAmount { get }
 }
@@ -168,6 +171,6 @@ public extension Amount {
 // MARK: - CustomStringConvertible
 public extension Amount {
     var description: String {
-        return stringValue
+        return amountAndSign.description
     }
 }

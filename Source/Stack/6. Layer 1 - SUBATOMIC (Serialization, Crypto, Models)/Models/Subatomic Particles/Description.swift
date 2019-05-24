@@ -8,7 +8,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// The description of a specific Radix Token (e.g. "XRD"). Constrained to a specific length.
 /// For the formal definition of these constraints read [RIP - Tokens][1].
@@ -22,8 +22,10 @@ public struct Description:
     PrefixedJsonCodable,
     CBORStringConvertible,
     MinLengthSpecifying,
-    MaxLengthSpecifying {
-// swiftlint:enable colon
+    MaxLengthSpecifying,
+    Hashable
+{
+// swiftlint:enable colon opening_brace
     
     public static let minLength = 8
     public static let maxLength = 200

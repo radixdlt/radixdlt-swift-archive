@@ -17,7 +17,7 @@ public struct StringDictionary: Decodable {
         self.values = stringMap.mapValues { $0.stringValue }
     }
     
-    func mapKeys<Key>(transform: (String) throws -> Key) throws -> [Key: String] where Key: Hashable {
+    func mapKeys<Key>(transform: (String) throws -> Key) rethrows -> [Key: String] where Key: Hashable {
         return try [Key: String](uniqueKeysWithValues: values.map {
             (
                 try transform($0.key),

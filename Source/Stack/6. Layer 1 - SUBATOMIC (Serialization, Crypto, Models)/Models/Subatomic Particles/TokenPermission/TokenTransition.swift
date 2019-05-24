@@ -8,12 +8,19 @@
 
 import Foundation
 
+// swiftlint:disable opening_brace
+
+/// Transition of tokens.
 public enum TokenTransition: String,
     StringInitializable,
     StringRepresentable,
     Codable,
-    Hashable {
+    Hashable,
+    CustomStringConvertible
+{
     
+    // swiftlint:enable opening_brace
+
     case mint
     case burn
 }

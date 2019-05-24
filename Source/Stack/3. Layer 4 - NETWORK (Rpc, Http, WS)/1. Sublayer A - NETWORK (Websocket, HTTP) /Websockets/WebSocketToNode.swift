@@ -78,7 +78,7 @@ public extension WebSocketToNode {
             queuedOutgoingMessages.append(message)
             return
         }
-        log.verbose("Sending message:\n<\(message)>")
+        log.debug("Sending message:\n<\(message)>")
         socket?.write(string: message)
     }
     
@@ -158,7 +158,8 @@ public extension WebSocketToNode {
             stateSubject.onNext(.ready)
             sendQueued()
         } else {
-            log.verbose("Recived response from websocket, text:\n<\(text)>")
+            log.debug("Received response over websockets (text of #\(text.count) chars)")
+            log.verbose("Response just received over websocket:\n<\(text)>")
             receivedMessagesSubject.onNext(text)
         }
     }

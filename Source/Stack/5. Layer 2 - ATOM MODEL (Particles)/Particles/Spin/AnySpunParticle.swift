@@ -32,6 +32,13 @@ public extension AnySpunParticle {
     func wrapInGroup() -> ParticleGroup {
         return ParticleGroup(spunParticles: [self])
     }
+    
+    func mapToSpunParticle<P>(with: P.Type) -> SpunParticle<P>? {
+        guard let castedParticle = particle as? P else {
+            return nil
+        }
+        return SpunParticle(spin: spin, particle: castedParticle)
+    }
 }
 
 // MARK: - Deodable

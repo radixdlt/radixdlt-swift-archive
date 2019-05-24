@@ -35,7 +35,48 @@ class SignedAmountTests: XCTestCase {
         XCTAssertEqual(a + b, "100000000000000000000000000000000000000000000000000001")
     }
     
+    func testFromSignedAmountNegative() {
+        let a: SignedAmount = -1
+        let b = SignedAmount(amount: a)
+        XCTAssertAllEqual(a, b, -1)
+    }
     
+    func testFromSignedAmountZero() {
+        let a: SignedAmount = 0
+        let b = SignedAmount(amount: a)
+        XCTAssertAllEqual(a, b, 0)
+    }
+    
+    func testFromSignedAmountPositive() {
+        let a: SignedAmount = 1
+        let b = SignedAmount(amount: a)
+        XCTAssertAllEqual(a, b, 1)
+    }
+    
+    func testFromNonNegativeAmountPositive() {
+        let a: NonNegativeAmount = 1
+        let b = SignedAmount(amount: a)
+        XCTAssertEqual(a, 1)
+        XCTAssertEqual(b, 1)
+        XCTAssertAllEqual(a.abs, b.abs, 1)
+    }
+    
+    func testFromNonNegativeAmountZero() {
+        let a: NonNegativeAmount = 0
+        let b = SignedAmount(amount: a)
+        XCTAssertEqual(a, 0)
+        XCTAssertEqual(b, 0)
+        XCTAssertAllEqual(a.abs, b.abs, 0)
+    }
+    
+    func testFromPositiveAmount() {
+        let a: PositiveAmount = 1
+        let b = SignedAmount(amount: a)
+        XCTAssertEqual(a, 1)
+        XCTAssertEqual(b, 1)
+        XCTAssertAllEqual(a.abs, b.abs, 1)
+    }
+
     func testNegatedNegative() {
         let a: SignedAmount = -2
         let negated: SignedAmount = a.negated()

@@ -8,7 +8,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// The permissions of a Token control who can mint, transfer and burn a Tokens instances under which circumstances.
 ///
@@ -24,9 +24,11 @@ import Foundation
 public struct TokenPermissions:
     DictionaryCodable,
     CBORDictionaryConvertible,
-    Equatable {
+    Throwing,
+    Equatable
+{
     
-// swiftlint:enable colon
+// swiftlint:enable colon opening_brace
     
     public typealias Key = TokenTransition
     public typealias Value = TokenPermission
@@ -46,6 +48,7 @@ public struct TokenPermissions:
     }
 }
 
+// MARK: - Throwing
 public extension TokenPermissions {
     enum Error: Swift.Error, Equatable {
         case mintMissing
@@ -53,6 +56,7 @@ public extension TokenPermissions {
     }
 }
 
+// MARK: - Presets
 public extension TokenPermissions {
 
     static var all: TokenPermissions {

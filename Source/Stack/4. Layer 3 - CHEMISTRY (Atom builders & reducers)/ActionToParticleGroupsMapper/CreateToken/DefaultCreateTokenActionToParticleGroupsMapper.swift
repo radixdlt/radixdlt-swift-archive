@@ -8,15 +8,6 @@
 
 import Foundation
 
-public protocol UserAction {}
-
-public protocol ActionToParticleGroupsMapping {
-    associatedtype Action: UserAction
-    func particleGroups(for action: Action) -> ParticleGroups
-}
-
-public protocol CreateTokenActionToParticleGroupsMapper: ActionToParticleGroupsMapping where Action == CreateTokenAction {}
-
 public struct DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenActionToParticleGroupsMapper {}
 
 public extension DefaultCreateTokenActionToParticleGroupsMapper {

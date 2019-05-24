@@ -8,7 +8,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 public struct TransferrableTokensParticle:
     ParticleConvertible,
@@ -17,8 +17,10 @@ public struct TransferrableTokensParticle:
     TokenDefinitionReferencing,
     Accountable,
     RadixCodable,
-    RadixModelTypeStaticSpecifying {
-    // swiftlint:enable colon
+    RadixModelTypeStaticSpecifying,
+    CustomStringConvertible
+{
+    // swiftlint:enable colon opening_brace
     
     public static let serializer = RadixModelType.transferrableTokensParticle
     
@@ -109,6 +111,21 @@ public extension TransferrableTokensParticle {
             EncodableKeyValue(key: .nonce, value: nonce),
             EncodableKeyValue(key: .planck, value: planck)
         ]
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension TransferrableTokensParticle {
+    var description: String {
+        return """
+        TransferrableTokensParticle(
+            address: \(address),
+            rri: \(tokenDefinitionReference),
+            amount: \(amount),
+            permissions: \(permissions),
+            (omitted: `planck, `granularity`, `nonce`)
+        )
+        """
     }
 }
 

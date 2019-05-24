@@ -13,7 +13,10 @@ public extension Sequence where Element == AnySpunParticle {
         return compactMap { $0.particle as? P }
     }
     
-    func filter(spin: Spin) -> [AnySpunParticle] {
+    func filter(spin: Spin?) -> [AnySpunParticle] {
+        guard let spin = spin else {
+            return [AnySpunParticle](self)
+        }
         return filter { $0.spin == spin }
     }
 }

@@ -14,6 +14,7 @@ import RxBlocking
 import RxSwift
 
 class TokenBalanceReducerTests: XCTestCase {
+    
     func testSimpleBalance() {
         let reducer = TokenBalanceReducer()
         let balances = reducer.reduce(transferrable(10))
@@ -30,13 +31,25 @@ class TokenBalanceReducerTests: XCTestCase {
             transferrable(11)
         ]
     
-        let reducer = TokenBalanceReducer()
-        let balances = reducer.reduce(spunTransferrable: spunTransferrable)
+        let balances = TokenBalanceReducer().reduce(spunTransferrable: spunTransferrable)
 
         guard let xrdBalance = balances[xrd] else { return XCTFail("Should not be nil") }
         XCTAssertEqual(xrdBalance.amount, 19)
-        XCTAssertLessThan(xrdBalance.amount, 20)
-        XCTAssertGreaterThan(xrdBalance.amount, 18)
+    }
+    
+    func testThatAtomOrderDoesNotMatter() {
+        
+        let downUp = TokenBalanceReducer().reduce(spunTransferrable: [
+            transferrable(1, spin: .down),
+            transferrable(1, spin: .up)
+        ]).balanceOrZero(of: xrd, address: address).amount
+
+        let upDown = TokenBalanceReducer().reduce(spunTransferrable: [
+            transferrable(1, spin: .down),
+            transferrable(1, spin: .up)
+        ]).balanceOrZero(of: xrd, address: address).amount
+        
+        XCTAssertAllEqual(downUp, upDown, 0)
     }
 }
 

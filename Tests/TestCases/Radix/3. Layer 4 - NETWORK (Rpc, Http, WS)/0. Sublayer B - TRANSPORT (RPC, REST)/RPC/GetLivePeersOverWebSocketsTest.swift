@@ -12,12 +12,13 @@ import XCTest
 import RxSwift
 import RxTest
 
+
 class GetLivePeersOverWebSocketsTest: WebsocketTest {
     
     func testLivePeersOverWS() {
         guard let rpcClient = makeRpcClient() else { return }
         guard let livePeers = rpcClient.getLivePeers().blockingTakeFirst(timeout: 1) else { return }
-
+        
         XCTAssertEqual(livePeers.count, 1)
         let livePeer = livePeers[0]
         XCTAssertFalse(livePeer.host.ipAddress.isEmpty)
@@ -29,7 +30,8 @@ class GetLivePeersOverWebSocketsTest: WebsocketTest {
         let mockedWebsocket = MockedWebsocket(subject: subject)
         let mockedRpcClient = MockedRPCClient(channel: mockedWebsocket)
         subject.onNext(goodJsonLivePeers)
-        let livePeers = try! mockedRpcClient.getLivePeers().take(1).toBlocking(timeout: 1).first()!
+        
+        guard let livePeers = mockedRpcClient.getLivePeers().blockingTakeFirst(timeout: 1) else { return }
         
         XCTAssertEqual(livePeers.count, 1)
         let livePeer = livePeers[0]
@@ -44,7 +46,7 @@ class GetLivePeersOverWebSocketsTest: WebsocketTest {
 
         XCTAssertThrowsSpecificError(
             try mockedRpcClient.getLivePeers().take(1).toBlocking(timeout: 1).first(),
-            DecodingError.expectedStringButGotDictionary,
+            RPCError.failedToDecodeResponse(DecodingError.keyNotFound(NodeInfo.CodingKeys.system)),
             "Should throw error when receiving error from API"
         )
     }

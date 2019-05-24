@@ -22,7 +22,8 @@ public struct Name:
     CBORStringConvertible,
     MinLengthSpecifying,
     MaxLengthSpecifying,
-    Throwing
+    Throwing,
+    Hashable
 {
 // swiftlint:enable colon opening_brace
     

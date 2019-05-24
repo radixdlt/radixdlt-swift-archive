@@ -137,8 +137,8 @@ public extension ECIES {
         let calculatedMac = try calculateMAC(salt: keyDataM, initializationVector: iv, ephemeralPublicKey: ephemeralPublicKey, cipherText: cipherText)
         
         guard calculatedMac == mac else {
-            log.verbose("Expected MAC:\n<\(mac.hex)>")
-            log.verbose("Calculated MAC:\n<\(calculatedMac.hex)>")
+            log.debug("Expected MAC:\n<\(mac.hex)>")
+            log.debug("Calculated MAC:\n<\(calculatedMac.hex)>")
             throw DecryptionError.macMismatch(expected: mac, butGot: calculatedMac)
         }
         

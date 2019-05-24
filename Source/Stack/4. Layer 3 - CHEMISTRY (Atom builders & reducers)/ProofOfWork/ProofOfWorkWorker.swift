@@ -22,7 +22,6 @@ public extension ProofOfWorkWorker {
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default
     ) -> Observable<ProofOfWork> {
-        return Observable.deferred {
             return Observable.create { observer in
                 
                 let calculatePOW = DispatchWorkItem { [weak self] in
@@ -47,7 +46,6 @@ public extension ProofOfWorkWorker {
                     calculatePOW.cancel()
                 }
             }
-        }
     }
 }
 

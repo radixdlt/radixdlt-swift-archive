@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct ProofOfWork: CustomStringConvertible {
+public struct ProofOfWork: CustomStringConvertible, CustomDebugStringConvertible {
     
     private let seed: Data
     private let targetHex: HexString
@@ -25,12 +25,16 @@ public struct ProofOfWork: CustomStringConvertible {
 
 // MARK: - Prove
 public extension ProofOfWork {
-    func prove() throws {
-        let unhashed: Data = magic.toFourBigEndianBytes() + seed + nonce.toEightBigEndianBytes()
-        let hashHex = RadixHash(unhashedData: unhashed).hex
-        guard hashHex <= targetHex.hex else {
-            throw Error.expected(hex: hashHex, toBeLessThanOrEqualToTargetHex: targetHex.hex)
+    @discardableResult
+    func prove() throws -> ProofOfWork {
+        let hashed = hash()
+        guard hashed.hex <= targetHex.hex else {
+            throw Error.expected(
+                hex: hashed.hex,
+                toBeLessThanOrEqualToTargetHex: targetHex.hex
+            )
         }
+        return self
     }
 }
 
@@ -48,11 +52,31 @@ public extension ProofOfWork {
     }
 }
 
+// MARK: CustomDebugStringConvertible
+public extension ProofOfWork {
+    var debugDescription: String {
+        return """
+            nonce: \(nonceAsString),
+            targetHex: \(targetHex.hex)
+            hashHex: \(hash().hex)
+        """
+    }
+}
+
 // MARK: - Error
 public extension ProofOfWork {
     enum Error: Swift.Error {
         case workInputIncorrectLengthOfSeed(expectedByteCountOf: Int, butGot: Int)
         case expected(hex: String, toBeLessThanOrEqualToTargetHex: String)
+    }
+}
+
+// MARK: - Private
+private extension ProofOfWork {
+    func hash() -> RadixHash {
+        let unhashed: Data = magic.toFourBigEndianBytes() + seed + nonce.toEightBigEndianBytes()
+        
+        return RadixHash(unhashedData: unhashed)
     }
 }
 

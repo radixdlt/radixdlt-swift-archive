@@ -9,9 +9,8 @@
 import Foundation
 
 public enum AtomSubscription: Decodable {
-    case start(AtomSubscriptionStart)
+    case startOrCancel(AtomSubscriptionStartOrCancel)
     case update(AtomSubscriptionUpdate)
-    case cancel(AtomSubscriptionCancel)
 }
 
 // MARK: - Decodable
@@ -19,21 +18,17 @@ public extension AtomSubscription {
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         do {
-            self = .start(try container.decode(AtomSubscriptionStart.self))
+            self = .startOrCancel(try container.decode(AtomSubscriptionStartOrCancel.self))
         } catch {
-            do {
-                self = .cancel(try container.decode(AtomSubscriptionCancel.self))
-            } catch {
-                self = .update(try container.decode(AtomSubscriptionUpdate.self))
-            }
+            self = .update(try container.decode(AtomSubscriptionUpdate.self))
         }
     }
 }
 
 public extension AtomSubscription {
-    var start: AtomSubscriptionStart? {
-        guard case .start(let start) = self else { return nil }
-        return start
+    var startOrCancel: AtomSubscriptionStartOrCancel? {
+        guard case .startOrCancel(let startOrCancel) = self else { return nil }
+        return startOrCancel
     }
     
     var update: AtomSubscriptionUpdate? {
@@ -41,20 +36,11 @@ public extension AtomSubscription {
         return update
     }
     
-    var cancel: AtomSubscriptionCancel? {
-        guard case .cancel(let cancel) = self else { return nil }
-        return cancel
-    }
-    
-    var isStart: Bool {
-        return start != nil
+    var isStartOrCancel: Bool {
+        return startOrCancel != nil
     }
     
     var isUpdate: Bool {
         return update != nil
-    }
-    
-    var isCancel: Bool {
-        return cancel != nil
     }
 }

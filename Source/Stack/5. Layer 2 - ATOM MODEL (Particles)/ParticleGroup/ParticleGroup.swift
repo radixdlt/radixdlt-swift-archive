@@ -29,7 +29,7 @@ public struct ParticleGroup:
     
     public static let serializer = RadixModelType.particleGroup
     
-    public private(set) var spunParticles: [AnySpunParticle]
+    public let spunParticles: [AnySpunParticle]
     public let metaData: MetaData
     
     public init(
@@ -38,6 +38,16 @@ public struct ParticleGroup:
     ) {
         self.spunParticles = spunParticles
         self.metaData = metaData
+    }
+}
+
+// MARK: - Convenience
+public extension ParticleGroup {
+    init(
+        spunParticles: AnySpunParticle...,
+        metaData: MetaData = [:]
+        ) {
+        self.init(spunParticles: spunParticles, metaData: metaData)
     }
 }
 
@@ -85,6 +95,20 @@ public extension ParticleGroup {
 // MARK: - Appending Particles
 public extension ParticleGroup {
     static func += (group: inout ParticleGroup, spunParticle: AnySpunParticle) {
-        group.spunParticles.append(spunParticle)
+        var allParticles = group.spunParticles
+        allParticles.append(spunParticle)
+        group = ParticleGroup(spunParticles: allParticles, metaData: group.metaData)
+    }
+}
+
+public extension Sequence where Element == ParticleGroup {
+    func firstParticle<P>(ofType type: P.Type, spin: Spin? = nil) -> P? {
+        return compactMap { $0.firstParticle(ofType: type, spin: spin) }.first
+    }
+}
+
+public extension ParticleGroup {
+    func firstParticle<P>(ofType type: P.Type, spin: Spin? = nil) -> P? {
+        return spunParticles.filter(spin: spin).compactMap { $0.particle as? P }.first
     }
 }

@@ -8,6 +8,8 @@
 
 import Foundation
 
+// swiftlint:disable opening_brace
+
 /// Permissions controlling who can perform `TokenTransitions` such as `burn` or `mint` tokens.
 ///
 /// - seeAlso:
@@ -16,7 +18,11 @@ import Foundation
 public enum TokenPermission: String,
     StringInitializable,
     StringRepresentable,
-    PrefixedJsonCodable {
+    PrefixedJsonCodable,
+    CustomStringConvertible
+{
+
+    // swiftlint:enable opening_brace
 
     case tokenCreationOnly = "token_creation_only"
     case tokenOwnerOnly = "token_owner_only"

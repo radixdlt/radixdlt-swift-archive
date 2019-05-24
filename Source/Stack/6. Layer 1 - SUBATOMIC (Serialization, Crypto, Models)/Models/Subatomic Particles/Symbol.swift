@@ -8,7 +8,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// The "ticker" for a specific Radix Token, e.g. "XRD" for the token named "Rad". Constrained to a specific
 /// character set and length, for the formal definition of these constraints read [RIP - Tokens][1].
@@ -23,8 +23,10 @@ public struct Symbol:
     CBORStringConvertible,
     CharacterSetSpecifying,
     MinLengthSpecifying,
-    MaxLengthSpecifying {
-// swiftlint:enable colon
+    MaxLengthSpecifying,
+    Hashable
+{
+// swiftlint:enable colon opening_brace
     
     public static let minLength = 1
     public static let maxLength = 14

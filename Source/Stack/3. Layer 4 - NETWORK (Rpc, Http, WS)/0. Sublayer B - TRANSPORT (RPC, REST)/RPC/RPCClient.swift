@@ -16,7 +16,12 @@ public protocol RPCClient:
     LivePeersRequesting,
     UniverseConfigRequesting,
     AtomsByAddressSubscribing,
+    AtomSubscriptionCancelling,
     AtomSubmitting
 {
     // swiftlint:enable colon opening_brace
+}
+
+public protocol AtomSubscriptionCancelling {
+    func unsubscribe(subscriberId: SubscriberId) -> Observable<AtomSubscriptionStartOrCancel>
 }

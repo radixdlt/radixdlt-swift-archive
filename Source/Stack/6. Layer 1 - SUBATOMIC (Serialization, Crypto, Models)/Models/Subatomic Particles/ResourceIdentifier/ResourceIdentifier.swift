@@ -8,16 +8,21 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
-/// A Radix resource identifier is a human readable index into the Ledger which points to a unique UP particle.
-/// On format: `/:address/:type/:unique`
+/// A Radix resource identifier is a human readable index into the Ledger which points to a name state machine
+///
+/// On format: `/:address/:name`, e.g.:
+/// `"/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"`
 public struct ResourceIdentifier:
     PrefixedJsonCodable,
     StringRepresentable,
     DSONPrefixedDataConvertible,
-    Hashable {
-// swiftlint:enable colon
+    Hashable,
+    CustomStringConvertible
+{
+  
+// swiftlint:enable colon opening_brace
 
     public let address: Address
     public let name: String
@@ -53,6 +58,13 @@ public extension ResourceIdentifier {
 public extension ResourceIdentifier {
     var stringValue: String {
         return identifier
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension ResourceIdentifier {
+    var description: String {
+        return "$/\(address.short)/\(name)$"
     }
 }
 
@@ -118,12 +130,5 @@ public extension ResourceIdentifier {
             address.base58String.value,
             name
         ].joined(separator: ResourceIdentifier.separator)
-    }
-}
-
-// MARK: CustomStringConvertible
-extension ResourceIdentifier {
-    public var description: String {
-        return identifier
     }
 }

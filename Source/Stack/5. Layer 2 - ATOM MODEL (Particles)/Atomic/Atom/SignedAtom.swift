@@ -8,14 +8,15 @@
 
 import Foundation
 
-public struct SignedAtom: AtomConvertible, SignableConvertible {
+// swiftlint:disable colon opening_brace
+
+public struct SignedAtom:
+    AtomContainer,
+    Throwing
+{
+    // swiftlint:enable colon opening_brace
     
-    public enum Error: Swift.Error {
-        case atomIsNotSigned
-        case atomSignaturesDoesNotContainId
-    }
-    
-    public let atom: ProofOfWorkedAtom
+    public let proofOfWorkAtom: ProofOfWorkedAtom
     public let signatureId: EUID
     public let signature: Signature
     
@@ -26,22 +27,23 @@ public struct SignedAtom: AtomConvertible, SignableConvertible {
         guard let signature = proofOfWorkAtom.signatures[signatureId] else {
             throw Error.atomSignaturesDoesNotContainId
         }
-        self.atom = proofOfWorkAtom
+        self.proofOfWorkAtom = proofOfWorkAtom
         self.signatureId = signatureId
         self.signature = signature
     }
 }
 
-// MARK: AtomConvertible
+// MARK: - Throwin
 public extension SignedAtom {
-    var atomic: Atomic {
-        return atom
+    enum Error: Swift.Error {
+        case atomIsNotSigned
+        case atomSignaturesDoesNotContainId
     }
 }
 
-// MARK: SignableConvertible
+// MARK: - AtomContainer
 public extension SignedAtom {
-    var signable: Signable {
-        return atom.signable
+    var wrappedAtom: ProofOfWorkedAtom {
+        return proofOfWorkAtom
     }
 }

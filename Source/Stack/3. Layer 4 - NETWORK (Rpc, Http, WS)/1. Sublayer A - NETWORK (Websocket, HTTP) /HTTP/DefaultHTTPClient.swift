@@ -53,7 +53,7 @@ public extension DefaultHTTPClient {
                         log.error(error)
                         observer.onError(error)
                     case .success(let string):
-                        log.verbose(string)
+                        log.debug(string)
                         observer.onNext(string)
                         observer.onCompleted()
                     }
@@ -61,12 +61,8 @@ public extension DefaultHTTPClient {
                 return Disposables.create { dataTask.cancel() }
             }
         }
-            /// Perform callbacks (code within `subscribe(onNext:` blocks) on MainThread
-        .observeOn(MainScheduler.instance)
-            
-        /// Perform work ("subscription code") on `background` thread.
-        /// SeeAlso: http://rx-marin.com/post/observeon-vs-subscribeon/
-        .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+        .subscribeOn(MainScheduler.instance)
     }
     
     enum Error: Swift.Error {
@@ -101,12 +97,9 @@ private extension DefaultHTTPClient {
                 }
                 return Disposables.create { dataRequest.cancel() }
             }
-        } /// Perform callbacks (code within `subscribe(onNext:` blocks) on MainThread
-        .observeOn(MainScheduler.instance)
-            
-        /// Perform work ("subscription code") on `background` thread.
-        /// SeeAlso: http://rx-marin.com/post/observeon-vs-subscribeon/
-        .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+        }
+        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+        .subscribeOn(MainScheduler.instance)
     }
 }
 

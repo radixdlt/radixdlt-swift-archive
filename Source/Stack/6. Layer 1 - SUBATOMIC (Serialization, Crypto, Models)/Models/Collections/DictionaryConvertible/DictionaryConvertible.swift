@@ -8,19 +8,24 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// A KeyValue-d Collection
 public protocol DictionaryConvertible:
     KeyValued,
     LengthMeasurable,
-    Collection {
-// swiftlint:enable colon
+    Collection,
+    CustomStringConvertible
+{
+    
+// swiftlint:enable colon opening_brace
+    
     typealias Map = [Key: Value]
     var dictionary: Map { get }
     init(dictionary: Map)
     init(validate: Map) throws
     subscript(key: Key) -> Value? { get }
+    func merging(with other: Self, uniquingKeysWith combine: (Value, Value) throws -> Value) rethrows -> Self
 }
 
 // MARK: Default Implementation
@@ -45,11 +50,27 @@ public extension DictionaryConvertible {
     func contains(where predicate: ((key: Key, value: Value)) throws -> Bool) rethrows -> Bool {
         return try dictionary.contains(where: predicate)
     }
+
+    func merging(with other: Self, uniquingKeysWith combine: (Value, Value) throws -> Value) rethrows -> Self {
+        
+        let mergedDictionary = try dictionary.merging(other.dictionary, uniquingKeysWith: combine)
+        
+        return Self(dictionary: mergedDictionary)
+    }
 }
 
 public extension DictionaryConvertible where Value: Equatable {
     func firstKeyForValue(_ needle: Value) -> Key? {
         return dictionary.firstKeyForValue(needle)
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension DictionaryConvertible {
+    var description: String {
+        return dictionary.map {
+            "\($0.key): \($0.value)"
+        }.joined(separator: ", ")
     }
 }
 

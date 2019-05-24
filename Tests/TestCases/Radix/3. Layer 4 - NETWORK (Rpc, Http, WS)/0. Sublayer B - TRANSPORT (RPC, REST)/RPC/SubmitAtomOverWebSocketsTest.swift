@@ -18,7 +18,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
     private let magic: Magic = 63799298
     
     private var atom: Atom!
-    private let identity = RadixIdentity()
+    private lazy var identity = RadixIdentity(magic: magic)
     
     override func setUp() {
         super.setUp()
@@ -39,7 +39,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
     }
     
     func testTokenDefinitionParticle() {
-        guard let pow = ProofOfWork.work(atom: atom, magic: magic) else { return XCTFail("timeout") }
+        guard let pow = ProofOfWork.work(atom: atom, magic: magic) else { return }
         let atowWithPOW = try! ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
         let unsignedAtom = try! UnsignedAtom(atomWithPow: atowWithPOW)
         let signedAtom = try! identity.sign(atom: unsignedAtom)
@@ -53,7 +53,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
         XCTAssertEqual(atomSubscriptions.count, 2)
         let as1 = atomSubscriptions[0]
         let as2 = atomSubscriptions[1]
-        XCTAssertTrue(as1.isStart)
+        XCTAssertTrue(as1.isStartOrCancel)
         XCTAssertTrue(as2.isUpdate)
 
         let u1 = as2.update!.subscriptionFromSubmissionsUpdate!

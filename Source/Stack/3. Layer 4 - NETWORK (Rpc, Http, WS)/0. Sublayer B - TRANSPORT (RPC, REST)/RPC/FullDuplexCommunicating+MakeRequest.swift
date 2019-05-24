@@ -13,9 +13,15 @@ import RxSwift
 internal extension FullDuplexCommunicating {
     
     func makeRequest<ResultFromResponse>(method: RPCMethod) -> Observable<ResultFromResponse> where ResultFromResponse: Decodable {
+       
         let rpcRequest = RPCRequest(method: method)
-        channel.sendMessage(rpcRequest.jsonString)
-        return channel.responseForMessage(with: rpcRequest.requestId)
+        let message = rpcRequest.jsonString
+        let requestId = rpcRequest.requestId
+        
+        return channel.responseForMessage(with: requestId)
+            .do(onSubscribed: {
+                self.channel.sendMessage(message)
+            })
     }
 }
 

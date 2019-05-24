@@ -8,40 +8,35 @@
 
 import Foundation
 
-public struct UnsignedAtom: AtomConvertible, SignableConvertible {
-    
-    public enum Error: Swift.Error {
-        case atomAlreadySigned
-    }
-    
-    public let unsignedAtom: ProofOfWorkedAtom
+// swiftlint:disable colon opening_brace
+
+public struct UnsignedAtom:
+    AtomContainer,
+    Throwing
+{
+    // swiftlint:enable colon opening_brace
+
+    public let wrappedAtom: ProofOfWorkedAtom
     
     public init(atomWithPow: ProofOfWorkedAtom) throws {
         guard atomWithPow.signatures.isEmpty else {
             throw Error.atomAlreadySigned
         }
-        self.unsignedAtom = atomWithPow
+        self.wrappedAtom = atomWithPow
     }
 }
 
-// MARK: - AtomConvertible
+// MARK: - Throwing
 public extension UnsignedAtom {
-    var atomic: Atomic {
-        return unsignedAtom
-    }
-}
-
-// MARK: - SignableConvertible
-public extension UnsignedAtom {
-    var signable: Signable {
-        return unsignedAtom
+    enum Error: Swift.Error {
+        case atomAlreadySigned
     }
 }
 
 // MARK: - Signing
 public extension UnsignedAtom {
     func signed(signature: Signature, signatureId: EUID) -> SignedAtom {
-        return unsignedAtom.withSignature(signature, signatureId: signatureId)
+        return wrappedAtom.withSignature(signature, signatureId: signatureId)
     }
 }
 

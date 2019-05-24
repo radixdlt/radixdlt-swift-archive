@@ -45,17 +45,18 @@ class PrivateKeyTests: XCTestCase {
     }
     
     func testBitcoinKitPerformanceOfSignAndVerify() {
+        let magic: Magic = 2
         let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords)
         let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
         let privateKeyBicoinKit = try! wallet.privateKey(index: expected.hdWalletIndex)
         let privateKey = try! PrivateKey(data: privateKeyBicoinKit.data)
         XCTAssertEqual(privateKey.hex, "3737eade55463b1cbae340bb3bc770d42a6e54a39e3fd92c080b1621b170eb03")
-        let identity = RadixIdentity(private: privateKey)
+        let identity = RadixIdentity(private: privateKey, magic: magic)
         let address = Address(
-            magic: 0x02,
+            magic: magic,
             publicKey: identity.publicKey
         )
-        XCTAssertEqual(address.description, "JEqnJtuyrXLkEDRT6ADTGSMe6etWyKNVdffC5icSh4hWhJYcvCx")
+        XCTAssertEqual(address.full, "JEqnJtuyrXLkEDRT6ADTGSMe6etWyKNVdffC5icSh4hWhJYcvCx")
         let publicKey = PublicKey(private: privateKey)
         XCTAssertEqual(publicKey.description, expected.publicKey)
         

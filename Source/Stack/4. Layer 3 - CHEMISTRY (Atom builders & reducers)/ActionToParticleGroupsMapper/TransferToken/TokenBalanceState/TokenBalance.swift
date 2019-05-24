@@ -8,22 +8,50 @@
 
 import Foundation
 
+public typealias ParticleHashId = EUID
+
 public struct TokenBalance: Hashable, TokenDefinitionReferencing {
+    public struct Consumables: DictionaryConvertible {
+        public typealias Key = ParticleHashId
+        public typealias Value = TransferrableTokensParticle
+        public var dictionary: Map
+        public init(dictionary: Map = [:]) {
+            self.dictionary = dictionary
+        }
+    }
     public let amount: SignedAmount
     public let address: Address
     public let tokenDefinitionReference: ResourceIdentifier
+    public let unconsumedTransferrable: Consumables
     
-    public init(amount: SignedAmount, address: Address, tokenDefinitionReference: ResourceIdentifier) {
+    public init(
+        amount: SignedAmount,
+        address: Address,
+        tokenDefinitionReference: ResourceIdentifier,
+        consumables: Consumables = [:]
+    ) {
         self.amount = amount
         self.address = address
         self.tokenDefinitionReference = tokenDefinitionReference
+        self.unconsumedTransferrable = consumables
     }
     
     public init(transferrable: TransferrableTokensParticle, spin: Spin) {
+        
+        let consumables: Consumables = spin == .up ? [transferrable.hashId: transferrable] : [:]
+  
+        let amount = spin * transferrable.amount
+        
+        if spin == .down {
+            print("amount: \(amount)")
+            assert(amount.isNegative)
+        }
+        
         self.init(
-            amount: spin * transferrable.amount,
+            amount: amount,
             address: transferrable.address,
-            tokenDefinitionReference: transferrable.tokenDefinitionReference
+            tokenDefinitionReference: transferrable.tokenDefinitionReference,
+            consumables: consumables
         )
     }
     
@@ -48,11 +76,13 @@ public extension TokenBalance {
         }
         
         let newAmount: SignedAmount = other.amount + amount
+        let mergedConsumables = unconsumedTransferrable.merging(with: other.unconsumedTransferrable, uniquingKeysWith: { _, new in new })
         
         return TokenBalance(
             amount: newAmount,
             address: address,
-            tokenDefinitionReference: tokenDefinitionReference
+            tokenDefinitionReference: tokenDefinitionReference,
+            consumables: mergedConsumables
         )
     }
 }

@@ -23,6 +23,7 @@ public final class SubscriptionIdIncrementingGenerator {
 
 public extension SubscriptionIdIncrementingGenerator {
     class func next() -> SubscriberId {
-        return SubscriberId(validated: shared.getIdAndIncrease().description)
+        let next = SubscriberId(validated: shared.getIdAndIncrease().description)
+        return next
     }
 }

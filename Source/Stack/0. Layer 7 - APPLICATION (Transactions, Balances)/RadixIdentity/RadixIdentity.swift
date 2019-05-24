@@ -13,29 +13,34 @@ public struct RadixIdentity:
     AtomSigning,
     SignedAtomVerifier,
     Signing,
+    Ownable,
     PublicKeyOwner {
     // swiftlint:enable colon
   
     private let keyPair: KeyPair
-    public init(keyPair: KeyPair) {
+    public let address: Address
+    public init(keyPair: KeyPair, address: Address) {
         self.keyPair = keyPair
+        self.address = address
     }
 }
 
 // MARK: - Convenience Init
 public extension RadixIdentity {
-    init(`private` privateKey: PrivateKey) {
-        self.init(keyPair: KeyPair(private: privateKey))
+    init(`private` privateKey: PrivateKey, magic: Magic) {
+        let keyPair = KeyPair(private: privateKey)
+        let address = Address(magic: magic, publicKey: keyPair.publicKey)
+        self.init(keyPair: keyPair, address: address)
     }
     
-    init() {
+    init(magic: Magic) {
         // Generate a new PrivateKey
         let privateKey = PrivateKey()
-        self.init(private: privateKey)
+        self.init(private: privateKey, magic: magic)
     }
 }
 
-// MARK: - Ownable
+// MARK: - PublicKeyOwner
 public extension RadixIdentity {
     var publicKey: PublicKey {
         return keyPair.publicKey

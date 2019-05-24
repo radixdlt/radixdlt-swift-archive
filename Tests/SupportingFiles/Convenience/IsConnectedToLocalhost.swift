@@ -8,18 +8,26 @@
 
 import Foundation
 
-var isConnectedToLocalhost: Bool = {
+private var timeoutForLocalhostLookup = DispatchTime.distantFuture
+func isConnectedToLocalhost(timeout: DispatchTime? = nil) -> Bool {
+    if let timeout = timeout {
+        timeoutForLocalhostLookup = timeout
+    }
+    return isConnectedToLocalhost
+}
+
+private var isConnectedToLocalhost: Bool = {
     var isConnected = false
-    let url = URL(string: "http://localhost:8080/api/network")!
+    let url = URL(string: "http://127.0.0.1:8080/api/network")!
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     
     let (data, response, error) = URLSession(configuration: .default)
         .synchronousDataTask(request: request)
     if let error = error {
-        print("Connect to localhost error: \(error)")
+        print("⚠️ Not connect to localhost, error: \(error)")
     } else if let _ = data {
-        print("Connected to localhost")
+        print("📡 Connected to localhost")
         isConnected = true
     }
     return isConnected

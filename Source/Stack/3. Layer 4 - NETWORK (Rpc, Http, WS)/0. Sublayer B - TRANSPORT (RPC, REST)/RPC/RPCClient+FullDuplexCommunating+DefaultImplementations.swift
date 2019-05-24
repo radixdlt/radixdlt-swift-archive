@@ -34,6 +34,17 @@ public extension AtomsByAddressSubscribing where Self: FullDuplexCommunicating {
     }
 }
 
+public extension AtomSubscriptionCancelling where Self: FullDuplexCommunicating {
+    func unsubscribe(subscriberId: SubscriberId) -> Observable<AtomSubscriptionStartOrCancel> {
+        return makeRequest(method: .unsubscribe(subscriberId: subscriberId)).map { (subscription: AtomSubscription) -> AtomSubscriptionStartOrCancel in
+            guard let cancellation = subscription.startOrCancel else {
+                incorrectImplementation("Should have received cancel, but got \(subscription)")
+            }
+            return cancellation
+        }
+    }
+}
+
 public extension AtomSubmitting where Self: FullDuplexCommunicating {
     func submit(atom: SignedAtom, subscriberId: SubscriberId) -> Observable<AtomSubscription> {
         return makeRequest(method: .submitAndSubscribe(atom: atom, subscriberId: subscriberId))

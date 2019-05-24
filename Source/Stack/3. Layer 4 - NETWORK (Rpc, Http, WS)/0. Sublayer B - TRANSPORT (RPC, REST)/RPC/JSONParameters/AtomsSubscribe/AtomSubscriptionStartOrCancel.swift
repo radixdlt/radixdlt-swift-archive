@@ -1,5 +1,5 @@
 //
-//  AtomSubscriptionCancel.swift
+//  AtomSubscriptionStartOrCancel.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-03-29.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-public struct AtomSubscriptionCancel: Decodable {
+public struct AtomSubscriptionStartOrCancel: Decodable {
     public let success: Bool
 }
