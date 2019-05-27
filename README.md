@@ -65,7 +65,9 @@ let createToken = CreateTokenAction(
     initialSupply: 30
 )
 
-// Alice creates a new token with an initial supply of 30, this action returns an instance of `ResourceIdentifier` (RRI), which uniquely identifies Alice's coin, having this format: "/<ALICE_ADDRESS>/AC", "AC" matching the `symbol`, chosen above.
+// Alice creates a new token with an initial supply of 30. An instance of `ResourceIdentifier` (RRI) is
+// returned, which uniquely identifies Alice's coin, having this format:
+// "/<ALICE_ADDRESS>/AC", "AC" matching the `symbol`, chosen in init of `CreateTokenAction`.
 let rriAliceCoin = application.create(token: createToken) 
 ```
 
