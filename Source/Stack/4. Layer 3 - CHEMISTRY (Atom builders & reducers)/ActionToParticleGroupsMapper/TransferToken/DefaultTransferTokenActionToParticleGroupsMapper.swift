@@ -17,21 +17,8 @@ public struct DefaultTransferTokenActionToParticleGroupsMapper:
     // swiftlint:enable colon opening_brace
 }
 
-// MARK: - Throwing
-public extension DefaultTransferTokenActionToParticleGroupsMapper {
-    enum Error: Swift.Error, Equatable {
-        case insufficientFunds
-    }
-}
-
-public extension Array {
-    static func += (array: inout Array, newElement: Element) {
-        array.append(newElement)
-    }
-}
-
 // MARK: - TransferTokenActionToParticleGroupsMapper
-public extension DefaultTransferTokenActionToParticleGroupsMapper {
+public extension TransferTokenActionToParticleGroupsMapper {
     
     func particleGroups(for transfer: Action, currentBalance tokenBalance: TokenBalance) throws -> ParticleGroups {
  
@@ -39,7 +26,7 @@ public extension DefaultTransferTokenActionToParticleGroupsMapper {
             let balance = try? PositiveAmount(signedAmount: tokenBalance.amount),
             balance >= transfer.amount
         else {
-            throw Error.insufficientFunds
+            throw TransferError.insufficientFunds
         }
       
         var (particleGroup, remainder) = transferToRecipientInParticleGroupWithRemainder(tokenBalance: tokenBalance, transfer: transfer)
@@ -64,8 +51,17 @@ public extension DefaultTransferTokenActionToParticleGroupsMapper {
     }
 }
 
+public enum TransferError: Swift.Error, Equatable {
+    case insufficientFunds
+}
+
+// MARK: - Throwing
+public extension DefaultTransferTokenActionToParticleGroupsMapper {
+    typealias Error = TransferError
+}
+
 // MARK: - Private Helpers
-private extension DefaultTransferTokenActionToParticleGroupsMapper {
+private extension TransferTokenActionToParticleGroupsMapper {
     func transferToRecipientInParticleGroupWithRemainder(tokenBalance: TokenBalance, transfer: TransferTokenAction) -> (group: ParticleGroup, remainder: PositiveAmount?) {
         
         let tokenConsumables: [TransferrableTokensParticle] = tokenBalance.unconsumedTransferrable.values
@@ -128,19 +124,5 @@ private extension TransferrableTokensParticle {
             permissions: permissions,
             granularity: granularity
         )
-    }
-}
-
-extension Array {
-    static func + (array: [Element], element: Element) -> [Element] {
-        var mutable = array
-        mutable.append(element)
-        return mutable
-    }
-    
-    static func + (element: Element, array: [Element]) -> [Element] {
-        var mutable = [element]
-        mutable.append(contentsOf: array)
-        return mutable
     }
 }

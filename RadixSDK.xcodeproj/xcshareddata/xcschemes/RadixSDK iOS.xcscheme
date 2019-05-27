@@ -107,6 +107,9 @@
                   Identifier = "TestSigDson">
                </Test>
                <Test
+                  Identifier = "TransferTokensTests">
+               </Test>
+               <Test
                   Identifier = "WebsocketTest">
                </Test>
             </SkippedTests>

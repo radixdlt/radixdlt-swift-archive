@@ -8,7 +8,12 @@
 
 import Foundation
 
+// swiftlint:disable colon opening_brace
+
 /// A type that is identifiable using a `ResourceIdentifier`.
+///
+/// Since and `ResourceIdentifier` has an `Address`, this type also conforms to `Accoutable`,
+/// containing a single address.
 ///
 /// Although this protocol looks very similar to `TokenDefinitionReferencing` - which also has
 /// a `ResourceIdentifier` property, they are used differently. This type
@@ -18,6 +23,18 @@ import Foundation
 /// - seeAlso: `TokenDefinitionReferencing`
 /// - seeAlso: `ResourceIdentifier`
 /// - seeAlso: `TokenDefinitionParticle`
-public protocol Identifiable: Hashable {
+public protocol Identifiable:
+    Accountable,
+    Hashable
+{
+    
+    // swiftlint:enable colon opening_brace
+    
     var identifier: ResourceIdentifier { get }
+}
+
+public extension Identifiable {
+    var addresses: Addresses {
+        return Addresses(identifier.address)
+    }
 }

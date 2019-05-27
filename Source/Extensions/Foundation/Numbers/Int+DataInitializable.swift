@@ -17,7 +17,7 @@ public extension BinaryInteger {
     
     init(data: Data) throws {
         let expectedByteCount = MemoryLayout<Self>.size
-        guard data.count == expectedByteCount else {
+        if data.count > expectedByteCount {
             throw IntFromDataError.incorrectByteCount(expected: expectedByteCount, butGot: data.count)
         }
         self.init(validData: data)

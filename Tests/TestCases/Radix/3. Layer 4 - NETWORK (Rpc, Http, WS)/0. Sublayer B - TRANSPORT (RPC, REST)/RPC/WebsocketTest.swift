@@ -35,6 +35,11 @@ extension RPCClientsRetainer {
 
 class WebsocketTest: XCTestCase {
     
+    override func invokeTest() {
+        guard isConnectedToLocalhost() else { return }
+        super.invokeTest()
+    }
+    
     func makeRpcClient(
         nodeDiscovery: NodeDiscovery = NodeDiscoveryHardCoded.localhost,
         timeout: TimeInterval = 1,

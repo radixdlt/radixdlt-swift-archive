@@ -8,14 +8,17 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// A representation of something unique.
 public struct UniqueParticle:
     ParticleConvertible,
     RadixModelTypeStaticSpecifying,
-    RadixCodable {
-// swiftlint:enable colon
+    RadixCodable,
+    Identifiable
+{
+    
+    // swiftlint:enable colon opening_brace
 
     public static let serializer = RadixModelType.uniqueParticle
     public let address: Address
@@ -26,7 +29,7 @@ public struct UniqueParticle:
         address: Address,
         uniqueName name: Name,
         nonce: Nonce = Nonce()
-        ) {
+    ) {
         self.address = address
         self.name = name
         self.nonce = nonce
@@ -57,6 +60,7 @@ public extension UniqueParticle {
     }
 }
 
+// MARK: - Identifiable
 public extension UniqueParticle {
     var identifier: ResourceIdentifier {
         return ResourceIdentifier(address: address, name: name.stringValue)

@@ -19,10 +19,10 @@ public struct RadixSystem:
     
     public static let serializer = RadixModelType.radixSystem
     
-    public let shards: Shards
+    public let shards: ShardInterval
     
     public init(
-        shards: Shards
+        shards: ShardInterval
     ) {
         self.shards = shards
     }
@@ -31,7 +31,7 @@ public struct RadixSystem:
 public extension RadixSystem {
     
     init(lowerShard: Shard, upperShard: Shard) throws {
-        let shards = try Shards(lower: lowerShard, upper: upperShard)
+        let shards = try ShardInterval(lower: lowerShard, upper: upperShard)
         self.init(shards: shards)
     }
 }

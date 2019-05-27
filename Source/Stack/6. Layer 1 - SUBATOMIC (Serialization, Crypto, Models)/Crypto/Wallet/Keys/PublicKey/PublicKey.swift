@@ -18,6 +18,7 @@ public struct PublicKey:
     RadixHashable,
     DSONEncodable,
     PublicKeyOwner,
+    Sharded,
     Hashable,
     CustomStringConvertible {
 // swiftlint:enable colon
@@ -57,6 +58,13 @@ public extension PublicKey {
 public extension PublicKey {
     var publicKey: PublicKey {
         return self
+    }
+}
+
+// MARK: - Sharded
+public extension PublicKey {
+    var shard: Shard {
+        return hashId.shard
     }
 }
 
