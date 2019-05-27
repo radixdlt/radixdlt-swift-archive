@@ -65,8 +65,8 @@ let createToken = CreateTokenAction(
     initialSupply: 30
 )
 
-// Alice creates a new token with an initial supply of 30
-application.create(token: createToken)
+// Alice creates a new token with an initial supply of 30, this action returns an instance of `ResourceIdentifier` (RRI), which uniquely identifies Alice's coin, having this format: "/<ALICE_ADDRESS>/AC", "AC" matching the `symbol`, chosen above.
+let rriAliceCoin = application.create(token: createToken) 
 ```
 
 #### Get token balance
@@ -74,8 +74,8 @@ application.create(token: createToken)
 ```swift
 let bob = RadixIdentity()
 
-var alicesBalanceOfHerCoin = application.getMyBalance(of: rri)
-var bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rri)
+var alicesBalanceOfHerCoin = application.getMyBalance(of: rriAliceCoin)
+var bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rriAliceCoin)
 
 assert(alicesBalanceOfHerCoin.balance == 30, "Alice's balance should equal `30`(initialSupply)")
 assert(bobsBalanceOfAliceCoin.balance == 0, "Bob's balance should equal `0`")
@@ -85,12 +85,12 @@ assert(bobsBalanceOfAliceCoin.balance == 0, "Bob's balance should equal `0`")
 
 ```swift
 // Alice sends 10 coins to Bob
-let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
+let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rriAliceCoin)
 
 application.transfer(tokens: transfer).take(1)
 
-alicesBalanceOfHerCoin = application.getMyBalance(of: rri)
-bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rri)
+alicesBalanceOfHerCoin = application.getMyBalance(of: rriAliceCoin)
+bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rriAliceCoin)
 
 assert(alicesBalanceOfHerCoin.balance == 20, "Alice's balance should equal `20`")
 assert(bobsBalanceOfAliceCoin.balance == 10, "Bob's balance should equal `10`")
