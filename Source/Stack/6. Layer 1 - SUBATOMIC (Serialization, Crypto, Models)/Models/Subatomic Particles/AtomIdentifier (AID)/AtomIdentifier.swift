@@ -10,7 +10,8 @@ import Foundation
 
 // swiftlint:disable colon opening_brace
 
-/// An Atom ID, made up of 192 bits of truncated hash and 64 bits of a selected shard. The Atom ID is used so that Atoms can be located using just their HashId (HID).
+/// An Atom Identifier - also known as `AID` - made up of 192 bits of truncated hash and 64 bits of a selected shard.
+/// The AID is used so that Atoms can be located using just this identifier.
 public struct AtomIdentifier:
     Throwing,
     DataInitializable,
