@@ -116,6 +116,7 @@
 		E689DBB9225F958100340CF3 /* Host.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBB8225F958100340CF3 /* Host.swift */; };
 		E689DBBB225F96CB00340CF3 /* NodeNetworkDetailsRequesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBBA225F96CB00340CF3 /* NodeNetworkDetailsRequesting.swift */; };
 		E689DBBD225F9B6700340CF3 /* URLFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBBC225F9B6700340CF3 /* URLFormatter.swift */; };
+		E68BD7F9229D781300FCE4D3 /* SignedInteger+CompareUnsigned.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD7F8229D781300FCE4D3 /* SignedInteger+CompareUnsigned.swift */; };
 		E696AAD0226DE6F700D19ED6 /* Transacting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AACF226DE6F700D19ED6 /* Transacting.swift */; };
 		E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */; };
 		E696AAD6226DE94900D19ED6 /* NodeInteracting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD5226DE94900D19ED6 /* NodeInteracting.swift */; };
@@ -540,6 +541,7 @@
 		E689DBB8225F958100340CF3 /* Host.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Host.swift; sourceTree = "<group>"; };
 		E689DBBA225F96CB00340CF3 /* NodeNetworkDetailsRequesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeNetworkDetailsRequesting.swift; sourceTree = "<group>"; };
 		E689DBBC225F9B6700340CF3 /* URLFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLFormatter.swift; sourceTree = "<group>"; };
+		E68BD7F8229D781300FCE4D3 /* SignedInteger+CompareUnsigned.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SignedInteger+CompareUnsigned.swift"; sourceTree = "<group>"; };
 		E696AACF226DE6F700D19ED6 /* Transacting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transacting.swift; sourceTree = "<group>"; };
 		E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountBalancing.swift; sourceTree = "<group>"; };
 		E696AAD5226DE94900D19ED6 /* NodeInteracting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInteracting.swift; sourceTree = "<group>"; };
@@ -2874,6 +2876,7 @@
 				E640F63B225E21E600855256 /* Int+BitsPerByte.swift */,
 				E6550EE4224BB02900160267 /* Int+DataInitializable.swift */,
 				E6A508E02251244000128123 /* BinaryInteger+RoundToMultipleOF.swift */,
+				E68BD7F8229D781300FCE4D3 /* SignedInteger+CompareUnsigned.swift */,
 			);
 			path = Numbers;
 			sourceTree = "<group>";
@@ -3320,6 +3323,7 @@
 				E6474ADF22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift in Sources */,
 				E6E2795C2271CD1C0067D46E /* RadixCodable.swift in Sources */,
 				E6166BE022609C9F003A9442 /* DefaultRPCClient.swift in Sources */,
+				E68BD7F9229D781300FCE4D3 /* SignedInteger+CompareUnsigned.swift in Sources */,
 				E6A507E4224E209200128123 /* RPCResponse.swift in Sources */,
 				E6E279422271CD1C0067D46E /* Hashing.swift in Sources */,
 				E6E2792C2271CD1C0067D46E /* SignatureVerifier.swift in Sources */,

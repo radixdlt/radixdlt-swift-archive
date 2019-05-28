@@ -126,6 +126,6 @@ private extension AtomIdentifier {
     ///
     static func selectShard(in shards: Shards, basedOnHash hash: RadixHash) -> Shard {
         let targetShardIndex = Int(hash[0]) % shards.count
-        return shards.sorted()[targetShardIndex]
+        return shards.sorted(by: Shard.areInIncreasingOrderUnsigned)[targetShardIndex]
     }
 }

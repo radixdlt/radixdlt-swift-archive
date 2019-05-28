@@ -32,6 +32,48 @@ class AtomIdentifierTests: XCTestCase {
         testAid(shards: [1, expectedShard], firstByteInHash: 3, expectedShard: expectedShard)
     }
     
+    func testMixedNegative() {
+        
+        func doTest(
+            firstByteInHash: Byte,
+            shards: Shards,
+            whenSorted expectedSorted: [Shard],
+            expected: Shard
+        ) {
+            let sorted: [Shard] = shards.asSet.sorted(by: Shard.areInIncreasingOrderUnsigned)
+            XCTAssertEqual(sorted, expectedSorted)
+            testAid(shards: shards, firstByteInHash: firstByteInHash, expectedShard: expected)
+        }
+        
+        doTest(
+            firstByteInHash: 5,
+            shards: [9, -7, 5],
+            whenSorted: [5, 9, -7],
+            expected: -7 // 5 % 3 => index 2 => -7
+        )
+        
+        doTest(
+            firstByteInHash: 6,
+            shards: [9, -7, 5],
+            whenSorted: [5, 9, -7],
+            expected: 5 // 6 % 3 => index 0 => 5
+        )
+        
+        doTest(
+            firstByteInHash: 7,
+            shards: [9, -7, 5],
+            whenSorted: [5, 9, -7],
+            expected: 9 // 7 % 3 => index 1 => 9
+        )
+        
+        doTest(
+            firstByteInHash: 9,
+            shards: [-9, -7, -13, 5],
+            whenSorted: [5, -13, -9, -7],
+            expected: -13 // 9 % 4 => index 1 => -13
+        )
+    }
+    
     func testOneShardManyHashes() {
         let expectedShard: Shard = 1
         for firstByteInt in 0...255 {
@@ -156,12 +198,11 @@ private extension RadixIdentity {
 
 
 private extension AtomIdentifierTests {
-    func testAid(shards shardSet: Set<Shard>, firstByteInHash firstByte: Byte, expectedShard: Shard) {
+    func testAid(shards: Shards, firstByteInHash firstByte: Byte, expectedShard: Shard) {
         let mockedHash = RadixHash(unhashedData: unsafeGenerateBytes(count: 32, replacingFirstWith: firstByte), hashedBy: SkipHashing())
         XCTAssertEqual(mockedHash.asData[0], firstByte)
         
         do {
-            let shards = try Shards(set: shardSet)
             let aid = try AtomIdentifier(hash: mockedHash, shards: shards)
             
             XCTAssertEqual(
@@ -188,12 +229,12 @@ func unsafeGenerateBytes(count: Int, replacingFirstWith replacementByte: Byte? =
     }
 }
 
-func generateShardSet(numberOfShards: Int) -> Set<Shard> {
+func generateShardSet(numberOfShards: Int) -> Shards {
     var randomSet = Set<Shard>()
     while randomSet.count != numberOfShards {
         randomSet.insert(Shard.random())
     }
-    return randomSet
+    return try! Shards(set: randomSet)
 }
 
 protocol Randomizing {
