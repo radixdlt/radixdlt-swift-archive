@@ -10,7 +10,7 @@ import Foundation
 
 // swiftlint:disable colon opening_brace
 
-/// EffectiveUserIdentifier holding a 128 bit int
+/// `EUID` is an abbreviation for `Extended Unique Identifier`, and holds a 128 bit int
 public struct EUID:
     PrefixedJsonCodable,
     StringRepresentable,
