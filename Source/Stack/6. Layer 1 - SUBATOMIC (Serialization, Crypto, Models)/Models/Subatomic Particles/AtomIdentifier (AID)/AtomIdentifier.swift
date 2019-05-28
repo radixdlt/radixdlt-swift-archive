@@ -18,7 +18,7 @@ public struct AtomIdentifier:
     DataConvertible,
     StringRepresentable,
     StringInitializable,
-    Comparable,
+    Hashable,
     CustomStringConvertible
 {
     // swiftlint:enable colon opening_brace
@@ -26,7 +26,7 @@ public struct AtomIdentifier:
     /// 192 first bits of a `RadixHash`
     private let truncatedHash: Data
     
-    /// 64 bits of a
+    /// 64 bit int representing the determinstically selected shard, based on the Hash of the Atom in question.
     public let shard: Shard
     
     public init(truncatedHash: Data, shard: Shard) throws {
@@ -60,13 +60,6 @@ public extension AtomIdentifier {
 public extension AtomIdentifier {
     static func == (lhs: AtomIdentifier, rhs: AtomIdentifier) -> Bool {
         return lhs.asData == rhs.asData
-    }
-}
-
-// MARK: - Comparable
-public extension AtomIdentifier {
-    static func < (lhs: AtomIdentifier, rhs: AtomIdentifier) -> Bool {
-        return lhs.hex < rhs.hex
     }
 }
 
