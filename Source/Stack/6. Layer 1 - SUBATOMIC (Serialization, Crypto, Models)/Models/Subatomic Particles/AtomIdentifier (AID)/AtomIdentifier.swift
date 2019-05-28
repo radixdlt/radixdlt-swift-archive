@@ -115,7 +115,6 @@ public extension AtomIdentifier {
 // MARK: - Throwing
 public extension AtomIdentifier {
     enum Error: Swift.Error {
-        case shardSetCannotBeEmpty
         case incorrectByteCountOfTruncatedHash(expected: Int, butGot: Int)
         case incorrectByteCount(expected: Int, butGot: Int)
     }
