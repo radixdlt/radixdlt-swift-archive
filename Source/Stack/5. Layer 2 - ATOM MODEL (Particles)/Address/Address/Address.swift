@@ -8,8 +8,15 @@
 
 import Foundation
 
-// swiftlint:disable colon
-/// The public address of any Radix Public Key. From which we can derive the Public Key.
+// swiftlint:disable colon opening_brace
+
+/// The public address of any Radix Public Key. From which we can derive the Public Key. Presented
+/// as a Base58 string,
+///
+/// This is an example of a Radix address:
+///
+/// `JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor`
+///
 public struct Address:
     CBORDataConvertible,
     PrefixedJsonCodableByProxy,
@@ -22,8 +29,11 @@ public struct Address:
     DSONEncodable,
     Codable,
     Hashable,
-    CustomStringConvertible {
-// swiftlint:enable colon
+    CustomStringConvertible
+{
+
+    // swiftlint:enable colon
+    
     public static let length = 51
     
     /// `base58String` is the base58 encoding of `Z` where:
