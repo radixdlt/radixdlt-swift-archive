@@ -9,15 +9,24 @@
 import Foundation
 
 public enum RadixModelType: String, Codable, CaseIterable {
-    case atomEvent                      = "api.atom_event"
-    case signature                      = "crypto.ecdsa_signature"
-    case nodeInfo                       = "network.peer"
+
+    // MARK: "api"
     case radixSystem                    = "api.system"
+    case atomEvent                      = "api.atom_event"
+    
+    // MARK: "crypto"
+    case signature                      = "crypto.ecdsa_signature"
+
+    // MARK: "network"
+    case nodeInfo                       = "network.peer"
+    case udpNodeInfo                    = "network.udp_peer"
+    case tcpNodeInfo                    = "network.tcp_peer"
+    
+    // MARK: "radix"
+    case shardSpace                     = "radix.shard.space"
     case atom                           = "radix.atom"
     case particleGroup                  = "radix.particle_group"
     case spunParticle                   = "radix.spun_particle"
-    case udpNodeInfo                    = "network.udp_peer"
-    case tcpNodeInfo                    = "network.tcp_peer"
     case universeConfig                 = "radix.universe"
 
     // MARK: - Particles

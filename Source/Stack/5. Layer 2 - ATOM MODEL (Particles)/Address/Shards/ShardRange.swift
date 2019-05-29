@@ -8,15 +8,19 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
+
 /// Represents an interval of Radix shards
-public struct ShardInterval:
+public struct ShardRange:
     RadixCodable,
     RangeExpression,
     Equatable,
     Hashable,
-    Codable {
-// swiftlint:enable colon
+    Codable
+{
+
+    // swiftlint:enable colon opening_brace
+    
     public typealias Bound = Shard
     
     private let range: Range<Bound>
@@ -26,10 +30,15 @@ public struct ShardInterval:
     }
 }
 
-public extension ShardInterval {
-    enum Error: Swift.Error {
-        case upperMustBeGreaterThanLower
+// MARK: - Public
+public extension ShardRange {
+    var span: Bound {
+        return range.span
     }
+}
+
+// MARK: - Convenience Init
+public extension ShardRange {
     
     init(lower: Bound, upper: Bound) throws {
         guard lower < upper else {
@@ -40,9 +49,16 @@ public extension ShardInterval {
     }
 }
 
+// MARK: - Throwing
+public extension ShardRange {
+    enum Error: Swift.Error {
+        case upperMustBeGreaterThanLower
+    }
+}
+
 // MARK: - RangeExpression
-public extension ShardInterval {
-    func relative<C>(to collection: C) -> Range<Shard> where C: Collection, ShardInterval.Bound == C.Index {
+public extension ShardRange {
+    func relative<C>(to collection: C) -> Range<Shard> where C: Collection, ShardRange.Bound == C.Index {
         return range.relative(to: collection)
     }
     
@@ -52,9 +68,10 @@ public extension ShardInterval {
 }
 
 // MARK: - Codable
-public extension ShardInterval {
+public extension ShardRange {
     
     enum CodingKeys: String, CodingKey {
+        case serializer, version
         case low
         case high
     }
@@ -66,7 +83,7 @@ public extension ShardInterval {
         try self.init(lower: lower, upper: upper)
     }
     
-    func encodableKeyValues() throws -> [EncodableKeyValue<ShardInterval.CodingKeys>] {
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .low, value: range.lowerBound),
             EncodableKeyValue(key: .high, value: range.upperBound)

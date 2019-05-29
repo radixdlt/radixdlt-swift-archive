@@ -32,7 +32,7 @@ public struct Node:
 // MARK: Shard
 public extension Node {
     func canServe(shard: Shard) -> Bool {
-        return nodeInfo.system.shards.contains(shard)
+        return nodeInfo.system.shards.range.contains(shard)
     }
 }
 

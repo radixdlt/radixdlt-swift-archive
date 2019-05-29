@@ -35,9 +35,9 @@ public extension NodeDiscoveryHardCoded {
                 let nodeObservables: [Observable<Node>] = nodeUrls.map { [unowned self] (nodeUrl: FormattedURL) -> Observable<Node> in
                     self.makeNetworkDetailsRequester(nodeUrl)
                         .networkDetails()
-                        .map { $0.tcp }
+                        .map { $0.udp }
                         .asObservable()
-                        .first(ifEmptyThrow: Error.tcpNetworkDetailsEmptyForNode(url: nodeUrl.url))
+                        .first(ifEmptyThrow: Error.udpNetworkDetailsEmptyForNode(url: nodeUrl.url))
                         .map {
                             return try Node(
                                 info: $0,
@@ -53,6 +53,6 @@ public extension NodeDiscoveryHardCoded {
 
 public extension NodeDiscoveryHardCoded {
     enum Error: Swift.Error {
-        case tcpNetworkDetailsEmptyForNode(url: URL)
+        case udpNetworkDetailsEmptyForNode(url: URL)
     }
 }

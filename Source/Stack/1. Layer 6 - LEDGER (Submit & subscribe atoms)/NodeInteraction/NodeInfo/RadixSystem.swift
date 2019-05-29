@@ -8,30 +8,24 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 public struct RadixSystem:
     RadixModelTypeStaticSpecifying,
     Codable,
     Equatable,
-    Hashable {
-    // swiftlint:enable colon
+    Hashable
+{
+
+    // swiftlint:enable colon opening_brace
     
     public static let serializer = RadixModelType.radixSystem
     
-    public let shards: ShardInterval
+    public let shards: ShardSpace
     
     public init(
-        shards: ShardInterval
+        shards: ShardSpace
     ) {
         self.shards = shards
-    }
-}
-
-public extension RadixSystem {
-    
-    init(lowerShard: Shard, upperShard: Shard) throws {
-        let shards = try ShardInterval(lower: lowerShard, upper: upperShard)
-        self.init(shards: shards)
     }
 }
