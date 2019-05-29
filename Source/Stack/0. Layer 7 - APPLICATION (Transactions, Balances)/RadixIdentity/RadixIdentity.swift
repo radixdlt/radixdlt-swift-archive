@@ -17,7 +17,8 @@ public struct RadixIdentity:
     Signing,
     Ownable,
     PublicKeyOwner,
-    Sharded
+    Sharded,
+    Equatable
 {
     // swiftlint:enable colon opening_brace
   
@@ -49,6 +50,13 @@ public extension RadixIdentity {
 public extension RadixIdentity {
     var publicKey: PublicKey {
         return keyPair.publicKey
+    }
+}
+
+// MARK: - Equatable
+public extension RadixIdentity {
+    static func == (lhs: RadixIdentity, rhs: RadixIdentity) -> Bool {
+        return lhs.privateKey == rhs.privateKey
     }
 }
 

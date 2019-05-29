@@ -10,7 +10,7 @@ import Foundation
 
 public struct DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenActionToParticleGroupsMapper {}
 
-public extension DefaultCreateTokenActionToParticleGroupsMapper {
+public extension CreateTokenActionToParticleGroupsMapper {
     func particleGroups(for action: CreateTokenAction) -> ParticleGroups {
 
         let token = TokenDefinitionParticle(createTokenAction: action)

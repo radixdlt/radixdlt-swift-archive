@@ -40,6 +40,10 @@ public extension MetaDataConvertible {
         return [.timestamp: TimeConverter.stringFrom(date: date)]
     }
     
+    static func application(_ string: String) -> Self {
+        return [.application: string]
+    }
+    
     static var timeNow: Self {
         return .timestamp(Date())
     }
