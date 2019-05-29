@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 import RxSwift
 
-class NodeDiscoveryTests: XCTestCase {
+class NodeDiscoveryTests: WebsocketTest {
 
     func testLocalHost() {
         let nodeDiscovery: NodeDiscoveryHardCoded = .localhost
@@ -22,11 +22,11 @@ class NodeDiscoveryTests: XCTestCase {
         XCTAssertEqual(node.websocketsUrl.url.absoluteString, "ws://localhost:8080/rpc")
     }
     
-//    func testNodeFinder() {
-//        let nodeFinder: NodeFinder = .sunstone
-//        guard let nodes = nodeFinder.loadNodes().blockingTakeFirst() else { return }
-//        XCTAssertFalse(nodes.isEmpty)
-//    }
+    func testNodeFinder() {
+        let nodeFinder: NodeFinder = .sunstone
+        guard let nodes = nodeFinder.loadNodes().blockingTakeFirst() else { return }
+        XCTAssertFalse(nodes.isEmpty)
+    }
     
     // This is kind of a test of my mock
     func testLoadNodesMockedGoodJson() {
