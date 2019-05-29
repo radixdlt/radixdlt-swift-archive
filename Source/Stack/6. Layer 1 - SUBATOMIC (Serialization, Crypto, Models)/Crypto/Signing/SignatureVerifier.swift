@@ -16,7 +16,7 @@ public extension SignatureVerifier {
     /// Verifies that the ECDSA `Signature` did sign the `Message` using the `PublicKey`
     static func verifyThat(
         signature: Signature,
-        signedMessage message: Message,
+        signedMessage message: SignableMessage,
         usingKey publicKey: PublicKey
     ) throws -> Bool {
         return try verifyThat(signature: signature, didSignData: message, usingKey: publicKey)

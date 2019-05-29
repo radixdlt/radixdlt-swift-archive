@@ -194,7 +194,7 @@
 		E6E279282271CD1C0067D46E /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278812271CD1C0067D46E /* Signature.swift */; };
 		E6E279292271CD1C0067D46E /* AtomSigning.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278822271CD1C0067D46E /* AtomSigning.swift */; };
 		E6E2792A2271CD1C0067D46E /* Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278832271CD1C0067D46E /* Signing.swift */; };
-		E6E2792B2271CD1C0067D46E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278842271CD1C0067D46E /* Message.swift */; };
+		E6E2792B2271CD1C0067D46E /* SignableMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278842271CD1C0067D46E /* SignableMessage.swift */; };
 		E6E2792C2271CD1C0067D46E /* SignatureVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278852271CD1C0067D46E /* SignatureVerifier.swift */; };
 		E6E2792D2271CD1C0067D46E /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278862271CD1C0067D46E /* Signer.swift */; };
 		E6E2792E2271CD1C0067D46E /* SignedAtomVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278872271CD1C0067D46E /* SignedAtomVerifier.swift */; };
@@ -625,7 +625,7 @@
 		E6E278812271CD1C0067D46E /* Signature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
 		E6E278822271CD1C0067D46E /* AtomSigning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomSigning.swift; sourceTree = "<group>"; };
 		E6E278832271CD1C0067D46E /* Signing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signing.swift; sourceTree = "<group>"; };
-		E6E278842271CD1C0067D46E /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		E6E278842271CD1C0067D46E /* SignableMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignableMessage.swift; sourceTree = "<group>"; };
 		E6E278852271CD1C0067D46E /* SignatureVerifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignatureVerifier.swift; sourceTree = "<group>"; };
 		E6E278862271CD1C0067D46E /* Signer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signer.swift; sourceTree = "<group>"; };
 		E6E278872271CD1C0067D46E /* SignedAtomVerifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignedAtomVerifier.swift; sourceTree = "<group>"; };
@@ -1994,7 +1994,7 @@
 				E6E278802271CD1C0067D46E /* Signature */,
 				E6E278822271CD1C0067D46E /* AtomSigning.swift */,
 				E6E278832271CD1C0067D46E /* Signing.swift */,
-				E6E278842271CD1C0067D46E /* Message.swift */,
+				E6E278842271CD1C0067D46E /* SignableMessage.swift */,
 				E6E278852271CD1C0067D46E /* SignatureVerifier.swift */,
 				E6E278862271CD1C0067D46E /* Signer.swift */,
 				E6E278872271CD1C0067D46E /* SignedAtomVerifier.swift */,
@@ -3123,7 +3123,7 @@
 				E6166BED2260CD5D003A9442 /* Port.swift in Sources */,
 				E6A508AE224E713F00128123 /* TokenDefinitionParticle.swift in Sources */,
 				E6025402225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift in Sources */,
-				E6E2792B2271CD1C0067D46E /* Message.swift in Sources */,
+				E6E2792B2271CD1C0067D46E /* SignableMessage.swift in Sources */,
 				E6E279892271CD1C0067D46E /* DataConvertible.swift in Sources */,
 				E6A508DA2251100800128123 /* ProofOfWork.swift in Sources */,
 				E6ED1A7C21F8E7E000654105 /* ObservableType+FilterNil.swift in Sources */,

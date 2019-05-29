@@ -20,7 +20,7 @@ public final class Signer {
 public extension Signer {
 
     static func sign(hashedData: Data, privateKey: PrivateKey) throws -> Signature {
-        let message = try Message(data: hashedData)
+        let message = try SignableMessage(data: hashedData)
         return try sign(message, privateKey: privateKey)
     }
     
@@ -30,7 +30,7 @@ public extension Signer {
     }
     
     static func sign(text: String, encoding: String.Encoding = .utf8, privateKey: PrivateKey) throws -> Signature {
-        let message = try Message(string: text, encoding: encoding)
+        let message = try SignableMessage(string: text, encoding: encoding)
         return try sign(message, privateKey: privateKey)
     }
 }

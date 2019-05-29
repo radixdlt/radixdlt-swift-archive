@@ -8,21 +8,23 @@
 
 import Foundation
 
-// swiftlint:disable colon
-public struct Message:
+// swiftlint:disable colon opening_brace
+
+public struct SignableMessage:
     Signable,
     ExactLengthSpecifying,
     StringInitializable,
     DataInitializable,
-    DataConvertible {
-    // swiftlint:enable colon
+    DataConvertible
+{
+    // swiftlint:enable colon opening_brace
     
     public static let length: Int = 32
     
     private let unsignedData: Data
     
     public init(data unsignedData: Data) throws {
-        try Message.validateLength(of: unsignedData)
+        try SignableMessage.validateLength(of: unsignedData)
         self.unsignedData = unsignedData
     }
     
@@ -33,7 +35,7 @@ public struct Message:
     }
 }
 
-public extension Message {
+public extension SignableMessage {
     init(string: String, encoding: String.Encoding) throws {
         try self.init(data: string.toData(encodingForced: encoding))
     }
@@ -48,7 +50,7 @@ public extension Message {
 }
 
 // MARK: - StringInitializable
-public extension Message {
+public extension SignableMessage {
     init(string: String) throws {
         try self.init(string: string, encoding: .default)
     }
@@ -59,14 +61,14 @@ public extension Message {
 }
 
 // MARK: - Signable
-public extension Message {
+public extension SignableMessage {
     var signableData: Data {
         return unsignedData
     }
 }
 
 // MARK: - DataConvertible
-public extension Message {
+public extension SignableMessage {
     var asData: Data {
         return unsignedData
     }
