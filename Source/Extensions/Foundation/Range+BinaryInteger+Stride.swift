@@ -9,8 +9,8 @@
 import Foundation
 
 public extension Range where Element: BinaryInteger {
-    var span: Element {
-        // + 1 to be inclusive in both ends
-        return upperBound - lowerBound + 1
+    /// Returns `upperBound - lowerBound`, thus this is NOT the same thing as the number of elements in this range.
+    var stride: Element {
+        return upperBound - lowerBound
     }
 }

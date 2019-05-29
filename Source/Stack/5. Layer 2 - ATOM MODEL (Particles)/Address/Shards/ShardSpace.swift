@@ -25,8 +25,8 @@ public struct ShardSpace:
     public let anchor: Shard
     
     public init(range: ShardRange, anchor: Shard) throws {
-        if range.span > ShardSpace.shardChunkRangeSpan {
-            throw Error.spanOfRangeTooBig(expectedAtMost: ShardSpace.shardChunkRangeSpan, butGot: range.span)
+        if range.stride > ShardSpace.shardChunkRangeSpan {
+            throw Error.spanOfRangeTooBig(expectedAtMost: ShardSpace.shardChunkRangeSpan, butGot: range.stride)
         }
         
         self.range = range

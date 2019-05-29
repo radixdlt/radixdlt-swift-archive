@@ -35,7 +35,7 @@ class ShardSpaceTests: XCTestCase {
         
         XCTAssertThrowsSpecificError(
             try ShardSpace(range: badRange, anchor: irrelevant),
-            ShardSpace.Error.spanOfRangeTooBig(expectedAtMost: ShardSpace.shardChunkRangeSpan, butGot: badRange.span)
+            ShardSpace.Error.spanOfRangeTooBig(expectedAtMost: ShardSpace.shardChunkRangeSpan, butGot: badRange.stride)
         )
         
     }

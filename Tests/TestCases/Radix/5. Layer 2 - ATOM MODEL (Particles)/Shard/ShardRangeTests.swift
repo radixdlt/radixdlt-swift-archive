@@ -32,15 +32,16 @@ class ShardRangeTests: XCTestCase {
     }
     
     func testSpan() {
-        func doTest(lower: Shard, upper: Shard, expectedSpan: Shard) {
+        func doTest(lower: Shard, upper: Shard, expectedStride: Shard) {
             do {
                 let range = try ShardRange(lower: lower, upper: upper)
-                XCTAssertEqual(range.span, expectedSpan)
+                XCTAssertEqual(range.stride, expectedStride)
             } catch {
                 XCTFail("bad range")
             }
         }
-        doTest(lower: 0, upper: 1, expectedSpan: 2)
-        doTest(lower: 1, upper: 5, expectedSpan: 5)
+        doTest(lower: 0, upper: 1, expectedStride: 1)
+        doTest(lower: 0, upper: 2, expectedStride: 2)
+        doTest(lower: 1, upper: 5, expectedStride: 4)
     }
 }

@@ -32,8 +32,8 @@ public struct ShardRange:
 
 // MARK: - Public
 public extension ShardRange {
-    var span: Bound {
-        return range.span
+    var stride: Bound {
+        return range.stride
     }
 }
 
