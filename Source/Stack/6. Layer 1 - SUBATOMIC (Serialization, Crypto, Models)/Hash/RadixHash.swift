@@ -29,8 +29,8 @@ public struct RadixHash:
     private let data: Data
     
     // MARK: - Designated initializer
-    public init(unhashedData: Data, hashedBy hasher: Hashing = Sha256TwiceHasher()) {
-        self.data = hasher.hash(data: unhashedData)
+    public init(unhashedData: DataConvertible, hashedBy hasher: Hashing = Sha256TwiceHasher()) {
+        self.data = hasher.hash(data: unhashedData.asData)
     }
 }
 
@@ -67,7 +67,7 @@ public extension RadixHash {
     
     func toEUID() -> EUID {
         do {
-            return try EUID(data.prefix(EUID.length))
+            return try EUID(data: data.prefix(EUID.length))
         } catch {
             incorrectImplementation("Should always be able to return EUID, error: \(error)")
         }

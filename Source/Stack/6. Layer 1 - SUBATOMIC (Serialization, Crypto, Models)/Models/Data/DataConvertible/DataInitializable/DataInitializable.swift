@@ -20,6 +20,7 @@ public extension DataInitializable {
     init(base58: Base58String) throws {
         try self.init(data: base58.asData)
     }
+    
     init(hex: HexString) throws {
         try self.init(data: hex.asData)
     }

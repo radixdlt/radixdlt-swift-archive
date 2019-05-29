@@ -11,6 +11,19 @@ import Foundation
 /// An abstract type bundling together particles
 public protocol ParticleConvertible: RadixHashable, DSONEncodable, Codable {
     var particleType: ParticleType { get }
+    
+    func shardables() -> Addresses?
+}
+
+public extension ParticleConvertible {
+    func shardables() -> Addresses? {
+
+        guard let accountable = self as? Accountable else {
+            return nil
+        }
+        
+        return accountable.addresses
+    }
 }
 
 public extension ParticleConvertible where Self: RadixModelTypeStaticSpecifying {

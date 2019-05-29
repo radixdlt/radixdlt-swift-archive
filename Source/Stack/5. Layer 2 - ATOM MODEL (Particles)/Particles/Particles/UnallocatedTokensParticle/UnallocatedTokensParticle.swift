@@ -8,14 +8,17 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 public struct UnallocatedTokensParticle:
     ParticleConvertible,
     RadixCodable,
     RadixModelTypeStaticSpecifying,
-    TokenDefinitionReferencing {
-    // swiftlint:enable colon
+    TokenDefinitionReferencing,
+    Accountable
+{
+    // swiftlint:enable colon opening_brace
+
     public static let serializer = RadixModelType.unallocatedTokensParticle
     
     public let tokenDefinitionReference: ResourceIdentifier
@@ -91,5 +94,12 @@ public extension UnallocatedTokensParticle {
             EncodableKeyValue(key: .tokenDefinitionReference, value: tokenDefinitionReference),
             EncodableKeyValue(key: .amount, value: amount)
         ]
+    }
+}
+
+// MARK: - Accountable
+public extension UnallocatedTokensParticle {
+    var addresses: Addresses {
+        return Addresses(tokenDefinitionReference.address)
     }
 }

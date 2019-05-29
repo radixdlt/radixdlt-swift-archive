@@ -73,7 +73,6 @@ public extension Magic {
 // MARK: - Public
 public extension Magic {
     var byte: Byte {
-        let and = value & Value(bitPattern: 0xFF)
-        return and.asData[0]
+        return asData[0]
     }
 }

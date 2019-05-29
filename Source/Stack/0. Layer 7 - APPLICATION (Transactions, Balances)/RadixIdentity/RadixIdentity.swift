@@ -8,17 +8,22 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
+
+/// A container of a cryptographic keypair and an address, used for higher level APIs.
 public struct RadixIdentity:
     AtomSigning,
     SignedAtomVerifier,
     Signing,
     Ownable,
-    PublicKeyOwner {
-    // swiftlint:enable colon
+    PublicKeyOwner,
+    Sharded
+{
+    // swiftlint:enable colon opening_brace
   
     private let keyPair: KeyPair
     public let address: Address
+    
     public init(keyPair: KeyPair, address: Address) {
         self.keyPair = keyPair
         self.address = address
@@ -51,5 +56,12 @@ public extension RadixIdentity {
 public extension RadixIdentity {
     var privateKey: PrivateKey {
         return keyPair.privateKey
+    }
+}
+
+// MARK: - Signing
+public extension RadixIdentity {
+    var shard: Shard {
+        return publicKey.shard
     }
 }

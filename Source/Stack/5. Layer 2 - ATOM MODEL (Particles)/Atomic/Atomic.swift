@@ -12,6 +12,7 @@ public protocol Atomic: RadixModelTypeStaticSpecifying {
     var particleGroups: ParticleGroups { get }
     var signatures: Signatures { get }
     var metaData: ChronoMetaData { get }
+    func identifier() -> AtomIdentifier
 }
 
 // MARK: - RadixModelTypeStaticSpecifying
@@ -21,7 +22,31 @@ public extension Atomic {
     }
 }
 
+public extension Atomic {
+    
+    /// Shard of each destination address of this atom
+    /// This set ought to never be empty
+    func shards() throws -> Shards {
+        let shards = spunParticles()
+            .map { $0.particle }
+            .compactMap { $0.shardables() }
+            .flatMap { $0 }
+            .map { $0.publicKey.shard }
+        
+        return try Shards(set: shards.asSet)
+    }
+}
+
 public extension Atomic where Self: RadixHashable {
+    
+    func identifier() -> AtomIdentifier {
+        do {
+            return try AtomIdentifier(hash: radixHash, shards: try shards())
+        } catch {
+            incorrectImplementation("Failed to create AtomIdentifier, error: \(error)")
+        }
+    }
+    
     // MARK: Equatable
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.radixHash == rhs.radixHash

@@ -12,7 +12,7 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
-class TransferTokensTests: XCTestCase {
+class TransferTokensTests: WebsocketTest {
     
     override func setUp() {
         super.setUp()

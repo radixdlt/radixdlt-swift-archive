@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct CreateTokenAction: UserAction, Identifiable {
+public struct CreateTokenAction: UserAction {
 
     public let creator: Address
     public let name: Name
@@ -37,7 +37,6 @@ public struct CreateTokenAction: UserAction, Identifiable {
     }
 }
 
-// MARK: - Identifiable
 public extension CreateTokenAction {
     var identifier: ResourceIdentifier {
         return ResourceIdentifier(address: creator, symbol: symbol)

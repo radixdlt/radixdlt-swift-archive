@@ -1,5 +1,5 @@
 //
-//  Shards.swift
+//  Sharded.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-05-27.
@@ -8,4 +8,8 @@
 
 import Foundation
 
-public typealias Shards = NonEmptySet<Shard>
+public typealias Shard = Int64
+
+public protocol Sharded {
+    var shard: Shard { get }
+}
