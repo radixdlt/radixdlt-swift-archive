@@ -82,20 +82,6 @@ class AtomIdentifierTests: XCTestCase {
         }
     }
     
-    func testManyShardsManyHashes() {
-        for firstByteInt in 0...255 {
-            let firstByte = Byte(firstByteInt)
-            
-            // Shard set cannot be empty
-            let shards = generateShardSet(numberOfShards: Int.random(in: 1...100))
-      
-            let targetShardIndex = Int(firstByte) % shards.count
-            let expectedShard = shards.sorted()[targetShardIndex]
-            
-            testAid(shards: shards, firstByteInHash: firstByte, expectedShard: expectedShard)
-        }
-    }
-    
     func testAtomIdentifierForAtomFromCreateTokenAction() {
         
         let createTokenAction = CreateTokenAction(
