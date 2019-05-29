@@ -43,7 +43,7 @@ protocol AccountBalancing {
 
 ### Usage
 
-Here are some example usages. The code below is an excerpt of an existing the unit test [`TransferTokensTests.swift`](https://github.com/radixdlt/radixdlt-swift/blob/master/Tests/TestCases/Radix/0.%20Layer%207%20-%20APPLICATION%20(Transactions%2C%20Balances)/TransferTokensTests.swift)
+Here are some example usages. The code below is an excerpt of an existing the unit test [`TransferTokensTests.swift`](https://github.com/radixdlt/radixdlt-swift/blob/develop/Tests/TestCases/Radix/0.%20Layer%207%20-%20APPLICATION%20(Transactions%2C%20Balances)/TransferTokensTests.swift)
 
 (In the Swift code below, for the sake of readability, we have written out the result as if the API's were synchronous. As you saw in above these methods they are asynchronous returning `Observables`, so we have omitted the appropriate [`toBlocking`](https://github.com/ReactiveX/RxSwift/blob/master/RxBlocking/ObservableConvertibleType+Blocking.swift) call.)
 
