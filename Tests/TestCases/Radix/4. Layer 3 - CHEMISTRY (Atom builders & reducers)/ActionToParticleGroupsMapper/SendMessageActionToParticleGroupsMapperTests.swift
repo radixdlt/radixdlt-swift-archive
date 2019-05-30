@@ -12,7 +12,7 @@ import XCTest
 class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
 
   
-    func testEncryptedMessage() {
+    func testSendMessageEncrypted() {
         let alice = RadixIdentity()
         let bob = RadixIdentity()
         let clara = RadixIdentity()

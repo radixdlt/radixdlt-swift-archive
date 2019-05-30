@@ -126,6 +126,8 @@
 		E68BD81F229ECCF400FCE4D3 /* DefaultSendMessageActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD81E229ECCF400FCE4D3 /* DefaultSendMessageActionToParticleGroupsMapper.swift */; };
 		E68BD821229ED06C00FCE4D3 /* EncryptedPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD820229ED06C00FCE4D3 /* EncryptedPrivateKey.swift */; };
 		E68BD823229EDA2000FCE4D3 /* SendMessageActionToParticleGroupsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD822229EDA2000FCE4D3 /* SendMessageActionToParticleGroupsMapperTests.swift */; };
+		E68BD82522A0331800FCE4D3 /* MetaDataCommonValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */; };
+		E68BD82722A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */; };
 		E696AAD0226DE6F700D19ED6 /* Transacting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AACF226DE6F700D19ED6 /* Transacting.swift */; };
 		E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */; };
 		E696AAD6226DE94900D19ED6 /* NodeInteracting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD5226DE94900D19ED6 /* NodeInteracting.swift */; };
@@ -560,6 +562,8 @@
 		E68BD81E229ECCF400FCE4D3 /* DefaultSendMessageActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSendMessageActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E68BD820229ED06C00FCE4D3 /* EncryptedPrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedPrivateKey.swift; sourceTree = "<group>"; };
 		E68BD822229EDA2000FCE4D3 /* SendMessageActionToParticleGroupsMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageActionToParticleGroupsMapperTests.swift; sourceTree = "<group>"; };
+		E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataCommonValue.swift; sourceTree = "<group>"; };
+		E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DictionaryConvertible+ArrayInitializable.swift"; sourceTree = "<group>"; };
 		E696AACF226DE6F700D19ED6 /* Transacting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transacting.swift; sourceTree = "<group>"; };
 		E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountBalancing.swift; sourceTree = "<group>"; };
 		E696AAD5226DE94900D19ED6 /* NodeInteracting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInteracting.swift; sourceTree = "<group>"; };
@@ -2271,6 +2275,7 @@
 			isa = PBXGroup;
 			children = (
 				E6E278D72271CD1C0067D46E /* DictionaryConvertible.swift */,
+				E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */,
 				E6E278D82271CD1C0067D46E /* DictionaryConvertibleMutable.swift */,
 				E6E278D92271CD1C0067D46E /* DictionaryDecodable.swift */,
 				E6E278DA2271CD1C0067D46E /* StringDictionary.swift */,
@@ -2367,6 +2372,7 @@
 			isa = PBXGroup;
 			children = (
 				E6E278F92271CD1C0067D46E /* MetaData.swift */,
+				E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */,
 				E6E278FA2271CD1C0067D46E /* MetaDataConvertible.swift */,
 				E6E278FB2271CD1C0067D46E /* KeyValued.swift */,
 				E6E278FC2271CD1C0067D46E /* MetaDataKey.swift */,
@@ -3153,6 +3159,7 @@
 				E6A508DA2251100800128123 /* ProofOfWork.swift in Sources */,
 				E6ED1A7C21F8E7E000654105 /* ObservableType+FilterNil.swift in Sources */,
 				E6E279242271CD1C0067D46E /* Signatures.swift in Sources */,
+				E68BD82522A0331800FCE4D3 /* MetaDataCommonValue.swift in Sources */,
 				E6F548522277456300EE6311 /* Amount+Sign+Check.swift in Sources */,
 				E6E279992271CD1C0067D46E /* InvalidStringError.swift in Sources */,
 				E6166BE42260AF5A003A9442 /* DefaultNodeInteraction.swift in Sources */,
@@ -3241,6 +3248,7 @@
 				E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */,
 				E6E2796A2271CD1C0067D46E /* DictionaryDecodable.swift in Sources */,
 				E6F5484522771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift in Sources */,
+				E68BD82722A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift in Sources */,
 				E6E2796D2271CD1C0067D46E /* ArrayConvertible.swift in Sources */,
 				E6E279452271CD1C0067D46E /* TimeConverter.swift in Sources */,
 				E6E2793E2271CD1C0067D46E /* RandomData.swift in Sources */,

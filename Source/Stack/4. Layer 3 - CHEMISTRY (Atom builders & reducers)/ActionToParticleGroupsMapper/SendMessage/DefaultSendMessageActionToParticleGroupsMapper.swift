@@ -51,7 +51,10 @@ public extension DefaultSendMessageActionToParticleGroupsMapper {
                     from: action.sender,
                     to: action.recipient,
                     payload: encryptorPayload,
-                    metaData: [.application: "encryptor", .contentType: "application/json"]
+                    metaData: [
+                        MetaDataKey.application(.encryptor),
+                        MetaDataKey.contentType(.applicationJson)
+                    ]
                 )
                 
                 particles += encryptorParticle.withSpin(.up)
@@ -64,7 +67,7 @@ public extension DefaultSendMessageActionToParticleGroupsMapper {
             from: action.sender,
             to: action.recipient,
             payload: payload,
-            metaData: [.application: "message"]
+            metaData: [MetaDataKey.application(.message)]
         )
         
         particles += messageParticle.withSpin(.up)
