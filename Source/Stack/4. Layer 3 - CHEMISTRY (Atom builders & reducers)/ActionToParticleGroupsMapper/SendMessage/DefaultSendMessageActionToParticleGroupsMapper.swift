@@ -23,18 +23,18 @@ public struct KeyGenerator: KeyGenerating {
 public struct DefaultSendMessageActionToParticleGroupsMapper: SendMessageActionToParticleGroupsMapper {
     
     private let keyGenerator: KeyGenerating
-    public typealias KeysSelector = (SendMessageAction) -> [PublicKey]
-    private let keysSelector: KeysSelector
+    public typealias KeysThatCanDecryptMessage = (SendMessageAction) -> [PublicKey]
+    private let readers: KeysThatCanDecryptMessage
     
     public init(
         keyGenerator: KeyGenerating = KeyGenerator(),
-        keysSelector: @escaping KeysSelector = { return [$0.sender, $0.recipient].map { $0.publicKey } }
+        // By default both sender and recipient of a message can decrypt it
+        readers: @escaping KeysThatCanDecryptMessage = { return [$0.sender, $0.recipient].map { $0.publicKey } }
     ) {
         self.keyGenerator = keyGenerator
-        self.keysSelector = keysSelector
+        self.readers = readers
     }
 }
-
 public extension DefaultSendMessageActionToParticleGroupsMapper {
     // swiftlint:disable:next function_body_length
     func particleGroups(for action: SendMessageAction) -> ParticleGroups {
@@ -42,7 +42,7 @@ public extension DefaultSendMessageActionToParticleGroupsMapper {
         let payload: Data = !action.shouldBeEncrypted ? action.payload : {
             do {
                 let sharedKey = keyGenerator.generateKeyPair()
-                let encryptor = try Encryptor(sharedKey: sharedKey, readers: keysSelector(action))
+                let encryptor = try Encryptor(sharedKey: sharedKey, readers: readers(action))
                 
                 let privateKeysStringArray = encryptor.protectors.map { $0.base64 }
                 let encryptorPayload = try JSONEncoder().encode(privateKeysStringArray)
