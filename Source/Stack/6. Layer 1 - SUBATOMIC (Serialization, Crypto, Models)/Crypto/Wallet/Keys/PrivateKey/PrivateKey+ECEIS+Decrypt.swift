@@ -32,4 +32,26 @@ public extension Signing {
         // swiftlint:disable force_unwrap
         return String(data: encoded, encoding: encoding)!
     }
+    
+    func decrypt(payload: Payload) throws -> UnencryptedData {
+        
+        let metaData = payload.metaData
+        let data = payload.payload
+        
+        guard let encryptor = payload.encryptor else {
+            return UnencryptedData(
+                metaData: metaData,
+                payload: data,
+                isFromEncryptedSource: false
+            )
+        }
+        
+        let decryptedData = try encryptor.decrypt(data: data, using: self)
+        
+        return UnencryptedData(
+            metaData: metaData,
+            payload: decryptedData,
+            isFromEncryptedSource: true
+        )
+    }
 }

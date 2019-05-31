@@ -9,9 +9,7 @@
 import Foundation
 
 public struct Encryptor {
-    
     private let protectors: [EncryptedPrivateKey]
-    
     init(protectors: [EncryptedPrivateKey]) {
         self.protectors = protectors
     }
@@ -19,7 +17,6 @@ public struct Encryptor {
 
 // MARK: - Convenience
 public extension Encryptor {
-    
     init(sharedKey: KeyPair, readers: [PublicKey]) throws {
         let encryptedPrivateKeys = try readers.map { try sharedKey.encryptPrivateKey(withPublicKey: $0) }
         self.init(protectors: encryptedPrivateKeys)
@@ -42,5 +39,23 @@ public extension Encryptor {
         let jsonStringWithNonEscapedForwardSlash = jsonStringWithEscapedForwardSlash.replacingOccurrences(of: "\\/", with: "/")
         
         return jsonStringWithNonEscapedForwardSlash.toData(encodingForced: encoding)
+    }
+    
+    static func fromData(_ encryptedData: Data, jsonDecoder: JSONDecoder = JSONDecoder()) throws -> Encryptor {
+
+        let protectorsAsStrings = try jsonDecoder.decode([String].self, from: encryptedData)
+        
+        let protectors = try protectorsAsStrings.map { try EncryptedPrivateKey(base64String: $0) }
+        return Encryptor(protectors: protectors)
+    }
+
+    func decrypt(data encryptedData: Data, using key: Signing) throws -> Data {
+
+        for protector in self.protectors {
+            do {
+                return try key.decrypt(encryptedData, sharedKey: protector)
+            } catch { /* try next one */ }
+        }
+        throw ECIES.DecryptionError.keyMismatch
     }
 }

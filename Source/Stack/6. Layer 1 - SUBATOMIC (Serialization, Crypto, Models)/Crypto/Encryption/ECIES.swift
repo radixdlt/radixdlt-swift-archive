@@ -30,7 +30,13 @@ public extension ECIES {
         let data = dataConvertible.asData
         // 0. Here follows ECEIS algorithm (steps copied from Radix DLT Java library)
         // 1. The destination is this publicKey
-        let point = EllipticCurvePoint.decodePointFromPublicKey(publicKeyOwner.publicKey)
+        let point: EllipticCurvePoint
+        do {
+            point = try EllipticCurvePoint.decodePointFromPublicKey(publicKeyOwner.publicKey)
+        } catch let decodePublicKeyError as EllipticCurvePoint.Error {
+            throw DecryptionError.failedToDecodePublicKeyPoint(error: decodePublicKeyError)
+        } catch { incorrectImplementation("unhandled error: \(error)") }
+        
         
         // 2. Generate 16 random bytes using a secure random number generator. Call them IV
         // swiftlint:disable:next identifier_name
@@ -89,6 +95,8 @@ public extension ECIES {
         case failedToConvertPublicKeyLengthDataToInteger
         case failedToConvertCipherTextLengthDataToInteger
         case macMismatch(expected: Data, butGot: Data)
+        case keyMismatch
+        case failedToDecodePublicKeyPoint(error: EllipticCurvePoint.Error)
     }
     
     static func decrypt(data dataConvertible: DataConvertible, using signing: Signing) throws -> Data {
@@ -110,7 +118,12 @@ public extension ECIES {
         }
         let publicKeyData = parse(byteCount: publicKeyLength)
         let ephemeralPublicKey = try PublicKey(data: publicKeyData)
-        let ephemeralPublicKeyPoint = EllipticCurvePoint.decodePointFromPublicKey(ephemeralPublicKey)
+        let ephemeralPublicKeyPoint: EllipticCurvePoint
+        do {
+            ephemeralPublicKeyPoint = try EllipticCurvePoint.decodePointFromPublicKey(ephemeralPublicKey)
+        } catch let decodePublicKeyError as EllipticCurvePoint.Error {
+            throw DecryptionError.failedToDecodePublicKeyPoint(error: decodePublicKeyError)
+        } catch { incorrectImplementation("unhandled error: \(error)") }
         
         // 3. Do an EC point multiply with this.getPrivateKey() and ephemeral public key. This gives you a point M.
         let pointM = ephemeralPublicKeyPoint * privateKey
@@ -137,8 +150,8 @@ public extension ECIES {
         let calculatedMac = try calculateMAC(salt: keyDataM, initializationVector: iv, ephemeralPublicKey: ephemeralPublicKey, cipherText: cipherText)
         
         guard calculatedMac == mac else {
-            log.debug("Expected MAC:\n<\(mac.hex)>")
-            log.debug("Calculated MAC:\n<\(calculatedMac.hex)>")
+            log.verbose("Expected MAC:\n<\(mac.hex)>")
+            log.verbose("Calculated MAC:\n<\(calculatedMac.hex)>")
             throw DecryptionError.macMismatch(expected: mac, butGot: calculatedMac)
         }
         
@@ -154,9 +167,15 @@ extension ECIES.DecryptionError {
     public static func == (lhs: ECIES.DecryptionError, rhs: ECIES.DecryptionError) -> Bool {
         switch (lhs, rhs) {
         case (.macMismatch, .macMismatch): return true
+        case (.macMismatch, _): return false
+        case (.keyMismatch, .keyMismatch): return true
+        case (.keyMismatch, _): return false
+        case (.failedToDecodePublicKeyPoint, .failedToDecodePublicKeyPoint): return true
+        case (.failedToDecodePublicKeyPoint, _): return false
         case (.failedToConvertCipherTextLengthDataToInteger, .failedToConvertCipherTextLengthDataToInteger): return true
+        case (.failedToConvertCipherTextLengthDataToInteger, _): return false
         case (.failedToConvertPublicKeyLengthDataToInteger, .failedToConvertPublicKeyLengthDataToInteger): return true
-        default: return false
+        case (.failedToConvertPublicKeyLengthDataToInteger, _): return false
         }
     }
 }

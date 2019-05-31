@@ -34,9 +34,7 @@ public extension DefaultSendMessageActionToParticleGroupsMapper {
         let payload: Data = !action.shouldBeEncrypted ? action.payload : {
             do {
                 let sharedKey = generateSharedKey()
-                
                 let encryptor = try Encryptor(sharedKey: sharedKey, readers: readers(action))
-                
                 let encryptorPayload = try encryptor.encodePayload(encoder: encryptedPayloadJsonEncoder)
                
                 let encryptorParticle = MessageParticle(
@@ -51,7 +49,8 @@ public extension DefaultSendMessageActionToParticleGroupsMapper {
                 
                 particles += encryptorParticle.withSpin(.up)
                 
-                return try sharedKey.publicKey.encrypt(action.payload)
+                let encryptedMessage = try sharedKey.publicKey.encrypt(action.payload)
+                return encryptedMessage
             } catch { incorrectImplementation("Failed to encrypt message, error: \(error)") }
         }()
         

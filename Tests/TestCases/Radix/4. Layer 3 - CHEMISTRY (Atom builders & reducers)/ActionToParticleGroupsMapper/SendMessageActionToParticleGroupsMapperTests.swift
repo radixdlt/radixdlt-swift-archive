@@ -10,68 +10,66 @@ import XCTest
 @testable import RadixSDK
 
 class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
-
-  
-    func testSendMessageEncrypted() {
+    
+    func testEncryptAndDecryptMessage() {
         let alice = RadixIdentity()
         let bob = RadixIdentity()
         let clara = RadixIdentity()
         let diana = RadixIdentity()
+
         XCTAssertAllInequal(alice, bob, clara, diana)
-        
         
         let message = "Hey Bob, this is your friend Alice"
         let sendMessageAction = SendMessageAction(from: alice, to: bob, message: message, shouldBeEncrypted: true)
-
-        let mapper = DefaultSendMessageActionToParticleGroupsMapper {
-            [$0.sender, $0.recipient, clara.address].map { $0.publicKey } // Alice => 0, Bob => 1, Clara => 2
+        
+        let readers = [alice, bob, clara]
+        
+        let mapper = DefaultSendMessageActionToParticleGroupsMapper { _ in
+            readers.map { $0.publicKey }
         }
-        let particleGroups = mapper.particleGroups(for: sendMessageAction)
-        XCTAssertEqual(particleGroups.count, 1)
-        let particles = particleGroups[0].spunParticles
-        XCTAssertEqual(particles.count, 2)
-        let spunParticle0 = particles[0]
-        let spunParticle1 = particles[1]
-        XCTAssertEqual(spunParticle0.spin, .up)
-        XCTAssertEqual(spunParticle1.spin, .up)
         
-        guard
-            let encryptorMessageParticle = spunParticle0.particle as? MessageParticle,
-            let messageParticle = spunParticle1.particle as? MessageParticle
-        else { return XCTFail("Should both be MessageParticles") }
+        let particleGroupsForMessage = mapper.particleGroups(for: sendMessageAction)
         
-        let protectorsData = encryptorMessageParticle.payload
-        let protectorsString = try! JSONDecoder().decode([String].self, from: protectorsData)
-        let protectors = protectorsString.map { try! EncryptedPrivateKey(base64String: $0) }
+        let mockedTimestamp = TimeConverter.dateFrom(millisecondsSince1970: 123456789)
 
-        let encryptedMessage = messageParticle.payload
-        
-        let aliceProtector = protectors[0]
-        let bobProtector = protectors[1]
-        let claraProtector = protectors[2]
-        
-        XCTAssertAllEqual(
-            try! alice.decrypt(encryptedMessage, sharedKey: aliceProtector).toString(),
-            try! bob.decrypt(encryptedMessage, sharedKey: bobProtector).toString(),
-            try! clara.decrypt(encryptedMessage, sharedKey: claraProtector).toString(),
-            message
-        )
-
-        XCTAssertThrowsSpecificError(
-            try alice.decrypt(encryptedMessage, sharedKey: bobProtector),
-            ECIES.DecryptionError.macMismatch(expected: .ignored, butGot: .ignored)
+        let atom = Atom(
+            metaData: ChronoMetaData.timestamp(mockedTimestamp),
+            particleGroups: particleGroupsForMessage
         )
         
-        // Diana should not be able to decrypt using any message
-        for protector in protectors {
-            XCTAssertThrowsSpecificError(
-                try diana.decrypt(encryptedMessage, sharedKey: protector),
-                ECIES.DecryptionError.macMismatch(expected: .ignored, butGot: .ignored)
-            )
+        let reducer = DefaultDecryptMessageReducer()
+
+        func doTestResult(_ decryptedMessage: DecryptedMessage, expectedEncryptionState: DecryptedMessage.EncryptionState) {
+            XCTAssertEqual(decryptedMessage.encryptionState, expectedEncryptionState)
+            XCTAssertEqual(decryptedMessage.timestamp, mockedTimestamp)
+            XCTAssertEqual(decryptedMessage.sender, alice.address)
+            XCTAssertEqual(decryptedMessage.recipient, bob.address)
+            if expectedEncryptionState == .decrypted {
+                XCTAssertEqual(decryptedMessage.payload.toString(), message)
+            }
+        }
+
+        func ensureEliglbeReaderCanDecrypt(_ identity: RadixIdentity) {
+            
+            do {
+                let decryptedMessage = try reducer.decryptMessage(in: atom, using: identity)
+                  doTestResult(decryptedMessage, expectedEncryptionState: .decrypted)
+            } catch {
+                XCTFail("Eligible reader: \(identity), should have been able to decrypt message, unexpected error: \(error)")
+            }
+        }
+        
+        readers.forEach {
+            ensureEliglbeReaderCanDecrypt($0)
+        }
+        
+        do {
+            let dianasFeableAttemptToIntercept = try reducer.decryptMessage(in: atom, using: diana)
+            doTestResult(dianasFeableAttemptToIntercept, expectedEncryptionState: .cannotDecrypt(error: ECIES.DecryptionError.keyMismatch))
+        } catch {
+            XCTFail("Even though Diana should not be able to read the clear text message, she should still be able to reduce a DecryptedMessage from an Atom, having still encrypted payload")
         }
     }
-
-
 }
 
 private let magic: Magic = 63799298
@@ -79,6 +77,10 @@ private let magic: Magic = 63799298
 private extension RadixIdentity {
     init() {
         self.init(magic: magic)
+    }
+    
+    init(privateKey: PrivateKey) {
+        self.init(private: privateKey, magic: magic)
     }
 }
 

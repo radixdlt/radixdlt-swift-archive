@@ -50,8 +50,9 @@ public extension MetaDataKey {
 
 // MARK: - Presets
 public extension MetaDataKey {
-    static let timestamp = MetaDataKey("timestamp")
-    static let proofOfWork = MetaDataKey("powNonce")
-    static let application = MetaDataKey("application")
-    static let contentType = MetaDataKey("contentType")
+    static let timestamp: MetaDataKey   = "timestamp"
+    static let proofOfWork: MetaDataKey = "powNonce"
+    static let application: MetaDataKey = "application"
+    static let contentType: MetaDataKey = "contentType"
+    static let encrypted: MetaDataKey = "encrypted"
 }
