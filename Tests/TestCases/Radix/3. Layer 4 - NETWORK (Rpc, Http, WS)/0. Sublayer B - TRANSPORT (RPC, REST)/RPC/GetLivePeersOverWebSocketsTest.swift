@@ -88,31 +88,40 @@ private let goodJsonLivePeers = """
 	"id": 0,
 	"jsonrpc": "2.0",
 	"result": [
-		{
-			"hid": ":uid:817bcb056b2cbc054ee536aa8c680499",
+        {
+			"hid": ":uid:121b8bb9550da9f469a01e2220416dd3",
 			"host": {
 				"ip": ":str:172.18.0.3",
 				"port": 30000
 			},
-			"serializer": "\(RadixModelType.nodeInfo.serializerId)",
+			"protocols": [
+				":str:UDP"
+			],
+			"serializer": "network.peer",
 			"system": {
 				"agent": {
 					"name": ":str:/Radix:/2700000",
 					"protocol": 100,
 					"version": 2700000
 				},
-				"clock": 5,
-				"commitment": ":hsh:1e00000000000000000000000000000000000000000000000000000000000000",
-				"hid": ":uid:bfe488a94313036680a0ecbb69cb7f1b",
-				"key": ":byt:AlXEENfkjHDcySk4Ivc5vyRFxilXNuIJGzyfZ91IuBo2",
-				"nid": ":uid:fb04c011af5ad0bbbc0f0bf1f8591e0f",
-				"planck": 25925352,
+				"clock": 1,
+				"commitment": ":hsh:0100000000000000000000000000000000000000000000000000000000000000",
+				"hid": ":uid:a3c0d67bc4e62bb51d5dba2c83bb41d3",
+				"key": ":byt:A1gV7wL3K35gW1AEo9NRi9Me9K1erHT80udvu5L88Tz2",
+				"nid": ":uid:ed159db66f945b9722c6579ab185aa60",
+				"planck": 24805440,
 				"port": 30000,
-				"serializer": "\(RadixModelType.radixSystem.serializerId)",
+				"serializer": "api.system",
 				"shards": {
-					"high": 9223372036854775807,
-					"low": -9223372036854775808
+					"anchor": -1363009905328104553,
+					"range": {
+						"high": 8796093022207,
+						"low": -8796093022208,
+						"serializer": "radix.shards.range"
+					},
+					"serializer": "radix.shard.space"
 				},
+				"timestamp": 1488326400000,
 				"version": 100
 			},
 			"version": 100

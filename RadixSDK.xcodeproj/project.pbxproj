@@ -117,6 +117,10 @@
 		E689DBBB225F96CB00340CF3 /* NodeNetworkDetailsRequesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBBA225F96CB00340CF3 /* NodeNetworkDetailsRequesting.swift */; };
 		E689DBBD225F9B6700340CF3 /* URLFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBBC225F9B6700340CF3 /* URLFormatter.swift */; };
 		E68BD7F9229D781300FCE4D3 /* SignedInteger+CompareUnsigned.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD7F8229D781300FCE4D3 /* SignedInteger+CompareUnsigned.swift */; };
+		E68BD811229EAC1200FCE4D3 /* ShardSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD810229EAC1200FCE4D3 /* ShardSpace.swift */; };
+		E68BD813229EAC3A00FCE4D3 /* Range+BinaryInteger+Stride.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD812229EAC3A00FCE4D3 /* Range+BinaryInteger+Stride.swift */; };
+		E68BD816229EAD9D00FCE4D3 /* ShardSpaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD815229EAD9D00FCE4D3 /* ShardSpaceTests.swift */; };
+		E68BD818229EB22000FCE4D3 /* ShardRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD817229EB22000FCE4D3 /* ShardRangeTests.swift */; };
 		E696AAD0226DE6F700D19ED6 /* Transacting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AACF226DE6F700D19ED6 /* Transacting.swift */; };
 		E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */; };
 		E696AAD6226DE94900D19ED6 /* NodeInteracting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD5226DE94900D19ED6 /* NodeInteracting.swift */; };
@@ -135,7 +139,7 @@
 		E6A507EA224E20CC00128123 /* RPCResponseResultWithRequestId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507E9224E20CB00128123 /* RPCResponseResultWithRequestId.swift */; };
 		E6A507F3224E6A4600128123 /* TokenBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F2224E6A4600128123 /* TokenBalance.swift */; };
 		E6A507F5224E6AEA00128123 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507F4224E6AEA00128123 /* Token.swift */; };
-		E6A50885224E713F00128123 /* ShardInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50820224E713F00128123 /* ShardInterval.swift */; };
+		E6A50885224E713F00128123 /* ShardRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50820224E713F00128123 /* ShardRange.swift */; };
 		E6A50887224E713F00128123 /* Atom+Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50823224E713F00128123 /* Atom+Sequence.swift */; };
 		E6A50888224E713F00128123 /* Atoms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50824224E713F00128123 /* Atoms.swift */; };
 		E6A50889224E713F00128123 /* Atom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50825224E713F00128123 /* Atom.swift */; };
@@ -542,6 +546,10 @@
 		E689DBBA225F96CB00340CF3 /* NodeNetworkDetailsRequesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeNetworkDetailsRequesting.swift; sourceTree = "<group>"; };
 		E689DBBC225F9B6700340CF3 /* URLFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLFormatter.swift; sourceTree = "<group>"; };
 		E68BD7F8229D781300FCE4D3 /* SignedInteger+CompareUnsigned.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SignedInteger+CompareUnsigned.swift"; sourceTree = "<group>"; };
+		E68BD810229EAC1200FCE4D3 /* ShardSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardSpace.swift; sourceTree = "<group>"; };
+		E68BD812229EAC3A00FCE4D3 /* Range+BinaryInteger+Stride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Range+BinaryInteger+Stride.swift"; sourceTree = "<group>"; };
+		E68BD815229EAD9D00FCE4D3 /* ShardSpaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardSpaceTests.swift; sourceTree = "<group>"; };
+		E68BD817229EB22000FCE4D3 /* ShardRangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardRangeTests.swift; sourceTree = "<group>"; };
 		E696AACF226DE6F700D19ED6 /* Transacting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transacting.swift; sourceTree = "<group>"; };
 		E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountBalancing.swift; sourceTree = "<group>"; };
 		E696AAD5226DE94900D19ED6 /* NodeInteracting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInteracting.swift; sourceTree = "<group>"; };
@@ -562,7 +570,7 @@
 		E6A507E9224E20CB00128123 /* RPCResponseResultWithRequestId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCResponseResultWithRequestId.swift; sourceTree = "<group>"; };
 		E6A507F2224E6A4600128123 /* TokenBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalance.swift; sourceTree = "<group>"; };
 		E6A507F4224E6AEA00128123 /* Token.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
-		E6A50820224E713F00128123 /* ShardInterval.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShardInterval.swift; sourceTree = "<group>"; };
+		E6A50820224E713F00128123 /* ShardRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShardRange.swift; sourceTree = "<group>"; };
 		E6A50823224E713F00128123 /* Atom+Sequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Atom+Sequence.swift"; sourceTree = "<group>"; };
 		E6A50824224E713F00128123 /* Atoms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atoms.swift; sourceTree = "<group>"; };
 		E6A50825224E713F00128123 /* Atom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Atom.swift; sourceTree = "<group>"; };
@@ -1577,6 +1585,15 @@
 			path = Host;
 			sourceTree = "<group>";
 		};
+		E68BD814229EAD9000FCE4D3 /* Shard */ = {
+			isa = PBXGroup;
+			children = (
+				E68BD815229EAD9D00FCE4D3 /* ShardSpaceTests.swift */,
+				E68BD817229EB22000FCE4D3 /* ShardRangeTests.swift */,
+			);
+			path = Shard;
+			sourceTree = "<group>";
+		};
 		E696AACE226DE6B900D19ED6 /* Transacting */ = {
 			isa = PBXGroup;
 			children = (
@@ -1664,7 +1681,8 @@
 		E6A5081F224E713F00128123 /* Shards */ = {
 			isa = PBXGroup;
 			children = (
-				E6A50820224E713F00128123 /* ShardInterval.swift */,
+				E6A50820224E713F00128123 /* ShardRange.swift */,
+				E68BD810229EAC1200FCE4D3 /* ShardSpace.swift */,
 				E6FF7E47229C1D1C00BC22EA /* Shards.swift */,
 				E6FF7E4D229C575E00BC22EA /* Sharded.swift */,
 			);
@@ -1836,6 +1854,7 @@
 				E6CEE72F21F5D4E000D745EC /* CharacterSet.swift */,
 				E6D1318221F7B2050014792D /* Data+Hex.swift */,
 				E62EFDC5224936E000B6DAD6 /* URL_Extensions.swift */,
+				E68BD812229EAC3A00FCE4D3 /* Range+BinaryInteger+Stride.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -2814,6 +2833,7 @@
 		E6E27A0B2271CE250067D46E /* 5. Layer 2 - ATOM MODEL (Particles) */ = {
 			isa = PBXGroup;
 			children = (
+				E68BD814229EAD9000FCE4D3 /* Shard */,
 				E6725644228AD41F004631F1 /* Spin */,
 				E6E27A0C2271CE250067D46E /* Particles */,
 			);
@@ -3121,6 +3141,7 @@
 				E6A508AC224E713F00128123 /* TokenDefinitionParticle+Encodable.swift in Sources */,
 				E6A508B3224E713F00128123 /* Address.swift in Sources */,
 				E696AAD8226DEB8A00D19ED6 /* Magic.swift in Sources */,
+				E68BD811229EAC1200FCE4D3 /* ShardSpace.swift in Sources */,
 				E6E279462271CD1C0067D46E /* RadixModelType.swift in Sources */,
 				E689DB85225F656400340CF3 /* DefaultRadixApplicationClient.swift in Sources */,
 				E6E2797B2271CD1C0067D46E /* TokenPermission.swift in Sources */,
@@ -3235,7 +3256,7 @@
 				E6E2794E2271CD1C0067D46E /* PrefixedJsonDecodableByProxy.swift in Sources */,
 				E6E279842271CD1C0067D46E /* KeyValued.swift in Sources */,
 				E6E2794D2271CD1C0067D46E /* KeyedDecodingContainer+PrefixedJson+Decode.swift in Sources */,
-				E6A50885224E713F00128123 /* ShardInterval.swift in Sources */,
+				E6A50885224E713F00128123 /* ShardRange.swift in Sources */,
 				E6E279742271CD1C0067D46E /* NonNegativeAmount.swift in Sources */,
 				E6A508AB224E713F00128123 /* TokenDefinitionParticle+CodingKeys.swift in Sources */,
 				E6E279962271CD1C0067D46E /* LowerBound.swift in Sources */,
@@ -3250,6 +3271,7 @@
 				E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */,
 				E6A507D9224E155A00128123 /* AtomSubscriptionStartOrCancel.swift in Sources */,
 				E6A5088E224E713F00128123 /* Spin.swift in Sources */,
+				E68BD813229EAC3A00FCE4D3 /* Range+BinaryInteger+Stride.swift in Sources */,
 				E6E279902271CD1C0067D46E /* ValueValidating.swift in Sources */,
 				E6E2796F2271CD1C0067D46E /* Granularity.swift in Sources */,
 				E6474AD022661E44009C4FDC /* RESTClient+HTTPClientOwner+Default.swift in Sources */,
@@ -3425,6 +3447,7 @@
 				E6E27A402271CE250067D46E /* CBOREncodingPrimitivesStringTests.swift in Sources */,
 				E6E27A462271CE250067D46E /* SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift in Sources */,
 				E6E27A222271CE250067D46E /* HashTests.swift in Sources */,
+				E68BD818229EB22000FCE4D3 /* ShardRangeTests.swift in Sources */,
 				E6E27A502271CE250067D46E /* Base58Tests.swift in Sources */,
 				E6E27A3E2271CE250067D46E /* DSONEncodingIntArrayTests.swift in Sources */,
 				E6E27A3A2271CE250067D46E /* BadRRITests.swift in Sources */,
@@ -3439,6 +3462,7 @@
 				E6E27A182271CE250067D46E /* GetBalanceOverWebSocketsTest.swift in Sources */,
 				E6E27A3B2271CE250067D46E /* UniverseConfigBetanetJSONDecodingTests.swift in Sources */,
 				E6725648228AE98F004631F1 /* TransferTokensTests.swift in Sources */,
+				E68BD816229EAD9D00FCE4D3 /* ShardSpaceTests.swift in Sources */,
 				E6E27A492271CE250067D46E /* ResourceIdentifierTests.swift in Sources */,
 				E6E27A302271CE250067D46E /* TooLongSymbolTests.swift in Sources */,
 				E6E27A352271CE250067D46E /* IncorrectSpinValueTests.swift in Sources */,

@@ -34,8 +34,6 @@ class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
         //                    guard let hashIdFromApiUsedForTesting = config.hashIdFromApiUsedForTesting else {
         //                        return
         //                    }
-        //                    expect(config.hashId).to(equal(hashIdFromApiUsedForTesting))
-        XCTAssertEqual(config.hashId, "e5027d7370ee2dbf94b931c35d2e96ce")
         
         guard let rriParticle = config.genesis.particles().compactMap({ $0 as? ResourceIdentifierParticle }).first else {
             return XCTFail("No RRI particle")
