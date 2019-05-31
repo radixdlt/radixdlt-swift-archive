@@ -19,7 +19,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
 
         XCTAssertAllInequal(alice, bob, clara, diana)
         
-        let message = "Hey Bob, this is your friend Alice, Clara should also be albe "
+        let message = "Hey Bob, this is your friend Alice, Clara should also be able to read this."
         let sendMessageAction = SendMessageAction(from: alice, to: bob, message: message, shouldBeEncrypted: true)
         
         let readers = [alice, bob, clara]
@@ -103,6 +103,42 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
                 decryptedMessage.encryptionState,
                 .cannotDecrypt(error: .keyMismatch))
         }
+    }
+    
+    func testMessagesAreEncryptedByDefault() {
+        let alice = RadixIdentity()
+        let bob = RadixIdentity()
+        
+        let sendMessageAction = SendMessageAction(from: alice, to: bob, message: "Super secret message")
+        XCTAssertTrue(sendMessageAction.shouldBeEncrypted)
+    }
+    
+    func testNonEncryptedMessage() {
+        let alice = RadixIdentity()
+        let bob = RadixIdentity()
+        let clara = RadixIdentity()
+        
+        XCTAssertAllInequal(alice, bob, clara)
+        
+        let message = "Hey Bob, this is your friend Alice, this message is not encrypted."
+        let sendMessageAction = SendMessageAction(from: alice, to: bob, message: message, shouldBeEncrypted: false)
+         XCTAssertFalse(sendMessageAction.shouldBeEncrypted)
+        let mapper = DefaultSendMessageActionToParticleGroupsMapper()
+        let atom = mapper.particleGroups(for: sendMessageAction).wrapInAtom()
+        let reducer = DefaultDecryptMessageReducer()
+        
+        func ensureNonEncryptedMessageCanBeRead(by identity: RadixIdentity) {
+            XCTAssertNotThrows(
+                try reducer.decryptMessage(in: atom, using: identity)
+            ) { decryptedMessage in
+                XCTAssertEqual(decryptedMessage.encryptionState, .wasNotEncrypted)
+                XCTAssertEqual(decryptedMessage.payload.toString(), message)
+            }
+        }
+        
+        ensureNonEncryptedMessageCanBeRead(by: alice)
+        ensureNonEncryptedMessageCanBeRead(by: bob)
+        ensureNonEncryptedMessageCanBeRead(by: clara)
     }
     
 }
