@@ -13,7 +13,6 @@ import Foundation
 /// Shared protocol for MetaData and ChronoMetaData, some dictionary having `MetaDataKey` as key.
 public protocol MetaDataConvertible:
     DictionaryCodable,
-    ArrayInitializable,
     CBORDictionaryConvertible,
     Equatable
 where

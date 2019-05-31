@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct MetaData: MetaDataConvertible {
+public struct MetaData: MetaDataConvertible, ArrayInitializable {
 
     public let dictionary: [Key: Value]
     

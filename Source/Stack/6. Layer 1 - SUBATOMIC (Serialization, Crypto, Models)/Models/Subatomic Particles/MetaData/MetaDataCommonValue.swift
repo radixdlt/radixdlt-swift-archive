@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum MetaDataCommonValue: String {
+public enum MetaDataCommonValue: String, Equatable {
     case encryptor
     case message
     case applicationJson = "application/json"
