@@ -22,6 +22,7 @@ func XCTAssertNotThrowsAndEqual<Result>(
     XCTAssertEqual(result, expectedValue, message)
 }
 
+
 @discardableResult
 func XCTAssertNotThrows<Result>(_ codeThatShouldNotThrow: @autoclosure () throws -> Result) -> Result? {
     do {
@@ -31,6 +32,15 @@ func XCTAssertNotThrows<Result>(_ codeThatShouldNotThrow: @autoclosure () throws
         return nil
     }
 }
+
+func XCTAssertNotThrows<Result>(
+    _ codeThatShouldNotThrow: @autoclosure () throws -> Result,
+    innerAssert: (Result) -> Void
+) {
+    guard let result = XCTAssertNotThrows(try codeThatShouldNotThrow()) else { return }
+    innerAssert(result)
+}
+
 
 func XCTAssertThrowsSpecificError<ReturnValue, ExpectedError>(
     _ codeThatThrows: @autoclosure () throws -> ReturnValue,

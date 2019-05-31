@@ -19,7 +19,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
 
         XCTAssertAllInequal(alice, bob, clara, diana)
         
-        let message = "Hey Bob, this is your friend Alice"
+        let message = "Hey Bob, this is your friend Alice, Clara should also be albe "
         let sendMessageAction = SendMessageAction(from: alice, to: bob, message: message, shouldBeEncrypted: true)
         
         let readers = [alice, bob, clara]
@@ -70,6 +70,41 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
             XCTFail("Even though Diana should not be able to read the clear text message, she should still be able to reduce a DecryptedMessage from an Atom, having still encrypted payload")
         }
     }
+    
+    func testThatOnlySenderAndRecipientCanDecryptMessageByDefault() {
+        let alice = RadixIdentity()
+        let bob = RadixIdentity()
+        let clara = RadixIdentity()
+        
+        XCTAssertAllInequal(alice, bob, clara)
+        
+        let message = "Hey Bob, this is your friend Alice, only you and I should be able to read this"
+        let sendMessageAction = SendMessageAction(from: alice, to: bob, message: message, shouldBeEncrypted: true)
+        let mapper = DefaultSendMessageActionToParticleGroupsMapper()
+        let atom = mapper.particleGroups(for: sendMessageAction).wrapInAtom()
+        let reducer = DefaultDecryptMessageReducer()
+
+        func ensureCanBeDecrypted(by identity: RadixIdentity) {
+            XCTAssertNotThrows(
+                try reducer.decryptMessage(in: atom, using: identity)
+            ) { decryptedMessage in
+                XCTAssertEqual(decryptedMessage.encryptionState, .decrypted)
+                XCTAssertEqual(decryptedMessage.payload.toString(), message)
+            }
+        }
+        
+        ensureCanBeDecrypted(by: alice)
+        ensureCanBeDecrypted(by: bob)
+        
+        XCTAssertNotThrows(
+            try reducer.decryptMessage(in: atom, using: clara)
+        ) { decryptedMessage in
+            XCTAssertEqual(
+                decryptedMessage.encryptionState,
+                .cannotDecrypt(error: .keyMismatch))
+        }
+    }
+    
 }
 
 private let magic: Magic = 63799298
