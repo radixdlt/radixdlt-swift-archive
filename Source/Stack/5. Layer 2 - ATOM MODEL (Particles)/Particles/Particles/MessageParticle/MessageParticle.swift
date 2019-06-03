@@ -103,10 +103,13 @@ public extension MessageParticle {
     }
     
     func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        
+        let payloadOrEmpty = payload.isEmpty ? "" : payload.toBase64String()
+        
         return [
             EncodableKeyValue(key: .from, value: from),
             EncodableKeyValue(key: .to, value: to),
-            EncodableKeyValue(key: .payload, nonEmpty: payload, value: { $0.toBase64String() }),
+            EncodableKeyValue(key: .payload, value: payloadOrEmpty),
             EncodableKeyValue(key: .nonce, value: nonce),
             EncodableKeyValue(key: .metaData, nonEmpty: metaData)
         ].compactMap { $0 }
