@@ -74,7 +74,7 @@ class SendMessageTests: WebsocketTest {
             SendMessageAction(from: clara, to: bob, message: "Hey Bob, this is Clara.")
         )
  
-        // Then: I see that action fails with a validation error
+        // THEN: I see that action fails with a validation error
         request.blockingAssertThrows(
             error: NodeInteractionError.atomNotStored(state: .validationError),
             timeout: RxTimeInterval.enoughForPOW
