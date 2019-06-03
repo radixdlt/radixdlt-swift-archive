@@ -43,6 +43,13 @@ extension Observable where Element == Void {
 
 extension Observable {
     
+    func blockingAssertThrows<SpecificError>(
+        error expectedError: SpecificError,
+        timeout: RxTimeInterval? = 2
+    ) where SpecificError: Swift.Error, SpecificError: Equatable {
+        toBlocking(timeout: timeout).expectToThrow(error: expectedError)
+    }
+    
     func blockingTakeFirst(
         _ takeCount: Int = 1,
         timeout: RxTimeInterval? = 2,
@@ -174,6 +181,19 @@ private extension BlockingObservable {
         } catch {
             XCTFail("Unexpected error thrown: \(error), \(description)")
             return nil
+        }
+    }
+    
+    func expectToThrow<SpecificError>(
+        error expectedError: SpecificError
+        ) where SpecificError: Swift.Error, SpecificError: Equatable {
+        switch materialize() {
+        case .completed: return XCTFail("Expected error, but got `completed` instead")
+        case .failed(_, let anyError):
+        guard let error = anyError as? SpecificError else {
+            return XCTFail("Got error as expected, but it has the wrong type, got error: \(anyError)")
+        }
+        XCTAssertEqual(error, expectedError)
         }
     }
     

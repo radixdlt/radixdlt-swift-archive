@@ -136,8 +136,6 @@
 		E69E752522A1901000AC631B /* MetaDataOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752422A1901000AC631B /* MetaDataOwner.swift */; };
 		E69E752722A1903600AC631B /* DecryptMessageReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752622A1903600AC631B /* DecryptMessageReducer.swift */; };
 		E69E752922A1B39E00AC631B /* DecryptedMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752822A1B39E00AC631B /* DecryptedMessage.swift */; };
-		E69E752D22A1B49800AC631B /* UnencryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752C22A1B49800AC631B /* UnencryptedData.swift */; };
-		E69E752F22A1B4A500AC631B /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752E22A1B4A500AC631B /* Payload.swift */; };
 		E69E753222A1B9CD00AC631B /* MessageSending.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753122A1B9CD00AC631B /* MessageSending.swift */; };
 		E69E753422A294D800AC631B /* SendMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753322A294D800AC631B /* SendMessageTests.swift */; };
 		E69E753622A5203600AC631B /* PoWSignSubmitAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753522A5203600AC631B /* PoWSignSubmitAtom.swift */; };
@@ -581,8 +579,6 @@
 		E69E752422A1901000AC631B /* MetaDataOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataOwner.swift; sourceTree = "<group>"; };
 		E69E752622A1903600AC631B /* DecryptMessageReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptMessageReducer.swift; sourceTree = "<group>"; };
 		E69E752822A1B39E00AC631B /* DecryptedMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptedMessage.swift; sourceTree = "<group>"; };
-		E69E752C22A1B49800AC631B /* UnencryptedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnencryptedData.swift; sourceTree = "<group>"; };
-		E69E752E22A1B4A500AC631B /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
 		E69E753122A1B9CD00AC631B /* MessageSending.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSending.swift; sourceTree = "<group>"; };
 		E69E753322A294D800AC631B /* SendMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageTests.swift; sourceTree = "<group>"; };
 		E69E753522A5203600AC631B /* PoWSignSubmitAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoWSignSubmitAtom.swift; sourceTree = "<group>"; };
@@ -1668,8 +1664,6 @@
 			isa = PBXGroup;
 			children = (
 				E69E752822A1B39E00AC631B /* DecryptedMessage.swift */,
-				E69E752C22A1B49800AC631B /* UnencryptedData.swift */,
-				E69E752E22A1B4A500AC631B /* Payload.swift */,
 			);
 			path = DecruptedMessage;
 			sourceTree = "<group>";
@@ -3396,7 +3390,6 @@
 				E6E2795B2271CD1C0067D46E /* DSONPrefixedDataConvertible.swift in Sources */,
 				E640F63C225E21E600855256 /* Int+BitsPerByte.swift in Sources */,
 				E6E279472271CD1C0067D46E /* AtomModelDecodingError.swift in Sources */,
-				E69E752F22A1B4A500AC631B /* Payload.swift in Sources */,
 				E672564E228B43D1004631F1 /* RPCError.swift in Sources */,
 				E6E279782271CD1C0067D46E /* NonNegativeAmountConvertible.swift in Sources */,
 				E6E279362271CD1C0067D46E /* Mnemonic+Strength.swift in Sources */,
@@ -3455,7 +3448,6 @@
 				E6E2798D2271CD1C0067D46E /* DataConvertible+StringConversion.swift in Sources */,
 				E6474AF22267931A009C4FDC /* FullDuplexCommunicating+MakeRequest.swift in Sources */,
 				E6E279682271CD1C0067D46E /* DictionaryConvertible.swift in Sources */,
-				E69E752D22A1B49800AC631B /* UnencryptedData.swift in Sources */,
 				E69E753622A5203600AC631B /* PoWSignSubmitAtom.swift in Sources */,
 				E6725651228B43EB004631F1 /* RPCRequestError.swift in Sources */,
 				E6E279292271CD1C0067D46E /* AtomSigning.swift in Sources */,

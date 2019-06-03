@@ -12,6 +12,14 @@ public protocol DecryptMessageReducer: Throwing where Error == DecryptMessageRed
     func decryptMessage(in atom: Atom, using key: Signing) throws -> DecryptedMessage
 }
 
+public enum DecryptMessageReducerError: Swift.Error {
+    case zeroMessageParticlesFound(in: Atom)
+    // swiftlint:disable:next identifier_name
+    case zeroMessageParticlesWithoutEncryptorMetaDataFound
+    // swiftlint:disable:next identifier_name
+    case incorrectMetaDataValueForApplication(expected: String, butGot: String?)
+}
+
 public struct DefaultDecryptMessageReducer: DecryptMessageReducer {
     
     private let jsonDecoder: JSONDecoder
@@ -24,71 +32,135 @@ public struct DefaultDecryptMessageReducer: DecryptMessageReducer {
 
 public extension DefaultDecryptMessageReducer {
     
-    // swiftlint:disable:next function_body_length
     func decryptMessage(in atom: Atom, using key: Signing) throws -> DecryptedMessage {
-        guard
-            case let messageParticles = atom.messageParticles(),
-            !messageParticles.isEmpty else {
-                throw Error.zeroMessageParticlesFound(in: atom)
-        }
-    
-        guard
-            let bytesParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, notEquals: .encryptor)
-            else {
-                throw Error.zeroEncryptedMessageParticlesFound(in: atom)
-        }
-        
-        let mode: Payload.Mode = try {
-            guard let encryptorParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .encryptor) else {
-                return .noEncryption
-            }
-  
-            let encryptor = try Encryptor.fromData(encryptorParticle.payload)
-            return .encryption(encryptor: encryptor)
-        }()
-        
-        let timestamp = atom.metaData.timestamp
-        
-        let metaData: [MetaDataKey: Any] = [
-            MetaDataKey.encrypted: mode.isEncrypted,
-            .timestamp: timestamp,
-            "signatures": atom.signatures
-        ]
-        
-        let encryptedPayload = bytesParticle.payload
-        
-        let payload = Payload(
-            payload: encryptedPayload,
-            metaData: metaData,
-            mode: mode
-        )
-        
-        let sender = bytesParticle.from
-        let recipient = bytesParticle.to
-        
+        let context = try EncryptedMessageContext(atom: atom)
         do {
-            let unencryptedData = try key.decrypt(payload: payload)
-
-            return DecryptedMessage(
-                sender: sender,
-                recipient: recipient,
-                payload: unencryptedData.payload,
-                encryptionState: unencryptedData.encryptionState,
-                timestamp: timestamp
-            )
-        } catch let decryptionError as ECIES.DecryptionError {
-            return DecryptedMessage(
-                sender: sender,
-                recipient: recipient,
-                payload: encryptedPayload,
-                encryptionState: .cannotDecrypt(error: decryptionError),
-                timestamp: timestamp
-            )
+            return try context.decryptMessageIfNeeded(key: key)
         } catch { incorrectImplementation("Unhandled error: \(error)") }
     }
 }
 
-public enum DecryptMessageReducerError: Swift.Error {
-    case zeroMessageParticlesFound(in: Atom)
-    case zeroEncryptedMessageParticlesFound(in: Atom)
+private struct EncryptedMessageContext {
+    enum Payload {
+        case encrypted(data: Data, encryptedBy: Encryptor)
+        case wasNotEncrypted(Data)
+    }
+    
+    fileprivate let timestamp: Date
+    fileprivate let sender: Address
+    fileprivate let recipient: Address
+    fileprivate let payload: Payload
+    
+    init(
+        timestamp: Date,
+        sender: Address,
+        recipient: Address,
+        payload: Payload
+        ) {
+        self.timestamp = timestamp
+        self.sender = sender
+        self.recipient = recipient
+        self.payload = payload
+    }
+}
+
+// MARK: - From Atom
+private extension EncryptedMessageContext {
+    
+    init(atom: Atom) throws {
+        
+        guard case let messageParticles = atom.messageParticles(), !messageParticles.isEmpty else {
+            throw DecryptMessageReducerError.zeroMessageParticlesFound(in: atom)
+        }
+        
+        try self.init(messageParticles: messageParticles, timestamp: atom.metaData.timestamp)
+    }
+    
+    init(messageParticles: [MessageParticle], timestamp: Date) throws {
+        guard let messageParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .message) else {
+            throw DecryptMessageReducerError.zeroMessageParticlesWithoutEncryptorMetaDataFound
+        }
+        
+        let encryptorParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .encryptor)
+        
+        try self.init(messageParticle: messageParticle, encryptorParticle: encryptorParticle, timestamp: timestamp)
+    }
+    
+    init(messageParticle: MessageParticle, encryptorParticle: MessageParticle?, timestamp: Date) throws {
+
+        try EncryptedMessageContext.ensureMetaDataApplication(value: .message, in: messageParticle)
+        
+        let encryptor: Encryptor? = try {
+            guard let encryptorParticle = encryptorParticle else {
+                return nil
+            }
+    
+            try EncryptedMessageContext.ensureMetaDataApplication(value: .encryptor, in: encryptorParticle)
+            
+            return try Encryptor.fromData(encryptorParticle.payload)
+        }()
+        
+        let payload: Payload = {
+            if let encryptor = encryptor {
+                return .encrypted(data: messageParticle.payload, encryptedBy: encryptor)
+            } else {
+                return .wasNotEncrypted(messageParticle.payload)
+            }
+        }()
+        
+        self.init(
+            timestamp: timestamp,
+            sender: messageParticle.from,
+            recipient: messageParticle.to,
+            payload: payload
+        )
+    }
+    
+    static func ensureMetaDataApplication(value expected: MetaDataCommonValue, in particle: MessageParticle) throws {
+        guard particle.valueFor(key: .application, equals: expected) else {
+            throw DecryptMessageReducerError.incorrectMetaDataValueForApplication(
+                expected: expected.rawValue,
+                butGot: particle.metaData.valueFor(key: MetaDataKey.application)
+            )
+        }
+        // Everything is fine!
+    }
+    
+}
+
+// MARK: - Decrypt Message
+private extension EncryptedMessageContext {
+    
+    func decryptMessageIfNeeded(key: Signing) throws -> DecryptedMessage {
+        switch payload {
+        case .wasNotEncrypted(let data):
+            return DecryptedMessage(context: self, data: data, encryptionState: .wasNotEncrypted)
+        case .encrypted(let encryptedData, let encryptor):
+            do {
+                let decryptedData = try encryptor.decrypt(data: encryptedData, using: key)
+                return DecryptedMessage(context: self, data: decryptedData, encryptionState: .decrypted)
+            } catch let decryptionError as ECIES.DecryptionError {
+                return DecryptedMessage(context: self, data: encryptedData, encryptionState: .cannotDecrypt(error: decryptionError))
+            } catch let unhandledError {
+                throw unhandledError
+            }
+        }
+    }
+}
+
+// MARK: DecryptedMessage from Context
+private extension DecryptedMessage {
+    init(
+        context: EncryptedMessageContext,
+        data: Data,
+        encryptionState: DecryptedMessage.EncryptionState
+    ) {
+        self.init(
+            sender: context.sender,
+            recipient: context.recipient,
+            payload: data,
+            encryptionState: encryptionState,
+            timestamp: context.timestamp
+        )
+    }
 }

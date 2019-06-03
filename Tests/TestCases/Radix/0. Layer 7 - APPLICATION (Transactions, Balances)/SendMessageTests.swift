@@ -42,15 +42,11 @@ class SendMessageTests: WebsocketTest {
         let message = SendMessageAction(from: bob, to: clara, message: "This is Alice claiming to be Bob, trying to send a message to Clara")
         
         let request = application.sendMessage(message)
-        
-        switch request.toBlocking(timeout: RxTimeInterval.enoughForPOW).materialize() {
-        case .completed: XCTFail("expected error")
-        case .failed(_, let anyError):
-            guard let error = anyError as? NodeInteractionError else {
-                return XCTFail("Got error as expected, but it has the wrong type, got error: \(anyError)")
-            }
-            XCTAssertEqual(error, NodeInteractionError.atomNotStored(state: .validationError))
-        }
+ 
+        request.blockingAssertThrows(
+            error: NodeInteractionError.atomNotStored(state: .validationError),
+            timeout: RxTimeInterval.enoughForPOW
+        )
         
     }
 }

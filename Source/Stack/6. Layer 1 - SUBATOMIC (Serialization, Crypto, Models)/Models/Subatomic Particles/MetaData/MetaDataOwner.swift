@@ -12,6 +12,12 @@ public protocol MetaDataOwner {
     var metaData: MetaData { get }
 }
 
+public extension MetaDataOwner {
+    func valueFor(key: MetaDataKey, equals expectedValue: MetaDataCommonValue) -> Bool {
+        return metaData.valueFor(key: key) == expectedValue.rawValue
+    }
+}
+
 extension MessageParticle: MetaDataOwner {}
 extension ParticleGroup: MetaDataOwner {}
 
