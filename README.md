@@ -39,6 +39,10 @@ protocol AccountBalancing {
     func getBalances(for address: Address) -> Observable<AccountBalances>
     func getBalances(for address: Address, ofToken token: ResourceIdentifier) -> Observable<AccountBalanceOf>
 }
+
+public protocol MessageSending {
+    func sendMessage(_ message: SendMessageAction) -> Completable
+}
 ```
 
 ### Usage
@@ -96,6 +100,16 @@ bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rriA
 
 assert(alicesBalanceOfHerCoin.balance == 20, "Alice's balance should equal `20`")
 assert(bobsBalanceOfAliceCoin.balance == 10, "Bob's balance should equal `10`")
+
+```
+
+#### Send Message
+```swift
+// `application` is initialzed above using Alice's identity
+application.sendMessage("Hey Bob, this is Alice, this is super secret message", to: bob, encrypt: true)
+
+// But messagess are encrypted by default so we can just write:
+application.sendMessage("Hey Bob, this is Alice, this is super secret message", to: bob)
 
 ```
 
