@@ -79,7 +79,23 @@ class SendMessageTests: WebsocketTest {
             error: NodeInteractionError.atomNotStored(state: .validationError),
             timeout: RxTimeInterval.enoughForPOW
         )
+    }
+    
+    func testSendToThirdParties() {
+        // GIVEN: A RadidxApplicationClient
+        let clara = RadixIdentity()
+        let diana = RadixIdentity()
+        // WHEN: I send a non empty message with encryption
+        let request = application.sendMessage(
+            "Hey Bob! Clara and Diana can also decrypt this encrypted message",
+            to: bob,
+            thirdPartyReaders: [clara, diana]
+        )
         
+        XCTAssertTrue(
+            // THEN: I see that action completes successfully
+            request.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+        )
     }
 }
 

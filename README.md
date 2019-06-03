@@ -22,10 +22,10 @@ This is a **sneak peak** of the **coming** Application Layer API
 
 ### Radix Application
 
-The `RadixApplicationClient` is the API layer this library exposes to you as a client developer. It will allow you to create and transfer tokens and also to fetch balances for a certain Radix address.
+The `RadixApplicationClient` is the API layer this library exposes to you as a client developer. It allows you to create & transfer tokens, fetch balances and send messages.
 
 ```swift
-typealias RadixApplicationClient = Transacting & AccountBalancing & TokenCreating
+typealias RadixApplicationClient = Transacting & AccountBalancing & TokenCreating & MessageSending
 
 protocol TokenCreating {
     func create(token: CreateTokenAction) -> Single<ResourceIdentifier>
@@ -40,7 +40,7 @@ protocol AccountBalancing {
     func getBalances(for address: Address, ofToken token: ResourceIdentifier) -> Observable<AccountBalanceOf>
 }
 
-public protocol MessageSending {
+protocol MessageSending {
     func sendMessage(_ message: SendMessageAction) -> Completable
 }
 ```
@@ -106,11 +106,20 @@ assert(bobsBalanceOfAliceCoin.balance == 10, "Bob's balance should equal `10`")
 #### Send Message
 ```swift
 // `application` is initialzed above using Alice's identity
-application.sendMessage("Hey Bob, this is Alice, this is super secret message", to: bob, encrypt: true)
+application.sendMessage("Hi Bob, this is a secret message from Alice", to: bob, encrypt: true)
 
 // But messagess are encrypted by default so we can just write:
-application.sendMessage("Hey Bob, this is Alice, this is super secret message", to: bob)
+application.sendMessage("Hi Bob, this is a secret message from Alice", to: bob)
 
+// You can even include some third parties to be able to read the encrypted message
+let clara = RadixIdentity()
+let diana = RadixIdentity()
+
+application.sendMessage(
+    "Hi Bob! Clara and Diana can also decrypt this encrypted message", 
+    to: bob,
+    thirdPartyReaders: [clara, diana] 
+)
 ```
 
 ## Getting started
