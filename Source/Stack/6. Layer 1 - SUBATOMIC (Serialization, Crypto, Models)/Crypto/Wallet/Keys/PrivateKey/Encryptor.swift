@@ -8,23 +8,25 @@
 
 import Foundation
 
+/// Holder of an array of EncryptedPrivateKey's, called `protectors`.
+///
+/// These `protectors` have been created by encrypting the privatekey of a temporary "shared key",
+/// using the public key of the `readers`, those being able to decrypt some encrypted message.
+///
 public struct Encryptor {
     private let protectors: [EncryptedPrivateKey]
-    init(protectors: [EncryptedPrivateKey]) {
+    
+    internal init(protectors: [EncryptedPrivateKey]) {
         self.protectors = protectors
     }
 }
 
-// MARK: - Convenience
 public extension Encryptor {
-    init(sharedKey: KeyPair, readers: [PublicKey]) throws {
-        let encryptedPrivateKeys = try readers.map { try sharedKey.encryptPrivateKey(withPublicKey: $0) }
-        self.init(protectors: encryptedPrivateKeys)
-    }
-}
-
-public extension Encryptor {
-    func encodePayload(encoder: JSONEncoder = JSONEncoder(), encoding: String.Encoding = .default) throws -> Data {
+    
+    func encodePayload(
+        encoder: JSONEncoder = JSONEncoder(),
+        encoding: String.Encoding = .default
+    ) throws -> Data {
         
         let privateKeysStringArray: [String] = protectors.map { $0.base64 }
         
@@ -41,7 +43,10 @@ public extension Encryptor {
         return jsonStringWithNonEscapedForwardSlash.toData(encodingForced: encoding)
     }
     
-    static func fromData(_ encryptedData: Data, jsonDecoder: JSONDecoder = JSONDecoder()) throws -> Encryptor {
+    static func fromData(
+        _ encryptedData: Data,
+        jsonDecoder: JSONDecoder = JSONDecoder()
+    ) throws -> Encryptor {
 
         let protectorsAsStrings = try jsonDecoder.decode([String].self, from: encryptedData)
         

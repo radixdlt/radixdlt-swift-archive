@@ -10,6 +10,7 @@ import Foundation
 
 // swiftlint:disable colon opening_brace
 
+/// Holder encrypted private key data.
 public struct EncryptedPrivateKey:
     DataConvertible,
     DataInitializable

@@ -13,7 +13,10 @@ public struct DefaultSendMessageActionToParticleGroupsMapper: SendMessageActionT
     public typealias KeyGenerator = () -> KeyPair
     
     private let generateSharedKey: KeyGenerator
-    private let readers: KeysThatCanDecryptMessage
+    
+    /// PublicKey's that can decrypt the message
+    private let readersOfMessage: KeysThatCanDecryptMessage
+    
     private let encryptedPayloadJsonEncoder: JSONEncoder
     
     public init(
@@ -24,7 +27,7 @@ public struct DefaultSendMessageActionToParticleGroupsMapper: SendMessageActionT
     ) {
         self.generateSharedKey = sharedKeyGenerator
         self.encryptedPayloadJsonEncoder = encryptedPayloadJsonEncoder
-        self.readers = readers
+        self.readersOfMessage = readers
     }
 }
 public extension DefaultSendMessageActionToParticleGroupsMapper {
@@ -58,7 +61,11 @@ private extension DefaultSendMessageActionToParticleGroupsMapper {
         let payload: Data = !action.shouldBeEncrypted ? action.payload : {
             do {
                 let sharedKey = generateSharedKey()
-                let encryptor = try Encryptor(sharedKey: sharedKey, readers: readers(action))
+                let readers = readersOfMessage(action)
+                
+                let encryptedPrivateKeys = try readers.map { try sharedKey.encryptPrivateKey(withPublicKey: $0) }
+                let encryptor = Encryptor(protectors: encryptedPrivateKeys)
+                
                 let encryptorPayload = try encryptor.encodePayload(encoder: encryptedPayloadJsonEncoder)
                 
                 let messageEncryptorParticle = MessageParticle(
