@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 public final class ProofOfWorkWorker {
-    private let dispatchQueue = DispatchQueue(label: "pow", qos: .background)
+    private let dispatchQueue = DispatchQueue(label: "Radix.ProofOfWorkWorker", qos: .background)
     public init() {}
 }
 
@@ -21,33 +21,57 @@ public extension ProofOfWorkWorker {
         seed: Data,
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default
-    ) -> Observable<ProofOfWork> {
-            return Observable.create { observer in
-                
-                let calculatePOW = DispatchWorkItem { [weak self] in
-                    guard let self = self else { return }
-                    return self.work(
-                        seed: seed,
-                        magic: magic,
-                        numberOfLeadingZeros: numberOfLeadingZeros
-                    ) { resultOfWork in
-                        switch resultOfWork {
-                        case .failure(let error):
-                            observer.onError(error)
-                        case .success(let pow):
-                            log.info("POW done")
-                            observer.onNext(pow)
-                            observer.onCompleted()
-                        }
-                    }
-                }
-                self.dispatchQueue.async(execute: calculatePOW)
-                
-                return Disposables.create {
-                    log.error("POW cancelled")
+        ) -> Observable<ProofOfWork> {
+        
+        return Observable.create { observer in
+            
+            var powDone = false
+            let calculatePOW = self.prepareWork(seed: seed, magic: magic, observer: observer) {
+                powDone = true
+            }
+            self.dispatchQueue.async(execute: calculatePOW)
+            
+            return Disposables.create {
+                if !powDone {
+                    log.warning("POW cancelled")
                     calculatePOW.cancel()
                 }
             }
+        }
+    }
+}
+
+private extension ProofOfWorkWorker {
+    
+    func prepareWork<O>(
+        seed: Data,
+        magic: Magic,
+        numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
+        observer: O,
+        done: @escaping () -> Void
+    ) -> DispatchWorkItem
+        where
+    O: ObserverType, O.E == ProofOfWork {
+
+        return DispatchWorkItem { [weak self] in
+            guard let self = self else { return }
+            log.verbose("POW started")
+            return self.work(
+                seed: seed,
+                magic: magic,
+                numberOfLeadingZeros: numberOfLeadingZeros
+            ) { resultOfWork in
+                switch resultOfWork {
+                case .failure(let error):
+                    observer.onError(error)
+                case .success(let pow):
+                    done()
+                    log.verbose("POW done")
+                    observer.onNext(pow)
+                    observer.onCompleted()
+                }
+            }
+        }
     }
 }
 

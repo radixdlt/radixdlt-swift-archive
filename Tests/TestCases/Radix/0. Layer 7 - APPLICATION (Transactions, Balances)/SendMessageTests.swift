@@ -8,6 +8,8 @@
 
 import XCTest
 @testable import RadixSDK
+import RxSwift
+import RxTest
 
 class SendMessageTests: WebsocketTest {
     
@@ -22,7 +24,7 @@ class SendMessageTests: WebsocketTest {
         let request = application.sendMessage("Hey Bob, this is plain text", to: bob, encrypt: false)
         
         XCTAssertTrue(
-            request.blockingWasSuccessfull(timeout: 30)
+            request.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
         )
     }
     
@@ -31,7 +33,7 @@ class SendMessageTests: WebsocketTest {
         let request = application.sendMessage("Hey Bob, this is plain text", to: bob)
         
         XCTAssertTrue(
-            request.blockingWasSuccessfull(timeout: 30)
+            request.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
         )
     }
     
@@ -41,7 +43,7 @@ class SendMessageTests: WebsocketTest {
         
         let request = application.sendMessage(message)
         
-        switch request.toBlocking(timeout: 30).materialize() {
+        switch request.toBlocking(timeout: RxTimeInterval.enoughForPOW).materialize() {
         case .completed: XCTFail("expected error")
         case .failed(_, let anyError):
             guard let error = anyError as? NodeInteractionError else {
