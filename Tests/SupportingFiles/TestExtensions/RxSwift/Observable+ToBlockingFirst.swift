@@ -13,6 +13,34 @@ import RxTest
 import RxBlocking
 @testable import RadixSDK
 
+
+extension Observable where Element == Void {
+    
+    func blockingWasSuccessfull(
+        _ takeCount: Int = 1,
+        timeout: RxTimeInterval? = 2,
+        failOnTimeout: Bool = true,
+        failOnNil: Bool = true,
+        function: String = #function,
+        file: String = #file,
+        line: Int = #line
+        ) -> Bool {
+        
+        guard let _ = blockingTakeFirst(
+            takeCount,
+            timeout: timeout,
+            failOnTimeout: failOnTimeout,
+            failOnNil: failOnNil,
+            function: function,
+            file: file,
+            line: line
+            ) else {
+                return false
+        }
+        return true
+    }
+}
+
 extension Observable {
     
     func blockingTakeFirst(

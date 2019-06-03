@@ -41,7 +41,7 @@ class TransferTokensTests: WebsocketTest {
 
         // WHEN
         // Alice creates a new token with an initial supply of 30
-        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: nil) else { return }
+        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: 60) else { return }
         XCTAssertEqual(rri.name, "AC")
         guard let alicesBalanceOfHerCoin = application.getMyBalance(of: rri).blockingTakeFirst() else { return }
         guard let bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rri).blockingTakeFirst() else { return }
@@ -62,13 +62,11 @@ class TransferTokensTests: WebsocketTest {
         // Alice sends 10 coins to Bob
         let txAmount: PositiveAmount = 10
         let transfer = TransferTokenAction(from: alice, to: bob, amount: txAmount, tokenResourceIdentifier: rri)
+        
+        let request = application.transfer(tokens: transfer)
 
         XCTAssertTrue(
-            application.transfer(tokens: transfer).take(1)
-                .toBlocking(timeout: nil)
-                .materialize()
-                .wasSuccessful
-            ,
+            request.blockingWasSuccessfull(timeout: 60),
             "Should be able to send coins to Bob"
         )
      

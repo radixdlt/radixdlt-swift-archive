@@ -29,7 +29,14 @@ public struct AddressToSubscriberId: DictionaryConvertibleMutable, ExpressibleBy
     }
 }
 
-public final class DefaultNodeInteraction: NodeInteraction {
+// swiftlint:disable colon opening_brace
+
+public final class DefaultNodeInteraction:
+    NodeInteraction,
+    Throwing
+{
+
+    // swiftlint:enable colon opening_brace
 
     private let futureNodeConnection: Observable<NodeConnection>
     private let rpcClient: Observable<RPCClient>
@@ -141,12 +148,13 @@ extension ObservableType {
 }
 
 // MARK: - Error
+public enum NodeInteractionError: Swift.Error, Equatable {
+    case failedToStartSubscribeToNode
+    case atomNotStored(state: AtomSubscriptionUpdateSubmitAndSubscribe.State)
+}
+
 public extension DefaultNodeInteraction {
-    enum Error: Swift.Error {
-        case deallocated
-        case failedToStartSubscribeToNode
-        case atomNotStored(state: AtomSubscriptionUpdateSubmitAndSubscribe.State)
-    }
+    typealias Error = NodeInteractionError
 }
 
 // MARK: - Observable + AtomSubscription

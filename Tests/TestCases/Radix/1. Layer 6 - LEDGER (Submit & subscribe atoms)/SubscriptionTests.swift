@@ -42,21 +42,19 @@ class SubscriptionTests: WebsocketTest {
         // A node interaction ("Ledger")
         let nodeInteraction = DefaultNodeInteraction(NodeDiscoveryHardCoded.localhost)
         // and a subscription
-        XCTAssert(nodeInteraction.subscribe(to: xrdAddress)
-            .take(1)
-            .toBlocking(timeout: 1)
-            .materialize()
-            .wasSuccessful
+        XCTAssertTrue(
+            nodeInteraction.subscribe(to: xrdAddress)
+                .mapToVoid()
+                .blockingWasSuccessfull(timeout: 1)
         )
         
         
         // WHEN
         // I cancel the subscription
-        XCTAssert(nodeInteraction.unsubscribe(from: xrdAddress)
-            .take(1)
-            .toBlocking(timeout: 1)
-            .materialize()
-            .wasSuccessful
+        XCTAssertTrue(
+            nodeInteraction.unsubscribe(from: xrdAddress)
+                .mapToVoid()
+                .blockingWasSuccessfull(timeout: 1)
         )
     }
     
@@ -65,12 +63,11 @@ class SubscriptionTests: WebsocketTest {
         // A node
         guard let rpcClient = makeRpcClient() else { return }
         let subscriberId = SubscriberId(validated: "666")
-        // and an existing Subscription
-        XCTAssert( rpcClient.subscribe(to: xrdAddress, subscriberId: subscriberId)
-            .take(1)
-            .toBlocking(timeout: 1)
-            .materialize()
-            .wasSuccessful
+        // and an existing Subscription        
+        XCTAssertTrue(
+            rpcClient.subscribe(to: xrdAddress, subscriberId: subscriberId)
+                .mapToVoid()
+                .blockingWasSuccessfull(timeout: 1)
         )
         
         XCTAssertEqual(

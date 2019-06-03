@@ -138,6 +138,9 @@
 		E69E752922A1B39E00AC631B /* DecryptedMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752822A1B39E00AC631B /* DecryptedMessage.swift */; };
 		E69E752D22A1B49800AC631B /* UnencryptedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752C22A1B49800AC631B /* UnencryptedData.swift */; };
 		E69E752F22A1B4A500AC631B /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752E22A1B4A500AC631B /* Payload.swift */; };
+		E69E753222A1B9CD00AC631B /* MessageSending.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753122A1B9CD00AC631B /* MessageSending.swift */; };
+		E69E753422A294D800AC631B /* SendMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753322A294D800AC631B /* SendMessageTests.swift */; };
+		E69E753622A5203600AC631B /* PoWSignSubmitAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753522A5203600AC631B /* PoWSignSubmitAtom.swift */; };
 		E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB8B221C0717006C5CA8 /* DateFormatter_Extension.swift */; };
 		E6A4ABC6221EDD4A006C5CA8 /* BigUInt_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABC5221EDD4A006C5CA8 /* BigUInt_Extension.swift */; };
 		E6A507D5224E14D500128123 /* AtomSubscriptionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507D4224E14D500128123 /* AtomSubscriptionRequest.swift */; };
@@ -580,6 +583,9 @@
 		E69E752822A1B39E00AC631B /* DecryptedMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptedMessage.swift; sourceTree = "<group>"; };
 		E69E752C22A1B49800AC631B /* UnencryptedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnencryptedData.swift; sourceTree = "<group>"; };
 		E69E752E22A1B4A500AC631B /* Payload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
+		E69E753122A1B9CD00AC631B /* MessageSending.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSending.swift; sourceTree = "<group>"; };
+		E69E753322A294D800AC631B /* SendMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageTests.swift; sourceTree = "<group>"; };
+		E69E753522A5203600AC631B /* PoWSignSubmitAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoWSignSubmitAtom.swift; sourceTree = "<group>"; };
 		E6A4AB8B221C0717006C5CA8 /* DateFormatter_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter_Extension.swift; sourceTree = "<group>"; };
 		E6A4ABB9221EA120006C5CA8 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		E6A4ABBA221EA120006C5CA8 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
@@ -1428,12 +1434,14 @@
 		E689DB87225F77E500340CF3 /* 0. Layer 7 - APPLICATION (Transactions, Balances) */ = {
 			isa = PBXGroup;
 			children = (
+				E69E753022A1B9C200AC631B /* MessageSending */,
 				E6725649228AEBC2004631F1 /* TokenCreating */,
 				E696AAD4226DE8DF00D19ED6 /* NodeInteracting */,
 				E696AACE226DE6B900D19ED6 /* Transacting */,
 				E689DB81225F653F00340CF3 /* RadixApplicationClient */,
 				E6A507EF224E69F400128123 /* AccountBalancing */,
 				E6040E612240F87C0065AEC2 /* RadixIdentity */,
+				E69E753522A5203600AC631B /* PoWSignSubmitAtom.swift */,
 			);
 			path = "0. Layer 7 - APPLICATION (Transactions, Balances)";
 			sourceTree = "<group>";
@@ -1672,6 +1680,14 @@
 				E69E752A22A1B47900AC631B /* DecruptedMessage */,
 			);
 			path = ResultOfReducer;
+			sourceTree = "<group>";
+		};
+		E69E753022A1B9C200AC631B /* MessageSending */ = {
+			isa = PBXGroup;
+			children = (
+				E69E753122A1B9CD00AC631B /* MessageSending.swift */,
+			);
+			path = MessageSending;
 			sourceTree = "<group>";
 		};
 		E6A4AB89221C0705006C5CA8 /* Date */ = {
@@ -2555,6 +2571,7 @@
 			children = (
 				E6F548382277022500EE6311 /* GetTokenBalanceTests.swift */,
 				E6725647228AE98F004631F1 /* TransferTokensTests.swift */,
+				E69E753322A294D800AC631B /* SendMessageTests.swift */,
 			);
 			path = "0. Layer 7 - APPLICATION (Transactions, Balances)";
 			sourceTree = "<group>";
@@ -3433,11 +3450,13 @@
 				E6E2797C2271CD1C0067D46E /* TokenTransition.swift in Sources */,
 				E6E279212271CD1C0067D46E /* ECIES.swift in Sources */,
 				E6FF7E48229C1D1C00BC22EA /* Shards.swift in Sources */,
+				E69E753222A1B9CD00AC631B /* MessageSending.swift in Sources */,
 				E6A508A3224E713F00128123 /* TransferrableTokensParticle.swift in Sources */,
 				E6E2798D2271CD1C0067D46E /* DataConvertible+StringConversion.swift in Sources */,
 				E6474AF22267931A009C4FDC /* FullDuplexCommunicating+MakeRequest.swift in Sources */,
 				E6E279682271CD1C0067D46E /* DictionaryConvertible.swift in Sources */,
 				E69E752D22A1B49800AC631B /* UnencryptedData.swift in Sources */,
+				E69E753622A5203600AC631B /* PoWSignSubmitAtom.swift in Sources */,
 				E6725651228B43EB004631F1 /* RPCRequestError.swift in Sources */,
 				E6E279292271CD1C0067D46E /* AtomSigning.swift in Sources */,
 				E6474AE222663E23009C4FDC /* SubscriberId.swift in Sources */,
@@ -3505,6 +3524,7 @@
 				E6474AAD2265D4DC009C4FDC /* Observable+ToBlockingFirst.swift in Sources */,
 				E6E27A322271CE250067D46E /* QuestionMarkInSymbolTests.swift in Sources */,
 				E6E27A452271CE250067D46E /* AtomTooBigDSONEncodingTests.swift in Sources */,
+				E69E753422A294D800AC631B /* SendMessageTests.swift in Sources */,
 				E6E27A342271CE250067D46E /* GranularityNegativeTests.swift in Sources */,
 				E6E27A1F2271CE250067D46E /* ECIESDecryptMessageTests.swift in Sources */,
 				E6E27A472271CE250067D46E /* DsonEncodingTokenDefinitionParticleTests.swift in Sources */,

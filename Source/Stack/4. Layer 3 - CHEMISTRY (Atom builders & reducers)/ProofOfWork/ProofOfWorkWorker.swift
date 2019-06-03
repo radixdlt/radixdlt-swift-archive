@@ -44,6 +44,7 @@ public extension ProofOfWorkWorker {
                 self.dispatchQueue.async(execute: calculatePOW)
                 
                 return Disposables.create {
+                    log.error("POW cancelled")
                     calculatePOW.cancel()
                 }
             }
