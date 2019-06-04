@@ -16,7 +16,7 @@
 - [License](#license)
 
 ## Features
-⚠️👷🏾‍♀️ The Swift library is not production ready yet, its under construction 🚜⚠️  
+⚠️👷🏾‍♀️ The Swift library is not production ready yet, it's under construction 🚜⚠️  
 
 This is a **sneak peak** of the **coming** Application Layer API
 
