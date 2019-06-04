@@ -2,7 +2,7 @@
 
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**radixdlt-swift** is a Swift Client library for interacting with a [Radix](https://www.radixdlt.com) Distributed Ledger.
+**radixdlt-swift** is a Swift Client library for interacting with a [Radix](https://www.radixdlt.com) Distributed Ledger, written in ***Swift 5***.
 
 ## Table of contents
 
@@ -16,7 +16,7 @@
 - [License](#license)
 
 ## Features
-⚠️👷🏾‍♀️ The Swift library is not production ready yet, its under construction 🚜⚠️  
+⚠️👷🏾‍♀️ The Swift library is not production ready yet, it's under construction 🚜⚠️  
 
 This is a **sneak peak** of the **coming** Application Layer API
 
