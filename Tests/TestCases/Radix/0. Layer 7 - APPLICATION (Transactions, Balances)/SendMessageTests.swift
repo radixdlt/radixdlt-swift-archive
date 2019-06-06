@@ -22,7 +22,7 @@ class SendMessageTests: WebsocketTest {
     func testSendNonEmptyPlainText() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message without encryption
-        let request = application.sendMessage("Hey Bob, this is plain text", to: bob, encrypt: false)
+        let request = application.sendMessage("Hey Bob, this is plain text", to: bob, encryption: .plainText)
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
@@ -45,7 +45,7 @@ class SendMessageTests: WebsocketTest {
     func testSendNonEmptyEncrypted() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message with encryption
-        let request = application.sendMessage("Hey Bob, this is super secret message", to: bob, encrypt: true)
+        let request = application.sendMessage("Hey Bob, this is super secret message", to: bob, encryption: .encrypted)
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
@@ -57,7 +57,7 @@ class SendMessageTests: WebsocketTest {
     func testSendEmptyEncrypted() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send an empty message with encryption
-        let request = application.sendMessage("", to: bob, encrypt: true)
+        let request = application.sendMessage("", to: bob, encryption: .encrypted)
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
@@ -89,7 +89,7 @@ class SendMessageTests: WebsocketTest {
         let request = application.sendMessage(
             "Hey Bob! Clara and Diana can also decrypt this encrypted message",
             to: bob,
-            thirdPartyReaders: [clara, diana]
+            encryption: .encrypt(cc: [clara, diana])
         )
         
         XCTAssertTrue(
