@@ -21,7 +21,7 @@ class DecodePointTests: XCTestCase {
             let publicKeyCompressed = PublicKey(private: privateKeyFromCompressed)
             XCTAssertEqual(publicKeyCompressed.hex, "03" + expectedX)
             
-            let decodedFromCompressed = EllipticCurvePoint.decodePointFromPublicKey(publicKeyCompressed)
+            let decodedFromCompressed = try EllipticCurvePoint.decodePointFromPublicKey(publicKeyCompressed)
             XCTAssertEqual(decodedFromCompressed.x.hex, expectedX)
             XCTAssertEqual(decodedFromCompressed.y.hex, expectedY)
             

@@ -15,6 +15,13 @@ public extension String.Encoding {
 }
 
 public extension Signing {
+    
+    func decrypt(_ data: DataConvertible, sharedKey: EncryptedPrivateKey) throws -> Data {
+        let privateKeyData = try decrypt(sharedKey.asData)
+        let sharedPrivateKey = try PrivateKey(data: privateKeyData)
+        return try sharedPrivateKey.decrypt(data)
+    }
+    
     func decrypt(_ data: DataConvertible) throws -> Data {
         return try ECIES.decrypt(data: data, using: self)
     }

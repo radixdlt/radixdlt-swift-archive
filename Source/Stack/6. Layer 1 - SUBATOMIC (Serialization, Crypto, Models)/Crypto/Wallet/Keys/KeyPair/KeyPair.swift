@@ -35,3 +35,11 @@ public extension KeyPair {
         self.init(private: PrivateKey())
     }
 }
+
+// MARK: - Public
+public extension KeyPair {
+    func encryptPrivateKey(withPublicKey publicKeyUsedToEncrypt: PublicKey) throws -> EncryptedPrivateKey {
+        let encryptedPrivateKeyData = try publicKeyUsedToEncrypt.encrypt(privateKey.asData)
+        return EncryptedPrivateKey(data: encryptedPrivateKeyData)
+    }
+}

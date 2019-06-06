@@ -8,13 +8,14 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// A MetaData type that enforces the occurence of one key-value pair for `timestamp`
 public struct ChronoMetaData:
     MetaDataConvertible,
-    ValueValidating {
-// swiftlint:enable colon
+    ValueValidating
+{
+    // swiftlint:enable colon opening_brace
     
     public let dictionary: [Key: Value]
     

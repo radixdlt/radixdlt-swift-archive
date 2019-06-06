@@ -8,7 +8,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// Shared protocol for MetaData and ChronoMetaData, some dictionary having `MetaDataKey` as key.
 public protocol MetaDataConvertible:
@@ -17,9 +17,14 @@ public protocol MetaDataConvertible:
     Equatable
 where
     Key == MetaDataKey,
-    Value == String {}
+    Value == String
+{
+    // swiftlint:enable colon opening_brace
+}
 
-// swiftlint:enable colon
+public enum DictionaryError<Key, Value>: Swift.Error {
+    case duplicate(values: [Value], forKey: Key)
+}
 
 public extension MetaDataConvertible {
     var timestampString: String {
@@ -39,7 +44,7 @@ public extension MetaDataConvertible {
     static func timestamp(_ date: Date) -> Self {
         return [.timestamp: TimeConverter.stringFrom(date: date)]
     }
-    
+        
     static var timeNow: Self {
         return .timestamp(Date())
     }

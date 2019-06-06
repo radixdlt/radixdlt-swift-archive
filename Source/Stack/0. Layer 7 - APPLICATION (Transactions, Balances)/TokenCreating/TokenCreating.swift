@@ -30,24 +30,7 @@ where
         let actionToParticleGroupsMapper = DefaultCreateTokenActionToParticleGroupsMapper()
         
         let atom = actionToParticleGroupsMapper.particleGroups(for: createToken).wrapInAtom()
-        
         let powWorker = ProofOfWorkWorker()
-        
-        // Prepare signed Atom
-        let signedAtomObservable = powWorker.work(atom: atom, magic: self.magic)
-            .map { pow -> ProofOfWorkedAtom in
-                try ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
-            }.map { proofOfWorkAtom -> UnsignedAtom in
-                try UnsignedAtom(atomWithPow: proofOfWorkAtom)
-            }.map { unsignedAtom -> SignedAtom in
-                try self.sign(atom: unsignedAtom)
-            }
-        
-        // Submit atom
-        return signedAtomObservable.flatMap { (signedAtom: SignedAtom) -> SingleWanted<ResourceIdentifier> in
-            self.nodeSubmitter.submit(atom: signedAtom).asObservable().map { _ in
-                return createToken.identifier
-            }
-        }
+        return performProvableWorkThenSignAndSubmit(atom: atom, powWorker: powWorker).map { createToken.identifier }
     }
 }

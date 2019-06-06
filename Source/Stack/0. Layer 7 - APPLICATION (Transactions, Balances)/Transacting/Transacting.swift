@@ -32,31 +32,24 @@ where
 {
     // swiftlint:enable opening_brace
     
-    func transfer(tokens transferTokenAction: TransferTokenAction) -> CompletableWanted {
+    func transfer(tokens transfer: TransferTokenAction) -> CompletableWanted {
         
-        log.info("\(transferTokenAction.sender.address) sends \(transferTokenAction.amount) of \(transferTokenAction.tokenResourceIdentifier) to \(transferTokenAction.recipient.address)")
+        log.info("\(transfer.sender.address) sends \(transfer.amount) of \(transfer.tokenResourceIdentifier) to \(transfer.recipient.address)")
         
         let actionToParticleGroupsMapper = DefaultTransferTokenActionToParticleGroupsMapper()
         
-        let rri = transferTokenAction.tokenResourceIdentifier
+        let rri = transfer.tokenResourceIdentifier
+        
         let powWorker = ProofOfWorkWorker()
-        return getBalances(for: transferTokenAction.sender, ofToken: rri)
-            .take(1)
-            .map { $0.balance }
-            .map { balance -> ParticleGroups in
-                try actionToParticleGroupsMapper.particleGroups(for: transferTokenAction, currentBalance: balance)
-            }.map { particleGroups -> Atom in
-                particleGroups.wrapInAtom()
-            }.flatMapLatest { atom -> Observable<ProofOfWorkedAtom> in
-                powWorker.work(atom: atom, magic: self.magic).map {
-                    try ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: $0)
-                }
-            }.map { proofOfWorkAtom -> UnsignedAtom in
-                try UnsignedAtom(atomWithPow: proofOfWorkAtom)
-            }.map { unsignedAtom -> SignedAtom in
-                try self.sign(atom: unsignedAtom)
-            }.flatMapLatest { (signedAtom: SignedAtom) -> CompletableWanted in
-                self.nodeSubmitter.submit(atom: signedAtom)
-        }
+        
+        // Get latest Balance
+        return getBalances(for: transfer.sender, ofToken: rri)
+            .take(1).map { $0.balance }
+            // Action => ParticleGroups
+            .map { try actionToParticleGroupsMapper.particleGroups(for: transfer, currentBalance: $0) }
+            // ParticleGroups => Atom
+            .map { $0.wrapInAtom() }
+            // Atom => ProofOfWorkedAtom => SignedAtom => Submit to Node
+            .flatMapLatest { self.performProvableWorkThenSignAndSubmit(atom: $0, powWorker: powWorker) }
     }
 }

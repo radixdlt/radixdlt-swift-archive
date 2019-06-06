@@ -22,6 +22,8 @@ func XCTAssertNotThrowsAndEqual<Result>(
     XCTAssertEqual(result, expectedValue, message)
 }
 
+
+@discardableResult
 func XCTAssertNotThrows<Result>(_ codeThatShouldNotThrow: @autoclosure () throws -> Result) -> Result? {
     do {
         return try codeThatShouldNotThrow()
@@ -30,6 +32,15 @@ func XCTAssertNotThrows<Result>(_ codeThatShouldNotThrow: @autoclosure () throws
         return nil
     }
 }
+
+func XCTAssertNotThrows<Result>(
+    _ codeThatShouldNotThrow: @autoclosure () throws -> Result,
+    innerAssert: (Result) -> Void
+) {
+    guard let result = XCTAssertNotThrows(try codeThatShouldNotThrow()) else { return }
+    innerAssert(result)
+}
+
 
 func XCTAssertThrowsSpecificError<ReturnValue, ExpectedError>(
     _ codeThatThrows: @autoclosure () throws -> ReturnValue,
@@ -84,13 +95,26 @@ func XCTAssertNotContains(_ haystack: String?, _ needle: String?) {
     XCTAssertFalse(haystack.contains(needle))
 }
 
+
 func XCTAssertAllEqual<Item>(_ items: Item...) where Item: Equatable {
+    forAll(items) {
+        XCTAssertEqual($0, $1)
+    }
+}
+
+func XCTAssertAllInequal<Item>(_ items: Item...) where Item: Equatable {
+    forAll(items) {
+        XCTAssertNotEqual($0, $1)
+    }
+}
+
+private func forAll<Item>(_ items: [Item], compareElemenets: (Item, Item) -> Void) where Item: Equatable {
     var lastIndex: Array<Item>.Index?
     for index in items.indices {
         defer { lastIndex = index }
         guard let last = lastIndex else { continue }
         let fooElement: Item = items[last]
         let barElement: Item = items[index]
-        XCTAssertEqual(fooElement, barElement)
+        compareElemenets(fooElement, barElement)
     }
 }

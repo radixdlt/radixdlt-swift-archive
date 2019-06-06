@@ -63,7 +63,7 @@ public extension Atomic where Self: RadixHashable {
     }
     
     var signable: Signable {
-        return Message(hash: radixHash)
+        return SignableMessage(hash: radixHash)
     }
 }
 

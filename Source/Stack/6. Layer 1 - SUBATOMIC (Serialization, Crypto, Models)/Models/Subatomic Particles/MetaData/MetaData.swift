@@ -8,11 +8,18 @@
 
 import Foundation
 
-public struct MetaData: MetaDataConvertible {
-    public typealias Key = MetaDataKey
-    public typealias Value = String
+public struct MetaData: MetaDataConvertible, ArrayInitializable {
+
     public let dictionary: [Key: Value]
+    
     public init(dictionary: Map) {
         self.dictionary = dictionary
     }
+}
+
+// MARK: - MetaDataConvertible
+public extension MetaData {
+    typealias Element = (key: Key, value: Value)
+    typealias Key = MetaDataKey
+    typealias Value = String
 }
