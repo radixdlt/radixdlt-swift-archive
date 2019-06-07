@@ -18,29 +18,18 @@ class TransferTokensTests: WebsocketTest {
         super.setUp()
         continueAfterFailure = false
     }
-    
-    func testCreateTokenThenTransferToBob() {
-        // GIVEN
-        // Identities: Alice and Bob
-        // and
-        // an Application Layer using Alice identity
+
+    // AC1
+    func testTransferTokenWithGranularityOf1() {
+        // GIVEN: a RadixApplicationClient and identities Alice and Bob
         let alice = RadixIdentity()
         let bob = RadixIdentity()
-        print("🙋🏾‍♀️ Alice: \(alice.address)")
-        print("🙋🏼‍♂️ Bob: \(bob.address)")
         let application = DefaultRadixApplicationClient(node: .localhost, identity: alice, magic: magic)
  
-        let createToken = CreateTokenAction(
-            creator: alice.address,
-            name: "Alice Coin",
-            symbol: "AC",
-            description: "Best coin",
-            supplyType: .fixed,
-            initialSupply: 30
-        )
+        let createToken = createTokenAction(identity: alice, supply: .fixed(to: 30))
+        
+        XCTAssertEqual(createToken.granularity, 1)
 
-        // WHEN
-        // Alice creates a new token with an initial supply of 30
         guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: RxTimeInterval.enoughForPOW) else { return }
         XCTAssertEqual(rri.name, "AC")
         guard let alicesBalanceOfHerCoin = application.getMyBalance(of: rri).blockingTakeFirst() else { return }
@@ -58,25 +47,21 @@ class TransferTokensTests: WebsocketTest {
             "Bob's balance should equal 0"
         )
         
-        // AND WHEN
-        // Alice sends 10 coins to Bob
+        // WHEN: Alice transfer tokens she owns, to Bob
         let txAmount: PositiveAmount = 10
         let transfer = TransferTokenAction(from: alice, to: bob, amount: txAmount, tokenResourceIdentifier: rri)
         
         let request = application.transfer(tokens: transfer)
 
+        // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
             request.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW),
             "Should be able to send coins to Bob"
         )
-     
-        print("💸: 🙋🏾‍♀️→ \(txAmount)💰 →🙋🏼‍♂️")
 
-        // ...and we update the balances
         guard let alicesBalanceOfHerCoinAfterTx = application.getMyBalance(of: rri).blockingTakeLast() else { return }
         guard let bobsBalanceOfAliceCoinAfterTx = application.getBalances(for: bob.address, ofToken: rri).blockingTakeLast() else { return }
 
-        // THEN
         XCTAssertEqual(
             alicesBalanceOfHerCoinAfterTx.balance.amount,
             20,
@@ -92,6 +77,158 @@ class TransferTokensTests: WebsocketTest {
         
     }
     
+    // AC2
+    func testTokenNotOwned() {
+        // GIVEN: a RadixApplicationClient and identities Alice and Bob
+        let alice = RadixIdentity()
+        let bob = RadixIdentity()
+        let application = DefaultRadixApplicationClient(node: .localhost, identity: alice, magic: magic)
+        
+        // WHEN: Alice tries to transfer tokens of some type she does not own, to Bob
+        let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: ResourceIdentifier(address: alice.address, name: "notOwned"))
+        
+        // THEN:  I see that action fails with error `InsufficientFunds`
+        application.transfer(tokens: transfer).blockingAssertThrows(
+            error: TransferError.insufficientFunds
+        )
+    }
+    
+    // AC3
+    func testInsufficientFunds() {
+        // GIVEN: a RadixApplicationClient and identities Alice and Bob
+        let alice = RadixIdentity()
+        let bob = RadixIdentity()
+        let application = DefaultRadixApplicationClient(node: .localhost, identity: alice, magic: magic)
+        
+        let createToken = createTokenAction(identity: alice, supply: .fixed(to: 30))
+        
+        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: RxTimeInterval.enoughForPOW) else { return }
+        XCTAssertEqual(rri.name, "AC")
+        guard let alicesBalanceOfHerCoin = application.getMyBalance(of: rri).blockingTakeFirst() else { return }
+        
+        XCTAssertEqual(
+            alicesBalanceOfHerCoin.balance.amount,
+            30,
+            "Alice's balance should equal `30` (initialSupply)"
+        )
+        
+        // WHEN: Alice tries to transfer tokens of some type she does not own, to Bob
+        let transfer = TransferTokenAction(from: alice, to: bob, amount: 50, tokenResourceIdentifier: rri)
+        
+        // THEN:  I see that action fails with error `InsufficientFunds`
+        application.transfer(tokens: transfer).blockingAssertThrows(
+            error: TransferError.insufficientFunds
+        )
+    }
+    
+    // AC 4
+    func testTransferTokenWithGranularityOf5() {
+        // GIVEN: a RadixApplicationClient and identities Alice and Bob
+        let alice = RadixIdentity()
+        let bob = RadixIdentity()
+        let application = DefaultRadixApplicationClient(node: .localhost, identity: alice, magic: magic)
+        
+        let createToken = createTokenAction(identity: alice, supply: .fixed(to: 30), granularity: 5)
+        
+        XCTAssertEqual(createToken.granularity, 5)
+        
+        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: RxTimeInterval.enoughForPOW) else { return }
+        XCTAssertEqual(rri.name, "AC")
+        guard let alicesBalanceOfHerCoin = application.getMyBalance(of: rri).blockingTakeFirst() else { return }
+        guard let bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rri).blockingTakeFirst() else { return }
+        
+        XCTAssertEqual(
+            alicesBalanceOfHerCoin.balance.amount,
+            30,
+            "Alice's balance should equal `30` (initialSupply)"
+        )
+        XCTAssertEqual(
+            bobsBalanceOfAliceCoin.balance.amount,
+            0,
+            "Bob's balance should equal 0"
+        )
+        
+        // WHEN: Alice transfer 20 (granuliaryt of 10) tokens she owns, to Bob
+        let txAmount: PositiveAmount = 10
+        let transfer = TransferTokenAction(from: alice, to: bob, amount: txAmount, tokenResourceIdentifier: rri)
+        
+        let request = application.transfer(tokens: transfer)
+        
+        // THEN:  I see that the transfer actions completes successfully
+        XCTAssertTrue(
+            request.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW),
+            "Should be able to send coins to Bob"
+        )
+        
+        guard let alicesBalanceOfHerCoinAfterTx = application.getMyBalance(of: rri).blockingTakeLast() else { return }
+        guard let bobsBalanceOfAliceCoinAfterTx = application.getBalances(for: bob.address, ofToken: rri).blockingTakeLast() else { return }
+        
+        XCTAssertEqual(
+            alicesBalanceOfHerCoinAfterTx.balance.amount,
+            20,
+            "Alice's balance should equal `20`"
+        )
+        
+        XCTAssertEqual(
+            bobsBalanceOfAliceCoinAfterTx.balance.amount,
+            10,
+            "Bob's balance should equal 10"
+        )
+        
+        
+    }
+    
+    // AC5
+    func testIncorrectGranularityOf5() {
+        // GIVEN: a RadixApplicationClient and identities Alice and Bob
+        let alice = RadixIdentity()
+        let bob = RadixIdentity()
+        let application = DefaultRadixApplicationClient(node: .localhost, identity: alice, magic: magic)
+        
+        let createToken = createTokenAction(identity: alice, supply: .fixed(to: 30), granularity: 5)
+        
+        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: RxTimeInterval.enoughForPOW) else { return }
+        XCTAssertEqual(rri.name, "AC")
+        guard let alicesBalanceOfHerCoin = application.getMyBalance(of: rri).blockingTakeFirst() else { return }
+        
+        XCTAssertEqual(
+            alicesBalanceOfHerCoin.balance.amount,
+            30,
+            "Alice's balance should equal `30` (initialSupply)"
+        )
+        
+        guard let bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rri).blockingTakeLast() else { return }
+        
+        XCTAssertEqual(
+            bobsBalanceOfAliceCoin.balance.amount,
+            0,
+            "Bob's balance should be 0"
+        )
+        
+        // AND WHEN: Alice tries to transfer 7 tokens having granularity 5, to Bob
+        let transfer = TransferTokenAction(from: alice, to: bob, amount: 7, tokenResourceIdentifier: rri)
+        let request = application.transfer(tokens: transfer)
+        
+        // THEN:   I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
+        request.blockingAssertThrows(
+            error: TransferError.amountNotMultipleOfGranularity,
+            timeout: RxTimeInterval.enoughForPOW
+        )
+    }
+    
+}
+
+private extension TransferTokensTests {
+    func createTokenAction(identity: RadixIdentity, supply: CreateTokenAction.InitialSupply, granularity: Granularity = .default) -> CreateTokenAction {
+        return try! CreateTokenAction(
+            creator: identity.address,
+            name: "Alice Coin",
+            symbol: "AC",
+            description: "Best coin",
+            supply: supply,
+            granularity: granularity
+        )
+    }
 }
 
 private let magic: Magic = 63799298

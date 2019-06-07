@@ -22,7 +22,7 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
     }
     
     
-    private func assertCorrectnessTokenCreationGroup(_ group: ParticleGroup) {
+    private func assertCorrectnessTokenCreationGroup(_ group: ParticleGroup, testPermissions: Bool = true) {
         let spunParticles = group.spunParticles
         XCTAssertEqual(spunParticles.count, 3)
         guard
@@ -51,11 +51,13 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
             unallocatedTokensParticle.granularity
         )
         
-        XCTAssertAllEqual(
-            [.mint: .tokenCreationOnly, .burn: .none],
-            tokenDefinitionParticle.permissions,
-            unallocatedTokensParticle.permissions
-        )
+        if testPermissions {
+            XCTAssertAllEqual(
+                [.mint: .tokenCreationOnly, .burn: .none],
+                tokenDefinitionParticle.permissions,
+                unallocatedTokensParticle.permissions
+            )
+        }
         
         XCTAssertEqual(
             unallocatedTokensParticle.amount,
@@ -116,29 +118,28 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
     
     func testTokenCreationWithoutInitialSupply() {
         
-        let createTokenAction = CreateTokenAction(
+        let createTokenAction = try! CreateTokenAction(
             creator: address,
             name: "Cyon",
             symbol: "CCC",
             description: "Cyon Crypto Coin is the worst shit coin",
-            supplyType: .fixed
+            supply: .mutable(initial: 0)
         )
         
         let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
         XCTAssertEqual(particleGroups.count, 1)
         guard let group = particleGroups.first else { return }
         
-        assertCorrectnessTokenCreationGroup(group)
+        assertCorrectnessTokenCreationGroup(group, testPermissions: false)
     }
     
-    func doTestTokenCreation(initialSupply: NonNegativeAmount) {
-        let createTokenAction = CreateTokenAction(
+    func doTestTokenCreation(initialSupply: PositiveAmount) {
+        let createTokenAction = try! CreateTokenAction(
             creator: address,
             name: "Cyon",
             symbol: "CCC",
             description: "Cyon Crypto Coin is the worst shit coin",
-            supplyType: .fixed,
-            initialSupply: initialSupply
+            supply: .fixed(to: initialSupply)
         )
         
         let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
@@ -150,7 +151,7 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
         assertCorrectnessMintTokenGroup(
             mintTokenGroup,
             tokenCreationGroup: tokenCreationGroup,
-            initialSupply: initialSupply,
+            initialSupply: NonNegativeAmount(positive: initialSupply),
             createTokenAction: createTokenAction
         )
     }

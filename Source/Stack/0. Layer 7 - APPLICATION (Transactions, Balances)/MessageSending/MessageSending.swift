@@ -15,34 +15,25 @@ public protocol MessageSending {
 
 // swiftlint:disable opening_brace
 
-public extension MessageSending
+extension MessageSending
     where
     Self: NodeInteractingSubmit,
     Self: AtomSigning,
-    Self: Magical
+    Self: Magical,
+    Self: ProofOfWorkWorking
 {
     // swiftlint:enable opening_brace
     
-    func sendMessage(_ message: SendMessageAction) -> CompletableWanted {
+    public func sendMessage(_ message: SendMessageAction) -> CompletableWanted {
         return doSendMessage(message)
     }
-}
 
-// swiftlint:disable opening_brace
-private extension MessageSending
-    where
-    Self: NodeInteractingSubmit,
-    Self: AtomSigning,
-    Self: Magical
-{
-    // swiftlint:enable opening_brace
-    func doSendMessage(_ message: SendMessageAction, cc thirdPartyReaders: [Ownable] = []) -> CompletableWanted {
+    private func doSendMessage(_ message: SendMessageAction, cc thirdPartyReaders: [Ownable] = []) -> CompletableWanted {
         let actionToParticleGroupsMapper = DefaultSendMessageActionToParticleGroupsMapper(
             readers: { ([$0.sender, $0.recipient] + thirdPartyReaders.map { $0.address }).map { $0.publicKey } }
         )
         let atom = actionToParticleGroupsMapper.particleGroups(for: message).wrapInAtom()
-        let powWorker = ProofOfWorkWorker()
-        return performProvableWorkThenSignAndSubmit(atom: atom, powWorker: powWorker)
+        return performProvableWorkThenSignAndSubmit(atom: atom, powWorker: proofOfWorkWorker)
     }
 }
 
@@ -65,7 +56,8 @@ public extension MessageSending
     Self: NodeInteractingSubmit,
     Self: AtomSigning,
     Self: Magical,
-    Self: IdentityHolder
+    Self: IdentityHolder,
+    Self: ProofOfWorkWorking
 {
     
     // swiftlint:enable opening_brace

@@ -12,6 +12,7 @@ import XCTest
 
 class AtomSignatureTests: XCTestCase {
 
+    private let powWorker = DefaultProofOfWorkWorker()
     
     func testSignatures() {
         
@@ -27,7 +28,7 @@ class AtomSignatureTests: XCTestCase {
         // Alice signs the atom
         guard let signedAtom: SignedAtom = try? {
             guard
-                let pow = ProofOfWork.work(atom: atom, magic: 2, numberOfLeadingZeros: 2, timeout: 1),
+                let pow = doPow(worker: powWorker, atom: atom, magic: 2, numberOfLeadingZeros: 2, timeout: 1),
                 let atomWithPow = XCTAssertNotThrows(
                     try ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
                 ),

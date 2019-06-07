@@ -18,6 +18,12 @@ public struct NonNegativeAmount: NonNegativeAmountConvertible {
     }
 }
 
+public extension NonNegativeAmount {
+    init(positive: PositiveAmount) {
+        self.init(validated: positive.magnitude)
+    }
+}
+
 // MARK: - Zero
 public extension NonNegativeAmount {
     static var zero: NonNegativeAmount {

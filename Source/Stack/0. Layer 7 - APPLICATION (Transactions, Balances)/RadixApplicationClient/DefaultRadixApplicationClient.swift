@@ -33,7 +33,9 @@ public final class DefaultRadixApplicationClient: RadixApplicationClient,
     IdentityHolder,
     NodeInteracting,
     Magical,
-    AtomSigning
+    AtomSigning,
+    ProofOfWorkWorking,
+    TokensDefinitionsReferencing
 {
     // swiftlint:enable opening_brace
 
@@ -43,19 +45,25 @@ public final class DefaultRadixApplicationClient: RadixApplicationClient,
     
     public let identity: RadixIdentity
     public let magic: Magic
+    public let proofOfWorkWorker: ProofOfWorkWorker
+    public let tokens: TokensDefinitionsStore
     
     public init(
         nodeSubscriber: NodeInteractionSubscribing,
         nodeUnsubscriber: NodeInteractionUnsubscribing,
         nodeSubmitter: NodeInteractionSubmitting,
         identity: RadixIdentity,
-        magic: Magic
+        magic: Magic,
+        proofOfWorkWorker: ProofOfWorkWorker = DefaultProofOfWorkWorker(),
+        tokens: TokensDefinitionsStore = Tokens()
     ) {
         self.nodeSubscriber = nodeSubscriber
         self.nodeUnsubscriber = nodeUnsubscriber
         self.nodeSubmitter = nodeSubmitter
         self.identity = identity
         self.magic = magic
+        self.proofOfWorkWorker = proofOfWorkWorker
+        self.tokens = tokens
     }
 }
 

@@ -11,6 +11,21 @@ import Foundation
 import XCTest
 
 class GranularityTests: XCTestCase {
+    
+    func testThatCannotCreateZeroGranularity() {
+        XCTAssertThrowsSpecificError(try Granularity(int: 0), Granularity.Error.cannotBeZero)
+    }
+    
+    func testAssertTooLargeThrowsError() {
+        
+        let expectedError: Granularity.Error = .tooLarge(expectedAtMost: Granularity.subunitsDenominator, butGot: Granularity.subunitsDenominator + 1)
+        
+        XCTAssertThrowsSpecificError(
+            try Granularity(value: Granularity.subunitsDenominator + 1),
+            expectedError
+        )
+    }
+    
     func testGranularityToHex() {
         // GIVEN
         // A Granularity of 1
@@ -53,7 +68,7 @@ class GranularityTests: XCTestCase {
     func testDsonEncodeGranularityBig() {
         // GIVEN
         // A big granularity
-        let granularity: Granularity = "1000000000000000000000000000"
+        let granularity: Granularity = "10000000000000"
         // WHEN
         // I DSON encode that
         guard let dsonHex = dsonHexStringOrFail(granularity) else { return }
@@ -62,7 +77,7 @@ class GranularityTests: XCTestCase {
         // I get the same results as Java lib
         XCTAssertEqual(
             dsonHex,
-            "5821050000000000000000000000000000000000000000033b2e3c9fd0803ce8000000"
+            "582105000000000000000000000000000000000000000000000000000009184e72a000"
         )
     }
 }

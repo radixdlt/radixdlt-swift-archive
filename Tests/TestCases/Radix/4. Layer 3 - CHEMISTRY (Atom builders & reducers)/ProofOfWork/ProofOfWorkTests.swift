@@ -15,10 +15,12 @@ import RxBlocking
 
 class ProofOfWorkTest: XCTestCase {
     
+    private let powWorker = DefaultProofOfWorkWorker()
+    
     func testPowSingleLeadingZero() {
         let magic: Magic = 1
         let seed = Data(repeating: 0x00, count: 32)
-        guard let pow = ProofOfWork.work(seed: seed.asData, magic: magic, numberOfLeadingZeros: 1) else { return XCTFail("timeout") }
+        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 1) else { return XCTFail("timeout") }
         do {
             try pow.prove()
             XCTAssertEqual(pow.nonceAsString, "5")
@@ -31,7 +33,7 @@ class ProofOfWorkTest: XCTestCase {
     func test4LeadingZerosDeadbeefSeed() {
         let magic: Magic = 12345
         let seed: HexString = "deadbeef00000000deadbeef00000000deadbeef00000000deadbeef00000000"
-        guard let pow = ProofOfWork.work(seed: seed.asData, magic: magic, numberOfLeadingZeros: 4, timeout: 1) else { return XCTFail("timeout") }
+        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 4, timeout: 1) else { return XCTFail("timeout") }
         do {
             try pow.prove()
             XCTAssertEqual(pow.nonceAsString, "30")
@@ -42,16 +44,18 @@ class ProofOfWorkTest: XCTestCase {
     }
 }
 
-extension ProofOfWork {
+extension XCTestCase {
     
-    static func work(
+    func doPow(
+        worker: DefaultProofOfWorkWorker,
         atom: Atom,
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
         timeout: RxTimeInterval? = RxTimeInterval.enoughForPOW,
         _ function: String = #function, _ file: String = #file
         ) -> ProofOfWork? {
-        return work(
+        return doPow(
+            worker: worker,
             seed: atom.radixHash.asData,
             magic: magic,
             numberOfLeadingZeros: numberOfLeadingZeros,
@@ -59,7 +63,8 @@ extension ProofOfWork {
         )
     }
     
-    static func work(
+    func doPow(
+        worker: DefaultProofOfWorkWorker,
         seed: Data,
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
@@ -67,7 +72,7 @@ extension ProofOfWork {
         _ function: String = #function, _ file: String = #file
         ) -> ProofOfWork? {
         
-        return ProofOfWorkWorker().work(
+        return worker.work(
             seed: seed,
             magic: magic,
             numberOfLeadingZeros: numberOfLeadingZeros

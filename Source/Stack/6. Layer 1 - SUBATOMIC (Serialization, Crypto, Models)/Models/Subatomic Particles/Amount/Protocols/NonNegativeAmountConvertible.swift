@@ -39,9 +39,5 @@ public extension NonNegativeAmountConvertible {
     static var maxValue256Bits: Self {
         return Self(validated: Magnitude(2).power(256) - 1)
     }
-    
-    // MARK: - Subunits
-    static var subunitsDenominatorDecimalExponent: Int { return 18 }
-    static var subunitsDenominator: Magnitude { return Magnitude(10).power(Self.subunitsDenominatorDecimalExponent) }
 }
 

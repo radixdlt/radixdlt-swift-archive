@@ -69,18 +69,13 @@ class SubscriptionTests: WebsocketTest {
                 .mapToVoid()
                 .blockingWasSuccessfull(timeout: 1)
         )
+ 
+        let request = rpcClient.subscribe(to: xrdAddress, subscriberId: subscriberId).take(1)
         
-        XCTAssertEqual(
-            // WHEN
-            // I try subscribing using the same subscription id
-            rpcClient.subscribe(to: xrdAddress, subscriberId: subscriberId)
-                .take(1)
-                .toBlocking(timeout: 1)
-                .materialize()
-                .mapToError(type: RPCError.self),
-            // THEN
-            RPCError.subscriberIdAlreadyInUse(subscriberId),
-            "I get an error saying that the subscriptions already is in use"
+        // THEN: I see that action fails with a validation error
+        request.blockingAssertThrows(
+            error: RPCError.subscriberIdAlreadyInUse(subscriberId),
+            timeout: RxTimeInterval.enoughForPOW
         )
     }
 
@@ -109,14 +104,10 @@ extension MaterializedSequenceResult {
     }
     
     func assertThrows<E>(error expectedError: E) -> Bool where E: Swift.Error & Equatable {
-        switch self {
-        case .completed: return false
-        case .failed(_, let anyThrowedError):
-            guard let throwedError = anyThrowedError as? E else {
-                return false
-            }
-            return throwedError == expectedError
+        guard let mappedError = mapToError(type: E.self) else {
+            return false
         }
+        return mappedError == expectedError
     }
     
     func mapToError<E>(type expectedErrorType: E.Type) -> E? where E: Swift.Error & Equatable {

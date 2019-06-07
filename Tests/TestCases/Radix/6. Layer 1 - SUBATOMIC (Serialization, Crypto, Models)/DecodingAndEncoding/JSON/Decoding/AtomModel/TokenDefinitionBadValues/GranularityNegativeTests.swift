@@ -20,7 +20,7 @@ class GranularityNegativeTests: AtomJsonDeserializationChangeJson {
             // I try decoding the bad json string into an Atom
             try decode(Atom.self, jsonString: badJson),
             // THEN
-            Granularity.Error.failedToCreateBigInt(fromString: "-1"),
+            InvalidStringError.invalidCharacters(expectedCharacters: CharacterSet.decimalDigits, butGot: "-"),
             "Decoding should fail to deserialize JSON with negative granulariy"
         )
     }

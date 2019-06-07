@@ -18,7 +18,6 @@ public struct EUID:
     CBORDataConvertible,
     ExactLengthSpecifying,
     Hashable,
-    ExpressibleByIntegerLiteral,
     CustomStringConvertible
 {
     
@@ -61,17 +60,6 @@ public extension EUID {
 public extension EUID {
     init(string: String) throws {
         try self.init(hex: try HexString(string: string))
-    }
-}
-
-// MARK: - ExpressibleByIntegerLiteral
-public extension EUID {
-    init(integerLiteral int: Int) {
-        do {
-            try self.init(int: int)
-        } catch {
-            fatalError("Passed bad value, error: \(error)")
-        }
     }
 }
 

@@ -6,7 +6,6 @@
 //  Copyright © 2019 Radix DLT. All rights reserved.
 //
 
-
 import Foundation
 @testable import RadixSDK
 import XCTest

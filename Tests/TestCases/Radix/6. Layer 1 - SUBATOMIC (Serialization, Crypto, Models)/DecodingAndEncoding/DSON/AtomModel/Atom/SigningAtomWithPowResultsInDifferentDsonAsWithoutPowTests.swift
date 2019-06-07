@@ -12,7 +12,7 @@ import XCTest
 
 
 class SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests: XCTestCase {
-    
+    private let powWorker = DefaultProofOfWorkWorker()
     private let numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = 1
     private let magic: Magic = 1337
     private lazy var identity = RadixIdentity(magic: magic)
@@ -31,7 +31,7 @@ class SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests: XCTestCase {
     
     
     func testThatPowIsIncludedInDsonOutputAllButExcludedInDsonOutputHash() {
-        guard let pow = ProofOfWork.work(atom: atom, magic: magic, numberOfLeadingZeros: numberOfLeadingZeros) else {
+        guard let pow = doPow(worker: powWorker, atom: atom, magic: magic, numberOfLeadingZeros: numberOfLeadingZeros) else {
             return XCTFail("no pow")
         }
         let atomWithPow = try! ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
