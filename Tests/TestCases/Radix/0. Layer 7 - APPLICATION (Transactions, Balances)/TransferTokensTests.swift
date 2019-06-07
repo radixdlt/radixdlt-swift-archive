@@ -148,7 +148,7 @@ class TransferTokensTests: WebsocketTest {
             "Bob's balance should equal 0"
         )
         
-        // WHEN: Alice transfer 20 (granuliaryt of 10) tokens she owns, to Bob
+        // WHEN: Alice transfer 20 (granularity of 10) tokens she owns, to Bob
         let txAmount: PositiveAmount = 10
         let transfer = TransferTokenAction(from: alice, to: bob, amount: txAmount, tokenResourceIdentifier: rri)
         
