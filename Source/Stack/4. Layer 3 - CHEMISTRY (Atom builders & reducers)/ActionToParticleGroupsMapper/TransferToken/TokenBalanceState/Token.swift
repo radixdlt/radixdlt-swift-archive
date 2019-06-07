@@ -16,11 +16,15 @@ public struct Token: TokenConvertible, Hashable {
 }
 
 public extension Token {
+    init(tokenConvertible token: TokenConvertible) {
+        self.symbol = token.symbol
+        self.name = token.name
+        self.address = token.address
+        self.granularity = token.granularity
+    }
+    
     init(particle: TokenDefinitionParticle) {
-        self.symbol = particle.symbol
-        self.name = particle.name
-        self.address = particle.address
-        self.granularity = particle.granularity
+        self.init(tokenConvertible: particle)
     }
 }
 

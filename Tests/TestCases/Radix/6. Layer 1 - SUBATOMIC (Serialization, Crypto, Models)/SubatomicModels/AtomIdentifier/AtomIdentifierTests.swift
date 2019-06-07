@@ -84,13 +84,12 @@ class AtomIdentifierTests: XCTestCase {
     
     func testAtomIdentifierForAtomFromCreateTokenAction() {
         
-        let createTokenAction = CreateTokenAction(
+        let createTokenAction = try! CreateTokenAction(
             creator: alice.address,
             name: "Test",
             symbol: "TEST",
             description: "Test description",
-            supplyType: .fixed,
-            initialSupply: 10
+            supply: .fixed(to: 10)
         )
         
         let createTokenAtom = testAidOfAtomFrom(

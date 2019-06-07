@@ -23,18 +23,59 @@ public struct Granularity:
     StringRepresentable,
     Comparable,
     Hashable,
-    CustomStringConvertible,
-    ExpressibleByIntegerLiteral
+    CustomStringConvertible
 {
 
 // swiftlint:enable colon opening_brace
     
-    public typealias Value = BigUnsignedInt
+    public typealias Value = PositiveAmount
     
     public let value: Value
 
-    public init(value: Value) {
+    public init(value: PositiveAmount) throws {
+        if value > Granularity.subunitsDenominator {
+            throw Error.tooLarge(expectedAtMost: Granularity.subunitsDenominator, butGot: value)
+        }
         self.value = value
+    }
+}
+
+public extension Granularity {
+    
+    // MARK: - Subunits
+    static var subunitsDenominatorDecimalExponent: Int { return 18 }
+    static var subunitsDenominator: PositiveAmount {
+        let magnitude = PositiveAmount.Magnitude(10).power(Granularity.subunitsDenominatorDecimalExponent)
+        return PositiveAmount(validated: magnitude)
+    }
+    static let max: Granularity = {
+        // swiftlint:disable:next force_try
+        return try! Granularity(value: subunitsDenominator)
+    }()
+    
+    static let one: Granularity = {
+        // swiftlint:disable:next force_try
+        return try! Granularity(int: 1)
+    }()
+    
+    static let min = Granularity.one
+}
+
+public extension Granularity {
+    init(magnitude: PositiveAmount.Magnitude) throws {
+        do {
+            let positiveAmount = try PositiveAmount(validating: magnitude)
+            try self.init(value: positiveAmount)
+        } catch PositiveAmount.Error.amountCannotBeZero {
+            throw Error.cannotBeZero
+        } catch {
+            throw error
+        }
+    }
+    
+    init(int: UInt) throws {
+        let magnitude = PositiveAmount.Magnitude(int)
+        try self.init(magnitude: magnitude)
     }
 }
 
@@ -62,49 +103,48 @@ public extension Granularity {
 // MARK: - StringInitializable
 public extension Granularity {
     init(string: String) throws {
-        guard let value = Value(string, radix: 10) else {
-            throw Error.failedToCreateBigInt(fromString: string)
-        }
-        self.init(value: value)
+        let decimalString = try DecimalString(unvalidated: string)
+        let value = try PositiveAmount(string: decimalString.stringValue)
+        try self.init(value: value)
     }
 }
 
 // MARK: - StringRepresentable
 public extension Granularity {
     var stringValue: String {
-        return value.toDecimalString()
+        return decimalString
     }
+    
 }
 
+public extension Granularity {
+    var decimalString: String {
+        return value.magnitude.toDecimalString()
+    }
+}
+    
 // MARK: - PrefixedJsonDecodable
 public extension Granularity {
     static let jsonPrefix = JSONPrefix.uint256DecimalString
 }
 
-// MARK: - ExpressibleByIntegerLiteral
-public extension Granularity {
-    init(integerLiteral int: Int) {
-        self.init(value: Value(int))
-    }
-}
-
 // MARK: - CustomStringConvertible
 public extension Granularity {
     var description: String {
-        return value.toDecimalString()
+        return stringValue
     }
 }
 
 // MARK: - Error
 public extension Granularity {
     enum Error: Swift.Error, Equatable {
+        case cannotBeZero
+        case tooLarge(expectedAtMost: PositiveAmount, butGot: PositiveAmount)
         case failedToCreateBigInt(fromString: String)
     }
 }
 
 // MARK: - Presets
 public extension Granularity {
-    static var `default`: Granularity {
-        return 1
-    }
+    static let `default` = Granularity.one
 }

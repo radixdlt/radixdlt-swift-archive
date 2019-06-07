@@ -53,6 +53,7 @@ public extension TransferTokenActionToParticleGroupsMapper {
 
 public enum TransferError: Swift.Error, Equatable {
     case insufficientFunds
+    case amountNotMultipleOfGranularity
 }
 
 // MARK: - Throwing

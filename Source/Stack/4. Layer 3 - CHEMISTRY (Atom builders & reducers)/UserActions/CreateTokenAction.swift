@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct CreateTokenAction: UserAction {
+public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
 
     public let creator: Address
     public let name: Name
@@ -23,17 +23,42 @@ public struct CreateTokenAction: UserAction {
         name: Name,
         symbol: Symbol,
         description: Description,
-        supplyType: SupplyType,
-        initialSupply: NonNegativeAmount = .zero,
+        supply initialSupplyType: InitialSupply,
         granularity: Granularity = .default
-    ) {
+    ) throws {
+        
+        switch initialSupplyType {
+        case .fixed(let positiveInitialSupply):
+            self.supplyType = .fixed
+            self.initialSupply = NonNegativeAmount(positive: positiveInitialSupply)
+        case .mutable(let nonNegativeInitialSupply):
+            self.supplyType = .mutable
+            self.initialSupply = nonNegativeInitialSupply
+        }
+        
+        guard initialSupply.isExactMultipleOfGranularity(granularity) else {
+            throw Error.initialSupplyNotMultipleOfGranularity
+        }
+        
         self.creator = creator
         self.name = name
         self.symbol = symbol
         self.description = description
-        self.supplyType = supplyType
-        self.initialSupply = initialSupply
         self.granularity = granularity
+    }
+}
+
+public extension CreateTokenAction {
+    enum Error: Swift.Error, Equatable {
+        // swiftlint:disable:next identifier_name
+        case initialSupplyNotMultipleOfGranularity
+    }
+}
+
+// MARK: - TokenConvertible
+public extension CreateTokenAction {
+    var address: Address {
+        return creator
     }
 }
 
@@ -44,8 +69,14 @@ public extension CreateTokenAction {
 }
 
 public extension CreateTokenAction {
+    enum InitialSupply {
+        case fixed(to: PositiveAmount)
+        case mutable(initial: NonNegativeAmount)
+    }
+    
     enum SupplyType: Int, Hashable {
-        case fixed, mutable
+        case fixed
+        case mutable
     }
 }
 

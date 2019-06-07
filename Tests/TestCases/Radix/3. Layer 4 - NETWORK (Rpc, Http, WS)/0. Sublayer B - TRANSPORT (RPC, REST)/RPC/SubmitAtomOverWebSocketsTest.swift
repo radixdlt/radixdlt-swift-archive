@@ -16,6 +16,7 @@ import RxBlocking
 class SubmitAtomOverWebSocketsTest: WebsocketTest {
     
     private let magic: Magic = 63799298
+    private let powWorker = DefaultProofOfWorkWorker()
     
     private var atom: Atom!
     private lazy var identity = RadixIdentity(magic: magic)
@@ -25,12 +26,12 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
         
         let address = Address(magic: magic, publicKey: identity.publicKey)
         
-        let createTokenAction = CreateTokenAction(
+        let createTokenAction = try! CreateTokenAction(
             creator: address,
             name: "Cyon",
             symbol: "CCC",
             description: "Cyon Crypto Coin is the worst shit coin",
-            supplyType: .fixed
+            supply: .fixed(to: 30)
         )
  
         let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
@@ -39,7 +40,7 @@ class SubmitAtomOverWebSocketsTest: WebsocketTest {
     }
     
     func testTokenDefinitionParticle() {
-        guard let pow = ProofOfWork.work(atom: atom, magic: magic) else { return }
+        guard let pow = doPow(worker: powWorker, atom: atom, magic: magic) else { return }
         let atowWithPOW = try! ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
         let unsignedAtom = try! UnsignedAtom(atomWithPow: atowWithPOW)
         let signedAtom = try! identity.sign(atom: unsignedAtom)

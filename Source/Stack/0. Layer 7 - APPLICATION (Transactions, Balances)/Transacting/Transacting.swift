@@ -28,19 +28,23 @@ where
     Self: AccountBalancing,
     Self: NodeInteractingSubmit,
     Self: Magical,
-    Self: AtomSigning
+    Self: AtomSigning,
+    Self: ProofOfWorkWorking,
+    Self: TokensDefinitionsReferencing
 {
     // swiftlint:enable opening_brace
     
     func transfer(tokens transfer: TransferTokenAction) -> CompletableWanted {
         
-        log.info("\(transfer.sender.address) sends \(transfer.amount) of \(transfer.tokenResourceIdentifier) to \(transfer.recipient.address)")
+        if let tokenDefinition = self.tokens.token(for: transfer.tokenResourceIdentifier) {
+            guard transfer.amount.isExactMultipleOfGranularity(tokenDefinition.granularity) else {
+                return CompletableWanted.error(TransferError.amountNotMultipleOfGranularity)
+            }
+        }
         
         let actionToParticleGroupsMapper = DefaultTransferTokenActionToParticleGroupsMapper()
         
         let rri = transfer.tokenResourceIdentifier
-        
-        let powWorker = ProofOfWorkWorker()
         
         // Get latest Balance
         return getBalances(for: transfer.sender, ofToken: rri)
@@ -50,6 +54,6 @@ where
             // ParticleGroups => Atom
             .map { $0.wrapInAtom() }
             // Atom => ProofOfWorkedAtom => SignedAtom => Submit to Node
-            .flatMapLatest { self.performProvableWorkThenSignAndSubmit(atom: $0, powWorker: powWorker) }
+            .flatMapLatest { self.performProvableWorkThenSignAndSubmit(atom: $0, powWorker: self.proofOfWorkWorker) }
     }
 }

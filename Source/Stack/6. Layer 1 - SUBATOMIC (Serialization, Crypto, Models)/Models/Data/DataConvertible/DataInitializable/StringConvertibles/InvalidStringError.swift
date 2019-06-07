@@ -14,3 +14,15 @@ public enum InvalidStringError: Swift.Error, Equatable {
     case tooFewCharacters(expectedAtLeast: Int, butGot: Int)
     case lengthNotMultiple(of: Int, shortOf: Int)
 }
+
+public extension InvalidStringError {
+    static func == (lhs: InvalidStringError, rhs: InvalidStringError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidCharacters, .invalidCharacters): return true
+        case (.tooManyCharacters, .tooManyCharacters): return true
+        case (.tooFewCharacters, .tooFewCharacters): return true
+        case (.lengthNotMultiple, .lengthNotMultiple): return true
+        default: return false
+        }
+    }
+}

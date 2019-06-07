@@ -20,7 +20,9 @@ public extension TokenCreating
 where
     Self: NodeInteractingSubmit,
     Self: Magical,
-    Self: AtomSigning
+    Self: AtomSigning,
+    Self: ProofOfWorkWorking,
+    Self: TokensDefinitionsReferencing
 {
     // swiftlint:enable opening_brace
     func create(token createToken: CreateTokenAction) -> SingleWanted<ResourceIdentifier> {
@@ -30,7 +32,10 @@ where
         let actionToParticleGroupsMapper = DefaultCreateTokenActionToParticleGroupsMapper()
         
         let atom = actionToParticleGroupsMapper.particleGroups(for: createToken).wrapInAtom()
-        let powWorker = ProofOfWorkWorker()
-        return performProvableWorkThenSignAndSubmit(atom: atom, powWorker: powWorker).map { createToken.identifier }
+        return performProvableWorkThenSignAndSubmit(atom: atom, powWorker: proofOfWorkWorker)
+            .map { createToken.identifier }
+            .do(onNext: {
+                self.tokens.add(token: Token(tokenConvertible: createToken), resourceIdentifier: $0)
+            })
     }
 }
