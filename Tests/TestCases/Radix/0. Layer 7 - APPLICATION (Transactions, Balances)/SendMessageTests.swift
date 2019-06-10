@@ -30,18 +30,6 @@ class SendMessageTests: WebsocketTest {
         )
     }
     
-    // This ought to work in Radix Core, but does not, awaiting fix: https://radixdlt.atlassian.net/browse/RLAU-1342
-//    func testSendEmptyPlainText() {
-//        // GIVEN: A RadidxApplicationClient
-//        // WHEN: I send an empty message without encryption
-//        let request = application.sendMessage("", to: bob, encrypt: false)
-//
-//        XCTAssertTrue(
-//            // THEN: I see that action completes successfully
-//            request.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
-//        )
-//    }
-    
     func testSendNonEmptyEncrypted() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message with encryption
@@ -52,8 +40,7 @@ class SendMessageTests: WebsocketTest {
             request.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
         )
     }
-    
-    
+
     func testSendEmptyEncrypted() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send an empty message with encryption
@@ -98,6 +85,20 @@ class SendMessageTests: WebsocketTest {
         )
     }
 }
+
+//extension SendMessageTests {
+    // This ought to work in Radix Core, but does not, awaiting fix: https://radixdlt.atlassian.net/browse/RLAU-1342
+    //    func testSendEmptyPlainText() {
+    //        // GIVEN: A RadidxApplicationClient
+    //        // WHEN: I send an empty message without encryption
+    //        let request = application.sendMessage("", to: bob, encrypt: false)
+    //
+    //        XCTAssertTrue(
+    //            // THEN: I see that action completes successfully
+    //            request.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+    //        )
+    //    }
+//}
 
 private let magic: Magic = 63799298
 
