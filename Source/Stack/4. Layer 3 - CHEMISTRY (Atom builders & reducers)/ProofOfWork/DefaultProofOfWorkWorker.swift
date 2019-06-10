@@ -83,35 +83,4 @@ internal extension DefaultProofOfWorkWorker {
         let pow = ProofOfWork(seed: seed, targetNumberOfLeadingZeros: targetNumberOfLeadingZeros, magic: magic, nonce: nonce)
         done(.success(pow))
     }
-    
 }
-
-// MARK: Data + NumberOfLeadingZeroBits
-internal extension DataConvertible {
-    var numberOfLeadingZeroBits: Int {
-        let byteArray = self.bytes
-        let bitsPerByte = Int.bitsPerByte
-        guard let index = byteArray.firstIndex(where: { $0 != 0 }) else {
-            return byteArray.count * bitsPerByte
-        }
-        
-        // count zero bits in byte at index `index`
-        let byte: Byte = byteArray[index]
-        if byte == 0x00 {
-            return index * bitsPerByte
-        } else {
-            return index * bitsPerByte + byte.leadingZeroBitCount
-        }
-    }
-}
-
-internal extension ProofOfWork.NumberOfLeadingZeros {
-    static func < (lhs: Int, rhs: ProofOfWork.NumberOfLeadingZeros) -> Bool {
-        return lhs < rhs.numberOfLeadingZeros
-    }
-    
-    static func >= (lhs: Int, rhs: ProofOfWork.NumberOfLeadingZeros) -> Bool {
-        return lhs >= rhs.numberOfLeadingZeros
-    }
-}
-

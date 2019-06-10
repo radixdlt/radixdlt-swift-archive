@@ -45,41 +45,6 @@ class ProofOfWorkTest: XCTestCase {
         guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 14, timeout: 0.5) else { return XCTFail("timeout") }
         XCTAssertEqual(pow.nonce, 9255)
     }
-    
-//    func test16LeadingZeros() {
-//        doTest(zeros: 16, expectedNonce: 241709)
-//    }
-    
-//    func test20LeadingZeros() {
-//        doTest(zeros: 20, expectedNonce: 1177532)
-//    }
-    
-//    func test16LeadingZeroRx() {
-//        let powWorker = DefaultProofOfWorkWorker()
-//        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 16, timeout: RxTimeInterval.enoughForPOW) else { return XCTFail("timeout") }
-//        XCTAssertEqual(pow.nonce, 241709)
-//    }
-    
-    func testCountNumberOfLeadingZeroBitsInData() {
-        func doTest(data: DataConvertible, expectZeroCount: Int) {
-            XCTAssertEqual(data.numberOfLeadingZeroBits, expectZeroCount)
-        }
-        doTest(data: Data(), expectZeroCount: 0)
-        doTest(data: [0], expectZeroCount: 8)
-        doTest(data: [1], expectZeroCount: 7)
-        doTest(data: [255], expectZeroCount: 0)
-        doTest(data: [0, 0], expectZeroCount: 16)
-        doTest(data: [1, 0], expectZeroCount: 7)
-        doTest(data: [0, 0, 0], expectZeroCount: 24)
-        doTest(data: [1, 0, 0], expectZeroCount: 7)
-        doTest(data: [255, 0, 0], expectZeroCount: 0)
-        doTest(data: [0, 1, 0], expectZeroCount: 15)
-        doTest(data: [0, 255, 0], expectZeroCount: 8)
-        doTest(data: [0, 0, 0, 0], expectZeroCount: 32)
-        doTest(data: [0, 0, 1, 0], expectZeroCount: 23)
-        doTest(data: [0, 0, 0, 1], expectZeroCount: 31)
-    }
-    
 }
 
 private extension ProofOfWorkTest {
