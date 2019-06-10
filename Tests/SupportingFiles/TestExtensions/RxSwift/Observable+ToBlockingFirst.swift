@@ -104,12 +104,14 @@ extension Observable {
         file: String = #file,
         line: Int = #line
         ) -> E? {
+        
+
         return take(takeCount)
             .toBlocking(timeout: timeout)
             .getElement(
                 at: takeElementAt,
                 timeout: timeout,
-                failOnTimeout: failOnTimeout && isConnectedToLocalhost(),
+                failOnTimeout: failOnTimeout,
                 failOnNil: failOnNil,
                 function: function,
                 file: file,
@@ -131,7 +133,7 @@ extension Observable {
             .toBlocking(timeout: timeout)
             .getArray(
                 timeout: timeout,
-                failOnTimeout: failOnTimeout && isConnectedToLocalhost(),
+                failOnTimeout: failOnTimeout,
                 failOnNil: failOnNil,
                 function: function,
                 file: file,
