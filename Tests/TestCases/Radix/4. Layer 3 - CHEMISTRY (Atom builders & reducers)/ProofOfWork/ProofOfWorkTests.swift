@@ -40,6 +40,12 @@ class ProofOfWorkTest: XCTestCase {
         doTest(zeros: 14, expectedNonce: 9255)
     }
     
+    func test14LeadingZeroRx() {
+        let powWorker = DefaultProofOfWorkWorker()
+        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 14, timeout: 0.5) else { return XCTFail("timeout") }
+        XCTAssertEqual(pow.nonce, 9255)
+    }
+    
 //    func test16LeadingZeros() {
 //        doTest(zeros: 16, expectedNonce: 241709)
 //    }
@@ -48,11 +54,11 @@ class ProofOfWorkTest: XCTestCase {
 //        doTest(zeros: 20, expectedNonce: 1177532)
 //    }
     
-    func test16LeadingZeroRx() {
-        let powWorker = DefaultProofOfWorkWorker()
-        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 16, timeout: RxTimeInterval.enoughForPOW) else { return XCTFail("timeout") }
-        XCTAssertEqual(pow.nonce, 241709)
-    }
+//    func test16LeadingZeroRx() {
+//        let powWorker = DefaultProofOfWorkWorker()
+//        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 16, timeout: RxTimeInterval.enoughForPOW) else { return XCTFail("timeout") }
+//        XCTAssertEqual(pow.nonce, 241709)
+//    }
     
     func testCountNumberOfLeadingZeroBitsInData() {
         func doTest(data: DataConvertible, expectZeroCount: Int) {
