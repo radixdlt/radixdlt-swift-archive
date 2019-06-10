@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
-    private let dispatchQueue = DispatchQueue(label: "Radix.DefaultProofOfWorkWorker", qos: .background)
+    private let dispatchQueue = DispatchQueue(label: "Radix.DefaultProofOfWorkWorker", qos: .userInitiated)
     public init() {}
     
     deinit {
@@ -21,20 +21,17 @@ public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
 public extension DefaultProofOfWorkWorker {
     static let expectedByteCountOfSeed = 32
     
-    // swiftlint:disable:next function_body_length
     func work(
         seed: Data,
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default
-        ) -> Observable<ProofOfWork> {
+    ) -> Observable<ProofOfWork> {
         
         return Observable.create { [unowned self] observer in
-            
             var powDone = false
-            
-            let calculatePOW = DispatchWorkItem {
+            self.dispatchQueue.async {
                 log.verbose("POW started")
-                return self.work(
+                DefaultProofOfWorkWorker.work(
                     seed: seed,
                     magic: magic,
                     numberOfLeadingZeros: numberOfLeadingZeros
@@ -51,12 +48,9 @@ public extension DefaultProofOfWorkWorker {
                 }
             }
             
-            self.dispatchQueue.async(execute: calculatePOW)
-            
             return Disposables.create {
                 if !powDone {
                     log.warning("POW cancelled")
-                    calculatePOW.cancel()
                 }
             }
         }
@@ -64,11 +58,11 @@ public extension DefaultProofOfWorkWorker {
 }
 
 // MARK: - Private
-private extension DefaultProofOfWorkWorker {
-    func work(
+internal extension DefaultProofOfWorkWorker {
+    static func work(
         seed: Data,
         magic: Magic,
-        numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
+        numberOfLeadingZeros targetNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
         done: ((Result<ProofOfWork, Error>) -> Void)
         ) {
         guard seed.length == DefaultProofOfWorkWorker.expectedByteCountOfSeed else {
@@ -77,26 +71,47 @@ private extension DefaultProofOfWorkWorker {
             return
         }
         
-        let numberOfBits = DefaultProofOfWorkWorker.expectedByteCountOfSeed * Int.bitsPerByte
-        var bitArray = BitArray(repeating: .one, count: numberOfBits)
-        
-        for index in 0..<Int(numberOfLeadingZeros.numberOfLeadingZeros) {
-            bitArray[index] = .zero
-        }
-        
-        let target = bitArray.asData
-        let targetHex = bitArray.hex
         var nonce: Nonce = 0
         let base: Data = magic.toFourBigEndianBytes() + seed
-        var hex: String
+        var radixHash: RadixHash!
         repeat {
             nonce += 1
             let unhashed = base + nonce.toEightBigEndianBytes()
-            hex = RadixHash(unhashedData: unhashed).hex
-        } while hex > targetHex
+            radixHash = RadixHash(unhashedData: unhashed)
+        } while radixHash.numberOfLeadingZeroBits < targetNumberOfLeadingZeros.numberOfLeadingZeros
         
-        let pow = ProofOfWork(seed: seed, targetHex: target.toHexString(), magic: magic, nonce: nonce)
+        let pow = ProofOfWork(seed: seed, targetNumberOfLeadingZeros: targetNumberOfLeadingZeros, magic: magic, nonce: nonce)
         done(.success(pow))
     }
     
 }
+
+// MARK: Data + NumberOfLeadingZeroBits
+internal extension DataConvertible {
+    var numberOfLeadingZeroBits: Int {
+        let byteArray = self.bytes
+        let bitsPerByte = Int.bitsPerByte
+        guard let index = byteArray.firstIndex(where: { $0 != 0 }) else {
+            return byteArray.count * bitsPerByte
+        }
+        
+        // count zero bits in byte at index `index`
+        let byte: Byte = byteArray[index]
+        if byte == 0x00 {
+            return index * bitsPerByte
+        } else {
+            return index * bitsPerByte + byte.leadingZeroBitCount
+        }
+    }
+}
+
+internal extension ProofOfWork.NumberOfLeadingZeros {
+    static func < (lhs: Int, rhs: ProofOfWork.NumberOfLeadingZeros) -> Bool {
+        return lhs < rhs.numberOfLeadingZeros
+    }
+    
+    static func >= (lhs: Int, rhs: ProofOfWork.NumberOfLeadingZeros) -> Bool {
+        return lhs >= rhs.numberOfLeadingZeros
+    }
+}
+
