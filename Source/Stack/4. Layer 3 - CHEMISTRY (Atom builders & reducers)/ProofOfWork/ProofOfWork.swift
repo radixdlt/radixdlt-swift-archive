@@ -11,13 +11,13 @@ import Foundation
 public struct ProofOfWork: CustomStringConvertible, CustomDebugStringConvertible {
     
     private let seed: Data
-    private let targetHex: HexString
     private let magic: Magic
-    private let nonce: Nonce
+    public let nonce: Nonce
+    public let targetNumberOfLeadingZeros: NumberOfLeadingZeros
     
-    internal init(seed: Data, targetHex: HexString, magic: Magic, nonce: Nonce) {
+    internal init(seed: Data, targetNumberOfLeadingZeros: NumberOfLeadingZeros, magic: Magic, nonce: Nonce) {
         self.seed = seed
-        self.targetHex = targetHex
+        self.targetNumberOfLeadingZeros = targetNumberOfLeadingZeros
         self.magic = magic
         self.nonce = nonce
     }
@@ -28,10 +28,11 @@ public extension ProofOfWork {
     @discardableResult
     func prove() throws -> ProofOfWork {
         let hashed = hash()
-        guard hashed.hex <= targetHex.hex else {
-            throw Error.expected(
-                hex: hashed.hex,
-                toBeLessThanOrEqualToTargetHex: targetHex.hex
+        let numberOfLeadingZeros = hashed.numberOfLeadingZeroBits
+        if numberOfLeadingZeros < targetNumberOfLeadingZeros {
+            throw Error.tooFewLeadingZeros(
+                expectedAtLeast: targetNumberOfLeadingZeros.numberOfLeadingZeros,
+                butGot: UInt8(numberOfLeadingZeros)
             )
         }
         return self
@@ -57,7 +58,6 @@ public extension ProofOfWork {
     var debugDescription: String {
         return """
             nonce: \(nonceAsString),
-            targetHex: \(targetHex.hex)
             hashHex: \(hash().hex)
         """
     }
@@ -67,7 +67,7 @@ public extension ProofOfWork {
 public extension ProofOfWork {
     enum Error: Swift.Error {
         case workInputIncorrectLengthOfSeed(expectedByteCountOf: Int, butGot: Int)
-        case expected(hex: String, toBeLessThanOrEqualToTargetHex: String)
+        case tooFewLeadingZeros(expectedAtLeast: UInt8, butGot: UInt8)
     }
 }
 

@@ -15,31 +15,54 @@ import RxBlocking
 
 class ProofOfWorkTest: XCTestCase {
     
-    private let powWorker = DefaultProofOfWorkWorker()
+    private let magic: Magic = 12345
+    private let seed: HexString = "deadbeef00000000deadbeef00000000deadbeef00000000deadbeef00000000"
     
-    func testPowSingleLeadingZero() {
-        let magic: Magic = 1
-        let seed = Data(repeating: 0x00, count: 32)
-        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 1) else { return XCTFail("timeout") }
-        do {
-            try pow.prove()
-            XCTAssertEqual(pow.nonceAsString, "5")
-        } catch {
-            XCTFail("POW fail, error: \(error)")
-            
+    func test1LeadingZero() {
+        doTest(zeros: 1, expectedNonce: 2)
+    }
+    
+    func test4LeadingZeros() {
+        doTest(zeros: 4, expectedNonce: 30)
+    }
+    
+    func test10LeadingZeros() {
+        measure { // strictly less than 0.01 sec without optimization
+            doTest(zeros: 10, expectedNonce: 198)
         }
     }
     
-    func test4LeadingZerosDeadbeefSeed() {
-        let magic: Magic = 12345
-        let seed: HexString = "deadbeef00000000deadbeef00000000deadbeef00000000deadbeef00000000"
-        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 4, timeout: 1) else { return XCTFail("timeout") }
-        do {
-            try pow.prove()
-            XCTAssertEqual(pow.nonceAsString, "30")
-        } catch {
-            XCTFail("POW fail, error: \(error)")
-            
+    func test12LeadingZeros() {
+        doTest(zeros: 12, expectedNonce: 6825)
+    }
+    
+    func test14LeadingZeros() {
+        doTest(zeros: 14, expectedNonce: 9255)
+    }
+    
+    func test14LeadingZeroRx() {
+        let powWorker = DefaultProofOfWorkWorker()
+        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 14, timeout: 0.5) else { return XCTFail("timeout") }
+        XCTAssertEqual(pow.nonce, 9255)
+    }
+}
+
+private extension ProofOfWorkTest {
+    func doTest(
+        zeros: ProofOfWork.NumberOfLeadingZeros,
+        expectedNonce: Nonce,
+        magic overridingMagic: Magic? = nil,
+        seed overridingSeed: HexString? = nil
+    ) {
+    
+        let magicUsed = overridingMagic ?? magic
+        let seedUsed = overridingSeed ?? seed
+        
+        DefaultProofOfWorkWorker.work(seed: seedUsed.asData, magic: magicUsed, numberOfLeadingZeros: zeros) {
+            switch $0 {
+            case .failure(let error): XCTFail("Unexpected error: \(error)")
+            case .success(let pow): XCTAssertEqual(pow.nonce, expectedNonce)
+            }
         }
     }
 }

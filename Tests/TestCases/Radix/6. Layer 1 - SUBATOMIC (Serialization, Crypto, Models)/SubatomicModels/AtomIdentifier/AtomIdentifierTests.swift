@@ -184,7 +184,7 @@ private extension RadixIdentity {
 
 private extension AtomIdentifierTests {
     func testAid(shards: Shards, firstByteInHash firstByte: Byte, expectedShard: Shard) {
-        let mockedHash = RadixHash(unhashedData: unsafeGenerateBytes(count: 32, replacingFirstWith: firstByte), hashedBy: SkipHashing())
+        let mockedHash = RadixHash(unhashedData: unsafe︕！GenerateBytes(count: 32, replacingFirstWith: firstByte), hashedBy: SkipHashing())
         XCTAssertEqual(mockedHash.asData[0], firstByte)
         
         do {
@@ -201,8 +201,7 @@ private extension AtomIdentifierTests {
     }
 }
 
-func unsafeGenerateBytes(count: Int, replacingFirstWith replacementByte: Byte? = nil) -> Data {
-    guard isDebug else { fatalError("never use this for anything than debug builds") }
+func unsafe︕！GenerateBytes(count: Int, replacingFirstWith replacementByte: Byte? = nil) -> Data {
     do {
         var random = try securelyGenerateBytes(count: count)
         if let replacementByte = replacementByte, count > 0 {

@@ -23,7 +23,7 @@ public class UserInputAction {
         #if DEBUG
         // Done! Use this to allow testing.
         #else
-        guard Thread.isMainThread, touch else {
+        guard Thread.isMainThread else {
             incorrectImplementation("User actions occur on main thread")
         }
         #endif

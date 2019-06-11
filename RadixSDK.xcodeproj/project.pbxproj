@@ -81,6 +81,7 @@
 		E6550EE8224BBDBD00160267 /* NodeDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */; };
 		E6550EEA224BBDC900160267 /* NodeDiscoveryHardCoded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */; };
 		E6550EF5224BEE1200160267 /* WebSocketsRetainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EF4224BEE1200160267 /* WebSocketsRetainer.swift */; };
+		E65C149922AECB6A006FA121 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C149822AECB6A006FA121 /* NumberOfLeadingZeroBitsInDataTests.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672562D228AB284004631F1 /* MockedNetworkDetailsRequester.swift */; };
 		E6725639228AB284004631F1 /* MockedHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6725631228AB284004631F1 /* MockedHTTPClient.swift */; };
@@ -536,6 +537,7 @@
 		E6550EE7224BBDBD00160267 /* NodeDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscovery.swift; sourceTree = "<group>"; };
 		E6550EE9224BBDC900160267 /* NodeDiscoveryHardCoded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDiscoveryHardCoded.swift; sourceTree = "<group>"; };
 		E6550EF4224BEE1200160267 /* WebSocketsRetainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketsRetainer.swift; sourceTree = "<group>"; };
+		E65C149822AECB6A006FA121 /* NumberOfLeadingZeroBitsInDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberOfLeadingZeroBitsInDataTests.swift; sourceTree = "<group>"; };
 		E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+AsArray.swift"; sourceTree = "<group>"; };
 		E672562D228AB284004631F1 /* MockedNetworkDetailsRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedNetworkDetailsRequester.swift; sourceTree = "<group>"; };
 		E6725631228AB284004631F1 /* MockedHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedHTTPClient.swift; sourceTree = "<group>"; };
@@ -3007,6 +3009,7 @@
 			isa = PBXGroup;
 			children = (
 				E6E27A102271CE250067D46E /* ProofOfWorkTests.swift */,
+				E65C149822AECB6A006FA121 /* NumberOfLeadingZeroBitsInDataTests.swift */,
 			);
 			path = ProofOfWork;
 			sourceTree = "<group>";
@@ -3613,6 +3616,7 @@
 				E6E27A502271CE250067D46E /* Base58Tests.swift in Sources */,
 				E6E27A3E2271CE250067D46E /* DSONEncodingIntArrayTests.swift in Sources */,
 				E6E27A3A2271CE250067D46E /* BadRRITests.swift in Sources */,
+				E65C149922AECB6A006FA121 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */,
 				E6725646228AD438004631F1 /* SpinAmountArthitmeticTests.swift in Sources */,
 				E62F352E2272051100B6779A /* TrivialAtomToDsonTests.swift in Sources */,
 				E6E27A2F2271CE250067D46E /* TooLongNameTests.swift in Sources */,
@@ -3835,7 +3839,6 @@
 				PRODUCT_NAME = RadixSDK;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

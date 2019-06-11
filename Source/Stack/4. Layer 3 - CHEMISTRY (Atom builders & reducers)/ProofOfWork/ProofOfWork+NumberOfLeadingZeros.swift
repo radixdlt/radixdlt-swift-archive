@@ -53,3 +53,28 @@ public extension ProofOfWork.NumberOfLeadingZeros {
         }
     }
 }
+
+// MARK: Data + NumberOfLeadingZeroBits
+internal extension DataConvertible {
+    var numberOfLeadingZeroBits: Int {
+        let byteArray = self.bytes
+        let bitsPerByte = Int.bitsPerByte
+        guard let index = byteArray.firstIndex(where: { $0 != 0 }) else {
+            return byteArray.count * bitsPerByte
+        }
+        
+        // count zero bits in byte at index `index`
+        return index * bitsPerByte + byteArray[index].leadingZeroBitCount
+    }
+}
+
+internal extension ProofOfWork.NumberOfLeadingZeros {
+    static func < (lhs: Int, rhs: ProofOfWork.NumberOfLeadingZeros) -> Bool {
+        return lhs < rhs.numberOfLeadingZeros
+    }
+    
+    static func >= (lhs: Int, rhs: ProofOfWork.NumberOfLeadingZeros) -> Bool {
+        return lhs >= rhs.numberOfLeadingZeros
+    }
+}
+
