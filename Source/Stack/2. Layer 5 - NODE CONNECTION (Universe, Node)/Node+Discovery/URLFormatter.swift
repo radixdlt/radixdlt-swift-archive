@@ -14,35 +14,40 @@ public struct URLFormatter {}
 public extension URLFormatter {
 
     static func format(
-        url urlConvertible: URLConvertible,
+        host hostConvertible: HostConvertible,
         `protocol`: CommuncationProtocol,
         appendPath: Bool = true,
         useSSL: Bool = true
     ) throws -> FormattedURL {
         
-        if urlConvertible.isLocal && useSSL {
+        if hostConvertible.isLocal && useSSL {
             throw Error.sslIsUnsupportedForLocalhost
         }
         
         var urlComponents = URLComponents()
-        urlComponents.host = try validating(isOnlyHost: urlConvertible.host)
+        urlComponents.host = try validating(isOnlyHost: hostConvertible.domain)
         if appendPath {
             urlComponents.path = `protocol`.path
         }
-        urlComponents.port = Int(urlConvertible.port.port)
+        urlComponents.port = Int(hostConvertible.port.port)
         urlComponents.scheme = `protocol`.scheme(useSSL: useSSL)
 
         guard let formattedUrl = urlComponents.url else {
             throw `protocol`.failedToCreateUrl(from: urlComponents.description)
         }
-        return FormattedURL(url: formattedUrl, host: urlConvertible.host, port: urlConvertible.port, isUsingSSL: useSSL)
+        return FormattedURL(
+            url: formattedUrl,
+            domain: hostConvertible.domain,
+            port: hostConvertible.port,
+            isUsingSSL: useSSL
+        )
     }
 }
 
 public extension URLFormatter {
     static var localhost: FormattedURL {
         do {
-            return try URLFormatter.format(url: Host.local(port: 8080), protocol: .hypertext, useSSL: false)
+            return try URLFormatter.format(host: Host.local(port: 8080), protocol: .hypertext, useSSL: false)
         } catch {
             incorrectImplementation("Failed to create localhost client, error: \(error)")
         }

@@ -11,4 +11,5 @@ import Foundation
 public enum NodeRouter: String, Router {
     case network
     case getLivePeers = "network/peers/live"
+    case getUniverseConfig = "universe"
 }

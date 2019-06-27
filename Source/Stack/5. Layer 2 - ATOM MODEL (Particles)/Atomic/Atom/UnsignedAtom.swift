@@ -16,9 +16,9 @@ public struct UnsignedAtom:
 {
     // swiftlint:enable colon opening_brace
 
-    public let wrappedAtom: ProofOfWorkedAtom
+    public let wrappedAtom: AtomWithFee
     
-    public init(atomWithPow: ProofOfWorkedAtom) throws {
+    public init(atomWithPow: AtomWithFee) throws {
         guard atomWithPow.signatures.isEmpty else {
             throw Error.atomAlreadySigned
         }
@@ -40,7 +40,7 @@ public extension UnsignedAtom {
     }
 }
 
-private extension ProofOfWorkedAtom {
+private extension AtomWithFee {
     func withSignature(_ signature: Signature, signatureId: EUID) -> SignedAtom {
         let atomWithPowAndSignature = Atom(
             metaData: metaData,
@@ -49,7 +49,7 @@ private extension ProofOfWorkedAtom {
         )
         
         do {
-            let proofOfWorkAtomWithSignature = try ProofOfWorkedAtom(atomWithPow: atomWithPowAndSignature)
+            let proofOfWorkAtomWithSignature = try AtomWithFee(atomWithPow: atomWithPowAndSignature)
             return try SignedAtom(proofOfWorkAtom: proofOfWorkAtomWithSignature, signatureId: signatureId)
         } catch {
             incorrectImplementation("Should always be able to add signature to an atom")

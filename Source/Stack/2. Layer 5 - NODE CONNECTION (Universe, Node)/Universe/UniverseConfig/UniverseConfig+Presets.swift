@@ -9,21 +9,27 @@
 import Foundation
 
 public extension UniverseConfig {
+    static var localnet: UniverseConfig {
+        return config(fromResource: "localnet")        
+    }
+    
     static var betanet: UniverseConfig {
         return config(fromResource: "betanet")
     }
-    static var sunstone: UniverseConfig {
-        return config(fromResource: "sunstone")
-    }
 }
+
+private final class ClassInBundle {}
 
 private extension UniverseConfig {
     static func config(fromResource resource: String) -> UniverseConfig {
         guard
-            let url = Bundle.main.url(forResource: resource, withExtension: "json") else {
-                incorrectImplementation("Config file not found: \(resource)")
+            case let bundle = Bundle(for: ClassInBundle.self),
+//            let path = bundle.path(forResource: resource, ofType: "json") else {
+            let url = bundle.url(forResource: resource, withExtension: "json") else {
+                incorrectImplementation("Config file '\(resource)' not found in Bundle.")
         }
         do {
+//            let url = URL(fileURLWithPath: path)
             let data = try Data(contentsOf: url)
             return try
                 JSONDecoder().decode(UniverseConfig.self, from: data)

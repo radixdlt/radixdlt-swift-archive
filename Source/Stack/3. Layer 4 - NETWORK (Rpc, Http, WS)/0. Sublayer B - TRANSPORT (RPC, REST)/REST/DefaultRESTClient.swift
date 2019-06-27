@@ -24,11 +24,15 @@ public final class DefaultRESTClient: RESTClient, HTTPClientOwner {
 
 public extension DefaultRESTClient {
     
-    convenience init(url: FormattedURL) {
+    convenience init(url: URL) {
         self.init(httpClient: DefaultHTTPClient(baseURL: url))
     }
     
+    convenience init(formattedUrl: FormattedURL) {
+        self.init(url: formattedUrl.url)
+    }
+    
     convenience init(node: Node) {
-        self.init(url: node.httpUrl)
+        self.init(formattedUrl: node.httpUrl)
     }
 }

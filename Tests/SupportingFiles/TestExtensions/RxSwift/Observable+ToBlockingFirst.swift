@@ -13,7 +13,6 @@ import RxTest
 import RxBlocking
 @testable import RadixSDK
 
-
 extension Observable where Element == Void {
     
     func blockingWasSuccessfull(
@@ -39,6 +38,45 @@ extension Observable where Element == Void {
         }
         return true
     }
+}
+
+extension ObservableConvertibleType where E == Never { /* Completable */
+    
+    func blockingWasSuccessfull(
+        timeout: RxTimeInterval? = 2,
+        failOnTimeout: Bool = true,
+        failOnErrors: Bool = true,
+        function: String = #function,
+        file: String = #file,
+        line: Int = #line
+        ) -> Bool {
+        
+        let description = "\(function) in \(file), at line: \(line)"
+        switch self.toBlocking(timeout: timeout).materialize() {
+        case .completed: return true
+        case .failed(_, let error):
+            if let rxError = error as? RxError {
+                if case .timeout = rxError {
+                    if failOnTimeout {
+                        XCTFail("Timeout, \(description)")
+                    }
+                }
+            } else {
+                if failOnErrors {
+                    XCTFail("Error: \(error) - \(description)")
+                }
+            }
+            return false
+        }
+    }
+    
+    func blockingAssertThrows<SpecificError>(
+        error expectedError: SpecificError,
+        timeout: RxTimeInterval? = 2
+    ) where SpecificError: Swift.Error, SpecificError: Equatable {
+        self.toBlocking(timeout: timeout).expectToThrow(error: expectedError)
+    }
+    
 }
 
 extension Observable {
@@ -221,6 +259,30 @@ private extension BlockingObservable {
             return nil
         } catch {
             fatalError("Unexpected error thrown: \(error), \(description)")
+        }
+    }
+}
+
+
+extension MaterializedSequenceResult {
+    var wasSuccessful: Bool {
+        switch self {
+        case .completed: return true
+        case .failed: return false
+        }
+    }
+    
+    func assertThrows<E>(error expectedError: E) -> Bool where E: Swift.Error & Equatable {
+        guard let mappedError = mapToError(type: E.self) else {
+            return false
+        }
+        return mappedError == expectedError
+    }
+    
+    func mapToError<E>(type expectedErrorType: E.Type) -> E? where E: Swift.Error & Equatable {
+        switch self {
+        case .completed: return nil
+        case .failed(_, let anyThrowedError): return anyThrowedError as? E
         }
     }
 }

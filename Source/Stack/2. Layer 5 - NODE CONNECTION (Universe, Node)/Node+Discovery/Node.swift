@@ -22,10 +22,29 @@ public struct Node:
     public let httpUrl: FormattedURL
     private let nodeInfo: NodeInfo
     
-    public init(info: NodeInfo, websocketsUrl: FormattedURL, httpUrl: FormattedURL) throws {
+    public init(
+        info: NodeInfo,
+        websocketsUrl: FormattedURL,
+        httpUrl: FormattedURL
+    ) {
         self.nodeInfo = info
         self.websocketsUrl = websocketsUrl
         self.httpUrl = httpUrl
+    }
+}
+
+public extension Node {
+
+    init(nodeInfo: NodeInfo) throws {
+        
+        let websocketsUrl = try URLFormatter.format(host: nodeInfo.host, protocol: .websockets)
+        let httpUrl = try URLFormatter.format(host: nodeInfo.host, protocol: .hypertext)
+        
+        self.init(
+            info: nodeInfo,
+            websocketsUrl: websocketsUrl,
+            httpUrl: httpUrl
+        )
     }
 }
 

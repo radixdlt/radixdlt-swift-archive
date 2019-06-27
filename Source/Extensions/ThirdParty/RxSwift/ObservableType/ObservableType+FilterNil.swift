@@ -10,12 +10,17 @@ import Foundation
 import RxSwift
 
 public extension ObservableType where E: OptionalType {
-    /**
-     Unwraps and filters out `nil` elements.
-     - returns: `Observable` of source `Observable`'s elements, with `nil` elements filtered out.
-     */
+
+    func replaceNilWith(_ valueOnNil: E.Wrapped) -> Observable<E.Wrapped> {
+        return self.map { element -> E.Wrapped in
+            guard let value = element.value else {
+                return valueOnNil
+            }
+            return value
+        }
+    }
     
-    func filterNil() -> Observable<E.Wrapped> {
+    func ifNilReturnEmpty() -> Observable<E.Wrapped> {
         return self.flatMap { element -> Observable<E.Wrapped> in
             guard let value = element.value else {
                 return Observable<E.Wrapped>.empty()

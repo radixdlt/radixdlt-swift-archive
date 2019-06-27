@@ -11,19 +11,22 @@ import XCTest
 
 class AtomIdentifierTests: XCTestCase {
     
-    let alice = RadixIdentity(privateKey: 1)
-    let bob = RadixIdentity(privateKey: 2)
+//    let alice = RadixIdentity(privateKey: 1)
+//    let bob = RadixIdentity(privateKey: 2)
+    
+    let alice = Address(privateKey: 1)
+    let bob = Address(privateKey: 2)
     
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
         
-        XCTAssertEqual(alice.address, "JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun")
-        XCTAssertEqual(alice.address.hashId, "b1cd0a4eb6d1cea5eb288fb4474ac403")
+        XCTAssertEqual(alice, "JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun")
+        XCTAssertEqual(alice.hashId, "b1cd0a4eb6d1cea5eb288fb4474ac403")
         XCTAssertEqual(alice.shard, -5634836225579692379)
         
-        XCTAssertEqual(bob.address, "JFeqmatdMyjxNce38w3pEfDeJ9CV6NCkygDt3kXtivHLsP3p846")
-        XCTAssertEqual(bob.address.hashId, "e142e5bb89503e3210b1f2c893eb5c12")
+        XCTAssertEqual(bob, "JFeqmatdMyjxNce38w3pEfDeJ9CV6NCkygDt3kXtivHLsP3p846")
+        XCTAssertEqual(bob.hashId, "e142e5bb89503e3210b1f2c893eb5c12")
         XCTAssertEqual(bob.shard, -2214955473087480270)
     }
     
@@ -104,7 +107,7 @@ class AtomIdentifierTests: XCTestCase {
         
         let consumables = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TransferrableTokensParticle.self) }
         XCTAssertEqual(consumables.count, 1)
-        let startBalance = TokenBalance(spunTransferrable: consumables[0])
+//        let startBalance = TokenBalanceReferenceWithConsumables(spunTransferrable: consumables[0])
         
         let atomFromTransfer = testAidOfAtomFrom(
             action: transferTokens,
@@ -127,14 +130,14 @@ private enum ShardAssertion {
     }
 }
 
-struct StatefulTransferTokensParticleGroupMapper: StatelessActionToParticleGroupsMapper, TransferTokenActionToParticleGroupsMapper {
-    
-    private let currentBalance: TokenBalance
-    
-    init(currentBalance: TokenBalance) {
+struct MockedStatefulTransferTokensParticleGroupMapper: StatelessActionToParticleGroupsMapper, TransferTokensActionToParticleGroupsMapper {
+
+    private let currentBalance: TokenBalanceReferenceWithConsumables
+
+    init(currentBalance: TokenBalanceReferenceWithConsumables) {
         self.currentBalance = currentBalance
     }
-    
+
     func particleGroups(for action: Action) -> ParticleGroups {
         return try! particleGroups(for: action, currentBalance: self.currentBalance)
     }
@@ -171,13 +174,14 @@ private extension AtomIdentifierTests {
 
 
 private let magic: Magic = 63799298
-private extension RadixIdentity {
+private extension Address {
     init() {
-        self.init(magic: magic)
+        self.init(privateKey: PrivateKey())
     }
-    
+
     init(privateKey: PrivateKey) {
-        self.init(private: privateKey, magic: magic)
+        let publicKey = PublicKey(private: privateKey)
+        self.init(magic: magic, publicKey: publicKey)
     }
 }
 

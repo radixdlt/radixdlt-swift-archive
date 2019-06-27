@@ -25,7 +25,11 @@ public extension Host {
     }
     
     // swiftlint:disable:next function_body_length
-    static func fromString(_ string: String, hostValidator: @escaping ((String) -> Bool) = { _ in true }) -> Host? {
+    static func fromString(
+        _ string: String,
+        defaultToPort defaultPort: Port = .nodeFinder,
+        hostValidator: @escaping ((String) -> Bool) = { _ in true }
+    ) -> Host? {
         
         let validatingHost: (String) -> String? = {
             guard hostValidator($0) else {
@@ -34,7 +38,6 @@ public extension Host {
             return $0
         }
         
-        let defaultPort: Port = 443
         let (base, scheme) = string.removingScheme()
         let components = base.components(separatedBy: ":")
         let schemeOrEmpty = scheme ?? ""
@@ -48,12 +51,12 @@ public extension Host {
             guard let validatedHost = validatingHost(hostWithPortRemoved) else {
                 return nil
             }
-            return try? Host(ipAddress: validatedHost, port: port)
+            return try? Host(domain: validatedHost, port: port)
         } else if components.count == 1 {
             guard let validatedHost = validatingHost(host) else {
                 return nil
             }
-            return try? Host(ipAddress: validatedHost, port: defaultPort)
+            return try? Host(domain: validatedHost, port: defaultPort)
         } else {
             incorrectImplementation("String should not have contained more than one colon")
         }

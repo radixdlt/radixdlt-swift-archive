@@ -15,11 +15,10 @@ class URLFormatterIncorrectUrlsTests: XCTestCase {
         // GIVEN
         // An address containing `256`, which does not fit in UInt8
         let ipAddress = "256.0.0.0"
-        
         XCTAssertThrowsSpecificError(
             // WHEN
             // I try to create a FormattedURL from it
-            try URLFormatter.format(url: Host(ipAddress: ipAddress, port: 1), protocol: .hypertext, useSSL: false),
+            try URLFormatter.format(host: Host(domain: ipAddress, port: 1), protocol: .hypertext, useSSL: false),
             // THEN
             URLFormatter.Error.nonHostStringPassed(url: ipAddress),
             "It should fail when IP address contains > UInt8.max"
@@ -33,7 +32,7 @@ class URLFormatterIncorrectUrlsTests: XCTestCase {
         XCTAssertThrowsSpecificError(
             // WHEN
             // I try to create a FormattedURL from it
-            try URLFormatter.format(url: Host(ipAddress: ipAddress, port: 1), protocol: .hypertext, useSSL: false),
+            try URLFormatter.format(host: Host(domain: ipAddress, port: 1), protocol: .hypertext, useSSL: false),
              // THEN
             URLFormatter.Error.nonHostStringPassed(url: ipAddress),
             "It should fail when IP address contains path"
@@ -46,7 +45,7 @@ class URLFormatterIncorrectUrlsTests: XCTestCase {
         XCTAssertThrowsSpecificError(
             // WHEN
             // I try to format URL using SSL
-            try URLFormatter.format(url: Host(ipAddress: "localhost", port: 123), protocol: .hypertext, useSSL: true),
+            try URLFormatter.format(host: Host(domain: "localhost", port: 123), protocol: .hypertext, useSSL: true),
             // THEN
             URLFormatter.Error.sslIsUnsupportedForLocalhost,
             "It should throw an error saying SSL is unsupported for localhost"

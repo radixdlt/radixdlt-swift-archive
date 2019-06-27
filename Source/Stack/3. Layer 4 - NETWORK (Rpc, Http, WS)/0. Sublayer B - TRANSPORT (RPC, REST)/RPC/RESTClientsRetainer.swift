@@ -34,7 +34,7 @@ private extension RESTClientsRetainer {
     
     func restClient(urlToNode: FormattedURL) -> DefaultRESTClient {
         return clientsForNodeUrl.valueForKey(key: urlToNode) {
-            DefaultRESTClient(url: urlToNode)
+            DefaultRESTClient(formattedUrl: urlToNode)
         }
     }
     

@@ -8,8 +8,12 @@
 
 import Foundation
 
-public protocol SubscriptionUpdate: Decodable {
-    var subscriberId: String { get }
+public protocol SubscriptionUpdate: PotentiallySubscriptionIdentifiable, Decodable {
+    var subscriberId: SubscriberId { get }
+}
+
+public extension SubscriptionUpdate {
+    var subscriberIdIfPresent: SubscriberId? { return subscriberId }
 }
 
 public enum AtomSubscriptionUpdate: SubscriptionUpdate {
@@ -28,7 +32,7 @@ public enum AtomSubscriptionUpdate: SubscriptionUpdate {
 
 public extension AtomSubscriptionUpdate {
     
-    var subscriberId: String {
+    var subscriberId: SubscriberId {
         switch self {
         case .submitAndSubscribe(let sas): return sas.subscriberId
         case .subscribe(let sub): return sub.subscriberId
@@ -61,22 +65,25 @@ public protocol SubscriptionUpdateValue: SubscriptionUpdate {}
 
 public struct AtomSubscriptionUpdateSubscribe: SubscriptionUpdateValue {
     public let atomEvents: [AtomEvent]
-    public let subscriberId: String
+    public let subscriberId: SubscriberId
     public let isHead: Bool
 }
 
 public extension AtomSubscriptionUpdateSubscribe {
-    func toAtomUpdates() -> [AtomUpdate] {
-        return atomEvents.enumerated().map {
-            let atomEvent = $0.element
-            let isHead = $0.offset == atomEvents.endIndex
-            return AtomUpdate(atom: atomEvent.atom, action: atomEvent.type, isHead: isHead)
+    func toAtomObservation() -> [AtomObservation] {
+        return atomEvents.enumerated().flatMap { eventAtIndex -> [AtomObservation] in
+            var observations: [AtomObservation] = [AtomObservation(eventAtIndex.element)]
+            let isHead = eventAtIndex.offset == atomEvents.endIndex
+            if isHead {
+                observations.append(AtomObservation.head())
+            }
+            return observations
         }
     }
 }
 
 public struct AtomSubscriptionUpdateSubmitAndSubscribe: SubscriptionUpdateValue {
-    public let subscriberId: String
+    public let subscriberId: SubscriberId
     public let value: State
     
     public enum State: String, Equatable, Decodable {

@@ -25,6 +25,7 @@ public struct Address:
     StringRepresentable,
     Ownable,
     PublicKeyOwner,
+    Sharded,
     RadixHashable,
     DSONEncodable,
     Codable,
@@ -66,6 +67,13 @@ public struct Address:
         self.base58String = try Address.isChecksummed(base58String)
         let addressData = base58String.asData
         self.publicKey = try PublicKey(data: addressData[1...addressData.count - 5])
+    }
+}
+
+// MARK: - Sharded
+public extension Address {
+    var shard: Shard {
+        return publicKey.shard
     }
 }
 
@@ -192,14 +200,5 @@ public extension Address {
     
     enum Error: Swift.Error, Equatable {
         case checksumMismatch
-    }
-}
-
-public extension UniverseConfig {
-    var rads: TokenDefinitionParticle {
-        guard let radTokenDefinition = genesis.particles().compactMap({ $0 as? TokenDefinitionParticle }).first(where: { $0.name == .rad }) else {
-            incorrectImplementation("Config should contain TokenDefinitionParticle for \(Name.rad)")
-        }
-        return radTokenDefinition
     }
 }

@@ -10,6 +10,13 @@ import Foundation
 import Alamofire
 import RxSwift
 
+public protocol URLConvertible {
+    var url: URL { get }
+}
+extension URL: URLConvertible {
+    public var url: URL { return self }
+}
+
 public final class DefaultHTTPClient: HTTPClient, RequestInterceptor {
     
     private let alamofireSession: Alamofire.Session
@@ -17,22 +24,40 @@ public final class DefaultHTTPClient: HTTPClient, RequestInterceptor {
     // Internal for testing only
     internal let baseUrl: URL
     
-    public init(baseURL: FormattedURL) {
-        self.baseUrl = baseURL.url
+    public init(
+        baseURL baseURLConvertible: URLConvertible,
+        makeRequestInterceptor: ((URLConvertible) -> Alamofire.RequestInterceptor) = HTTPRequestInterceptor.init
+    ) {
+        let baseURL = baseURLConvertible.url
+        self.baseUrl = baseURL
         let configuration = URLSessionConfiguration.default
-        let interceptor = HTTPRequestInterceptor(baseURL: baseURL.url)
+        let interceptor = makeRequestInterceptor(baseURL.url)
+        
         var evaluators: [String: ServerTrustEvaluating] = [
             String.localhost: DisabledEvaluator()
         ]
-        if let host = baseURL.url.host {
+        
+        if let host = baseURL.host {
             evaluators[host] = DisabledEvaluator()
         }
+       
         let trustManager = ServerTrustManager(evaluators: evaluators)
-        alamofireSession = Alamofire.Session(configuration: configuration, interceptor: interceptor, serverTrustManager: trustManager)
+        
+        alamofireSession = Alamofire.Session(
+            configuration: configuration,
+            interceptor: interceptor,
+            serverTrustManager: trustManager
+        )
     }
     
     deinit {
         log.error("💣")
+    }
+}
+
+public extension DefaultHTTPClient {
+    convenience init(formattedUrl: FormattedURL) {
+        self.init(baseURL: formattedUrl.url)
     }
 }
 

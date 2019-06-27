@@ -9,50 +9,51 @@
 import Foundation
 import RxSwift
 
-public final class NodeDiscoveryHardCoded: NodeDiscovery {
+public final class NodeDiscoveryHardCoded: NodeDiscovery, SuitableNodeDiscovering {
+    public typealias Error = NodeDiscoveryError
     private let urls: [FormattedURL]
+    private let expectedUniverseConfig: UniverseConfig
+    private let strategyIfUnsuitable: StrategyWhenNodeIsUnsuitable
     
-    public typealias MakeNetworkDetailsRequester = (FormattedURL) -> NodeNetworkDetailsRequesting
-    private let makeNetworkDetailsRequester: MakeNetworkDetailsRequester
-    
-    public init(
-        hosts: [Host],
-        networkDetailsRequestingFactory: @escaping MakeNetworkDetailsRequester = { RESTClientsRetainer.restClient(urlToNode: $0) }
-    ) throws {
-        self.urls = try hosts.map {
-            try URLFormatter.format(url: $0, protocol: .hypertext, useSSL: !$0.isLocal)
-        }
-        self.makeNetworkDetailsRequester = networkDetailsRequestingFactory
+    public init(formattedURLs: [FormattedURL], universeConfig: UniverseConfig, strategyIfUnsuitable: StrategyWhenNodeIsUnsuitable) {
+        self.urls = formattedURLs
+        self.expectedUniverseConfig = universeConfig
+        self.strategyIfUnsuitable = strategyIfUnsuitable
     }
+    
 }
 
 // MARK: - NodeDiscovery
 public extension NodeDiscoveryHardCoded {
     
+    convenience init(hosts: [Host], universeConfig: UniverseConfig, strategyIfUnsuitable: StrategyWhenNodeIsUnsuitable) throws {
+        self.init(
+            formattedURLs: try hosts.map {
+                try URLFormatter.format(host: $0, protocol: .hypertext, useSSL: !$0.isLocal)
+            },
+            universeConfig: universeConfig,
+            strategyIfUnsuitable: strategyIfUnsuitable
+        )
+    }
+    
     func loadNodes() -> Observable<[Node]> {
-        return Observable<[FormattedURL]>.just(urls)
-            .flatMap { (nodeUrls: [FormattedURL]) -> Observable<[Node]> in
-                let nodeObservables: [Observable<Node>] = nodeUrls.map { [unowned self] (nodeUrl: FormattedURL) -> Observable<Node> in
-                    self.makeNetworkDetailsRequester(nodeUrl)
-                        .networkDetails()
-                        .map { $0.udp }
-                        .asObservable()
-                        .first(ifEmptyThrow: Error.udpNetworkDetailsEmptyForNode(url: nodeUrl.url))
-                        .map {
-                            return try Node(
-                                info: $0,
-                                websocketsUrl: try URLFormatter.format(url: nodeUrl, protocol: .websockets, useSSL: !nodeUrl.isLocal),
-                                httpUrl: try URLFormatter.format(url: nodeUrl, protocol: .hypertext, useSSL: !nodeUrl.isLocal)
-                            )
-                    }
-                }
-                return Observable.combineLatest(nodeObservables) { $0 }
-        }
+        return Observable.combineLatest(urls.map { [unowned self] urlToNode in
+            return self.infoOfNode(urlToNode).getInfo().map { try Node(nodeInfo: $0) }
+        }) { $0 }
+    }
+    
+    var configOfNode: (Node) -> Observable<UniverseConfig> {
+        return { RESTClientsRetainer.restClient(node: $0).getUniverseConfig() }
     }
 }
 
-public extension NodeDiscoveryHardCoded {
-    enum Error: Swift.Error {
-        case udpNetworkDetailsEmptyForNode(url: URL)
+private extension NodeDiscoveryHardCoded {
+    var infoOfNode: (FormattedURL) -> NodeInfoRequesting {
+        return { RESTClientsRetainer.restClient(urlToNode: $0) }
     }
+    
+//    var universeConfigRequester: UniverseConfigRequesting {
+//        implementMe()
+//    }
 }
+

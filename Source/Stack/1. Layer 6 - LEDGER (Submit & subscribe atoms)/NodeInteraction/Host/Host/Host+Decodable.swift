@@ -11,7 +11,7 @@ import Foundation
 // MARK: - Decodable
 public extension Host {
     enum CodingKeys: String, CodingKey {
-        case ipAddress = "ip"
+        case domain = "ip"
         case port
     }
     
@@ -22,19 +22,22 @@ public extension Host {
         let port: Port
         do {
             port = try Port(unvalidated: portValue)
-        } catch {
+        } catch let error as Port.Error {
             throw Error.badPort(error)
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
         }
-        let ipAddress = try container.decode(StringValue.self, forKey: .ipAddress).stringValue
         
-        try self.init(ipAddress: ipAddress, port: port)
+        let domain = try container.decode(StringValue.self, forKey: .domain).stringValue
+        
+        try self.init(domain: domain, port: port)
     }
 }
 
-// MARK: - Validation
+// MARK: - Throwing
 public extension Host {
-    enum Error: Swift.Error {
-        case badPort(Swift.Error)
+    enum Error: Swift.Error, Equatable {
+        case badPort(Port.Error)
         case locationEmpty
     }
 }

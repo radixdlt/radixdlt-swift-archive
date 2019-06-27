@@ -17,7 +17,7 @@ import RxBlocking
 extension NodeDiscoveryHardCoded {
     static var localhost: NodeDiscoveryHardCoded {
         do {
-            return try NodeDiscoveryHardCoded(hosts: [Host.local()])
+            return try NodeDiscoveryHardCoded(hosts: [Host.local()], universeConfig: UniverseConfig.localnet, strategyIfUnsuitable: .throwError)
         } catch {
             incorrectImplementation("Error: \(error)")
         }

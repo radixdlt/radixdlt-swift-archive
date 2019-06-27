@@ -51,10 +51,10 @@ class PrivateKeyTests: XCTestCase {
         let privateKeyBicoinKit = try! wallet.privateKey(index: expected.hdWalletIndex)
         let privateKey = try! PrivateKey(data: privateKeyBicoinKit.data)
         XCTAssertEqual(privateKey.hex, "3737eade55463b1cbae340bb3bc770d42a6e54a39e3fd92c080b1621b170eb03")
-        let identity = RadixIdentity(private: privateKey, magic: magic)
+        let account = Account(privateKey: privateKey)
         let address = Address(
             magic: magic,
-            publicKey: identity.publicKey
+            publicKey: account.publicKey
         )
         XCTAssertEqual(address.full, "JEqnJtuyrXLkEDRT6ADTGSMe6etWyKNVdffC5icSh4hWhJYcvCx")
         let publicKey = PublicKey(private: privateKey)

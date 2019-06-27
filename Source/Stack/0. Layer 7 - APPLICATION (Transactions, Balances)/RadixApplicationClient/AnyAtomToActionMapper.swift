@@ -1,0 +1,42 @@
+//
+//  AnyAtomToExecutedActionMapper.swift
+//  RadixSDK iOS
+//
+//  Created by Alexander Cyon on 2019-06-14.
+//  Copyright © 2019 Radix DLT. All rights reserved.
+//
+
+import Foundation
+import RxSwift
+
+public struct AnyAtomToExecutedActionMapper: BaseAtomToSpecificExecutedActionMapper {
+    
+    private let _actionType: () -> Any.Type
+    private let _matchesType: (Any.Type) -> Bool
+    private let _map: (Atom, Any.Type, Account) -> Observable<Any>
+    
+    public init<Concrete>(_ concrete: Concrete) where Concrete: AtomToSpecificExecutedActionMapper {
+        self._actionType = { Concrete.ExecutedAction.self }
+        self._matchesType = { return $0 == Concrete.ExecutedAction.self }
+        self._map = {
+            guard let matchingActionType = $1 as? Concrete.ExecutedAction.Type else {
+                incorrectImplementation()
+            }
+            return concrete.map(atom: $0, toAction: matchingActionType, account: $2).map { $0 }
+        }
+    }
+}
+
+public extension AnyAtomToExecutedActionMapper {
+    func map<Action>(atom: Atom, toAction actionType: Action.Type, account: Account) -> Observable<Action> {
+        implementMe()
+    }
+    
+    func matches<Action>(actionType: Action.Type) -> Bool {
+        return _matchesType(actionType)
+    }
+    
+    var actionType: Any.Type {
+        return _actionType()
+    }
+}

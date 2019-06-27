@@ -40,7 +40,7 @@ public extension DictionaryConvertible {
     }
     
     func firstKeyForValue(_ needle: Value) -> Key? {
-        abstract
+        abstract()
     }
     
     func valueFor(key: Key) -> Value? {

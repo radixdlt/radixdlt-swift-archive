@@ -63,7 +63,13 @@ private extension CreateTokenActionTests {
 // MARK: - IRRELEVANT For this test
 private extension Address {
     static var irrelevant: Address {
-        return RadixIdentity(magic: .irrelevant).address
+        return Address(magic: .irrelevant, publicKey: .irrelevant)
+    }
+}
+
+private extension PublicKey {
+    static var irrelevant: PublicKey {
+        return PublicKey(private: PrivateKey())
     }
 }
 

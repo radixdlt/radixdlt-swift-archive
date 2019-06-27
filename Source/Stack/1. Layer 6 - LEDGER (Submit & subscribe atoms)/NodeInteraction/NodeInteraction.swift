@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 public protocol NodeInteractionSubscribing {
-    func subscribe(to address: Address) -> Observable<[AtomUpdate]>
+    func subscribe(to address: Address) -> Observable<[AtomObservation]>
 }
 
 public protocol NodeInteractionUnsubscribing {

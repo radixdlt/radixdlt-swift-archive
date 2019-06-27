@@ -28,7 +28,7 @@ The `RadixApplicationClient` is the API layer this library exposes to you as a c
 typealias RadixApplicationClient = Transacting & AccountBalancing & TokenCreating & MessageSending
 
 protocol TokenCreating {
-    func create(token: CreateTokenAction) -> Single<ResourceIdentifier>
+    func create(token: CreateTokenAction) -> SingleWanted<ResourceIdentifier>
 }
 
 protocol Transacting {
@@ -217,7 +217,7 @@ to help with understanding of the different layers and trying to ease separation
 | LEVEL | NAME                                    		| FUNCTION                                                                	| COMPONENTS                                                        |
 |-------|-----------------------------------------------|---------------------------------------------------------------------------|-------------------------------------------------------------------|
 | 7     | [Application](#layer-7---application)   		| Transfer & create token, account balance 									| `ApplicationClient`, `RadixIdentity`                         		|
-| 6     | [Ledger](#layer-6---ledger)             		| Subscribing to and submission of atoms          							| `NodeInteraction`, `AtomUpdate`                                   |
+| 6     | [Ledger](#layer-6---ledger)             		| Subscribing to and submission of atoms          							| `NodeInteraction`, `AtomObservation`                                   |
 | 5     | [Node Connection](#layer-5---node-connection) | Connection to a node's RPC and REST API's 								| `Node`, `NodeConnection`, `Universe`                         		|
 | 4     | [Network](#layer-4---network)           		| Network (Websocket, HTTP) and transport (RPC, REST)                   	| `RPCClient`, `RESTClient`, `WebsocketToNode                       |
 | 3     | [Chemistry](#layer-3---chemistry)       		| Mapping user action to atoms and reducing atoms to state (e.g. balance) 	| `CreateTokenAction`, `TransferTokenAction`, `TokenBalanceReducer` |

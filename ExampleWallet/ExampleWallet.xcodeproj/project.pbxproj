@@ -1,0 +1,799 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E62AD04022C3DBCC00608713 /* SipHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83222C3C95600536DC7 /* SipHash.framework */; };
+		E6ABA7EF22C3C6B200536DC7 /* Never.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79822C3C6B200536DC7 /* Never.swift */; };
+		E6ABA7F022C3C6B200536DC7 /* Unsafe︕！Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79922C3C6B200536DC7 /* Unsafe︕！Cache.swift */; };
+		E6ABA7F122C3C6B200536DC7 /* FormValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79C22C3C6B200536DC7 /* FormValidator.swift */; };
+		E6ABA7F222C3C6B200536DC7 /* Driver+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79E22C3C6B200536DC7 /* Driver+Empty.swift */; };
+		E6ABA7F322C3C6B200536DC7 /* FilterNil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79F22C3C6B200536DC7 /* FilterNil.swift */; };
+		E6ABA7F422C3C6B200536DC7 /* Driver+Operator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A022C3C6B200536DC7 /* Driver+Operator.swift */; };
+		E6ABA7F522C3C6B200536DC7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A122C3C6B200536DC7 /* ActivityIndicator.swift */; };
+		E6ABA7F622C3C6B200536DC7 /* UIView+Spacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A322C3C6B200536DC7 /* UIView+Spacer.swift */; };
+		E6ABA7F822C3C6B200536DC7 /* ScrollViewOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A622C3C6B200536DC7 /* ScrollViewOwner.swift */; };
+		E6ABA7F922C3C6B200536DC7 /* UIFont_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A722C3C6B200536DC7 /* UIFont_Extension.swift */; };
+		E6ABA7FA22C3C6B200536DC7 /* UIColor_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A822C3C6B200536DC7 /* UIColor_Extension.swift */; };
+		E6ABA7FB22C3C6B200536DC7 /* UITabBarItem_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A922C3C6B200536DC7 /* UITabBarItem_Extension.swift */; };
+		E6ABA7FC22C3C6B200536DC7 /* EmptyInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7AB22C3C6B200536DC7 /* EmptyInitializable.swift */; };
+		E6ABA7FD22C3C6B200536DC7 /* Makeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7AC22C3C6B200536DC7 /* Makeable.swift */; };
+		E6ABA7FE22C3C6B200536DC7 /* StaticEmptyInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7AD22C3C6B200536DC7 /* StaticEmptyInitializable.swift */; };
+		E6ABA7FF22C3C6B200536DC7 /* Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7AE22C3C6B200536DC7 /* Styling.swift */; };
+		E6ABA80022C3C6B200536DC7 /* ContentViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7AF22C3C6B200536DC7 /* ContentViewProvider.swift */; };
+		E6ABA80122C3C6B200536DC7 /* ViewStyling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7B022C3C6B200536DC7 /* ViewStyling.swift */; };
+		E6ABA80222C3C6B200536DC7 /* StackViewStyling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7B122C3C6B200536DC7 /* StackViewStyling.swift */; };
+		E6ABA80322C3C6B200536DC7 /* UITextField+Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7B322C3C6B200536DC7 /* UITextField+Styling.swift */; };
+		E6ABA80422C3C6B200536DC7 /* UIStackView+Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7B422C3C6B200536DC7 /* UIStackView+Styling.swift */; };
+		E6ABA80522C3C6B200536DC7 /* UITextView+Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7B522C3C6B200536DC7 /* UITextView+Styling.swift */; };
+		E6ABA80622C3C6B200536DC7 /* UILabel+Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7B622C3C6B200536DC7 /* UILabel+Styling.swift */; };
+		E6ABA80722C3C6B200536DC7 /* UIButton+Styling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7B722C3C6B200536DC7 /* UIButton+Styling.swift */; };
+		E6ABA80822C3C6B200536DC7 /* ViewModelled.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7B822C3C6B200536DC7 /* ViewModelled.swift */; };
+		E6ABA80922C3C6B200536DC7 /* ViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7B922C3C6B200536DC7 /* ViewStyle.swift */; };
+		E6ABA80A22C3C6B200536DC7 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7BD22C3C6B200536DC7 /* SettingsView.swift */; };
+		E6ABA80B22C3C6B200536DC7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7BE22C3C6B200536DC7 /* SettingsViewModel.swift */; };
+		E6ABA80C22C3C6B200536DC7 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7BF22C3C6B200536DC7 /* SettingsCoordinator.swift */; };
+		E6ABA80D22C3C6B200536DC7 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7C022C3C6B200536DC7 /* Settings.swift */; };
+		E6ABA80E22C3C6B200536DC7 /* CreateNewWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7C222C3C6B200536DC7 /* CreateNewWallet.swift */; };
+		E6ABA80F22C3C6B200536DC7 /* CreateNewWalletCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7C322C3C6B200536DC7 /* CreateNewWalletCoordinator.swift */; };
+		E6ABA81022C3C6B200536DC7 /* CreateNewWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7C422C3C6B200536DC7 /* CreateNewWalletViewModel.swift */; };
+		E6ABA81122C3C6B200536DC7 /* CreateNewWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7C522C3C6B200536DC7 /* CreateNewWalletView.swift */; };
+		E6ABA81722C3C6B200536DC7 /* ChooseWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7CE22C3C6B200536DC7 /* ChooseWalletViewModel.swift */; };
+		E6ABA81822C3C6B200536DC7 /* ChooseWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7CF22C3C6B200536DC7 /* ChooseWalletView.swift */; };
+		E6ABA81922C3C6B200536DC7 /* ChooseWalletCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7D022C3C6B200536DC7 /* ChooseWalletCoordinator.swift */; };
+		E6ABA81A22C3C6B200536DC7 /* ChooseWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7D122C3C6B200536DC7 /* ChooseWallet.swift */; };
+		E6ABA81F22C3C6B200536DC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6ABA7D722C3C6B200536DC7 /* Assets.xcassets */; };
+		E6ABA82022C3C6B200536DC7 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7D922C3C6B200536DC7 /* Scene.swift */; };
+		E6ABA82122C3C6B200536DC7 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7DA22C3C6B200536DC7 /* ViewModelType.swift */; };
+		E6ABA82422C3C6B200536DC7 /* AppNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7E022C3C6B200536DC7 /* AppNavigator.swift */; };
+		E6ABA82522C3C6B200536DC7 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7E122C3C6B200536DC7 /* MainCoordinator.swift */; };
+		E6ABA82622C3C6B200536DC7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7E222C3C6B200536DC7 /* AppDelegate.swift */; };
+		E6ABA82722C3C6B200536DC7 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7E322C3C6B200536DC7 /* Coordinator.swift */; };
+		E6ABA82822C3C6B200536DC7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6ABA7E422C3C6B200536DC7 /* LaunchScreen.storyboard */; };
+		E6ABA82922C3C6B200536DC7 /* LabelsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7E722C3C6B200536DC7 /* LabelsView.swift */; };
+		E6ABA82A22C3C6B200536DC7 /* BalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7E822C3C6B200536DC7 /* BalanceView.swift */; };
+		E6ABA82B22C3C6B200536DC7 /* WalletBalanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7E922C3C6B200536DC7 /* WalletBalanceView.swift */; };
+		E6ABA82C22C3C6B200536DC7 /* WalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7EA22C3C6B200536DC7 /* WalletView.swift */; };
+		E6ABA83122C3C79800536DC7 /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83022C3C79800536DC7 /* RadixSDK.framework */; };
+		E6ABA84022C3C95600536DC7 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83322C3C95600536DC7 /* CryptoSwift.framework */; };
+		E6ABA84122C3C95600536DC7 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83422C3C95600536DC7 /* RxSwift.framework */; };
+		E6ABA84222C3C95600536DC7 /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83522C3C95600536DC7 /* SwiftCBOR.framework */; };
+		E6ABA84322C3C95600536DC7 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83622C3C95600536DC7 /* BigInt.framework */; };
+		E6ABA84422C3C95600536DC7 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83722C3C95600536DC7 /* SwiftyBeaver.framework */; };
+		E6ABA84522C3C95600536DC7 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83822C3C95600536DC7 /* RxBlocking.framework */; };
+		E6ABA84622C3C95600536DC7 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83922C3C95600536DC7 /* Starscream.framework */; };
+		E6ABA84722C3C95600536DC7 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83A22C3C95600536DC7 /* RxCocoa.framework */; };
+		E6ABA84822C3C95600536DC7 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83B22C3C95600536DC7 /* Alamofire.framework */; };
+		E6ABA84A22C3C95600536DC7 /* RxAtomic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83D22C3C95600536DC7 /* RxAtomic.framework */; };
+		E6ABA84B22C3C95600536DC7 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83E22C3C95600536DC7 /* BitcoinKit.framework */; };
+		E6ABA84E22C3CAD600536DC7 /* TinyConstraints.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA84D22C3CAD600536DC7 /* TinyConstraints.framework */; };
+		E6DC276022C40E450049BB3C /* RestoreWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7D422C3C6B200536DC7 /* RestoreWalletView.swift */; };
+		E6DC276122C40E4A0049BB3C /* RestoreWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7D322C3C6B200536DC7 /* RestoreWalletViewModel.swift */; };
+		E6DC276222C40E500049BB3C /* RestoreWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7D522C3C6B200536DC7 /* RestoreWallet.swift */; };
+		E6DC276322C40E550049BB3C /* RestoreWalletCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7D622C3C6B200536DC7 /* RestoreWalletCoordinator.swift */; };
+		E6EDCDA122C3E47E008AE5D0 /* Send.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7C922C3C6B200536DC7 /* Send.swift */; };
+		E6EDCDA222C3E47E008AE5D0 /* SendCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7CA22C3C6B200536DC7 /* SendCoordinator.swift */; };
+		E6EDCDA322C3E47E008AE5D0 /* SendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7CB22C3C6B200536DC7 /* SendView.swift */; };
+		E6EDCDA422C3E47E008AE5D0 /* SendViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7CC22C3C6B200536DC7 /* SendViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E6ABA77D22C3C56D00536DC7 /* ExampleWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6ABA79822C3C6B200536DC7 /* Never.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Never.swift; sourceTree = "<group>"; };
+		E6ABA79922C3C6B200536DC7 /* Unsafe︕！Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Unsafe︕！Cache.swift"; sourceTree = "<group>"; };
+		E6ABA79C22C3C6B200536DC7 /* FormValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormValidator.swift; sourceTree = "<group>"; };
+		E6ABA79E22C3C6B200536DC7 /* Driver+Empty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Empty.swift"; sourceTree = "<group>"; };
+		E6ABA79F22C3C6B200536DC7 /* FilterNil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterNil.swift; sourceTree = "<group>"; };
+		E6ABA7A022C3C6B200536DC7 /* Driver+Operator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Operator.swift"; sourceTree = "<group>"; };
+		E6ABA7A122C3C6B200536DC7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		E6ABA7A322C3C6B200536DC7 /* UIView+Spacer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Spacer.swift"; sourceTree = "<group>"; };
+		E6ABA7A622C3C6B200536DC7 /* ScrollViewOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewOwner.swift; sourceTree = "<group>"; };
+		E6ABA7A722C3C6B200536DC7 /* UIFont_Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFont_Extension.swift; sourceTree = "<group>"; };
+		E6ABA7A822C3C6B200536DC7 /* UIColor_Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor_Extension.swift; sourceTree = "<group>"; };
+		E6ABA7A922C3C6B200536DC7 /* UITabBarItem_Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITabBarItem_Extension.swift; sourceTree = "<group>"; };
+		E6ABA7AB22C3C6B200536DC7 /* EmptyInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyInitializable.swift; sourceTree = "<group>"; };
+		E6ABA7AC22C3C6B200536DC7 /* Makeable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Makeable.swift; sourceTree = "<group>"; };
+		E6ABA7AD22C3C6B200536DC7 /* StaticEmptyInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaticEmptyInitializable.swift; sourceTree = "<group>"; };
+		E6ABA7AE22C3C6B200536DC7 /* Styling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Styling.swift; sourceTree = "<group>"; };
+		E6ABA7AF22C3C6B200536DC7 /* ContentViewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewProvider.swift; sourceTree = "<group>"; };
+		E6ABA7B022C3C6B200536DC7 /* ViewStyling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewStyling.swift; sourceTree = "<group>"; };
+		E6ABA7B122C3C6B200536DC7 /* StackViewStyling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackViewStyling.swift; sourceTree = "<group>"; };
+		E6ABA7B322C3C6B200536DC7 /* UITextField+Styling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+Styling.swift"; sourceTree = "<group>"; };
+		E6ABA7B422C3C6B200536DC7 /* UIStackView+Styling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStackView+Styling.swift"; sourceTree = "<group>"; };
+		E6ABA7B522C3C6B200536DC7 /* UITextView+Styling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextView+Styling.swift"; sourceTree = "<group>"; };
+		E6ABA7B622C3C6B200536DC7 /* UILabel+Styling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+Styling.swift"; sourceTree = "<group>"; };
+		E6ABA7B722C3C6B200536DC7 /* UIButton+Styling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Styling.swift"; sourceTree = "<group>"; };
+		E6ABA7B822C3C6B200536DC7 /* ViewModelled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelled.swift; sourceTree = "<group>"; };
+		E6ABA7B922C3C6B200536DC7 /* ViewStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewStyle.swift; sourceTree = "<group>"; };
+		E6ABA7BD22C3C6B200536DC7 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E6ABA7BE22C3C6B200536DC7 /* SettingsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		E6ABA7BF22C3C6B200536DC7 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
+		E6ABA7C022C3C6B200536DC7 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		E6ABA7C222C3C6B200536DC7 /* CreateNewWallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewWallet.swift; sourceTree = "<group>"; };
+		E6ABA7C322C3C6B200536DC7 /* CreateNewWalletCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewWalletCoordinator.swift; sourceTree = "<group>"; };
+		E6ABA7C422C3C6B200536DC7 /* CreateNewWalletViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewWalletViewModel.swift; sourceTree = "<group>"; };
+		E6ABA7C522C3C6B200536DC7 /* CreateNewWalletView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNewWalletView.swift; sourceTree = "<group>"; };
+		E6ABA7C922C3C6B200536DC7 /* Send.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Send.swift; sourceTree = "<group>"; };
+		E6ABA7CA22C3C6B200536DC7 /* SendCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendCoordinator.swift; sourceTree = "<group>"; };
+		E6ABA7CB22C3C6B200536DC7 /* SendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendView.swift; sourceTree = "<group>"; };
+		E6ABA7CC22C3C6B200536DC7 /* SendViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendViewModel.swift; sourceTree = "<group>"; };
+		E6ABA7CE22C3C6B200536DC7 /* ChooseWalletViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseWalletViewModel.swift; sourceTree = "<group>"; };
+		E6ABA7CF22C3C6B200536DC7 /* ChooseWalletView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseWalletView.swift; sourceTree = "<group>"; };
+		E6ABA7D022C3C6B200536DC7 /* ChooseWalletCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseWalletCoordinator.swift; sourceTree = "<group>"; };
+		E6ABA7D122C3C6B200536DC7 /* ChooseWallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseWallet.swift; sourceTree = "<group>"; };
+		E6ABA7D322C3C6B200536DC7 /* RestoreWalletViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreWalletViewModel.swift; sourceTree = "<group>"; };
+		E6ABA7D422C3C6B200536DC7 /* RestoreWalletView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreWalletView.swift; sourceTree = "<group>"; };
+		E6ABA7D522C3C6B200536DC7 /* RestoreWallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreWallet.swift; sourceTree = "<group>"; };
+		E6ABA7D622C3C6B200536DC7 /* RestoreWalletCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestoreWalletCoordinator.swift; sourceTree = "<group>"; };
+		E6ABA7D722C3C6B200536DC7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E6ABA7D922C3C6B200536DC7 /* Scene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		E6ABA7DA22C3C6B200536DC7 /* ViewModelType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
+		E6ABA7DE22C3C6B200536DC7 /* RadixExampleWallet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RadixExampleWallet-Info.plist"; sourceTree = "<group>"; };
+		E6ABA7E022C3C6B200536DC7 /* AppNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNavigator.swift; sourceTree = "<group>"; };
+		E6ABA7E122C3C6B200536DC7 /* MainCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		E6ABA7E222C3C6B200536DC7 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E6ABA7E322C3C6B200536DC7 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		E6ABA7E522C3C6B200536DC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E6ABA7E722C3C6B200536DC7 /* LabelsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelsView.swift; sourceTree = "<group>"; };
+		E6ABA7E822C3C6B200536DC7 /* BalanceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BalanceView.swift; sourceTree = "<group>"; };
+		E6ABA7E922C3C6B200536DC7 /* WalletBalanceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletBalanceView.swift; sourceTree = "<group>"; };
+		E6ABA7EA22C3C6B200536DC7 /* WalletView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletView.swift; sourceTree = "<group>"; };
+		E6ABA83022C3C79800536DC7 /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6ABA83222C3C95600536DC7 /* SipHash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SipHash.framework; path = ../Carthage/Build/iOS/SipHash.framework; sourceTree = "<group>"; };
+		E6ABA83322C3C95600536DC7 /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = ../Carthage/Build/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
+		E6ABA83422C3C95600536DC7 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = ../Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		E6ABA83522C3C95600536DC7 /* SwiftCBOR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftCBOR.framework; path = ../Carthage/Build/iOS/SwiftCBOR.framework; sourceTree = "<group>"; };
+		E6ABA83622C3C95600536DC7 /* BigInt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BigInt.framework; path = ../Carthage/Build/iOS/BigInt.framework; sourceTree = "<group>"; };
+		E6ABA83722C3C95600536DC7 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = ../Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
+		E6ABA83822C3C95600536DC7 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = ../Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
+		E6ABA83922C3C95600536DC7 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = ../Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
+		E6ABA83A22C3C95600536DC7 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = ../Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		E6ABA83B22C3C95600536DC7 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = ../Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		E6ABA83C22C3C95600536DC7 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = ../Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
+		E6ABA83D22C3C95600536DC7 /* RxAtomic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxAtomic.framework; path = ../Carthage/Build/iOS/RxAtomic.framework; sourceTree = "<group>"; };
+		E6ABA83E22C3C95600536DC7 /* BitcoinKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BitcoinKit.framework; path = ../Carthage/Build/iOS/BitcoinKit.framework; sourceTree = "<group>"; };
+		E6ABA84D22C3CAD600536DC7 /* TinyConstraints.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TinyConstraints.framework; path = Carthage/Build/iOS/TinyConstraints.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E6ABA77A22C3C56D00536DC7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E6ABA83122C3C79800536DC7 /* RadixSDK.framework in Frameworks */,
+				E6ABA84E22C3CAD600536DC7 /* TinyConstraints.framework in Frameworks */,
+				E6ABA84022C3C95600536DC7 /* CryptoSwift.framework in Frameworks */,
+				E62AD04022C3DBCC00608713 /* SipHash.framework in Frameworks */,
+				E6ABA84122C3C95600536DC7 /* RxSwift.framework in Frameworks */,
+				E6ABA84222C3C95600536DC7 /* SwiftCBOR.framework in Frameworks */,
+				E6ABA84322C3C95600536DC7 /* BigInt.framework in Frameworks */,
+				E6ABA84422C3C95600536DC7 /* SwiftyBeaver.framework in Frameworks */,
+				E6ABA84522C3C95600536DC7 /* RxBlocking.framework in Frameworks */,
+				E6ABA84622C3C95600536DC7 /* Starscream.framework in Frameworks */,
+				E6ABA84722C3C95600536DC7 /* RxCocoa.framework in Frameworks */,
+				E6ABA84822C3C95600536DC7 /* Alamofire.framework in Frameworks */,
+				E6ABA84A22C3C95600536DC7 /* RxAtomic.framework in Frameworks */,
+				E6ABA84B22C3C95600536DC7 /* BitcoinKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E6ABA77422C3C56D00536DC7 = {
+			isa = PBXGroup;
+			children = (
+				E6ABA79422C3C6B200536DC7 /* Source */,
+				E6ABA77E22C3C56D00536DC7 /* Products */,
+				E6ABA82F22C3C79800536DC7 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		E6ABA77E22C3C56D00536DC7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA77D22C3C56D00536DC7 /* ExampleWallet.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E6ABA79422C3C6B200536DC7 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7BA22C3C6B200536DC7 /* Application */,
+				E6ABA79A22C3C6B200536DC7 /* Extensions */,
+				E6ABA79722C3C6B200536DC7 /* Utils */,
+				E6ABA7E622C3C6B200536DC7 /* Views */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		E6ABA79722C3C6B200536DC7 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA79822C3C6B200536DC7 /* Never.swift */,
+				E6ABA79922C3C6B200536DC7 /* Unsafe︕！Cache.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		E6ABA79A22C3C6B200536DC7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA79B22C3C6B200536DC7 /* FormValidator */,
+				E6ABA79D22C3C6B200536DC7 /* RxSwift */,
+				E6ABA7A222C3C6B200536DC7 /* UIKit */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E6ABA79B22C3C6B200536DC7 /* FormValidator */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA79C22C3C6B200536DC7 /* FormValidator.swift */,
+			);
+			path = FormValidator;
+			sourceTree = "<group>";
+		};
+		E6ABA79D22C3C6B200536DC7 /* RxSwift */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA79E22C3C6B200536DC7 /* Driver+Empty.swift */,
+				E6ABA79F22C3C6B200536DC7 /* FilterNil.swift */,
+				E6ABA7A022C3C6B200536DC7 /* Driver+Operator.swift */,
+				E6ABA7A122C3C6B200536DC7 /* ActivityIndicator.swift */,
+			);
+			path = RxSwift;
+			sourceTree = "<group>";
+		};
+		E6ABA7A222C3C6B200536DC7 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7A322C3C6B200536DC7 /* UIView+Spacer.swift */,
+				E6ABA7A422C3C6B200536DC7 /* SingleViewOwner */,
+				E6ABA7A722C3C6B200536DC7 /* UIFont_Extension.swift */,
+				E6ABA7A822C3C6B200536DC7 /* UIColor_Extension.swift */,
+				E6ABA7A922C3C6B200536DC7 /* UITabBarItem_Extension.swift */,
+				E6ABA7AA22C3C6B200536DC7 /* Views+Styleable */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		E6ABA7A422C3C6B200536DC7 /* SingleViewOwner */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7A622C3C6B200536DC7 /* ScrollViewOwner.swift */,
+			);
+			path = SingleViewOwner;
+			sourceTree = "<group>";
+		};
+		E6ABA7AA22C3C6B200536DC7 /* Views+Styleable */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7AB22C3C6B200536DC7 /* EmptyInitializable.swift */,
+				E6ABA7AC22C3C6B200536DC7 /* Makeable.swift */,
+				E6ABA7AD22C3C6B200536DC7 /* StaticEmptyInitializable.swift */,
+				E6ABA7AE22C3C6B200536DC7 /* Styling.swift */,
+				E6ABA7AF22C3C6B200536DC7 /* ContentViewProvider.swift */,
+				E6ABA7B022C3C6B200536DC7 /* ViewStyling.swift */,
+				E6ABA7B122C3C6B200536DC7 /* StackViewStyling.swift */,
+				E6ABA7B222C3C6B200536DC7 /* Styling */,
+				E6ABA7B822C3C6B200536DC7 /* ViewModelled.swift */,
+				E6ABA7B922C3C6B200536DC7 /* ViewStyle.swift */,
+			);
+			path = "Views+Styleable";
+			sourceTree = "<group>";
+		};
+		E6ABA7B222C3C6B200536DC7 /* Styling */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7B322C3C6B200536DC7 /* UITextField+Styling.swift */,
+				E6ABA7B422C3C6B200536DC7 /* UIStackView+Styling.swift */,
+				E6ABA7B522C3C6B200536DC7 /* UITextView+Styling.swift */,
+				E6ABA7B622C3C6B200536DC7 /* UILabel+Styling.swift */,
+				E6ABA7B722C3C6B200536DC7 /* UIButton+Styling.swift */,
+			);
+			path = Styling;
+			sourceTree = "<group>";
+		};
+		E6ABA7BA22C3C6B200536DC7 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7BB22C3C6B200536DC7 /* Scenes */,
+				E6ABA7D722C3C6B200536DC7 /* Assets.xcassets */,
+				E6ABA7D822C3C6B200536DC7 /* Common */,
+				E6ABA7DD22C3C6B200536DC7 /* SupportingFiles */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		E6ABA7BB22C3C6B200536DC7 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7BC22C3C6B200536DC7 /* Settings */,
+				E6ABA7C122C3C6B200536DC7 /* CreateNewWallet */,
+				E6ABA7C822C3C6B200536DC7 /* Send */,
+				E6ABA7CD22C3C6B200536DC7 /* ChooseWallet */,
+				E6ABA7D222C3C6B200536DC7 /* RestoreWallet */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		E6ABA7BC22C3C6B200536DC7 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7BD22C3C6B200536DC7 /* SettingsView.swift */,
+				E6ABA7BE22C3C6B200536DC7 /* SettingsViewModel.swift */,
+				E6ABA7BF22C3C6B200536DC7 /* SettingsCoordinator.swift */,
+				E6ABA7C022C3C6B200536DC7 /* Settings.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E6ABA7C122C3C6B200536DC7 /* CreateNewWallet */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7C222C3C6B200536DC7 /* CreateNewWallet.swift */,
+				E6ABA7C322C3C6B200536DC7 /* CreateNewWalletCoordinator.swift */,
+				E6ABA7C422C3C6B200536DC7 /* CreateNewWalletViewModel.swift */,
+				E6ABA7C522C3C6B200536DC7 /* CreateNewWalletView.swift */,
+			);
+			path = CreateNewWallet;
+			sourceTree = "<group>";
+		};
+		E6ABA7C822C3C6B200536DC7 /* Send */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7C922C3C6B200536DC7 /* Send.swift */,
+				E6ABA7CA22C3C6B200536DC7 /* SendCoordinator.swift */,
+				E6ABA7CB22C3C6B200536DC7 /* SendView.swift */,
+				E6ABA7CC22C3C6B200536DC7 /* SendViewModel.swift */,
+			);
+			path = Send;
+			sourceTree = "<group>";
+		};
+		E6ABA7CD22C3C6B200536DC7 /* ChooseWallet */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7CE22C3C6B200536DC7 /* ChooseWalletViewModel.swift */,
+				E6ABA7CF22C3C6B200536DC7 /* ChooseWalletView.swift */,
+				E6ABA7D022C3C6B200536DC7 /* ChooseWalletCoordinator.swift */,
+				E6ABA7D122C3C6B200536DC7 /* ChooseWallet.swift */,
+			);
+			path = ChooseWallet;
+			sourceTree = "<group>";
+		};
+		E6ABA7D222C3C6B200536DC7 /* RestoreWallet */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7D322C3C6B200536DC7 /* RestoreWalletViewModel.swift */,
+				E6ABA7D422C3C6B200536DC7 /* RestoreWalletView.swift */,
+				E6ABA7D522C3C6B200536DC7 /* RestoreWallet.swift */,
+				E6ABA7D622C3C6B200536DC7 /* RestoreWalletCoordinator.swift */,
+			);
+			path = RestoreWallet;
+			sourceTree = "<group>";
+		};
+		E6ABA7D822C3C6B200536DC7 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7D922C3C6B200536DC7 /* Scene.swift */,
+				E6ABA7DA22C3C6B200536DC7 /* ViewModelType.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		E6ABA7DD22C3C6B200536DC7 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7DE22C3C6B200536DC7 /* RadixExampleWallet-Info.plist */,
+				E6ABA7E422C3C6B200536DC7 /* LaunchScreen.storyboard */,
+				E6ABA7DF22C3C6B200536DC7 /* Navigation */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		E6ABA7DF22C3C6B200536DC7 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7E022C3C6B200536DC7 /* AppNavigator.swift */,
+				E6ABA7E122C3C6B200536DC7 /* MainCoordinator.swift */,
+				E6ABA7E222C3C6B200536DC7 /* AppDelegate.swift */,
+				E6ABA7E322C3C6B200536DC7 /* Coordinator.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		E6ABA7E622C3C6B200536DC7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA7E722C3C6B200536DC7 /* LabelsView.swift */,
+				E6ABA7E822C3C6B200536DC7 /* BalanceView.swift */,
+				E6ABA7E922C3C6B200536DC7 /* WalletBalanceView.swift */,
+				E6ABA7EA22C3C6B200536DC7 /* WalletView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E6ABA82F22C3C79800536DC7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E6ABA84D22C3CAD600536DC7 /* TinyConstraints.framework */,
+				E6ABA83B22C3C95600536DC7 /* Alamofire.framework */,
+				E6ABA83622C3C95600536DC7 /* BigInt.framework */,
+				E6ABA83E22C3C95600536DC7 /* BitcoinKit.framework */,
+				E6ABA83322C3C95600536DC7 /* CryptoSwift.framework */,
+				E6ABA83D22C3C95600536DC7 /* RxAtomic.framework */,
+				E6ABA83822C3C95600536DC7 /* RxBlocking.framework */,
+				E6ABA83A22C3C95600536DC7 /* RxCocoa.framework */,
+				E6ABA83422C3C95600536DC7 /* RxSwift.framework */,
+				E6ABA83C22C3C95600536DC7 /* RxTest.framework */,
+				E6ABA83222C3C95600536DC7 /* SipHash.framework */,
+				E6ABA83922C3C95600536DC7 /* Starscream.framework */,
+				E6ABA83522C3C95600536DC7 /* SwiftCBOR.framework */,
+				E6ABA83722C3C95600536DC7 /* SwiftyBeaver.framework */,
+				E6ABA83022C3C79800536DC7 /* RadixSDK.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E6ABA77C22C3C56D00536DC7 /* ExampleWallet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E6ABA78F22C3C56E00536DC7 /* Build configuration list for PBXNativeTarget "ExampleWallet" */;
+			buildPhases = (
+				E6ABA77922C3C56D00536DC7 /* Sources */,
+				E6ABA77A22C3C56D00536DC7 /* Frameworks */,
+				E6ABA77B22C3C56D00536DC7 /* Resources */,
+				E6ABA84C22C3CA8B00536DC7 /* Carthage */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ExampleWallet;
+			productName = ExampleWallet;
+			productReference = E6ABA77D22C3C56D00536DC7 /* ExampleWallet.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E6ABA77522C3C56D00536DC7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "Radix DLT";
+				TargetAttributes = {
+					E6ABA77C22C3C56D00536DC7 = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+				};
+			};
+			buildConfigurationList = E6ABA77822C3C56D00536DC7 /* Build configuration list for PBXProject "ExampleWallet" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E6ABA77422C3C56D00536DC7;
+			productRefGroup = E6ABA77E22C3C56D00536DC7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E6ABA77C22C3C56D00536DC7 /* ExampleWallet */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E6ABA77B22C3C56D00536DC7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E6ABA81F22C3C6B200536DC7 /* Assets.xcassets in Resources */,
+				E6ABA82822C3C6B200536DC7 /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E6ABA84C22C3CA8B00536DC7 /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"$(SRCROOT)/input.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = Carthage;
+			outputFileListPaths = (
+				"$(SRCROOT)/output.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E6ABA77922C3C56D00536DC7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E6EDCDA422C3E47E008AE5D0 /* SendViewModel.swift in Sources */,
+				E6ABA82A22C3C6B200536DC7 /* BalanceView.swift in Sources */,
+				E6ABA80922C3C6B200536DC7 /* ViewStyle.swift in Sources */,
+				E6ABA82522C3C6B200536DC7 /* MainCoordinator.swift in Sources */,
+				E6ABA80422C3C6B200536DC7 /* UIStackView+Styling.swift in Sources */,
+				E6ABA7F622C3C6B200536DC7 /* UIView+Spacer.swift in Sources */,
+				E6ABA82C22C3C6B200536DC7 /* WalletView.swift in Sources */,
+				E6ABA81922C3C6B200536DC7 /* ChooseWalletCoordinator.swift in Sources */,
+				E6ABA7FE22C3C6B200536DC7 /* StaticEmptyInitializable.swift in Sources */,
+				E6ABA7F322C3C6B200536DC7 /* FilterNil.swift in Sources */,
+				E6ABA82422C3C6B200536DC7 /* AppNavigator.swift in Sources */,
+				E6ABA81122C3C6B200536DC7 /* CreateNewWalletView.swift in Sources */,
+				E6ABA7F422C3C6B200536DC7 /* Driver+Operator.swift in Sources */,
+				E6ABA7F122C3C6B200536DC7 /* FormValidator.swift in Sources */,
+				E6ABA80022C3C6B200536DC7 /* ContentViewProvider.swift in Sources */,
+				E6EDCDA122C3E47E008AE5D0 /* Send.swift in Sources */,
+				E6ABA82922C3C6B200536DC7 /* LabelsView.swift in Sources */,
+				E6ABA82722C3C6B200536DC7 /* Coordinator.swift in Sources */,
+				E6DC276322C40E550049BB3C /* RestoreWalletCoordinator.swift in Sources */,
+				E6ABA81022C3C6B200536DC7 /* CreateNewWalletViewModel.swift in Sources */,
+				E6ABA7F022C3C6B200536DC7 /* Unsafe︕！Cache.swift in Sources */,
+				E6ABA80822C3C6B200536DC7 /* ViewModelled.swift in Sources */,
+				E6EDCDA322C3E47E008AE5D0 /* SendView.swift in Sources */,
+				E6ABA82122C3C6B200536DC7 /* ViewModelType.swift in Sources */,
+				E6ABA80322C3C6B200536DC7 /* UITextField+Styling.swift in Sources */,
+				E6ABA7F522C3C6B200536DC7 /* ActivityIndicator.swift in Sources */,
+				E6ABA7EF22C3C6B200536DC7 /* Never.swift in Sources */,
+				E6ABA81822C3C6B200536DC7 /* ChooseWalletView.swift in Sources */,
+				E6ABA7FB22C3C6B200536DC7 /* UITabBarItem_Extension.swift in Sources */,
+				E6ABA7FD22C3C6B200536DC7 /* Makeable.swift in Sources */,
+				E6ABA80B22C3C6B200536DC7 /* SettingsViewModel.swift in Sources */,
+				E6ABA81722C3C6B200536DC7 /* ChooseWalletViewModel.swift in Sources */,
+				E6ABA7F222C3C6B200536DC7 /* Driver+Empty.swift in Sources */,
+				E6ABA7FF22C3C6B200536DC7 /* Styling.swift in Sources */,
+				E6ABA80722C3C6B200536DC7 /* UIButton+Styling.swift in Sources */,
+				E6ABA82022C3C6B200536DC7 /* Scene.swift in Sources */,
+				E6ABA80F22C3C6B200536DC7 /* CreateNewWalletCoordinator.swift in Sources */,
+				E6ABA80522C3C6B200536DC7 /* UITextView+Styling.swift in Sources */,
+				E6ABA81A22C3C6B200536DC7 /* ChooseWallet.swift in Sources */,
+				E6EDCDA222C3E47E008AE5D0 /* SendCoordinator.swift in Sources */,
+				E6ABA80D22C3C6B200536DC7 /* Settings.swift in Sources */,
+				E6ABA82B22C3C6B200536DC7 /* WalletBalanceView.swift in Sources */,
+				E6ABA80122C3C6B200536DC7 /* ViewStyling.swift in Sources */,
+				E6ABA80E22C3C6B200536DC7 /* CreateNewWallet.swift in Sources */,
+				E6ABA80A22C3C6B200536DC7 /* SettingsView.swift in Sources */,
+				E6DC276122C40E4A0049BB3C /* RestoreWalletViewModel.swift in Sources */,
+				E6ABA7F922C3C6B200536DC7 /* UIFont_Extension.swift in Sources */,
+				E6DC276022C40E450049BB3C /* RestoreWalletView.swift in Sources */,
+				E6ABA80622C3C6B200536DC7 /* UILabel+Styling.swift in Sources */,
+				E6ABA82622C3C6B200536DC7 /* AppDelegate.swift in Sources */,
+				E6DC276222C40E500049BB3C /* RestoreWallet.swift in Sources */,
+				E6ABA80C22C3C6B200536DC7 /* SettingsCoordinator.swift in Sources */,
+				E6ABA80222C3C6B200536DC7 /* StackViewStyling.swift in Sources */,
+				E6ABA7FC22C3C6B200536DC7 /* EmptyInitializable.swift in Sources */,
+				E6ABA7F822C3C6B200536DC7 /* ScrollViewOwner.swift in Sources */,
+				E6ABA7FA22C3C6B200536DC7 /* UIColor_Extension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E6ABA7E422C3C6B200536DC7 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E6ABA7E522C3C6B200536DC7 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E6ABA78D22C3C56E00536DC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E6ABA78E22C3C56E00536DC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E6ABA79022C3C56E00536DC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/../Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = "Source/Application/SupportingFiles/RadixExampleWallet-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.ExampleWallet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E6ABA79122C3C56E00536DC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/../Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = "Source/Application/SupportingFiles/RadixExampleWallet-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.ExampleWallet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E6ABA77822C3C56D00536DC7 /* Build configuration list for PBXProject "ExampleWallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6ABA78D22C3C56E00536DC7 /* Debug */,
+				E6ABA78E22C3C56E00536DC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E6ABA78F22C3C56E00536DC7 /* Build configuration list for PBXNativeTarget "ExampleWallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6ABA79022C3C56E00536DC7 /* Debug */,
+				E6ABA79122C3C56E00536DC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E6ABA77522C3C56D00536DC7 /* Project object */;
+}

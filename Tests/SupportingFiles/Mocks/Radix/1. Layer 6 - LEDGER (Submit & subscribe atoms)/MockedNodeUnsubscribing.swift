@@ -11,10 +11,10 @@ import RxSwift
 
 struct MockedNodeUnsubscribing: NodeInteractionUnsubscribing {
     func unsubscribe(from address: Address) -> CompletableWanted {
-        abstract
+        abstract()
     }
     
     func unsubscribeAll() -> CompletableWanted {
-        abstract
+        abstract()
     }
 }

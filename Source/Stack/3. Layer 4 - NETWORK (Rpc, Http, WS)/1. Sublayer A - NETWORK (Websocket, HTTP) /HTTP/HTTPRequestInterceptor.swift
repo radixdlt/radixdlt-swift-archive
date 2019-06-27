@@ -11,8 +11,8 @@ import Alamofire
 
 public final class HTTPRequestInterceptor: RequestInterceptor {
     private let baseURL: URL
-    init(baseURL: URL) {
-        self.baseURL = baseURL
+    public init(baseURL: RadixSDK.URLConvertible) {
+        self.baseURL = baseURL.url
     }
 }
 

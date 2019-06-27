@@ -21,15 +21,12 @@ class GetBalanceOverWebSocketsTest: WebsocketTest {
     override func setUp() {
         super.setUp()
         self.address = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
-        self.xrd = ResourceIdentifier(address: address, name: "XRD")
     }
     
     func testGetBalanceOverWS() {
-        let magic: Magic = 1
-        let identity = RadixIdentity(private: 1, magic: magic)
-        let application = DefaultRadixApplicationClient(node: .localhost, identity: identity, magic: magic)
-        guard let balance =  application.getBalances(for: address, ofToken: xrd).blockingTakeFirst() else { return }
+        let application = DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhost, identity: AbstractIdentity())
+        guard let balance = application.balanceOfNativeTokensOrZero(for: address).blockingTakeFirst() else { return }
         
-        XCTAssertEqual(balance.balance.amount.description, "1000000000000000000000000000")
+        XCTAssertEqual(balance.amount.description, "1000000000000000000000000000")
     }
 }

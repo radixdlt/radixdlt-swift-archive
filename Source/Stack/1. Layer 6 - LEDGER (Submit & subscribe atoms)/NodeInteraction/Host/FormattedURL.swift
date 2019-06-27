@@ -8,15 +8,30 @@
 
 import Foundation
 
-public struct FormattedURL: Hashable, Equatable, URLConvertible {
+// swiftlint:disable colon opening_brace
+
+public struct FormattedURL:
+    HostConvertible,
+    URLConvertible,
+    Hashable
+{
+    // swiftlint:enable colon opening_brace
+
     public let url: URL
-    public let host: String
+    public let domain: String
     public let port: Port
     public let isUsingSSL: Bool
-    public init(url: URL, host: String, port: Port, isUsingSSL: Bool) {
+    
+    public init(url: URL, domain: String, port: Port, isUsingSSL: Bool) {
         self.url = url
-        self.host = host
+        self.domain = domain
         self.port = port
         self.isUsingSSL = isUsingSSL
+    }
+}
+
+public extension FormattedURL {
+    static var localhost: FormattedURL {
+        return URLFormatter.localhost
     }
 }

@@ -24,4 +24,11 @@ public extension Array {
         mutable.append(contentsOf: array)
         return mutable
     }
+    
+    func appending<S>(contentsOf additionalElements: S) -> [Element] where S: Sequence, S.Element == Element {
+        var copy = self
+        copy.append(contentsOf: additionalElements)
+        return copy
+    }
+    
 }

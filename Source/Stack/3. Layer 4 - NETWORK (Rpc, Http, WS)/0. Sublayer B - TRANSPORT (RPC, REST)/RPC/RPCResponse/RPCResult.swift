@@ -41,12 +41,3 @@ extension Result: Decodable where Success: Decodable, Failure == RPCError {
         }
     }
 }
-
-extension RPCResult: PotentiallyRequestIdentifiable where Success: RPCResposeResultConvertible {
-    var requestIdIfPresent: Int? {
-        switch self {
-        case .success(let success): return success.requestIdIfPresent
-        case .failure: return nil
-        }
-    }
-}

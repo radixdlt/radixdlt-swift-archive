@@ -8,15 +8,17 @@
 
 import Foundation
 
-protocol PotentiallyRequestIdentifiable {
+public protocol PotentiallyRequestIdentifiable {
     var requestIdIfPresent: Int? { get }
 }
 
-extension PotentiallyRequestIdentifiable {
+public extension PotentiallyRequestIdentifiable {
     var requestIdIfPresent: Int? { return nil }
 }
 
-internal protocol RPCResposeResultConvertible: Decodable, PotentiallyRequestIdentifiable {
+public protocol BaseRPCResposeResult {}
+
+public protocol RPCResposeResultConvertible: Decodable, BaseRPCResposeResult {
     associatedtype Model: Decodable
     var model: Model { get }
 }

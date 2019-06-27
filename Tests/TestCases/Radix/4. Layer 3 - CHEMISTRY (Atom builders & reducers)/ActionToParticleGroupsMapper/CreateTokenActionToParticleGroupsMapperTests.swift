@@ -13,8 +13,8 @@ import XCTest
 class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
 
     private let magic: Magic = 63799298
-    private lazy var identity = RadixIdentity(private: 1, magic: magic)
-    private lazy var address = Address(magic: magic, publicKey: identity.publicKey)
+    private lazy var account = Account(privateKey: 1)
+    private lazy var address = Address(magic: magic, publicKey: account.publicKey)
     
     override func setUp() {
         super.setUp()

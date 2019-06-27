@@ -1,5 +1,5 @@
 //
-//  ProofOfWorkedAtom.swift
+//  AtomWithFee.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-04-17.
@@ -10,7 +10,7 @@ import Foundation
 
 // swiftlint:disable colon opening_brace
 
-public struct ProofOfWorkedAtom:
+public struct AtomWithFee:
     AtomContainer,
     Throwing
 {
@@ -35,7 +35,7 @@ public struct ProofOfWorkedAtom:
 }
 
 // MARK: - Throwing
-public extension ProofOfWorkedAtom {
+public extension AtomWithFee {
     enum Error: Swift.Error {
         case atomAlreadyContainedPow(powNonce: String)
         case atomDoesNotContainPow

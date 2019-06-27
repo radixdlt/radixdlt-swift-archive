@@ -12,6 +12,6 @@ import RxSwift
 
 struct MockedNodeSubmitting: NodeInteractionSubmitting {
     func submit(atom: SignedAtom) -> CompletableWanted {
-        abstract
+        abstract()
     }
 }

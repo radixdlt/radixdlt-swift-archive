@@ -12,8 +12,20 @@ import Foundation
 
 public protocol RESTClient:
     NodeNetworkDetailsRequesting,
+    NodeInfoRequesting,
     LivePeersRequesting,
-    NodeAddressRequesting
+    UniverseConfigRequesting
 {
     // swiftlint:enable colon opening_brace
+}
+
+public extension NodeNetworkDetailsRequesting where Self: NodeInfoRequesting {
+    
+    func getInfo() -> SingleWanted<NodeInfo> {
+        return networkDetails().map {
+            $0.udp
+        }.flatMap { (nodesInfos: [NodeInfo]) -> SingleWanted<NodeInfo> in
+            return SingleWanted.from(nodesInfos)
+        }
+    }
 }

@@ -8,14 +8,85 @@
 
 import Foundation
 
-public struct AtomSubmitAndSubscribeRequest: Encodable {
+//public struct AtomSubmitAndSubscribeRequest: Encodable {
+//
+//    public let subscriberId: SubscriberId
+//    public let atom: Atom
+//
+//    public init(atom signedAtom: SignedAtom, subscriberId: SubscriberId) {
+//        // TODO: Make `Atomic` conform to `Encodable`
+//        self.atom = Atom(atomic: signedAtom)
+//        self.subscriberId = subscriberId
+//    }
+//}
+
+public struct AtomSubmitRequest: Encodable {
     
-    public let subscriberId: SubscriberId
     public let atom: Atom
     
-    public init(atom signedAtom: SignedAtom, subscriberId: SubscriberId) {
+    public init(atom signedAtom: SignedAtom) {
         // TODO: Make `Atomic` conform to `Encodable`
-        self.atom = Atom(atomic: signedAtom)
-        self.subscriberId = subscriberId
+        self.atom = Atom(atomic: signedAtom) // or replace with: `signedAtom.wrappedAtom.wrappedAtom` ?
+    }
+}
+
+public struct GetAtomStatusRequest: Encodable {
+    public let atomIdentifier: AtomIdentifier
+}
+
+// MARK: - Encodable
+public extension GetAtomStatusRequest {
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(atomIdentifier.stringValue, forKey: .atomIdentifier)
+    }
+    
+    // MARK: - CodingKeys
+    enum CodingKeys: String, CodingKey {
+        case atomIdentifier = "aid"
+    }
+}
+
+public struct GetAtomStatusNotificationRequest: Encodable {
+    public let atomIdentifier: AtomIdentifier
+    public let subscriberId: SubscriberId
+}
+
+// MARK: - Encodable
+public extension GetAtomStatusNotificationRequest {
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(atomIdentifier.stringValue, forKey: .atomIdentifier)
+        try container.encode(subscriberId, forKey: .subscriberId)
+    }
+    
+    // MARK: - CodingKeys
+    enum CodingKeys: String, CodingKey {
+        case atomIdentifier = "aid"
+        case subscriberId
+    }
+}
+
+public struct CloseAtomStatusNotificationRequest: Encodable {
+    public let subscriberId: SubscriberId
+}
+
+public struct GetAtomRequest: Encodable {
+    public let atomHashIdentifier: HashId
+}
+
+// MARK: - Encodable
+public extension GetAtomRequest {
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(atomHashIdentifier.stringValue, forKey: .atomHashIdentifier)
+    }
+    
+    // MARK: - CodingKeys
+    enum CodingKeys: String, CodingKey {
+        case atomHashIdentifier = "hid"
     }
 }

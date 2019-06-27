@@ -8,14 +8,14 @@
 
 import Foundation
 
-public struct Token: TokenConvertible, Hashable {
+public struct TokenDefinition: TokenConvertible, Hashable {
     public let symbol: Symbol
     public let name: Name
     public let address: Address
     public let granularity: Granularity
 }
 
-public extension Token {
+public extension TokenDefinition {
     init(tokenConvertible token: TokenConvertible) {
         self.symbol = token.symbol
         self.name = token.name
@@ -25,13 +25,5 @@ public extension Token {
     
     init(particle: TokenDefinitionParticle) {
         self.init(tokenConvertible: particle)
-    }
-}
-
-// MARK: - Known Tokens
-public extension Token {
-    
-    static func rad(inUniverse universeConfig: UniverseConfig) -> Token {
-        return Token(particle: universeConfig.rads)
     }
 }

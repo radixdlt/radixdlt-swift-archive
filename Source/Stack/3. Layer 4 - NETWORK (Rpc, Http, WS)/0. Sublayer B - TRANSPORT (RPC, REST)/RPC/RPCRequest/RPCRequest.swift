@@ -23,6 +23,16 @@ public struct RPCRequest: Encodable {
 
 // MARK: - Convenience Init
 public extension RPCRequest {
+    init(rootRequest: RPCRootRequest) {
+        switch rootRequest {
+        case .fireAndForget(let rpcMethod): self.init(method: rpcMethod)
+        case .sendAndListenToNotifications(let rpcMethod, _): self.init(method: rpcMethod)
+        }
+    }
+}
+
+private extension RPCRequest {
+    
     init(method: RPCMethod) {
         self.init(rpcMethod: method.method.rawValue, encodeParams: method.encodeParams(key: .parameters))
     }

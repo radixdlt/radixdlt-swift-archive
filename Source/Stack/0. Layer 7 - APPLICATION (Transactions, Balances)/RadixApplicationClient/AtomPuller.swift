@@ -1,0 +1,52 @@
+//
+//  Ledger.swift
+//  RadixSDK iOS
+//
+//  Created by Alexander Cyon on 2019-06-14.
+//  Copyright © 2019 Radix DLT. All rights reserved.
+//
+
+import Foundation
+import RxSwift
+
+public protocol AtomPuller {
+    func pull(address: Address) -> Observable<Any>
+}
+
+public final class DefaultAtomPuller: AtomPuller {
+    
+    private var requestCache = RequestCache()
+    
+    private let networkController: RadixNetworkController
+    public init(networkController: RadixNetworkController) {
+        self.networkController = networkController
+    }
+}
+
+public extension DefaultAtomPuller {
+    func pull(address: Address) -> Observable<Any> {
+        return requestCache.valueForKey(key: address) {
+            let fetchAtomsRequest = FetchAtomsAction.newRequest(address: address)
+            return Observable.create { [unowned self] observer in
+                
+                self.networkController.dispatch(nodeAction: fetchAtomsRequest)
+                
+                return Disposables.create {
+                    self.networkController.dispatch(nodeAction: FetchAtomsAction.cancel(action: fetchAtomsRequest))
+                }
+            }
+        }.map { $0 }
+    }
+}
+
+internal extension DefaultAtomPuller {
+    struct RequestCache: DictionaryConvertibleMutable, ExpressibleByDictionaryLiteral {
+        public typealias Key = Address
+        public typealias Value = Observable<FetchAtomsAction>
+        public typealias Map = [Key: Value]
+        public var dictionary: Map
+        public init(dictionary: Map) {
+            self.dictionary = dictionary
+        }
+    }
+}

@@ -30,7 +30,7 @@ public struct NodeInfo:
 // MARK: - Equatable
 public extension NodeInfo {
     func hash(into hasher: inout Hasher) {
-        hasher.combine(host.ipAddress)
+        hasher.combine(host.domain)
         hasher.combine(system.shards)
     }
 }
@@ -38,7 +38,7 @@ public extension NodeInfo {
 // MARK: - Equatable
 public extension NodeInfo {
     static func == (lhs: NodeInfo, rhs: NodeInfo) -> Bool {
-        return lhs.host.ipAddress == rhs.host.ipAddress && lhs.system.shards == rhs.system.shards
+        return lhs.host.domain == rhs.host.domain && lhs.system.shards == rhs.system.shards
     }
 }
 

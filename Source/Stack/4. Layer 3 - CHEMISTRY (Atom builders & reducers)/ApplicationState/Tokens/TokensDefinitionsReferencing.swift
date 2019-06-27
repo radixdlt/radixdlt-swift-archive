@@ -8,6 +8,6 @@
 
 import Foundation
 
-public protocol TokensDefinitionsReferencing {
-    var tokens: TokensDefinitionsStore { get }
-}
+//public protocol TokensDefinitionsReferencing {
+//    var tokens: TokensDefinitionsStore { get }
+//}

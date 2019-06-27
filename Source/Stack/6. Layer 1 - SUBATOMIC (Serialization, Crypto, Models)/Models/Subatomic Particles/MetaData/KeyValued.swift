@@ -30,7 +30,7 @@ extension Dictionary: KeyValued {
     }
     
     public func firstKeyForValue(_ needle: Value) -> Key? {
-        abstract
+        abstract()
     }
 }
 

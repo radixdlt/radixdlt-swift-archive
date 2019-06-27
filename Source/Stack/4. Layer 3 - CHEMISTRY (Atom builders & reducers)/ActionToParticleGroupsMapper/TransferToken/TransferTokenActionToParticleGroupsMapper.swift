@@ -1,5 +1,5 @@
 //
-//  TransferTokenActionToParticleGroupsMapper.swift
+//  TransferTokensActionToParticleGroupsMapper.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-04-29.
@@ -10,21 +10,31 @@ import Foundation
 
 // swiftlint:disable colon opening_brace
 
-public protocol TransferTokenActionToParticleGroupsMapper:
+public protocol TransferTokensActionToParticleGroupsMapper:
     StatefulActionToParticleGroupsMapper
 where
-    Action == TransferTokenAction,
-    State == BalancePerToken
+    Action == TransferTokenAction
 {
     // swiftlint:enable colon opening_brace
-    func particleGroups(for action: Action, currentBalance: TokenBalance) throws -> ParticleGroups
 }
 
-public extension TransferTokenActionToParticleGroupsMapper {
-    func particleGroups(for action: Action, state: State) throws -> ParticleGroups {
-        let rri = action.tokenResourceIdentifier
-        let sender = action.sender
-        let currentBalance = state.balanceOrZero(of: rri, address: sender)
-        return try particleGroups(for: action, currentBalance: currentBalance)
+public extension TransferTokensActionToParticleGroupsMapper {
+    
+    func requiredState(for transferAction: Action) -> [AnyShardedParticleStateId] {
+        return [
+            ShardedParticleStateId(typeOfParticle: TransferrableTokensParticle.self, address: transferAction.sender)
+        ].map {
+            AnyShardedParticleStateId($0)
+        }
     }
+    
+//    func particleGroups(for action: Action, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
+//        let rri = action.tokenResourceIdentifier
+//
+//        let transferrableParticles = upParticles.compactMap { $0 as? TransferrableTokensParticle }.filter { $0.tokenDefinitionReference == rri }
+//
+//        let currentBalance = try TokenBalanceReferenceWithConsumables(transferrableParticlesWithSpinUp: transferrableParticles, matching: action)
+//
+//        return try particleGroups(for: action, currentBalance: currentBalance)
+//    }
 }

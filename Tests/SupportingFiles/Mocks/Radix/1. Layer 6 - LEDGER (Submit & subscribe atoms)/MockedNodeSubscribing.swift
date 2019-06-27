@@ -11,20 +11,20 @@ import RxSwift
 
 struct MockedNodeSubscribing: NodeInteractionSubscribing {
     // MARK: - Mocked Response in Observable
-    private let observable: Observable<[AtomUpdate]>
+    private let observable: Observable<[AtomObservation]>
     
     // MARK: - From Observable
-    init(observable: Observable<[AtomUpdate]>) {
+    init(observable: Observable<[AtomObservation]>) {
         self.observable = observable
     }
     
     // MARK: - From Observable via ReplaySubject
-    init(replaySubject: ReplaySubject<[AtomUpdate]>) {
+    init(replaySubject: ReplaySubject<[AtomObservation]>) {
         self.init(observable: replaySubject.asObservable())
     }
     
     // MARK: - Mocked NodeInteractionSubscribing
-    func subscribe(to address: Address) -> Observable<[AtomUpdate]> {
+    func subscribe(to address: Address) -> Observable<[AtomObservation]> {
         return observable
     }
 }

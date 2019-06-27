@@ -23,30 +23,30 @@ class GetUniverseOverWebSocketsTest: WebsocketTest {
         XCTAssertEqual(universeConfig.magic, 63799298)
     }
     
-    // This is kind of a test of my mock
-    func testGetUniverseConfigMockedGoodJson() {
-        let subject = ReplaySubject<String>.create(bufferSize: 1)
-        let mockedWebsocket = MockedWebsocket(subject: subject)
-        let mockedRpcClient = MockedRPCClient(channel: mockedWebsocket)
-        subject.onNext(goodJsonUniverseConfig)
-        let universeConfig = try! mockedRpcClient.getUniverseConfig().take(1).toBlocking(timeout: 2).first()!
-        
-        XCTAssertEqual(universeConfig.description, "The Radix development Universe")
-        XCTAssertEqual(universeConfig.magic, 63799298)
-    }
-    
-    func testGetUniverseConfigMockedBadJson() {
-        let subject = ReplaySubject<String>.create(bufferSize: 1)
-        let mockedWebsocket = MockedWebsocket(subject: subject)
-        let mockedRpcClient = MockedRPCClient(channel: mockedWebsocket)
-        subject.onNext(badJsonUniverseConfig)
-        
-        XCTAssertThrowsSpecificError(
-            try mockedRpcClient.getUniverseConfig().take(1).toBlocking(timeout: 1).first(),
-             RPCError.failedToDecodeResponse(DecodingError.keyNotFound(UniverseConfig.CodingKeys.magic)),
-            "Should throw error when receiving error from API"
-        )
-    }
+//    // This is kind of a test of my mock
+//    func testGetUniverseConfigMockedGoodJson() {
+//        let subject = ReplaySubject<String>.create(bufferSize: 1)
+//        let mockedWebsocket = MockedWebsocket(subject: subject)
+//        let mockedRpcClient = MockedRPCClient(channel: mockedWebsocket)
+//        subject.onNext(goodJsonUniverseConfig)
+//        let universeConfig = try! mockedRpcClient.getUniverseConfig().take(1).toBlocking(timeout: 2).first()!
+//        
+//        XCTAssertEqual(universeConfig.description, "The Radix development Universe")
+//        XCTAssertEqual(universeConfig.magic, 63799298)
+//    }
+//    
+//    func testGetUniverseConfigMockedBadJson() {
+//        let subject = ReplaySubject<String>.create(bufferSize: 1)
+//        let mockedWebsocket = MockedWebsocket(subject: subject)
+//        let mockedRpcClient = MockedRPCClient(channel: mockedWebsocket)
+//        subject.onNext(badJsonUniverseConfig)
+//        
+//        XCTAssertThrowsSpecificError(
+//            try mockedRpcClient.getUniverseConfig().take(1).toBlocking(timeout: 1).first(),
+//             RPCError.failedToDecodeResponse(DecodingError.keyNotFound(UniverseConfig.CodingKeys.magic)),
+//            "Should throw error when receiving error from API"
+//        )
+//    }
 }
 
 private let badJsonUniverseConfig = """

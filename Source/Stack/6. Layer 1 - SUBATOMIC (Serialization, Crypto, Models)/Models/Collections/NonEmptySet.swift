@@ -15,7 +15,7 @@ public struct NonEmptySet<ElementInSet>:
     Throwing,
     Hashable,
     ExpressibleByArrayLiteral
-    where
+where
     ElementInSet: Hashable
 {
     // swiftlint:enable opening_brace
@@ -58,3 +58,19 @@ public extension NonEmptySet {
     }
 }
 
+public extension ArrayConvertible {
+    func randomElement() -> Element? {
+        guard !isEmpty else { return nil }
+        let randomInt = Int.random(in: 0..<count)
+        let randomIndex = self.index(self.startIndex, offsetBy: randomInt)
+        return self[randomIndex]
+    }
+}
+
+public extension NonEmptySet {
+    func randomElement() -> Element {
+        let randomInt = Int.random(in: 0..<count)
+        let randomIndex = self.index(elements.startIndex, offsetBy: randomInt)
+        return elements[randomIndex]
+    }
+}

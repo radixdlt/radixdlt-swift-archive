@@ -8,28 +8,25 @@
 
 import Foundation
 
-// swiftlint:disable opening_brace
-
-public extension NodeInteractingSubmit
-where
-    Self: AtomSigning,
-    Self: Magical
-{
-
-    // swiftlint:enable opening_brace
-
-    func performProvableWorkThenSignAndSubmit(atom: Atom, powWorker: ProofOfWorkWorker) -> CompletableWanted {
-        
-        return powWorker.work(atom: atom, magic: self.magic)
-            .map { pow -> ProofOfWorkedAtom in
-                try ProofOfWorkedAtom(atomWithoutPow: atom, proofOfWork: pow)
-            }.map { proofOfWorkAtom -> UnsignedAtom in
-                try UnsignedAtom(atomWithPow: proofOfWorkAtom)
-            }.map { unsignedAtom -> SignedAtom in
-                try self.sign(atom: unsignedAtom)
-            }.flatMapLatest {
-                self.nodeSubmitter.submit(atom: $0)
-                
-        }
-    }
-}
+//public extension NodeInteractingSubmit
+//where
+//    Self: AtomSigning,
+//    Self: Magical
+//{
+//
+//
+//    func performProvableWorkThenSignAndSubmit(atom: Atom, powWorker: ProofOfWorkWorker) -> CompletableWanted {
+//        
+//        return powWorker.work(atom: atom, magic: self.magic)
+//            .map { pow -> AtomWithFee in
+//                try AtomWithFee(atomWithoutPow: atom, proofOfWork: pow)
+//            }.map { proofOfWorkAtom -> UnsignedAtom in
+//                try UnsignedAtom(atomWithPow: proofOfWorkAtom)
+//            }.map { unsignedAtom -> SignedAtom in
+//                try self.sign(atom: unsignedAtom)
+//            }.flatMapLatest {
+//                self.nodeSubmitter.submit(atom: $0)
+//                
+//        }
+//    }
+//}

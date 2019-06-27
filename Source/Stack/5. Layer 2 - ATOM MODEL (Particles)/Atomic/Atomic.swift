@@ -27,13 +27,18 @@ public extension Atomic {
     /// Shard of each destination address of this atom
     /// This set ought to never be empty
     func shards() throws -> Shards {
-        let shards = spunParticles()
-            .map { $0.particle }
-            .compactMap { $0.shardables() }
-            .flatMap { $0 }
-            .map { $0.publicKey.shard }
+        let shards = addresses().map { $0.shard }
         
         return try Shards(set: shards.asSet)
+    }
+    
+    func addresses() -> Addresses {
+        let addresses: [Address] = spunParticles()
+            .map { $0.particle }
+            .compactMap { $0.shardables() }
+            .flatMap { $0.elements }
+        
+        return Addresses(addresses)
     }
 }
 
@@ -81,13 +86,13 @@ public extension Atomic {
         return spunParticles().compactMap(type: MessageParticle.self)
     }
     
-    func tokensBalances() -> [TokenBalance] {
-        return spunParticles().compactMap {
-            $0.mapToSpunParticle(with: TransferrableTokensParticle.self)
-        }.map {
-            TokenBalance(spunTransferrable: $0)
-        }
-    }
+//    func tokensBalances() -> [TokenBalanceReferenceWithConsumables] {
+//        return spunParticles().compactMap {
+//            $0.mapToSpunParticle(with: TransferrableTokensParticle.self)
+//        }.map {
+//            TokenBalanceReferenceWithConsumables(spunTransferrable: $0)
+//        }
+//    }
     
     func particlesOfType<P>(_ type: P.Type, spin: Spin? = nil) -> [P] where P: ParticleConvertible {
         return spunParticles()

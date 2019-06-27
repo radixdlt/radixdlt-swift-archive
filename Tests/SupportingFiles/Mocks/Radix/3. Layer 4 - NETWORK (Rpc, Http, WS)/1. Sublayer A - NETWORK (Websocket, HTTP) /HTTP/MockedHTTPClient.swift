@@ -23,6 +23,6 @@ struct MockedHTTPClient: HTTPClient {
     }
     
     func loadContent(of page: String) -> SingleWanted<String> {
-        abstract
+        abstract()
     }
 }

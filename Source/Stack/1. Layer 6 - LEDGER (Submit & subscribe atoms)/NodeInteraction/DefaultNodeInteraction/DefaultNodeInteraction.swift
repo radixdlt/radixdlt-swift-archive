@@ -42,10 +42,46 @@ public final class DefaultNodeInteraction:
     private let rpcClient: Observable<RPCClient>
     private var addressToSubscriberId: AddressToSubscriberId = [:]
     private var subscriptionsFromSubmit = [SubscriberId]()
-
-    public init(_ nodeDiscovery: NodeDiscovery) {
-        self.futureNodeConnection = DefaultNodeConnection.byNodeDiscovery(nodeDiscovery).map { $0 }
+    
+    public init(withNode node: Observable<Node>) {
+        self.futureNodeConnection = node.map { DefaultNodeConnection(node: $0) } // DefaultNodeConnection.byNodeDiscovery(nodeDiscovery).map { $0 }
         self.rpcClient = futureNodeConnection.map { $0.rpcClient }
+    }
+}
+
+public extension DefaultNodeInteraction {
+    
+    convenience init(node: Node) {
+        self.init(withNode: .just(node))
+    }
+}
+
+enum NodeFindingResult {
+    public typealias FindingResult = Result<NodeInteraction, SpecificNode.UnsuitableReason>
+    
+    case anyNode(DefaultNodeInteraction)
+    case specificNode(SpecificNode)
+    
+    public enum SpecificNode {
+        case connectedToSpecifiedNode(DefaultNodeInteraction)
+        case didNotConnectToSpecifiedNodeFellbackTo(DefaultNodeInteraction, reason: UnsuitableReason)
+        case didNotConnectToSpecifiedNodeError(reason: UnsuitableReason)
+        
+        public enum UnsuitableReason: Swift.Error {
+            case offline, shardMismatch, wrongUniverse
+        }
+    }
+    
+    var result: FindingResult {
+        switch self {
+        case .anyNode(let nodeInteraction): return .success(nodeInteraction)
+        case .specificNode(let resultConnectingToSpecificNode):
+            switch resultConnectingToSpecificNode {
+            case .connectedToSpecifiedNode(let nodeInteraction): return .success(nodeInteraction)
+            case .didNotConnectToSpecifiedNodeFellbackTo(let fallbackNodeInteraction, _): return .success(fallbackNodeInteraction)
+            case .didNotConnectToSpecifiedNodeError(let reason): return .failure(reason)
+            }
+        }
     }
 }
 
@@ -57,16 +93,16 @@ public extension DefaultNodeInteraction {
     // The first one, containing the atoms, having `isHead: false`
     // The second one, containing no atoms, having `isHead: true`
     // With the current solution we map those two `AtomSubscriptionUpdateSubscribe`
-    // into two `onNext` events, which element is an array of `AtomUpdate`,
+    // into two `onNext` events, which element is an array of `AtomObservation`,
     // The first message resulting in a non empty array, the second message
     // being an empty array, which is kind of weird. Change this!
-    func subscribe(to address: Address) -> Observable<[AtomUpdate]> {
+    func subscribe(to address: Address) -> Observable<[AtomObservation]> {
         let id = SubscriptionIdIncrementingGenerator.next()
         addressToSubscriberId.add(subscriptionId: id, for: address)
         return rpcClient.flatMapLatest { $0.subscribe(to: address, subscriberId: id) }
             .assertSubscriptionStarted()
             .mapToUpdateTypeElseReturnEmpty(type: AtomSubscriptionUpdateSubscribe.self)
-            .map { $0.toAtomUpdates() }
+            .map { $0.toAtomObservation() }
     }
 }
 
@@ -74,13 +110,7 @@ public extension DefaultNodeInteraction {
 public extension DefaultNodeInteraction {
     
     func submit(atom: SignedAtom) -> CompletableWanted {
-        let id = SubscriptionIdIncrementingGenerator.next()
-        subscriptionsFromSubmit.append(id)
-        return rpcClient.flatMap { $0.submit(atom: atom, subscriberId: id) }
-            .assertSubscriptionStarted()
-            .mapToUpdateTypeElseReturnEmpty(type: AtomSubscriptionUpdateSubmitAndSubscribe.self)
-            .assertAtomGotStored()
-        
+        return rpcClient.flatMap { $0.submit(atom: atom) }
     }
 }
 
@@ -172,9 +202,9 @@ extension ObservableType where E == AtomSubscription {
     func mapToUpdateTypeElseReturnEmpty<U: SubscriptionUpdateValue>(type: U.Type) -> Observable<U> {
         return self.asObservable()
             .map { $0.update }
-            .filterNil()
+            .ifNilReturnEmpty()
             .map { $0.mapTo(type: U.self) }
-            .filterNil()
+            .ifNilReturnEmpty()
     }
 }
 

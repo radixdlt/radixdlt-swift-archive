@@ -27,7 +27,7 @@ public extension CreateTokenActionToParticleGroupsMapper {
             return [tokenCreationGroup]
         }
         
-        let minted = TransferrableTokensParticle(token: token, amount: positiveInitialSupply)
+        let minted = TransferrableTokensParticle(token: token, amount: NonNegativeAmount(positive: positiveInitialSupply))
         
         var mintGroup: ParticleGroup = [
             unallocated.withSpin(.down),

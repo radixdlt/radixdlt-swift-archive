@@ -8,19 +8,19 @@
 
 import Foundation
 
-public protocol TokensDefinitionsStore {
-    func add(token: Token, resourceIdentifier: ResourceIdentifier)
-    func token(for identifier: ResourceIdentifier) -> Token?
-}
-
-public extension TokensDefinitionsStore {
-    
-    func add(tokenConvertible: TokenConvertible, resourceIdentifier: ResourceIdentifier) {
-        let token = Token(tokenConvertible: tokenConvertible)
-        add(token: token, resourceIdentifier: resourceIdentifier)
-    }
-    
-    func add(tokenDefinitionParticle: TokenDefinitionParticle, resourceIdentifier: ResourceIdentifier) {
-        add(tokenConvertible: tokenDefinitionParticle, resourceIdentifier: resourceIdentifier)
-    }
-}
+//public protocol TokensDefinitionsStore {
+//    func add(token: Token, resourceIdentifier: ResourceIdentifier)
+//    func token(for identifier: ResourceIdentifier) -> Token?
+//}
+//
+//public extension TokensDefinitionsStore {
+//    
+//    func add(tokenConvertible: TokenConvertible, resourceIdentifier: ResourceIdentifier) {
+//        let token = Token(tokenConvertible: tokenConvertible)
+//        add(token: token, resourceIdentifier: resourceIdentifier)
+//    }
+//    
+//    func add(tokenDefinitionParticle: TokenDefinitionParticle, resourceIdentifier: ResourceIdentifier) {
+//        add(tokenConvertible: tokenDefinitionParticle, resourceIdentifier: resourceIdentifier)
+//    }
+//}

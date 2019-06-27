@@ -16,11 +16,11 @@ public struct SignedAtom:
 {
     // swiftlint:enable colon opening_brace
     
-    public let proofOfWorkAtom: ProofOfWorkedAtom
+    private let proofOfWorkAtom: AtomWithFee
     public let signatureId: EUID
     public let signature: Signature
     
-    public init(proofOfWorkAtom: ProofOfWorkedAtom, signatureId: EUID) throws {
+    public init(proofOfWorkAtom: AtomWithFee, signatureId: EUID) throws {
         guard !proofOfWorkAtom.signatures.isEmpty else {
             throw Error.atomIsNotSigned
         }
@@ -43,7 +43,7 @@ public extension SignedAtom {
 
 // MARK: - AtomContainer
 public extension SignedAtom {
-    var wrappedAtom: ProofOfWorkedAtom {
+    var wrappedAtom: AtomWithFee {
         return proofOfWorkAtom
     }
 }

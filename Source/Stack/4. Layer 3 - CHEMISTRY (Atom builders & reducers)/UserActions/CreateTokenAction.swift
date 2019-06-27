@@ -26,7 +26,7 @@ public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
         supply initialSupplyType: InitialSupply,
         granularity: Granularity = .default
     ) throws {
-        
+
         switch initialSupplyType {
         case .fixed(let positiveInitialSupply):
             self.supplyType = .fixed
@@ -50,7 +50,6 @@ public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
 
 public extension CreateTokenAction {
     enum Error: Swift.Error, Equatable {
-        // swiftlint:disable:next identifier_name
         case initialSupplyNotMultipleOfGranularity
     }
 }
@@ -69,6 +68,7 @@ public extension CreateTokenAction {
 }
 
 public extension CreateTokenAction {
+    
     enum InitialSupply {
         case fixed(to: PositiveAmount)
         case mutable(initial: NonNegativeAmount)

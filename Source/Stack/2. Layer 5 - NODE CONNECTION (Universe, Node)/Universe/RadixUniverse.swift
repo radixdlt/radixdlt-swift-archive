@@ -9,35 +9,72 @@
 import Foundation
 import RxSwift
 
-public final class RadixUniverse {
+public protocol RadixUniverse {
+    
+    var atomStore: AtomStore { get }
+    var atomPuller: AtomPuller { get }
+    var config: UniverseConfig { get }
+    var networkController: RadixNetworkController { get }
+    var nativeTokenDefinition: TokenDefinition { get }
+    
+    func connectToNode(nodeFinding: NodeFindingg, account: Account) -> Completable
+    func connectToNode(address: Address) -> Completable
+}
 
-    private let config: UniverseConfig
-    private let nodeDiscovery: NodeDiscovery
-
-    private init(config: UniverseConfig, nodeDiscovery: NodeDiscovery) {
+// MARK: - RadixUniverse
+public final class DefaultRadixUniverse: RadixUniverse {
+    
+    public let config: UniverseConfig
+    public let networkController: RadixNetworkController
+    public let nativeTokenDefinition: TokenDefinition
+    public let atomStore: AtomStore
+    public let atomPuller: AtomPuller
+    
+    public init(config: UniverseConfig, networkController: RadixNetworkController, atomStore: AtomStore) throws {
         self.config = config
-        self.nodeDiscovery = nodeDiscovery
+        self.networkController = networkController
+        self.nativeTokenDefinition = try config.nativeTokenDefinition()
+        self.atomPuller = DefaultAtomPuller(networkController: networkController)
+        self.atomStore = atomStore
     }
 }
 
-// MARK: - Presets
-public extension RadixUniverse {
-    
-    static var sunstone: RadixUniverse {
-        return RadixUniverse(
-            config: .sunstone,
-            nodeDiscovery: NodeFinder.sunstone
+public extension DefaultRadixUniverse {
+
+    convenience init(config: UniverseConfig, nodeFinding: NodeFindingg) throws {
+        let atomStore = InMemoryAtomStore(genesisAtoms: config.genesis.atoms)
+        
+        let networkController = DefaultRadixNetworkController(
+            nodeFinding: nodeFinding,
+            reducers: [SomeReducer<NodeAction>(InMemoryAtomStoreReducer(atomStore: atomStore))]
         )
+        
+        try self.init(config: config, networkController: networkController, atomStore: atomStore)
     }
     
-    static var localhost: RadixUniverse {
-        return RadixUniverse(
-            config: .betanet,
-            // swiftlint:disable:next force_try
-            nodeDiscovery: try! NodeDiscoveryHardCoded(hosts: [
-                "localhost:8080",
-                "localhost:8081"
-            ])
-        )
+    convenience init(bootstrapConfig: BootstrapConfig) {
+        do {
+            try self.init(
+                config: bootstrapConfig.config,
+                nodeFinding: bootstrapConfig.nodeFinding
+            )
+        } catch {
+            incorrectImplementation("Should always be able to create RadixUniverse from bootstrap config")
+        }
+    }
+}
+
+public extension DefaultRadixUniverse {
+    func connectToNode(nodeFinding: NodeFindingg, account: Account) -> Completable {
+        let address = addressFrom(account: account)
+        return networkController.connectToNode(nodeFinding: nodeFinding, address: address)
+    }
+    
+    func connectToNode(address: Address) -> Completable {
+        return networkController.connectToNode(address: address)
+    }
+    
+    func addressFrom(account: Account) -> Address {
+        return account.addressFromMagic(config.magic)
     }
 }

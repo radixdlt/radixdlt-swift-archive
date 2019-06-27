@@ -8,13 +8,15 @@
 
 import Foundation
 
+public typealias HashId = EUID
+
 public protocol RadixHashable {
     var radixHash: RadixHash { get }
-    var hashId: EUID { get }
+    var hashId: HashId { get }
 }
 
 public extension RadixHashable {
-    var hashId: EUID {
+    var hashId: HashId {
         return radixHash.toEUID()
     }
 }

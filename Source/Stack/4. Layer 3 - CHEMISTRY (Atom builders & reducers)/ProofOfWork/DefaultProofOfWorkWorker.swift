@@ -11,7 +11,10 @@ import RxSwift
 
 public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
     private let dispatchQueue = DispatchQueue(label: "Radix.DefaultProofOfWorkWorker", qos: .userInitiated)
-    public init() {}
+    private let defaultNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros
+    public init(defaultNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default) {
+        self.defaultNumberOfLeadingZeros = defaultNumberOfLeadingZeros
+    }
     
     deinit {
         log.verbose("POW Worker deinit")
@@ -82,5 +85,14 @@ internal extension DefaultProofOfWorkWorker {
         
         let pow = ProofOfWork(seed: seed, targetNumberOfLeadingZeros: targetNumberOfLeadingZeros, magic: magic, nonce: nonce)
         done(.success(pow))
+    }
+}
+
+extension DefaultProofOfWorkWorker: FeeMapper {}
+public extension DefaultProofOfWorkWorker {
+    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> SingleWanted<AtomWithFee> {
+        return work(atom: atom, magic: universeConfig.magic, numberOfLeadingZeros: self.defaultNumberOfLeadingZeros).map {
+            try AtomWithFee(atomWithoutPow: atom, proofOfWork: $0)
+        }
     }
 }

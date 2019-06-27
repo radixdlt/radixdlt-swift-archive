@@ -9,15 +9,15 @@
 import Foundation
 
 public extension Host {
-    static func local(port: Port = 8080) -> Host {
+    static func local(port: Port = .localhost) -> Host {
         do {
-            return try Host(ipAddress: .localhost, port: port)
+            return try Host(domain: .localhost, port: port)
         } catch {
             incorrectImplementation("Failed to create localhost, error: \(error)")
         }
     }
     
     var isLocal: Bool {
-        return ipAddress == String.localhost
+        return domain == String.localhost
     }
 }

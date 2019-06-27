@@ -82,6 +82,13 @@ public extension PublicKey {
     }
 }
 
+// MARK: - Equtable
+public extension PublicKey {
+    static func == (lhs: PublicKey, rhs: PublicKey) -> Bool {
+        return lhs.compressedData == rhs.compressedData
+    }
+}
+
 // MARK: - BitcoinKit
 import BitcoinKit
 public extension PublicKey {

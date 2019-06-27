@@ -8,21 +8,22 @@
 
 import Foundation
 
-public struct Host: Decodable, Hashable, URLConvertible {
+// swiftlint:disable opening_brace colon
+
+public struct Host:
+    HostConvertible,
+    Throwing,
+    Decodable,
+    Hashable
+{
+    // swiftlint:enable opening_brace colon
     
-    public let ipAddress: String
+    public let domain: String
     public let port: Port
     
-    public init(ipAddress: String, port: Port) throws {
-        self.ipAddress = try URLFormatter.validating(isOnlyHost: ipAddress)
+    public init(domain: String, port: Port) throws {
+        self.domain = try URLFormatter.validating(isOnlyHost: domain)
         self.port = port
     }
     
-}
-
-// MARK: - URLConvertible
-public extension Host {
-    var host: String {
-        return ipAddress
-    }
 }

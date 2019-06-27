@@ -7,37 +7,33 @@
 //
 
 import Foundation
+import RxSwift
 
-public protocol DecryptMessageReducer: Throwing where Error == DecryptMessageReducerError {
-    func decryptMessage(in atom: Atom, using key: Signing) throws -> DecryptedMessage
-}
+public protocol AtomToDecryptedMessageMapper: AtomToSpecificExecutedActionMapper, Throwing where
+    ExecutedAction == DecryptedMessage,
+    Error == DecryptMessageFromAtomMapperError {}
 
-public enum DecryptMessageReducerError: Swift.Error {
-    case zeroMessageParticlesFound(in: Atom)
-    // swiftlint:disable:next identifier_name
-    case zeroMessageParticlesWithoutEncryptorMetaDataFound
-    // swiftlint:disable:next identifier_name
-    case incorrectMetaDataValueForApplication(expected: String, butGot: String?)
-}
-
-public struct DefaultDecryptMessageReducer: DecryptMessageReducer {
-    
+public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMapper {
     private let jsonDecoder: JSONDecoder
     
     public init(jsonDecoder: JSONDecoder = JSONDecoder()) {
         self.jsonDecoder = jsonDecoder
     }
-    
 }
 
-public extension DefaultDecryptMessageReducer {
-    
-    func decryptMessage(in atom: Atom, using key: Signing) throws -> DecryptedMessage {
-        let context = try EncryptedMessageContext(atom: atom)
-        do {
-            return try context.decryptMessageIfNeeded(key: key)
-        } catch { incorrectImplementation("Unhandled error: \(error)") }
+public extension DefaultAtomToDecryptedMessageMapper {
+    typealias ExecutedAction = DecryptedMessage
+    func map(atom: Atom, account: Account) -> Observable<ExecutedAction> {
+        return account.privateKeyForSigning.map {
+            try EncryptedMessageContext(atom: atom).decryptMessageIfNeeded(key: $0)
+        }
     }
+}
+
+public enum DecryptMessageFromAtomMapperError: Swift.Error {
+    case zeroMessageParticlesFound(in: Atom)
+    case zeroMessageParticlesWithoutEncryptorMetaDataFound
+    case incorrectMetaDataValueForApplication(expected: String, butGot: String?)
 }
 
 private struct EncryptedMessageContext {
@@ -70,7 +66,7 @@ private extension EncryptedMessageContext {
     init(atom: Atom) throws {
         
         guard case let messageParticles = atom.messageParticles(), !messageParticles.isEmpty else {
-            throw DecryptMessageReducerError.zeroMessageParticlesFound(in: atom)
+            throw DecryptMessageFromAtomMapperError.zeroMessageParticlesFound(in: atom)
         }
         
         try self.init(messageParticles: messageParticles, timestamp: atom.metaData.timestamp)
@@ -78,7 +74,7 @@ private extension EncryptedMessageContext {
     
     init(messageParticles: [MessageParticle], timestamp: Date) throws {
         guard let messageParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .message) else {
-            throw DecryptMessageReducerError.zeroMessageParticlesWithoutEncryptorMetaDataFound
+            throw DecryptMessageFromAtomMapperError.zeroMessageParticlesWithoutEncryptorMetaDataFound
         }
         
         let encryptorParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .encryptor)
@@ -118,7 +114,7 @@ private extension EncryptedMessageContext {
     
     static func ensureMetaDataApplication(value expected: MetaDataCommonValue, in particle: MessageParticle) throws {
         guard particle.valueFor(key: .application, equals: expected) else {
-            throw DecryptMessageReducerError.incorrectMetaDataValueForApplication(
+            throw DecryptMessageFromAtomMapperError.incorrectMetaDataValueForApplication(
                 expected: expected.rawValue,
                 butGot: particle.metaData.valueFor(key: MetaDataKey.application)
             )

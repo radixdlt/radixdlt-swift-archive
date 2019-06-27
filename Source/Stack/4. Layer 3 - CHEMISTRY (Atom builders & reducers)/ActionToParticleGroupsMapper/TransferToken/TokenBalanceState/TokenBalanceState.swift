@@ -8,63 +8,101 @@
 
 import Foundation
 
-public struct BalancePerToken: ApplicationState, DictionaryConvertible {
+//public extension TokenBalanceReferencesState {
+//    
+//    
+//    func getBalance(definedBy tokenDefinition: TokenDefinition) throws -> TokenBalance? {
+//        guard let liteBalance = getBalance(identifier: tokenDefinition.tokenIdentifier) else {
+//            return nil
+//        }
+//        return TokenBalance(token: tokenDefinition, amount: liteBalance.amount, owner: liteBalance.owner)
+//    }
+//    
+//    func getBalance(identifier: ResourceIdentifier) -> TokenBalanceReference? {
+//        return tokenBalances[identifier]
+//    }
+//}
+
+public struct TokenBalanceReferencesState: ApplicationState, DictionaryConvertible, Equatable {
     public typealias Key = ResourceIdentifier
-    public typealias Value = TokenBalance
+    public typealias Value = TokenReferenceBalance
     public var dictionary: Map
     public init(dictionary: Map = [:]) {
         self.dictionary = dictionary
     }
     
-    public init(reducing balances: [TokenBalance]) {
-        self.init(dictionary: BalancePerToken.reduce(balances))
+    public init(reducing balances: [TokenReferenceBalance]) {
+        self.init(dictionary: TokenBalanceReferencesState.reduce(balances))
     }
 }
 
-public extension BalancePerToken {
+public extension TokenBalanceReferencesState {
+
+    /*
+     	public static TokenBalanceState merge(TokenBalanceState state, TransferrableTokensParticle tokens) {
+		HashMap<RRI, BigDecimal> balance = new HashMap<>(state.balance);
+		BigDecimal amount = TokenUnitConversions.subunitsToUnits(tokens.getAmount());
+		balance.merge(
+			tokens.getTokenDefinitionReference(),
+			amount,
+			BigDecimal::add
+		);
+
+		return new TokenBalanceState(balance);
+	}
+     */
     
-    static var zeroBalances: BalancePerToken {
-        return [:]
+    static func merge(state: TokenBalanceReferencesState, transferrableTokensParticle: TransferrableTokensParticle) -> TokenBalanceReferencesState {
+        let stateFromParticle = TokenBalanceReferencesState(reducing: [TokenReferenceBalance(transferrableTokensParticle: transferrableTokensParticle)])
+
+        return state.merging(with: stateFromParticle)
     }
     
-    static func reduce(_ balances: [TokenBalance]) -> Map {
-        return Map(balances.map { ($0.tokenDefinitionReference, $0) }, uniquingKeysWith: BalancePerToken.conflictResolver)
+    static func combine(state lhsState: TokenBalanceReferencesState, with rhsState: TokenBalanceReferencesState) -> TokenBalanceReferencesState {
+        if lhsState == rhsState { return lhsState }
+        return lhsState.merging(with: rhsState)
     }
+}
+
+public extension TokenBalanceReferencesState {
+//    static var zeroBalances: TokenBalanceReferencesState {
+//        return [:]
+//    }
+//
     
-    static var conflictResolver: (TokenBalance, TokenBalance) -> TokenBalance {
+    static func reduce(_ balances: [TokenReferenceBalance]) -> Map {
+        return Map(balances.map { ($0.tokenResourceIdentifier, $0) }, uniquingKeysWith: TokenBalanceReferencesState.conflictResolver)
+    }
+
+    static var conflictResolver: (TokenReferenceBalance, TokenReferenceBalance) -> TokenReferenceBalance {
         return { (current, new) in
             do {
                 return try current.merging(with: new)
-            } catch let error as TokenBalance.Error {
-                switch error {
-                case .addressMismatch: incorrectImplementation("Unhandled address mismatch")
-                case .tokenDefinitionReferenceMismatch: incorrectImplementation("This should not happen")
-                }
             } catch { incorrectImplementation("Unhandled error: \(error)") }
         }
     }
-    
-    mutating func add(transferrable: TransferrableTokensParticle, spin: Spin) {
-        dictionary[transferrable.tokenDefinitionReference] = TokenBalance(transferrable: transferrable, spin: spin)
+
+//    mutating func add(transferrable: TransferrableTokensParticle, spin: Spin) {
+//        dictionary[transferrable.tokenDefinitionReference] = TokenBalanceReferenceWithConsumables(transferrable: transferrable, spin: spin)
+//    }
+//
+//    func adding(transferrable: TransferrableTokensParticle, spin: Spin) -> TokenBalanceReferencesState {
+//        var copy = self
+//        copy.add(transferrable: transferrable, spin: spin)
+//        return copy
+//    }
+//
+    mutating func merge(with other: TokenBalanceReferencesState) {
+        dictionary.merge(other.dictionary, uniquingKeysWith: TokenBalanceReferencesState.conflictResolver)
     }
-    
-    func adding(transferrable: TransferrableTokensParticle, spin: Spin) -> BalancePerToken {
-        var copy = self
-        copy.add(transferrable: transferrable, spin: spin)
-        return copy
-    }
-    
-    mutating func merge(with other: BalancePerToken) {
-        dictionary.merge(other.dictionary, uniquingKeysWith: BalancePerToken.conflictResolver)
-    }
-    
-    func merging(with other: BalancePerToken) -> BalancePerToken {
+
+    func merging(with other: TokenBalanceReferencesState) -> TokenBalanceReferencesState {
         var copy = self
         copy.merge(with: other)
         return copy
     }
-    
-    func balanceOrZero(of token: Key, address: Address) -> TokenBalance {
-        return valueFor(key: token) ?? TokenBalance(amount: .zero, address: address, tokenDefinitionReference: token)
-    }
+//
+//    func balanceOrZero(of token: Key, address: Address) -> TokenBalanceReferenceWithConsumables {
+//        return valueFor(key: token) ?? TokenBalanceReferenceWithConsumables(amount: .zero, address: address, tokenDefinitionReference: token)
+//    }
 }
