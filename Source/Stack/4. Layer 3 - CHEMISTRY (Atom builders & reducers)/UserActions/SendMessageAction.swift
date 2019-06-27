@@ -14,7 +14,7 @@ public struct SendMessageAction: UserAction {
     public let payload: Data
     public let encryptionMode: MessageEncryptionMode
     
-    private init(
+    internal init(
         from sender: Ownable,
         to recipient: Ownable,
         payload: Data,
@@ -27,7 +27,7 @@ public struct SendMessageAction: UserAction {
     }
 }
 
-private extension SendMessageAction {
+internal extension SendMessageAction {
     
     init(
         text: String,
@@ -112,9 +112,10 @@ public extension SendMessageAction {
         )
     }
     
-    static func encryptedDecryptableOnlyByRecipientAndSender(
+    static func encrypted(
         from sender: Ownable,
         to recipient: Ownable,
+        onlyDecryptableBy: [Ownable],
         text: String,
         encoding: String.Encoding = .default
     ) -> SendMessageAction {
@@ -124,25 +125,35 @@ public extension SendMessageAction {
             from: sender,
             to: recipient,
             payload: payload,
-            encryption: .encryptedDecryptableOnlyByRecipientAndSender
+            encryption: .encryption(onlyDecryptableBy: onlyDecryptableBy)
         )
     }
     
-    static func encrypted(
+    static func encryptedDecryptableBySenderAndRecipient(
+        and extraDecryptors: [Ownable]? = nil,
         from sender: Ownable,
         to recipient: Ownable,
         text: String,
-        onlyDecryptableBy: [Ownable],
         encoding: String.Encoding = .default
-        ) -> SendMessageAction {
+    ) -> SendMessageAction {
         
-        let payload = text.toData(encodingForced: encoding)
-        return SendMessageAction(
-            from: sender,
-            to: recipient,
-            payload: payload,
-            encryption: .encryption(onlyDecryptableBy: onlyDecryptableBy)
-        )
+        // "or possibly more": https://www.youtube.com/watch?v=-9-cQTGdWHA&feature=youtu.be&t=68
+        var senderAndRecipientOrPossibleMore: [Ownable] = [sender, recipient]
+        if let extraDecryptors = extraDecryptors {
+            senderAndRecipientOrPossibleMore.append(contentsOf: extraDecryptors)
+        }
+        
+        return encrypted(from: sender, to: recipient, onlyDecryptableBy: senderAndRecipientOrPossibleMore, text: text, encoding: encoding)
+    }
+    
+    static func encryptedDecryptableOnlyByRecipientAndSender(
+        from sender: Ownable,
+        to recipient: Ownable,
+        text: String,
+        encoding: String.Encoding = .default
+    ) -> SendMessageAction {
+        
+        return encryptedDecryptableBySenderAndRecipient(and: nil, from: sender, to: recipient, text: text, encoding: encoding)
     }
 }
 

@@ -52,6 +52,17 @@ internal func unexpectedlyMissedToCatch(
     )
 }
 
+internal func typeErasureExpects<T>(
+    type anyType: Any.Type,
+    toBe expectedType: T.Type,
+    _ file: String = #file,
+    _ line: Int = #line
+    ) {
+    guard (anyType as? T) != nil else {
+        typeErasureExpected(instance: anyType, toBe: T.self, file, line)
+    }
+}
+
 internal func typeErasureExpected<T>(
     instance incorrectTypeOfThisInstance: Any,
     toBe expectedType: T.Type,

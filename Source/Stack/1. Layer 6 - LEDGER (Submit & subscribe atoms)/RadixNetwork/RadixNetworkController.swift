@@ -19,7 +19,6 @@ public protocol RadixNetworkController {
     func connectToNode(address: Address) -> Completable
 }
 
-
 public final class DefaultRadixNetworkController: RadixNetworkController {
 //    public private(set) var network: RadixNetwork
     
@@ -81,7 +80,6 @@ public extension DefaultRadixNetworkController {
     func connectToNode(address: Address) -> Completable {
         return connectToNode(nodeFinding: self.nodeFinding, address: address)
     }
-
     
     var networkState: Observable<RadixNetworkState> {
         return networkStateSubject.asObservable()

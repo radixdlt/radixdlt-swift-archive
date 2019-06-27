@@ -107,11 +107,10 @@ class AtomIdentifierTests: XCTestCase {
         
         let consumables = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TransferrableTokensParticle.self) }
         XCTAssertEqual(consumables.count, 1)
-//        let startBalance = TokenBalanceReferenceWithConsumables(spunTransferrable: consumables[0])
         
         let atomFromTransfer = testAidOfAtomFrom(
             action: transferTokens,
-            mapper: StatefulTransferTokensParticleGroupMapper(currentBalance: startBalance),
+            mapper: StatelessTransferTokensParticleGroupMapper(transferrableTokensParticle: consumables[0].particle),
             expectedAidShard: .eitherIn([alice.shard, bob.shard])
         )
         XCTAssertEqual(try! atomFromTransfer.shards(), [alice.shard, bob.shard])
@@ -130,17 +129,25 @@ private enum ShardAssertion {
     }
 }
 
-struct MockedStatefulTransferTokensParticleGroupMapper: StatelessActionToParticleGroupsMapper, TransferTokensActionToParticleGroupsMapper {
+struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGroupsMapper, TransferTokensActionToParticleGroupsMapper {
 
-    private let currentBalance: TokenBalanceReferenceWithConsumables
+    private let transferrableTokensParticle: TransferrableTokensParticle
 
-    init(currentBalance: TokenBalanceReferenceWithConsumables) {
-        self.currentBalance = currentBalance
+    init(transferrableTokensParticle: TransferrableTokensParticle) {
+        self.transferrableTokensParticle = transferrableTokensParticle
     }
 
+//    func particleGroups(for action: Action) -> ParticleGroups {
+//        return try! particleGroups(for: action, currentBalance: self.currentBalance)
+//    }
+    
     func particleGroups(for action: Action) -> ParticleGroups {
-        return try! particleGroups(for: action, currentBalance: self.currentBalance)
+        return try! particleGroups(for: action, upParticles: [transferrableTokensParticle])
     }
+    
+//    func particleGroups(for transfer: TransferTokenAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
+//
+//    }
 }
 
 private extension AtomIdentifierTests {

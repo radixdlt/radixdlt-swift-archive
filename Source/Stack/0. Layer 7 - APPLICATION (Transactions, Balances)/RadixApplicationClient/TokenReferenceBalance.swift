@@ -35,7 +35,6 @@ public extension TokenReferenceBalance {
         )
     }
     
-    
     /// TransferrableTokensParticle'a MUST have spin up.
     init(upTransferrableTokensParticles tokenConsumables: [TransferrableTokensParticle], tokenIdentifier: ResourceIdentifier, owner: Address) throws {
         if tokenConsumables.contains(where: { $0.tokenDefinitionReference != tokenIdentifier }) {

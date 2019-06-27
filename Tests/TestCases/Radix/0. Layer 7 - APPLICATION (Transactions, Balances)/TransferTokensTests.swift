@@ -44,8 +44,13 @@ class TransferTokensTests: WebsocketTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
  
         // WHEN: Alice transfer tokens she owns, to Bob
-        let createToken = createTokenAction(identity: alice, supply: .fixed(to: 30))
-        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: RxTimeInterval.enoughForPOW) else { return }
+        let createToken = createTokenAction(address: alice, supply: .fixed(to: 30))
+
+        XCTAssertTrue(
+            application.create(token: createToken).blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+        )
+        let rri = createToken.identifier
+        
         let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri))
 
         // THEN: I see that the transfer actions completes successfully
@@ -70,8 +75,11 @@ class TransferTokensTests: WebsocketTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
       
         // WHEN: Alice tries to transfer tokens with a larger amount than her current balance, to Bob
-        let createToken = createTokenAction(identity: alice, supply: .fixed(to: 30))
-        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: RxTimeInterval.enoughForPOW) else { return }
+        let createToken = createTokenAction(address: alice, supply: .fixed(to: 30))
+        XCTAssertTrue(
+            application.create(token: createToken).blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+        )
+        let rri = createToken.identifier
         let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 50, tokenResourceIdentifier: rri))
         
         // THEN:  I see that action fails with error `InsufficientFunds`
@@ -84,8 +92,13 @@ class TransferTokensTests: WebsocketTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
   
         // WHEN: Alice transfer tokens she owns, having a granularity larger than 1, to Bob
-        let createToken = createTokenAction(identity: alice, supply: .fixed(to: 10000), granularity: 10)
-        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: RxTimeInterval.enoughForPOW) else { return }
+        let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: 10)
+        
+        XCTAssertTrue(
+            application.create(token: createToken).blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+        )
+        let rri = createToken.identifier
+        
         let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 20, tokenResourceIdentifier: rri))
         
         // THEN: I see that the transfer actions completes successfully
@@ -98,8 +111,11 @@ class TransferTokensTests: WebsocketTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
         // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
-        let createToken = createTokenAction(identity: alice, supply: .fixed(to: 10000), granularity: 5)
-        guard let rri = application.create(token: createToken).blockingTakeFirst(timeout: RxTimeInterval.enoughForPOW) else { return }
+        let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: 5)
+        XCTAssertTrue(
+            application.create(token: createToken).blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+        )
+        let rri = createToken.identifier
         let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 7, tokenResourceIdentifier: rri))
         
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
@@ -112,9 +128,9 @@ class TransferTokensTests: WebsocketTest {
 }
 
 private extension TransferTokensTests {
-    func createTokenAction(address: RadixIdentity, supply: CreateTokenAction.InitialSupply, granularity: Granularity = .default) -> CreateTokenAction {
+    func createTokenAction(address: Address, supply: CreateTokenAction.InitialSupply, granularity: Granularity = .default) -> CreateTokenAction {
         return try! CreateTokenAction(
-            creator: identity.address,
+            creator: address,
             name: "Alice Coin",
             symbol: "AC",
             description: "Best coin",
@@ -125,9 +141,3 @@ private extension TransferTokensTests {
 }
 
 private let magic: Magic = 63799298
-
-private extension RadixIdentity {
-    init() {
-        self.init(magic: magic)
-    }
-}

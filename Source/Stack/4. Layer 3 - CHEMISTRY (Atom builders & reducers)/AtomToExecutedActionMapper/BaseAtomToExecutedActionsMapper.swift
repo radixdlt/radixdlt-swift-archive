@@ -10,5 +10,5 @@ import Foundation
 import RxSwift
 
 public protocol BaseAtomToSpecificExecutedActionMapper {
-    func map<Action>(atom: Atom, toAction actionType: Action.Type, account: Account) -> Observable<Action>
+    func map<Action>(atom: Atom, toActionType _: Action.Type, account: Account) -> Observable<Action>
 }

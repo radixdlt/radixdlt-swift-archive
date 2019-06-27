@@ -9,19 +9,15 @@
 import Foundation
 import RxSwift
 
-public protocol BaseAtomToExecutedActionsMapper {
-    func map<Action>(atom: Atom, toAction actionType: Action.Type, account: Account) -> Observable<Action>
-}
-
 public protocol AtomToSpecificExecutedActionMapper: BaseAtomToSpecificExecutedActionMapper {
     associatedtype ExecutedAction
     func map(atom: Atom, account: Account) -> Observable<ExecutedAction>
 }
 
 public extension AtomToSpecificExecutedActionMapper {
-    func map<Action>(atom: Atom, toAction actionType: Action.Type, account: Account) -> Observable<Action> {
-        assert(actionType == ExecutedAction.self, "action types should match")
-        // swiftlint:disable:next force_cast
-        return map(atom: atom, account: account).map { $0 as! Action }
+    func map<Action>(atom: Atom, toActionType _: Action.Type, account: Account) -> Observable<Action> {
+        return map(atom: atom, account: account).map {
+            castOrKill(instance: $0, toType: Action.self)
+        }
     }
 }

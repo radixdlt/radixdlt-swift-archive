@@ -102,29 +102,29 @@ public extension RadixApplicationClient {
 public extension RadixApplicationClient {
     func create(
         token createTokenAction: CreateTokenAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
     ) -> ResultOfUserAction {
         return execute(action: createTokenAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
     
     func transfer(
         tokens transferTokensAction: TransferTokenAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
     ) -> ResultOfUserAction {
         return self.execute(action: transferTokensAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
     
     func send(
         message sendMessageAction: SendMessageAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
     ) -> ResultOfUserAction {
         return self.execute(action: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
     
     func execute(
         action: UserAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent
-        ) -> ResultOfUserAction {
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+    ) -> ResultOfUserAction {
         return execute(actions: [action], ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
 }
@@ -132,33 +132,32 @@ public extension RadixApplicationClient {
 // MARK: - Send Message Convenience
 public extension RadixApplicationClient {
 
-        func sendPlainTextMessage(
-            _ plainText: String,
-            encoding: String.Encoding = .default,
-            to recipient: Ownable,
-            ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+    func sendPlainTextMessage(
+        _ plainText: String,
+        encoding: String.Encoding = .default,
+        to recipient: Ownable,
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
         ) -> ResultOfUserAction {
-            let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
-            return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
-        }
+        let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
+        return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
+    }
     
     func sendEncryptedMessage(
         _ textToEncrypt: String,
         encoding: String.Encoding = .default,
         to recipient: Ownable,
-        canAlsoBeDecryptedBy decryptorCC: [Ownable]? = nil,
+        canAlsoBeDecryptedBy extraDecryptors: [Ownable]? = nil,
         ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
     ) -> ResultOfUserAction {
         
-        let sendMessageAction: SendMessageAction
-        if let decryptorCC = decryptorCC {
-            var readers = decryptorCC
-            readers.append(addressOfActiveAccount)
-            readers.append(recipient)
-            sendMessageAction = SendMessageAction.encrypted(from: addressOfActiveAccount, to: recipient, text: textToEncrypt, onlyDecryptableBy: readers, encoding: encoding)
-        } else {
-            sendMessageAction = SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: addressOfActiveAccount, to: recipient, text: textToEncrypt, encoding: encoding)
-        }
+        let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(
+            and: extraDecryptors,
+            from: addressOfActiveAccount,
+            to: recipient,
+            text: textToEncrypt,
+            encoding: encoding
+        )
+        
         return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
 }

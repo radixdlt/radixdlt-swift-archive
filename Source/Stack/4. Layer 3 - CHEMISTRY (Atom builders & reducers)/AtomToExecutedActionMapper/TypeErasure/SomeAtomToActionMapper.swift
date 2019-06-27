@@ -21,7 +21,7 @@ public struct SomeAtomToExecutedActionMapper<ExecutedAction>: AtomToSpecificExec
         guard any.matches(actionType: ExecutedAction.self) else {
             throw Error.actionTypeMismatch
         }
-        self._map = { any.map(atom: $0, toAction: ExecutedAction.self, account: $1) }
+        self._map = { any.map(atom: $0, toActionType: ExecutedAction.self, account: $1) }
     }
 }
 
