@@ -49,6 +49,10 @@ public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
 }
 
 public extension CreateTokenAction {
+    var nameOfAction: UserActionName { return .createToken }
+}
+
+public extension CreateTokenAction {
     enum Error: Swift.Error, Equatable {
         case initialSupplyNotMultipleOfGranularity
     }

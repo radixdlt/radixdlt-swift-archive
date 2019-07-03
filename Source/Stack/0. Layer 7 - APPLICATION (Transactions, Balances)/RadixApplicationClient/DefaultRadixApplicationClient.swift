@@ -272,7 +272,6 @@ public extension Array where Element == AnyStatefulActionToParticleGroupsMapper 
     static var `default`: [AnyStatefulActionToParticleGroupsMapper] {
         return [
             AnyStatefulActionToParticleGroupsMapper(DefaultMintTokensActionToParticleGroupsMapper()),
-            AnyStatefulActionToParticleGroupsMapper(DefaultMintAndTransferTokensActionToParticleGroupsMapper()),
             AnyStatefulActionToParticleGroupsMapper(DefaultBurnTokensActionToParticleGroupsMapper()),
             AnyStatefulActionToParticleGroupsMapper(DefaultTransferTokensActionToParticleGroupsMapper())
         ]

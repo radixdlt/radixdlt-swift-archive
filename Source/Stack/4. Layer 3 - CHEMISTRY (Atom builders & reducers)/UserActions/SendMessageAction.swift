@@ -27,6 +27,10 @@ public struct SendMessageAction: UserAction {
     }
 }
 
+public extension SendMessageAction {
+    var nameOfAction: UserActionName { return .sendMessage }
+}
+
 internal extension SendMessageAction {
     
     init(

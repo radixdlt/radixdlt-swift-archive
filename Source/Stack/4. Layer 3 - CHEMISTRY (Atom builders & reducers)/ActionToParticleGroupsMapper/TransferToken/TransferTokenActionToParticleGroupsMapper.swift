@@ -8,15 +8,8 @@
 
 import Foundation
 
-// swiftlint:disable colon opening_brace
 
-public protocol TransferTokensActionToParticleGroupsMapper:
-    StatefulActionToParticleGroupsMapper
-where
-    Action == TransferTokenAction
-{
-    // swiftlint:enable colon opening_brace
-}
+public protocol TransferTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action == TransferTokenAction {}
 
 public extension TransferTokensActionToParticleGroupsMapper {
     

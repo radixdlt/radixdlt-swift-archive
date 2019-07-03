@@ -8,4 +8,19 @@
 
 import Foundation
 
-public protocol UserAction {}
+public enum UserActionName: String, Hashable {
+    
+    // Stateful actions
+    case transferTokens
+    case burnTokens
+    case mintTokens
+    
+    // Stateless actions
+    case createToken
+    case putUnique
+    case sendMessage
+}
+
+public protocol UserAction {
+    var nameOfAction: UserActionName { get }
+}

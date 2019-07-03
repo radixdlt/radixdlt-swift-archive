@@ -85,7 +85,6 @@
 		E626E20422B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626E20322B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift */; };
 		E626E20622B41B8F0046D2AC /* SomeAtomToActionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626E20522B41B8F0046D2AC /* SomeAtomToActionMapper.swift */; };
 		E626E20822B41BAC0046D2AC /* IdentityHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626E20722B41BAC0046D2AC /* IdentityHolder.swift */; };
-		E626E20A22B41CC60046D2AC /* MintAndTransferTokensActionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626E20922B41CC60046D2AC /* MintAndTransferTokensActionMapper.swift */; };
 		E626E20C22B41CD50046D2AC /* BurnTokensActionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626E20B22B41CD50046D2AC /* BurnTokensActionMapper.swift */; };
 		E626E20E22B41D0E0046D2AC /* AnyParticleReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626E20D22B41D0E0046D2AC /* AnyParticleReducer.swift */; };
 		E626E21022B4F5760046D2AC /* AtomUpdateSoft.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626E20F22B4F5760046D2AC /* AtomUpdateSoft.swift */; };
@@ -661,7 +660,6 @@
 		E626E20322B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyStatefulActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E626E20522B41B8F0046D2AC /* SomeAtomToActionMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomeAtomToActionMapper.swift; sourceTree = "<group>"; };
 		E626E20722B41BAC0046D2AC /* IdentityHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityHolder.swift; sourceTree = "<group>"; };
-		E626E20922B41CC60046D2AC /* MintAndTransferTokensActionMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintAndTransferTokensActionMapper.swift; sourceTree = "<group>"; };
 		E626E20B22B41CD50046D2AC /* BurnTokensActionMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurnTokensActionMapper.swift; sourceTree = "<group>"; };
 		E626E20D22B41D0E0046D2AC /* AnyParticleReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyParticleReducer.swift; sourceTree = "<group>"; };
 		E626E20F22B4F5760046D2AC /* AtomUpdateSoft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomUpdateSoft.swift; sourceTree = "<group>"; };
@@ -1752,7 +1750,6 @@
 				E626E20F22B4F5760046D2AC /* AtomUpdateSoft.swift */,
 				E689DB84225F656400340CF3 /* DefaultRadixApplicationClient.swift */,
 				E615C51A22B7AF0800604E90 /* Magical.swift */,
-				E626E20922B41CC60046D2AC /* MintAndTransferTokensActionMapper.swift */,
 				E626E20B22B41CD50046D2AC /* BurnTokensActionMapper.swift */,
 				E615C51222B790F100604E90 /* ParticleReducer.swift */,
 				E626E20D22B41D0E0046D2AC /* AnyParticleReducer.swift */,
@@ -3744,7 +3741,6 @@
 				E6166BE42260AF5A003A9442 /* DefaultNodeInteraction.swift in Sources */,
 				E626E20022B41B350046D2AC /* AnyAtomToActionMapper.swift in Sources */,
 				E6CEE73021F5D4E000D745EC /* CharacterSet.swift in Sources */,
-				E626E20A22B41CC60046D2AC /* MintAndTransferTokensActionMapper.swift in Sources */,
 				E6E279792271CD1C0067D46E /* UnsignedNumeric.swift in Sources */,
 				E6A508B7224E713F00128123 /* Accountable.swift in Sources */,
 				E6296C8B2292EF6000753FD5 /* AnyDecodable.swift in Sources */,

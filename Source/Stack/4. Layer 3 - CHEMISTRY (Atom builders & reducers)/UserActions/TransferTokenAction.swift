@@ -28,3 +28,6 @@ public struct TransferTokenAction: UserAction {
         self.tokenResourceIdentifier = tokenResourceIdentifier
     }
 }
+public extension TransferTokenAction {
+    var nameOfAction: UserActionName { return .transferTokens }
+}

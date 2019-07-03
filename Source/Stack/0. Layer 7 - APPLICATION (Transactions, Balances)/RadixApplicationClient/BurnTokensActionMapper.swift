@@ -14,9 +14,12 @@ public struct BurnTokensAction: UserAction {
     public let amount: PositiveAmount
 }
 
-public protocol BurnTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action == BurnTokensAction {
-    
+
+public extension BurnTokensAction {
+    var nameOfAction: UserActionName { return .burnTokens }
 }
+
+public protocol BurnTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action == BurnTokensAction {}
 
 public extension BurnTokensActionToParticleGroupsMapper {
     func requiredState(for burnTokensAction: Action) -> [AnyShardedParticleStateId] {

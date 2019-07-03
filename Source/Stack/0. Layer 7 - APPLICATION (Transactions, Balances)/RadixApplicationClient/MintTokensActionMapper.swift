@@ -13,6 +13,10 @@ public struct MintTokensAction: UserAction {
     public let amount: PositiveAmount
 }
 
+public extension MintTokensAction {
+    var nameOfAction: UserActionName { return .mintTokens }
+}
+
 public protocol MintTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action == MintTokensAction {}
 public extension MintTokensActionToParticleGroupsMapper {
     func requiredState(for mintTokensAction: Action) -> [AnyShardedParticleStateId] {
