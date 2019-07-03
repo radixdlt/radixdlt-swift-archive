@@ -10,5 +10,5 @@ import Foundation
 import RxSwift
 
 public protocol NodeNetworkDetailsRequesting {
-    func networkDetails() -> SingleWanted<NodeNetworkDetails>
+    func networkDetails() -> Single<NodeNetworkDetails>
 }

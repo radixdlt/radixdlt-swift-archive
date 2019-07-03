@@ -21,23 +21,21 @@ public extension InMemoryAtomStoreReducer {
     
     func reduce(action: Action) {
         
-        if
-            let fetchAtomAction = action as? FetchAtomsAction,
-            case .observation((let uuid, let address), let fromNode, let atomObservation) = fetchAtomAction
-        {
+        if let fetchAtomActionObservation = action as? FetchAtomsActionObservation {
+            let atomObservation = fetchAtomActionObservation.atomObservation
+            let address = fetchAtomActionObservation.address
            atomStore.store(atomObservation: atomObservation, address: address, notifyListeners: .notifyOnAtomUpdate)
         }
 
-        if
-            let submitAtomAction = action as? SubmitAtomAction,
-            case .statusOf((let uuid, let atom), let sentToNode, let atomStatusNotification) = submitAtomAction
-        {
-            if atomStatusNotification.atomStatus == AtomStatus.stored {
+        if let submitAtomActionStatus = action as? SubmitAtomActionStatus {
+            let atomStatusNotification = submitAtomActionStatus.statusNotification
+            let atom = submitAtomActionStatus.atom
+            if atomStatusNotification == .stored {
                 atom.addresses().forEach { addressInAtom in
                     func store(atomObservation: AtomObservation) {
                         atomStore.store(atomObservation: atomObservation, address: addressInAtom, notifyListeners: .dontNotify)
                     }
-                    store(atomObservation: .stored(atom, isSoft: true))
+                    store(atomObservation: .stored(atom.wrappedAtom.wrappedAtom, isSoft: true))
                     store(atomObservation: .head())
                 }
             }

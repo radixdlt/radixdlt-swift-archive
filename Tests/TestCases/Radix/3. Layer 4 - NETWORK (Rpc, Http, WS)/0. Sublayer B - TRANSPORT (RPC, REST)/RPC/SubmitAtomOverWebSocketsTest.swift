@@ -13,7 +13,7 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-//class SubmitAtomOverWebSocketsTest: WebsocketTest {
+//class SubmitAtomOverWebSocketsTest: LocalhostNodeTest {
 //    
 //    private let magic: Magic = 63799298
 //    private let powWorker = DefaultProofOfWorkWorker()

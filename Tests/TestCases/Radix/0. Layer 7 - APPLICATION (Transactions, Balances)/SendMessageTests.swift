@@ -45,7 +45,7 @@ extension Account {
 
 extension ResultOfUserAction {
     func blockingWasSuccessfull(
-        timeout: RxTimeInterval? = 2,
+        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnErrors: Bool = true,
         function: String = #function,
@@ -64,13 +64,13 @@ extension ResultOfUserAction {
     
     func blockingAssertThrows<SpecificError>(
         error expectedError: SpecificError,
-        timeout: RxTimeInterval? = 2
+        timeout: TimeInterval? = .default
         ) where SpecificError: Swift.Error, SpecificError: Equatable {
         return self.toCompletable().blockingAssertThrows(error: expectedError, timeout: timeout)
     }
 }
 
-class SendMessageTests: WebsocketTest {
+class SendMessageTests: LocalhostNodeTest {
     
     private let aliceIdentity = AbstractIdentity(alias: "Alice")
     private let bobAccount = Account()
@@ -104,7 +104,7 @@ class SendMessageTests: WebsocketTest {
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
-            result.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            result.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
     }
     
@@ -115,7 +115,7 @@ class SendMessageTests: WebsocketTest {
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
-            result.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            result.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
     }
 
@@ -126,7 +126,7 @@ class SendMessageTests: WebsocketTest {
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
-            result.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            result.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
     }
     
@@ -141,9 +141,11 @@ class SendMessageTests: WebsocketTest {
         )
  
         // THEN: I see that action fails with a validation error
+        
+        //            error: NodeInteractionError.atomNotStored(state: .validationError),
         result.blockingAssertThrows(
-            error: NodeInteractionError.atomNotStored(state: .validationError),
-            timeout: RxTimeInterval.enoughForPOW
+            error: SubmitAtomError(rpcError: RPCError.requestErrorCode(RPCErrorCode.invalidRequest)),
+            timeout: .enoughForPOW
         )
     }
     
@@ -158,7 +160,7 @@ class SendMessageTests: WebsocketTest {
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
-            result.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            result.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
     }
 }
@@ -172,7 +174,7 @@ class SendMessageTests: WebsocketTest {
     //
     //        XCTAssertTrue(
     //            // THEN: I see that action completes successfully
-    //            request.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+    //            request.blockingWasSuccessfull(timeout: .enoughForPOW)
     //        )
     //    }
 //}

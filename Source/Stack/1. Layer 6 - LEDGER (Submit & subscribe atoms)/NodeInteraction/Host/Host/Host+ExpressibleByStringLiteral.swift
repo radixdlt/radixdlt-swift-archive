@@ -24,7 +24,6 @@ public extension Host {
         
     }
     
-    // swiftlint:disable:next function_body_length
     static func fromString(
         _ string: String,
         defaultToPort defaultPort: Port = .nodeFinder,

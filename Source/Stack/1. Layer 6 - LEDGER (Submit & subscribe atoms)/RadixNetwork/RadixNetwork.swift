@@ -24,6 +24,7 @@ public final class DefaultRadixNetwork: RadixNetwork {
 public extension DefaultRadixNetwork {
     
     func reduce(state: RadixNetworkState, action: NodeAction) -> RadixNetworkState {
-        implementMe()
+        // TODO implement me
+        return state
     }
 }

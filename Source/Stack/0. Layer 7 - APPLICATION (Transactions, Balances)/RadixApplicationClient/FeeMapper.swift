@@ -10,5 +10,5 @@ import Foundation
 import RxSwift
 
 public protocol FeeMapper {
-    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> SingleWanted<AtomWithFee>
+    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> Single<AtomWithFee>
 }

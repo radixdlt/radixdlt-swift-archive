@@ -17,28 +17,23 @@ public struct ResultOfUserAction {
         self.updates = updates.replayAll()
         
         self.completable = updates.ofType(SubmitAtomAction.self)
-            .filter { $0.isStatusUpdate }
-            .asSingle() //.lastOrError()
-            .flatMapCompletable { action in
-                guard
-                    case .statusOf(_, _, let statusNotification) = action
-                    else { incorrectImplementation("should have filtered out just StatusUpdate case") }
-                let status = statusNotification.atomStatus
-                
-                if status == AtomStatus.stored {
-                    return Completable.empty()
-                } else {
-                    // TODO: map to error somewhere, instead of using raw json string
-                    return Completable.error(Error.submitAtomError(underlyingReasonAsJsonString: statusNotification.dataAsJsonString))
+            .ofType(SubmitAtomActionStatus.self)
+            .takeLast(1).asSingle()
+            .flatMapCompletable { submitAtomActionStatus in
+                let statusNotification = submitAtomActionStatus.statusNotification
+                switch statusNotification {
+                case .stored: return Completable.completed()
+                case .notStored(let reason):
+//                    let submitAtomError: SubmitAtomError = reason.error ?? SubmitAtomError(rpcError: RPCError.unrecognizedJson(jsonString: dataAsJsonString))
+                    return Completable.error(Error.failedToSubmitAtom(reason.error))
                 }
-        }
-        
+            }
     }
 }
 
 public extension ResultOfUserAction {
     enum Error: Swift.Error, Equatable {
-        case submitAtomError(underlyingReasonAsJsonString: String)
+        case failedToSubmitAtom(SubmitAtomError)
     }
 }
 
@@ -63,17 +58,4 @@ public extension ResultOfUserAction {
     func toCompletable() -> Completable {
         return completable
     }
-}
-
-extension PrimitiveSequenceType where Self: ObservableConvertibleType, Self.TraitType == SingleTrait {
-    
-    func flatMapCompletable(_ selector: @escaping (E) -> Completable) -> Completable {
-        return self
-            .asObservable()
-            .flatMap { element -> Observable<Never> in
-                selector(element).asObservable()
-            }
-            .asCompletable()
-    }
-    
 }

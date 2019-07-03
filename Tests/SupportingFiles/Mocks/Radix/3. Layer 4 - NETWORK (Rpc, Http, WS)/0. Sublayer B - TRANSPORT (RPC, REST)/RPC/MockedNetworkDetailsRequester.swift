@@ -11,14 +11,14 @@ import Foundation
 import RxSwift
 
 //struct MockedNetworkDetailsRequester: NodeNetworkDetailsRequesting {
-//    private let single: SingleWanted<NodeNetworkDetails>
-//    init(_ single: SingleWanted<NodeNetworkDetails>) {
+//    private let single: Single<NodeNetworkDetails>
+//    init(_ single: Single<NodeNetworkDetails>) {
 //        self.single = single
 //    }
 //    init(subject: PublishSubject<NodeNetworkDetails>) {
 //        self.init(subject.asObservable())
 //    }
-//    func networkDetails() -> SingleWanted<NodeNetworkDetails> {
+//    func networkDetails() -> Single<NodeNetworkDetails> {
 //        return single
 //    }
 //}

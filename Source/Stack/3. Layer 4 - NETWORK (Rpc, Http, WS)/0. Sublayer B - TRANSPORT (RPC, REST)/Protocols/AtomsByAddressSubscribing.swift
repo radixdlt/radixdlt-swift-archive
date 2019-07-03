@@ -10,5 +10,6 @@ import Foundation
 import RxSwift
 
 public protocol AtomsByAddressSubscribing {
-    func subscribe(to address: Address, subscriberId: SubscriberId) -> Observable<AtomSubscription>
+    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable
+    func observeAtoms(subscriberId: SubscriberId) -> Observable<AtomObservation>
 }

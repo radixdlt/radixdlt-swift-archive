@@ -24,9 +24,9 @@ public extension RESTClientsRetainer {
         return shared.restClient(urlToNode: urlToNode)
     }
     
-    class func restClient(node: Node) -> RESTClient {
-        return restClient(urlToNode: node.httpUrl)
-    }
+//    class func restClient(node: Node) -> RESTClient {
+//        return restClient(urlToNode: node.httpUrl)
+//    }
 }
 
 // MARK: - Private Instance Methods
@@ -38,8 +38,8 @@ private extension RESTClientsRetainer {
         }
     }
     
-    func restClient(node: Node) -> RESTClient {
-        let httpUrl = node.httpUrl
-        return restClient(urlToNode: httpUrl)
-    }
+//    func restClient(node: Node) -> RESTClient {
+//        let httpUrl = node.httpUrl
+//        return restClient(urlToNode: httpUrl)
+//    }
 }

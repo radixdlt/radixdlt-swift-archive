@@ -28,13 +28,13 @@ import RxCocoa
 
 public extension ObservableType {
 
-    func catchErrorReturnEmpty() -> Observable<E> {
+    func catchErrorReturnEmpty() -> Observable<Element> {
         return catchError { _ in
             return Observable.empty()
         }
     }
 
-    func asDriverOnErrorReturnEmpty() -> Driver<E> {
+    func asDriverOnErrorReturnEmpty() -> Driver<Element> {
         return asDriver { _ in
             return Driver.empty()
         }

@@ -18,6 +18,8 @@ public protocol RPCClient:
     AtomsByAddressSubscribing,
     AtomSubscriptionCancelling,
     AtomSubmitting,
+    AtomStatusObservationRequesting,
+    AtomStatusObservationCancelling,
     AtomStatusObserving,
     AtomStatusChecking
 {
@@ -25,5 +27,5 @@ public protocol RPCClient:
 }
 
 public protocol AtomSubscriptionCancelling {
-    func unsubscribe(subscriberId: SubscriberId) -> Observable<AtomSubscriptionStartOrCancel>
+    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable
 }

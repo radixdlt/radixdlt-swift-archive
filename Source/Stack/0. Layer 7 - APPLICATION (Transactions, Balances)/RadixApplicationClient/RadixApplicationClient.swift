@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import RxSwiftExt
 
 public protocol RadixApplicationClient {
     
@@ -258,17 +259,6 @@ public extension RadixApplicationClient {
     @discardableResult
     func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
         return identity.selectAccount(accountSelector)
-    }
-    
-    func connectToNode(url: FormattedURL, strategyForWhenNodeIsInsuitable: StrategyWhenNodeIsUnsuitable = .default) -> Completable {
-
-        let nodeFinding = NodeFindingg.connectToSpecificNode(
-            url: url,
-            config: universeConfig,
-            strategyForWhenNodeIsInsuitable: strategyForWhenNodeIsInsuitable
-        )
-        
-        return universe.connectToNode(nodeFinding: nodeFinding, account: activeAccount)
     }
 }
 

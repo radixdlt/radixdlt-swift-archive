@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 import RxSwift
 
-class NodeDiscoveryTests: WebsocketTest {
+class NodeDiscoveryTests: LocalhostNodeTest {
 
     func testLocalHost() {
         let nodeDiscovery: NodeDiscoveryHardCoded = .localhost
@@ -86,12 +86,12 @@ extension FormattedURL {
     }
 }
 
-//struct MockedFindNodeRequester: NodeAddressRequesting {
+//struct MockedFindNodeRequester: OriginNodeFinding {
 //    private let observable: Observable<FormattedURL>
 //    init(observable: Observable<FormattedURL>) {
 //        self.observable = observable
 //    }
-//    func findNode() -> SingleWanted<FormattedURL> {
+//    func findNode() -> Single<FormattedURL> {
 //        return observable
 //    }
 //}

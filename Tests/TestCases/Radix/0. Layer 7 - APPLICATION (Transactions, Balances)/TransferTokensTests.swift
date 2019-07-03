@@ -12,7 +12,7 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
-class TransferTokensTests: WebsocketTest {
+class TransferTokensTests: LocalhostNodeTest {
     
     private var aliceIdentity: AbstractIdentity!
     private var bobAccount: Account!
@@ -47,7 +47,7 @@ class TransferTokensTests: WebsocketTest {
         let createToken = createTokenAction(address: alice, supply: .fixed(to: 30))
 
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         let rri = createToken.identifier
         
@@ -55,7 +55,7 @@ class TransferTokensTests: WebsocketTest {
 
         // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
-            transfer.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
     }
     
@@ -77,7 +77,7 @@ class TransferTokensTests: WebsocketTest {
         // WHEN: Alice tries to transfer tokens with a larger amount than her current balance, to Bob
         let createToken = createTokenAction(address: alice, supply: .fixed(to: 30))
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         let rri = createToken.identifier
         let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 50, tokenResourceIdentifier: rri))
@@ -95,7 +95,7 @@ class TransferTokensTests: WebsocketTest {
         let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: 10)
         
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         let rri = createToken.identifier
         
@@ -103,7 +103,7 @@ class TransferTokensTests: WebsocketTest {
         
         // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
-            transfer.blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
     }
     
@@ -113,7 +113,7 @@ class TransferTokensTests: WebsocketTest {
         // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
         let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: 5)
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: RxTimeInterval.enoughForPOW)
+            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         let rri = createToken.identifier
         let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 7, tokenResourceIdentifier: rri))
@@ -121,7 +121,7 @@ class TransferTokensTests: WebsocketTest {
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
         transfer.blockingAssertThrows(
             error: TransferError.amountNotMultipleOfGranularity,
-            timeout: RxTimeInterval.enoughForPOW
+            timeout: .enoughForPOW
         )
     }
     

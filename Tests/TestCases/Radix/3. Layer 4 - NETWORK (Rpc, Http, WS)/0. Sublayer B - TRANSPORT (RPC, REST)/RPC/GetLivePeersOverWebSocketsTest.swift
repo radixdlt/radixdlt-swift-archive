@@ -13,7 +13,7 @@ import RxSwift
 import RxTest
 
 
-class GetLivePeersOverWebSocketsTest: WebsocketTest {
+class GetLivePeersOverWebSocketsTest: LocalhostNodeTest {
     
     func testLivePeersOverWS() {
         guard let rpcClient = makeRpcClient() else { return }
@@ -74,11 +74,11 @@ struct MockedWebsocket: FullDuplexCommunicationChannel {
 //        self.channel = channel
 //    }
 //
-//    func getLivePeers() -> SingleWanted<[NodeInfo]> {
+//    func getLivePeers() -> Single<[NodeInfo]> {
 //        return channel.responseForMessage(requestId: <#T##Int#>)
 //    }
 //
-//    func getUniverseConfig() -> SingleWanted<UniverseConfig> {
+//    func getUniverseConfig() -> Single<UniverseConfig> {
 //        return channel.responseForMessage(with: nil)
 //    }
 //}

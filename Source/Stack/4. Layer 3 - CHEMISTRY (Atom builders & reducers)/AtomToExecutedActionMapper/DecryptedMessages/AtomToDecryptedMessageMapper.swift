@@ -24,7 +24,9 @@ public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMa
 public extension DefaultAtomToDecryptedMessageMapper {
     typealias ExecutedAction = DecryptedMessage
     func map(atom: Atom, account: Account) -> Observable<ExecutedAction> {
-        return account.privateKeyForSigning.map {
+        return account.privateKeyForSigning
+            .asObservable()
+            .map {
             try EncryptedMessageContext(atom: atom).decryptMessageIfNeeded(key: $0)
         }
     }

@@ -14,7 +14,7 @@ import RxSwift
 //    func transfer(
 //        tokens: TransferTokenAction,
 //        ifNoSigningKeyPresent: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent
-//    ) -> CompletableWanted
+//    ) -> Completable
 //}
 
 // MARK: - Transacting + Accounting + NodeInteracting => Default Impl
@@ -32,11 +32,11 @@ import RxSwift
 //
 //    func transfer(
 //        tokens transfer: TransferTokenAction,
-//    ) -> CompletableWanted {
+//    ) -> Completable {
 //
 //        if let tokenDefinition = self.tokens.token(for: transfer.tokenResourceIdentifier) {
 //            guard transfer.amount.isExactMultipleOfGranularity(tokenDefinition.granularity) else {
-//                return CompletableWanted.error(TransferError.amountNotMultipleOfGranularity)
+//                return Completable.error(TransferError.amountNotMultipleOfGranularity)
 //            }
 //        }
 //

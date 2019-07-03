@@ -32,7 +32,8 @@ public extension DefaultRESTClient {
         self.init(url: formattedUrl.url)
     }
     
-    convenience init(node: Node) {
-        self.init(formattedUrl: node.httpUrl)
-    }
+//    convenience init(node: Node) {
+//        fatalError("dont use node when creating RESTClient...")
+////        self.init(formattedUrl: node.httpUrl)
+//    }
 }

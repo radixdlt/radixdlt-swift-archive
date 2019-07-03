@@ -17,6 +17,12 @@ public struct SubscriberId: Hashable, Codable, ExpressibleByStringLiteral, Strin
 }
 
 public extension SubscriberId {
+    init(uuid: UUID) {
+        self.init(validated: uuid.uuidString)
+    }
+}
+
+public extension SubscriberId {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(value)

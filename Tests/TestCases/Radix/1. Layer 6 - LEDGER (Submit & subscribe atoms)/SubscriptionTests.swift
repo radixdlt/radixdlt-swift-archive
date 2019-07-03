@@ -31,7 +31,7 @@ extension DefaultNodeConnection {
     }
 }
 
-class SubscriptionTests: WebsocketTest {
+class SubscriptionTests: LocalhostNodeTest {
     
     override func setUp() {
         super.setUp()
@@ -94,7 +94,7 @@ class SubscriptionTests: WebsocketTest {
         // THEN: I see that action fails with a validation error
         request.blockingAssertThrows(
             error: RPCError.subscriberIdAlreadyInUse(subscriberId),
-            timeout: RxTimeInterval.enoughForPOW
+            timeout: .enoughForPOW
         )
     }
 

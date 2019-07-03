@@ -66,7 +66,7 @@ import RxSwift
 //}
 //
 
-internal extension ObservableType where E == [AtomObservation] {
+internal extension ObservableType where Element == [AtomObservation] {
     func storedAtomsOnly() -> Observable<[Atom]> {
         return self.asObservable().map { (atomUpdates: [AtomObservation]) -> [Atom] in
             return atomUpdates.compactMap {

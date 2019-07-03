@@ -11,11 +11,15 @@ import RxSwift
 
 extension FullDuplexCommunicationChannel {
     
-    func responseForMessage<Model>(requestId: Int) -> Observable<Model> where Model: Decodable {
+    func responseForMessage<Model>(requestId: String) -> Observable<Model> where Model: Decodable {
         
-        return resultForMessage(requestId: requestId).map {
+        return responseOrErrorForMessage(requestId: requestId).map {
             try $0.get().model
         }
+    }
+    
+    func responseOrErrorForMessage<Model>(requestId: String) -> Observable<RPCResult<Model>> where Model: Decodable {
+        return resultForMessage(requestId: requestId)
     }
     
     func responseForMessage<Model>(notification: RPCNotification, subscriberId: SubscriberId) -> Observable<Model> where Model: Decodable {
@@ -28,7 +32,7 @@ extension FullDuplexCommunicationChannel {
 
 private extension FullDuplexCommunicationChannel {
     func resultForMessage<Model>(
-        requestId: Int? = nil,
+        requestId: String? = nil,
         subscriberId: SubscriberId? = nil,
         notification: RPCNotification? = nil
     ) -> Observable<RPCResult<Model>> where Model: Decodable {
@@ -51,7 +55,7 @@ private extension FullDuplexCommunicationChannel {
 //extension Swift.Result: BaseRPCResposeResult & PotentiallyRequestIdentifiable & PotentiallySubscriptionIdentifiable where Success: BaseRPCResposeResult & PotentiallyRequestIdentifiable & PotentiallySubscriptionIdentifiable {}
 
 extension RPCResult: BaseRPCResposeResult where Success: BaseRPCResposeResult {
-//    public var requestIdIfPresent: Int? {
+//    public var requestIdIfPresent: String? {
 //        switch self {
 //        case .success(let success):
 //            
@@ -68,12 +72,12 @@ extension RPCResult: BaseRPCResposeResult where Success: BaseRPCResposeResult {
 //    }
 }
 
-private extension ObservableType where E: BaseRPCResposeResult {
+private extension ObservableType where Element: BaseRPCResposeResult {
     func filter(
-        requestId: Int? = nil,
+        requestId: String? = nil,
         subscriberId: SubscriberId? = nil,
         notification: RPCNotification? = nil
-    ) -> Observable<E> {
+    ) -> Observable<Element> {
         
         return self.asObservable().filter { element in
             if
@@ -110,19 +114,19 @@ private extension ObservableType where E: BaseRPCResposeResult {
     }
 }
 
-//extension ObservableType where E: RPCSubscriptionResponseConvertible {
+//extension ObservableType where Element: RPCSubscriptionResponseConvertible {
 //    
 //    
-//    func filterOnSubscriberId(_ subscriberId: SubscriberId) -> Observable<E> {
+//    func filterOnSubscriberId(_ subscriberId: SubscriberId) -> Observable<Element> {
 //        return asObservable()
 //            .filter { $0.subscriberId == subscriberId }
 //    }
 //}
 //
-//extension ObservableType where E: RPCSubscriptionResponseConvertible & RPCNotificationResponseConvertible {
+//extension ObservableType where Element: RPCSubscriptionResponseConvertible & RPCNotificationResponseConvertible {
 //    
 //    
-//    func filterOnSubscriberId(_ subscriberId: SubscriberId, andNotification notificationMethod: RPCNotification) -> Observable<E> {
+//    func filterOnSubscriberId(_ subscriberId: SubscriberId, andNotification notificationMethod: RPCNotification) -> Observable<Element> {
 //        return filterOnSubscriberId(subscriberId)
 //            .filter { $0.method == notificationMethod }
 //    }

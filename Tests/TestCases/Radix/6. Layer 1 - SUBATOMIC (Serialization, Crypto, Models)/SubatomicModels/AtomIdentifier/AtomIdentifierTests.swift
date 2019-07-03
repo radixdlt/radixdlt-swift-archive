@@ -172,7 +172,7 @@ private extension AtomIdentifierTests {
         )
         
         let aid = atom.identifier()
-        
+        print(aid.stringValue)
         XCTAssertTrue(expectedAidShard.assert(actual: aid.shard), "Actual shard not found in expected, actual: \(aid.shard)")
         
         return atom

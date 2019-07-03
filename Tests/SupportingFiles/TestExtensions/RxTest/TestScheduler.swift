@@ -15,7 +15,11 @@ import RxSwift
 
 extension RxTimeInterval {
     static var enoughForPOW: RxTimeInterval {
-        return 8
+        return RxTimeInterval.seconds(8)
+    }
+    
+    static var `default`: RxTimeInterval {
+        return RxTimeInterval.seconds(2)
     }
 }
 

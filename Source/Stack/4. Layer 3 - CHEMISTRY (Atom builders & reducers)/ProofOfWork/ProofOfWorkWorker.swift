@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 public protocol ProofOfWorkWorker {
-    func work(seed: Data, magic: Magic, numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros) -> Observable<ProofOfWork>
+    func work(seed: Data, magic: Magic, numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros) -> Single<ProofOfWork>
 }
 
 // MARK: - Convenience
@@ -19,7 +19,7 @@ public extension ProofOfWorkWorker {
         atom: Atom,
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default
-        ) -> Observable<ProofOfWork> {
+        ) -> Single<ProofOfWork> {
         
         return work(
             seed: atom.radixHash.asData,

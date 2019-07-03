@@ -1,5 +1,5 @@
 //
-//  NodeAddressRequesting.swift
+//  OriginNodeFinding.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-04-16.
@@ -9,24 +9,24 @@
 import Foundation
 import RxSwift
 
-public protocol NodeAddressRequesting {
-    func findSomeOriginNode() -> SingleWanted<FormattedURL>
+public protocol OriginNodeFinding {
+    func findSomeOriginNode(port: Port) -> Single<Node>
 }
 
-public extension NodeAddressRequesting where Self: HTTPClientOwner {
-    func findSomeOriginNode() -> SingleWanted<FormattedURL> {
+public extension OriginNodeFinding where Self: HTTPClientOwner {
+    func findSomeOriginNode(port: Port = .nodeFinder) -> Single<Node> {
         return httpClient.loadContent(of: "/node-finder")
-            .map { try Host(domain: $0, port: .nodeFinder) }
-            .map { try URLFormatter.format(host: $0, protocol: .hypertext, useSSL: true) }
+            .map { try Host(domain: $0, port: port) }
+            .map { try Node.init(host: $0, isUsingSSL: true) }
     }
 }
 
-public final class OriginNodeFinder: NodeAddressRequesting, HTTPClientOwner {
+public final class OriginNodeFinder: OriginNodeFinding, HTTPClientOwner {
 //    private let urlToFinderOfSomeOriginNode: URL
     
     public let httpClient: HTTPClient
     
-    public init(formattedUrlToFinderOfSomeOriginNode: FormattedURL) {
+    private init(formattedUrlToFinderOfSomeOriginNode: FormattedURL) {
         self.httpClient = DefaultHTTPClient(formattedUrl: formattedUrlToFinderOfSomeOriginNode)
     }
 }
@@ -52,7 +52,8 @@ public extension OriginNodeFinder {
 
 public extension OriginNodeFinder {
     static var betanet: OriginNodeFinder {
-        // swiftlint:disable:next force_try
-        return try! OriginNodeFinder(domain: "https://betanet.radixdlt.com")
+        do {
+            return try OriginNodeFinder(domain: "https://betanet.radixdlt.com")
+        } catch { incorrectImplementation("Should always be able to create an OriginNodeFinder for betanet") }
     }
 }

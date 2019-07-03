@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 // swiftlint:disable colon opening_brace
 
@@ -19,13 +20,13 @@ public protocol RESTClient:
     // swiftlint:enable colon opening_brace
 }
 
-public extension NodeNetworkDetailsRequesting where Self: NodeInfoRequesting {
+public extension NodeNetworkDetailsRequesting where Self: RESTClient {
     
-    func getInfo() -> SingleWanted<NodeInfo> {
+    func getInfo() -> Single<NodeInfo> {
         return networkDetails().map {
             $0.udp
-        }.flatMap { (nodesInfos: [NodeInfo]) -> SingleWanted<NodeInfo> in
-            return SingleWanted.from(nodesInfos)
+        }.flatMap { (nodesInfos: [NodeInfo]) -> Single<NodeInfo> in
+            return Observable.from(nodesInfos).asSingle()
         }
     }
 }

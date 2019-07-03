@@ -16,13 +16,13 @@ struct MockedHTTPClient: HTTPClient {
         self.httpResponse = httpResponse
     }
     
-    func request<D>(router: Router, decodeAs type: D.Type) -> SingleWanted<D> where D: Decodable {
+    func request<D>(router: Router, decodeAs type: D.Type) -> Single<D> where D: Decodable {
         return httpResponse.map {
             try JSONDecoder().decode(D.self, from: $0.toData())
         }
     }
     
-    func loadContent(of page: String) -> SingleWanted<String> {
+    func loadContent(of page: String) -> Single<String> {
         abstract()
     }
 }

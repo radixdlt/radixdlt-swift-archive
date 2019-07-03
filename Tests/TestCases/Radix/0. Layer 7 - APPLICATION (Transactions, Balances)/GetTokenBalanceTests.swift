@@ -10,7 +10,7 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
-class GetTokenBalanceTests: WebsocketTest {
+class GetTokenBalanceTests: LocalhostNodeTest {
     
 //    func testGetTokenBalance() {
 //        // GIVEN

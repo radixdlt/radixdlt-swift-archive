@@ -31,7 +31,7 @@ public struct FormattedURL:
 }
 
 public extension FormattedURL {
-    static var localhost: FormattedURL {
-        return URLFormatter.localhost
+    static var localhostWebsocket: FormattedURL {
+        return URLFormatter.localhostWebsocket
     }
 }

@@ -46,8 +46,6 @@ public final class DefaultRadixApplicationClient: RadixApplicationClient {
         self.activeAccount = identity.selectAccount(accountSelection)
         self.feeMapper = feeMapper
         
-        // Connect to origin node
-        universe.connectToNode(address: addressOfActiveAccount)
     }
 }
 
@@ -106,7 +104,7 @@ public extension DefaultRadixApplicationClient {
         return atomPuller.pull(address: address).subscribe()
     }
     
-    func addFee(to atom: Atom) -> SingleWanted<AtomWithFee> {
+    func addFee(to atom: Atom) -> Single<AtomWithFee> {
         return feeMapper.feeBasedOn(
             atom: atom,
             universeConfig: universeConfig,
@@ -143,7 +141,7 @@ internal final class Transaction {
         let signedAtom = api.sign(atom: unsignedAtom, ifNoSigningKeyPresent: noKeyPresentStrategy)
         
         return api.createAtomSubmission(
-            atom: signedAtom.map { $0.wrappedAtom.wrappedAtom },
+            atom: signedAtom,
             completeOnAtomStoredOnly: false,
             originNode: originNode
         ).connect()
@@ -166,7 +164,7 @@ internal final class Transaction {
         
     }
     
-    func buildAtom() -> SingleWanted<UnsignedAtom> {
+    func buildAtom() -> Single<UnsignedAtom> {
         let particleGroups = api.universe.atomStore.clearStagedParticleGroups(for: uuid)
         let atom = Atom(particleGroups: particleGroups)
         let atomWithFee = api.addFee(to: atom)
@@ -189,24 +187,25 @@ public enum BuildAtomError: Int, Swift.Error {
 // MARK: - Private
 private extension DefaultRadixApplicationClient {
     
-    func sign(atom: SingleWanted<UnsignedAtom>, ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent) -> SingleWanted<SignedAtom> {
+    func sign(atom: Single<UnsignedAtom>, ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent) -> Single<SignedAtom> {
         if activeAccount.privateKey == nil, case .throwErrorDirectly = noKeyPresentStrategy {
-            return SingleWanted.error(SigningError.noSigningKeyPresentButWasExpectedToBe)
+            return Single.error(SigningError.noSigningKeyPresentButWasExpectedToBe)
         }
         return atom.flatMap { [unowned self] in
             try self.activeAccount.sign(atom: $0)
         }
     }
     
-    func createAtomSubmission(atom atomSingle: SingleWanted<Atom>, completeOnAtomStoredOnly: Bool, originNode: Node?) -> ResultOfUserAction {
-        let updates = atomSingle.flatMap { [unowned self] (atom: Atom) -> Observable<SubmitAtomAction> in
+    func createAtomSubmission(atom atomSingle: Single<SignedAtom>, completeOnAtomStoredOnly: Bool, originNode: Node?) -> ResultOfUserAction {
+        let updates = atomSingle.flatMapObservable { [unowned self] (atom: SignedAtom) -> Observable<SubmitAtomAction> in
             let initialAction: SubmitAtomAction
+            
             if let originNode = originNode {
-                initialAction = SubmitAtomAction.toSpecificNode(originNode, atom: atom, completeOnAtomStoredOnly: completeOnAtomStoredOnly)
+                initialAction = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
             } else {
-                initialAction = SubmitAtomAction.newRequest(atom: atom, completeOnAtomStoredOnly: completeOnAtomStoredOnly)
-
+                initialAction = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
             }
+            
             let status: Observable<SubmitAtomAction> = self.universe.networkController
                 .getActions()
                 .ofType(SubmitAtomAction.self)
@@ -243,7 +242,7 @@ private extension DefaultRadixApplicationClient {
 
 public extension ObservableType {
     func ofType<T>(_ type: T.Type) -> Observable<T> {
-        return self.asObservable().map { (element: E) -> T? in
+        return self.asObservable().map { (element: Element) -> T? in
             guard let casted = element as? T else { return nil }
             return casted
         }.ifNilReturnEmpty()
@@ -283,6 +282,7 @@ public extension Array where Element == AnyStatefulActionToParticleGroupsMapper 
 public extension Array where Element == AnyStatelessActionToParticleGroupsMapper {
     static var `default`: [AnyStatelessActionToParticleGroupsMapper] {
         return [
+            AnyStatelessActionToParticleGroupsMapper(DefaultSendMessageActionToParticleGroupsMapper()),
             AnyStatelessActionToParticleGroupsMapper(DefaultCreateTokenActionToParticleGroupsMapper()),
             AnyStatelessActionToParticleGroupsMapper(DefaultPutUniqueActionToParticleGroupsMapper())
         ]

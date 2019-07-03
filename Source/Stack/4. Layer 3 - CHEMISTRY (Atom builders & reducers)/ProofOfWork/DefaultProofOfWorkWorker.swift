@@ -28,7 +28,7 @@ public extension DefaultProofOfWorkWorker {
         seed: Data,
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default
-    ) -> Observable<ProofOfWork> {
+    ) -> Single<ProofOfWork> {
         
         return Observable.create { [unowned self] observer in
             var powDone = false
@@ -56,7 +56,7 @@ public extension DefaultProofOfWorkWorker {
                     log.warning("POW cancelled")
                 }
             }
-        }
+        }.asSingle()
     }
 }
 
@@ -90,7 +90,7 @@ internal extension DefaultProofOfWorkWorker {
 
 extension DefaultProofOfWorkWorker: FeeMapper {}
 public extension DefaultProofOfWorkWorker {
-    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> SingleWanted<AtomWithFee> {
+    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> Single<AtomWithFee> {
         return work(atom: atom, magic: universeConfig.magic, numberOfLeadingZeros: self.defaultNumberOfLeadingZeros).map {
             try AtomWithFee(atomWithoutPow: atom, proofOfWork: $0)
         }

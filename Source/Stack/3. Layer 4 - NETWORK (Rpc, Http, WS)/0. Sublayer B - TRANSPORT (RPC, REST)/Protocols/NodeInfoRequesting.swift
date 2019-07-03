@@ -10,5 +10,5 @@ import Foundation
 import RxSwift
 
 public protocol NodeInfoRequesting {
-    func getInfo() -> SingleWanted<NodeInfo>
+    func getInfo() -> Single<NodeInfo>
 }

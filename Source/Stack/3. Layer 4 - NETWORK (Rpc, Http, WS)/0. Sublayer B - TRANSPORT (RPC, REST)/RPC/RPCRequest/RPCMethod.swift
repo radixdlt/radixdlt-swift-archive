@@ -131,7 +131,6 @@ public extension RPCMethod {
         }
     }
     
-    // swiftlint:disable:next function_body_length
     func encodeParams<K>(key: K) -> EncodeValue<K> where K: CodingKey {
         
         func innerEncode<V>(_ value: V) -> EncodeValue<K> where V: Encodable {

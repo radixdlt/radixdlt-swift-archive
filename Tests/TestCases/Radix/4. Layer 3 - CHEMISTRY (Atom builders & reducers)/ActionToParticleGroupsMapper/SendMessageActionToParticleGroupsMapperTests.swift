@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import RadixSDK
+import RxSwift
 
 enum DecryptMessageErrorInTest: Swift.Error, Equatable {
     case unknownError
@@ -49,7 +50,7 @@ private struct AccountWithAddress: SigningRequesting, Ownable, Equatable, Accoun
     }
 }
 extension AccountWithAddress {
-    var privateKeyForSigning: SingleWanted<PrivateKey> {
+    var privateKeyForSigning: Single<PrivateKey> {
         return account.privateKeyForSigning
     }
 }

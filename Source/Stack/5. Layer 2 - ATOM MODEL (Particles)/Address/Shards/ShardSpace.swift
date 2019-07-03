@@ -34,6 +34,20 @@ public struct ShardSpace:
     }
 }
 
+public extension ShardSpace {
+    func contains(shard: Shard) -> Bool {
+        return range.contains(shard)
+    }
+    
+    func intersects(with shards: Shards) -> Bool {
+        for shard in shards {
+            guard contains(shard: shard) else { continue }
+            return true
+        }
+        return false
+    }
+}
+
 // MARK: - Throwing
 public extension ShardSpace {
     enum Error: Swift.Error, Equatable {

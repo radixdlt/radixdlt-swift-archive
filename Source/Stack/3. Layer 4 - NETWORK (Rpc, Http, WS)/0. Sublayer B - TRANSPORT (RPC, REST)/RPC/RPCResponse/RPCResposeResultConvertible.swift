@@ -9,11 +9,11 @@
 import Foundation
 
 public protocol PotentiallyRequestIdentifiable {
-    var requestIdIfPresent: Int? { get }
+    var requestIdIfPresent: String? { get }
 }
 
 public extension PotentiallyRequestIdentifiable {
-    var requestIdIfPresent: Int? { return nil }
+    var requestIdIfPresent: String? { return nil }
 }
 
 public protocol BaseRPCResposeResult {}

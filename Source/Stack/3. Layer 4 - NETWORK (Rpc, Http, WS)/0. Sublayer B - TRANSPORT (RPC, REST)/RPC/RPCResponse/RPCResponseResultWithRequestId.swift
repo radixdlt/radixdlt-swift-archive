@@ -10,11 +10,11 @@ import Foundation
 
 internal struct RPCResponseResultWithRequestId<Result>: Decodable, RPCResposeResultConvertible where Result: Decodable {
     let result: Result
-    let id: Int
+    let requestUuid: String
     var model: Result { return result }
 }
 
 // MARK: - PotentiallyRequestIdentifiable
 extension RPCResponseResultWithRequestId {
-    var requestIdIfPresent: Int? { return id }
+    var requestIdIfPresent: String? { return requestUuid }
 }

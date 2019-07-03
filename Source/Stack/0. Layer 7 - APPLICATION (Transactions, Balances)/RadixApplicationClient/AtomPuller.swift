@@ -26,13 +26,14 @@ public final class DefaultAtomPuller: AtomPuller {
 public extension DefaultAtomPuller {
     func pull(address: Address) -> Observable<Any> {
         return requestCache.valueForKey(key: address) {
-            let fetchAtomsRequest = FetchAtomsAction.newRequest(address: address)
+            let fetchAtomsRequest = FetchAtomsActionRequest(address: address)
             return Observable.create { [unowned self] observer in
                 
                 self.networkController.dispatch(nodeAction: fetchAtomsRequest)
                 
                 return Disposables.create {
-                    self.networkController.dispatch(nodeAction: FetchAtomsAction.cancel(action: fetchAtomsRequest))
+                    let cancelRequest = FetchAtomsActionCancel(request: fetchAtomsRequest)
+                    self.networkController.dispatch(nodeAction: cancelRequest)
                 }
             }
         }.map { $0 }

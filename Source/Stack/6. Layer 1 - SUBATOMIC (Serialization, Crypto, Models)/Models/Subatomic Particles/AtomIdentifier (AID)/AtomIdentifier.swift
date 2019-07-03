@@ -12,6 +12,9 @@ import Foundation
 
 /// An Atom Identifier - also known as `AID` - made up of 192 bits of truncated hash and 64 bits of a selected shard.
 /// The AID is used so that Atoms can be located using just this identifier.
+///
+/// This is an example of an AID: `"9b3ff63d7a055e037f0d52b0e6382e07388927a66b2cc97c56abab3870585f04"`
+///
 public struct AtomIdentifier:
     Throwing,
     DataInitializable,

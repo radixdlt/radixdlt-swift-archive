@@ -21,11 +21,28 @@ public struct RadixSystem:
     
     public static let serializer = RadixModelType.radixSystem
     
-    public let shards: ShardSpace
+    public let shardSpace: ShardSpace
     
     public init(
-        shards: ShardSpace
+        shardSpace: ShardSpace
     ) {
-        self.shards = shards
+        self.shardSpace = shardSpace
+    }
+}
+
+public extension RadixSystem {
+    enum CodingKeys: String, CodingKey {
+        case shardSpace = "shards"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let shardSpace = try container.decode(ShardSpace.self, forKey: .shardSpace)
+        self.init(shardSpace: shardSpace)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(shardSpace, forKey: .shardSpace)
     }
 }

@@ -45,12 +45,16 @@ public extension URLFormatter {
 }
 
 public extension URLFormatter {
-    static var localhost: FormattedURL {
+    static func localhost(`protocol`: CommuncationProtocol) -> FormattedURL {
         do {
-            return try URLFormatter.format(host: Host.local(port: 8080), protocol: .hypertext, useSSL: false)
+            return try URLFormatter.format(host: Host.local(port: 8080), protocol: `protocol`, useSSL: false)
         } catch {
             incorrectImplementation("Failed to create localhost client, error: \(error)")
         }
+    }
+    
+    static var localhostWebsocket: FormattedURL {
+        return URLFormatter.localhost(protocol: .websockets)
     }
 }
 

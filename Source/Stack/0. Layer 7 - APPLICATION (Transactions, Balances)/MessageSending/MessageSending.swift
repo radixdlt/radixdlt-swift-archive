@@ -10,13 +10,13 @@ import Foundation
 
 //public protocol MessageSending {
 //    /// Sends a message
-//    func sendMessage(_ message: SendMessageAction) -> CompletableWanted
+//    func sendMessage(_ message: SendMessageAction) -> Completable
 //}
 
 //
 //public extension DefaultRadixApplicationClient {
 //    
-//    private func doSendMessage(_ message: SendMessageAction, cc thirdPartyReaders: [Ownable] = []) -> CompletableWanted {
+//    private func doSendMessage(_ message: SendMessageAction, cc thirdPartyReaders: [Ownable] = []) -> Completable {
 //        let actionToParticleGroupsMapper = DefaultSendMessageActionToParticleGroupsMapper(
 //            readers: { ([$0.sender, $0.recipient] + thirdPartyReaders.map { $0.address }).map { $0.publicKey } }
 //        )
@@ -43,7 +43,7 @@ import Foundation
 //        data: Data,
 //        to recipient: Ownable,
 //        encryption mode: MessageEncryptionMode = .encrypted
-//    ) -> CompletableWanted {
+//    ) -> Completable {
 //        
 //        var shouldBeEncrypted = false
 //        var thirdPartyReaders = [Ownable]()
@@ -68,7 +68,7 @@ import Foundation
 //        encoding: String.Encoding = .default,
 //        to recipient: Ownable,
 //        encryption mode: MessageEncryptionMode = .encrypted
-//    ) -> CompletableWanted {
+//    ) -> Completable {
 //        
 //        return sendMessage(
 //            data: string.toData(encodingForced: encoding),

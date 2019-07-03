@@ -10,12 +10,12 @@ import Foundation
 import RxSwift
 
 public protocol AtomSigning {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> SingleWanted<SignedAtom>
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom>
 }
 
 // MARK: - Default Implementation
 public extension AtomSigning where Self: SigningRequesting, Self: PublicKeyOwner {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> SingleWanted<SignedAtom> {
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom> {
         let signatureId = publicKey.hashId
         
         return privateKeyForSigning.map {

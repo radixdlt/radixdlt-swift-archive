@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 public protocol SigningRequesting {
-    var privateKeyForSigning: SingleWanted<PrivateKey> { get }
+    var privateKeyForSigning: Single<PrivateKey> { get }
 }
 
 public protocol Signing: SigningRequesting {
@@ -18,7 +18,7 @@ public protocol Signing: SigningRequesting {
 }
 
 public extension Signing {
-    var privateKeyForSigning: SingleWanted<PrivateKey> {
-        return SingleWanted.just(privateKey)
+    var privateKeyForSigning: Single<PrivateKey> {
+        return Single.just(privateKey)
     }
 }

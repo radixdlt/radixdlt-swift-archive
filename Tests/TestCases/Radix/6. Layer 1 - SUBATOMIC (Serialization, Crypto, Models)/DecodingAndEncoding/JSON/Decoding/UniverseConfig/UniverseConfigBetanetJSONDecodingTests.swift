@@ -12,7 +12,7 @@ import XCTest
 class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
     func testUniverses() {
         test(config: "betanet")
-        //       test(config: "sunstone")
+        test(config: "localnet")
     }
     
     private func test(config: String) {
@@ -30,10 +30,9 @@ class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
         // Waiting on bug fix for Jackson: https://github.com/cbor/cbor.github.io/issues/49
         // The Java lib produces incorrect hashId for any data containing a Message particle
         // which serializer `"radix.particles.message"` gets incorrectly CBOR encoded.
-        
-        //                    guard let hashIdFromApiUsedForTesting = config.hashIdFromApiUsedForTesting else {
-        //                        return
-        //                    }
+//        if let hashIdFromApi = config.hashIdFromApi {
+//            XCTAssertEqual(config.hashId, hashIdFromApi)
+//        }
         
         guard let rriParticle = config.genesis.particles().compactMap({ $0 as? ResourceIdentifierParticle }).first else {
             return XCTFail("No RRI particle")

@@ -10,19 +10,19 @@ import Foundation
 import RxSwift
 
 public extension NodeNetworkDetailsRequesting where Self: HTTPClientOwner {
-    func networkDetails() -> Observable<NodeNetworkDetails> {
+    func networkDetails() -> Single<NodeNetworkDetails> {
         return httpClient.request(.network)
     }
 }
 
 public extension LivePeersRequesting where Self: HTTPClientOwner {
-    func getLivePeers() -> SingleWanted<[NodeInfo]> {
+    func getLivePeers() -> Single<[NodeInfo]> {
         return httpClient.request(.getLivePeers)
     }
 }
 
 public extension UniverseConfigRequesting where Self: HTTPClientOwner {
-    func getUniverseConfig() -> SingleWanted<UniverseConfig> {
+    func getUniverseConfig() -> Single<UniverseConfig> {
         return httpClient.request(.getUniverseConfig)
     }
 }

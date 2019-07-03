@@ -28,7 +28,7 @@ The `RadixApplicationClient` is the API layer this library exposes to you as a c
 typealias RadixApplicationClient = Transacting & AccountBalancing & TokenCreating & MessageSending
 
 protocol TokenCreating {
-    func create(token: CreateTokenAction) -> SingleWanted<ResourceIdentifier>
+    func create(token: CreateTokenAction) -> Single<ResourceIdentifier>
 }
 
 protocol Transacting {

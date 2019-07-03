@@ -10,5 +10,5 @@ import Foundation
 import RxSwift
 
 public protocol AtomSubmitting {
-    func submit(atom: SignedAtom) -> CompletableWanted
+    func pushAtom(_ atom: SignedAtom) -> Completable
 }

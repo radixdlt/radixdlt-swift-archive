@@ -29,9 +29,9 @@ public extension Account {
         }
     }
     
-    var privateKeyForSigning: SingleWanted<PrivateKey> {
+    var privateKeyForSigning: Single<PrivateKey> {
         if let privateKey = privateKey {
-            return SingleWanted.just(privateKey)
+            return Single.just(privateKey)
         } else {
             return requestSignableKeyFromUser(matchingPublicKey: publicKey)
         }
@@ -45,7 +45,7 @@ public extension Account {
 }
 
 public extension Account {
-    func requestSignableKeyFromUser(matchingPublicKey: PublicKey) -> SingleWanted<PrivateKey> {
+    func requestSignableKeyFromUser(matchingPublicKey: PublicKey) -> Single<PrivateKey> {
         implementMe()
     }
 }

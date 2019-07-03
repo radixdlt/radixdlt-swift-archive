@@ -25,6 +25,8 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import RxOptional
+
 import RadixSDK
 
 final class SettingsViewModel {

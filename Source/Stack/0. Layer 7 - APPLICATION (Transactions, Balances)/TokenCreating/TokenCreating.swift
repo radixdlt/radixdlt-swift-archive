@@ -11,7 +11,7 @@ import RxSwift
 
 //public protocol TokenCreating {
 //    /// Creates a token
-//    func create(token: CreateTokenAction) -> SingleWanted<ResourceIdentifier>
+//    func create(token: CreateTokenAction) -> Single<ResourceIdentifier>
 //}
 //
 //// swiftlint:disable opening_brace
@@ -24,7 +24,7 @@ import RxSwift
 //    Self: ProofOfWorkWorking
 //{
 //    // swiftlint:enable opening_brace
-//    func create(token createToken: CreateTokenAction) -> SingleWanted<ResourceIdentifier> {
+//    func create(token createToken: CreateTokenAction) -> Single<ResourceIdentifier> {
 //
 ////        log.info("\(createToken.creator) creates new token: \(createToken.identifier)")
 ////

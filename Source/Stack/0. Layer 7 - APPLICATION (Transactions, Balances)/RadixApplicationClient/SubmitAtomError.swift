@@ -8,7 +8,13 @@
 
 import Foundation
 
-// chose either this or `AtomSubscriptionUpdateSubmitAndSubscribe.State`
-public enum SubmitAtomError: Swift.Error {
-    case failed, collision, illagalState, unsuitablePeer, validationError, unknownError
+public struct SubmitAtomError: ErrorMappedFromRPCError, Equatable {
+    public let rpcError: RPCError
+    init(rpcError: RPCError) {
+        self.rpcError = rpcError
+    }
+}
+
+public struct DiscoverMoreNodesActionError: NodeAction {
+    public let reason: Swift.Error
 }

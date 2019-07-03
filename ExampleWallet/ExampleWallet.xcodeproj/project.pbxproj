@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E62AD04022C3DBCC00608713 /* SipHash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83222C3C95600536DC7 /* SipHash.framework */; };
+		E6A7479122CB869400DACEA0 /* RxSwiftExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A7478E22CB869400DACEA0 /* RxSwiftExt.framework */; };
+		E6A7479222CB869400DACEA0 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A7478F22CB869400DACEA0 /* RxRelay.framework */; };
+		E6A7479322CB869400DACEA0 /* RxOptional.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A7479022CB869400DACEA0 /* RxOptional.framework */; };
 		E6ABA7EF22C3C6B200536DC7 /* Never.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79822C3C6B200536DC7 /* Never.swift */; };
 		E6ABA7F022C3C6B200536DC7 /* Unsafe︕！Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79922C3C6B200536DC7 /* Unsafe︕！Cache.swift */; };
 		E6ABA7F122C3C6B200536DC7 /* FormValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79C22C3C6B200536DC7 /* FormValidator.swift */; };
@@ -64,11 +66,9 @@
 		E6ABA84222C3C95600536DC7 /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83522C3C95600536DC7 /* SwiftCBOR.framework */; };
 		E6ABA84322C3C95600536DC7 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83622C3C95600536DC7 /* BigInt.framework */; };
 		E6ABA84422C3C95600536DC7 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83722C3C95600536DC7 /* SwiftyBeaver.framework */; };
-		E6ABA84522C3C95600536DC7 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83822C3C95600536DC7 /* RxBlocking.framework */; };
 		E6ABA84622C3C95600536DC7 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83922C3C95600536DC7 /* Starscream.framework */; };
 		E6ABA84722C3C95600536DC7 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83A22C3C95600536DC7 /* RxCocoa.framework */; };
 		E6ABA84822C3C95600536DC7 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83B22C3C95600536DC7 /* Alamofire.framework */; };
-		E6ABA84A22C3C95600536DC7 /* RxAtomic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83D22C3C95600536DC7 /* RxAtomic.framework */; };
 		E6ABA84B22C3C95600536DC7 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83E22C3C95600536DC7 /* BitcoinKit.framework */; };
 		E6ABA84E22C3CAD600536DC7 /* TinyConstraints.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA84D22C3CAD600536DC7 /* TinyConstraints.framework */; };
 		E6DC276022C40E450049BB3C /* RestoreWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7D422C3C6B200536DC7 /* RestoreWalletView.swift */; };
@@ -82,6 +82,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E6A7478E22CB869400DACEA0 /* RxSwiftExt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwiftExt.framework; path = ../Carthage/Build/iOS/RxSwiftExt.framework; sourceTree = "<group>"; };
+		E6A7478F22CB869400DACEA0 /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = ../Carthage/Build/iOS/RxRelay.framework; sourceTree = "<group>"; };
+		E6A7479022CB869400DACEA0 /* RxOptional.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxOptional.framework; path = ../Carthage/Build/iOS/RxOptional.framework; sourceTree = "<group>"; };
 		E6ABA77D22C3C56D00536DC7 /* ExampleWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6ABA79822C3C6B200536DC7 /* Never.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Never.swift; sourceTree = "<group>"; };
 		E6ABA79922C3C6B200536DC7 /* Unsafe︕！Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Unsafe︕！Cache.swift"; sourceTree = "<group>"; };
@@ -167,16 +170,16 @@
 				E6ABA83122C3C79800536DC7 /* RadixSDK.framework in Frameworks */,
 				E6ABA84E22C3CAD600536DC7 /* TinyConstraints.framework in Frameworks */,
 				E6ABA84022C3C95600536DC7 /* CryptoSwift.framework in Frameworks */,
-				E62AD04022C3DBCC00608713 /* SipHash.framework in Frameworks */,
 				E6ABA84122C3C95600536DC7 /* RxSwift.framework in Frameworks */,
 				E6ABA84222C3C95600536DC7 /* SwiftCBOR.framework in Frameworks */,
 				E6ABA84322C3C95600536DC7 /* BigInt.framework in Frameworks */,
 				E6ABA84422C3C95600536DC7 /* SwiftyBeaver.framework in Frameworks */,
-				E6ABA84522C3C95600536DC7 /* RxBlocking.framework in Frameworks */,
+				E6A7479122CB869400DACEA0 /* RxSwiftExt.framework in Frameworks */,
+				E6A7479222CB869400DACEA0 /* RxRelay.framework in Frameworks */,
+				E6A7479322CB869400DACEA0 /* RxOptional.framework in Frameworks */,
 				E6ABA84622C3C95600536DC7 /* Starscream.framework in Frameworks */,
 				E6ABA84722C3C95600536DC7 /* RxCocoa.framework in Frameworks */,
 				E6ABA84822C3C95600536DC7 /* Alamofire.framework in Frameworks */,
-				E6ABA84A22C3C95600536DC7 /* RxAtomic.framework in Frameworks */,
 				E6ABA84B22C3C95600536DC7 /* BitcoinKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -422,6 +425,9 @@
 		E6ABA82F22C3C79800536DC7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E6A7479022CB869400DACEA0 /* RxOptional.framework */,
+				E6A7478F22CB869400DACEA0 /* RxRelay.framework */,
+				E6A7478E22CB869400DACEA0 /* RxSwiftExt.framework */,
 				E6ABA84D22C3CAD600536DC7 /* TinyConstraints.framework */,
 				E6ABA83B22C3C95600536DC7 /* Alamofire.framework */,
 				E6ABA83622C3C95600536DC7 /* BigInt.framework */,

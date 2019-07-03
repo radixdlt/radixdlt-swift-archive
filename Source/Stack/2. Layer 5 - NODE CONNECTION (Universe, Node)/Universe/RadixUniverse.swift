@@ -16,9 +16,6 @@ public protocol RadixUniverse {
     var config: UniverseConfig { get }
     var networkController: RadixNetworkController { get }
     var nativeTokenDefinition: TokenDefinition { get }
-    
-    func connectToNode(nodeFinding: NodeFindingg, account: Account) -> Completable
-    func connectToNode(address: Address) -> Completable
 }
 
 // MARK: - RadixUniverse
@@ -41,12 +38,42 @@ public final class DefaultRadixUniverse: RadixUniverse {
 
 public extension DefaultRadixUniverse {
 
-    convenience init(config: UniverseConfig, nodeFinding: NodeFindingg) throws {
+    convenience init(config: UniverseConfig, discoveryMode: DiscoveryMode) throws {
         let atomStore = InMemoryAtomStore(genesisAtoms: config.genesis.atoms)
+
+        let discoveryEpics: [RadixNetworkEpic]
+        let initialNetworkOfNodes: Set<Node>
+        
+        switch discoveryMode {
+        case .byDiscoveryEpics(let discoveryEpicsFromMode):
+            discoveryEpics = discoveryEpicsFromMode.elements
+            initialNetworkOfNodes = Set()
+        case .byInitialNetworkOfNodes(let initialNetworkOfNodesFromMode):
+            discoveryEpics = []
+            initialNetworkOfNodes = initialNetworkOfNodesFromMode.asSet
+        }
+        
+        var networkEpics: [RadixNetworkEpic] = [
+            WebSocketsEpic.init(epicFromWebsockets: [
+                WebSocketEventsEpic.init(webSockets:),
+                ConnectWebSocketEpic.init(webSockets:),
+                SubmitAtomEpic.init(webSockets:),
+                FetchAtomsEpic.init(webSockets:),
+                RadixJsonRpcMethodEpic<GetLivePeersActionRequest, GetLivePeersActionResult>.createGetLivePeersEpic(webSockets:),
+                RadixJsonRpcMethodEpic<GetNodeInfoActionRequest, GetNodeInfoActionResult>.createGetNodeInfoEpic(webSockets:),
+                RadixJsonRpcMethodEpic<GetUniverseConfigActionRequest, GetUniverseConfigActionResult>.createUniverseConfigEpic(webSockets:),
+                RadixJsonRpcAutoConnectEpic.init(webSockets:),
+                RadixJsonRpcAutoCloseEpic.init(webSockets:)
+            ])
+        ]
+        
+        networkEpics.append(contentsOf: discoveryEpics)
         
         let networkController = DefaultRadixNetworkController(
-            nodeFinding: nodeFinding,
-            reducers: [SomeReducer<NodeAction>(InMemoryAtomStoreReducer(atomStore: atomStore))]
+            network: DefaultRadixNetwork(),
+            initialNetworkState: RadixNetworkState(nodesDisconnectFromWS: initialNetworkOfNodes.asArray),
+            epics: networkEpics,
+            reducers: [SomeReducer(InMemoryAtomStoreReducer(atomStore: atomStore))]
         )
         
         try self.init(config: config, networkController: networkController, atomStore: atomStore)
@@ -56,7 +83,7 @@ public extension DefaultRadixUniverse {
         do {
             try self.init(
                 config: bootstrapConfig.config,
-                nodeFinding: bootstrapConfig.nodeFinding
+                discoveryMode: bootstrapConfig.discoveryMode
             )
         } catch {
             incorrectImplementation("Should always be able to create RadixUniverse from bootstrap config")
@@ -65,16 +92,18 @@ public extension DefaultRadixUniverse {
 }
 
 public extension DefaultRadixUniverse {
-    func connectToNode(nodeFinding: NodeFindingg, account: Account) -> Completable {
-        let address = addressFrom(account: account)
-        return networkController.connectToNode(nodeFinding: nodeFinding, address: address)
-    }
-    
-    func connectToNode(address: Address) -> Completable {
-        return networkController.connectToNode(address: address)
-    }
-    
+
     func addressFrom(account: Account) -> Address {
         return account.addressFromMagic(config.magic)
+    }
+}
+
+private extension RadixNetworkState {
+    init(nodesDisconnectFromWS: [Node]) {
+        self.init(nodes:
+            nodesDisconnectFromWS
+                .map { KeyValuePair<Node, RadixNodeState>(key: $0, value: .init(node: $0, webSocketStatus: .disconnected)) }
+                .toDictionary()
+        )
     }
 }

@@ -31,14 +31,20 @@ public struct NodeInfo:
 public extension NodeInfo {
     func hash(into hasher: inout Hasher) {
         hasher.combine(host.domain)
-        hasher.combine(system.shards)
+        hasher.combine(system.shardSpace)
     }
 }
 
 // MARK: - Equatable
 public extension NodeInfo {
     static func == (lhs: NodeInfo, rhs: NodeInfo) -> Bool {
-        return lhs.host.domain == rhs.host.domain && lhs.system.shards == rhs.system.shards
+        return lhs.host.domain == rhs.host.domain && lhs.system.shardSpace == rhs.system.shardSpace
+    }
+}
+
+public extension NodeInfo {
+    var shardSpace: ShardSpace {
+        return system.shardSpace
     }
 }
 

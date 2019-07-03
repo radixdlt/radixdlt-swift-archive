@@ -19,17 +19,17 @@ public struct Node:
     // swiftlint:enable colon opening_brace
     
     public let websocketsUrl: FormattedURL
-    public let httpUrl: FormattedURL
-    private let nodeInfo: NodeInfo
+//    public let httpUrl: FormattedURL
+//    private let nodeInfo: NodeInfo
     
     public init(
-        info: NodeInfo,
-        websocketsUrl: FormattedURL,
-        httpUrl: FormattedURL
+//        info: NodeInfo,
+        websocketsUrl: FormattedURL
+//        httpUrl: FormattedURL
     ) {
-        self.nodeInfo = info
+//        self.nodeInfo = info
         self.websocketsUrl = websocketsUrl
-        self.httpUrl = httpUrl
+//        self.httpUrl = httpUrl
     }
 }
 
@@ -38,25 +38,35 @@ public extension Node {
     init(nodeInfo: NodeInfo) throws {
         
         let websocketsUrl = try URLFormatter.format(host: nodeInfo.host, protocol: .websockets)
-        let httpUrl = try URLFormatter.format(host: nodeInfo.host, protocol: .hypertext)
+//        let httpUrl = try URLFormatter.format(host: nodeInfo.host, protocol: .hypertext)
         
         self.init(
-            info: nodeInfo,
-            websocketsUrl: websocketsUrl,
-            httpUrl: httpUrl
+//            info: nodeInfo,
+            websocketsUrl: websocketsUrl
+//            httpUrl: httpUrl
         )
     }
-}
-
-// MARK: Shard
-public extension Node {
-    func canServe(shard: Shard) -> Bool {
-        return nodeInfo.system.shards.range.contains(shard)
+    
+    init(host: Host, isUsingSSL: Bool) throws {
+        let websocketsUrl = try URLFormatter.format(host: host, protocol: .websockets, useSSL: isUsingSSL)
+        self.init(websocketsUrl: websocketsUrl)
+    }
+    
+    init(domain: String, port: Port, isUsingSSL: Bool) throws {
+        let host = try Host(domain: domain, port: port)
+        try self.init(host: host, isUsingSSL: isUsingSSL)
     }
 }
 
-public extension Node {
-    var request: URLRequest {
-        return URLRequest(url: httpUrl.url)
-    }
-}
+//// MARK: Shard
+//public extension Node {
+//    func canServe(shard: Shard) -> Bool {
+//        return nodeInfo.system.shardSpace.contains(shard: shard)
+//    }
+//}
+
+//public extension Node {
+//    var request: URLRequest {
+//        return URLRequest(url: httpUrl.url)
+//    }
+//}

@@ -11,13 +11,13 @@ import Foundation
 public struct RPCRequest: Encodable {
     public let rpcMethod: String
     private let _encodeParams: RPCMethod.EncodeValue<CodingKeys>
-    public let requestId: Int
+    public let requestUuid: String
     public let version = "2.0"
     
-    public init(rpcMethod: String, encodeParams: @escaping RPCMethod.EncodeValue<CodingKeys>) {
+    public init(rpcMethod: String, requestUuid: UUID, encodeParams: @escaping RPCMethod.EncodeValue<CodingKeys>) {
         self.rpcMethod = rpcMethod
         self._encodeParams = encodeParams
-        self.requestId = RequestIdGenerator.nextId()
+        self.requestUuid = requestUuid.uuidString
     }
 }
 
@@ -33,8 +33,12 @@ public extension RPCRequest {
 
 private extension RPCRequest {
     
-    init(method: RPCMethod) {
-        self.init(rpcMethod: method.method.rawValue, encodeParams: method.encodeParams(key: .parameters))
+    init(method: RPCMethod, requestUuid: UUID = .init()) {
+        self.init(
+            rpcMethod: method.method.rawValue,
+            requestUuid: requestUuid,
+            encodeParams: method.encodeParams(key: .parameters)
+        )
     }
 }
 
@@ -49,7 +53,7 @@ public extension RPCRequest {
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(requestId, forKey: .requestId)
+        try container.encode(requestUuid, forKey: .requestId)
         try container.encode(rpcMethod, forKey: .rpcMethod)
         try _encodeParams(&container)
         try container.encode(version, forKey: .version)

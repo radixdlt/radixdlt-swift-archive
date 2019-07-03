@@ -25,7 +25,7 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
     private let bag = DisposeBag()
     internal let node: Node
     
-    public init(node: Node, shouldConnect: Bool = true) {
+    public init(node: Node, shouldConnect: Bool) {
         defer {
             if shouldConnect {
                 connect()
@@ -35,7 +35,7 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
         let stateSubject = BehaviorSubject<WebSocketStatus>(value: .disconnected)
         
         stateSubject.filter { $0 == .failed }
-            .debounce(60, scheduler: MainScheduler.instance)
+            .debounce(RxTimeInterval.seconds(60), scheduler: MainScheduler.instance)
             .subscribe(
                 onNext: { _ in stateSubject.onNext(.disconnected) },
                 onError: { _ in stateSubject.onNext(.disconnected) }
@@ -64,13 +64,17 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
     
     deinit {
         log.warning("Deinit (might be relevant until life cycle is proper fixed)")
-        close()
+        closeDisregardingListeners()
     }
 }
 
 public extension WebSocketToNode {
     enum Error: Swift.Error {
         case hasDisconnected
+    }
+    
+    func waitForConnection() -> Completable {
+        return state.filter { $0.isConnected }.firstOrError().asCompletable()
     }
     
     func sendMessage(_ message: String) {
@@ -83,8 +87,12 @@ public extension WebSocketToNode {
         socket?.write(string: message)
     }
     
-    func close() {
-        socket?.disconnect()
+    /// Close the websocket only if no it has no observers, returns `true` if it was able to close, otherwise `false`.
+    @discardableResult
+    func closeIfNoOneListens() -> Bool {
+        guard !receivedMessagesSubject.hasObservers else { return false }
+        closeDisregardingListeners()
+        return true
     }
     
     func connect() {
@@ -112,6 +120,11 @@ private extension WebSocketToNode {
     
     var isClosing: Bool {
         return hasStatus(.closing)
+    }
+    
+    func closeDisregardingListeners() {
+        stateSubject.onNext(.closing)
+        socket?.disconnect()
     }
     
 //    var isConnected: Bool {

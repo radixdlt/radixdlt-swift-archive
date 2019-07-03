@@ -9,11 +9,11 @@
 import Foundation
 
 public protocol NodeAction {
-    var node: Node? { get }
+    var node: Node { get }
 }
 
 public extension NodeAction {
-    var node: Node? { return nil }
+    var node: Node { abstract() }
 }
 
 //public protocol FindANodeRequestAction: NodeAction {

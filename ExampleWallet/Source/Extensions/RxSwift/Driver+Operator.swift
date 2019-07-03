@@ -27,10 +27,10 @@ import RxSwift
 import RxCocoa
 
 infix operator -->
-func --> <E>(driver: Driver<E>, binder: Binder<E>) -> Disposable {
+func --> <Element>(driver: Driver<Element>, binder: Binder<Element>) -> Disposable {
     return driver.drive(binder)
 }
-func --> <E>(driver: Driver<E>, binder: Binder<E?>) -> Disposable {
+func --> <Element>(driver: Driver<Element>, binder: Binder<Element?>) -> Disposable {
     return driver.drive(binder)
 }
 func --> (driver: Driver<String>, label: UILabel) -> Disposable {

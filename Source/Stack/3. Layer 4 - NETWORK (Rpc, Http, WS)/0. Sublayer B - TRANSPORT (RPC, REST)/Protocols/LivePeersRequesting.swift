@@ -10,5 +10,5 @@ import Foundation
 import RxSwift
 
 public protocol LivePeersRequesting {
-    func getLivePeers() -> SingleWanted<[NodeInfo]>
+    func getLivePeers() -> Single<[NodeInfo]>
 }

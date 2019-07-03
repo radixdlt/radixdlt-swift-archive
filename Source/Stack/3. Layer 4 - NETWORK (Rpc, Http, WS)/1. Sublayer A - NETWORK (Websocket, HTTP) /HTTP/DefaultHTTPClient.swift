@@ -63,13 +63,13 @@ public extension DefaultHTTPClient {
 
 // MARK: - HTTPClient
 public extension DefaultHTTPClient {
-    func request<D>(router: Router, decodeAs type: D.Type) -> SingleWanted<D> where D: Decodable {
+    func request<D>(router: Router, decodeAs type: D.Type) -> Single<D> where D: Decodable {
         return request { alamofireSession in
             alamofireSession.request(router)
         }
     }
     
-    func loadContent(of page: String) -> SingleWanted<String> {
+    func loadContent(of page: String) -> Single<String> {
         return Observable.deferred { [unowned alamofireSession] in
             return Observable<String>.create { observer in
                 let dataTask = alamofireSession.request(page).responseString { response in
@@ -88,6 +88,7 @@ public extension DefaultHTTPClient {
         }
         .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
         .subscribeOn(MainScheduler.instance)
+        .asSingle()
     }
     
     enum Error: Swift.Error {
@@ -97,8 +98,7 @@ public extension DefaultHTTPClient {
 
 // MARK: - Private
 private extension DefaultHTTPClient {
-    // swiftlint:disable:next function_body_length
-    func request<D>(_ makeRequest: @escaping (Alamofire.Session) -> Alamofire.DataRequest) -> SingleWanted<D> where D: Decodable {
+    func request<D>(_ makeRequest: @escaping (Alamofire.Session) -> Alamofire.DataRequest) -> Single<D> where D: Decodable {
         return Observable<D>.deferred { [weak alamofireSession] in
             return Observable.create { observer in
                 guard let alamofireSession = alamofireSession else {
@@ -125,6 +125,7 @@ private extension DefaultHTTPClient {
         }
         .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
         .subscribeOn(MainScheduler.instance)
+        .asSingle()
     }
 }
 

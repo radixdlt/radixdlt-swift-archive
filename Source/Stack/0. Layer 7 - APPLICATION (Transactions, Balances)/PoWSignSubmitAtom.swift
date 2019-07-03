@@ -15,7 +15,7 @@ import Foundation
 //{
 //
 //
-//    func performProvableWorkThenSignAndSubmit(atom: Atom, powWorker: ProofOfWorkWorker) -> CompletableWanted {
+//    func performProvableWorkThenSignAndSubmit(atom: Atom, powWorker: ProofOfWorkWorker) -> Completable {
 //        
 //        return powWorker.work(atom: atom, magic: self.magic)
 //            .map { pow -> AtomWithFee in

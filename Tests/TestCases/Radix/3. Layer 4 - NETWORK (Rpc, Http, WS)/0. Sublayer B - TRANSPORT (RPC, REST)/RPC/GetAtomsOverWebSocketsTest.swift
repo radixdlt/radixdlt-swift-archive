@@ -19,7 +19,7 @@ extension AtomsByAddressSubscribing {
     }
 }
 
-class GetAtomsOverWebSocketsTest: WebsocketTest {
+class GetAtomsOverWebSocketsTest: LocalhostNodeTest {
     
     override func setUp() {
         super.setUp()

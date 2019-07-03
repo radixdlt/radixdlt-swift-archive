@@ -13,7 +13,7 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-class GetBalanceOverWebSocketsTest: WebsocketTest {
+class GetBalanceOverWebSocketsTest: LocalhostNodeTest {
     
     private var address: Address!
     private var xrd: ResourceIdentifier!

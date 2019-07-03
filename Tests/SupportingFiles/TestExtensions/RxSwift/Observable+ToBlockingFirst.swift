@@ -17,7 +17,7 @@ extension Observable where Element == Void {
     
     func blockingWasSuccessfull(
         _ takeCount: Int = 1,
-        timeout: RxTimeInterval? = 2,
+        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
@@ -40,10 +40,10 @@ extension Observable where Element == Void {
     }
 }
 
-extension ObservableConvertibleType where E == Never { /* Completable */
+extension ObservableConvertibleType where Element == Never { /* Completable */
     
     func blockingWasSuccessfull(
-        timeout: RxTimeInterval? = 2,
+        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnErrors: Bool = true,
         function: String = #function,
@@ -72,31 +72,40 @@ extension ObservableConvertibleType where E == Never { /* Completable */
     
     func blockingAssertThrows<SpecificError>(
         error expectedError: SpecificError,
-        timeout: RxTimeInterval? = 2
+        timeout: TimeInterval? = .default
     ) where SpecificError: Swift.Error, SpecificError: Equatable {
         self.toBlocking(timeout: timeout).expectToThrow(error: expectedError)
     }
     
 }
 
+extension TimeInterval {
+    static var `default`: TimeInterval {
+        return 2
+    }
+    static var enoughForPOW: TimeInterval {
+        return 10
+    }
+}
+
 extension Observable {
     
     func blockingAssertThrows<SpecificError>(
         error expectedError: SpecificError,
-        timeout: RxTimeInterval? = 2
+        timeout: TimeInterval? = .default
     ) where SpecificError: Swift.Error, SpecificError: Equatable {
         toBlocking(timeout: timeout).expectToThrow(error: expectedError)
     }
     
     func blockingTakeFirst(
         _ takeCount: Int = 1,
-        timeout: RxTimeInterval? = 2,
+        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
         file: String = #file,
         line: Int = #line
-        ) -> E? {
+        ) -> Element? {
         
         return blockingTake(
             takeCount,
@@ -112,13 +121,13 @@ extension Observable {
     
     func blockingTakeLast(
         _ takeCount: Int = 1,
-        timeout: RxTimeInterval? = 2,
+        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
         file: String = #file,
         line: Int = #line
-        ) -> E? {
+        ) -> Element? {
         
         return blockingTake(
             takeCount,
@@ -135,14 +144,13 @@ extension Observable {
     func blockingTake(
         _ takeCount: Int = 1,
         at takeElementAt: ElementAt,
-        timeout: RxTimeInterval? = 2,
+        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
         file: String = #file,
         line: Int = #line
-        ) -> E? {
-        
+        ) -> Element? {
 
         return take(takeCount)
             .toBlocking(timeout: timeout)
@@ -159,13 +167,13 @@ extension Observable {
     
     func blockingArrayTakeFirst(
         _ takeCount: Int = 1,
-        timeout: RxTimeInterval? = 2,
+        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
         file: String = #file,
         line: Int = #line
-    ) -> [E]? {
+    ) -> [Element]? {
         
         return take(takeCount)
             .toBlocking(timeout: timeout)
@@ -186,19 +194,19 @@ enum ElementAt {
     case last
 }
 
-private extension BlockingObservable {
+extension BlockingObservable {
     func getElement(
         at getElementAt: ElementAt = .first,
-        timeout: RxTimeInterval? = 2,
+        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
         file: String = #file,
         line: Int = #line
-    ) -> E? {
+    ) -> Element? {
         let description = "\(function) in \(file), at line: \(line)"
         do {
-            let element: E?
+            let element: Element?
             switch getElementAt {
             case .first:
                 element = try self.first()
@@ -238,13 +246,13 @@ private extension BlockingObservable {
     }
     
     func getArray(
-        timeout: RxTimeInterval? = 2,
+        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
         file: String = #file,
         line: Int = #line
-        ) -> [E]? {
+        ) -> [Element]? {
         let description = "\(function) in \(file), at line: \(line)"
         do {
             let array = try self.toArray()
@@ -272,17 +280,17 @@ extension MaterializedSequenceResult {
         }
     }
     
-    func assertThrows<E>(error expectedError: E) -> Bool where E: Swift.Error & Equatable {
-        guard let mappedError = mapToError(type: E.self) else {
+    func assertThrows<Error>(error expectedError: Error) -> Bool where Error: Swift.Error & Equatable {
+        guard let mappedError = mapToError(type: Error.self) else {
             return false
         }
         return mappedError == expectedError
     }
     
-    func mapToError<E>(type expectedErrorType: E.Type) -> E? where E: Swift.Error & Equatable {
+    func mapToError<Error>(type expectedErrorType: Error.Type) -> Error? where Error: Swift.Error & Equatable {
         switch self {
         case .completed: return nil
-        case .failed(_, let anyThrowedError): return anyThrowedError as? E
+        case .failed(_, let anyThrowedError): return anyThrowedError as? Error
         }
     }
 }

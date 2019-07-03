@@ -26,19 +26,41 @@ import RxSwift
 import RxCocoa
 
 public class ActivityIndicator: SharedSequenceConvertibleType {
-    public typealias E = Bool
+    public typealias Element = Bool
     public typealias SharingStrategy = DriverSharingStrategy
+    
+    private let lock = NSRecursiveLock()
+    private let subject = BehaviorSubject(value: false)
+    private lazy var isLoading = subject.asDriverOnErrorReturnEmpty().distinctUntilChanged()
+    
+    public init() {}
+}
 
-    private let _lock = NSRecursiveLock()
-    private let _variable = Variable(false)
-    private let _loading: SharedSequence<SharingStrategy, Bool>
-
-    public init() {
-        _loading = _variable.asDriver()
-            .distinctUntilChanged()
+public extension ActivityIndicator {
+    func asSharedSequence() -> SharedSequence<SharingStrategy, Element> {
+        return isLoading
     }
+    
+    func asObservable() -> Observable<Element> {
+        return subject.asObservable()
+    }
+}
 
-    fileprivate func trackActivityOfObservable<O: ObservableConvertibleType>(_ source: O) -> Observable<O.E> {
+private extension ActivityIndicator {
+    
+    private func subscribed() {
+        lock.lock()
+        subject.onNext(true)
+        lock.unlock()
+    }
+    
+    private func sendStopLoading() {
+        lock.lock()
+        subject.onNext(false)
+        lock.unlock()
+    }
+    
+    func trackActivityOfObservable<O: ObservableConvertibleType>(_ source: O) -> Observable<O.Element> {
         return source.asObservable()
             .do(onNext: { _ in
                 self.sendStopLoading()
@@ -48,26 +70,12 @@ public class ActivityIndicator: SharedSequenceConvertibleType {
                 self.sendStopLoading()
             }, onSubscribe: subscribed)
     }
-
-    private func subscribed() {
-        _lock.lock()
-        _variable.value = true
-        _lock.unlock()
-    }
-
-    private func sendStopLoading() {
-        _lock.lock()
-        _variable.value = false
-        _lock.unlock()
-    }
-
-    public func asSharedSequence() -> SharedSequence<SharingStrategy, E> {
-        return _loading
-    }
+    
 }
 
-extension ObservableConvertibleType {
-    public func trackActivity(_ activityIndicator: ActivityIndicator) -> Observable<E> {
+// MARK: - ObservableConvertibleType + ActivityIndicator
+public extension ObservableConvertibleType {
+    func trackActivity(_ activityIndicator: ActivityIndicator) -> Observable<Element> {
         return activityIndicator.trackActivityOfObservable(self)
     }
 }
