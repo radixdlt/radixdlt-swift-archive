@@ -29,8 +29,7 @@ public extension DefaultProofOfWorkWorker {
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default
     ) -> Single<ProofOfWork> {
-        
-        return Observable.create { [unowned self] observer in
+        return Single.create { [unowned self] single in
             var powDone = false
             self.dispatchQueue.async {
                 log.verbose("POW started")
@@ -41,12 +40,12 @@ public extension DefaultProofOfWorkWorker {
                 ) { resultOfWork in
                     switch resultOfWork {
                     case .failure(let error):
-                        observer.onError(error)
+//                        observer.onError(error)
+                        single(.error(error))
                     case .success(let pow):
                         powDone = true
                         log.verbose("POW done")
-                        observer.onNext(pow)
-                        observer.onCompleted()
+                        single(.success(pow))
                     }
                 }
             }
@@ -56,7 +55,7 @@ public extension DefaultProofOfWorkWorker {
                     log.warning("POW cancelled")
                 }
             }
-        }.asSingle()
+        }
     }
 }
 

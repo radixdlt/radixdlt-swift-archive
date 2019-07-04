@@ -17,6 +17,7 @@ extension ConnectableObservableType {
             
             let outer = self.do(onSubscribe: {
                 counter += 1
+                log.verbose("autoConnect counter: \(counter) (after increment, target: \(numberOfSubscribers)")
                 if counter >= numberOfSubscribers {
                     disposables.append(self.connect())
                 }

@@ -60,7 +60,7 @@ public extension UnallocatedTokensParticle {
 public extension UnallocatedTokensParticle {
     
     enum CodingKeys: String, CodingKey {
-        case serializer, version
+        case serializer, version, destinations
         case tokenDefinitionReference
         case granularity, nonce, amount, permissions
     }

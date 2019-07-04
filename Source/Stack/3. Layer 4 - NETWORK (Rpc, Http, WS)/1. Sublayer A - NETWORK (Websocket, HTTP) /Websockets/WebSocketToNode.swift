@@ -74,7 +74,7 @@ public extension WebSocketToNode {
     }
     
     func waitForConnection() -> Completable {
-        return state.filter { $0.isConnected }.firstOrError().asCompletable()
+        return state.filter { $0.isReady }.take(1).asSingle().asCompletable().debug()
     }
     
     func sendMessage(_ message: String) {
@@ -82,8 +82,8 @@ public extension WebSocketToNode {
             queuedOutgoingMessages.append(message)
             return
         }
-        log.debug("Sending message of length: #\(message.count) chars")
-        log.verbose("Sending message:\n<\(message)>")
+        print("Sending message of length: #\(message.count) chars")
+        print("Sending message:\n<\(message)>")
         socket?.write(string: message)
     }
     
@@ -101,7 +101,7 @@ public extension WebSocketToNode {
         case .none, .disconnected?, .failed?:
             stateSubject.onNext(.connecting)
             socket = createSocket(shouldConnect: true)
-        case .closing?, .connected?, .connecting?, .ready?: return
+        case .closing?, .connecting?, .ready?: return
         }
         
     }
@@ -149,7 +149,8 @@ private extension WebSocketToNode {
 
 public extension WebSocketToNode {
     func websocketDidConnect(socket: WebSocketClient) {
-        stateSubject.onNext(.connected)
+        log.verbose("Websocket did connect, to node: \(node)")
+//        stateSubject.onNext(.connected)
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Swift.Error?) {
@@ -173,7 +174,7 @@ public extension WebSocketToNode {
             sendQueued()
         } else {
             log.debug("Received response over websockets (text of #\(text.count) chars)")
-            log.verbose("Response just received over websocket:\n<\(text)>")
+            print("Response just received over websocket:\n<\(text)>")
             receivedMessagesSubject.onNext(text)
         }
     }

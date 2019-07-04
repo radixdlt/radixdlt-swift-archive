@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class AbstractIdentity: Throwing {
+public final class AbstractIdentity: Throwing, CustomStringConvertible {
     public typealias AccountSelector = ([Account]) -> Account
     public var alias: String?
     public private(set) var accounts: [Account]
@@ -30,5 +30,14 @@ public extension AbstractIdentity {
 public extension AbstractIdentity {
     enum Error: Int, Swift.Error, Equatable {
         case mustContainAtLeastOneAccount
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension AbstractIdentity {
+    var description: String {
+        return """
+        Accounts: #\(accounts.count)\(alias.ifPresent { ",\nalias: \($0)" })
+        """
     }
 }

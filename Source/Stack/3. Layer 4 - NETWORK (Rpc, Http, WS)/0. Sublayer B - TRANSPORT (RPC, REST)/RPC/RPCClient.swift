@@ -12,6 +12,7 @@ import RxSwift
 // swiftlint:disable colon opening_brace
 
 public protocol RPCClient:
+    NodeNetworkInfoRequesting,
     NodeInfoRequesting,
     LivePeersRequesting,
     UniverseConfigRequesting,

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct DefaultSendMessageActionToParticleGroupsMapper: SendMessageActionToParticleGroupsMapper {
+public final class DefaultSendMessageActionToParticleGroupsMapper: SendMessageActionToParticleGroupsMapper {
     public typealias KeyGenerator = () -> KeyPair
     
     private let generateSharedKey: KeyGenerator
@@ -19,6 +19,9 @@ public struct DefaultSendMessageActionToParticleGroupsMapper: SendMessageActionT
         encryptedPayloadJsonEncoder: JSONEncoder = JSONEncoder()    ) {
         self.generateSharedKey = sharedKeyGenerator
         self.encryptedPayloadJsonEncoder = encryptedPayloadJsonEncoder
+    }
+    deinit {
+        log.warning("🧨")
     }
 }
 public extension DefaultSendMessageActionToParticleGroupsMapper {

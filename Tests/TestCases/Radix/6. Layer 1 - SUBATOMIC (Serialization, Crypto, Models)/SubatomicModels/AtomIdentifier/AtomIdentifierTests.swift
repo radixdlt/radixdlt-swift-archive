@@ -22,11 +22,11 @@ class AtomIdentifierTests: XCTestCase {
         continueAfterFailure = false
         
         XCTAssertEqual(alice, "JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun")
-        XCTAssertEqual(alice.hashId, "b1cd0a4eb6d1cea5eb288fb4474ac403")
+        XCTAssertEqual(alice.hashEUID, "b1cd0a4eb6d1cea5eb288fb4474ac403")
         XCTAssertEqual(alice.shard, -5634836225579692379)
         
         XCTAssertEqual(bob, "JFeqmatdMyjxNce38w3pEfDeJ9CV6NCkygDt3kXtivHLsP3p846")
-        XCTAssertEqual(bob.hashId, "e142e5bb89503e3210b1f2c893eb5c12")
+        XCTAssertEqual(bob.hashEUID, "e142e5bb89503e3210b1f2c893eb5c12")
         XCTAssertEqual(bob.shard, -2214955473087480270)
     }
     

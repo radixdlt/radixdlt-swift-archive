@@ -23,10 +23,10 @@ public enum RPCMethod {
     case getAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId)
     case closeAtomStatusNotifications(subscriberId: SubscriberId)
 
-    case getAtom(byHashId: HashId)
+    case getAtom(byHashId: HashEUID)
 
     case getLivePeers
-    case getInfo
+    case getNetworkInfo
     case getUniverse
 //    case submitAndSubscribe(atom: SignedAtom, subscriberId: SubscriberId)
 }
@@ -65,16 +65,16 @@ public extension RPCRootRequest {
         return .fireAndForget(.closeAtomStatusNotifications(subscriberId: subscriberId))
     }
 
-    static func getAtom(byHashId hashId: HashId) -> RPCRootRequest {
-        return .fireAndForget(.getAtom(byHashId: hashId))
+    static func getAtom(byHashId hashEUID: HashEUID) -> RPCRootRequest {
+        return .fireAndForget(.getAtom(byHashId: hashEUID))
     }
 
     static var getLivePeers: RPCRootRequest {
         return .fireAndForget(.getLivePeers)
     }
     
-    static var getInfo: RPCRootRequest {
-        return .fireAndForget(.getInfo)
+    static var getNetworkInfo: RPCRootRequest {
+        return .fireAndForget(.getNetworkInfo)
     }
     
     static var getUniverse: RPCRootRequest {
@@ -94,7 +94,7 @@ public enum RPCRequestMethod: String {
     case getAtom                        = "Ledger.getAtoms"
     
     case getLivePeers                   = "Network.getLivePeers"
-    case getInfo                        = "Network.getInfo"
+    case getNetworkInfo                 = "Network.getInfo"
     case getUniverse                    = "Universe.getUniverse"
 //    case submitAndSubscribe             = "Universe.submitAtomAndSubscribe"
 }
@@ -126,7 +126,7 @@ public extension RPCMethod {
         case .getAtom: return .getAtom
 
         case .getLivePeers: return .getLivePeers
-        case .getInfo: return .getInfo
+        case .getNetworkInfo: return .getNetworkInfo
         case .getUniverse: return .getUniverse
         }
     }
@@ -147,8 +147,8 @@ public extension RPCMethod {
             let unsubscriptionRequest = UnsubscriptionRequest(subscriberId: subscriberId)
             return innerEncode(unsubscriptionRequest)
         case .submitAtom(let atom):
-            let request = AtomSubmitRequest(atom: atom)
-            return innerEncode(request)
+            let atomToEncode = atom.atomWithFee.wrappedAtom
+            return innerEncode(atomToEncode)
         case .getAtomStatus(let atomIdentifier):
             let request = GetAtomStatusRequest(atomIdentifier: atomIdentifier)
             return innerEncode(request)
@@ -161,7 +161,7 @@ public extension RPCMethod {
         case .closeAtomStatusNotifications(let subscriberId):
             let request = CloseAtomStatusNotificationRequest(subscriberId: subscriberId)
             return innerEncode(request)
-        case .getUniverse, .getInfo, .getLivePeers:
+        case .getUniverse, .getNetworkInfo, .getLivePeers:
             return { keyedEncodingContainer in
                 // We MUST encode some params, if nil, an empty array should be used, which element conforms to `Encodable`,
                 // arbitrarily we chose [Int]

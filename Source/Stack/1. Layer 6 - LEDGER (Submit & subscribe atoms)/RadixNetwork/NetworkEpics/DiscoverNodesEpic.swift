@@ -57,7 +57,11 @@ public extension DiscoverNodesEpic {
                     
                     return nodeInfos.compactMap { (nodeInfo: NodeInfo) -> AddNodeAction? in
                         guard
-                            let nodeFromInfo = try? Node(nodeInfo: nodeInfo),
+                            let nodeFromInfo = try? Node(
+                                ensureDomainNotNil: nodeInfo.host?.domain,
+                                port: livePeersResult.node.host.port,
+                                isUsingSSL: livePeersResult.node.isUsingSSL
+                            ),
                             !state.nodes.containsValue(forKey: nodeFromInfo)
                             else { return nil }
                         return AddNodeAction(node: nodeFromInfo, nodeInfo: nodeInfo)

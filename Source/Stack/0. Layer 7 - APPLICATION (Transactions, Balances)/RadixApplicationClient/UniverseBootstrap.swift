@@ -30,58 +30,34 @@ private extension UniverseBootstrap {
     
     init(config: UniverseConfig, originNode: Node, nodes: Node...) {
         self.config = config
-        self.discoveryMode = DiscoveryMode.byOriginNode(originNode, nodes: nodes)
+        self.discoveryMode = .byOriginNode(originNode, nodes: nodes)
     }
 }
 
+// MARK: - CustomDebugStringConvertible
 public extension UniverseBootstrap {
-//    var config: UniverseConfig {
-//        switch self {
-//        case .betanet: return .betanet
-//        case .localhost: return .localnet
-//        }
-//    }
-//
-//    var nodeFindingStrategy: NodeFindingStrategy {
-//        switch self {
-//        case .betanet:
-//            let viaNodeFinder = NodeFinder(originNodeFinder: OriginNodeFinder.betanet)
-//            return NodeFindingStrategy.anySuitableNode(discovery: viaNodeFinder, selection: .random)
-//        case .localhost:
-//            return NodeFindingStrategy.connectToSpecificNode(
-//                urlToNode: URLFormatter.localhost,
-//                universeConfig: config,
-//                ifSpecifiedNodeIsUnsuitable: .throwError
-//            )
-//        }
-//    }
-    
-//    var nodeFinding: NodeFindingg {
-//        switch self {
-//        case .betanet:
-//            let viaNodeFinder = NodeFinder(originNodeFinder: .betanet)
-//            return NodeFindingg.anySuitableNode(
-//                config: config,
-//                discovery: viaNodeFinder
-//            )
-//        case .localhost:
-//            return NodeFindingg.connectToSpecificNode(
-//                url: .localhost,
-//                config: config,
-//                strategyForWhenNodeIsInsuitable: .throwError
-//            )
-//        }
-//    }
-    
+    var debugDescription: String {
+        return """
+        UniverseConfig: \(config.debugDescription),
+        DiscoveryMode: \(discoveryMode.debugDescription)
+        """
+    }
 }
 
 // MARK: - Presets
 public extension UniverseBootstrap {
-    static var localhost: UniverseBootstrap {
+    static var localhostTwoNodes: UniverseBootstrap {
         return UniverseBootstrap(
             config: .localnet,
             originNode: .localhostWebsocket(port: 8080),
             nodes: .localhostWebsocket(port: 8081)
+        )
+    }
+    
+    static var localhostSingleNode: UniverseBootstrap {
+        return UniverseBootstrap(
+            config: .localnet,
+            originNode: .localhostWebsocket(port: 8080)
         )
     }
     

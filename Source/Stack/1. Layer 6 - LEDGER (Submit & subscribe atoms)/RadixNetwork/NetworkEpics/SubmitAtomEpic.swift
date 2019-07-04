@@ -26,14 +26,14 @@ public extension SubmitAtomEpic {
             .ofType(FindANodeResultAction.self)
             .filter { $0.request is SubmitAtomActionRequest }
             .map {
-                let request = castOrKill(instance: $0, toType: SubmitAtomActionRequest.self)
+                let request = castOrKill(instance: $0.request, toType: SubmitAtomActionRequest.self)
                 return SubmitAtomActionSend(request: request, node: $0.node)
-        }
+        }.debug()
         
         let submitToNode: Observable<NodeAction> = actions
             .ofType(SubmitAtomActionSend.self)
             .flatMap { [unowned self] in
-                self.waitForConnection(toNode: $0.node)
+                self.waitForConnection(toNode: $0.node).debug()
                     .andThen(self.submitAtom(sendAction: $0, toNode: $0.node))
         }
         
@@ -112,7 +112,8 @@ private extension SubmitAtomEpic {
                     }
                 ).subscribe().disposed(by: self.disposeBag)
         })
-        .takeUntil(TakeUntilBehavior.inclusive) { $0 is SubmitAtomActionCompleted }
+        .takeUntil(.exclusive) { $0 is SubmitAtomActionCompleted }
+        .debug()
         
     }
 }
@@ -120,9 +121,6 @@ private extension SubmitAtomEpic {
 public protocol FindANodeRequestAction: NodeAction {
     /// A shard space which must be intersected with a node's shard space to be selected, shards which can be picked amongst to find a matching supporting node
     var shards: Shards { get }
-}
-public extension FindANodeRequestAction {
-    var shards: Shards { abstract() }
 }
 
 public struct FindANodeResultAction: NodeAction {

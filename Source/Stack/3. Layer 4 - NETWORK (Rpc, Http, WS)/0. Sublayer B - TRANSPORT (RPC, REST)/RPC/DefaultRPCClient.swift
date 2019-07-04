@@ -19,6 +19,6 @@ public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
     }
     
     deinit {
-        log.error("💣")
+        log.warning("🧨")
     }
 }

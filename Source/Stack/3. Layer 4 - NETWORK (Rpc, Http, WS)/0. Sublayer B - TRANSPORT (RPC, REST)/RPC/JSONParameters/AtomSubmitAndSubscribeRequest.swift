@@ -20,15 +20,15 @@ import Foundation
 //    }
 //}
 
-public struct AtomSubmitRequest: Encodable {
-    
-    public let atom: Atom
-    
-    public init(atom signedAtom: SignedAtom) {
-        // TODO: Make `Atomic` conform to `Encodable`
-        self.atom = Atom(atomic: signedAtom) // or replace with: `signedAtom.wrappedAtom.wrappedAtom` ?
-    }
-}
+//public struct AtomSubmitRequest: Encodable {
+//    
+//    public let atom: Atom
+//    
+//    public init(atom signedAtom: SignedAtom) {
+//        // TODO: Make `Atomic` conform to `Encodable`
+//        self.atom = Atom(atomic: signedAtom) // or replace with: `signedAtom.wrappedAtom.wrappedAtom` ?
+//    }
+//}
 
 public struct GetAtomStatusRequest: Encodable {
     public let atomIdentifier: AtomIdentifier
@@ -74,7 +74,7 @@ public struct CloseAtomStatusNotificationRequest: Encodable {
 }
 
 public struct GetAtomRequest: Encodable {
-    public let atomHashIdentifier: HashId
+    public let atomHashIdentifier: HashEUID
 }
 
 // MARK: - Encodable

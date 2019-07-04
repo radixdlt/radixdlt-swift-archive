@@ -37,15 +37,30 @@ private extension FullDuplexCommunicationChannel {
         notification: RPCNotification? = nil
     ) -> Observable<RPCResult<Model>> where Model: Decodable {
         
-        return messagesDecoded()
+        return messagesDecoded(filterOnRequestId: requestId)
             .filter(requestId: requestId, subscriberId: subscriberId, notification: notification)
     }
     
-    func messagesDecoded<Model>() -> Observable<RPCResult<Model>> where Model: Decodable {
+    func messagesDecoded<Model>(filterOnRequestId: String?) -> Observable<RPCResult<Model>> where Model: Decodable {
         return messages
             .map { $0.toData() }
-            .map {
-                try JSONDecoder().decode(RPCResult<Model>.self, from: $0)
+            .filterMap {
+                guard let requestIdToFilterOn = filterOnRequestId else { return .map($0) }
+                guard let jsonObj = try? JSONSerialization.jsonObject(with: $0, options: []) as? JSON,
+                    let requestIdInResponse = jsonObj["id"] as? String else { return .map($0) }
+                guard requestIdInResponse == requestIdToFilterOn else {
+                    print("🍀 found requestIdInResponse: \(requestIdInResponse), matches: FALSE -> ignore")
+                    return .ignore
+                }
+                print("🍀 found requestIdInResponse: \(requestIdInResponse), matches: TRUE => parse into \(RPCResult<Model>.self)")
+                return .map($0)
+            }
+            .map { (data: Data) -> RPCResult<Model> in
+                // swiftlint:disable all
+                let jsonObj = try! JSONSerialization.jsonObject(with: data, options: []) as! JSON
+                // swiftlint:enable all
+                print("🇸🇪 filterOnRequestId: \(filterOnRequestId), json: \(jsonObj)")
+                return try JSONDecoder().decode(RPCResult<Model>.self, from: data)
             }
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribeOn(MainScheduler.instance)

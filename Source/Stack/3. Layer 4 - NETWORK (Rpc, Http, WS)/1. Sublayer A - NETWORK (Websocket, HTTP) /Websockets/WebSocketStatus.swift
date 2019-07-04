@@ -12,7 +12,7 @@ public enum WebSocketStatus: String, Hashable, CustomStringConvertible, CaseIter
     case disconnected
     
     case connecting
-    case connected
+//    case connected
     case ready
 
     case closing
@@ -20,9 +20,9 @@ public enum WebSocketStatus: String, Hashable, CustomStringConvertible, CaseIter
 }
 
 public extension WebSocketStatus {
-    var isConnected: Bool {
-        return statusIs(.connected)
-    }
+//    var isConnected: Bool {
+//        return statusIs(.connected)
+//    }
     
     var isReady: Bool {
         return statusIs(.ready)
@@ -34,49 +34,6 @@ public extension WebSocketStatus {
     
     func statusIs(_ `case`: WebSocketStatus) -> Bool {
         return enumCase(is: `case`)
-    }
-}
-
-public struct WebSocketEvent: NodeAction {
-    public let node: Node
-    public let eventType: EventType
-    private init(node: Node, eventType: EventType) {
-        self.node = node
-        self.eventType = eventType
-    }
-}
-
-public extension WebSocketEvent {
-    init(node: Node, webSocketStatus: WebSocketStatus) {
-        self.init(node: node, eventType: EventType(status: webSocketStatus))
-    }
-}
-
-public extension WebSocketEvent {
-    enum EventType {
-        case disconnected
-
-        case connecting
-        case connected
-        case ready
-        
-        case closing
-        case failed
-    }
-}
-
-private extension WebSocketEvent.EventType {
-    init(status: WebSocketStatus) {
-        switch status {
-        case .disconnected: self = .disconnected
-
-        case .connecting: self = .connecting
-        case .connected: self = .connected
-        case .ready: self = .ready
-
-        case .closing: self = .closing
-        case .failed: self = .failed
-        }
     }
 }
 

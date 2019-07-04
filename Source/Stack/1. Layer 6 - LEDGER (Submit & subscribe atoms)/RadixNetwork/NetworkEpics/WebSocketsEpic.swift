@@ -27,7 +27,7 @@ public extension NetworkWebsocketEpic {
     
     func waitForConnectionReturnWS(toNode node: Node) -> Single<WebSocketToNode> {
         let websocketToNode = webSockets.webSocket(to: node, shouldConnect: true)
-        return websocketToNode.waitForConnection().andThen(Single.just(websocketToNode))
+        return websocketToNode.waitForConnection().andThen(Single.just(websocketToNode).debug()).debug()
     }
     
     func close(webSocketToNode: WebSocketToNode, useDelay: Bool = false) {
@@ -44,6 +44,9 @@ public extension NetworkWebsocketEpic {
 public final class WebSocketsEpic: RadixNetworkEpic {
     public typealias EpicsFromWebSockets = [Function<WebSockets, NetworkWebsocketEpic>]
     private let epicFromWebsockets: EpicsFromWebSockets
+
+    private var _retainingVariableEpics = [NetworkWebsocketEpic]()
+    
     public init(epicFromWebsockets: [(WebSockets) -> NetworkWebsocketEpic]) {
         self.epicFromWebsockets = epicFromWebsockets.map { Function($0) }
     }
@@ -54,8 +57,14 @@ public extension WebSocketsEpic {
         let webSockets = WebSockets()
         return Observable.merge(
             epicFromWebsockets
-                .map { $0.apply(webSockets) }
-                .map { $0.epic(actions: actions, networkState: networkState) }
+                .map { [unowned self] in
+                    let newEpic = $0.apply(webSockets)
+                    self._retainingVariableEpics.append(newEpic)
+                    return newEpic
+                }
+                .map { (newlyCreatedEpic: NetworkWebsocketEpic) -> Observable<NodeAction> in
+                    return newlyCreatedEpic.epic(actions: actions, networkState: networkState)
+                }
         )
     }
 }
@@ -66,6 +75,10 @@ public extension WebSocketsEpic {
         private var webSockets = [Node: WebSocketToNode]()
         fileprivate init() {
             self.newSocketsToNodeSubject = PublishSubject()
+        }
+        
+        deinit {
+            log.warning("🧨")
         }
     }
 }

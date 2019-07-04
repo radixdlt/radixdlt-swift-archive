@@ -10,4 +10,8 @@ import Foundation
 
 public struct GetNodeInfoActionRequest: JsonRpcMethodNodeAction {
     public let node: Node
+    
+    public init(node: Node) {
+        self.node = node
+    }
 }

@@ -289,6 +289,9 @@
 		E6A7479822CC913400DACEA0 /* RxSwiftExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC1022C9F85B00A7E52E /* RxSwiftExt.framework */; };
 		E6A7479922CC914300DACEA0 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
 		E6A7479B22CC960800DACEA0 /* JsonRpcResultAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A7479A22CC960800DACEA0 /* JsonRpcResultAction.swift */; };
+		E6A7479D22CCC72700DACEA0 /* Optional+IfPresentMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A7479C22CCC72700DACEA0 /* Optional+IfPresentMap.swift */; };
+		E6A747A022CCC89800DACEA0 /* Bool_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A7479F22CCC89800DACEA0 /* Bool_Extensions.swift */; };
+		E6A747A222CCF09100DACEA0 /* WebSocketEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A747A122CCF09100DACEA0 /* WebSocketEvent.swift */; };
 		E6ABA76D22C3593B00536DC7 /* InMemoryAtomStoreReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA76C22C3593B00536DC7 /* InMemoryAtomStoreReducer.swift */; };
 		E6ABA76F22C3594C00536DC7 /* RadixNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA76E22C3594C00536DC7 /* RadixNetwork.swift */; };
 		E6ABA77322C3596D00536DC7 /* FetchAtomsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA77222C3596D00536DC7 /* FetchAtomsAction.swift */; };
@@ -855,6 +858,9 @@
 		E6A643112244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodePointFromPublicKeyTests.swift; sourceTree = "<group>"; };
 		E6A7479422CB9F7000DACEA0 /* GetNodeInfoActionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNodeInfoActionResult.swift; sourceTree = "<group>"; };
 		E6A7479A22CC960800DACEA0 /* JsonRpcResultAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonRpcResultAction.swift; sourceTree = "<group>"; };
+		E6A7479C22CCC72700DACEA0 /* Optional+IfPresentMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+IfPresentMap.swift"; sourceTree = "<group>"; };
+		E6A7479F22CCC89800DACEA0 /* Bool_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bool_Extensions.swift; sourceTree = "<group>"; };
+		E6A747A122CCF09100DACEA0 /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
 		E6ABA76C22C3593B00536DC7 /* InMemoryAtomStoreReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryAtomStoreReducer.swift; sourceTree = "<group>"; };
 		E6ABA76E22C3594C00536DC7 /* RadixNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixNetwork.swift; sourceTree = "<group>"; };
 		E6ABA77222C3596D00536DC7 /* FetchAtomsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAtomsAction.swift; sourceTree = "<group>"; };
@@ -1358,6 +1364,7 @@
 				E6474AD322661F26009C4FDC /* FullDuplexCommunicationChannel */,
 				E62EFDE2224A4D6F00B6DAD6 /* WebSocketToNode.swift */,
 				E62EFDE7224A4DBF00B6DAD6 /* WebSocketStatus.swift */,
+				E6A747A122CCF09100DACEA0 /* WebSocketEvent.swift */,
 			);
 			path = Websockets;
 			sourceTree = "<group>";
@@ -2285,6 +2292,14 @@
 			path = EllipticCurveMethods;
 			sourceTree = "<group>";
 		};
+		E6A7479E22CCC88B00DACEA0 /* Bool */ = {
+			isa = PBXGroup;
+			children = (
+				E6A7479F22CCC89800DACEA0 /* Bool_Extensions.swift */,
+			);
+			path = Bool;
+			sourceTree = "<group>";
+		};
 		E6ABA77022C3595900536DC7 /* FetchAtomsAction */ = {
 			isa = PBXGroup;
 			children = (
@@ -2412,6 +2427,7 @@
 		E6CEE72E21F5D4D600D745EC /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				E6A7479E22CCC88B00DACEA0 /* Bool */,
 				E6296C882292EDF400753FD5 /* Codable */,
 				E6A4AB89221C0705006C5CA8 /* Date */,
 				E62C030A220491B4001F27DE /* Collection */,
@@ -3494,6 +3510,7 @@
 			children = (
 				E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */,
 				E64BFF932269B96A00501726 /* Optional+Debug.swift */,
+				E6A7479C22CCC72700DACEA0 /* Optional+IfPresentMap.swift */,
 			);
 			path = Optionals;
 			sourceTree = "<group>";
@@ -3859,6 +3876,7 @@
 				E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */,
 				E6E2796A2271CD1C0067D46E /* DictionaryDecodable.swift in Sources */,
 				E6F5484522771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift in Sources */,
+				E6A747A222CCF09100DACEA0 /* WebSocketEvent.swift in Sources */,
 				E6ABA76F22C3594C00536DC7 /* RadixNetwork.swift in Sources */,
 				E68BD82722A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift in Sources */,
 				E6E2796D2271CD1C0067D46E /* ArrayConvertible.swift in Sources */,
@@ -3928,6 +3946,7 @@
 				E6E2793F2271CD1C0067D46E /* Sha256Hasher.swift in Sources */,
 				E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */,
 				E615C51922B791FA00604E90 /* SomeParticleReducer.swift in Sources */,
+				E6A7479D22CCC72700DACEA0 /* Optional+IfPresentMap.swift in Sources */,
 				E6A507D9224E155A00128123 /* AtomSubscriptionStartOrCancel.swift in Sources */,
 				E626E1D622B3F9430046D2AC /* NodeFinding.swift in Sources */,
 				E606FC2622CB461400A7E52E /* DiscoverMoreNodesAction.swift in Sources */,
@@ -4108,6 +4127,7 @@
 				E6A508B4224E713F00128123 /* ParticleGroup.swift in Sources */,
 				E6A508B1224E713F00128123 /* ParticleGroups.swift in Sources */,
 				E626E1E022B3F9F90046D2AC /* AtomStore.swift in Sources */,
+				E6A747A022CCC89800DACEA0 /* Bool_Extensions.swift in Sources */,
 				E6ED1A5821F8E5A100654105 /* AtomSubmitting.swift in Sources */,
 				E6DC276522C4C7650049BB3C /* TokenReferenceBalance.swift in Sources */,
 				E6CB4B2B22C50FEC00B7382A /* SubmitAtomEpic.swift in Sources */,

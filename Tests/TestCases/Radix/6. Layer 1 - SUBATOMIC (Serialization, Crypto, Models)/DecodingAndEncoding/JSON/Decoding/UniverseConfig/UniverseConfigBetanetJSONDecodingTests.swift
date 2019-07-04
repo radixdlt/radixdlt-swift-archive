@@ -10,34 +10,54 @@
 import XCTest
 
 class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
-    func testUniverses() {
-        test(config: "betanet")
-        test(config: "localnet")
+    
+    private var betanet: UniverseConfig?
+    private var localnet: UniverseConfig?
+    
+    /*  Run Before Each Test */
+    override func setUp() {
+        super.setUp()
+        
+        betanet = configWithName("betanet")
+        localnet = configWithName("localnet")
     }
     
-    private func test(config: String) {
-        guard let jsonFileUrl = self.testBundle.url(forResource: config, withExtension: "json") else {
-            return XCTFail("file not found")
+    func testUniverses() {
+        func doTest(config: UniverseConfig?) {
+            guard let config = config else {
+                return XCTFail("Config was nil")
+            }
+            // Waiting on bug fix for Jackson: https://github.com/cbor/cbor.github.io/issues/49
+            // The Java lib produces incorrect hashEUID for any data containing a Message particle
+            // which serializer `"radix.particles.message"` gets incorrectly CBOR encoded.
+            //        if let hashIdFromApi = config.hashIdFromApi {
+            //            XCTAssertEqual(config.hashEUID, hashIdFromApi)
+            //        }
+            
+            guard let rriParticle = config.genesis.particles().compactMap({ $0 as? ResourceIdentifierParticle }).first else {
+                return XCTFail("No RRI particle")
+            }
+            XCTAssertEqual(rriParticle.resourceIdentifier.name, "XRD")
+            
+        }
+        
+        doTest(config: betanet)
+        doTest(config: localnet)
+    }
+}
+
+private extension UniverseConfigBetanetJSONDecodingTest {
+    
+    func configWithName(_ nameOfConfig: String) -> UniverseConfig? {
+        guard let jsonFileUrl = self.testBundle.url(forResource: nameOfConfig, withExtension: "json") else {
+            return nil
         }
         
         guard let data = XCTAssertNotThrows(
             try Data(contentsOf: jsonFileUrl)
-        ) else { return }
+        ) else { return nil }
         
-        //                    let config = try JSONDecoder().decode(UniverseConfig.self, from: data)
-        guard let config = decodeOrFail(jsonData: data, to: UniverseConfig.self) else { return }
-        
-        // Waiting on bug fix for Jackson: https://github.com/cbor/cbor.github.io/issues/49
-        // The Java lib produces incorrect hashId for any data containing a Message particle
-        // which serializer `"radix.particles.message"` gets incorrectly CBOR encoded.
-//        if let hashIdFromApi = config.hashIdFromApi {
-//            XCTAssertEqual(config.hashId, hashIdFromApi)
-//        }
-        
-        guard let rriParticle = config.genesis.particles().compactMap({ $0 as? ResourceIdentifierParticle }).first else {
-            return XCTFail("No RRI particle")
-        }
-        XCTAssertEqual(rriParticle.resourceIdentifier.name, "XRD")
-        
+        guard let config = decodeOrFail(jsonData: data, to: UniverseConfig.self) else { return nil }
+        return config
     }
 }

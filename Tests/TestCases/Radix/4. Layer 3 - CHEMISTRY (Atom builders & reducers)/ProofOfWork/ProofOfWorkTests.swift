@@ -99,7 +99,7 @@ extension XCTestCase {
             seed: seed,
             magic: magic,
             numberOfLeadingZeros: numberOfLeadingZeros
-            ).blockingSingle(timeout: timeout, function: function, file: file, line: line)
+        ).blockingSingle(timeout: timeout, function: function, file: file, line: line)
     }
 }
 

@@ -18,7 +18,8 @@ public struct UniverseConfig:
     Throwing,
     Decodable,
     Equatable,
-    CustomStringConvertible
+    CustomStringConvertible,
+    CustomDebugStringConvertible
 {
     // swiftlint:enable colon opening_brace
     
@@ -33,7 +34,7 @@ public struct UniverseConfig:
     public let planck: Planck
     
     /// Only used for tests
-    internal let hashIdFromApi: HashId?
+    internal let hashIdFromApi: HashEUID?
     
     private init(
         magic: Magic,
@@ -45,8 +46,9 @@ public struct UniverseConfig:
         creator: PublicKey,
         genesis: Atoms,
         planck: Planck,
-        hashIdFromApi: HashId? = nil
+        hashIdFromApi: HashEUID? = nil
     ) throws {
+        print("👽 Universe config designated INIT")
         self.magic = magic
         self.port = port
         self.name = name
@@ -59,11 +61,12 @@ public struct UniverseConfig:
         self.hashIdFromApi = hashIdFromApi
         
         try UniverseConfig.nativeTokenDefinitionFrom(genesis: genesis)
+        print("👽 Universe config designated INIT DONE")
         
-        // TODO verify hashId match of UniverseConfig
+        // TODO verify hashEUID match of UniverseConfig
 //        guard
 //            let hashIdFromApi = hashIdFromApi,
-//            hashIdFromApi == self.hashId
+//            hashIdFromApi == self.hashEUID
 //        else {
 //            throw Error.hashIdFromApiDoesNotMatchCalculated
 //        }
@@ -82,6 +85,7 @@ public extension UniverseConfig {
     }
     
     init(from decoder: Decoder) throws {
+        print("👽 Universe config Decode START")
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let magic = try container.decode(Magic.self, forKey: .magic)
         let port = try container.decode(Port.self, forKey: .port)
@@ -96,8 +100,9 @@ public extension UniverseConfig {
         let planck = try container.decode(Planck.self, forKey: .planck)
         
         // TESTING ONLY
-        let hashIdFromApi = try container.decodeIfPresent(HashId.self, forKey: .hashIdFromApi)
+        let hashIdFromApi = try container.decodeIfPresent(HashEUID.self, forKey: .hashIdFromApi)
         
+        print("👽 Universe config Decode calling init")
         try self.init(
             magic: magic,
             port: port,
@@ -135,12 +140,23 @@ public extension UniverseConfig {
     static let serializer: RadixModelType = .universeConfig
 }
 
-// MARK:
+// MARK: Throwing
 public extension UniverseConfig {
     enum Error: Swift.Error, Equatable {
         case hashIdFromApiDoesNotMatchCalculated
         case noParticleForNativeToken
         case multipleNativeTokensFound([ResourceIdentifier])
+    }
+}
+
+// MARK: - CustomDebugStringConvertible
+public extension UniverseConfig {
+    var debugDescription: String {
+        return """
+        Name: \(name),
+        Type: \(type.name),
+        Magic: \(magic)
+        """
     }
 }
 

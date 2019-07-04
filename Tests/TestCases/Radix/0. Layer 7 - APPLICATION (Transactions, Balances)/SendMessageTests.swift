@@ -29,6 +29,10 @@ extension AbstractIdentity {
     convenience init(alias: String? = nil) {
         try! self.init(accounts: [Account()], alias: alias)
     }
+    
+    convenience init(privateKey: PrivateKey, alias: String? = nil) {
+        try! self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
+    }
 }
 
 extension Account {
@@ -72,13 +76,13 @@ extension ResultOfUserAction {
 
 class SendMessageTests: LocalhostNodeTest {
     
-    private let aliceIdentity = AbstractIdentity(alias: "Alice")
-    private let bobAccount = Account()
-    private let claraAccount = Account()
-    private let dianaAccount = Account()
+    private let aliceIdentity = AbstractIdentity(privateKey: 1, alias: "Alice")
+    private let bobAccount = Account(privateKey: 2)
+    private let claraAccount = Account(privateKey: 3)
+    private let dianaAccount = Account(privateKey: 4)
     
 //    private lazy var application = DefaultRadixApplicationClient(node: .localhost, identity: alice, magic: magic)
-    private lazy var application = DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhost, identity: aliceIdentity)
+    private lazy var application = DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
     
     private lazy var alice: Address = {
         return application.addressOfActiveAccount
@@ -96,17 +100,59 @@ class SendMessageTests: LocalhostNodeTest {
         return application.addressOf(account: dianaAccount)
     }()
     
+    let disposeBag = DisposeBag()
+
     func testSendNonEmptyPlainText() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message without encryption
         let result = application.sendPlainTextMessage("Hey Bob, this is plain text", to: bob) //.sendMessage("Hey Bob, this is plain text", to: bob, encryption: .plainText)
 //        let request = application.sendMessage("Hey Bob, this is plain text", to: bob, encryption: .plainText)
         
-        XCTAssertTrue(
-            // THEN: I see that action completes successfully
-            result.blockingWasSuccessfull(timeout: .enoughForPOW)
-        )
+        print("🙋🏻‍♀️ Alice: \(alice.stringValue) sends message to 🙋🏻‍♂️ Bob: \(bob.stringValue)")
+        
+        result.toObservable().subscribe {
+            print("⚛️⚛️⚛️ send msg result update: \($0)")
+        }.disposed(by: disposeBag)
+        result.connect().disposed(by: disposeBag)
+        
+        XCTAssertTrue(result.blockUntilComplete(timeout: 50))
+        
+//        XCTAssertTrue(
+//            // THEN: I see that action completes successfully
+////            result.blockUntilComplete(timeout: 15)
+//            result.blockingWasSuccessfull(timeout: 15)
+//        )
     }
+    
+    
+//    func testFindCompatiblePrivateKeysForLocalnetNodesRegardingShardSpace() {
+//        func doTest(shardRange rangeToUseToCreateAShardSpace: ShardRange) {
+//            let irrelavantAnchor: Shard = 1337
+//            let shardSpace = try! ShardSpace(range: rangeToUseToCreateAShardSpace, anchor: irrelavantAnchor)
+//            func doTest(privateKey: PrivateKey) -> PrivateKey? {
+//                let publicKey = PublicKey(private: privateKey)
+//                let shardFromKey = publicKey.shard
+//                guard shardSpace.intersectsWithShard(shardFromKey) else {
+//                    print("Range: \(rangeToUseToCreateAShardSpace) does NOT contain shard \(shardFromKey)")
+//                    return nil
+//                }
+//                return privateKey
+//            }
+//            var foundAny = false
+//            for privateKeyScalar in 1..<10 {
+//                guard doTest(privateKey: try! PrivateKey(scalar: PrivateKey.Scalar(privateKeyScalar))) != nil else { continue }
+//                print("PrivateKey(\(privateKeyScalar)) intersects with shardRange")
+//                foundAny = true
+//            }
+//            if !foundAny {
+//                print("None of the PrivateKets provided intersected with the shard range")
+//            }
+//        }
+//
+//        doTest(
+//            shardRange: try! ShardRange(lower: -8796093022208, upper: 8796093022207)
+//        )
+//    }
     
     func testSendNonEmptyEncrypted() {
         // GIVEN: A RadidxApplicationClient

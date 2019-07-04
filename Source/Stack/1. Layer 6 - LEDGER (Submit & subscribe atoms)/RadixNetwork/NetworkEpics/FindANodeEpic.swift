@@ -26,12 +26,12 @@ public extension FindANodeEpic {
     func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
         return actions.ofType(FindANodeRequestAction.self)
             .flatMap { findANodeRequestAction -> Observable<NodeAction> in
-                
+                log.verbose("🚀 findANodeRequestAction: \(findANodeRequestAction)")
                 let connectedNodes: Observable<[Node]> = networkState.map { state in
                     getConnectedNodes(shards: findANodeRequestAction.shards, state: state)
-                }
-                .replay(1)
-                .autoConnect(numberOfSubscribers: 2)
+                }.debug()
+//                .replay(1)
+//                .autoConnect(numberOfSubscribers: 2)
                 
                 let selectedNode: Observable<NodeAction> = connectedNodes
                     .compactMap { try? NonEmptySet(array: $0) }
@@ -53,8 +53,8 @@ public extension FindANodeEpic {
                         
                     )
                     .takeUntil(selectedNode)
-                    .replay(1)
-                    .autoConnect(numberOfSubscribers: 2)
+//                    .replay(1)
+//                    .autoConnect(numberOfSubscribers: 2)
                 
                 let cleanupConnections: Observable<NodeAction> = findConnectionAction
                     .ofType(ConnectWebSocketAction.self)
@@ -95,7 +95,7 @@ private extension FindANodeEpic {
             return [DiscoverMoreNodesAction()]
         }
         
-        let correctShardNodes = try? NonEmptySet(array: disconnectedPeers.filter { state.nodes[$0]?.shardSpace?.intersects(with: shards) ?? false })
+        let correctShardNodes = try? NonEmptySet(array: disconnectedPeers.filter { state.nodes[$0]?.shardSpace?.intersectsWithShards(shards) ?? false })
         if let correctShardNodes = correctShardNodes {
             return [ConnectWebSocketAction(node: self.peerSelector(correctShardNodes))]
         }
@@ -120,8 +120,12 @@ private let maxSimultaneousConnectionsRequest = 2
 
 private func getConnectedNodes(shards: Shards, state: RadixNetworkState) -> [Node] {
     return state.nodes
-        .filter { $0.value.websocketStatus == .connected }
-        .filter { $0.value.shardSpace?.intersects(with: shards) ?? false }
-        .map { $0.key }
+        .filter { $0.value.websocketStatus == .ready }
+        .filter { $0.value.shardSpace?.intersectsWithShards(shards) ?? false }
+        .map {
+            print("🚀 FOUND COMPATIBLE NODE!!")
+            return $0.key
+            
+        }
     
 }

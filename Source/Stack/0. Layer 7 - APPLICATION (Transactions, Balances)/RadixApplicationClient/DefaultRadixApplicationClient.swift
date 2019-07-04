@@ -26,6 +26,8 @@ public final class DefaultRadixApplicationClient: RadixApplicationClient {
     
     private let feeMapper: FeeMapper
     
+    private let disposeBag = DisposeBag()
+    
     public init(
         identity: AbstractIdentity,
         universe: RadixUniverse,
@@ -46,18 +48,16 @@ public final class DefaultRadixApplicationClient: RadixApplicationClient {
         self.activeAccount = identity.selectAccount(accountSelection)
         self.feeMapper = feeMapper
         
+        log.verbose("(Default)RadixApplicationClient created")
     }
 }
 
 public extension DefaultRadixApplicationClient {
     
     convenience init(bootstrapConfig: BootstrapConfig, identity: AbstractIdentity) {
+        log.debug("Creating (Default)RadixApplicationClient via bootstrapConfig: \(bootstrapConfig.debugDescription), identity: \(identity)")
         let universe = DefaultRadixUniverse(bootstrapConfig: bootstrapConfig)
         self.init(identity: identity, universe: universe)
-    }
-    
-    func connectTo(node: FormattedURL) -> Completable {
-        implementMe()
     }
 }
 
@@ -117,9 +117,7 @@ public extension DefaultRadixApplicationClient {
         ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent
     ) -> ResultOfUserAction {
         let transaction = Transaction(api: self)
-        print("STAGING ACTIONs")
         actions.forEach { transaction.stage(action: $0) }
-        print("ACTIONS staged, about to commitAndPush")
         return transaction.commitAndPush(ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
     
@@ -137,14 +135,16 @@ internal final class Transaction {
         toNode originNode: Node? = nil
     ) -> ResultOfUserAction {
         
-        let unsignedAtom = buildAtom()
-        let signedAtom = api.sign(atom: unsignedAtom, ifNoSigningKeyPresent: noKeyPresentStrategy)
+        log.verbose("Committing and pushing transaction (actions -> Atom -> POW -> Sign -> ResultOfUserAction)")
+        
+        let unsignedAtom = buildAtom() //.asObservable().share().asSingle()
+        let signedAtom = api.sign(atom: unsignedAtom, ifNoSigningKeyPresent: noKeyPresentStrategy) //.asObservable().share().asSingle()
         
         return api.createAtomSubmission(
             atom: signedAtom,
             completeOnAtomStoredOnly: false,
             originNode: originNode
-        ).connect()
+        )
     }
     
     func stage(action: UserAction) {
@@ -165,13 +165,19 @@ internal final class Transaction {
     }
     
     func buildAtom() -> Single<UnsignedAtom> {
+        log.verbose("Building atom")
         let particleGroups = api.universe.atomStore.clearStagedParticleGroups(for: uuid)
         let atom = Atom(particleGroups: particleGroups)
-        let atomWithFee = api.addFee(to: atom)
-        let unsignedAtom = atomWithFee.map {
+        
+        return api.addFee(to: atom).map {
             try UnsignedAtom(atomWithPow: $0)
         }
-        return unsignedAtom
+        
+//        let atomWithFee = api.addFee(to: atom)
+//        let unsignedAtom = atomWithFee.map {
+//
+//        }
+//        return unsignedAtom
     }
 }
 
@@ -197,7 +203,9 @@ private extension DefaultRadixApplicationClient {
     }
     
     func createAtomSubmission(atom atomSingle: Single<SignedAtom>, completeOnAtomStoredOnly: Bool, originNode: Node?) -> ResultOfUserAction {
+        log.verbose("createAtomSubmission start")
         let updates = atomSingle.flatMapObservable { [unowned self] (atom: SignedAtom) -> Observable<SubmitAtomAction> in
+            log.verbose("createAtomSubmission flatMapObservable")
             let initialAction: SubmitAtomAction
             
             if let originNode = originNode {
@@ -210,13 +218,16 @@ private extension DefaultRadixApplicationClient {
                 .getActions()
                 .ofType(SubmitAtomAction.self)
                 .filter { $0.uuid == initialAction.uuid }
+                .do(onNext: { log.verbose("SubmitAtomAction: \($0)") })
                 .takeWhile { !$0.isCompleted }
 
             self.universe.networkController.dispatch(nodeAction: initialAction)
             return status
-        }
+        }.share(replay: 1, scope: .whileConnected)
         
-        return ResultOfUserAction(updates: updates)
+        let result = ResultOfUserAction(updates: updates)
+        result.connect().disposed(by: disposeBag)
+        return result
         
     }
     

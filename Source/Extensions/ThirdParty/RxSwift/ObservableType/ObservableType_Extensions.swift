@@ -15,7 +15,7 @@ extension ObservableType {
     }
     
     func flatMapSingle<Other>(_ selector: @escaping (Element) -> Single<Other>) -> Observable<Other> {
-        return self.asSingle().flatMap(selector).asObservable()
+        return self.take(1).asSingle().flatMap(selector).asObservable()
     }
 
     func mapToVoid() -> Observable<Void> {

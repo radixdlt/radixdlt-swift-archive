@@ -29,8 +29,8 @@ public extension UniverseConfigType {
     
     var name: String {
         switch self {
-        case .public: return "RADIX_PUBLIC"
-        case .development: return "RADIX_DEVELOPMENT"
+        case .public: return "Public"
+        case .development: return "Development"
         }
     }
 }

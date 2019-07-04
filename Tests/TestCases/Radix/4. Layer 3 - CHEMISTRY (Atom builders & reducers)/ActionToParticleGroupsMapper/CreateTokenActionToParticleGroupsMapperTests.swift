@@ -95,8 +95,8 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
         let transferrableTokensParticle = spunTransferrableTokensParticle.particle
         
         XCTAssertEqual(
-            unallocatedParticleFromTokenCreationGroup.hashId,
-            unallocatedTokensParticle.hashId,
+            unallocatedParticleFromTokenCreationGroup.hashEUID,
+            unallocatedTokensParticle.hashEUID,
             "The `UnallocatedTokensParticle` in the two ParticleGroups should be the same, but with different spin"
         )
         

@@ -33,13 +33,16 @@ public final class DefaultRadixUniverse: RadixUniverse {
         self.nativeTokenDefinition = try config.nativeTokenDefinition()
         self.atomPuller = DefaultAtomPuller(networkController: networkController)
         self.atomStore = atomStore
+        
+        log.verbose("(Default)RadixUniverse created")
     }
+
 }
 
 public extension DefaultRadixUniverse {
 
     convenience init(config: UniverseConfig, discoveryMode: DiscoveryMode) throws {
-        let atomStore = InMemoryAtomStore(genesisAtoms: config.genesis.atoms)
+       let atomStore = InMemoryAtomStore(genesisAtoms: config.genesis.atoms)
 
         let discoveryEpics: [RadixNetworkEpic]
         let initialNetworkOfNodes: Set<Node>
@@ -52,7 +55,7 @@ public extension DefaultRadixUniverse {
             discoveryEpics = []
             initialNetworkOfNodes = initialNetworkOfNodesFromMode.asSet
         }
-        
+        log.verbose("Creating NetworkEpics")
         var networkEpics: [RadixNetworkEpic] = [
             WebSocketsEpic.init(epicFromWebsockets: [
                 WebSocketEventsEpic.init(webSockets:),
@@ -64,7 +67,8 @@ public extension DefaultRadixUniverse {
                 RadixJsonRpcMethodEpic<GetUniverseConfigActionRequest, GetUniverseConfigActionResult>.createUniverseConfigEpic(webSockets:),
                 RadixJsonRpcAutoConnectEpic.init(webSockets:),
                 RadixJsonRpcAutoCloseEpic.init(webSockets:)
-            ])
+            ]),
+            FindANodeEpic()
         ]
         
         networkEpics.append(contentsOf: discoveryEpics)
@@ -80,11 +84,13 @@ public extension DefaultRadixUniverse {
     }
     
     convenience init(bootstrapConfig: BootstrapConfig) {
+        
         do {
             try self.init(
                 config: bootstrapConfig.config,
                 discoveryMode: bootstrapConfig.discoveryMode
             )
+            log.debug("Creating (Default)RadixUniverse via bootsrapConfig")
         } catch {
             incorrectImplementation("Should always be able to create RadixUniverse from bootstrap config")
         }

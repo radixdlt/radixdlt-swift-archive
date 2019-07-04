@@ -75,7 +75,7 @@ public extension MessageParticle {
 // MARK: Codable
 public extension MessageParticle {
     enum CodingKeys: String, CodingKey {
-        case serializer, version
+        case serializer, version, destinations
 
         case from
         case to

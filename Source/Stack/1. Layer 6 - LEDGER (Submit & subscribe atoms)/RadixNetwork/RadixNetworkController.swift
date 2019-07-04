@@ -25,20 +25,29 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
     public let networkState: Observable<RadixNetworkState>
     private let disposeBag = DisposeBag()
 
+    private let _retainingVariableEpics: [RadixNetworkEpic]
+    
     public init(
         network: RadixNetwork = DefaultRadixNetwork.init(),
         initialNetworkState: RadixNetworkState = RadixNetworkState(),
         epics: [RadixNetworkEpic],
         reducers: [SomeReducer<NodeAction>]
     ) {
+        
+        log.debug("Creating (Default)RadixNetworkController with #\(epics.count) epics and #\(reducers.count) reducers")
         let networkStateSubject = BehaviorSubject(value: initialNetworkState)
         let nodeActionSubject = PublishSubject<NodeAction>()
         
         let reducedNodeActions = nodeActionSubject.asObservable().do(onNext: { action in
             let state = try networkStateSubject.value()
             let nextState = network.reduce(state: state, action: action)
-            reducers.forEach { $0.reduce(action: action) }
+            reducers.forEach {
+                $0.reduce(action: action)
+            }
+   
             if nextState != state {
+                log.verbose("Current Network state: \(state)")
+                log.verbose("Next Network state: \(nextState)")
                 networkStateSubject.onNext(nextState)
             }
         }).publish()
@@ -49,6 +58,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
         self.networkStateSubject = networkStateSubject
         self.networkState = networkState
         self.reducedNodeActions = reducedNodeActions
+        self._retainingVariableEpics = epics
         
         // Then run Epics
         let updates: [Observable<NodeAction>] = epics.map { epic in
@@ -56,12 +66,15 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
         }
         
         Observable.merge(updates).subscribe(
-            onNext: { [unowned self] in self.dispatch(nodeAction: $0) },
+            onNext: { [unowned self] in
+                self.dispatch(nodeAction: $0)
+            },
             onError: {
-                log.error("Error: \($0)")
-                networkStateSubject.onError($0)
-                
-        }).disposed(by: disposeBag)
+                incorrectImplementation("Error: \($0)")
+//                log.error("Error: \($0)")
+//                networkStateSubject.onError($0)
+            }
+        ).disposed(by: disposeBag)
         
         reducedNodeActions.connect().disposed(by: disposeBag)
     }
@@ -78,51 +91,3 @@ public extension DefaultRadixNetworkController {
     }
     
 }
-
-//private extension DefaultRadixNetworkController {
-//
-//
-//
-//    var universeConfig: UniverseConfig {
-//        return nodeFinding.config
-//    }
-//
-//    func nodeInteraction(for address: Address) -> Observable<NodeInteraction> {
-//        return nodeInteraction(nodeFinding: nodeFinding, for: address)
-//    }
-//
-//    func nodeInteraction(nodeFinding: NodeFindingg, for address: Address) -> Observable<NodeInteraction> {
-//        let suitableNodes = discovery.findNodesSuitable(for: address, inUniverseHavingConfig: universeConfig, strategyWhenUnsuitable: nodeFinding.strategyWhenAllNodesAreUnsuitable)
-//
-//        return suitableNodes.map { (nodes: [Node]) -> Node in
-//            guard let first = nodes.first else {
-//                throw NodeDiscoveryError.foundZeroNodes
-//            }
-//            return first
-//            }.map {
-//                DefaultNodeInteraction(node: $0)
-//            }.map { $0 }
-//    }
-//}
-
-//public extension DefaultRadixNetworkController {
-//    struct NodeInteractionForAddress: DictionaryConvertibleMutable, ExpressibleByDictionaryLiteral {
-//        public typealias Key = Address
-//        public typealias Value = [NodeInteraction]
-//        public typealias Map = [Key: Value]
-//        public var dictionary: Map
-//        public init(dictionary: Map) {
-//            self.dictionary = dictionary
-//        }
-//
-//        mutating func add(interaction: NodeInteraction, for address: Address) {
-//            var existingInteractions = valueForKey(key: address, ifAbsent: { [NodeInteraction]() })
-//            existingInteractions.append(interaction)
-//            self[address] = existingInteractions
-//        }
-//
-//        mutating func removeInteractions(for address: Address) {
-//            self.removeValue(forKey: address)
-//        }
-//    }
-//}

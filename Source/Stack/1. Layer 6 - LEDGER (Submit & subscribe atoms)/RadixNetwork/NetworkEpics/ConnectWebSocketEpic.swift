@@ -24,6 +24,7 @@ public extension ConnectWebSocketEpic {
         let onConnect: Observable<NodeAction> = actions
             .filter { type(of: $0) == ConnectWebSocketAction.self }
             .do(onNext: { [unowned self] in
+                log.verbose("Acting upon ConnectWebSocketAction")
                 self.webSockets.webSocket(to: $0.node, shouldConnect: true)
                 
             }).ignoreElementsObservable()
@@ -31,6 +32,7 @@ public extension ConnectWebSocketEpic {
         let onClose: Observable<NodeAction> = actions
             .filter { type(of: $0) == CloseWebSocketAction.self }
             .do(onNext: { [unowned self] in
+                log.verbose("Acting upon CloseWebSocketAction")
                 self.webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: $0.node)
             }).ignoreElementsObservable()
         
@@ -61,6 +63,10 @@ public final class RadixJsonRpcAutoConnectEpic: NetworkWebsocketEpic {
     
     public init(webSockets: WebSocketsEpic.WebSockets) {
         self.webSockets = webSockets
+    }
+    
+    deinit {
+        log.warning("🧨")
     }
 }
 public extension RadixJsonRpcAutoConnectEpic {

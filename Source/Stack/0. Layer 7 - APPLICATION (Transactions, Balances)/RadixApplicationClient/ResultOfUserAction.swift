@@ -18,7 +18,7 @@ public struct ResultOfUserAction {
         
         self.completable = updates.ofType(SubmitAtomAction.self)
             .ofType(SubmitAtomActionStatus.self)
-            .takeLast(1).asSingle()
+            .lastOrError()
             .flatMapCompletable { submitAtomActionStatus in
                 let statusNotification = submitAtomActionStatus.statusNotification
                 switch statusNotification {
@@ -38,9 +38,9 @@ public extension ResultOfUserAction {
 }
 
 internal extension ResultOfUserAction {
-    func connect() -> ResultOfUserAction {
-        _ = updates.connect()
-        return self
+    func connect() -> Disposable {
+        return updates.connect()
+//        return self
     }
     
     static var empty: ResultOfUserAction {
@@ -51,11 +51,22 @@ internal extension ResultOfUserAction {
         implementMe()
     }
 }
+
+import RxBlocking
 public extension ResultOfUserAction {
     func toObservable() -> Observable<SubmitAtomAction> {
         return updates
     }
     func toCompletable() -> Completable {
         return completable
+    }
+    
+    // Returns a bool marking if the action was successfully completed within the provided time period if any timeout was provided
+    // if no `timeout` was provided, then the bool just marks if the action was successfull or not in general.
+    func blockUntilComplete(timeout: TimeInterval? = nil) -> Bool {
+        switch completable.toBlocking(timeout: timeout).materialize() {
+        case .completed: return true
+        case .failed: return false
+        }
     }
 }

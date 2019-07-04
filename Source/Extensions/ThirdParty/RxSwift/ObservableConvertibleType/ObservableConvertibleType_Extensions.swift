@@ -16,14 +16,14 @@ extension ObservableConvertibleType {
     }
 
     func firstOrError() -> Single<Element> {
-        return self.asObservable().elementAt(0).asSingle()
+        return self.asObservable().elementAt(0).take(1).asSingle()
     }
     
     func lastOrError() -> Single<Element> {
         // `count` is part of `RxSwiftExt`
         return asObservable().count().flatMap {
             return self.asObservable().elementAt($0 - 1)
-        }.asSingle()
+        }.take(1).asSingle()
     }
     
     func flatMapIterable<Other>(_ selector: @escaping (Element) -> [Other]) -> Observable<Other> {

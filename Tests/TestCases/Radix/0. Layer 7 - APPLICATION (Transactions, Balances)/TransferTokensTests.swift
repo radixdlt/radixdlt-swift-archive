@@ -26,7 +26,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         aliceIdentity = AbstractIdentity(alias: "Alice")
         bobAccount = Account()
-        application = DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhost, identity: aliceIdentity)
+        application = DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobAccount)
     }

@@ -25,9 +25,12 @@ public extension FetchAtomsEpic {
         
         let fetch: Observable<NodeAction> = actions
             .ofType(FindANodeResultAction.self)
-            .filterMap {
-                guard let fetchAtomsRequest = $0.request as? FetchAtomsActionRequest else { return .ignore }
-                return RxSwiftExt.FilterMap<FetchAtomsActionRequest>.map(fetchAtomsRequest)
+//            .filterMap {
+//                guard let fetchAtomsRequest = $0.request as? FetchAtomsActionRequest else { return .ignore }
+//                return RxSwiftExt.FilterMap<FetchAtomsActionRequest>.map(fetchAtomsRequest)
+            .filter { $0.request is FetchAtomsActionRequest }
+            .map {
+               castOrKill(instance: $0.request, toType: FetchAtomsActionRequest.self) // TODO if this works, change to `filterMap`, do analogously in `SubmitAtomEpic`
             }.flatMap { [unowned self] (fetchAtomsActionRequest: FetchAtomsActionRequest) -> Observable<NodeAction> in
                 let node = fetchAtomsActionRequest.node
                 let uuid = fetchAtomsActionRequest.uuid

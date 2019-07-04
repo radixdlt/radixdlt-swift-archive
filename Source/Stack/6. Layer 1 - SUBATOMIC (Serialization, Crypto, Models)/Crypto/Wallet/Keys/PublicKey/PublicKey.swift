@@ -64,7 +64,7 @@ public extension PublicKey {
 // MARK: - Sharded
 public extension PublicKey {
     var shard: Shard {
-        return hashId.shard
+        return hashEUID.shard
     }
 }
 

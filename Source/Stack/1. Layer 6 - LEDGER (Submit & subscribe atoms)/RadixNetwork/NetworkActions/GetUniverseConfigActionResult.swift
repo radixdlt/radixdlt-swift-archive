@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct GetUniverseConfigActionResult: JsonRpcResultAction {
+public struct GetUniverseConfigActionResult: JsonRpcResultAction, RadixNetworkNodeAction {
     public let node: Node
     private let universeConfig: UniverseConfig
     

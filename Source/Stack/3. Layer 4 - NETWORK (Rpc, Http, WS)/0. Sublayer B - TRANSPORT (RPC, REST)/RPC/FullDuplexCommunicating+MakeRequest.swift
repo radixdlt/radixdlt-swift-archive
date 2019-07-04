@@ -36,7 +36,7 @@ extension RPCError: ErrorMappedFromRPCError {
 // MARK: - MakeRequest
 internal extension FullDuplexCommunicating {
 
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> Observable<ResultFromResponse> where ResultFromResponse: Decodable {
+    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> Single<ResultFromResponse> where ResultFromResponse: Decodable {
         return make(request: rootRequest, resoponseType: ResultFromResponse.self)
     }
     
@@ -56,12 +56,13 @@ internal extension FullDuplexCommunicating {
         return channel.responseForMessage(notification: notification, subscriberId: subscriberId)
     }
     
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest, resoponseType: ResultFromResponse.Type) -> Observable<ResultFromResponse> where ResultFromResponse: Decodable {
+    func make<ResultFromResponse>(request rootRequest: RPCRootRequest, resoponseType: ResultFromResponse.Type) -> Single<ResultFromResponse> where ResultFromResponse: Decodable {
         let noMapper: ((RPCError) -> RPCError)? = nil
         return make(request: rootRequest, resoponseType: resoponseType, errorMapper: noMapper)
     }
 
-    func make<ResultFromResponse, MapToError>(request rootRequest: RPCRootRequest, resoponseType: ResultFromResponse.Type, errorMapper: ((RPCError) -> MapToError)?) -> Observable<ResultFromResponse> where ResultFromResponse: Decodable, MapToError: ErrorMappedFromRPCError {
+    func make<ResultFromResponse, MapToError>(request rootRequest: RPCRootRequest, resoponseType: ResultFromResponse.Type, errorMapper: ((RPCError) -> MapToError)?) -> Single<ResultFromResponse> where ResultFromResponse: Decodable, MapToError: ErrorMappedFromRPCError {
+        
         return makeRequestMapToResponseOrError(request: rootRequest, resoponseType: resoponseType).map {
             do {
                 return try $0.get().model
@@ -76,14 +77,16 @@ internal extension FullDuplexCommunicating {
 
 private extension FullDuplexCommunicating {
     
-    func makeRequestMapToResponseOrError<Model>(request rootRequest: RPCRootRequest, resoponseType: Model.Type) -> Observable<RPCResult<Model>> where Model: Decodable {
+    func makeRequestMapToResponseOrError<Model>(request rootRequest: RPCRootRequest, resoponseType: Model.Type) -> Single<RPCResult<Model>> where Model: Decodable {
         
         let rpcRequest = RPCRequest(rootRequest: rootRequest)
         
         let message = rpcRequest.jsonString
         let requestId = rpcRequest.requestUuid
         
-        return channel.responseOrErrorForMessage(requestId: requestId)
+        print("❓ Making JSON RPC request with id: \(requestId), method: \(rpcRequest.rpcMethod), expected response type: \(type(of: Model.self))")
+        
+        return channel.responseOrErrorForMessage(requestId: requestId).take(1).asSingle()
             .do(onSubscribed: {
                 self.channel.sendMessage(message)
             })

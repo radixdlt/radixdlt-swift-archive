@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct AddNodeAction: NodeAction, Hashable {
+public struct AddNodeAction: RadixNetworkNodeAction, Hashable {
     public let node: Node
     public let nodeInfo: NodeInfo?
     

@@ -29,13 +29,15 @@ public extension RadixJsonRpcMethodEpic {
     func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
         return actions
             .ofType(Request.self)
+            .do(onNext: { log.debug("Request: \($0)") })
             .flatMapSingle { [unowned self] (rpcMethod: Request) -> Single<Result> in
-                self.waitForConnectionReturnWS(toNode: rpcMethod.node)
+                log.debug("Waiting for ws connection to node")
+                return self.waitForConnectionReturnWS(toNode: rpcMethod.node).debug()
                     .map { DefaultRPCClient(channel: $0) }
                     .flatMap { rpcClient -> Single<Result> in
                         return self.methodCall.apply(rpcClient, rpcMethod)
                     }
-            }.map { $0 }
+            }.map { $0 }.debug()
     }
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 
 /// Current state of nodes connected to
-public struct RadixNetworkState: Equatable {
+public struct RadixNetworkState: Equatable, CustomDebugStringConvertible {
     public let nodes: [Node: RadixNodeState]
 
     public init(nodes: [Node: RadixNodeState] = [:]) {
@@ -20,5 +20,18 @@ public struct RadixNetworkState: Equatable {
 public extension RadixNetworkState {
     init(node: Node, state: RadixNodeState) {
         self.init(nodes: [node: state])
+    }
+}
+
+// MARK: - CustomDebugStringConvertible
+public extension RadixNetworkState {
+    var debugDescription: String {
+        let mapDescription = nodes.map {
+            "\($0.key.debugDescription): \($0.value.debugDescriptionIncludeNode(false))"
+        }.joined(separator: ", ")
+        
+        return """
+            RadixNetworkState(\(mapDescription))
+        """
     }
 }

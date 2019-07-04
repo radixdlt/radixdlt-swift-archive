@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct GetNodeInfoActionResult: JsonRpcResultAction {
+public struct GetNodeInfoActionResult: JsonRpcResultAction, RadixNetworkNodeAction {
     public let node: Node
     private let nodeInfo: NodeInfo
     

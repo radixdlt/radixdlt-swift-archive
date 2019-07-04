@@ -8,7 +8,11 @@
 
 import Foundation
 
-public struct DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenActionToParticleGroupsMapper {}
+public final class DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenActionToParticleGroupsMapper {
+    deinit {
+        log.warning("🧨")
+    }
+}
 
 public extension CreateTokenActionToParticleGroupsMapper {
     func particleGroups(for action: CreateTokenAction) -> ParticleGroups {

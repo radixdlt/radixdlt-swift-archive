@@ -18,19 +18,21 @@ public struct NodeInfo:
 {
     // swiftlint:enable colon opening_brace
     
-    public let host: Host
     public let system: RadixSystem
+    public let host: Host?
     
-    public init(host: Host, system: RadixSystem) {
-        self.host = host
+    public init(system: RadixSystem, host: Host?) {
         self.system = system
+        self.host = host
     }
 }
 
 // MARK: - Equatable
 public extension NodeInfo {
     func hash(into hasher: inout Hasher) {
-        hasher.combine(host.domain)
+        if let host = host {
+            hasher.combine(host.domain)
+        }
         hasher.combine(system.shardSpace)
     }
 }
@@ -38,7 +40,15 @@ public extension NodeInfo {
 // MARK: - Equatable
 public extension NodeInfo {
     static func == (lhs: NodeInfo, rhs: NodeInfo) -> Bool {
-        return lhs.host.domain == rhs.host.domain && lhs.system.shardSpace == rhs.system.shardSpace
+        guard lhs.system.shardSpace == rhs.system.shardSpace else { return false }
+        
+        let maybeLhsHost = lhs.host
+        let maybeRhsHost = rhs.host
+        switch (maybeLhsHost, maybeRhsHost) {
+        case (.some(let lhsHost), .some(let rhsHost)): return lhsHost == rhsHost
+        case (.none, .none): return true
+        default: return false
+        }
     }
 }
 
@@ -57,9 +67,12 @@ public extension NodeInfo {
     }
     
     init(from decoder: Decoder) throws {
+        
+        print("📚 Node Info Decode START")
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.host = try container.decode(Host.self, forKey: .host)
         self.system = try container.decode(RadixSystem.self, forKey: .system)
+        print("📚 Node Info Decode DONE, initialized ✅")
     }
 }
 

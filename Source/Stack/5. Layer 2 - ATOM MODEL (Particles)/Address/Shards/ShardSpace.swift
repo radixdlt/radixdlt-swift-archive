@@ -13,6 +13,7 @@ import Foundation
 public struct ShardSpace:
     RadixCodable,
     Throwing,
+    CustomStringConvertible,
     Equatable,
     Hashable,
     Codable
@@ -22,7 +23,7 @@ public struct ShardSpace:
     public static let serializer = RadixModelType.shardSpace
     
     public let range: ShardRange
-    public let anchor: Shard
+    private let anchor: Shard /* not used? */
     
     public init(range: ShardRange, anchor: Shard) throws {
         if range.stride > ShardSpace.shardChunkRangeSpan {
@@ -35,16 +36,26 @@ public struct ShardSpace:
 }
 
 public extension ShardSpace {
-    func contains(shard: Shard) -> Bool {
-        return range.contains(shard)
+    func intersectsWithShard(_ shard: Shard) -> Bool {
+        let remainder = shard % ShardSpace.shardChunkRangeSpanHalf
+        return range.contains(remainder)
     }
     
-    func intersects(with shards: Shards) -> Bool {
+    func intersectsWithShards(_ shards: Shards) -> Bool {
         for shard in shards {
-            guard contains(shard: shard) else { continue }
+            guard intersectsWithShard(shard) else { continue }
             return true
         }
         return false
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension ShardSpace {
+    var description: String {
+        return """
+        ShardSpace: \(range)
+        """
     }
 }
 

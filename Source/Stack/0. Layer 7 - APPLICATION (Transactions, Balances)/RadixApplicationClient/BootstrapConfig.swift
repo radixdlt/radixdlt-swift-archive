@@ -9,14 +9,32 @@
 import Foundation
 import RxSwift
 
-public protocol BootstrapConfig {
+public protocol BootstrapConfig: CustomDebugStringConvertible {
     var config: UniverseConfig { get }
     var discoveryMode: DiscoveryMode { get }
 }
 
-public enum DiscoveryMode {
+public enum DiscoveryMode: CustomDebugStringConvertible {
     case byDiscoveryEpics(NonEmptyArray<RadixNetworkEpic>)
     case byInitialNetworkOfNodes(NonEmptySet<Node>)
+}
+
+// MARK: - CustomDebugStringConvertible
+public extension DiscoveryMode {
+    var debugDescription: String {
+        switch self {
+        case .byDiscoveryEpics(let epics):
+            return """
+            DiscoveryMode(epics (#\(epics.count)))
+            """
+            
+        case .byInitialNetworkOfNodes(let nodes):
+            let nodesString = nodes.map { $0.debugDescription }.joined(separator: ", ")
+            return """
+            DiscoveryMode(initial network of nodes: \(nodesString))
+            """
+        }
+    }
 }
 
 public extension DiscoveryMode {

@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public protocol TransferTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action == TransferTokenAction {}
 
 public extension TransferTokensActionToParticleGroupsMapper {

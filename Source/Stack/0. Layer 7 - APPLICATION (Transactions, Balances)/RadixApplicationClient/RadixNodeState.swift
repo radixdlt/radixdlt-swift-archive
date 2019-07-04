@@ -9,7 +9,7 @@
 import Foundation
 
 /// Immutable state at a certain point in time of a RadixNode (`Node`)
-public struct RadixNodeState: Equatable {
+public struct RadixNodeState: Equatable, CustomDebugStringConvertible {
     public let node: Node
     public let websocketStatus: WebSocketStatus
     public let universeConfig: UniverseConfig?
@@ -24,14 +24,26 @@ public struct RadixNodeState: Equatable {
 }
 
 public extension RadixNodeState {
+    func debugDescriptionIncludeNode(_ includeNode: Bool) -> String {
+        
+        return """
+        \(includeNode.ifTrue { "Node: \(node.debugDescription),\n" })
+        webSocketStatus: \(websocketStatus),
+        nodeInfo: \(nodeInfo.ifPresent(elseDefaultTo: "nil") { "\($0.shardSpace)" })
+        universeConfig: \(universeConfig.ifPresent(elseDefaultTo: "nil") { "\($0)" }),
+        """
+    }
+    
+    var debugDescription: String {
+        return debugDescriptionIncludeNode(true)
+    }
+}
+
+public extension RadixNodeState {
    
     var shardSpace: ShardSpace? {
         guard let nodeInfo = nodeInfo else { return nil }
         return nodeInfo.shardSpace
     }
-    
-//    static func == (lhs: RadixNodeState, rhs: RadixNodeState) -> Bool {
-//        return lhs.node == rhs.node && lhs.universeConfig == rhs.universeConfig
-//    }
 }
 

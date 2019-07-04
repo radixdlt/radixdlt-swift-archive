@@ -133,7 +133,7 @@ private extension TransferrableTokensParticle {
     }
 }
 
-typealias ParticleHashId = HashId
+typealias ParticleHashId = HashEUID
 
 //private struct TokenBalanceReferenceWithConsumables: TokenDefinitionReferencing {
 //
@@ -171,7 +171,7 @@ typealias ParticleHashId = HashId
 //                guard transferrableParticle.address == transferAction.sender else {
 //                    throw Error.wrongOwner(expected: transferAction.sender, butGot: transferrableParticle.address)
 //                }
-//                dictionary[transferrableParticle.hashId] = transferrableParticle
+//                dictionary[transferrableParticle.hashEUID] = transferrableParticle
 //            }
 //        }
 //

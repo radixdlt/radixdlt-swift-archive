@@ -11,21 +11,27 @@ import RxSwift
 import RxOptional
 
 // MARK: - Default Implementation
-public extension NodeInfoRequesting where Self: FullDuplexCommunicating {
-    func getInfo() -> Single<NodeInfo> {
-        return make(request: .getInfo).asSingle()
+public extension NodeNetworkInfoRequesting where Self: FullDuplexCommunicating {
+    func getNetworkInfo() -> Single<RadixSystem> {
+        return make(request: .getNetworkInfo)
     }
 }
 
+//public extension NodeInfoRequesting where Self: FullDuplexCommunicating {
+//    func getInfo() -> Single<RadixSystem> {
+//        return make(request: .getInfo)
+//    }
+//}
+
 public extension LivePeersRequesting where Self: FullDuplexCommunicating {
     func getLivePeers() -> Single<[NodeInfo]> {
-        return make(request: .getLivePeers).asSingle()
+        return make(request: .getLivePeers)
     }
 }
 
 public extension UniverseConfigRequesting where Self: FullDuplexCommunicating {
     func getUniverseConfig() -> Single<UniverseConfig> {
-        return make(request: .getUniverse).asSingle()
+        return make(request: .getUniverse)
     }
 }
 
@@ -37,7 +43,7 @@ public extension AtomStatusObservationRequesting where Self: FullDuplexCommunica
 
 public extension AtomStatusObservationCancelling where Self: FullDuplexCommunicating {
     func closeAtomStatusNotifications(subscriberId: SubscriberId) -> Completable {
-        implementMe()
+       return makeCompletable(request: .closeAtomStatusNotifications(subscriberId: subscriberId))
     }
 }
 
@@ -70,7 +76,7 @@ public extension AtomStatusObserving where Self: FullDuplexCommunicating {
 
 public extension AtomStatusChecking where Self: FullDuplexCommunicating {
     func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> Single<AtomStatus> {
-        return make(request: RPCRootRequest.getAtomStatus(atomIdentifier: atomIdentifier)).asSingle()
+        return make(request: RPCRootRequest.getAtomStatus(atomIdentifier: atomIdentifier))
     }
 }
 

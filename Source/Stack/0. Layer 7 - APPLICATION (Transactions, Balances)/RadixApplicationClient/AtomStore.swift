@@ -16,11 +16,11 @@ public struct AnyParticle: Hashable {
     
 //    public init<Concrete>(_ concrete: Concrete) where Concrete: ParticleConvertible {
 //        self._getParticle = { concrete }
-//        self._hashInto = { $0.combine(concrete.hashId) }
+//        self._hashInto = { $0.combine(concrete.hashEUID) }
 //    }
     public init(someParticle: ParticleConvertible) {
         self._getParticle = { someParticle }
-        self._hashInto = { $0.combine(someParticle.hashId) }
+        self._hashInto = { $0.combine(someParticle.hashEUID) }
     }
 }
 public extension AnyParticle {
@@ -30,7 +30,7 @@ public extension AnyParticle {
 }
 public extension AnyParticle {
     static func == (lhs: AnyParticle, rhs: AnyParticle) -> Bool {
-        return lhs.getParticle().hashId == rhs.getParticle().hashId
+        return lhs.getParticle().hashEUID == rhs.getParticle().hashEUID
     }
     
     func hash(into hasher: inout Hasher) {
