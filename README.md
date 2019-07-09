@@ -57,7 +57,7 @@ Here are some example usages. The code below is an excerpt of an existing the un
 let alice = RadixIdentity()
 
 // Instantiate a RadixApplicationClient connecting to a `localhost` in this example, with Alice identity
-let application = DefaultRadixApplicationClient(node: .localhost, identity: alice)
+let application = RadixApplicationClient(node: .localhost, identity: alice)
 
 // Alice defines her own token
 let createToken = CreateTokenAction(

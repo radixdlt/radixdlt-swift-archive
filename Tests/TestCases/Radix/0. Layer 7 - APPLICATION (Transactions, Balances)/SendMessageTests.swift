@@ -12,68 +12,6 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-//private let magic: Magic = 63799298
-//
-//private extension RadixIdentity {
-//    init() {
-//        self.init(magic: magic)
-//    }
-//
-//    init(privateKey: PrivateKey) {
-//        self.init(private: privateKey, magic: magic)
-//    }
-//}
-
-
-extension AbstractIdentity {
-    convenience init(alias: String? = nil) {
-        try! self.init(accounts: [Account()], alias: alias)
-    }
-    
-    convenience init(privateKey: PrivateKey, alias: String? = nil) {
-        try! self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
-    }
-}
-
-extension Account {
-    init() {
-        let keyPair = KeyPair()
-        self = .privateKeyPresent(keyPair)
-    }
-    
-    init(privateKey: PrivateKey) {
-        let keyPair = KeyPair(private: privateKey)
-        self = .privateKeyPresent(keyPair)
-    }
-}
-
-extension ResultOfUserAction {
-    func blockingWasSuccessfull(
-        timeout: TimeInterval? = .default,
-        failOnTimeout: Bool = true,
-        failOnErrors: Bool = true,
-        function: String = #function,
-        file: String = #file,
-        line: Int = #line
-    ) -> Bool {
-        
-        return self.toCompletable().blockingWasSuccessfull(
-            timeout: timeout,
-            failOnTimeout: failOnTimeout,
-            failOnErrors: failOnErrors,
-            function: function, file: file, line: line
-        )
-        
-    }
-    
-    func blockingAssertThrows<SpecificError>(
-        error expectedError: SpecificError,
-        timeout: TimeInterval? = .default
-        ) where SpecificError: Swift.Error, SpecificError: Equatable {
-        return self.toCompletable().blockingAssertThrows(error: expectedError, timeout: timeout)
-    }
-}
-
 class SendMessageTests: LocalhostNodeTest {
     
     private let aliceIdentity = AbstractIdentity(privateKey: 1, alias: "Alice")
@@ -81,26 +19,13 @@ class SendMessageTests: LocalhostNodeTest {
     private let claraAccount = Account(privateKey: 3)
     private let dianaAccount = Account(privateKey: 4)
     
-//    private lazy var application = DefaultRadixApplicationClient(node: .localhost, identity: alice, magic: magic)
-    private lazy var application = DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+    private lazy var application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
     
-    private lazy var alice: Address = {
-        return application.addressOfActiveAccount
-    }()
+    private lazy var alice = application.addressOfActiveAccount
+    private lazy var bob = application.addressOf(account: bobAccount)
+    private lazy var clara = application.addressOf(account: claraAccount)
+    private lazy var diana = application.addressOf(account: dianaAccount)
     
-    private lazy var bob: Address = {
-        return application.addressOf(account: bobAccount)
-    }()
-    
-    private lazy var clara: Address = {
-        return application.addressOf(account: claraAccount)
-    }()
-    
-    private lazy var diana: Address = {
-        return application.addressOf(account: dianaAccount)
-    }()
-    
-    let disposeBag = DisposeBag()
 
     func testSendNonEmptyPlainText() {
         // GIVEN: A RadidxApplicationClient
@@ -154,7 +79,9 @@ class SendMessageTests: LocalhostNodeTest {
     }
     
     func testSendToThirdParties() {
-  
+        // GIVEN: A RadidxApplicationClient and identities Alice, Bob and Clara
+        XCTAssertAllInequal(alice, bob, clara)
+        
         // WHEN: I send a non empty message with encryption
         let result = application.sendEncryptedMessage(
             "Hey Bob! Clara and Diana can also decrypt this encrypted message",
@@ -184,5 +111,54 @@ extension RPCError {
             case .unrecognizedJson(let unrecognizeJsonString): return unrecognizeJsonString
             default: return nil
         }
+    }
+}
+
+extension AbstractIdentity {
+    convenience init(alias: String? = nil) {
+        try! self.init(accounts: [Account()], alias: alias)
+    }
+    
+    convenience init(privateKey: PrivateKey, alias: String? = nil) {
+        try! self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
+    }
+}
+
+extension Account {
+    init() {
+        let keyPair = KeyPair()
+        self = .privateKeyPresent(keyPair)
+    }
+    
+    init(privateKey: PrivateKey) {
+        let keyPair = KeyPair(private: privateKey)
+        self = .privateKeyPresent(keyPair)
+    }
+}
+
+extension ResultOfUserAction {
+    func blockingWasSuccessfull(
+        timeout: TimeInterval? = .default,
+        failOnTimeout: Bool = true,
+        failOnErrors: Bool = true,
+        function: String = #function,
+        file: String = #file,
+        line: Int = #line
+        ) -> Bool {
+        
+        return self.toCompletable().blockingWasSuccessfull(
+            timeout: timeout,
+            failOnTimeout: failOnTimeout,
+            failOnErrors: failOnErrors,
+            function: function, file: file, line: line
+        )
+        
+    }
+    
+    func blockingAssertThrows<SpecificError>(
+        error expectedError: SpecificError,
+        timeout: TimeInterval? = .default
+        ) where SpecificError: Swift.Error, SpecificError: Equatable {
+        return self.toCompletable().blockingAssertThrows(error: expectedError, timeout: timeout)
     }
 }

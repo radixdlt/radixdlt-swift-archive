@@ -189,7 +189,6 @@
 		E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB76225F227800340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift */; };
 		E689DB7D225F61BF00340CF3 /* DefaultHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB7C225F61BF00340CF3 /* DefaultHTTPClient.swift */; };
 		E689DB83225F655100340CF3 /* RadixApplicationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB82225F655100340CF3 /* RadixApplicationClient.swift */; };
-		E689DB85225F656400340CF3 /* DefaultRadixApplicationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB84225F656400340CF3 /* DefaultRadixApplicationClient.swift */; };
 		E689DB92225F7FB100340CF3 /* NodeConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB91225F7FB100340CF3 /* NodeConnection.swift */; };
 		E689DB94225F7FC800340CF3 /* NodeInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB93225F7FC800340CF3 /* NodeInteraction.swift */; };
 		E689DBA2225F87F200340CF3 /* NodeInfoRequesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBA1225F87F200340CF3 /* NodeInfoRequesting.swift */; };
@@ -295,6 +294,10 @@
 		E6ABA76D22C3593B00536DC7 /* InMemoryAtomStoreReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA76C22C3593B00536DC7 /* InMemoryAtomStoreReducer.swift */; };
 		E6ABA76F22C3594C00536DC7 /* RadixNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA76E22C3594C00536DC7 /* RadixNetwork.swift */; };
 		E6ABA77322C3596D00536DC7 /* FetchAtomsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA77222C3596D00536DC7 /* FetchAtomsAction.swift */; };
+		E6CABA0722D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0622D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift */; };
+		E6CABA0922D4BC6300B6D00C /* SigningError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0822D4BC6300B6D00C /* SigningError.swift */; };
+		E6CABA0B22D4BC7300B6D00C /* BuildAtomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0A22D4BC7300B6D00C /* BuildAtomError.swift */; };
+		E6CABA0D22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0C22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift */; };
 		E6CB4B2822C501A800B7382A /* MagicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CB4B2722C501A800B7382A /* MagicTests.swift */; };
 		E6CB4B2B22C50FEC00B7382A /* SubmitAtomEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CB4B2A22C50FEC00B7382A /* SubmitAtomEpic.swift */; };
 		E6CB4B2D22C5100800B7382A /* RadixNetworkEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CB4B2C22C5100800B7382A /* RadixNetworkEpic.swift */; };
@@ -760,7 +763,6 @@
 		E689DB76225F227800340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PrivateKey+ExpressilbleByIntegerLiteral.swift"; sourceTree = "<group>"; };
 		E689DB7C225F61BF00340CF3 /* DefaultHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultHTTPClient.swift; sourceTree = "<group>"; };
 		E689DB82225F655100340CF3 /* RadixApplicationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixApplicationClient.swift; sourceTree = "<group>"; };
-		E689DB84225F656400340CF3 /* DefaultRadixApplicationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRadixApplicationClient.swift; sourceTree = "<group>"; };
 		E689DB91225F7FB100340CF3 /* NodeConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeConnection.swift; sourceTree = "<group>"; };
 		E689DB93225F7FC800340CF3 /* NodeInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInteraction.swift; sourceTree = "<group>"; };
 		E689DBA1225F87F200340CF3 /* NodeInfoRequesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInfoRequesting.swift; sourceTree = "<group>"; };
@@ -864,6 +866,10 @@
 		E6ABA76C22C3593B00536DC7 /* InMemoryAtomStoreReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryAtomStoreReducer.swift; sourceTree = "<group>"; };
 		E6ABA76E22C3594C00536DC7 /* RadixNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixNetwork.swift; sourceTree = "<group>"; };
 		E6ABA77222C3596D00536DC7 /* FetchAtomsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAtomsAction.swift; sourceTree = "<group>"; };
+		E6CABA0622D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RadixApplicationClient+Transaction.swift"; sourceTree = "<group>"; };
+		E6CABA0822D4BC6300B6D00C /* SigningError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningError.swift; sourceTree = "<group>"; };
+		E6CABA0A22D4BC7300B6D00C /* BuildAtomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildAtomError.swift; sourceTree = "<group>"; };
+		E6CABA0C22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RadixApplicationClient+Array+Mapper+Reducers.swift"; sourceTree = "<group>"; };
 		E6CB4B2722C501A800B7382A /* MagicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicTests.swift; sourceTree = "<group>"; };
 		E6CB4B2A22C50FEC00B7382A /* SubmitAtomEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAtomEpic.swift; sourceTree = "<group>"; };
 		E6CB4B2C22C5100800B7382A /* RadixNetworkEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixNetworkEpic.swift; sourceTree = "<group>"; };
@@ -1734,9 +1740,13 @@
 			isa = PBXGroup;
 			children = (
 				E689DB82225F655100340CF3 /* RadixApplicationClient.swift */,
+				E6CABA0622D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift */,
+				E6CABA0C22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift */,
 				E626E1E522B3FB530046D2AC /* TokenBalance.swift */,
+				E6CABA0822D4BC6300B6D00C /* SigningError.swift */,
 				E6DC276422C4C7650049BB3C /* TokenReferenceBalance.swift */,
 				E626E1E922B3FBBE0046D2AC /* TokenBalances.swift */,
+				E6CABA0A22D4BC7300B6D00C /* BuildAtomError.swift */,
 				E626E1ED22B3FDA70046D2AC /* StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent.swift */,
 				E626E1D522B3F9430046D2AC /* NodeFinding.swift */,
 				E606FC4422CB55C300A7E52E /* NodeFindingStrategy.swift */,
@@ -1755,7 +1765,6 @@
 				E626E20322B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift */,
 				E626E1EB22B3FD390046D2AC /* SubmitAtomError.swift */,
 				E626E20F22B4F5760046D2AC /* AtomUpdateSoft.swift */,
-				E689DB84225F656400340CF3 /* DefaultRadixApplicationClient.swift */,
 				E615C51A22B7AF0800604E90 /* Magical.swift */,
 				E626E20B22B41CD50046D2AC /* BurnTokensActionMapper.swift */,
 				E615C51222B790F100604E90 /* ParticleReducer.swift */,
@@ -3774,7 +3783,6 @@
 				E696AAD8226DEB8A00D19ED6 /* Magic.swift in Sources */,
 				E68BD811229EAC1200FCE4D3 /* ShardSpace.swift in Sources */,
 				E6E279462271CD1C0067D46E /* RadixModelType.swift in Sources */,
-				E689DB85225F656400340CF3 /* DefaultRadixApplicationClient.swift in Sources */,
 				E6E2797B2271CD1C0067D46E /* TokenPermission.swift in Sources */,
 				E6E279612271CD1C0067D46E /* DSONEncodable.swift in Sources */,
 				E606FC5322CB78B900A7E52E /* Function.swift in Sources */,
@@ -3816,6 +3824,7 @@
 				E6474AEF22674B17009C4FDC /* AtomWithFee.swift in Sources */,
 				E6F548562277458000EE6311 /* Amount+AmountAndSign.swift in Sources */,
 				E626E1F222B3FFF60046D2AC /* BaseAtomToExecutedActionsMapper.swift in Sources */,
+				E6CABA0922D4BC6300B6D00C /* SigningError.swift in Sources */,
 				E6474AE422663E2F009C4FDC /* RPCMethod.swift in Sources */,
 				E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */,
 				E626E1E222B3FA2A0046D2AC /* Account.swift in Sources */,
@@ -3944,6 +3953,7 @@
 				E6E279572271CD1C0067D46E /* AnyEncodableKeyValuesProcessing.swift in Sources */,
 				E6A508AD224E713F00128123 /* TokenDefinitionParticle+Identifiable.swift in Sources */,
 				E6E2793F2271CD1C0067D46E /* Sha256Hasher.swift in Sources */,
+				E6CABA0D22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift in Sources */,
 				E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */,
 				E615C51922B791FA00604E90 /* SomeParticleReducer.swift in Sources */,
 				E6A7479D22CCC72700DACEA0 /* Optional+IfPresentMap.swift in Sources */,
@@ -3982,6 +3992,7 @@
 				E6A6430B2244D38800CD4BFC /* BitcoinKit+ECMethods.swift in Sources */,
 				E6E279592271CD1C0067D46E /* CBORDataConvertible.swift in Sources */,
 				E64BFF8D2268985800501726 /* ResourceIdentifierParticle.swift in Sources */,
+				E6CABA0B22D4BC7300B6D00C /* BuildAtomError.swift in Sources */,
 				E637564C22B7E31700C4F9A2 /* NodeAction.swift in Sources */,
 				E615C51322B790F100604E90 /* ParticleReducer.swift in Sources */,
 				E6E2795D2271CD1C0067D46E /* AnyEncodableKeyValueListConvertible.swift in Sources */,
@@ -3992,6 +4003,7 @@
 				E606FC4B22CB5E2200A7E52E /* WebSocketsEpic.swift in Sources */,
 				E6E279672271CD1C0067D46E /* BigInteger+StringConversion.swift in Sources */,
 				E6E279522271CD1C0067D46E /* ParticleType.swift in Sources */,
+				E6CABA0722D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift in Sources */,
 				E6550EEA224BBDC900160267 /* NodeDiscoveryHardCoded.swift in Sources */,
 				E626E1EC22B3FD390046D2AC /* SubmitAtomError.swift in Sources */,
 				E6E2795B2271CD1C0067D46E /* DSONPrefixedDataConvertible.swift in Sources */,

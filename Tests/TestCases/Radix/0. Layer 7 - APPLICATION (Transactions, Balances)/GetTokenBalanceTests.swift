@@ -102,10 +102,10 @@ class GetTokenBalanceTests: LocalhostNodeTest {
 }
 
 //private extension GetTokenBalanceTests {
-//    func applicationWithMockedSubscriber(identity: RadixIdentity = RadixIdentity(), bufferSize: Int = 1) -> (subject: ReplaySubject<[AtomObservation]>, app: DefaultRadixApplicationClient) {
+//    func applicationWithMockedSubscriber(identity: RadixIdentity = RadixIdentity(), bufferSize: Int = 1) -> (subject: ReplaySubject<[AtomObservation]>, app: RadixApplicationClient) {
 //        let replaySubject = ReplaySubject<[AtomObservation]>.create(bufferSize: bufferSize)
 //
-//        let application = DefaultRadixApplicationClient(
+//        let application = RadixApplicationClient(
 //            nodeSubscriber: MockedNodeSubscribing(replaySubject: replaySubject),
 //            nodeUnsubscriber: MockedNodeUnsubscribing(),
 //            nodeSubmitter: MockedNodeSubmitting(),

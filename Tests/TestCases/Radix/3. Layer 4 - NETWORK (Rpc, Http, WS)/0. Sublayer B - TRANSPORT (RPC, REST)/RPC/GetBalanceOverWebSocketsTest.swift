@@ -24,7 +24,7 @@ class GetBalanceOverWebSocketsTest: LocalhostNodeTest {
     }
     
     func testGetBalanceOverWS() {
-        let application = DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhost, identity: AbstractIdentity())
+        let application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhost, identity: AbstractIdentity())
         guard let balance = application.balanceOfNativeTokensOrZero(for: address).blockingTakeFirst() else { return }
         
         XCTAssertEqual(balance.amount.description, "1000000000000000000000000000")

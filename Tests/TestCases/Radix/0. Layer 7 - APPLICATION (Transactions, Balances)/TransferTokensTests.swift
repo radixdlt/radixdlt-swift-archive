@@ -16,7 +16,7 @@ class TransferTokensTests: LocalhostNodeTest {
     
     private var aliceIdentity: AbstractIdentity!
     private var bobAccount: Account!
-    private var application: DefaultRadixApplicationClient!
+    private var application: RadixApplicationClient!
     private var alice: Address!
     private var bob: Address!
     
@@ -26,7 +26,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         aliceIdentity = AbstractIdentity(alias: "Alice")
         bobAccount = Account()
-        application = DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobAccount)
     }
@@ -45,18 +45,20 @@ class TransferTokensTests: LocalhostNodeTest {
  
         // WHEN: Alice transfer tokens she owns, to Bob
         let createToken = createTokenAction(address: alice, supply: .fixed(to: 30))
-
         XCTAssertTrue(
             application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
-        let rri = createToken.identifier
         
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri))
-
-        // THEN: I see that the transfer actions completes successfully
-        XCTAssertTrue(
-            transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
-        )
+        let rri = createToken.identifier
+        guard let myTokenDef = application.observeTokenDefinition(identifier: rri).blockingTakeFirst(timeout: 2) else { return }
+        XCTAssertEqual(myTokenDef.symbol, "AC")
+        
+//        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri))
+//
+//        // THEN: I see that the transfer actions completes successfully
+//        XCTAssertTrue(
+//            transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
+//        )
     }
     
     func testTokenNotOwned() {

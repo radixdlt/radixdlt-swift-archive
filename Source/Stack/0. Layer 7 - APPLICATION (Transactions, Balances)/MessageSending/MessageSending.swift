@@ -14,7 +14,7 @@ import Foundation
 //}
 
 //
-//public extension DefaultRadixApplicationClient {
+//public extension RadixApplicationClient {
 //    
 //    private func doSendMessage(_ message: SendMessageAction, cc thirdPartyReaders: [Ownable] = []) -> Completable {
 //        let actionToParticleGroupsMapper = DefaultSendMessageActionToParticleGroupsMapper(
