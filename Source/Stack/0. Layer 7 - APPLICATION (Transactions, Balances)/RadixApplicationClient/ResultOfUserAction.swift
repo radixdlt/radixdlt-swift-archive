@@ -8,24 +8,27 @@
 
 import Foundation
 import RxSwift
+import RxSwiftExt
 
 public struct ResultOfUserAction {
     private let updates: ConnectableObservable<SubmitAtomAction>
     private let completable: Completable
+    
+    /// Ugly hack to retain this observable
     private let cachedAtom: Single<SignedAtom>
+    
     public init(updates: Observable<SubmitAtomAction>, cachedAtom: Single<SignedAtom>) {
         self.cachedAtom = cachedAtom
         self.updates = updates.replayAll()
         
-        self.completable = updates.ofType(SubmitAtomAction.self)
-            .ofType(SubmitAtomActionStatus.self)
+        self.completable = updates.ofType(SubmitAtomActionStatus.self)
             .lastOrError()
             .flatMapCompletable { submitAtomActionStatus in
                 let statusNotification = submitAtomActionStatus.statusNotification
                 switch statusNotification {
                 case .stored: return Completable.completed()
                 case .notStored(let reason):
-//                    let submitAtomError: SubmitAtomError = reason.error ?? SubmitAtomError(rpcError: RPCError.unrecognizedJson(jsonString: dataAsJsonString))
+                    log.warning("Not stored, reason: \(reason)")
                     return Completable.error(Error.failedToSubmitAtom(reason.error))
                 }
             }

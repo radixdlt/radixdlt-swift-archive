@@ -60,3 +60,24 @@ public extension RPCError {
         }
     }
 }
+
+// MARK: - Equatable
+public extension RPCError {
+    static func == (lhs: RPCError, rhs: RPCError) -> Bool {
+        return RPCError.compare(lhs: lhs, rhs: rhs)
+    }
+    
+    static func compare(lhs: RPCError, rhs: RPCError, unrecognizedJsonComparer: (String, String) -> Bool = { _, _ in return true}) -> Bool {
+        switch (lhs, rhs) {
+        case (.requestError(let lhsRequestError), .requestError(let rhsRequestError)):
+            return lhsRequestError == rhsRequestError
+        case (.failedToDecodeResponse(let lhsDecodingError), .failedToDecodeResponse(let rhsDecodingError)):
+            return lhsDecodingError == rhsDecodingError
+        case (.metaError(let lhsDecodingError), .metaError(let rhsDecodingError)):
+            return lhsDecodingError == rhsDecodingError
+        case (.unrecognizedJson(let lhsJsonString), .unrecognizedJson(let rhsJsonString)):
+            return unrecognizedJsonComparer(lhsJsonString, rhsJsonString)
+        default: return false
+        }
+    }
+}

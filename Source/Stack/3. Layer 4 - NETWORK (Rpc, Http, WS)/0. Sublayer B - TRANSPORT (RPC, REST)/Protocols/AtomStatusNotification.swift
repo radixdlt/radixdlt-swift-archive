@@ -53,16 +53,16 @@ public extension AtomStatusNotification {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
         let atomStatus = try container.decode(AtomStatus.self, forKey: .atomStatus)
-        
-        let anyDecodable = try container.decode(AnyDecodable.self, forKey: .dataAsJsonString)
-        let dataAsJsonString = String(describing: anyDecodable.value)
-        
+
         switch atomStatus {
         case .stored:
             self = .stored
         default:
+            
+            let anyDecodable = try container.decode(AnyDecodable.self, forKey: .dataAsJsonString)
+            let dataAsJsonString = String(describing: anyDecodable.value)
+            
             let reasonForNotStored = AtomNotStoredReason(atomStatus: atomStatus, dataAsJsonString: dataAsJsonString)
             self = .notStored(reason: reasonForNotStored)
         }

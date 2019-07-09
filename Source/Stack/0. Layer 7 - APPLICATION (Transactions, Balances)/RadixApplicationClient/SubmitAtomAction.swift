@@ -16,7 +16,7 @@ public protocol SubmitAtomAction: NodeAction, CustomDebugStringConvertible {
 public extension SubmitAtomAction {
     var debugDescription: String {
         return """
-        SubmitAtomActionCompleted(atomWithAid: \(atom.identifier().hex.suffix(4)), node: \(node), uuid: \(uuid.uuidString.suffix(4)))
+        \(type(of: self))(atomWithAid: \(atom.identifier().hex.suffix(4)), node: \(node), uuid: \(uuid.uuidString.suffix(4)))
         """
     }
 }

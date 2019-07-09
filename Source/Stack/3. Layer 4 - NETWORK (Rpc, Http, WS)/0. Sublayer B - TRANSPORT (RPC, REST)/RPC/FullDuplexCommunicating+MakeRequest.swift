@@ -88,7 +88,16 @@ internal extension DefaultRPCClient {
         return make(request: rootRequest, responseType: responseType, errorMapper: noMapper)
     }
 
-    func make<ResultFromResponse, MapToError>(request rootRequest: RPCRootRequest, responseType: ResultFromResponse.Type, errorMapper: ((RPCError) -> MapToError)?) -> Single<ResultFromResponse> where ResultFromResponse: Decodable, MapToError: ErrorMappedFromRPCError {
+    func make<ResultFromResponse, MapToError>(
+        request rootRequest: RPCRootRequest,
+        responseType: ResultFromResponse.Type,
+        errorMapper: ((RPCError) -> MapToError)?
+    ) -> Single<ResultFromResponse>
+        where
+        ResultFromResponse: Decodable,
+        MapToError: ErrorMappedFromRPCError
+        // swiftlint:disable:next opening_brace
+    {
         
         return makeRequestMapToResponseOrError(request: rootRequest, responseType: responseType).map {
             do {

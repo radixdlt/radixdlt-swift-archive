@@ -105,54 +105,12 @@ class SendMessageTests: LocalhostNodeTest {
     func testSendNonEmptyPlainText() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message without encryption
-        let result = application.sendPlainTextMessage("Hey Bob, this is plain text", to: bob) //.sendMessage("Hey Bob, this is plain text", to: bob, encryption: .plainText)
-//        let request = application.sendMessage("Hey Bob, this is plain text", to: bob, encryption: .plainText)
-        
-        print("🙋🏻‍♀️ Alice: \(alice.stringValue) sends message to 🙋🏻‍♂️ Bob: \(bob.stringValue)")
-        
-//        result.toObservable().subscribe {
-//            print("🙋🏻‍♀️📧🙋🏻‍♂️ sendTextMessage update event: \($0)")
-//        }.disposed(by: disposeBag)
-//        result.connect().disposed(by: disposeBag)
-        
-        XCTAssertTrue(result.blockUntilComplete(timeout: 15))
-        
-//        XCTAssertTrue(
-//            // THEN: I see that action completes successfully
-////            result.blockUntilComplete(timeout: 15)
-//            result.blockingWasSuccessfull(timeout: 15)
-//        )
+        let result = application.sendPlainTextMessage("Hey Bob, this is plain text", to: bob)
+
+        // THEN: I see that action completes successfully
+        XCTAssertTrue(result.blockUntilComplete(timeout: .enoughForPOW))
+
     }
-    
-    
-//    func testFindCompatiblePrivateKeysForLocalnetNodesRegardingShardSpace() {
-//        func doTest(shardRange rangeToUseToCreateAShardSpace: ShardRange) {
-//            let irrelavantAnchor: Shard = 1337
-//            let shardSpace = try! ShardSpace(range: rangeToUseToCreateAShardSpace, anchor: irrelavantAnchor)
-//            func doTest(privateKey: PrivateKey) -> PrivateKey? {
-//                let publicKey = PublicKey(private: privateKey)
-//                let shardFromKey = publicKey.shard
-//                guard shardSpace.intersectsWithShard(shardFromKey) else {
-//                    print("Range: \(rangeToUseToCreateAShardSpace) does NOT contain shard \(shardFromKey)")
-//                    return nil
-//                }
-//                return privateKey
-//            }
-//            var foundAny = false
-//            for privateKeyScalar in 1..<10 {
-//                guard doTest(privateKey: try! PrivateKey(scalar: PrivateKey.Scalar(privateKeyScalar))) != nil else { continue }
-//                print("PrivateKey(\(privateKeyScalar)) intersects with shardRange")
-//                foundAny = true
-//            }
-//            if !foundAny {
-//                print("None of the PrivateKets provided intersected with the shard range")
-//            }
-//        }
-//
-//        doTest(
-//            shardRange: try! ShardRange(lower: -8796093022208, upper: 8796093022207)
-//        )
-//    }
     
     func testSendNonEmptyEncrypted() {
         // GIVEN: A RadidxApplicationClient
@@ -187,12 +145,12 @@ class SendMessageTests: LocalhostNodeTest {
         )
  
         // THEN: I see that action fails with a validation error
+        result.toCompletable().blockingAssertThrowsRPCErrorUnrecognizedJson(
+            timeout: .enoughForPOW,
+            expectedErrorType: ResultOfUserAction.Error.self,
+            containingString: "message must be signed by sender: \(clara.address.base58String)"
+        ) { $0.unrecognizedJsonStringFromError }
         
-        //            error: NodeInteractionError.atomNotStored(state: .validationError),
-        result.blockingAssertThrows(
-            error: SubmitAtomError(rpcError: RPCError.requestErrorCode(RPCErrorCode.invalidRequest)),
-            timeout: .enoughForPOW
-        )
     }
     
     func testSendToThirdParties() {
@@ -211,17 +169,20 @@ class SendMessageTests: LocalhostNodeTest {
     }
 }
 
-//extension SendMessageTests {
-    // This ought to work in Radix Core, but does not, awaiting fix: https://radixdlt.atlassian.net/browse/RLAU-1342
-    //    func testSendEmptyPlainText() {
-    //        // GIVEN: A RadidxApplicationClient
-    //        // WHEN: I send an empty message without encryption
-    //        let request = application.sendMessage("", to: bob, encrypt: false)
-    //
-    //        XCTAssertTrue(
-    //            // THEN: I see that action completes successfully
-    //            request.blockingWasSuccessfull(timeout: .enoughForPOW)
-    //        )
-    //    }
-//}
+extension ResultOfUserAction.Error {
+    var unrecognizedJsonStringFromError: String? {
+        switch self {
+        case .failedToSubmitAtom(let submitAtomError):
+            return submitAtomError.rpcError.unrecognizedJsonStringFromError
+        }
+    }
+}
 
+extension RPCError {
+    var unrecognizedJsonStringFromError: String? {
+        switch self {
+            case .unrecognizedJson(let unrecognizeJsonString): return unrecognizeJsonString
+            default: return nil
+        }
+    }
+}
