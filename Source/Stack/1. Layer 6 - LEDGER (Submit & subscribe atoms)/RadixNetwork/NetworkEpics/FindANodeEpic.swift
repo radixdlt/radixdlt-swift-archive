@@ -29,7 +29,7 @@ public extension FindANodeEpic {
                 log.verbose("🚀 findANodeRequestAction: \(findANodeRequestAction)")
                 let connectedNodes: Observable<[Node]> = networkState.map { state in
                     getConnectedNodes(shards: findANodeRequestAction.shards, state: state)
-                }.debug()
+                }
 //                .replay(1)
 //                .autoConnect(numberOfSubscribers: 2)
                 
@@ -43,7 +43,7 @@ public extension FindANodeEpic {
                 let findConnectionAction: Observable<NodeAction> = connectedNodes
                     .filter { $0.isEmpty }
                     .firstOrError()
-                    .ignoreElements()
+                    .asCompletable()
                     .andThen(
                         Observable<Int>.timer(RxTimeInterval.seconds(0), period: RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
                             .withLatestFrom(networkState) { $1 }
@@ -123,7 +123,6 @@ private func getConnectedNodes(shards: Shards, state: RadixNetworkState) -> [Nod
         .filter { $0.value.websocketStatus == .ready }
         .filter { $0.value.shardSpace?.intersectsWithShards(shards) ?? false }
         .map {
-            print("🚀 FOUND COMPATIBLE NODE!!")
             return $0.key
             
         }

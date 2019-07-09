@@ -12,6 +12,8 @@ import Foundation
 
 public struct StringValue:
     PrefixedJsonCodable,
+    CBORStringConvertible,
+    DSONEncodable,
     StringConvertible,
     StringRepresentable {
     // swiftlint:enable colon

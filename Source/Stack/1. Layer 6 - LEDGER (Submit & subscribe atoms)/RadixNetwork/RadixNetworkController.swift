@@ -34,7 +34,6 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
         reducers: [SomeReducer<NodeAction>]
     ) {
         
-        log.debug("Creating (Default)RadixNetworkController with #\(epics.count) epics and #\(reducers.count) reducers")
         let networkStateSubject = BehaviorSubject(value: initialNetworkState)
         let nodeActionSubject = PublishSubject<NodeAction>()
         

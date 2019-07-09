@@ -47,7 +47,7 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
         self.messages = receivedMessagesSubject.asObservable()
         self.state = stateSubject.asObservable()
         
-        self.state.subscribe(onNext: { log.debug("WS status -> `\($0)`") }).disposed(by: bag)
+        self.state.subscribe(onNext: { log.verbose("WS status -> `\($0)`") }).disposed(by: bag)
     }
     
     private func createSocket(shouldConnect: Bool) -> WebSocket {
@@ -74,7 +74,7 @@ public extension WebSocketToNode {
     }
     
     func waitForConnection() -> Completable {
-        return state.filter { $0.isReady }.take(1).asSingle().asCompletable().debug()
+        return state.filter { $0.isReady }.take(1).asSingle().asCompletable()
     }
     
     func sendMessage(_ message: String) {
@@ -82,8 +82,8 @@ public extension WebSocketToNode {
             queuedOutgoingMessages.append(message)
             return
         }
-        print("Sending message of length: #\(message.count) chars")
-        print("Sending message:\n<\(message)>")
+        log.verbose("Sending message of length: #\(message.count) chars")
+        log.verbose("Sending message:\n<\(message)>")
         socket?.write(string: message)
     }
     
@@ -169,12 +169,11 @@ public extension WebSocketToNode {
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if text.contains("Radix.welcome") {
-            log.debug("Received welcome message, which we ignore, proceed sending queued")
+            log.verbose("Received welcome message, which we ignore, proceed sending queued")
             stateSubject.onNext(.ready)
             sendQueued()
         } else {
-            log.debug("Received response over websockets (text of #\(text.count) chars)")
-            print("Response just received over websocket:\n<\(text)>")
+            log.verbose("Received response over websockets (text of #\(text.count) chars)")
             receivedMessagesSubject.onNext(text)
         }
     }

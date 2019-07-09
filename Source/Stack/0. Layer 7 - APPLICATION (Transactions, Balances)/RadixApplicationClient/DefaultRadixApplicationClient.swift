@@ -47,15 +47,12 @@ public final class DefaultRadixApplicationClient: RadixApplicationClient {
         self.statefulActionToParticleGroupsMappers = statefulActionToParticleGroupsMappers
         self.activeAccount = identity.selectAccount(accountSelection)
         self.feeMapper = feeMapper
-        
-        log.verbose("(Default)RadixApplicationClient created")
     }
 }
 
 public extension DefaultRadixApplicationClient {
     
     convenience init(bootstrapConfig: BootstrapConfig, identity: AbstractIdentity) {
-        log.debug("Creating (Default)RadixApplicationClient via bootstrapConfig: \(bootstrapConfig.debugDescription), identity: \(identity)")
         let universe = DefaultRadixUniverse(bootstrapConfig: bootstrapConfig)
         self.init(identity: identity, universe: universe)
     }
@@ -88,7 +85,7 @@ private extension DefaultRadixApplicationClient {
 
 // MARK: - Public Implementation Of protocol methods in protocol declaration header
 public extension DefaultRadixApplicationClient {
-    func applicationState<State>(ofType stateType: State.Type, at address: Address) -> Observable<State> where State: ApplicationState {
+    func observeState<State>(ofType stateType: State.Type, at address: Address) -> Observable<State> where State: ApplicationState {
         let reducer = particlesToStateReducer(for: stateType)
         return atomStore.onSync(address: address).mapToVoid().map { [unowned self] in
             self.atomStore.upParticles(at: address, stagedUuid: nil)
@@ -96,7 +93,7 @@ public extension DefaultRadixApplicationClient {
         }
     }
     
-    func actions<ExecutedAction>(ofType actionType: ExecutedAction.Type, at address: Address) -> Observable<ExecutedAction> {
+    func observeActions<ExecutedAction>(ofType actionType: ExecutedAction.Type, at address: Address) -> Observable<ExecutedAction> {
         implementMe()
     }
     
@@ -203,9 +200,15 @@ private extension DefaultRadixApplicationClient {
     }
     
     func createAtomSubmission(atom atomSingle: Single<SignedAtom>, completeOnAtomStoredOnly: Bool, originNode: Node?) -> ResultOfUserAction {
-        log.verbose("createAtomSubmission start")
-        let updates = atomSingle.flatMapObservable { [unowned self] (atom: SignedAtom) -> Observable<SubmitAtomAction> in
-            log.verbose("createAtomSubmission flatMapObservable")
+        log.debug("🇸🇪")
+        let cachedAtom = atomSingle.cache()
+        let updates = cachedAtom.do(
+                onSuccess: { log.debug("⚛️⭐️ success: \($0)") },
+                onError: { log.debug("⚛️💩 error: \($0)") },
+                onSubscribed: { log.debug("⚛️🎧 subscribed") },
+                onDispose: { log.debug("⚛️🗑 dispose") }
+            )
+            .flatMapObservable { [unowned self] (atom: SignedAtom) -> Observable<SubmitAtomAction> in
             let initialAction: SubmitAtomAction
             
             if let originNode = originNode {
@@ -216,16 +219,19 @@ private extension DefaultRadixApplicationClient {
             
             let status: Observable<SubmitAtomAction> = self.universe.networkController
                 .getActions()
+                .do(onNext: { log.verbose("🚀 next: \($0)") })
                 .ofType(SubmitAtomAction.self)
+                .do(onNext: { log.verbose("🚀⭐️ next: \($0)") })
                 .filter { $0.uuid == initialAction.uuid }
-                .do(onNext: { log.verbose("SubmitAtomAction: \($0)") })
+                .do(onNext: { log.verbose("🚀⭐️🎉 next: \($0)") })
                 .takeWhile { !$0.isCompleted }
-
+                .do(onNext: { log.verbose("🚀⭐️🎉✅ next: \($0)") })
+            
             self.universe.networkController.dispatch(nodeAction: initialAction)
             return status
-        }.share(replay: 1, scope: .whileConnected)
+        }.share(replay: 1, scope: .forever)
         
-        let result = ResultOfUserAction(updates: updates)
+        let result = ResultOfUserAction(updates: updates, cachedAtom: cachedAtom)
         result.connect().disposed(by: disposeBag)
         return result
         
@@ -248,15 +254,6 @@ private extension DefaultRadixApplicationClient {
         }
         // swiftlint:disable:next force_try
         return try! SomeParticleReducer<State>(any: reducer)
-    }
-}
-
-public extension ObservableType {
-    func ofType<T>(_ type: T.Type) -> Observable<T> {
-        return self.asObservable().map { (element: Element) -> T? in
-            guard let casted = element as? T else { return nil }
-            return casted
-        }.ifNilReturnEmpty()
     }
 }
 

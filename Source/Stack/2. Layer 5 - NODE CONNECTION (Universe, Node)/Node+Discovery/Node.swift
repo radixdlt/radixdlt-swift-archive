@@ -31,12 +31,11 @@ public struct Node:
     }
 }
 
-
 // MARK: - CustomDebugStringConvertible
 public extension Node {
     var debugDescription: String {
         return """
-        Node(ip: \(websocketsUrl.domain), port: \(websocketsUrl.port)
+        Node(\(websocketsUrl.domain))
         """
     }
 }
@@ -54,7 +53,6 @@ public extension Node {
 ////            httpUrl: httpUrl
 //        )
 //    }
-
     
     init(domain: String, port: Port, isUsingSSL: Bool) throws {
         let host = try Host(domain: domain, port: port)

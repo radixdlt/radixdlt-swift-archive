@@ -14,7 +14,6 @@ public struct BurnTokensAction: UserAction {
     public let amount: PositiveAmount
 }
 
-
 public extension BurnTokensAction {
     var nameOfAction: UserActionName { return .burnTokens }
 }

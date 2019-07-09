@@ -48,7 +48,6 @@ public struct UniverseConfig:
         planck: Planck,
         hashIdFromApi: HashEUID? = nil
     ) throws {
-        print("👽 Universe config designated INIT")
         self.magic = magic
         self.port = port
         self.name = name
@@ -61,15 +60,13 @@ public struct UniverseConfig:
         self.hashIdFromApi = hashIdFromApi
         
         try UniverseConfig.nativeTokenDefinitionFrom(genesis: genesis)
-        print("👽 Universe config designated INIT DONE")
         
-        // TODO verify hashEUID match of UniverseConfig
-//        guard
-//            let hashIdFromApi = hashIdFromApi,
-//            hashIdFromApi == self.hashEUID
-//        else {
-//            throw Error.hashIdFromApiDoesNotMatchCalculated
-//        }
+        guard
+            let hashIdFromApi = hashIdFromApi,
+            hashIdFromApi == self.hashEUID
+        else {
+            throw Error.hashIdFromApiDoesNotMatchCalculated
+        }
     }
 }
 
@@ -85,7 +82,6 @@ public extension UniverseConfig {
     }
     
     init(from decoder: Decoder) throws {
-        print("👽 Universe config Decode START")
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let magic = try container.decode(Magic.self, forKey: .magic)
         let port = try container.decode(Port.self, forKey: .port)
@@ -102,7 +98,6 @@ public extension UniverseConfig {
         // TESTING ONLY
         let hashIdFromApi = try container.decodeIfPresent(HashEUID.self, forKey: .hashIdFromApi)
         
-        print("👽 Universe config Decode calling init")
         try self.init(
             magic: magic,
             port: port,

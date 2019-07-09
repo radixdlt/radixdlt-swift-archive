@@ -61,7 +61,6 @@ public extension AtomStatusNotification {
         
         switch atomStatus {
         case .stored:
-            log.warning("Ignoring data of AtomStatusNotificatoin: \(dataAsJsonString)")
             self = .stored
         default:
             let reasonForNotStored = AtomNotStoredReason(atomStatus: atomStatus, dataAsJsonString: dataAsJsonString)

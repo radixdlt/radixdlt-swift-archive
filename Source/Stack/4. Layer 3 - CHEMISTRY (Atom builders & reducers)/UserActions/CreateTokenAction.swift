@@ -17,6 +17,7 @@ public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
     public let granularity: Granularity
     public let initialSupply: NonNegativeAmount
     public let supplyType: SupplyType
+    public let iconUrl: URL?
     
     public init(
         creator: Address,
@@ -24,7 +25,8 @@ public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
         symbol: Symbol,
         description: Description,
         supply initialSupplyType: InitialSupply,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        iconUrl: URL? = nil
     ) throws {
 
         switch initialSupplyType {
@@ -45,6 +47,7 @@ public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
         self.symbol = symbol
         self.description = description
         self.granularity = granularity
+        self.iconUrl = iconUrl
     }
 }
 

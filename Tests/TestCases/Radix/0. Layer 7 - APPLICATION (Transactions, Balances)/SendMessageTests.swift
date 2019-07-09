@@ -110,12 +110,12 @@ class SendMessageTests: LocalhostNodeTest {
         
         print("🙋🏻‍♀️ Alice: \(alice.stringValue) sends message to 🙋🏻‍♂️ Bob: \(bob.stringValue)")
         
-        result.toObservable().subscribe {
-            print("⚛️⚛️⚛️ send msg result update: \($0)")
-        }.disposed(by: disposeBag)
-        result.connect().disposed(by: disposeBag)
+//        result.toObservable().subscribe {
+//            print("🙋🏻‍♀️📧🙋🏻‍♂️ sendTextMessage update event: \($0)")
+//        }.disposed(by: disposeBag)
+//        result.connect().disposed(by: disposeBag)
         
-        XCTAssertTrue(result.blockUntilComplete(timeout: 50))
+        XCTAssertTrue(result.blockUntilComplete(timeout: 15))
         
 //        XCTAssertTrue(
 //            // THEN: I see that action completes successfully

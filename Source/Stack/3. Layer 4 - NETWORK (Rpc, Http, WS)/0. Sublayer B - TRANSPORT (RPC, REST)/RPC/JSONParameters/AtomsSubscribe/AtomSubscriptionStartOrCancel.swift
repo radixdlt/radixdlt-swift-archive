@@ -8,6 +8,6 @@
 
 import Foundation
 
-public struct AtomSubscriptionStartOrCancel: Decodable {
+public struct RPCSubscriptionStartOrCancel: Decodable {
     public let success: Bool
 }

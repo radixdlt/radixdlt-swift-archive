@@ -11,7 +11,6 @@ import Foundation
 internal struct RPCResponseResultWithRequestId<Result>: Decodable, RPCResposeResultConvertible where Result: Decodable {
     let result: Result
     private let id: String
-    var model: Result { return result }
 }
 
 // MARK: - PotentiallyRequestIdentifiable
@@ -23,4 +22,16 @@ extension RPCResponseResultWithRequestId {
     var requestUuid: String {
         return id
     }
+}
+
+internal extension RPCResponseResultWithRequestId {
+    var model: Result { return result }
+}
+
+internal extension RPCResponseResultWithRequestId {
+    typealias CodingKeys = RPCResponseResultWithRequestIdCodingKeys
+}
+
+internal enum RPCResponseResultWithRequestIdCodingKeys: String, CodingKey {
+    case result, id
 }

@@ -50,7 +50,6 @@ public extension ShardRange {
     
     init(lower: Bound, upper: Bound) throws {
         guard lower < upper else {
-            print("🧨 bad range: lower: \(lower), upper: \(upper)")
             throw Error.upperMustBeGreaterThanLower
         }
         let actuallyCheckedbounds = (lower, upper)

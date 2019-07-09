@@ -22,7 +22,7 @@ public protocol ParticleConvertible: RadixHashable, DSONEncodable, Codable, Dest
 
 public extension DestinationsOwner where Self: Accountable {
     func destinations() -> [PublicKeyHashEUID] {
-        return self.addresses.map { $0.publicKey.hashEUID }
+        return addresses.elements.map { $0.publicKey.hashEUID }.sorted()
     }
 }
 

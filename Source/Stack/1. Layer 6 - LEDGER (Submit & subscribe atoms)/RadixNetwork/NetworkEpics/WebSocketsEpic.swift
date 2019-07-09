@@ -27,7 +27,7 @@ public extension NetworkWebsocketEpic {
     
     func waitForConnectionReturnWS(toNode node: Node) -> Single<WebSocketToNode> {
         let websocketToNode = webSockets.webSocket(to: node, shouldConnect: true)
-        return websocketToNode.waitForConnection().andThen(Single.just(websocketToNode).debug()).debug()
+        return websocketToNode.waitForConnection().andThen(Single.just(websocketToNode))
     }
     
     func close(webSocketToNode: WebSocketToNode, useDelay: Bool = false) {

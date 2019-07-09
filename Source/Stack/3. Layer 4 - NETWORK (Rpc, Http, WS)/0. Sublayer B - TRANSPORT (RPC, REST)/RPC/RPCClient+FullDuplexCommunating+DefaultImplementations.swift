@@ -10,96 +10,69 @@ import Foundation
 import RxSwift
 import RxOptional
 
-// MARK: - Default Implementation
-public extension NodeNetworkInfoRequesting where Self: FullDuplexCommunicating {
-    func getNetworkInfo() -> Single<RadixSystem> {
-        return make(request: .getNetworkInfo)
-    }
-}
-
-//public extension NodeInfoRequesting where Self: FullDuplexCommunicating {
-//    func getInfo() -> Single<RadixSystem> {
-//        return make(request: .getInfo)
-//    }
-//}
-
-public extension LivePeersRequesting where Self: FullDuplexCommunicating {
-    func getLivePeers() -> Single<[NodeInfo]> {
-        return make(request: .getLivePeers)
-    }
-}
-
-public extension UniverseConfigRequesting where Self: FullDuplexCommunicating {
-    func getUniverseConfig() -> Single<UniverseConfig> {
-        return make(request: .getUniverse)
-    }
-}
-
-public extension AtomStatusObservationRequesting where Self: FullDuplexCommunicating {
-    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> Completable {
-        return makeCompletable(request: .getAtomStatusNotifications(atomIdentifier: atomIdentifier, subscriberId: subscriberId))
-    }
-}
-
-public extension AtomStatusObservationCancelling where Self: FullDuplexCommunicating {
-    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> Completable {
-       return makeCompletable(request: .closeAtomStatusNotifications(subscriberId: subscriberId))
-    }
-}
-
-public extension AtomsByAddressSubscribing where Self: FullDuplexCommunicating {
-    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable {
-        return make(request: .subscribe(to: address, subscriberId: subscriberId), resoponseType: AtomSubscription.self)
-            .map { subscription -> AtomSubscription in
-                if let startSubscription = subscription.startOrCancel, !startSubscription.success {
-                    throw RPCClientError.failedToStartAtomSubscription
-                }
-                return subscription
-            }.ignoreElements()
-    }
-    
+// MARK: - Observing RPC Responses
+public extension DefaultRPCClient {
     func observeAtoms(subscriberId: SubscriberId) -> Observable<AtomObservation> {
-        return observe(notification: RPCNotification.subscribeUpdate, subscriberId: subscriberId, responseType: AtomSubscription.self)
-            .map { $0.update }.filterNil()
+        return observe(notification: .subscribeUpdate, subscriberId: subscriberId, responseType: AtomSubscriptionUpdate.self)
             .map { $0.toAtomObservation() }
             .flatMap { (atomObservations: [AtomObservation]) -> Observable<AtomObservation> in
                 return Observable.from(atomObservations)
-            }
+        }
     }
-}
-
-public extension AtomStatusObserving where Self: FullDuplexCommunicating {
+    
     func observeAtomStatusNotifications(subscriberId: SubscriberId) -> Observable<AtomStatusNotification> {
-        return self.observe(notification: RPCNotification.observeAtomStatusNotifications, subscriberId: subscriberId, responseType: AtomStatusNotification.self)
+        return self.observe(notification: .observeAtomStatusNotifications, subscriberId: subscriberId, responseType: AtomStatusNotification.self)
     }
 }
 
-public extension AtomStatusChecking where Self: FullDuplexCommunicating {
+// MARK: - Make RPC Requests
+
+// MARK: - Single's
+public extension DefaultRPCClient {
+    func getNetworkInfo() -> Single<RadixSystem> {
+        return make(request: .getNetworkInfo)
+    }
+    
+    func getLivePeers() -> Single<[NodeInfo]> {
+        return make(request: .getLivePeers)
+    }
+
+    func getUniverseConfig() -> Single<UniverseConfig> {
+        return make(request: .getUniverse)
+    }
+    
     func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> Single<AtomStatus> {
-        return make(request: RPCRootRequest.getAtomStatus(atomIdentifier: atomIdentifier))
+        return make(request: .getAtomStatus(atomIdentifier: atomIdentifier))
     }
 }
 
-public extension AtomSubscriptionCancelling where Self: FullDuplexCommunicating {
-    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable {
-        return make(request: .unsubscribe(subscriberId: subscriberId))
-            .map { (subscription: AtomSubscription) -> AtomSubscription in
-                guard let cancellation = subscription.startOrCancel, cancellation.success else {
-                    throw RPCClientError.failedToCancelAtomSubscription
-                }
-                
-                return subscription
-        }.ignoreElements()
-    }
-}
-
-public enum RPCClientError: Swift.Error, Equatable {
-    case failedToCancelAtomSubscription
-    case failedToStartAtomSubscription
-}
-
-public extension AtomSubmitting where Self: FullDuplexCommunicating {
+// MARK: - Completable
+public extension DefaultRPCClient {
     func pushAtom(_ atom: SignedAtom) -> Completable {
         return makeCompletableMapError(request: .submitAtom(atom: atom)) { SubmitAtomError(rpcError: $0) }
     }
 }
+
+// MARK: - Send Request for STARTING Subscribing To Some Notification
+public extension DefaultRPCClient {
+    
+    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable {
+        return sendStartSubscription(request: .subscribe(to: address, subscriberId: subscriberId))
+    }
+    
+    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> Completable {
+        return sendStartSubscription(request: .getAtomStatusNotifications(atomIdentifier: atomIdentifier, subscriberId: subscriberId))
+    }
+}
+
+// MARK: - Send Request for CLOSING Subscribing To Some Notification
+public extension DefaultRPCClient {
+    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> Completable {
+        return sendCancelSubscription(request: .closeAtomStatusNotifications(subscriberId: subscriberId))
+    }
+    
+    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable {
+        return sendCancelSubscription(request: .unsubscribe(subscriberId: subscriberId))
+    }
+}
+

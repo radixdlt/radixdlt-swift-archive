@@ -37,12 +37,12 @@ public protocol RadixApplicationClient {
     /// Returns a never ending hot observable of the state of a given address.
     /// If the given address is not currently being pulled this will pull for atoms in that
     /// address automatically until the observable is disposed.
-    func applicationState<State>(ofType stateType: State.Type, at address: Address) -> Observable<State> where State: ApplicationState
+    func observeState<State>(ofType stateType: State.Type, at address: Address) -> Observable<State> where State: ApplicationState
     
     /// Returns a never ending hot observable of the actions performed at a given address.
     /// If the given address is not currently being pulled this will pull for atoms in that
     /// address automatically until the observable is disposed.
-    func actions<ExecutedAction>(ofType actionType: ExecutedAction.Type, at address: Address) -> Observable<ExecutedAction>
+    func observeActions<ExecutedAction>(ofType actionType: ExecutedAction.Type, at address: Address) -> Observable<ExecutedAction>
     
     func execute(
         actions: [UserAction],
@@ -51,29 +51,29 @@ public protocol RadixApplicationClient {
 }
 
 internal extension RadixApplicationClient {
-    func tokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
-        return applicationState(ofType: TokenDefinitionsState.self, at: address)
+    func observeTokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
+        return observeState(ofType: TokenDefinitionsState.self, at: address)
     }
     
-    func balanceReferences(at address: Address) -> Observable<TokenBalanceReferencesState> {
-        return applicationState(ofType: TokenBalanceReferencesState.self, at: address)
+    func observeBalanceReferences(at address: Address) -> Observable<TokenBalanceReferencesState> {
+        return observeState(ofType: TokenBalanceReferencesState.self, at: address)
     }
 }
 
 // MARK: - Public Methods using applicationState
 public extension RadixApplicationClient {
     
-    func tokenDefinition(identifier: ResourceIdentifier) -> Observable<TokenDefinition> {
+    func observeTokenDefinition(identifier: ResourceIdentifier) -> Observable<TokenDefinition> {
         let address = identifier.address
-        return tokenDefinitions(at: address).map {
+        return observeTokenDefinitions(at: address).map {
             $0.tokenDefinition(identifier: identifier)
         }.ifNilReturnEmpty()
     }
     
-    func balances(at address: Address) -> Observable<TokenBalances> {
+    func observeBalances(at address: Address) -> Observable<TokenBalances> {
         return Observable.combineLatest(
-            self.balanceReferences(at: address),
-            self.tokenDefinitions(at: address)
+            self.observeBalanceReferences(at: address),
+            self.observeTokenDefinitions(at: address)
         ) {
             try TokenBalances(
                 balanceReferencesState: $0,
@@ -83,19 +83,19 @@ public extension RadixApplicationClient {
     }
     
     // MARK: - AccountBalance
-    func balance(of tokenIdentifier: ResourceIdentifier, for address: Address) -> Observable<TokenBalance?> {
-        return balances(at: address).map {
+    func observeBalance(of tokenIdentifier: ResourceIdentifier, for address: Address) -> Observable<TokenBalance?> {
+        return observeBalances(at: address).map {
             $0.balance(of: tokenIdentifier)
         }
     }
     
     // MARK: - History of Executed Actions
-    func tokenTransfers(toOrFrom address: Address) -> Observable<TransferTokenAction> {
-        return actions(ofType: TransferTokenAction.self, at: address)
+    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokenAction> {
+        return observeActions(ofType: TransferTokenAction.self, at: address)
     }
     
-    func messages(toOrFrom address: Address) -> Observable<DecryptedMessage> {
-        return actions(ofType: DecryptedMessage.self, at: address)
+    func observeMessages(toOrFrom address: Address) -> Observable<DecryptedMessage> {
+        return observeActions(ofType: DecryptedMessage.self, at: address)
     }
 }
 
@@ -138,7 +138,8 @@ public extension RadixApplicationClient {
         encoding: String.Encoding = .default,
         to recipient: Ownable,
         ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-        ) -> ResultOfUserAction {
+    ) -> ResultOfUserAction {
+        
         let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
         return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
@@ -185,36 +186,36 @@ public extension RadixApplicationClient {
     //    var myAddress: Address { return identity.address }
     
     /// Returns a hot observable of the latest state of token definitions at the user's address
-    func myTokenDefinitions() -> Observable<TokenDefinitionsState> {
+    func observeMyTokenDefinitions() -> Observable<TokenDefinitionsState> {
 //        guard let myAddress = addressOfActiveAccount else { return Observable.empty() }
-        return tokenDefinitions(at: addressOfActiveAccount)
+        return observeTokenDefinitions(at: addressOfActiveAccount)
     }
     
-    func myTokenTransfers() -> Observable<TransferTokenAction> {
+    func observeMyTokenTransfers() -> Observable<TransferTokenAction> {
 //        guard let myAddress = addressOfActiveAccount else { return Observable.empty() }
-        return tokenTransfers(toOrFrom: addressOfActiveAccount)
+        return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
     }
     
-    func myBalances() -> Observable<TokenBalances> {
-        return balances(at: addressOfActiveAccount)
+    func observeMyBalances() -> Observable<TokenBalances> {
+        return observeBalances(at: addressOfActiveAccount)
     }
     
-    func myBalance(of tokenIdentifier: ResourceIdentifier) -> Observable<TokenBalance?> {
-        return balance(of: tokenIdentifier, for: addressOfActiveAccount)
+    func observeMyBalance(of tokenIdentifier: ResourceIdentifier) -> Observable<TokenBalance?> {
+        return observeBalance(of: tokenIdentifier, for: addressOfActiveAccount)
     }
     
-    func myBalanceOfNativeTokens() -> Observable<TokenBalance?> {
-        return myBalance(of: nativeTokenIdentifier)
+    func observeMyBalanceOfNativeTokens() -> Observable<TokenBalance?> {
+        return observeMyBalance(of: nativeTokenIdentifier)
     }
     
-    func myBalanceOfNativeTokensOrZero() -> Observable<TokenBalance> {
-        return myBalanceOfNativeTokens()
+    func observeMyBalanceOfNativeTokensOrZero() -> Observable<TokenBalance> {
+        return observeMyBalanceOfNativeTokens()
             .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
     }
     
-    func myMessages() -> Observable<DecryptedMessage> {
+    func observeMyMessages() -> Observable<DecryptedMessage> {
 //        guard let myAddress = addressOfActiveAccount else { return Observable.empty() }
-        return messages(toOrFrom: addressOfActiveAccount)
+        return observeMessages(toOrFrom: addressOfActiveAccount)
     }
     
     func pull() -> Disposable {
@@ -226,7 +227,7 @@ public extension RadixApplicationClient {
 public extension RadixApplicationClient {
     
     func balanceOfNativeTokensOrZero(for address: Address) -> Observable<TokenBalance> {
-        return balance(of: nativeTokenIdentifier, for: address)
+        return observeBalance(of: nativeTokenIdentifier, for: address)
             .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: address))
     }
     
@@ -280,8 +281,6 @@ public extension RadixApplicationClient {
             supply: initialSupplyType,
             granularity: granularity
         )
-        
-        print("Woho creating token...?")
         
         return self.create(
             token: createTokenAction,

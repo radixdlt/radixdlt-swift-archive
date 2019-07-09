@@ -31,3 +31,11 @@ public extension PotentiallySubscriptionIdentifiable {
 extension RPCResponseLookingLikeRequest: PotentiallySubscriptionIdentifiable where Params: PotentiallySubscriptionIdentifiable {
       public var subscriberIdIfPresent: SubscriberId? { return params.subscriberIdIfPresent }
 }
+
+public extension RPCResponseLookingLikeRequest {
+    typealias CodingKeys = RPCResponseLookingLikeRequestCodingKeys
+}
+
+public enum RPCResponseLookingLikeRequestCodingKeys: String, CodingKey {
+    case params, method
+}

@@ -16,6 +16,13 @@ public extension StringInitializable {
     init(unvalidated value: ValidationValue) throws {
         try self.init(string: value)
     }
+    
+    init?(string: String?) throws {
+        guard let string = string else {
+            return nil
+        }
+        try self.init(string: string)
+    }
 }
 
 // MARK: - ExpressibleByStringLiteral

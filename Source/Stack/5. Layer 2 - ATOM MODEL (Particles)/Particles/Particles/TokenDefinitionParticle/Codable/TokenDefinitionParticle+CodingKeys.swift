@@ -12,6 +12,6 @@ public extension TokenDefinitionParticle {
     enum CodingKeys: String, CodingKey {
         case serializer, version, destinations
         
-        case symbol, name, description, address, granularity, permissions, icon
+        case symbol, name, description, address, granularity, permissions, iconUrl
     }
 }

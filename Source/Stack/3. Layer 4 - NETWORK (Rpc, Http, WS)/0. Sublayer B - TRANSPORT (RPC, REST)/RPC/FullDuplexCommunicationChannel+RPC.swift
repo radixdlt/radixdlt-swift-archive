@@ -19,132 +19,70 @@ extension FullDuplexCommunicationChannel {
     }
     
     func responseOrErrorForMessage<Model>(requestId: String) -> Observable<RPCResult<Model>> where Model: Decodable {
-        return resultForMessage(requestId: requestId)
+        return resultForMessage(parseMode: .responseOnRequest(withId: requestId))
     }
     
-    func responseForMessage<Model>(notification: RPCNotification, subscriberId: SubscriberId) -> Observable<Model> where Model: Decodable {
+    func observeNotification<Model>(_ notification: RPCNotification, subscriberId: SubscriberId) -> Observable<Model> where Model: Decodable {
         
-        return resultForMessage(subscriberId: subscriberId, notification: notification).map {
+        return resultForMessage(parseMode: .parseAsNotification(notification, subscriberId: subscriberId)).map {
             try $0.get().model
         }
     }
 }
 
+private enum ParseJsonRpcResponseMode {
+    case parseAsNotification(RPCNotification, subscriberId: SubscriberId)
+    case responseOnRequest(withId: String)
+}
+
+public enum RPCNotificationError: Swift.Error, Equatable {
+    case failedToStartObservingNotification(RPCNotification, subscriberId: SubscriberId)
+}
+
 private extension FullDuplexCommunicationChannel {
+
+    // swiftlint:disable:next function_body_length
     func resultForMessage<Model>(
-        requestId: String? = nil,
-        subscriberId: SubscriberId? = nil,
-        notification: RPCNotification? = nil
+        parseMode: ParseJsonRpcResponseMode
     ) -> Observable<RPCResult<Model>> where Model: Decodable {
-        
-        return messagesDecoded(filterOnRequestId: requestId)
-            .filter(requestId: requestId, subscriberId: subscriberId, notification: notification)
-    }
-    
-    func messagesDecoded<Model>(filterOnRequestId: String?) -> Observable<RPCResult<Model>> where Model: Decodable {
+
         return messages
             .map { $0.toData() }
-            .filterMap {
-                guard let requestIdToFilterOn = filterOnRequestId else { return .map($0) }
-                guard let jsonObj = try? JSONSerialization.jsonObject(with: $0, options: []) as? JSON,
-                    let requestIdInResponse = jsonObj["id"] as? String else { return .map($0) }
-                guard requestIdInResponse == requestIdToFilterOn else {
-                    print("🍀 found requestIdInResponse: \(requestIdInResponse), matches: FALSE -> ignore")
-                    return .ignore
+            .filter {
+                guard
+                    let jsonObj = try? JSONSerialization.jsonObject(with: $0, options: []) as? JSON
+                    else {
+                       incorrectImplementation("not json!")
                 }
-                print("🍀 found requestIdInResponse: \(requestIdInResponse), matches: TRUE => parse into \(RPCResult<Model>.self)")
-                return .map($0)
+                
+                switch parseMode {
+                case .parseAsNotification(let expectedNotification, let expectedSubscriberId):
+                    guard
+                        let notificationMethodFromResponseAsString = jsonObj[RPCResponseLookingLikeRequestCodingKeys.method.rawValue] as? String,
+                        let notificationMethodFromRespons = RPCNotification(rawValue: notificationMethodFromResponseAsString),
+                        notificationMethodFromRespons == expectedNotification,
+                        let subscriberIdWrapperJson = jsonObj[RPCResponseLookingLikeRequestCodingKeys.params.rawValue] as? JSON,
+                        let subscriberIdFromResponseAsString = subscriberIdWrapperJson["subscriberId"] as? String,
+                        case let subscriberIdFromRespons = SubscriberId(validated: subscriberIdFromResponseAsString),
+                        subscriberIdFromRespons == expectedSubscriberId
+                    else {
+                        return false
+                    }
+                    return true
+                    
+                case .responseOnRequest(let rpcRequestId):
+                    guard
+                        let requestIdFromResponse = jsonObj[RPCResponseResultWithRequestIdCodingKeys.id.rawValue] as? String,
+                        requestIdFromResponse == rpcRequestId
+                        else {
+                            return false
+                            
+                    }
+                    return true
+                }
             }
-            .map { (data: Data) -> RPCResult<Model> in
-                // swiftlint:disable all
-                let jsonObj = try! JSONSerialization.jsonObject(with: data, options: []) as! JSON
-                // swiftlint:enable all
-                print("🇸🇪 filterOnRequestId: \(filterOnRequestId), json: \(jsonObj)")
-                return try JSONDecoder().decode(RPCResult<Model>.self, from: data)
-            }
+            .map { try JSONDecoder().decode(RPCResult<Model>.self, from: $0) }
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .subscribeOn(MainScheduler.instance)
     }
 }
-
-//extension Swift.Result: BaseRPCResposeResult & PotentiallyRequestIdentifiable & PotentiallySubscriptionIdentifiable where Success: BaseRPCResposeResult & PotentiallyRequestIdentifiable & PotentiallySubscriptionIdentifiable {}
-
-extension RPCResult: BaseRPCResposeResult where Success: BaseRPCResposeResult {
-//    public var requestIdIfPresent: String? {
-//        switch self {
-//        case .success(let success):
-//            
-//            return success.requestIdIfPresent
-//        case .failure: return nil
-//        }
-//    }
-//    
-//    public var subscriberIdIfPresent: SubscriberId? {
-//        switch self {
-//        case .success(let success): return success.subscriberIdIfPresent
-//        case .failure: return nil
-//        }
-//    }
-}
-
-private extension ObservableType where Element: BaseRPCResposeResult {
-    func filter(
-        requestId: String? = nil,
-        subscriberId: SubscriberId? = nil,
-        notification: RPCNotification? = nil
-    ) -> Observable<Element> {
-        
-        return self.asObservable().filter { element in
-            if
-                let requestId = requestId,
-                let identifiableRequestResponse = element as? PotentiallyRequestIdentifiable,
-                let elementRequestId = identifiableRequestResponse.requestIdIfPresent
-            {
-                guard elementRequestId == requestId else {
-                    return false
-                }
-            }
-            
-            if
-                let subscriberId = subscriberId,
-                let subscribedRequestResponse = element as? PotentiallySubscriptionIdentifiable,
-                let elementSubscriptionId = subscribedRequestResponse.subscriberIdIfPresent
-            {
-                guard elementSubscriptionId == subscriberId else {
-                    return false
-                }
-            }
-            
-            if
-                let notification = notification,
-                let notificationResponse = element as? RPCNotificationResponseConvertible
-            {
-                guard notificationResponse.method == notification else {
-                    return false
-                }
-            }
-            
-            return true
-        }
-    }
-}
-
-//extension ObservableType where Element: RPCSubscriptionResponseConvertible {
-//    
-//    
-//    func filterOnSubscriberId(_ subscriberId: SubscriberId) -> Observable<Element> {
-//        return asObservable()
-//            .filter { $0.subscriberId == subscriberId }
-//    }
-//}
-//
-//extension ObservableType where Element: RPCSubscriptionResponseConvertible & RPCNotificationResponseConvertible {
-//    
-//    
-//    func filterOnSubscriberId(_ subscriberId: SubscriberId, andNotification notificationMethod: RPCNotification) -> Observable<Element> {
-//        return filterOnSubscriberId(subscriberId)
-//            .filter { $0.method == notificationMethod }
-//    }
-//}
-//
-//

@@ -12,8 +12,9 @@ import RxSwift
 public struct ResultOfUserAction {
     private let updates: ConnectableObservable<SubmitAtomAction>
     private let completable: Completable
-    public init(updates: Observable<SubmitAtomAction>) {
-        
+    private let cachedAtom: Single<SignedAtom>
+    public init(updates: Observable<SubmitAtomAction>, cachedAtom: Single<SignedAtom>) {
+        self.cachedAtom = cachedAtom
         self.updates = updates.replayAll()
         
         self.completable = updates.ofType(SubmitAtomAction.self)

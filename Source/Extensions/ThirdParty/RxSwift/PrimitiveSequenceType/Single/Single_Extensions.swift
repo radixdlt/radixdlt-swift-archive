@@ -15,6 +15,10 @@ extension PrimitiveSequenceType where Self: ObservableConvertibleType, Self.Trai
         return self.asObservable().flatMap(selector)
     }
     
+    func cache() -> Single<Element> {
+        return self.asObservable().cache().asSingle()
+    }
+        
     func flatMapCompletable(_ selector: @escaping (Element) -> Completable) -> Completable {
         return self
             .asObservable()

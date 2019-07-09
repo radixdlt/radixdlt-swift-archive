@@ -18,6 +18,7 @@ public struct EUID:
     CBORDataConvertible,
     ExactLengthSpecifying,
     Hashable,
+    Comparable,
     CustomStringConvertible
 {
     
@@ -53,6 +54,16 @@ public extension EUID {
         }
         
         try self.init(value: value)
+    }
+}
+
+// MARK: - Comparable
+public extension EUID {
+    static func < (lhs: EUID, rhs: EUID) -> Bool {
+        return lhs.value < rhs.value
+    }
+    static func > (lhs: EUID, rhs: EUID) -> Bool {
+        return lhs.value > rhs.value
     }
 }
 

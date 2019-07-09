@@ -8,9 +8,17 @@
 
 import Foundation
 
-public protocol SubmitAtomAction: NodeAction {
+public protocol SubmitAtomAction: NodeAction, CustomDebugStringConvertible {
     var atom: SignedAtom { get }
     var uuid: UUID { get }
+}
+
+public extension SubmitAtomAction {
+    var debugDescription: String {
+        return """
+        SubmitAtomActionCompleted(atomWithAid: \(atom.identifier().hex.suffix(4)), node: \(node), uuid: \(uuid.uuidString.suffix(4)))
+        """
+    }
 }
 
 public extension SubmitAtomAction {
@@ -75,7 +83,12 @@ public struct SubmitAtomActionSend: SubmitAtomAction {
     }
     
     public init(request: SubmitAtomActionRequest, node: Node) {
-        self.init(atom: request.atom, node: node, isCompletingOnStoreOnly: request.isCompletingOnStoreOnly)
+        self.init(
+            atom: request.atom,
+            node: node,
+            isCompletingOnStoreOnly: request.isCompletingOnStoreOnly,
+            uuid: request.uuid
+        )
     }
 }
 

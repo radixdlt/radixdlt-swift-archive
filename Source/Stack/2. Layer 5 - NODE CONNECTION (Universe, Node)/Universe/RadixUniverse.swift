@@ -55,7 +55,6 @@ public extension DefaultRadixUniverse {
             discoveryEpics = []
             initialNetworkOfNodes = initialNetworkOfNodesFromMode.asSet
         }
-        log.verbose("Creating NetworkEpics")
         var networkEpics: [RadixNetworkEpic] = [
             WebSocketsEpic.init(epicFromWebsockets: [
                 WebSocketEventsEpic.init(webSockets:),
@@ -90,7 +89,6 @@ public extension DefaultRadixUniverse {
                 config: bootstrapConfig.config,
                 discoveryMode: bootstrapConfig.discoveryMode
             )
-            log.debug("Creating (Default)RadixUniverse via bootsrapConfig")
         } catch {
             incorrectImplementation("Should always be able to create RadixUniverse from bootstrap config")
         }

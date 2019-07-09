@@ -85,6 +85,16 @@ class AtomIdentifierTests: XCTestCase {
         }
     }
     
+    func testEndianessNegativeShards() {
+        let aidString: String = "126fd230a7cab9d9766f1065d498c4ac80ad2b754af1889fb1cd0a4eb6d1cea5"
+        let aidFromString = AtomIdentifier(stringLiteral: aidString)
+        let shard: Shard = -5634836225579692379
+        XCTAssertEqual(aidFromString.shard, shard)
+        XCTAssertEqual(aidString, aidFromString.hex)
+        let aidFromHashAndShard = try! AtomIdentifier(hash: "126fd230a7cab9d9766f1065d498c4ac80ad2b754af1889fdafeb316d52c54e0", shard: shard)
+        XCTAssertEqual(aidFromHashAndShard, aidFromString)
+    }
+    
     func testAtomIdentifierForAtomFromCreateTokenAction() {
         
         let createTokenAction = try! CreateTokenAction(

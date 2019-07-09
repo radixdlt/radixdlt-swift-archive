@@ -67,12 +67,9 @@ public extension NodeInfo {
     }
     
     init(from decoder: Decoder) throws {
-        
-        print("📚 Node Info Decode START")
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.host = try container.decode(Host.self, forKey: .host)
         self.system = try container.decode(RadixSystem.self, forKey: .system)
-        print("📚 Node Info Decode DONE, initialized ✅")
     }
 }
 

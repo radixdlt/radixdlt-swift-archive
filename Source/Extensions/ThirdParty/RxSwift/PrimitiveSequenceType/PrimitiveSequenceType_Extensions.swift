@@ -9,9 +9,8 @@
 import Foundation
 import RxSwift
 
-extension PrimitiveSequenceType where Self: ObservableConvertibleType {
-    
-    func ignoreElements() -> Completable {
-        return asObservable().ignoreElements()
-    }
-}
+//extension PrimitiveSequenceType where Self: ObservableConvertibleType {
+//    func ignoreElements() -> Completable {
+//        return asObservable().ignoreElements()
+//    }
+//}

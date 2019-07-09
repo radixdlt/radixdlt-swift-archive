@@ -19,6 +19,14 @@ public extension TokenDefinitionParticle {
         address = try container.decode(Address.self, forKey: .address)
         granularity = try container.decode(Granularity.self, forKey: .granularity)
         permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
-        icon = try container.decodeIfPresent(BytesValue.self, forKey: .icon)?.data
+        iconUrl = URL(string: try container.decodeIfPresent(StringValue.self, forKey: .iconUrl)?.value)
+        
+    }
+}
+
+private extension URL {
+    init?(string: String?) {
+        guard let urlString = string else { return nil }
+        self.init(string: urlString)
     }
 }
