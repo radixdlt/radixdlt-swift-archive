@@ -41,13 +41,11 @@ public final class InMemoryAtomStore: AtomStore {
     
     private var stagedAtoms         = [UUID: Atom]()
     private var atoms               = [Atom: AtomObservation]()
-//    private let justUpdatedAtomsAt  = ReplaySubject<Address>()
     
     private var stagedParticleIndex = [UUID: [AnyParticle: Spin]]()
     private var particleIndex       = [AnyParticle: [Spin: Set<Atom>]]()
     
     private var synced              = [Address: Bool]()
-//    private let justSyncedAtomsAt   = ReplaySubject<Address>()
 
     private var atomUpdateListeners: ListenerOf<AtomObservation>
     private var syncListeners: ListenerOf<Date>
@@ -84,7 +82,6 @@ public extension InMemoryAtomStore {
         if let existingListenerAtAddress = syncListeners.listener(of: address) {
             return existingListenerAtAddress.asObservable()
         } else {
-//            let replaySubject = ReplaySubject<Date>.create(bufferSize: 10000)
             let newListener = ReplaySubject<Date>.createUnbounded()
             syncListeners.addListener(newListener, of: address)
             defer {
@@ -92,19 +89,6 @@ public extension InMemoryAtomStore {
                     newListener.onNext(Date())
                 }
             }
-            
-//            return Observable.create { [unowned self] observer in
-//
-//                if self.synced.valueForKey(key: address, ifAbsent: { false }) {
-//                    observer.onNext(Date())
-//                }
-//
-//                return newListener.asObservable()
-//                    .do(onNext: {
-//                        log.error("Yay! Sync got next: \($0)")
-//                    })
-//                    .subscribe(observer)
-//            }
             return newListener.asObservable()
         }
     }
@@ -116,28 +100,12 @@ public extension InMemoryAtomStore {
         } else {
             let newListener = ReplaySubject<AtomObservation>.createUnbounded()
             atomUpdateListeners.addListener(newListener, of: address)
-            log.error("replaying history for new AtomObserver")
             // Replay history
             atoms.filter {
                 $0.value.isStore && $0.key.addresses().contains(address)
             }.compactMap {
                 $0.value
             }.forEach { newListener.onNext($0) }
-            
-//            return Observable.create { [unowned self] observer in
-//                // Replay history
-//                self.atoms.filter {
-//                    $0.value.isStore && $0.key.addresses().contains(address)
-//                    }.compactMap {
-//                        $0.value
-//                    }.forEach { observer.onNext($0) }
-//
-//                return newListener.asObservable()
-//                    .do(onNext: {
-//                        log.error("Yay! Sync got next: \($0)")
-//                    })
-//                    .subscribe(observer)
-//            }.share()
             return newListener.asObservable()
         }
 
@@ -201,7 +169,6 @@ public extension InMemoryAtomStore {
             if areAtomsInSync, notifyListenerMode.shouldNotifyOnSync {
                 syncListeners.notifyLister(of: address, about: Date())
             }
-//            justSyncedAtomsAt.onNext(address)
         }
         
         guard let atom = atomObservation.atom else {
@@ -255,11 +222,9 @@ public extension InMemoryAtomStore {
         
         if includeAtom || isSoftToHard {
             atoms[atom] = atomObservation
-//            justUpdatedAtomsAt.onNext(address)
         }
         
         if includeAtom, notifyListenerMode.shouldNotifyOnAtomUpdate {
-            log.info("atom.addresses(): \(atom.addresses())")
             atom.addresses().forEach {
                 atomUpdateListeners.notifyLister(of: $0, about: atomObservation)
             }
@@ -295,9 +260,7 @@ private extension InMemoryAtomStore {
 extension InMemoryAtomStore.ListenerOf {
     func notifyLister(of address: Address, about element: Element) {
         guard let listenerOfAddress = listener(of: address) else {
-            log.warning("no listener at address: \(address), element not emitted to any listener: \(element), elementType: \(Element.self))")
             return }
-        log.error("📢 notifying listener at address: \(address), about element: \(element)")
         listenerOfAddress.onNext(element)
     }
     
@@ -311,13 +274,6 @@ extension InMemoryAtomStore.ListenerOf {
     
     func addListener(_ subject: ReplaySubject<Element>, of address: Address) {
         guard !hasListener(of: address) else { return }
-        log.warning("Adding listener of address: \(address), elementType: \(Element.self)")
         listeners[address] = subject
     }
-    
-//    func addLister(subject: ReplaySubject<Element>, forAddress address: Address) {
-//        var subjects = listeners.valueForKey(key: address, ifAbsent: { [ReplaySubject<Element>]() })
-//        subjects.append(subject)
-//        listeners[address] = subjects
-//    }
 }

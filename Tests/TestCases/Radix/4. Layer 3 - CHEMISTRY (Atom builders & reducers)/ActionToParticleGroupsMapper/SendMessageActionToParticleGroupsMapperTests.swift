@@ -10,51 +10,6 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
-enum DecryptMessageErrorInTest: Swift.Error, Equatable {
-    case unknownError
-}
-
-extension AtomToDecryptedMessageMapper {
-    
-    func decryptMessage(in atom: Atom, account acountOwner: AccountOwner) throws -> DecryptedMessage {
-        guard let decryptedMessage = self.map(atom: atom, account: acountOwner.account).blockingTakeFirst() else {
-            throw DecryptMessageErrorInTest.unknownError
-        }
-        return decryptedMessage
-    }
-}
-
-private let magic: Magic = 63799298
-
-protocol AccountOwner {
-    var account: Account { get }
-}
-extension Account: AccountOwner {
-    var account: Account { return self }
-}
-
-
-private struct AccountWithAddress: SigningRequesting, Ownable, Equatable, AccountOwner {
-    let address: Address
-    let account: Account
-    
-    init(address: Address, account: Account) {
-        self.address = address
-        self.account = account
-    }
-    
-    init() {
-        let account = Account()
-        let address = account.addressFromMagic(magic)
-        self.init(address: address, account: account)
-    }
-}
-extension AccountWithAddress {
-    var privateKeyForSigning: Single<PrivateKey> {
-        return account.privateKeyForSigning
-    }
-}
-
 class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
     
     private lazy var alice  = AccountWithAddress()
@@ -83,7 +38,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         
         let atomToDecryptedMessagesMapper = DefaultAtomToDecryptedMessageMapper()
 
-        func doTestResult(_ decryptedMessage: DecryptedMessage, expectedEncryptionState: DecryptedMessage.EncryptionState) {
+        func doTestResult(_ decryptedMessage: SentMessage, expectedEncryptionState: SentMessage.EncryptionState) {
             XCTAssertEqual(decryptedMessage.encryptionState, expectedEncryptionState)
             XCTAssertEqual(decryptedMessage.timestamp, mockedTimestamp)
             XCTAssertEqual(decryptedMessage.sender, alice.address)
@@ -112,7 +67,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
             let dianasFeableAttemptToIntercept = try atomToDecryptedMessagesMapper.decryptMessage(in: atom, account: diana)
             doTestResult(dianasFeableAttemptToIntercept, expectedEncryptionState: .cannotDecrypt(error: ECIES.DecryptionError.keyMismatch))
         } catch {
-            XCTFail("Even though Diana should not be able to read the clear text message, she should still be able to reduce a DecryptedMessage from an Atom, having still encrypted payload")
+            XCTFail("Even though Diana should not be able to read the clear text message, she should still be able to reduce a SentMessage from an Atom, having still encrypted payload")
         }
     }
     
@@ -181,6 +136,51 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         ensureNonEncryptedMessageCanBeRead(by: clara)
     }
     
+}
+
+enum DecryptMessageErrorInTest: Swift.Error, Equatable {
+    case unknownError
+}
+
+extension AtomToDecryptedMessageMapper {
+    
+    func decryptMessage(in atom: Atom, account acountOwner: AccountOwner) throws -> SentMessage {
+        guard let decryptedMessage = self.map(atom: atom, account: acountOwner.account).blockingTakeFirst() else {
+            throw DecryptMessageErrorInTest.unknownError
+        }
+        return decryptedMessage
+    }
+}
+
+private let magic: Magic = 63799298
+
+protocol AccountOwner {
+    var account: Account { get }
+}
+extension Account: AccountOwner {
+    var account: Account { return self }
+}
+
+
+private struct AccountWithAddress: SigningRequesting, Ownable, Equatable, AccountOwner {
+    let address: Address
+    let account: Account
+    
+    init(address: Address, account: Account) {
+        self.address = address
+        self.account = account
+    }
+    
+    init() {
+        let account = Account()
+        let address = account.addressFromMagic(magic)
+        self.init(address: address, account: account)
+    }
+}
+extension AccountWithAddress {
+    var privateKeyForSigning: Single<PrivateKey> {
+        return account.privateKeyForSigning
+    }
 }
 
 extension Data {

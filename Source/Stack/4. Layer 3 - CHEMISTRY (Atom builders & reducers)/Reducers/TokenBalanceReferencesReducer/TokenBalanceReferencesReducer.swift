@@ -23,8 +23,5 @@ public extension TokenBalanceReferencesReducer {
         }
         return state.mergingWithTransferrableTokensParticle(transferrableTokensParticle)
     }
-    
-//    func combine(state lhs: State, withOther rhs: State) -> State {
-//        return TokenBalanceReferencesState.combine(state: lhs, with: rhs)
-//    }
+
 }

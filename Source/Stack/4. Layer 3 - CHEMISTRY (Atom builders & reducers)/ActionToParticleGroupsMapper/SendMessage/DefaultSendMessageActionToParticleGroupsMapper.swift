@@ -52,13 +52,12 @@ private extension DefaultSendMessageActionToParticleGroupsMapper {
     
     /// PublicKey's that can decrypt the message
     func readersOf(message sendMessageAction: SendMessageAction) -> [PublicKey] {
-        var readers: [Address] = [sendMessageAction.sender, sendMessageAction.recipient]
         switch sendMessageAction.encryptionMode {
-        case .encrypt(let ccReaders):
-            readers.append(contentsOf: ccReaders.map { $0.address })
-        case .plainText: break
+        case .encrypt(let readers):
+            return readers.map { $0.address.publicKey }
+        case .plainText:
+            incorrectImplementation("Dont call this function if you are not encrypting message")
         }
-        return readers.map { $0.publicKey }
     }
     
     func encryptDataIfNeeded(action sendMessageAction: SendMessageAction) -> (data: Data, encryptorParticle: AnySpunParticle?) {

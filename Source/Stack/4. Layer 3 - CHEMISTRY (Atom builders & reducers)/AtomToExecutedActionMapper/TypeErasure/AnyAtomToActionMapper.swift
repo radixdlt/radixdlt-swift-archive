@@ -27,7 +27,10 @@ public struct AnyAtomToExecutedActionMapper: BaseAtomToSpecificExecutedActionMap
 
 public extension AnyAtomToExecutedActionMapper {
     func map<Action>(atom: Atom, toActionType _: Action.Type, account: Account) -> Observable<Action> {
-        implementMe()
+        
+        return self._map(atom, Action.self, account).map {
+            return castOrKill(instance: $0, toType: Action.self)
+        }
     }
     
     func matches<Action>(actionType: Action.Type) -> Bool {

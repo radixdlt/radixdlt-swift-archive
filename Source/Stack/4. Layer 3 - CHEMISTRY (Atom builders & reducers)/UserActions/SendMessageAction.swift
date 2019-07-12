@@ -176,9 +176,12 @@ public extension SendMessageAction.EncryptionMode {
     
     func messageEncryptionMode(sender: Ownable, recipient: Ownable) -> MessageEncryptionMode {
         switch self {
-        case .plainText: return .plainText
-        case .encryption(let onlyDecryptableBy): return .encrypt(onlyDecryptableBy: onlyDecryptableBy)
-        case .encryptionSpecifyDecryptors(let encryptionSpecifyDecryptors): return encryptionSpecifyDecryptors([sender, recipient])
+        case .plainText:
+            return .plainText
+        case .encryption(let onlyDecryptableBy):
+            return .encrypt(onlyDecryptableBy: onlyDecryptableBy)
+        case .encryptionSpecifyDecryptors(let encryptionSpecifyDecryptors):
+            return encryptionSpecifyDecryptors([sender, recipient])
         }
     }
     

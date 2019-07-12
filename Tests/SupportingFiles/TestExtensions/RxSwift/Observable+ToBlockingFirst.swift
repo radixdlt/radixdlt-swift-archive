@@ -273,7 +273,7 @@ extension BlockingObservable {
             }
             
             guard let deriveUnreconizedJsonStringFromError = deriveUnreconizedJsonError(error) else {
-                return XCTFail("Could not derive any <unreconized JSON string> from error, but expected one")
+                return XCTFail("Could not derive any <unreconized JSON string> from error: `\(error)`, but expected one")
             }
             XCTAssertTrue(deriveUnreconizedJsonStringFromError.contains(expectedSubStringInUnrecognizedStringError))
             

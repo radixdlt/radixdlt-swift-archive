@@ -79,7 +79,6 @@ public extension RadixApplicationClient {
         let account = activeAccount
 
         return atomStore.atomObservations(of: address)
-            .do(onNext: { fatalError("WIN! GOT ATOM OBSERVATION: \($0)") })
             .filterMap { (atomObservation: AtomObservation) -> FilterMap<Atom> in
                 guard case .store(let atom, _, _) = atomObservation else { return .ignore }
                 return .map(atom)
@@ -138,8 +137,8 @@ public extension RadixApplicationClient {
         return observeActions(ofType: TransferTokenAction.self, at: address)
     }
     
-    func observeMessages(toOrFrom address: Address) -> Observable<DecryptedMessage> {
-        return observeActions(ofType: DecryptedMessage.self, at: address)
+    func observeMessages(toOrFrom address: Address) -> Observable<SentMessage> {
+        return observeActions(ofType: SentMessage.self, at: address)
     }
     
     func create(
@@ -238,7 +237,7 @@ public extension RadixApplicationClient {
             .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
     }
     
-    func observeMyMessages() -> Observable<DecryptedMessage> {
+    func observeMyMessages() -> Observable<SentMessage> {
         return observeMessages(toOrFrom: addressOfActiveAccount)
     }
     

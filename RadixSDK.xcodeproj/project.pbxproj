@@ -227,7 +227,7 @@
 		E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752222A18F5C00AC631B /* Encryptor.swift */; };
 		E69E752522A1901000AC631B /* MetaDataOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752422A1901000AC631B /* MetaDataOwner.swift */; };
 		E69E752722A1903600AC631B /* AtomToDecryptedMessageMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752622A1903600AC631B /* AtomToDecryptedMessageMapper.swift */; };
-		E69E752922A1B39E00AC631B /* DecryptedMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752822A1B39E00AC631B /* DecryptedMessage.swift */; };
+		E69E752922A1B39E00AC631B /* SentMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752822A1B39E00AC631B /* SentMessage.swift */; };
 		E69E753222A1B9CD00AC631B /* MessageSending.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753122A1B9CD00AC631B /* MessageSending.swift */; };
 		E69E753422A294D800AC631B /* SendMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753322A294D800AC631B /* SendMessageTests.swift */; };
 		E69E753622A5203600AC631B /* PoWSignSubmitAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753522A5203600AC631B /* PoWSignSubmitAtom.swift */; };
@@ -813,7 +813,7 @@
 		E69E752222A18F5C00AC631B /* Encryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryptor.swift; sourceTree = "<group>"; };
 		E69E752422A1901000AC631B /* MetaDataOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataOwner.swift; sourceTree = "<group>"; };
 		E69E752622A1903600AC631B /* AtomToDecryptedMessageMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToDecryptedMessageMapper.swift; sourceTree = "<group>"; };
-		E69E752822A1B39E00AC631B /* DecryptedMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptedMessage.swift; sourceTree = "<group>"; };
+		E69E752822A1B39E00AC631B /* SentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentMessage.swift; sourceTree = "<group>"; };
 		E69E753122A1B9CD00AC631B /* MessageSending.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSending.swift; sourceTree = "<group>"; };
 		E69E753322A294D800AC631B /* SendMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageTests.swift; sourceTree = "<group>"; };
 		E69E753522A5203600AC631B /* PoWSignSubmitAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoWSignSubmitAtom.swift; sourceTree = "<group>"; };
@@ -2101,18 +2101,18 @@
 			path = NodeInteracting;
 			sourceTree = "<group>";
 		};
-		E69E752A22A1B47900AC631B /* DecruptedMessage */ = {
+		E69E752A22A1B47900AC631B /* SentMessage */ = {
 			isa = PBXGroup;
 			children = (
-				E69E752822A1B39E00AC631B /* DecryptedMessage.swift */,
+				E69E752822A1B39E00AC631B /* SentMessage.swift */,
 			);
-			path = DecruptedMessage;
+			path = SentMessage;
 			sourceTree = "<group>";
 		};
 		E69E752B22A1B48500AC631B /* ResultOfReducer */ = {
 			isa = PBXGroup;
 			children = (
-				E69E752A22A1B47900AC631B /* DecruptedMessage */,
+				E69E752A22A1B47900AC631B /* SentMessage */,
 			);
 			path = ResultOfReducer;
 			sourceTree = "<group>";
@@ -3993,7 +3993,7 @@
 				E62EFDBE22490BA900B6DAD6 /* Router.swift in Sources */,
 				E6A508E12251244000128123 /* BinaryInteger+RoundToMultipleOF.swift in Sources */,
 				E6A507DD224E168300128123 /* RPCClientsRetainer.swift in Sources */,
-				E69E752922A1B39E00AC631B /* DecryptedMessage.swift in Sources */,
+				E69E752922A1B39E00AC631B /* SentMessage.swift in Sources */,
 				E67129A522C228AE004F6D0A /* Reducer.swift in Sources */,
 				E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */,
 				E61EB9A622D87306007826D3 /* TokenDefinitionsState+Value.swift in Sources */,

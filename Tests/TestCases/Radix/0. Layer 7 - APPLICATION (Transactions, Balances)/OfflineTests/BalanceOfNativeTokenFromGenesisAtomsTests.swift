@@ -20,5 +20,4 @@ class BalanceOfNativeTokenFromGenesisAtomsTests: XCTestCase {
         guard let xrdBalance = application.balanceOfNativeTokensOrZero(for: address).blockingTakeFirst(timeout: 4) else { return }
         XCTAssertEqual(xrdBalance.amount, "1000000000000000000000000000")
     }
-
 }

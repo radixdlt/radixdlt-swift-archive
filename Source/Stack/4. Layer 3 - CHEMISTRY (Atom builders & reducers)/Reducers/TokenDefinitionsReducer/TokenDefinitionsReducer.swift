@@ -27,8 +27,5 @@ public extension TokenDefinitionsReducer {
             return state
         }
     }
-    
-//    func combine(state lhs: State, withOther rhs: State) -> State {
-//        return TokenDefinitionsState.combine(state: lhs, with: rhs)
-//    }
+
 }

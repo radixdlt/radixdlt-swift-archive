@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 public protocol AtomToDecryptedMessageMapper: AtomToSpecificExecutedActionMapper, Throwing where
-    ExecutedAction == DecryptedMessage,
+    ExecutedAction == SentMessage,
     Error == DecryptMessageFromAtomMapperError {}
 
 public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMapper {
@@ -22,7 +22,7 @@ public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMa
 }
 
 public extension DefaultAtomToDecryptedMessageMapper {
-    typealias ExecutedAction = DecryptedMessage
+    typealias ExecutedAction = SentMessage
     func map(atom: Atom, account: Account) -> Observable<ExecutedAction> {
         return account.privateKeyForSigning
             .asObservable()
@@ -129,16 +129,16 @@ private extension EncryptedMessageContext {
 // MARK: - Decrypt Message
 private extension EncryptedMessageContext {
     
-    func decryptMessageIfNeeded(key: Signing) throws -> DecryptedMessage {
+    func decryptMessageIfNeeded(key: Signing) throws -> SentMessage {
         switch payload {
         case .wasNotEncrypted(let data):
-            return DecryptedMessage(context: self, data: data, encryptionState: .wasNotEncrypted)
+            return SentMessage(context: self, data: data, encryptionState: .wasNotEncrypted)
         case .encrypted(let encryptedData, let encryptor):
             do {
                 let decryptedData = try encryptor.decrypt(data: encryptedData, using: key)
-                return DecryptedMessage(context: self, data: decryptedData, encryptionState: .decrypted)
+                return SentMessage(context: self, data: decryptedData, encryptionState: .decrypted)
             } catch let decryptionError as ECIES.DecryptionError {
-                return DecryptedMessage(context: self, data: encryptedData, encryptionState: .cannotDecrypt(error: decryptionError))
+                return SentMessage(context: self, data: encryptedData, encryptionState: .cannotDecrypt(error: decryptionError))
             } catch let unhandledError {
                 throw unhandledError
             }
@@ -146,12 +146,12 @@ private extension EncryptedMessageContext {
     }
 }
 
-// MARK: DecryptedMessage from Context
-private extension DecryptedMessage {
+// MARK: SentMessage from Context
+private extension SentMessage {
     init(
         context: EncryptedMessageContext,
         data: Data,
-        encryptionState: DecryptedMessage.EncryptionState
+        encryptionState: SentMessage.EncryptionState
     ) {
         self.init(
             sender: context.sender,
