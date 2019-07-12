@@ -8,11 +8,12 @@
 
 import Foundation
 
+public typealias TokenStateConvertible = TokenConvertible & TokenSupplyStateConvertible
+
 // swiftlint:disable colon opening_brace
 
 public struct TokenState:
-    TokenConvertible,
-    TokenSupplyStateConvertible,
+    TokenStateConvertible,
     Throwing,
     Hashable
 {
@@ -49,7 +50,9 @@ public struct TokenState:
     }
 }
 
-// MARK: - Private
+// MARK: - Convenience Initializers
+
+// MARK: Private Init
 private extension TokenState {
     init(
         token tokenDefinition: TokenConvertible,
@@ -68,11 +71,9 @@ private extension TokenState {
     }
 }
 
+// MARK: Public Init
 public extension TokenState {
-    enum Error: Swift.Error, Equatable {
-        case tokenDefinitionReferenceMismatch
-    }
-    
+
     init(
         token tokenDefinition: TokenConvertible,
         supplyState: TokenSupplyStateConvertible
@@ -95,8 +96,14 @@ public extension TokenState {
     }
 }
 
-public typealias TokenStateConvertible = TokenConvertible & TokenSupplyStateConvertible
+// MARK: - Throwing
+public extension TokenState {
+    enum Error: Swift.Error, Equatable {
+        case tokenDefinitionReferenceMismatch
+    }
+}
 
+// MARK: - Merge
 public extension TokenState {
     func merging(with other: TokenState) throws -> TokenState {
 

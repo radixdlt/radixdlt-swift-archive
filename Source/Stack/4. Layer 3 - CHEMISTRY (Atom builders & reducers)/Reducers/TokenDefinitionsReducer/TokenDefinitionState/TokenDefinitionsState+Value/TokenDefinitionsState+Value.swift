@@ -15,9 +15,9 @@ public extension TokenDefinitionsState {
     }
 }
 
+// MARK: - Convenience Init
 public extension TokenDefinitionsState.Value {
     
-    // MARK: From Protocols
     init(tokenConvertible: TokenConvertible) {
         self = .partial(.tokenDefinition(TokenDefinition(tokenConvertible: tokenConvertible)))
     }
@@ -26,7 +26,6 @@ public extension TokenDefinitionsState.Value {
         self = .partial(.supply(TokenDefinitionsState.SupplyInfo(tokenSupplyStateConvertible: supplyState)))
     }
     
-    // MARK: - From Particles
     init(tokenDefinitionParticle: TokenDefinitionParticle) {
         self.init(tokenConvertible: tokenDefinitionParticle)
     }
@@ -34,19 +33,20 @@ public extension TokenDefinitionsState.Value {
     init(unallocatedTokensParticle: UnallocatedTokensParticle) {
         self = .partial(.supply(TokenDefinitionsState.SupplyInfo(unallocatedTokensParticle: unallocatedTokensParticle)))
     }
-    
-    // MARK: - TokenDefinitionReferencing
+}
+
+// MARK: - TokenDefinitionReferencing
+public extension TokenDefinitionsState.Value {
     var tokenDefinitionReference: ResourceIdentifier {
         switch self {
         case .full(let tokenState): return tokenState.tokenDefinitionReference
         case .partial(let partial): return partial.tokenDefinitionReference
         }
     }
-    
-    var full: TokenState? {
-        guard case .full(let tokenState) = self else { return nil }
-        return tokenState
-    }
+}
+
+// MARK: - Merge
+public extension TokenDefinitionsState.Value {
     
     func merging(with other: TokenDefinitionsState.Value) throws -> TokenDefinitionsState.Value {
         switch (self, other) {
@@ -64,6 +64,14 @@ public extension TokenDefinitionsState.Value {
             return .full(try selfFull.mergingWithPartial(otherPartial))
             
         }
+    }
+}
+
+// MARK: - Value Retrival
+public extension TokenDefinitionsState.Value {
+    var full: TokenState? {
+        guard case .full(let tokenState) = self else { return nil }
+        return tokenState
     }
     
     var isFull: Bool {

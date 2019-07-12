@@ -85,22 +85,15 @@ public extension TokenDefinitionsState {
         }
     }
     
-//    static func combine(state lhsState: TokenDefinitionsState, with rhsState: TokenDefinitionsState) -> TokenDefinitionsState {
-//        if lhsState == rhsState { return lhsState }
-//        return lhsState.merging(with: rhsState)
-//    }
-//
     func mergeWithTokenDefinitionParticle(_ tokenDefinitionParticle: TokenDefinitionParticle) -> TokenDefinitionsState {
         let value = Value(tokenDefinitionParticle: tokenDefinitionParticle)
         let otherState = TokenDefinitionsState(reducingValues: [value])
-//        return TokenDefinitionsState.combine(state: self, with: otherState)
         return merging(with: otherState)
     }
     
     func mergeWithUnallocatedTokensParticle(_ unallocatedTokensParticle: UnallocatedTokensParticle) -> TokenDefinitionsState {
         let value = Value(unallocatedTokensParticle: unallocatedTokensParticle)
         let otherState = TokenDefinitionsState(reducingValues: [value])
-//        return TokenDefinitionsState.combine(state: self, with: otherState)
         return merging(with: otherState)
     }
     

@@ -27,30 +27,40 @@ public extension TokenDefinitionsState.Value.Partial {
 
 // MARK: - Internal
 internal extension TokenDefinitionsState.Value.Partial {
-    func merging(with other: TokenDefinitionsState.Value.Partial) throws -> TokenDefinitionsState.Value {
-        guard self.tokenDefinitionReference == other.tokenDefinitionReference else {
+    func merging(with newPartial: TokenDefinitionsState.Value.Partial) throws -> TokenDefinitionsState.Value {
+        guard self.tokenDefinitionReference == newPartial.tokenDefinitionReference else {
             throw TokenDefinitionsState.Error.tokenDefinitionReferenceMismatch
         }
         
-        switch (self, other) {
-        case (.supply(_), .supply(let otherSupplyInfo)):
-            let totalSupply = otherSupplyInfo.totalSupply // TODO or should we add them????
+        switch (self, newPartial) {
+        case (.tokenDefinition(let currentTokenDefinition), .supply(let newSupplyInfo)):
+            return .full(
+                try TokenState(
+                    token: currentTokenDefinition,
+                    supplyState: newSupplyInfo
+                )
+            )
             
-            let mergedSupplyInfo = TokenDefinitionsState.SupplyInfo(
-                totalSupply: totalSupply,
+        case (.supply(let currentSupplyInfo), .tokenDefinition(let newTokenDefinition)):
+            return .full(
+                try TokenState(
+                    token: newTokenDefinition,
+                    supplyState: currentSupplyInfo
+                )
+            )
+            
+        case (.supply(let currentSupplyInfo), .supply(let newSupplyInfo)):
+            let accumulatedSupply = try currentSupplyInfo.totalSupply.add(newSupplyInfo.totalSupply)
+            
+            let accumulatedSupplyInfo = TokenDefinitionsState.SupplyInfo(
+                totalSupply: accumulatedSupply,
                 tokenDefinitionReference: tokenDefinitionReference
             )
             
-            return .partial(.supply(mergedSupplyInfo))
+            return .partial(.supply(accumulatedSupplyInfo))
             
-        case (.tokenDefinition(let selfTokenDefinition), .supply(let otherSupplyInfo)):
-            return .full(try TokenState(token: selfTokenDefinition, supplyState: otherSupplyInfo))
-            
-        case (.supply(let selfSupplyInfo), .tokenDefinition(let otherTokenDefinition)):
-            return .full(try TokenState(token: otherTokenDefinition, supplyState: selfSupplyInfo))
-            
-        case (.tokenDefinition(_), .tokenDefinition(let otherTokenDefinition)):
-            return .partial(.tokenDefinition(otherTokenDefinition))
+        case (.tokenDefinition, .tokenDefinition(let newTokenDefinition)):
+            return .partial(.tokenDefinition(newTokenDefinition))
         }
     }
 }

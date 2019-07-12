@@ -44,7 +44,7 @@ public extension Supply {
 
 // MARK: - ValueValidating
 public extension Supply {
-    
+
     static let maxAmountValue = NonNegativeAmount.maxValue256Bits
     
     static func validate(_ value: NonNegativeAmount) throws -> NonNegativeAmount {
@@ -94,6 +94,7 @@ public extension Supply {
 // MARK: - Presets
 public extension Supply {
     // swiftlint:disable force_try
+    static let max = try! Supply(nonNegativeAmount: Supply.maxAmountValue)
     static let zero = try! Supply(nonNegativeAmount: 0)
     // swiftlint:enable force_try
 }

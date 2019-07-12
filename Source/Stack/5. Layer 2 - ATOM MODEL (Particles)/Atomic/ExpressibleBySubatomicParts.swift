@@ -95,11 +95,11 @@ public extension ExpressibleBySubatomicParts where Self: Atomic {
             EncodableKeyValue(key: .signatures, nonEmpty: signatures, output: .allButHash)
         ].compactMap { $0 }
         
-//        let atomSize = try AnyEncodableKeyValueList(keyValues: properties).toDSON().asData.length
-//        
-//        guard atomSize <= Self.maxSizeOfDSONEncodedAtomInBytes else {
-//            throw Error.tooManyBytes(expectedAtMost: Self.maxSizeOfDSONEncodedAtomInBytes, butGot: atomSize)
-//        }
+        let atomSize = try AnyEncodableKeyValueList(keyValues: properties).toDSON().asData.length
+        
+        guard atomSize <= Self.maxSizeOfDSONEncodedAtomInBytes else {
+            throw Error.tooManyBytes(expectedAtMost: Self.maxSizeOfDSONEncodedAtomInBytes, butGot: atomSize)
+        }
         
         return properties
     }

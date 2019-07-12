@@ -143,7 +143,8 @@ public extension Amount {
 // MARK: - StringInitializable
 public extension Amount {
     init(string: String) throws {
-        try self.init(validating: try Magnitude(validating: string))
+        let magnitude = try Magnitude.init(string: string)
+        try self.init(validating: magnitude)
     }
 }
 

@@ -21,8 +21,121 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
         continueAfterFailure = false
     }
     
+    func testTokenCreationWithoutInitialSupply() {
+        
+        let createTokenAction = try! CreateTokenAction(
+            creator: address,
+            name: "Cyon",
+            symbol: "CCC",
+            description: "Cyon Crypto Coin is the worst shit coin",
+            supply: .mutable(initial: 0)
+        )
+        
+        let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
+        XCTAssertEqual(particleGroups.count, 1)
+        guard let group = particleGroups.first else { return }
+        
+        assertCorrectnessTokenCreationGroup(group, testPermissions: false)
+    }
     
-    private func assertCorrectnessTokenCreationGroup(_ group: ParticleGroup, testPermissions: Bool = true) {
+    func doTestTokenCreation(initialSupply: Supply) {
+        let createTokenAction = try! CreateTokenAction(
+            creator: address,
+            name: "Cyon",
+            symbol: "CCC",
+            description: "Cyon Crypto Coin is the worst shit coin",
+            supply: .fixed(to: initialSupply)
+        )
+        
+        let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
+        XCTAssertEqual(particleGroups.count, 2)
+        guard let tokenCreationGroup = particleGroups.first else { return }
+        assertCorrectnessTokenCreationGroup(tokenCreationGroup)
+        let mintTokenGroup = particleGroups[1]
+        
+        assertCorrectnessMintTokenGroup(
+            mintTokenGroup,
+            tokenCreationGroup: tokenCreationGroup,
+            initialSupply: initialSupply,
+            createTokenAction: createTokenAction
+        )
+    }
+    
+    func testTokenCreationWithInitialSupplyPartial() {
+        doTestTokenCreation(initialSupply: 1000)
+    }
+    
+    func testTokenCreationWithInitialSupplyAll() {
+        doTestTokenCreation(initialSupply: Supply.max)
+    }
+    
+}
+
+private extension CreateTokenActionToParticleGroupsMapperTests {
+    func assertCorrectnessMintTokenGroup(
+        _ mintTokenGroup: ParticleGroup,
+        tokenCreationGroup: ParticleGroup,
+        initialSupply: Supply,
+        createTokenAction: CreateTokenAction
+        ) {
+        
+        guard
+            case let tokenCreationGroupParticles = tokenCreationGroup.spunParticles,
+            tokenCreationGroupParticles.count == 3,
+            let unallocatedParticleFromTokenCreationGroup = tokenCreationGroupParticles[2].particle as? UnallocatedTokensParticle else {
+                return XCTFail("Expected UnallocatedTokensParticle at index 2 in ParticleGroup at index 0")
+        }
+        
+        
+        let expectUnallocatedFromLeftOverSupply: Bool
+        if let leftOverSupply = initialSupply.subtractedFromMax {
+            expectUnallocatedFromLeftOverSupply = leftOverSupply >= 1
+        } else {
+            expectUnallocatedFromLeftOverSupply = false
+        }
+        
+        let spunParticles = mintTokenGroup.spunParticles
+        
+        if expectUnallocatedFromLeftOverSupply {
+            XCTAssertEqual(spunParticles.count, 3)
+        } else {
+            XCTAssertEqual(spunParticles.count, 2)
+        }
+        
+        guard
+            let spunUnallocatedTokensParticle = spunParticles[0].mapToSpunParticle(with: UnallocatedTokensParticle.self),
+            let spunTransferrableTokensParticle = spunParticles[1].mapToSpunParticle(with: TransferrableTokensParticle.self)
+            else { return }
+        XCTAssertEqual(spunUnallocatedTokensParticle.spin, .down)
+        XCTAssertEqual(spunTransferrableTokensParticle.spin, .up)
+        
+        let unallocatedTokensParticle = spunUnallocatedTokensParticle.particle
+        let transferrableTokensParticle = spunTransferrableTokensParticle.particle
+        
+        XCTAssertEqual(
+            unallocatedParticleFromTokenCreationGroup.hashEUID,
+            unallocatedTokensParticle.hashEUID,
+            "The `UnallocatedTokensParticle` in the two ParticleGroups should be the same, but with different spin"
+        )
+        
+        XCTAssertEqual(
+            transferrableTokensParticle.amount.abs,
+            createTokenAction.initialSupply.amount
+        )
+        
+        if expectUnallocatedFromLeftOverSupply {
+            guard
+                let spunLeftOverUnallocatedTokensParticle = spunParticles[2].mapToSpunParticle(with: UnallocatedTokensParticle.self)
+                else { return }
+            
+            XCTAssertEqual(spunLeftOverUnallocatedTokensParticle.spin, .up)
+            let leftOverUnallocatedTokensParticle = spunLeftOverUnallocatedTokensParticle.particle
+            XCTAssertEqual(unallocatedTokensParticle.tokenDefinitionReference, leftOverUnallocatedTokensParticle.tokenDefinitionReference)
+        }
+    }
+    
+    
+    func assertCorrectnessTokenCreationGroup(_ group: ParticleGroup, testPermissions: Bool = true) {
         let spunParticles = group.spunParticles
         XCTAssertEqual(spunParticles.count, 3)
         guard
@@ -64,104 +177,4 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
             PositiveAmount.maxValue256Bits
         )
     }
-    
-    private func assertCorrectnessMintTokenGroup(_ mintTokenGroup: ParticleGroup, tokenCreationGroup: ParticleGroup, initialSupply: NonNegativeAmount, createTokenAction: CreateTokenAction) {
-        
-        guard
-            case let tokenCreationGroupParticles = tokenCreationGroup.spunParticles,
-            tokenCreationGroupParticles.count == 3,
-            let unallocatedParticleFromTokenCreationGroup = tokenCreationGroupParticles[2].particle as? UnallocatedTokensParticle else {
-                return XCTFail("Expected UnallocatedTokensParticle at index 2 in ParticleGroup at index 0")
-        }
-        
-        let expectUnallocatedFromLeftOverSupply = (NonNegativeAmount.maxValue256Bits - initialSupply) > 0
-        
-        let spunParticles = mintTokenGroup.spunParticles
-        
-        if expectUnallocatedFromLeftOverSupply {
-            XCTAssertEqual(spunParticles.count, 3)
-        } else {
-            XCTAssertEqual(spunParticles.count, 2)
-        }
-        
-        guard
-            let spunUnallocatedTokensParticle = spunParticles[0].mapToSpunParticle(with: UnallocatedTokensParticle.self),
-            let spunTransferrableTokensParticle = spunParticles[1].mapToSpunParticle(with: TransferrableTokensParticle.self)
-            else { return }
-        XCTAssertEqual(spunUnallocatedTokensParticle.spin, .down)
-        XCTAssertEqual(spunTransferrableTokensParticle.spin, .up)
-       
-        let unallocatedTokensParticle = spunUnallocatedTokensParticle.particle
-        let transferrableTokensParticle = spunTransferrableTokensParticle.particle
-        
-        XCTAssertEqual(
-            unallocatedParticleFromTokenCreationGroup.hashEUID,
-            unallocatedTokensParticle.hashEUID,
-            "The `UnallocatedTokensParticle` in the two ParticleGroups should be the same, but with different spin"
-        )
-        
-        XCTAssertEqual(
-            transferrableTokensParticle.amount.abs,
-            createTokenAction.initialSupply.abs
-        )
-        
-        if expectUnallocatedFromLeftOverSupply {
-            guard
-                let spunLeftOverUnallocatedTokensParticle = spunParticles[2].mapToSpunParticle(with: UnallocatedTokensParticle.self)
-                else { return }
-            
-            XCTAssertEqual(spunLeftOverUnallocatedTokensParticle.spin, .up)
-            let leftOverUnallocatedTokensParticle = spunLeftOverUnallocatedTokensParticle.particle
-            XCTAssertEqual(unallocatedTokensParticle.tokenDefinitionReference, leftOverUnallocatedTokensParticle.tokenDefinitionReference)
-        }
-    }
-    
-    func testTokenCreationWithoutInitialSupply() {
-        
-        let createTokenAction = try! CreateTokenAction(
-            creator: address,
-            name: "Cyon",
-            symbol: "CCC",
-            description: "Cyon Crypto Coin is the worst shit coin",
-            supply: .mutable(initial: 0)
-        )
-        
-        let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
-        XCTAssertEqual(particleGroups.count, 1)
-        guard let group = particleGroups.first else { return }
-        
-        assertCorrectnessTokenCreationGroup(group, testPermissions: false)
-    }
-    
-    func doTestTokenCreation(initialSupply: PositiveAmount) {
-        let createTokenAction = try! CreateTokenAction(
-            creator: address,
-            name: "Cyon",
-            symbol: "CCC",
-            description: "Cyon Crypto Coin is the worst shit coin",
-            supply: .fixed(to: initialSupply)
-        )
-        
-        let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
-        XCTAssertEqual(particleGroups.count, 2)
-        guard let tokenCreationGroup = particleGroups.first else { return }
-        assertCorrectnessTokenCreationGroup(tokenCreationGroup)
-        let mintTokenGroup = particleGroups[1]
-        
-        assertCorrectnessMintTokenGroup(
-            mintTokenGroup,
-            tokenCreationGroup: tokenCreationGroup,
-            initialSupply: NonNegativeAmount(positive: initialSupply),
-            createTokenAction: createTokenAction
-        )
-    }
-    
-    func testTokenCreationWithInitialSupplyPartial() {
-        doTestTokenCreation(initialSupply: 1000)
-    }
-    
-    func testTokenCreationWithInitialSupplyAll() {
-        doTestTokenCreation(initialSupply: .maxValue256Bits)
-    }
-    
 }
