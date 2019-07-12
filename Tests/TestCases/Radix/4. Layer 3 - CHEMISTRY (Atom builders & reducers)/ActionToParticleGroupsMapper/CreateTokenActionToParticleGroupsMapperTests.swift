@@ -38,6 +38,29 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
         assertCorrectnessTokenCreationGroup(group, testPermissions: false)
     }
     
+    func testTokenCreationWithInitialSupplyPartial() {
+        doTestTokenCreation(initialSupply: 1000)
+    }
+    
+    func testTokenCreationWithInitialSupplyAll() {
+        doTestTokenCreation(initialSupply: Supply.max)
+    }
+    
+    func testAssertMaxSupplySubtractedFromMaxIsNil() {
+        XCTAssertNil(Supply.max.subtractedFromMax)
+    }
+    
+    func testAssert100SubtractedFromMaxSupplyIsCorrectValue() {
+        let hundred: Supply = 100
+        XCTAssertAllEqual(
+            hundred.subtractedFromMax,
+            try? Supply(subtractingFromMax: hundred.amount),
+            try? Supply(nonNegativeAmount: Supply.maxAmountValue - hundred.amount)
+        )
+    }
+}
+
+private extension CreateTokenActionToParticleGroupsMapperTests {
     func doTestTokenCreation(initialSupply: Supply) {
         let createTokenAction = try! CreateTokenAction(
             creator: address,
@@ -61,17 +84,6 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
         )
     }
     
-    func testTokenCreationWithInitialSupplyPartial() {
-        doTestTokenCreation(initialSupply: 1000)
-    }
-    
-    func testTokenCreationWithInitialSupplyAll() {
-        doTestTokenCreation(initialSupply: Supply.max)
-    }
-    
-}
-
-private extension CreateTokenActionToParticleGroupsMapperTests {
     func assertCorrectnessMintTokenGroup(
         _ mintTokenGroup: ParticleGroup,
         tokenCreationGroup: ParticleGroup,
@@ -89,7 +101,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         
         let expectUnallocatedFromLeftOverSupply: Bool
         if let leftOverSupply = initialSupply.subtractedFromMax {
-            expectUnallocatedFromLeftOverSupply = leftOverSupply >= 1
+            expectUnallocatedFromLeftOverSupply = leftOverSupply.amount >= 1
         } else {
             expectUnallocatedFromLeftOverSupply = false
         }
@@ -174,7 +186,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         
         XCTAssertEqual(
             unallocatedTokensParticle.amount,
-            PositiveAmount.maxValue256Bits
+            Supply.max
         )
     }
 }

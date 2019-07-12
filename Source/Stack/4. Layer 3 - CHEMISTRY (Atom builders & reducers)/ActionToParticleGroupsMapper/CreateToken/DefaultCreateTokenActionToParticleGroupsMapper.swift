@@ -18,7 +18,7 @@ public extension CreateTokenActionToParticleGroupsMapper {
     func particleGroups(for action: CreateTokenAction) -> ParticleGroups {
 
         let token = TokenDefinitionParticle(createTokenAction: action)
-        let unallocated = UnallocatedTokensParticle(token: token, amount: .maxValue256Bits)
+        let unallocated = UnallocatedTokensParticle.maxSupplyForNewToken(token)
         let rriParticle = ResourceIdentifierParticle(token: token)
         
         let tokenCreationGroup: ParticleGroup = [

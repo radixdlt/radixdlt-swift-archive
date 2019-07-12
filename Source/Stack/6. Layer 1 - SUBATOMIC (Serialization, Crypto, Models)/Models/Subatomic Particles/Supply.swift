@@ -28,13 +28,17 @@ public struct Supply:
 // MARK: - Convenience Init
 public extension Supply {
     
+    init<AmountType>(subtractingFromMax amountToSubtractFromMax: AmountType) throws where AmountType: NonNegativeAmountConvertible {
+        try self.init(positiveAmount: Supply.subtractingFromMax(amount: amountToSubtractFromMax))
+    }
+    
     init(positiveAmount: PositiveAmount) throws {
         try self.init(nonNegativeAmount: NonNegativeAmount(positive: positiveAmount))
     }
     
     init(unallocatedTokensParticle: UnallocatedTokensParticle) {
         do {
-            let unallocatedAmount = NonNegativeAmount(positive: unallocatedTokensParticle.amount)
+            let unallocatedAmount = unallocatedTokensParticle.amount.amount
             try self.init(positiveAmount: Supply.subtractingFromMax(amount: unallocatedAmount))
         } catch {
             unexpectedlyMissedToCatch(error: error)
@@ -61,12 +65,13 @@ public extension Supply {
         return try? PositiveAmount(nonNegative: amount)
     }
     
-    var subtractedFromMax: PositiveAmount? {
-        return try? Supply.subtractingFromMax(amount: self.amount)
+    var subtractedFromMax: Supply? {
+        guard let positiveLeftOverSupplyAmount = try? Supply.subtractingFromMax(amount: self.amount) else { return nil }
+        return try? Supply(positiveAmount: positiveLeftOverSupplyAmount)
     }
     
-    static func subtractingFromMax(amount: NonNegativeAmount) throws -> PositiveAmount {
-        return try PositiveAmount(nonNegative: Supply.maxAmountValue - amount)
+    static func subtractingFromMax<AmountType>(amount: AmountType) throws -> PositiveAmount where AmountType: NonNegativeAmountConvertible {
+        return try PositiveAmount(nonNegative: Supply.maxAmountValue - NonNegativeAmount(validated: amount.magnitude))
     }
 }
 

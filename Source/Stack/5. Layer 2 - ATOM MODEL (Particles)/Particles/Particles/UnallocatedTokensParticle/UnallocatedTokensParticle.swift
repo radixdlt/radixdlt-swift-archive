@@ -23,11 +23,11 @@ public struct UnallocatedTokensParticle:
     public let tokenDefinitionReference: ResourceIdentifier
     public let granularity: Granularity
     public let nonce: Nonce
-    public let amount: PositiveAmount
+    public let amount: Supply
     public let permissions: TokenPermissions
     
     public init(
-        amount: PositiveAmount,
+        amount: Supply,
         tokenDefinitionReference: ResourceIdentifier,
         permissions: TokenPermissions = .default,
         granularity: Granularity = .default,
@@ -45,7 +45,8 @@ public struct UnallocatedTokensParticle:
 public extension UnallocatedTokensParticle {
     init(
         token: TokenDefinitionParticle,
-        amount: PositiveAmount) {
+        amount: Supply
+    ) {
         self.init(
             amount: amount,
             tokenDefinitionReference: token.tokenDefinitionReference,
@@ -69,7 +70,8 @@ public extension UnallocatedTokensParticle {
         
         let granularity = try container.decode(Granularity.self, forKey: .granularity)
         let nonce = try container.decode(Nonce.self, forKey: .nonce)
-        let amount = try container.decode(PositiveAmount.self, forKey: .amount)
+        let positiveAmount = try container.decode(PositiveAmount.self, forKey: .amount)
+        let amount = try Supply(positiveAmount: positiveAmount)
         let permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
         let tokenDefinitionReference = try container.decode(ResourceIdentifier.self, forKey: .tokenDefinitionReference)
         
@@ -91,7 +93,7 @@ public extension UnallocatedTokensParticle {
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .nonce, value: nonce),
             EncodableKeyValue(key: .tokenDefinitionReference, value: tokenDefinitionReference),
-            EncodableKeyValue(key: .amount, value: amount)
+            EncodableKeyValue(key: .amount, value: try PositiveAmount(nonNegative: amount.amount))
         ]
     }
 }
@@ -103,8 +105,8 @@ public extension UnallocatedTokensParticle {
     }
 }
 
-//public extension UnallocatedTokensParticle {
-//    var tokenSupplyType: SupplyType {
-//        return SupplyType(tokenPermissions: permissions)
-//    }
-//}
+public extension UnallocatedTokensParticle {
+    static func maxSupplyForNewToken(_ token: TokenDefinitionParticle) -> UnallocatedTokensParticle {
+        return UnallocatedTokensParticle(token: token, amount: .max)
+    }
+}
