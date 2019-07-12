@@ -25,14 +25,11 @@ public extension FetchAtomsEpic {
         
         let fetch: Observable<NodeAction> = actions
             .ofType(FindANodeResultAction.self)
-//            .filterMap {
-//                guard let fetchAtomsRequest = $0.request as? FetchAtomsActionRequest else { return .ignore }
-//                return RxSwiftExt.FilterMap<FetchAtomsActionRequest>.map(fetchAtomsRequest)
             .filter { $0.request is FetchAtomsActionRequest }
-            .map {
-               castOrKill(instance: $0.request, toType: FetchAtomsActionRequest.self) // TODO if this works, change to `filterMap`, do analogously in `SubmitAtomEpic`
-            }.flatMap { [unowned self] (fetchAtomsActionRequest: FetchAtomsActionRequest) -> Observable<NodeAction> in
-                let node = fetchAtomsActionRequest.node
+            .flatMap { [unowned self] (nodeFound: FindANodeResultAction) -> Observable<NodeAction> in
+                
+                let node = nodeFound.node
+                let fetchAtomsActionRequest = castOrKill(instance: nodeFound.request, toType: FetchAtomsActionRequest.self)
                 let uuid = fetchAtomsActionRequest.uuid
                 
                 var fetchDisposable: Disposable?
@@ -45,6 +42,7 @@ public extension FetchAtomsEpic {
                     .andThen(atomsObs)
                     .do(onSubscribe: { disposableMap[uuid] = fetchDisposable })
         }
+        
         let cancelFetch: Observable<NodeAction> = actions
             .ofType(FetchAtomsActionCancel.self)
             .do(onNext: { disposableMap.removeValue(forKey: $0.uuid)?.dispose() })

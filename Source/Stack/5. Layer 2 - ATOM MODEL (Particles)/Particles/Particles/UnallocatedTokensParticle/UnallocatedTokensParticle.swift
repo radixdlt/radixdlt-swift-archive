@@ -14,7 +14,6 @@ public struct UnallocatedTokensParticle:
     ParticleConvertible,
     RadixCodable,
     RadixModelTypeStaticSpecifying,
-    TokenDefinitionReferencing,
     Accountable
 {
     // swiftlint:enable colon opening_brace
@@ -100,6 +99,12 @@ public extension UnallocatedTokensParticle {
 // MARK: - Accountable
 public extension UnallocatedTokensParticle {
     var addresses: Addresses {
-        return Addresses(tokenDefinitionReference.address)
+        return [tokenDefinitionReference.address]
     }
 }
+
+//public extension UnallocatedTokensParticle {
+//    var tokenSupplyType: SupplyType {
+//        return SupplyType(tokenPermissions: permissions)
+//    }
+//}

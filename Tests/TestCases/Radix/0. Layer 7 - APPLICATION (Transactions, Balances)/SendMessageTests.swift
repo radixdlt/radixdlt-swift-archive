@@ -14,10 +14,10 @@ import RxBlocking
 
 class SendMessageTests: LocalhostNodeTest {
     
-    private let aliceIdentity = AbstractIdentity(privateKey: 1, alias: "Alice")
-    private let bobAccount = Account(privateKey: 2)
-    private let claraAccount = Account(privateKey: 3)
-    private let dianaAccount = Account(privateKey: 4)
+    private let aliceIdentity = AbstractIdentity(alias: "Alice")
+    private let bobAccount = Account()
+    private let claraAccount = Account()
+    private let dianaAccount = Account()
     
     private lazy var application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
     
@@ -26,15 +26,22 @@ class SendMessageTests: LocalhostNodeTest {
     private lazy var clara = application.addressOf(account: claraAccount)
     private lazy var diana = application.addressOf(account: dianaAccount)
     
-
+    private let disposeBag = DisposeBag()
+    
     func testSendNonEmptyPlainText() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message without encryption
+        application.pull().disposed(by: disposeBag)
         let result = application.sendPlainTextMessage("Hey Bob, this is plain text", to: bob)
 
         // THEN: I see that action completes successfully
+        print("SENDING MESSAGE")
         XCTAssertTrue(result.blockUntilComplete(timeout: .enoughForPOW))
+        print("MESSAGE SENT, fetching decrypted message")
 
+        guard let sentMessage = application.observeMyMessages().blockingTakeLast(timeout: 20) else { return }
+        print("FETCHED DECRYPTED message")
+        XCTAssertEqual(sentMessage.payload.toString(), "Hey Bob")
     }
     
     func testSendNonEmptyEncrypted() {

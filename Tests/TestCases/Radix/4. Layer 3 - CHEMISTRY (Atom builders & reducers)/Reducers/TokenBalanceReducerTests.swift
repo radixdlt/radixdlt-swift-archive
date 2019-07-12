@@ -17,17 +17,17 @@ import RxSwift
 class TokenBalanceReducerTests: XCTestCase {
     
     func testSimpleBalance() {
-        let reducer = TokenBalanceReducer()
-        let balances = reducer.reduce(particles: [transferrable(10)])
+        let reducer = TokenBalanceReferencesReducer()
+        let balances = reducer.reduceFromInitialState(particles: [transferrable(10)])
         
         let balance = balances[xrd]
         XCTAssertEqual(balance?.amount, 10)
     }
     
     func testMultipleMintedTokens() {
-        let reducer = TokenBalanceReducer()
+        let reducer = TokenBalanceReferencesReducer()
     
-        let balances = reducer.reduce(particles: [
+        let balances = reducer.reduceFromInitialState(particles: [
             transferrable(3),
             transferrable(5),
             transferrable(11)

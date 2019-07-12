@@ -20,6 +20,11 @@ public extension SubscriberId {
     init(uuid: UUID) {
         self.init(validated: uuid.uuidString)
     }
+    
+    init(from decoder: Decoder) throws {
+        let singleValueContainer = try decoder.singleValueContainer()
+        self.init(validated: try singleValueContainer.decode(String.self))
+    }
 }
 
 public extension SubscriberId {

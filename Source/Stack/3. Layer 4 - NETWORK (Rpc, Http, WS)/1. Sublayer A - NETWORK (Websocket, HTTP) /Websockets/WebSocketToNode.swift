@@ -63,7 +63,7 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
     }
     
     deinit {
-        log.warning("Deinit (might be relevant until life cycle is proper fixed)")
+        log.warning("🧨")
         closeDisregardingListeners()
     }
 }
@@ -173,7 +173,8 @@ public extension WebSocketToNode {
             stateSubject.onNext(.ready)
             sendQueued()
         } else {
-            log.verbose("Received response over websockets (text of #\(text.count) chars)")
+            log.debug("Received response over websockets (text of #\(text.count) chars)")
+            log.verbose("Received response over websockets: \n<\(text)>\n")
             receivedMessagesSubject.onNext(text)
         }
     }

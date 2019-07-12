@@ -35,13 +35,8 @@ private enum ParseJsonRpcResponseMode {
     case responseOnRequest(withId: String)
 }
 
-public enum RPCNotificationError: Swift.Error, Equatable {
-    case failedToStartObservingNotification(RPCNotification, subscriberId: SubscriberId)
-}
-
 private extension FullDuplexCommunicationChannel {
 
-    // swiftlint:disable:next function_body_length
     func resultForMessage<Model>(
         parseMode: ParseJsonRpcResponseMode
     ) -> Observable<RPCResult<Model>> where Model: Decodable {

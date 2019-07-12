@@ -79,6 +79,10 @@ public extension Atomic where Self: RadixHashable {
         }
     }
     
+    var shortAid: String {
+        return String(identifier().stringValue.suffix(4))
+    }
+    
     // MARK: Equatable
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.radixHash == rhs.radixHash

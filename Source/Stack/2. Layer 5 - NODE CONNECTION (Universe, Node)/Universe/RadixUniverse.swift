@@ -37,6 +37,9 @@ public final class DefaultRadixUniverse: RadixUniverse {
         log.verbose("(Default)RadixUniverse created")
     }
 
+    deinit {
+        log.warning("🧨")
+    }
 }
 
 public extension DefaultRadixUniverse {

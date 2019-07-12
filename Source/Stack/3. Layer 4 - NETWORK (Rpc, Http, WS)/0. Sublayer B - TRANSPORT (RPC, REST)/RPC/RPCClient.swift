@@ -26,7 +26,3 @@ public protocol RPCClient:
 {
     // swiftlint:enable colon opening_brace
 }
-
-public protocol AtomSubscriptionCancelling {
-    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable
-}

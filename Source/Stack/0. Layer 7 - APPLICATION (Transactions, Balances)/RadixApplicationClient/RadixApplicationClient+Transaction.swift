@@ -52,19 +52,12 @@ extension RadixApplicationClient {
         }
         
         func buildAtom() -> Single<UnsignedAtom> {
-            log.verbose("Building atom")
             let particleGroups = api.universe.atomStore.clearStagedParticleGroups(for: uuid)
             let atom = Atom(particleGroups: particleGroups)
             
             return api.addFee(to: atom).map {
                 try UnsignedAtom(atomWithPow: $0)
             }
-            
-            //        let atomWithFee = api.addFee(to: atom)
-            //        let unsignedAtom = atomWithFee.map {
-            //
-            //        }
-            //        return unsignedAtom
         }
     }
 }

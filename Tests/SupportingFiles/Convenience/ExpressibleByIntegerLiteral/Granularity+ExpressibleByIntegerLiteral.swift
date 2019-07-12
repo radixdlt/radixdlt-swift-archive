@@ -32,3 +32,29 @@ public extension EUID {
         }
     }
 }
+
+// MARK: - ExpressibleByIntegerLiteral
+extension Supply: ExpressibleByIntegerLiteral {}
+public extension Supply {
+    init(integerLiteral unvalidated: Int) {
+        do {
+            let nonNegativeAmount = try NonNegativeAmount(integer: unvalidated)
+            try self.init(nonNegativeAmount: nonNegativeAmount)
+        } catch {
+            badLiteralValue(unvalidated, error: error)
+        }
+    }
+}
+
+// MARK: - ExpressibleByIntegerLiteral
+extension UniverseConfig.UniverseType: ExpressibleByIntegerLiteral {}
+public extension IntInitializable where Self: ExpressibleByIntegerLiteral {
+    init(integerLiteral unvalidated: Int) {
+        do {
+            try self.init(int: unvalidated)
+        } catch {
+            badLiteralValue(unvalidated, error: error)
+        }
+    }
+    
+}

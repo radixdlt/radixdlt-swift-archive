@@ -9,35 +9,6 @@
 import Foundation
 import RxSwift
 
-public struct AnyParticle: Hashable {
-    
-    private let _getParticle: () -> ParticleConvertible
-    private let _hashInto: (inout Swift.Hasher) -> Void
-    
-//    public init<Concrete>(_ concrete: Concrete) where Concrete: ParticleConvertible {
-//        self._getParticle = { concrete }
-//        self._hashInto = { $0.combine(concrete.hashEUID) }
-//    }
-    public init(someParticle: ParticleConvertible) {
-        self._getParticle = { someParticle }
-        self._hashInto = { $0.combine(someParticle.hashEUID) }
-    }
-}
-public extension AnyParticle {
-    func getParticle() -> ParticleConvertible {
-        return self._getParticle()
-    }
-}
-public extension AnyParticle {
-    static func == (lhs: AnyParticle, rhs: AnyParticle) -> Bool {
-        return lhs.getParticle().hashEUID == rhs.getParticle().hashEUID
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        self._hashInto(&hasher)
-    }
-}
-
 public protocol AtomStore {
     
     /// Interface for propagating when the current store
@@ -55,7 +26,7 @@ public protocol AtomStore {
     func upParticles(at address: Address, stagedUuid: UUID?) -> [ParticleConvertible]
     
     /// Stores an Atom (wrapped in AtomObservation) under a given destination (Address) and not
-    func store(atomObservation: AtomObservation, address: Address, notifyListeners: AtomNotificationMode)
+    func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode)
     
     func stateParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID)
 
@@ -64,17 +35,19 @@ public protocol AtomStore {
 
 public final class InMemoryAtomStore: AtomStore {
     public final class ListenerOf<Element> {
-        private var listeners: [Address: [PublishSubject<Element>]] = [:]
+        private var listeners: [Address: ReplaySubject<Element>] = [:]
         public init() {}
     }
     
     private var stagedAtoms         = [UUID: Atom]()
     private var atoms               = [Atom: AtomObservation]()
+//    private let justUpdatedAtomsAt  = ReplaySubject<Address>()
     
     private var stagedParticleIndex = [UUID: [AnyParticle: Spin]]()
     private var particleIndex       = [AnyParticle: [Spin: Set<Atom>]]()
     
     private var synced              = [Address: Bool]()
+//    private let justSyncedAtomsAt   = ReplaySubject<Address>()
 
     private var atomUpdateListeners: ListenerOf<AtomObservation>
     private var syncListeners: ListenerOf<Date>
@@ -83,17 +56,23 @@ public final class InMemoryAtomStore: AtomStore {
         genesisAtoms: [Atom] = [],
         atomUpdateListeners: ListenerOf<AtomObservation> = .init(),
         syncListeners: ListenerOf<Date> = .init()
-        ) {
+    ) {
         self.atomUpdateListeners = atomUpdateListeners
         self.syncListeners = syncListeners
+        
+        // Store genesis atoms
         genesisAtoms.forEach { atom in
             atom.addresses().forEach {
                 let atomObservation = AtomObservation.stored(atom)
                 self.store(
                     atomObservation: atomObservation,
                     address: $0,
-                    notifyListeners: .dontNotify
+                    // TODO change `notifyListenerMode` to `.dontNotify`?
+                    notifyListenerMode: .notifyOnAtomUpdateAndSync
                 )
+            }
+            atom.addresses().forEach {
+                self.store(atomObservation: AtomObservation.head(), address: $0, notifyListenerMode: .notifyOnAtomUpdateAndSync)
             }
         }
     }
@@ -102,33 +81,66 @@ public final class InMemoryAtomStore: AtomStore {
 public extension InMemoryAtomStore {
     
     func onSync(address: Address) -> Observable<Date> {
-        return Observable.create { [unowned self] observer in
-            if self.synced.valueForKey(key: address, ifAbsent: { false }) {
-                observer.onNext(Date())
+        if let existingListenerAtAddress = syncListeners.listener(of: address) {
+            return existingListenerAtAddress.asObservable()
+        } else {
+//            let replaySubject = ReplaySubject<Date>.create(bufferSize: 10000)
+            let newListener = ReplaySubject<Date>.createUnbounded()
+            syncListeners.addListener(newListener, of: address)
+            defer {
+                if synced.valueForKey(key: address, ifAbsent: { false }) {
+                    newListener.onNext(Date())
+                }
             }
-
-            var disposables = [Disposable]()
             
-            let syncList: [PublishSubject<Date>]
-            
-            if !self.syncListeners.hasAnyListener(for: address) {
-                let subject = PublishSubject<Date>()
-                self.syncListeners.addLister(subject: subject, forAddress: address)
-                syncList = [subject]
-            } else {
-                // swiftlint:disable:next force_unwrap
-                syncList = self.syncListeners.listers(of: address)!
-                
-            }
-            syncList.forEach {
-                disposables.append($0.subscribe(observer))
-            }
-            return Disposables.create(disposables)
+//            return Observable.create { [unowned self] observer in
+//
+//                if self.synced.valueForKey(key: address, ifAbsent: { false }) {
+//                    observer.onNext(Date())
+//                }
+//
+//                return newListener.asObservable()
+//                    .do(onNext: {
+//                        log.error("Yay! Sync got next: \($0)")
+//                    })
+//                    .subscribe(observer)
+//            }
+            return newListener.asObservable()
         }
     }
     
     func atomObservations(of address: Address) -> Observable<AtomObservation> {
-        implementMe()
+        
+        if let existingListenerAtAddress = atomUpdateListeners.listener(of: address) {
+            return existingListenerAtAddress.asObservable()
+        } else {
+            let newListener = ReplaySubject<AtomObservation>.createUnbounded()
+            atomUpdateListeners.addListener(newListener, of: address)
+            log.error("replaying history for new AtomObserver")
+            // Replay history
+            atoms.filter {
+                $0.value.isStore && $0.key.addresses().contains(address)
+            }.compactMap {
+                $0.value
+            }.forEach { newListener.onNext($0) }
+            
+//            return Observable.create { [unowned self] observer in
+//                // Replay history
+//                self.atoms.filter {
+//                    $0.value.isStore && $0.key.addresses().contains(address)
+//                    }.compactMap {
+//                        $0.value
+//                    }.forEach { observer.onNext($0) }
+//
+//                return newListener.asObservable()
+//                    .do(onNext: {
+//                        log.error("Yay! Sync got next: \($0)")
+//                    })
+//                    .subscribe(observer)
+//            }.share()
+            return newListener.asObservable()
+        }
+
     }
     
     func upParticles(at address: Address, stagedUuid: UUID?) -> [ParticleConvertible] {
@@ -181,19 +193,20 @@ public extension InMemoryAtomStore {
         return atom.particleGroups
     }
     
-    // swiftlint:disable:next function_body_length
-    func store(atomObservation: AtomObservation, address: Address, notifyListeners: AtomNotificationMode) {
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
+    func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {
         let areAtomsInSync = atomObservation.isHead
+        synced[address] = areAtomsInSync
         defer {
-            synced[address] = areAtomsInSync
-            if areAtomsInSync, notifyListeners.shouldNotifyOnSync {
-                syncListeners.notifyAll(about: Date(), address: address)
+            if areAtomsInSync, notifyListenerMode.shouldNotifyOnSync {
+                syncListeners.notifyLister(of: address, about: Date())
             }
+//            justSyncedAtomsAt.onNext(address)
         }
         
         guard let atom = atomObservation.atom else {
-            if notifyListeners.shouldNotifyOnAtomUpdate {
-                atomUpdateListeners.notifyAll(about: atomObservation, address: address)
+            if notifyListenerMode.shouldNotifyOnAtomUpdate {
+                atomUpdateListeners.notifyLister(of: address, about: atomObservation)
             }
             return
         }
@@ -220,20 +233,35 @@ public extension InMemoryAtomStore {
         }
   
         let includeAtom: Bool
+        let isSoftToHard: Bool
         if let currentAtomObservation = atoms[atom] {
+            // Soft observation should not be able to update a hard state
+            // Only update if type changes
             includeAtom = (!atomObservation.isSoft || currentAtomObservation.isSoft) && !atomObservation.isSameType(as: currentAtomObservation)
+            isSoftToHard = currentAtomObservation.isSoft && !atomObservation.isSoft
         } else {
             includeAtom = atomObservation.isStore
+            isSoftToHard = false
             atom.spunParticles().forEach { spunParticle in
                 let key = AnyParticle(someParticle: spunParticle.particle)
                 let spinParticleIndex = particleIndex.valueForKey(key: key) { [Spin: Set<Atom>]() }
                 particleIndex[key] = spinParticleIndex.merging([spunParticle.spin: [atom].asSet], uniquingKeysWith: { $0.union($1) })
             }
         }
+
+        if atomObservation.isDelete && includeAtom {
+            softDeleteDependentsOf(atom: atom)
+        }
         
-        if includeAtom, notifyListeners.shouldNotifyOnAtomUpdate {
+        if includeAtom || isSoftToHard {
+            atoms[atom] = atomObservation
+//            justUpdatedAtomsAt.onNext(address)
+        }
+        
+        if includeAtom, notifyListenerMode.shouldNotifyOnAtomUpdate {
+            log.info("atom.addresses(): \(atom.addresses())")
             atom.addresses().forEach {
-                atomUpdateListeners.notifyAll(about: atomObservation, address: $0)
+                atomUpdateListeners.notifyLister(of: $0, about: atomObservation)
             }
         }
         
@@ -265,23 +293,31 @@ private extension InMemoryAtomStore {
 }
 
 extension InMemoryAtomStore.ListenerOf {
-    func notifyAll(about element: Element, address: Address) {
-        guard let listenersOfAddress = listers(of: address) else { return }
-        listenersOfAddress.forEach { $0.onNext(element) }
+    func notifyLister(of address: Address, about element: Element) {
+        guard let listenerOfAddress = listener(of: address) else {
+            log.warning("no listener at address: \(address), element not emitted to any listener: \(element), elementType: \(Element.self))")
+            return }
+        log.error("📢 notifying listener at address: \(address), about element: \(element)")
+        listenerOfAddress.onNext(element)
     }
     
-    func listers(of address: Address) -> [PublishSubject<Element>]? {
+    func listener(of address: Address) -> ReplaySubject<Element>? {
         return listeners[address]
     }
     
-    func hasAnyListener(for address: Address) -> Bool {
-        let subjetsOrEmpty = listeners.valueForKey(key: address, ifAbsent: { [PublishSubject<Element>]() })
-        return !subjetsOrEmpty.isEmpty
+    func hasListener(of address: Address) -> Bool {
+        return listener(of: address) != nil
     }
     
-    func addLister(subject: PublishSubject<Element>, forAddress address: Address) {
-        var subjects = listeners.valueForKey(key: address, ifAbsent: { [PublishSubject<Element>]() })
-        subjects.append(subject)
-        listeners[address] = subjects
+    func addListener(_ subject: ReplaySubject<Element>, of address: Address) {
+        guard !hasListener(of: address) else { return }
+        log.warning("Adding listener of address: \(address), elementType: \(Element.self)")
+        listeners[address] = subject
     }
+    
+//    func addLister(subject: ReplaySubject<Element>, forAddress address: Address) {
+//        var subjects = listeners.valueForKey(key: address, ifAbsent: { [ReplaySubject<Element>]() })
+//        subjects.append(subject)
+//        listeners[address] = subjects
+//    }
 }

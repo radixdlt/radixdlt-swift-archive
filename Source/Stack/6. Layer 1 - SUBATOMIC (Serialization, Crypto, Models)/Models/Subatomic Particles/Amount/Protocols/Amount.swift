@@ -45,7 +45,7 @@ public extension Amount {
     
     init?<T>(exactly source: T) where T: BinaryInteger {
         guard let fromSource = Magnitude(exactly: source) else { return nil }
-        self.init(validated: fromSource)
+        try? self.init(validating: fromSource)
     }
 }
 
@@ -143,7 +143,7 @@ public extension Amount {
 // MARK: - StringInitializable
 public extension Amount {
     init(string: String) throws {
-        try self.init(validating: try Magnitude(string: string))
+        try self.init(validating: try Magnitude(validating: string))
     }
 }
 
@@ -159,11 +159,21 @@ public extension Amount {
     static var jsonPrefix: JSONPrefix { return .uint256DecimalString }
 }
 
+// MARK: - From Binary Integer
+public extension Amount {
+    init<Integer>(integer: Integer) throws where Integer: BinaryInteger {
+        try self.init(validating: Magnitude(integer))
+    }
+}
+
 // MARK: - ExpressibleByIntegerLiteral
 public extension Amount {
-    init(integerLiteral: Magnitude.IntegerLiteralType) {
-        let unvalidatedMagnitude = Magnitude.init(integerLiteral: integerLiteral)
-        self.init(validated: unvalidatedMagnitude)
+    init(integerLiteral magnitudeIntegerLiteral: Magnitude.IntegerLiteralType) {
+        do {
+            try self.init(validating: Magnitude.init(integerLiteral: magnitudeIntegerLiteral))
+        } catch {
+            badLiteralValue(magnitudeIntegerLiteral, error: error)
+        }
     }
 }
 

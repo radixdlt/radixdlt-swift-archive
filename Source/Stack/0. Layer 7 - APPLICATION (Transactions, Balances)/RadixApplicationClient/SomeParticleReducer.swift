@@ -12,12 +12,12 @@ public struct SomeParticleReducer<State: ApplicationState>: ParticleReducer, Thr
     
     public let initialState: State
     private let _reduce: (State, ParticleConvertible) -> State
-    private let _combine: (State, State) -> State
+//    private let _combine: (State, State) -> State
     
     public init<Concrete>(_ concrete: Concrete) where Concrete: ParticleReducer, Concrete.State == State {
         self.initialState = concrete.initialState
         self._reduce = { concrete.reduce(state: $0, particle: $1) }
-        self._combine = { concrete.combine(state: $0, withOther: $1) }
+//        self._combine = { concrete.combine(state: $0, withOther: $1) }
     }
     
     public init(any: AnyParticleReducer) throws {
@@ -26,7 +26,7 @@ public struct SomeParticleReducer<State: ApplicationState>: ParticleReducer, Thr
         }
         self.initialState = any.anInitialState()
         self._reduce = { any.reduce(aState: $0, particle: $1) }
-        self._combine = { any.combine(aState: $0, withOther: $1) }
+//        self._combine = { any.combine(aState: $0, withOther: $1) }
     }
 }
 
@@ -40,7 +40,7 @@ public extension SomeParticleReducer {
         return self._reduce(state, particle)
     }
     
-    func combine(state lhs: State, withOther rhs: State) -> State {
-        return self._combine(lhs, rhs)
-    }
+//    func combine(state lhs: State, withOther rhs: State) -> State {
+//        return self._combine(lhs, rhs)
+//    }
 }

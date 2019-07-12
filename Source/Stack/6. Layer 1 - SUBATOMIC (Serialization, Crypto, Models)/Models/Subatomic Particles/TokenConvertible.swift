@@ -11,20 +11,22 @@ import Foundation
 public protocol TokenConvertible: TokenDefinitionReferencing {
     var symbol: Symbol { get }
     var name: Name { get }
-    var address: Address { get }
+    var tokenDefinedBy: Address { get }
     var granularity: Granularity { get }
+    var description: Description { get }
+    var tokenSupplyType: SupplyType { get }
 }
 
 // MARK: - Hashable Preparation
 public extension TokenConvertible {
     func hash(into hasher: inout Hasher) {
-        hasher.combine(symbol)
+        hasher.combine(tokenDefinitionReference)
     }
 }
 
 // MARK: - TokenDefinitionReferencing
 public extension TokenConvertible {
     var tokenDefinitionReference: ResourceIdentifier {
-        return ResourceIdentifier(address: address, symbol: symbol)
+        return ResourceIdentifier(address: tokenDefinedBy, symbol: symbol)
     }
 }

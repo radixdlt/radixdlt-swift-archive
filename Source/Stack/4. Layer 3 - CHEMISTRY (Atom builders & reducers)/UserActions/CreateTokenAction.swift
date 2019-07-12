@@ -8,15 +8,15 @@
 
 import Foundation
 
-public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
+public struct CreateTokenAction: UserAction, Throwing, TokenConvertible, TokenSupplyStateConvertible {
 
     public let creator: Address
     public let name: Name
     public let symbol: Symbol
     public let description: Description
     public let granularity: Granularity
-    public let initialSupply: NonNegativeAmount
-    public let supplyType: SupplyType
+    public let initialSupply: Supply
+    public let tokenSupplyType: SupplyType
     public let iconUrl: URL?
     
     public init(
@@ -31,11 +31,11 @@ public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
 
         switch initialSupplyType {
         case .fixed(let positiveInitialSupply):
-            self.supplyType = .fixed
-            self.initialSupply = NonNegativeAmount(positive: positiveInitialSupply)
+            self.tokenSupplyType = .fixed
+            self.initialSupply = positiveInitialSupply
         case .mutable(let nonNegativeInitialSupply):
-            self.supplyType = .mutable
-            self.initialSupply = nonNegativeInitialSupply
+            self.tokenSupplyType = .mutable
+            self.initialSupply = nonNegativeInitialSupply ?? .zero
         }
         
         guard initialSupply.isExactMultipleOfGranularity(granularity) else {
@@ -55,6 +55,7 @@ public extension CreateTokenAction {
     var nameOfAction: UserActionName { return .createToken }
 }
 
+// MARK: - Throwing
 public extension CreateTokenAction {
     enum Error: Swift.Error, Equatable {
         case initialSupplyNotMultipleOfGranularity
@@ -63,8 +64,15 @@ public extension CreateTokenAction {
 
 // MARK: - TokenConvertible
 public extension CreateTokenAction {
-    var address: Address {
+    var tokenDefinedBy: Address {
         return creator
+    }
+}
+
+// MARK: - TokenSupplyStateConvertible
+public extension CreateTokenAction {
+    var totalSupply: Supply {
+        return initialSupply
     }
 }
 
@@ -77,21 +85,7 @@ public extension CreateTokenAction {
 public extension CreateTokenAction {
     
     enum InitialSupply {
-        case fixed(to: PositiveAmount)
-        case mutable(initial: NonNegativeAmount)
-    }
-    
-    enum SupplyType: Int, Hashable {
-        case fixed
-        case mutable
-    }
-}
-
-public extension CreateTokenAction.SupplyType {
-    var tokenPermissions: TokenPermissions {
-        switch self {
-        case .fixed: return [.mint: .tokenCreationOnly, .burn: .none]
-        case .mutable: return [.mint: .tokenOwnerOnly, .burn: .tokenOwnerOnly]
-        }
+        case fixed(to: Supply)
+        case mutable(initial: Supply?)
     }
 }

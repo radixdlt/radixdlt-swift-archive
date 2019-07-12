@@ -33,12 +33,12 @@ import Foundation
 ///         "method": "Atoms.subscribeUpdate",
 ///         "params": {
 ///             "atomEvents": [
-///             {
-///             "atom": { /* ATOM OMITTED FOR SAKE OF BREVITY */ },
-///             "serializer": "radix.atom",
-///             "type": ":str:store",
-///             "version": 100
-///             }
+///                 {
+///                     "atom": { /* ATOM OMITTED FOR SAKE OF BREVITY */ },
+///                     "serializer": "radix.atom",
+///                     "type": ":str:store",
+///                     "version": 100
+///                  }
 ///             ],
 ///             "isHead": false,
 ///             "subscriberId": "2388888"

@@ -24,7 +24,9 @@ extension Result: Decodable where Success: Decodable, Failure == RPCError {
             do {
                 self = .success(try singleValueContainer.decode(Success.self))
             } catch let decodingError as DecodingError {
-                self = .failure(RPCError.failedToDecodeResponse(decodingError))
+                let anyDecodable = try singleValueContainer.decode(AnyDecodable.self)
+                let jsonString = String(describing: anyDecodable.value)
+                self = .failure(RPCError.failedToDecodeResponse(error: decodingError, toType: Success.self, fromJson: jsonString))
             } catch {
                 incorrectImplementation("Covered by RPCResponse `init(from: Decoder)`")
             }

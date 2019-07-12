@@ -12,7 +12,7 @@ public enum RPCError: Swift.Error, Decodable, Equatable, CustomStringConvertible
     case requestError(RPCRequestError)
     
     /// Received response containing `"params"` or `"result"`, thus a valid response, but failed to decode it into a model.
-    case failedToDecodeResponse(DecodingError) // Instantiated from RPCResult
+    case failedToDecodeResponse(error: DecodingError, toType: Decodable.Type, fromJson: String) // Instantiated from RPCResult
     
     case unrecognizedJson(jsonString: String)
     
@@ -53,7 +53,7 @@ public extension RPCError {
 public extension RPCError {
     var description: String {
         switch self {
-        case .failedToDecodeResponse(let decodingError): return "Recived non error response from API, but failed to decode it: \(decodingError)"
+        case .failedToDecodeResponse(let decodingError, let decodableType, let fromJson): return "Received non error response from API, but failed to decode it into type: <\(decodableType)>, decoding error: <\(decodingError)>, from json: <\(fromJson)>"
         case .metaError(let decodingError): return "Recived specific API error, but failed to parse it, meta error: \(decodingError)"
         case .unrecognizedJson(let jsonString): return "Error parsing unrecognized json: `\(jsonString)`"
         case .requestError(let requestError): return "Request error: `\(requestError)`"
@@ -71,8 +71,8 @@ public extension RPCError {
         switch (lhs, rhs) {
         case (.requestError(let lhsRequestError), .requestError(let rhsRequestError)):
             return lhsRequestError == rhsRequestError
-        case (.failedToDecodeResponse(let lhsDecodingError), .failedToDecodeResponse(let rhsDecodingError)):
-            return lhsDecodingError == rhsDecodingError
+        case (.failedToDecodeResponse(let lhsDecodingError, let lhsDecodableType, _), .failedToDecodeResponse(let rhsDecodingError, let rhsDecodableType, _)):
+            return lhsDecodableType == rhsDecodableType && lhsDecodingError == rhsDecodingError
         case (.metaError(let lhsDecodingError), .metaError(let rhsDecodingError)):
             return lhsDecodingError == rhsDecodingError
         case (.unrecognizedJson(let lhsJsonString), .unrecognizedJson(let rhsJsonString)):

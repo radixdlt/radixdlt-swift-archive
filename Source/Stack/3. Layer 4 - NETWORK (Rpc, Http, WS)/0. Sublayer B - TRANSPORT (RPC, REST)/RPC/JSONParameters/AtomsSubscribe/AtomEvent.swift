@@ -8,13 +8,19 @@
 
 import Foundation
 
-public struct AtomEvent: RadixModelTypeStaticSpecifying, Decodable {
+public struct AtomEvent: RadixModelTypeStaticSpecifying, Decodable, CustomStringConvertible {
     public let atom: Atom
     public let type: AtomEventType
 }
 
 // MARK: - AtomEventType
 public extension AtomEvent {
+    
+    var description: String {
+        return """
+        .\(type)(atomWithAID: \(atom.shortAid))
+        """
+    }
     
     // swiftlint:disable colon
     

@@ -75,8 +75,26 @@ public extension TokenDefinitionParticle {
             description: action.description,
             address: action.creator,
             granularity: action.granularity,
-            permissions: action.supplyType.tokenPermissions,
+            permissions: action.tokenSupplyType.tokenPermissions,
             iconUrl: action.iconUrl
         )
+    }
+}
+
+// MARK: - TokenDefinitionReferencing
+public extension TokenDefinitionParticle {
+    var tokenDefinitionReference: ResourceIdentifier {
+        return ResourceIdentifier(address: address, symbol: symbol)
+    }
+}
+
+// MARK: - TokenConvertible
+public extension TokenDefinitionParticle {
+    var tokenDefinedBy: Address {
+        return address
+    }
+    
+    var tokenSupplyType: SupplyType {
+        return SupplyType(tokenPermissions: permissions)
     }
 }

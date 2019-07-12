@@ -14,7 +14,7 @@ public struct AnyParticleReducer: BaseParticleReducer {
     private let _matchesType: (Any.Type) -> Bool
     private let _initialState: () -> Any
     private let _reduce: (Any, ParticleConvertible) -> Any
-    private let _combine: (Any, Any) -> Any
+//    private let _combine: (Any, Any) -> Any
     
     public init<Concrete>(_ concrete: Concrete) where Concrete: ParticleReducer {
         // swiftlint:disable:next identifier_name
@@ -26,10 +26,10 @@ public struct AnyParticleReducer: BaseParticleReducer {
             let state = castOrKill(instance: $0, toType: State)
             return concrete.reduce(state: state, particle: $1)
         }
-        self._combine = {
-            let (lhsState, rhsState) = castOrKill(instance: $0, and: $1, toType: State)
-            return concrete.combine(state: lhsState, withOther: rhsState)
-        }
+//        self._combine = {
+//            let (lhsState, rhsState) = castOrKill(instance: $0, and: $1, toType: State)
+//            return concrete.combine(state: lhsState, withOther: rhsState)
+//        }
     }
 }
 
@@ -57,11 +57,11 @@ public extension AnyParticleReducer {
         )
     }
     
-    func combine<S>(aState lhs: S, withOther rhs: S) -> S where S: ApplicationState {
-        return castOrKill(
-            instance: self._combine(lhs, rhs),
-            toType: S.self
-        )
-    }
+//    func combine<S>(aState lhs: S, withOther rhs: S) -> S where S: ApplicationState {
+//        return castOrKill(
+//            instance: self._combine(lhs, rhs),
+//            toType: S.self
+//        )
+//    }
 }
 

@@ -8,28 +8,6 @@
 
 import Foundation
 
-//public struct AtomSubmitAndSubscribeRequest: Encodable {
-//
-//    public let subscriberId: SubscriberId
-//    public let atom: Atom
-//
-//    public init(atom signedAtom: SignedAtom, subscriberId: SubscriberId) {
-//        // TODO: Make `Atomic` conform to `Encodable`
-//        self.atom = Atom(atomic: signedAtom)
-//        self.subscriberId = subscriberId
-//    }
-//}
-
-//public struct AtomSubmitRequest: Encodable {
-//    
-//    public let atom: Atom
-//    
-//    public init(atom signedAtom: SignedAtom) {
-//        // TODO: Make `Atomic` conform to `Encodable`
-//        self.atom = Atom(atomic: signedAtom) // or replace with: `signedAtom.wrappedAtom.wrappedAtom` ?
-//    }
-//}
-
 public struct GetAtomStatusRequest: Encodable {
     public let atomIdentifier: AtomIdentifier
 }

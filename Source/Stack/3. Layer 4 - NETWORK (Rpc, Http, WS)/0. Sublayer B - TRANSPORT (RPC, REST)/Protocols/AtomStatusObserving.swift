@@ -10,5 +10,5 @@ import Foundation
 import RxSwift
 
 public protocol AtomStatusObserving {
-    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> Observable<AtomStatusNotification>
+    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> Observable<AtomStatusEvent>
 }

@@ -1,5 +1,5 @@
 //
-//  AtomStatusNotification.swift
+//  AtomStatusEvent.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-06-28.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum AtomStatusNotification: Decodable, Equatable {
+public enum AtomStatusEvent: Decodable, Equatable {
     case stored
     case notStored(reason: AtomNotStoredReason)
 }
@@ -45,7 +45,7 @@ public struct AtomNotStoredReason: Equatable {
     }
 }
 
-public extension AtomStatusNotification {
+public extension AtomStatusEvent {
     enum CodingKeys: String, CodingKey {
         case atomStatus = "status"
         case dataAsJsonString = "data"
@@ -74,7 +74,7 @@ extension AtomStatusNotStored {
     init(atomStatus: AtomStatus) {
         
         switch atomStatus {
-        case .stored: incorrectImplementation("Should have beeb handled in AtomStatusNotification.stored")
+        case .stored: incorrectImplementation("Should have beeb handled in AtomStatusEvent.stored")
         case .conflictLoser: self = .conflictLoser
         case .doesNotExist: self = .doesNotExist
         case .missingDependency: self = .missingDependency
@@ -87,11 +87,11 @@ extension AtomStatusNotStored {
     }
 }
 
-//public struct AtomStatusNotification: Decodable {
+//public struct AtomStatusEvent: Decodable {
 //    public let atomStatus: AtomStatus
 //    //    public let dataAsJsonString: String
 //}
-//public extension AtomStatusNotification {
+//public extension AtomStatusEvent {
 //    enum CodingKeys: String, CodingKey {
 //        case atomStatus = "status"
 //        //        case dataAsJsonString = "data"

@@ -16,7 +16,7 @@ public protocol SubmitAtomAction: NodeAction, CustomDebugStringConvertible {
 public extension SubmitAtomAction {
     var debugDescription: String {
         return """
-        \(type(of: self))(atomWithAid: \(atom.identifier().hex.suffix(4)), node: \(node), uuid: \(uuid.uuidString.suffix(4)))
+        \(type(of: self))(atomWithAid: \(atom.shortAid), node: \(node), uuid: \(uuid.uuidString.suffix(4)))
         """
     }
 }
@@ -111,17 +111,17 @@ public struct SubmitAtomActionRecived: SubmitAtomAction {
 public struct SubmitAtomActionStatus: SubmitAtomAction {
     public let atom: SignedAtom
     public let node: Node
-    public let statusNotification: AtomStatusNotification
+    public let statusNotification: AtomStatusEvent
     public let uuid: UUID
     
-    private init(atom: SignedAtom, node: Node, statusNotification: AtomStatusNotification, uuid: UUID) {
+    private init(atom: SignedAtom, node: Node, statusNotification: AtomStatusEvent, uuid: UUID) {
         self.atom = atom
         self.node = node
         self.statusNotification = statusNotification
         self.uuid = uuid
     }
     
-    public init(sendAction: SubmitAtomActionSend, node: Node, statusNotification: AtomStatusNotification) {
+    public init(sendAction: SubmitAtomActionSend, node: Node, statusNotification: AtomStatusEvent) {
         self.init(atom: sendAction.atom, node: node, statusNotification: statusNotification, uuid: sendAction.uuid)
     }
 }

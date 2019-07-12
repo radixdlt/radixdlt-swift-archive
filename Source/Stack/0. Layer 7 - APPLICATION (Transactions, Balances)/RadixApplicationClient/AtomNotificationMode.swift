@@ -26,7 +26,7 @@ public extension AtomNotificationMode {
     static let dontNotify = AtomNotificationMode()
     static let notifyOnAtomUpdate = AtomNotificationMode()
     static let notifyOnSync = AtomNotificationMode()
-    static let notifyOnAtomUpdateAndSync: AtomNotificationMode = [.notifyOnAtomUpdate, .notifyOnAtomUpdate]
+    static let notifyOnAtomUpdateAndSync: AtomNotificationMode = [.notifyOnAtomUpdate, .notifyOnSync]
     static let `default`: AtomNotificationMode = .notifyOnAtomUpdateAndSync
 }
 

@@ -42,6 +42,28 @@ internal func incorrectImplementation(
     fatalError(message)
 }
 
+extension ValueValidating {
+    static func badValuePassed(_ value: Unvalidated,
+                               validationThrew error: Swift.Error,
+                               _ file: String = #file,
+                               _ line: Int = #line
+    ) -> Never {
+        let message = "Passed bad value: `\(value)`, validation threw error: `\(error)`, in file: \(file), line: \(line)"
+        fatalError(message)
+    }
+}
+
+internal func badLiteralValue<Value>(
+    _ value: Value,
+    error: Swift.Error,
+//    _ reason: String? = nil,
+    _ file: String = #file,
+    _ line: Int = #line
+) -> Never {
+    let message = "Passed bad integer value: `\(value)` to non-throwing ExpressibleByFoobarLiteral initializer, resulting in error: `\(error)`, in file: \(file), line: \(line)"
+    fatalError(message)
+}
+
 internal func unexpectedlyMissedToCatch(
     error: Swift.Error,
     _ file: String = #file,

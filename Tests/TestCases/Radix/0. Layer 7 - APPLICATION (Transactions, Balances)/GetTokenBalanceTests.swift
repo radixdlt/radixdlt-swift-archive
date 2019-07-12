@@ -11,7 +11,7 @@ import XCTest
 import RxSwift
 
 class GetTokenBalanceTests: LocalhostNodeTest {
-    
+        
 //    func testGetTokenBalance() {
 //        // GIVEN
 //        // a Radix Application

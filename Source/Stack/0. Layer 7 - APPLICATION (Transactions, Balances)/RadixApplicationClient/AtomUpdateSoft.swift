@@ -8,13 +8,28 @@
 
 import Foundation
 
-public enum AtomObservation: Hashable {
+public enum AtomObservation: Hashable, CustomStringConvertible {
     case store(atom: Atom, soft: Bool, receivedAt: Date)
     case head(receivedAt: Date)
     case delete(atom: Atom, soft: Bool, receivedAt: Date)
 }
 
 public extension AtomObservation {
+    
+    var typeName: String {
+        switch self {
+        case .store: return "store"
+        case .head: return "head"
+        case .delete: return "delete"
+        }
+    }
+    
+    var description: String {
+        return """
+        .\(typeName)(\((isStore || isDelete).ifTrue { "isSoft: \(isStore)" })\(atom.ifPresent { ", atomWithAID: \($0.shortAid)" }))
+        """
+    }
+    
     /**
      * Describes the type of observation including whether the update is "soft", or a weakly
      * supported atom which could possibly be deleted soon

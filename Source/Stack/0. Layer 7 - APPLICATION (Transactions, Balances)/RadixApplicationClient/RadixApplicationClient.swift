@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 import RxSwiftExt
+import RxOptional
 
 // swiftlint:disable file_length
 
@@ -18,7 +19,7 @@ public final class RadixApplicationClient {
     public private(set) var identity: AbstractIdentity
     public var activeAccount: Account
     
-    private let atomToExecutedActionMapper: [AnyAtomToExecutedActionMapper]
+    private let atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper]
     private let particlesToStateReducers: [AnyParticleReducer]
     
     /// Action to Particle Mappers which can mapToParticleGroups without any dependency on ledger state
@@ -35,7 +36,7 @@ public final class RadixApplicationClient {
         identity: AbstractIdentity,
         universe: RadixUniverse,
         feeMapper: FeeMapper = DefaultProofOfWorkWorker(),
-        atomToExecutedActionMapper: [AnyAtomToExecutedActionMapper] = .default,
+        atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper] = .default,
         particlesToStateReducers: [AnyParticleReducer] = .default,
         statelessActionToParticleGroupsMappers: [AnyStatelessActionToParticleGroupsMapper] = .default,
         statefulActionToParticleGroupsMappers: [AnyStatefulActionToParticleGroupsMapper] = .default,
@@ -44,7 +45,7 @@ public final class RadixApplicationClient {
         self.universe = universe
         self.identity = identity
         
-        self.atomToExecutedActionMapper = atomToExecutedActionMapper
+        self.atomToExecutedActionMappers = atomToExecutedActionMappers
         self.particlesToStateReducers = particlesToStateReducers
         self.statelessActionToParticleGroupsMappers = statelessActionToParticleGroupsMappers
         self.statefulActionToParticleGroupsMappers = statefulActionToParticleGroupsMappers
@@ -62,14 +63,27 @@ public extension RadixApplicationClient {
 
     func observeState<State>(ofType stateType: State.Type, at address: Address) -> Observable<State> where State: ApplicationState {
         let reducer = particlesToStateReducer(for: stateType)
-        return atomStore.onSync(address: address).mapToVoid().map { [unowned self] in
-            self.atomStore.upParticles(at: address, stagedUuid: nil)
-                .reduce(reducer.initialState, reducer.reduceThenCombine)
+        return atomStore.onSync(address: address)
+            .map { [unowned self] date in
+                let upParticles = self.atomStore.upParticles(at: address, stagedUuid: nil)
+                log.error("Reducing state from #\(upParticles.count) UP particles")
+                let reducedState = reducer.reduceFromInitialState(particles: upParticles)
+                log.error("Reduced state of type: \(type(of: reducedState)), to value: \(reducedState)")
+                return reducedState
         }
     }
     
     func observeActions<ExecutedAction>(ofType actionType: ExecutedAction.Type, at address: Address) -> Observable<ExecutedAction> {
-        implementMe()
+        
+        let mapper = atomToExecutedActionMapper(for: actionType)
+        let account = activeAccount
+
+        return atomStore.atomObservations(of: address)
+            .do(onNext: { fatalError("WIN! GOT ATOM OBSERVATION: \($0)") })
+            .filterMap { (atomObservation: AtomObservation) -> FilterMap<Atom> in
+                guard case .store(let atom, _, _) = atomObservation else { return .ignore }
+                return .map(atom)
+            }.flatMap { mapper.map(atom: $0, account: account) }
     }
     
     func pull(address: Address) -> Disposable {
@@ -109,7 +123,7 @@ public extension RadixApplicationClient {
                 balanceReferencesState: $0,
                 tokenDefinitionsState: $1
             )
-        }
+        }.debug()
     }
     
     // MARK: - AccountBalance
@@ -282,11 +296,11 @@ public extension RadixApplicationClient {
 // MARK: - Internal
 internal extension RadixApplicationClient {
     func observeTokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
-        return observeState(ofType: TokenDefinitionsState.self, at: address)
+        return observeState(ofType: TokenDefinitionsState.self, at: address).debug()
     }
     
     func observeBalanceReferences(at address: Address) -> Observable<TokenBalanceReferencesState> {
-        return observeState(ofType: TokenBalanceReferencesState.self, at: address)
+        return observeState(ofType: TokenBalanceReferencesState.self, at: address).debug()
     }
     
     var atomPuller: AtomPuller {
@@ -360,8 +374,8 @@ private extension RadixApplicationClient {
         return merged
     }
 
-    func atomToActionToParticleGroupsMapper<ExecutedAction>(for actionType: ExecutedAction.Type) -> SomeAtomToExecutedActionMapper<ExecutedAction> {
-        guard let mapper = atomToExecutedActionMapper.first(where: { $0.matches(actionType: actionType) }) else {
+    func atomToExecutedActionMapper<ExecutedAction>(for actionType: ExecutedAction.Type) -> SomeAtomToExecutedActionMapper<ExecutedAction> {
+        guard let mapper = atomToExecutedActionMappers.first(where: { $0.matches(actionType: actionType) }) else {
             fatalError("found no mapper")
         }
         do {

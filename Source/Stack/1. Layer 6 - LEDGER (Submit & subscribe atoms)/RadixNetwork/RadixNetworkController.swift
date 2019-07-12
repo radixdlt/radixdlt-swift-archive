@@ -77,6 +77,10 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
         
         reducedNodeActions.connect().disposed(by: disposeBag)
     }
+    
+    deinit {
+        log.warning("🧨")
+    }
 }
 
 public extension DefaultRadixNetworkController {

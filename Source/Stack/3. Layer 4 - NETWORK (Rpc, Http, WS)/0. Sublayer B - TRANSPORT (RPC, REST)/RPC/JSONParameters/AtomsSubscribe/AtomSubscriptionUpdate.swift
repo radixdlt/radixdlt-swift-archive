@@ -24,13 +24,12 @@ public struct AtomSubscriptionUpdate: SubscriptionUpdate {
 
 public extension AtomSubscriptionUpdate {
     func toAtomObservation() -> [AtomObservation] {
-        return atomEvents.enumerated().flatMap { eventAtIndex -> [AtomObservation] in
-            var observations: [AtomObservation] = [AtomObservation(eventAtIndex.element)]
-            let isHead = eventAtIndex.offset == atomEvents.endIndex
-            if isHead {
-                observations.append(AtomObservation.head())
-            }
-            return observations
+        if !isHead {
+            let atomObservations = atomEvents.map { AtomObservation($0) }
+            return atomObservations
+        } else {
+            return [AtomObservation.head()]
         }
     }
 }
+

@@ -24,7 +24,7 @@ public extension InMemoryAtomStoreReducer {
         if let fetchAtomActionObservation = action as? FetchAtomsActionObservation {
             let atomObservation = fetchAtomActionObservation.atomObservation
             let address = fetchAtomActionObservation.address
-           atomStore.store(atomObservation: atomObservation, address: address, notifyListeners: .notifyOnAtomUpdate)
+            atomStore.store(atomObservation: atomObservation, address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
         }
 
         if let submitAtomActionStatus = action as? SubmitAtomActionStatus {
@@ -33,7 +33,7 @@ public extension InMemoryAtomStoreReducer {
             if atomStatusNotification == .stored {
                 atom.addresses().forEach { addressInAtom in
                     func store(atomObservation: AtomObservation) {
-                        atomStore.store(atomObservation: atomObservation, address: addressInAtom, notifyListeners: .dontNotify)
+                        atomStore.store(atomObservation: atomObservation, address: addressInAtom, notifyListenerMode: .notifyOnAtomUpdateAndSync)
                     }
                     store(atomObservation: .stored(atom.wrappedAtom.wrappedAtom, isSoft: true))
                     store(atomObservation: .head())

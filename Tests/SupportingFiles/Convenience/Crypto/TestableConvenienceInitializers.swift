@@ -43,3 +43,31 @@ extension Mnemonic: ExpressibleByStringLiteral {
         self.init(strings: words.components(separatedBy: " "))
     }
 }
+
+// MARK: - ExpressibleByStringLiteral
+extension Name: ExpressibleByStringLiteral {}
+extension Description: ExpressibleByStringLiteral {}
+extension Symbol: ExpressibleByStringLiteral {}
+public extension ExpressibleByStringLiteral where Self: StringInitializable {
+    init(stringLiteral unvalidated: String) {
+        do {
+            try self.init(string: unvalidated)
+        } catch {
+            badLiteralValue(unvalidated, error: error)
+        }
+    }
+}
+
+extension RadixHash: ExpressibleByStringLiteral {
+    public init(stringLiteral unvalidated: String) {
+        do {
+            let hexString = try HexString(string: unvalidated)
+            guard hexString.length == 64 else {
+                fatalError("HexString should be 64 chars long")
+            }
+            self.init(unhashedData: hexString.asData, hashedBy: SkipHashing())
+        } catch {
+            badLiteralValue(unvalidated, error: error)
+        }
+    }
+}

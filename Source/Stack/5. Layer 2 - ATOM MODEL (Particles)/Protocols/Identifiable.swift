@@ -33,6 +33,7 @@ public protocol Identifiable:
     var identifier: ResourceIdentifier { get }
 }
 
+// MARK: - Accountable
 public extension Identifiable {
     var addresses: Addresses {
         return Addresses(identifier.address)

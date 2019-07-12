@@ -21,14 +21,21 @@ public final class DefaultAtomPuller: AtomPuller {
     public init(networkController: RadixNetworkController) {
         self.networkController = networkController
     }
+    
+    deinit {
+        log.warning("🧨")
+    }
 }
 
 public extension DefaultAtomPuller {
     func pull(address: Address) -> Observable<Any> {
         return requestCache.valueForKey(key: address) {
             let fetchAtomsRequest = FetchAtomsActionRequest(address: address)
-            return Observable.create { [unowned self] observer in
-                
+            return Observable.create { [weak self] observer in
+                guard let `self` = self else {
+                    observer.onCompleted()
+                    return Disposables.create()
+                }
                 self.networkController.dispatch(nodeAction: fetchAtomsRequest)
                 
                 return Disposables.create {
