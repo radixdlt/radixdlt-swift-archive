@@ -1,5 +1,5 @@
 //
-//  AmountTests.swift
+//  PositiveAmountTests.swift
 //  RadixSDK iOS Tests
 //
 //  Created by Alexander Cyon on 2019-04-11.
@@ -10,7 +10,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class PostiveAmountTests: XCTestCase {
+class PositiveAmountTests: XCTestCase {
     func testPositiveAmount256BitMaxValue() {
         XCTAssertEqual(PositiveAmount.maxValue256Bits.hex, String(repeating: "f", count: 64))
     }

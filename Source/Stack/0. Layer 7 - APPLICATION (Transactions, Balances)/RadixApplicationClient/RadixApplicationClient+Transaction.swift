@@ -12,6 +12,9 @@ import RxSwift
 extension RadixApplicationClient {
     final class Transaction {
         private let uuid = UUID()
+        
+        private var errorWhileStagingAction: ResultOfUserAction?
+        
         private unowned let api: RadixApplicationClient
         internal init(api: RadixApplicationClient) {
             self.api = api
@@ -20,12 +23,16 @@ extension RadixApplicationClient {
         func commitAndPush(
             ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent,
             toNode originNode: Node? = nil
-            ) -> ResultOfUserAction {
+        ) -> ResultOfUserAction {
             
             log.verbose("Committing and pushing transaction (actions -> Atom -> POW -> Sign -> ResultOfUserAction)")
             
-            let unsignedAtom = buildAtom() //.asObservable().share().asSingle()
-            let signedAtom = api.sign(atom: unsignedAtom, ifNoSigningKeyPresent: noKeyPresentStrategy) //.asObservable().share().asSingle()
+            if let errorWhileStagingAction = errorWhileStagingAction {
+                return errorWhileStagingAction
+            }
+            
+            let unsignedAtom = buildAtom()
+            let signedAtom = api.sign(atom: unsignedAtom, ifNoSigningKeyPresent: noKeyPresentStrategy)
             
             return api.createAtomSubmission(
                 atom: signedAtom,
@@ -35,6 +42,8 @@ extension RadixApplicationClient {
         }
         
         func stage(action: UserAction) {
+            guard errorWhileStagingAction == nil else { return }
+            
             let statefulMapper = api.actionMapperFor(action: action)
             let requiredState = api.requiredState(for: action)
             let particles = requiredState.flatMap { requiredStateContext in
@@ -46,13 +55,18 @@ extension RadixApplicationClient {
                     api.atomStore.stateParticleGroup($0, uuid: uuid)
                 }
             } catch {
-                incorrectImplementation("unexpected error: \(error), when mapping action: \(action), using mapper: \(statefulMapper)")
+                let reason = FailedAction.Error(swiftError: error)
+                let failedAction = FailedAction(error: reason, userAction: action)
+                errorWhileStagingAction = ResultOfUserAction.failedToExecuteAction(failedAction)
+                // revert and previously staged particle groups for the given UUID if we got an error
+                api.atomStore.clearStagedParticleGroups(for: uuid)
             }
-            
         }
         
         func buildAtom() -> Single<UnsignedAtom> {
-            let particleGroups = api.universe.atomStore.clearStagedParticleGroups(for: uuid)
+            guard let particleGroups = api.universe.atomStore.clearStagedParticleGroups(for: uuid) else {
+                incorrectImplementation("Found no staged ParticleGroups for UUID: \(uuid), but expected to.")
+            }
             let atom = Atom(particleGroups: particleGroups)
             
             return api.addFee(to: atom).map {

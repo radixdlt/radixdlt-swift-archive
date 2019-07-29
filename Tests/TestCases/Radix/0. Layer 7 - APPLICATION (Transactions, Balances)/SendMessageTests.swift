@@ -129,6 +129,7 @@ extension ResultOfUserAction.Error {
         switch self {
         case .failedToSubmitAtom(let submitAtomError):
             return submitAtomError.rpcError.unrecognizedJsonStringFromError
+        case .failedToStageAction: return nil
         }
     }
 }

@@ -72,7 +72,7 @@ class AmountAndGranularityTests: XCTestCase {
         okGran(4)
     }
     
-    func testGranularityOfOnePostiveAmount() {
+    func testGranularityOfOnePositiveAmount() {
         func doTest(_ signedAmount: PositiveAmount) {
             XCTAssertTrue(signedAmount.isExactMultipleOfGranularity(granularityOfOne))
         }
@@ -81,7 +81,7 @@ class AmountAndGranularityTests: XCTestCase {
         doTest(3)
     }
     
-    func testGranularityOfThreePostiveAmount() {
+    func testGranularityOfThreePositiveAmount() {
         func okGran(_ signedAmount: PositiveAmount) {
             XCTAssertTrue(signedAmount.isExactMultipleOfGranularity(granularityOfThree))
         }

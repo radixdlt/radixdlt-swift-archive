@@ -81,10 +81,18 @@ extension ObservableConvertibleType where Element == Never { /* Completable */
         timeout: TimeInterval? = .default,
         expectedErrorType: SpecificError.Type,
         containingString expectedSubStringInUnrecognizedStringError: String,
+        function: String = #function,
+        file: String = #file,
+        line: Int = #line,
         deriveUnreconizedJsonError: @escaping (SpecificError) -> String?
     ) where SpecificError: Swift.Error {
         
-        self.toBlocking(timeout: timeout).expectToThrowRPCErrorUnrecognizedJson(expectedErrorType: expectedErrorType, containingString: expectedSubStringInUnrecognizedStringError, deriveUnreconizedJsonError: deriveUnreconizedJsonError)
+        self.toBlocking(timeout: timeout).expectToThrowRPCErrorUnrecognizedJson(
+            expectedErrorType: expectedErrorType,
+            containingString: expectedSubStringInUnrecognizedStringError,
+            function: function, file: file, line: line,
+            deriveUnreconizedJsonError: deriveUnreconizedJsonError
+        )
     }
     
 }
@@ -263,8 +271,14 @@ extension BlockingObservable {
     func expectToThrowRPCErrorUnrecognizedJson<SpecificError>(
         expectedErrorType: SpecificError.Type,
         containingString expectedSubStringInUnrecognizedStringError: String,
+        function: String = #function,
+        file: String = #file,
+        line: Int = #line,
         deriveUnreconizedJsonError: (SpecificError) -> String?
     ) where SpecificError: Swift.Error {
+        
+        let description = "\(function) in \(file), at line: \(line)"
+        
         switch materialize() {
         case .completed: return XCTFail("Expected error, but got `completed` instead")
         case .failed(_, let anyError):
@@ -275,7 +289,9 @@ extension BlockingObservable {
             guard let deriveUnreconizedJsonStringFromError = deriveUnreconizedJsonError(error) else {
                 return XCTFail("Could not derive any <unreconized JSON string> from error: `\(error)`, but expected one")
             }
-            XCTAssertTrue(deriveUnreconizedJsonStringFromError.contains(expectedSubStringInUnrecognizedStringError))
+            XCTAssertTrue(deriveUnreconizedJsonStringFromError.contains(expectedSubStringInUnrecognizedStringError),
+                          "Test \(description) failed, `deriveUnreconizedJsonStringFromError`: \(deriveUnreconizedJsonStringFromError) DID NOT contain `expectedSubStringInUnrecognizedStringError`: \(expectedSubStringInUnrecognizedStringError)"
+            )
             
         }
     }

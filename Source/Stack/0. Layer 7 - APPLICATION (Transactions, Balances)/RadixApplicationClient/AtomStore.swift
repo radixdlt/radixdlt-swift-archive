@@ -30,7 +30,8 @@ public protocol AtomStore {
     
     func stateParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID)
 
-    func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups
+    @discardableResult
+    func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups?
 }
 
 public final class InMemoryAtomStore: AtomStore {
@@ -155,8 +156,9 @@ public extension InMemoryAtomStore {
         }
     }
     
-    func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups {
-        guard let atom = stagedAtoms.removeValue(forKey: uuid) else { incorrectImplementation("Found no staged atom for uuid: '\(uuid)'") }
+    @discardableResult
+    func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups? {
+        guard let atom = stagedAtoms.removeValue(forKey: uuid) else { return nil }
         stagedParticleIndex.removeValue(forKey: uuid)
         return atom.particleGroups
     }

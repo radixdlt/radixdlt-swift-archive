@@ -14,9 +14,19 @@ public extension TransferTokensActionToParticleGroupsMapper {
     
     func requiredState(for transferAction: Action) -> [AnyShardedParticleStateId] {
         return [
-            ShardedParticleStateId(typeOfParticle: TransferrableTokensParticle.self, address: transferAction.sender)
-        ].map {
-            AnyShardedParticleStateId($0)
-        }
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(
+                    typeOfParticle: TokenDefinitionParticle.self,
+                    address: transferAction.tokenResourceIdentifier.address
+                )
+            ),
+            
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(
+                    typeOfParticle: TransferrableTokensParticle.self,
+                    address: transferAction.sender
+                )
+            )
+        ]
     }
 }

@@ -53,23 +53,24 @@ class TransferTokensTests: LocalhostNodeTest {
         guard let myTokenDef = application.observeTokenDefinition(identifier: rri).blockingTakeFirst(timeout: 2) else { return }
         XCTAssertEqual(myTokenDef.symbol, "AC")
         
-//        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri))
-//
-//        // THEN: I see that the transfer actions completes successfully
-//        XCTAssertTrue(
-//            transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
-//        )
+        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri))
+
+        // THEN: I see that the transfer actions completes successfully
+        XCTAssertTrue(
+            transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
     }
     
     func testTokenNotOwned() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
 
         // WHEN: Alice tries to transfer tokens of some type she does not own, to Bob
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: ResourceIdentifier(address: alice.address, name: "notOwned")))
+        let amount: PositiveAmount = 10
+        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: ResourceIdentifier(address: alice.address, name: "notOwned")))
         
         // THEN:  I see that action fails with error `InsufficientFunds`
         transfer.blockingAssertThrows(
-            error: TransferError.insufficientFunds
+            error: TransferError.insufficientFunds(currentBalance: .zero, butTriedToTransfer: amount)
         )
     }
     
@@ -77,16 +78,18 @@ class TransferTokensTests: LocalhostNodeTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
       
         // WHEN: Alice tries to transfer tokens with a larger amount than her current balance, to Bob
-        let createToken = createTokenAction(address: alice, supply: .fixed(to: 30))
+        let initialSupply: Supply = 30
+        let createToken = createTokenAction(address: alice, supply: .fixed(to: initialSupply))
         XCTAssertTrue(
             application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         let rri = createToken.identifier
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 50, tokenResourceIdentifier: rri))
+        let amount: PositiveAmount = 50
+        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: rri))
         
         // THEN:  I see that action fails with error `InsufficientFunds`
         transfer.blockingAssertThrows(
-            error: TransferError.insufficientFunds
+            error: TransferError.insufficientFunds(currentBalance: initialSupply.amount, butTriedToTransfer: amount)
         )
     }
     
@@ -112,17 +115,23 @@ class TransferTokensTests: LocalhostNodeTest {
     func testIncorrectGranularityOf5() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
+        let granularity: Granularity = 5
+        
         // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
-        let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: 5)
+        let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: granularity)
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW),
+            "Failed to create token"
         )
+        
+        let amountToSend: PositiveAmount = 7
+        
         let rri = createToken.identifier
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 7, tokenResourceIdentifier: rri))
+        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: amountToSend, tokenResourceIdentifier: rri))
         
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
         transfer.blockingAssertThrows(
-            error: TransferError.amountNotMultipleOfGranularity,
+            error: TransferError.amountNotMultipleOfGranularity(amount: amountToSend, tokenGranularity: granularity),
             timeout: .enoughForPOW
         )
     }

@@ -21,18 +21,30 @@ public struct DefaultTransferTokensActionToParticleGroupsMapper:
 public extension TransferTokensActionToParticleGroupsMapper {
     
     func particleGroups(for transfer: TransferTokenAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
-//    func particleGroups(for transfer: Action, currentBalance tokenBalance: TokenBalanceReferenceWithConsumables) throws -> ParticleGroups {
         let rri = transfer.tokenResourceIdentifier
+        
         let upTransferrableParticles = upParticles.compactMap { $0 as? TransferrableTokensParticle }.filter { $0.tokenDefinitionReference == rri }
         
         let tokenBalanceOfSender = try TokenReferenceBalance(upTransferrableTokensParticles: upTransferrableParticles, tokenIdentifier: rri, owner: transfer.sender)
-    
+        
         guard
             tokenBalanceOfSender.amount >= transfer.amount
         else {
-            throw TransferError.insufficientFunds
+            throw TransferError.insufficientFunds(
+                currentBalance: tokenBalanceOfSender.amount,
+                butTriedToTransfer: transfer.amount
+            )
         }
-      
+        
+        guard let tokenDefinitionParticle = upParticles.compactMap({ $0 as? TokenDefinitionParticle }).first(where: { $0.identifier == rri }) else {
+            log.warning("Expected to found TokenDefinitionParticle with RRI: \(rri), amongst up particles: \(upParticles), but found none.")
+            throw TransferError.foundNoTokenDefinition(forIdentifier: rri)
+        }
+        
+        guard transfer.amount.isExactMultipleOfGranularity(tokenDefinitionParticle.granularity) else {
+            throw TransferError.amountNotMultipleOfGranularity(amount: transfer.amount, tokenGranularity: tokenDefinitionParticle.granularity)
+        }
+        
         var (particleGroup, remainder) = transferToRecipientInParticleGroupWithRemainder(upTransferrableParticles: upTransferrableParticles, transfer: transfer)
         
         guard let tokensToRecipient = particleGroup.firstParticle(ofType: TransferrableTokensParticle.self, spin: .up) else {
@@ -57,8 +69,9 @@ public extension TransferTokensActionToParticleGroupsMapper {
 }
 
 public enum TransferError: Swift.Error, Equatable {
-    case insufficientFunds
-    case amountNotMultipleOfGranularity
+    case insufficientFunds(currentBalance: NonNegativeAmount, butTriedToTransfer: PositiveAmount)
+    case foundNoTokenDefinition(forIdentifier: ResourceIdentifier)
+    case amountNotMultipleOfGranularity(amount: PositiveAmount, tokenGranularity: Granularity)
 }
 
 // MARK: - Throwing
@@ -134,50 +147,3 @@ private extension TransferrableTokensParticle {
 }
 
 typealias ParticleHashId = HashEUID
-
-//private struct TokenBalanceReferenceWithConsumables: TokenDefinitionReferencing {
-//
-//    let amount: SignedAmount
-//    let address: Address
-//    let tokenDefinitionReference: ResourceIdentifier
-//    let unconsumedTransferrable: Consumables
-//
-//    init(transferrableParticlesWithSpinUp transferrableParticles: [TransferrableTokensParticle], matching transferAction: TransferTokenAction) throws {
-//        self.unconsumedTransferrable = try Consumables(transferrableParticlesWithSpinUp: transferrableParticles, matching: transferAction)
-//        self.tokenDefinitionReference = transferAction.tokenResourceIdentifier
-//        self.address = transferAction.sender
-//
-//        let amounts: [PositiveAmount] = transferrableParticles.map({ $0.amount })
-//        let sum: PositiveAmount = amounts.reduce(PositiveAmount.zero) { $0 + $1 }
-//        self.amount = SignedAmount(amount: sum)
-//    }
-//}
-//
-//extension TokenBalanceReferenceWithConsumables {
-//    struct Consumables: DictionaryConvertible, Throwing {
-//        typealias Key = ParticleHashId
-//        typealias Value = TransferrableTokensParticle
-//        var dictionary: Map
-//        init(dictionary: Map) {
-//            fatalError()
-//        }
-//
-//        fileprivate init(transferrableParticlesWithSpinUp transferrableParticles: [TransferrableTokensParticle], matching transferAction: TransferTokenAction) throws {
-//            self.init()
-//            for transferrableParticle in transferrableParticles {
-//                guard transferrableParticle.tokenDefinitionReference == transferAction.tokenResourceIdentifier else {
-//                    throw Error.resourceIdentifierMismatch(expected: transferAction.tokenResourceIdentifier, butGot: transferrableParticle.tokenDefinitionReference)
-//                }
-//                guard transferrableParticle.address == transferAction.sender else {
-//                    throw Error.wrongOwner(expected: transferAction.sender, butGot: transferrableParticle.address)
-//                }
-//                dictionary[transferrableParticle.hashEUID] = transferrableParticle
-//            }
-//        }
-//
-//        enum Error: Swift.Error, Equatable {
-//            case resourceIdentifierMismatch(expected: ResourceIdentifier, butGot: ResourceIdentifier)
-//            case wrongOwner(expected: Address, butGot: Address)
-//        }
-//    }
-//}

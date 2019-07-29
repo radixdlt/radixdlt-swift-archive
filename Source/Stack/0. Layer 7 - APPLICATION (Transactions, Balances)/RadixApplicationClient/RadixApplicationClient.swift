@@ -353,8 +353,11 @@ internal extension RadixApplicationClient {
                 return status
             }.share(replay: 1, scope: .forever)
         
-        let result = ResultOfUserAction(updates: updates, cachedAtom: cachedAtom)
-        result.connect().disposed(by: disposeBag)
+        let result = ResultOfUserAction(updates: updates, cachedAtom: cachedAtom) { [unowned self] in
+            // Disposable from calling `connect`
+            $0.disposed(by: self.disposeBag)
+        }
+        
         return result
     }
 }
@@ -390,4 +393,3 @@ private extension RadixApplicationClient {
         return try! SomeParticleReducer<State>(any: reducer)
     }
 }
-

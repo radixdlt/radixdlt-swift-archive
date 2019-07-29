@@ -117,10 +117,17 @@ class AtomIdentifierTests: XCTestCase {
         
         let consumables = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TransferrableTokensParticle.self) }
         XCTAssertEqual(consumables.count, 1)
+        let tokenDefinitionParticles = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TokenDefinitionParticle.self) }
+        XCTAssertEqual(tokenDefinitionParticles.count, 1)
+        
+        let mapper = StatelessTransferTokensParticleGroupMapper(
+            tokenDefinitionParticle: tokenDefinitionParticles[0].particle,
+            transferrableTokensParticle: consumables[0].particle
+        )
         
         let atomFromTransfer = testAidOfAtomFrom(
             action: transferTokens,
-            mapper: StatelessTransferTokensParticleGroupMapper(transferrableTokensParticle: consumables[0].particle),
+            mapper: mapper,
             expectedAidShard: .eitherIn([alice.shard, bob.shard])
         )
         XCTAssertEqual(try! atomFromTransfer.shards(), [alice.shard, bob.shard])
@@ -141,9 +148,14 @@ private enum ShardAssertion {
 
 struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGroupsMapper, TransferTokensActionToParticleGroupsMapper {
 
+    private let tokenDefinitionParticle: TokenDefinitionParticle
     private let transferrableTokensParticle: TransferrableTokensParticle
 
-    init(transferrableTokensParticle: TransferrableTokensParticle) {
+    init(
+        tokenDefinitionParticle: TokenDefinitionParticle,
+        transferrableTokensParticle: TransferrableTokensParticle
+    ) {
+        self.tokenDefinitionParticle = tokenDefinitionParticle
         self.transferrableTokensParticle = transferrableTokensParticle
     }
 
@@ -152,7 +164,7 @@ struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGrou
 //    }
     
     func particleGroups(for action: Action) -> ParticleGroups {
-        return try! particleGroups(for: action, upParticles: [transferrableTokensParticle])
+        return try! particleGroups(for: action, upParticles: [tokenDefinitionParticle, transferrableTokensParticle])
     }
     
 //    func particleGroups(for transfer: TransferTokenAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
