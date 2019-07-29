@@ -66,9 +66,7 @@ public extension RadixApplicationClient {
         return atomStore.onSync(address: address)
             .map { [unowned self] date in
                 let upParticles = self.atomStore.upParticles(at: address, stagedUuid: nil)
-                log.error("Reducing state from #\(upParticles.count) UP particles")
                 let reducedState = reducer.reduceFromInitialState(particles: upParticles)
-                log.error("Reduced state of type: \(type(of: reducedState)), to value: \(reducedState)")
                 return reducedState
         }
     }

@@ -45,9 +45,6 @@ extension Mnemonic: ExpressibleByStringLiteral {
 }
 
 // MARK: - ExpressibleByStringLiteral
-extension Name: ExpressibleByStringLiteral {}
-extension Description: ExpressibleByStringLiteral {}
-extension Symbol: ExpressibleByStringLiteral {}
 public extension ExpressibleByStringLiteral where Self: StringInitializable {
     init(stringLiteral unvalidated: String) {
         do {

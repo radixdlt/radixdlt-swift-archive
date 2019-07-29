@@ -19,14 +19,4 @@ public extension TransferTokensActionToParticleGroupsMapper {
             AnyShardedParticleStateId($0)
         }
     }
-    
-//    func particleGroups(for action: Action, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
-//        let rri = action.tokenResourceIdentifier
-//
-//        let transferrableParticles = upParticles.compactMap { $0 as? TransferrableTokensParticle }.filter { $0.tokenDefinitionReference == rri }
-//
-//        let currentBalance = try TokenBalanceReferenceWithConsumables(transferrableParticlesWithSpinUp: transferrableParticles, matching: action)
-//
-//        return try particleGroups(for: action, currentBalance: currentBalance)
-//    }
 }

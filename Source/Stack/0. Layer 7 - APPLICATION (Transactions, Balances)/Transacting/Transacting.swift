@@ -9,49 +9,10 @@
 import Foundation
 import RxSwift
 
-///// Type that is can make transactions of different types between Radix accounts
+/// Type that is can make transactions of different types between Radix accounts
 //public protocol Transacting {
 //    func transfer(
 //        tokens: TransferTokenAction,
 //        ifNoSigningKeyPresent: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent
 //    ) -> Completable
-//}
-
-// MARK: - Transacting + Accounting + NodeInteracting => Default Impl
-
-//public extension Transacting
-//where
-//    Self: IdentityHolder,
-//    Self: AccountBalancing,
-//    Self: NodeInteractingSubmit,
-//    Self: Magical,
-//    Self: AtomSigning,
-//    Self: ProofOfWorkWorking,
-//    Self: TokensDefinitionsReferencing
-//{
-//
-//    func transfer(
-//        tokens transfer: TransferTokenAction,
-//    ) -> Completable {
-//
-//        if let tokenDefinition = self.tokens.token(for: transfer.tokenResourceIdentifier) {
-//            guard transfer.amount.isExactMultipleOfGranularity(tokenDefinition.granularity) else {
-//                return Completable.error(TransferError.amountNotMultipleOfGranularity)
-//            }
-//        }
-//
-//        let actionToParticleGroupsMapper = DefaultTransferTokensActionToParticleGroupsMapper()
-//
-//        let rri = transfer.tokenResourceIdentifier
-//
-//        // Get latest Balance
-//        return getBalances(for: transfer.sender, ofToken: rri)
-//            .take(1).map { $0.balance }
-//            // Action => ParticleGroups
-//            .map { try actionToParticleGroupsMapper.particleGroups(for: transfer, currentBalance: $0) }
-//            // ParticleGroups => Atom
-//            .map { $0.wrapInAtom() }
-//            // Atom => AtomWithFee => SignedAtom => Submit to Node
-//            .flatMapLatest { self.performProvableWorkThenSignAndSubmit(atom: $0, powWorker: self.proofOfWorkWorker) }
-//    }
 //}

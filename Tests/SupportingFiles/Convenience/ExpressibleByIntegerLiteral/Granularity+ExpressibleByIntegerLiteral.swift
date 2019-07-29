@@ -45,16 +45,3 @@ public extension Supply {
         }
     }
 }
-
-// MARK: - ExpressibleByIntegerLiteral
-extension UniverseConfig.UniverseType: ExpressibleByIntegerLiteral {}
-public extension IntInitializable where Self: ExpressibleByIntegerLiteral {
-    init(integerLiteral unvalidated: Int) {
-        do {
-            try self.init(int: unvalidated)
-        } catch {
-            badLiteralValue(unvalidated, error: error)
-        }
-    }
-    
-}
