@@ -37,9 +37,5 @@ private extension RESTClientsRetainer {
             DefaultRESTClient(formattedUrl: urlToNode)
         }
     }
-    
-//    func restClient(node: Node) -> RESTClient {
-//        let httpUrl = node.httpUrl
-//        return restClient(urlToNode: httpUrl)
-//    }
+
 }

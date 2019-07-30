@@ -22,16 +22,12 @@ public final class FindANodeEpic: RadixNetworkEpic {
 
 public extension FindANodeEpic {
     
-    // swiftlint:disable:next function_body_length
     func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
         return actions.ofType(FindANodeRequestAction.self)
             .flatMap { findANodeRequestAction -> Observable<NodeAction> in
-                log.verbose("🚀 findANodeRequestAction: \(findANodeRequestAction)")
                 let connectedNodes: Observable<[Node]> = networkState.map { state in
                     getConnectedNodes(shards: findANodeRequestAction.shards, state: state)
                 }
-//                .replay(1)
-//                .autoConnect(numberOfSubscribers: 2)
                 
                 let selectedNode: Observable<NodeAction> = connectedNodes
                     .compactMap { try? NonEmptySet(array: $0) }
@@ -53,8 +49,6 @@ public extension FindANodeEpic {
                         
                     )
                     .takeUntil(selectedNode)
-//                    .replay(1)
-//                    .autoConnect(numberOfSubscribers: 2)
                 
                 let cleanupConnections: Observable<NodeAction> = findConnectionAction
                     .ofType(ConnectWebSocketAction.self)

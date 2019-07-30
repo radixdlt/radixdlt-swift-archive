@@ -10,16 +10,8 @@ import Foundation
 import RxSwift
 
 public struct UniverseBootstrap: BootstrapConfig {
-
     public let config: UniverseConfig
-//    public let discoveryEpics: [RadixNetworkEpic]
-//    public let initialNetwork: Set<Node>
     public let discoveryMode: DiscoveryMode
-    
-//    private init(config: UniverseConfig, seedNodes: Observable<Node>) {
-//        implementMe()
-//    }
-    
 }
 
 private extension UniverseBootstrap {

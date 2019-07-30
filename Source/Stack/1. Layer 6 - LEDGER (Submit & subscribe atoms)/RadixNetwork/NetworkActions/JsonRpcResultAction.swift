@@ -18,25 +18,3 @@ public protocol JsonRpcResultAction: BaseJsonRpcResultAction {
 public extension JsonRpcResultAction {
     var anyResult: Any { return result }
 }
-
-//public struct AnyJsonRpcResult<Result>: JsonRpcResultAction {
-//
-//    private let _getResult: () -> Result
-//    private let _getNode: () -> Node
-//
-//    public init<Concrete>(_ concrete: Concrete) where Concrete: JsonRpcResultAction, Concrete.Result == Result {
-//        self._getResult = { concrete.result }
-//        self._getNode = { concrete.node }
-//    }
-//
-//}
-//
-//public extension AnyJsonRpcResult {
-//    var result: Result {
-//        return self._getResult()
-//    }
-//
-//    var node: Node {
-//        return self._getNode()
-//    }
-//}

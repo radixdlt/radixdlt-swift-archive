@@ -28,9 +28,7 @@ public struct PromptUserToProvideSigningKey {
         case timeout
     }
     
-//    private let subject = PublishSubject<SigningKeyProvidedByUser>()
     public let timeout: TimeInterval?
-//    public let result: Observable<SigningKeyProvidedByUser>
     private let onResult: (PromptUserToProvideSigningKey.SigningKeyProvidedByUser) -> Void
     public typealias OnResult = (PromptUserToProvideSigningKey.SigningKeyProvidedByUser) -> Void
     

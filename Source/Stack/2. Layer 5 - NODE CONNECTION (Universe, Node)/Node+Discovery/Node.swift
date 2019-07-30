@@ -41,19 +41,6 @@ public extension Node {
 }
 
 public extension Node {
-
-//    init(nodeInfo: NodeInfo) throws {
-//
-//        let websocketsUrl = try URLFormatter.format(host: nodeInfo.host, protocol: .websockets)
-////        let httpUrl = try URLFormatter.format(host: nodeInfo.host, protocol: .hypertext)
-//
-//        self.init(
-////            info: nodeInfo,
-//            websocketsUrl: websocketsUrl
-////            httpUrl: httpUrl
-//        )
-//    }
-    
     init(domain: String, port: Port, isUsingSSL: Bool) throws {
         let host = try Host(domain: domain, port: port)
         try self.init(host: host, isUsingSSL: isUsingSSL)
@@ -68,16 +55,3 @@ public extension Node {
         case domainCannotBeNil
     }
 }
-
-//// MARK: Shard
-//public extension Node {
-//    func canServe(shard: Shard) -> Bool {
-//        return nodeInfo.system.shardSpace.contains(shard: shard)
-//    }
-//}
-
-//public extension Node {
-//    var request: URLRequest {
-//        return URLRequest(url: httpUrl.url)
-//    }
-//}

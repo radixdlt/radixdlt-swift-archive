@@ -45,8 +45,6 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
             }
    
             if nextState != state {
-                log.verbose("Current Network state: \(state)")
-                log.verbose("Next Network state: \(nextState)")
                 networkStateSubject.onNext(nextState)
             }
         }).publish()
@@ -70,7 +68,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
             },
             onError: {
                 incorrectImplementation("Error: \($0)")
-//                log.error("Error: \($0)")
+                // TODO change to the line below, remove fatalError
 //                networkStateSubject.onError($0)
             }
         ).disposed(by: disposeBag)
