@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct SendMessageAction: UserAction {
+public struct SendMessageAction: UserAction, ChatMessage {
     public let sender: Address
     public let recipient: Address
     public let payload: Data

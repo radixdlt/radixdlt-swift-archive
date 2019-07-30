@@ -9,19 +9,19 @@
 import Foundation
 import RxSwift
 
-public struct SomeAtomToExecutedActionMapper<ExecutedAction>: AtomToSpecificExecutedActionMapper {
+public struct SomeAtomToExecutedActionMapper<SpecificExecutedAction>: AtomToSpecificExecutedActionMapper where SpecificExecutedAction: ExecutedAction {
     
-    private let _map: (Atom, Account) -> Observable<ExecutedAction>
+    private let _map: (Atom, Account) -> Observable<SpecificExecutedAction>
     
-    public init<Concrete>(_ concrete: Concrete) where Concrete: AtomToSpecificExecutedActionMapper, Concrete.ExecutedAction == ExecutedAction {
+    public init<Concrete>(_ concrete: Concrete) where Concrete: AtomToSpecificExecutedActionMapper, Concrete.SpecificExecutedAction == SpecificExecutedAction {
         self._map = { concrete.map(atom: $0, account: $1) }
     }
     
     public init(any: AnyAtomToExecutedActionMapper) throws {
-        guard any.matches(actionType: ExecutedAction.self) else {
+        guard any.matches(actionType: SpecificExecutedAction.self) else {
             throw Error.actionTypeMismatch
         }
-        self._map = { any.map(atom: $0, toActionType: ExecutedAction.self, account: $1) }
+        self._map = { any.map(atom: $0, toActionType: SpecificExecutedAction.self, account: $1) }
     }
 }
 
@@ -31,7 +31,7 @@ public extension SomeAtomToExecutedActionMapper {
         case actionTypeMismatch
     }
     
-    func map(atom: Atom, account: Account) -> Observable<ExecutedAction> {
+    func map(atom: Atom, account: Account) -> Observable<SpecificExecutedAction> {
         return _map(atom, account)
     }
 }

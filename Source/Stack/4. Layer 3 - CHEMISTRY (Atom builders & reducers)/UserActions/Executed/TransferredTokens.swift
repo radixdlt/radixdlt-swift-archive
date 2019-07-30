@@ -13,11 +13,8 @@ public protocol TokenTransfer {
     var recipient: Address { get }
     var amount: PositiveAmount { get }
     var tokenResourceIdentifier: ResourceIdentifier { get }
-    var date: Date { get }
     var attachment: Data? { get }
 }
-
-public protocol ExecutedAction: UserAction {}
 
 /// A transfer of a non-zero amount of a certain token between two Radix accounts
 public struct TransferredTokens: ExecutedAction, TokenTransfer {
@@ -46,6 +43,15 @@ public struct TransferredTokens: ExecutedAction, TokenTransfer {
     }
 }
 
+// MARK: UserAction
 public extension TransferredTokens {
-    var nameOfAction: UserActionName { return .transferTokens }
+    var nameOfAction: UserActionName { return .transferredTokens }
+}
+
+// MARK: Attachment as Message
+public extension TransferredTokens {
+    func attachedMessage(decodeAs encoding: String.Encoding = .default) -> String? {
+        guard let attachmentData = attachment else { return nil }
+        return String(data: attachmentData, encoding: encoding)
+    }
 }

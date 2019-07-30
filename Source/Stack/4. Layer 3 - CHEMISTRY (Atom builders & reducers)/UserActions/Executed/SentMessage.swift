@@ -8,7 +8,13 @@
 
 import Foundation
 
-public struct SentMessage {
+public protocol ChatMessage {
+    var sender: Address { get }
+    var recipient: Address { get }
+    var payload: Data { get }
+}
+
+public struct SentMessage: ExecutedAction, ChatMessage {
     public let sender: Address
     public let recipient: Address
     public let payload: Data
@@ -44,4 +50,9 @@ public extension SentMessage.EncryptionState {
         case .decrypted, .wasNotEncrypted: return false
         }
     }
+}
+
+// MARK: UserAction
+public extension SentMessage {
+    var nameOfAction: UserActionName { return .sentMessage }
 }

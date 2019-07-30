@@ -16,17 +16,17 @@ public struct AnyAtomToExecutedActionMapper: BaseAtomToSpecificExecutedActionMap
     private let _map: (Atom, Any.Type, Account) -> Observable<Any>
     
     public init<Concrete>(_ concrete: Concrete) where Concrete: AtomToSpecificExecutedActionMapper {
-        self._actionType = { Concrete.ExecutedAction.self }
-        self._matchesType = { return $0 == Concrete.ExecutedAction.self }
+        self._actionType = { Concrete.SpecificExecutedAction.self }
+        self._matchesType = { return $0 == Concrete.SpecificExecutedAction.self }
         self._map = {
-            typeErasureExpects(type: $1, toBe: Concrete.ExecutedAction.Type.self)
-            return concrete.map(atom: $0, toActionType: Concrete.ExecutedAction.self, account: $2).map { $0 }
+            typeErasureExpects(type: $1, toBe: Concrete.SpecificExecutedAction.Type.self)
+            return concrete.map(atom: $0, toActionType: Concrete.SpecificExecutedAction.self, account: $2).map { $0 }
         }
     }
 }
 
 public extension AnyAtomToExecutedActionMapper {
-    func map<Action>(atom: Atom, toActionType _: Action.Type, account: Account) -> Observable<Action> {
+    func map<Action>(atom: Atom, toActionType _: Action.Type, account: Account) -> Observable<Action> where Action: ExecutedAction {
         
         return self._map(atom, Action.self, account).map {
             return castOrKill(instance: $0, toType: Action.self)

@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 public protocol AtomToDecryptedMessageMapper: AtomToSpecificExecutedActionMapper, Throwing where
-    ExecutedAction == SentMessage,
+    SpecificExecutedAction == SentMessage,
     Error == DecryptMessageFromAtomMapperError {}
 
 public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMapper {

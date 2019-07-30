@@ -10,6 +10,8 @@ import Foundation
 
 public enum UserActionName: String, Hashable {
     
+    // MARK: Pending Actions
+    
     // Stateful actions
     case transferTokens
     case burnTokens
@@ -19,6 +21,11 @@ public enum UserActionName: String, Hashable {
     case createToken
     case putUnique
     case sendMessage
+    
+    // MARK: Executed Actions
+    
+    case sentMessage
+    case transferredTokens
 }
 
 public protocol UserAction {

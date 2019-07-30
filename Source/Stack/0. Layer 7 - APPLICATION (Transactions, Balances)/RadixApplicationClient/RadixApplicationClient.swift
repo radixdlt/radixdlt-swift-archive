@@ -71,7 +71,7 @@ public extension RadixApplicationClient {
         }
     }
     
-    func observeActions<ExecutedAction>(ofType actionType: ExecutedAction.Type, at address: Address) -> Observable<ExecutedAction> {
+    func observeActions<SpecificExecutedAction>(ofType actionType: SpecificExecutedAction.Type, at address: Address) -> Observable<SpecificExecutedAction> where SpecificExecutedAction: ExecutedAction {
         
         let mapper = atomToExecutedActionMapper(for: actionType)
         let account = activeAccount
@@ -396,7 +396,7 @@ public extension RadixApplicationClient {
         supply initialSupplyType: CreateTokenAction.InitialSupply,
         granularity: Granularity = .default,
         ifNoSigningKeyPresent: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-        ) throws -> ResultOfUserAction {
+    ) throws -> ResultOfUserAction {
         
         let createTokenAction = try CreateTokenAction(
             creator: addressOfActiveAccount,
@@ -410,6 +410,28 @@ public extension RadixApplicationClient {
         return self.create(
             token: createTokenAction,
             ifNoSigningKeyPresent: ifNoSigningKeyPresent
+        )
+    }
+    
+    func transferTokens(
+        identifier tokenIdentifier: ResourceIdentifier,
+        to recipient: Ownable,
+        amount: PositiveAmount,
+        message: String,
+        messageEncoding: String.Encoding = .default,
+        from specifiedSender: Ownable? = nil,
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+    ) -> ResultOfUserAction {
+        
+        let attachment = message.toData(encodingForced: messageEncoding)
+
+        return transferTokens(
+            identifier: tokenIdentifier,
+            to: recipient,
+            amount: amount,
+            attachment: attachment,
+            from: specifiedSender,
+            ifNoSigningKeyPresent: noKeyPresentStrategy
         )
     }
     

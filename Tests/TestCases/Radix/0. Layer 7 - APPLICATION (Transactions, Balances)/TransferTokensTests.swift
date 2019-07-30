@@ -33,8 +33,6 @@ class TransferTokensTests: LocalhostNodeTest {
     
     func testTransferTokenWithGranularityOf1() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
-        print("🙋🏻‍♀️ Alice: \(alice!)")
-        print("🙋🏻‍♂️ Bob: \(bob!)")
         // WHEN: Alice transfer tokens she owns, to Bob
         let createToken = createTokenAction(address: alice, supply: .fixed(to: 30))
         XCTAssertTrue(
@@ -50,27 +48,31 @@ class TransferTokensTests: LocalhostNodeTest {
         XCTAssertEqual(myBalanceBeforeTx.token.tokenDefinitionReference, rri)
         XCTAssertEqual(myBalanceBeforeTx.amount, 30)
         
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri))
+        let attachedMessage = "For taxi fare"
+        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 10, message: attachedMessage)
         
         // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
             transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
 
-        guard let myBalanceOrNilAfterTx = application.observeMyBalance(of: rri).blockingTakeLast(timeout: 2) else { return }
+        guard let myBalanceOrNilAfterTx = application.observeMyBalance(of: rri).blockingTakeLast(timeout: 3) else { return }
         guard let myBalanceAfterTx = myBalanceOrNilAfterTx else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(myBalanceAfterTx.amount, 20)
         
-        guard let bobsBalanceOrNilAfterTx = application.observeBalance(of: rri, for: bob).blockingTakeFirst(timeout: 2) else { return }
+        guard let bobsBalanceOrNilAfterTx = application.observeBalance(of: rri, for: bob).blockingTakeFirst(timeout: 3) else { return }
         guard let bobsBalanceAfterTx = bobsBalanceOrNilAfterTx else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(bobsBalanceAfterTx.amount, 10)
         
-        guard let myTransfer = application.observeMyTokenTransfers().blockingTakeFirst(timeout: 2) else { return }
+        guard let myTransfer = application.observeMyTokenTransfers().blockingTakeFirst(timeout: 3) else { return }
         XCTAssertEqual(myTransfer.sender, alice)
         XCTAssertEqual(myTransfer.recipient, bob)
         XCTAssertEqual(myTransfer.amount, 10)
+        XCTAssertGreaterThanOrEqual(myTransfer.date.timeIntervalSinceNow, -30) // max 30 seconds ago
+        guard let decodedAttachedMessage = myTransfer.attachedMessage() else { return XCTFail("Expected attachment") }
+        XCTAssertEqual(decodedAttachedMessage, attachedMessage)
         
-        guard let bobTransfer = application.observeTokenTransfers(toOrFrom: bob).blockingTakeFirst(timeout: 2) else { return }
+        guard let bobTransfer = application.observeTokenTransfers(toOrFrom: bob).blockingTakeFirst(timeout: 3) else { return }
         XCTAssertEqual(bobTransfer.sender, alice)
         XCTAssertEqual(bobTransfer.recipient, bob)
         XCTAssertEqual(bobTransfer.amount, 10)

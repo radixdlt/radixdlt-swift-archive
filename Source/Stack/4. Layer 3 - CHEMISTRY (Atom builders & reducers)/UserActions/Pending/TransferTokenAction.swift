@@ -15,7 +15,7 @@ public struct TransferTokenAction: UserAction, TokenTransfer {
     public let recipient: Address
     public let amount: PositiveAmount
     public let tokenResourceIdentifier: ResourceIdentifier
-    public let date: Date
+    
     public let attachment: Data?
     
     public init(
@@ -23,14 +23,12 @@ public struct TransferTokenAction: UserAction, TokenTransfer {
         to recipient: Ownable,
         amount: PositiveAmount,
         tokenResourceIdentifier: ResourceIdentifier,
-        attachment: Data? = nil,
-        date: Date = .init()
+        attachment: Data? = nil
     ) {
         self.sender = sender.address
         self.recipient = recipient.address
         self.amount = amount
         self.tokenResourceIdentifier = tokenResourceIdentifier
-        self.date = date
         self.attachment = attachment
     }
 }

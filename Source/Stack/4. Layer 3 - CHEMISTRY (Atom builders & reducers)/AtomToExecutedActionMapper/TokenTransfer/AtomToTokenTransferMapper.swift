@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-public protocol AtomToTokenTransferMapper: AtomToSpecificExecutedActionMapper where ExecutedAction == TransferredTokens {}
+public protocol AtomToTokenTransferMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == TransferredTokens {}
 
 public final class DefaultAtomToTokenTransferMapper: AtomToTokenTransferMapper {
     public init() {}
@@ -17,10 +17,10 @@ public final class DefaultAtomToTokenTransferMapper: AtomToTokenTransferMapper {
 
 public extension DefaultAtomToTokenTransferMapper {
     
-    typealias ExecutedAction = TransferredTokens
+    typealias SpecificExecutedAction = TransferredTokens
     
     // swiftlint:disable:next function_body_length
-    func map(atom: Atom, account: Account) -> Observable<ExecutedAction> {
+    func map(atom: Atom, account: Account) -> Observable<SpecificExecutedAction> {
         
         // swiftlint:disable:next function_body_length
         func transferredTokensFromParticleGroup(_ particleGroup: ParticleGroup) -> [TransferredTokens] {
@@ -92,46 +92,5 @@ public extension DefaultAtomToTokenTransferMapper {
         let transferredTokensList: [TransferredTokens] = atom.particleGroups.flatMap(transferredTokensFromParticleGroup)
         
         return Observable.from(transferredTokensList)
-    }
-}
-
-extension ObservableConvertibleType where Element: Sequence {
-    
-    /// Converts `Observable<[Foo]>` to `Observable<Foo>`
-    func toStream() -> Observable<Element.Element> {
-        let observableArray: Observable<[Element.Element]> = self.asObservable().map { Array($0) }
-        return observableArray.flatMap {
-            Observable.from($0)
-        }
-    }
-}
-
-internal enum ZeroOneTwoAndMany<Element> {
-    case zero
-    case one(single: Element)
-    case two(first: Element, secondAndLast: Element)
-    case many(first: Element, second: Element, last: Element)
-}
-
-internal extension Collection {
-    
-    var countedElementsZeroOneTwoAndMany: ZeroOneTwoAndMany<Element> {
-        if isEmpty {
-            return .zero
-        } else {
-            let firstElement = first!
-            if count == 1 {
-                return .one(single: firstElement)
-            } else {
-                let second = self.dropFirst().first!
-                if count == 2 {
-                    return .two(first: firstElement, secondAndLast: second)
-                } else {
-                    let last = self.suffix(1).first!
-                    return .many(first: firstElement, second: second, last: last)
-                }
-            }
-            
-        }
     }
 }

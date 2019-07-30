@@ -30,18 +30,10 @@ public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
 public extension DefaultRPCClient {
     func observeAtoms(subscriberId: SubscriberId) -> Observable<AtomObservation> {
         return observe(notification: .subscribeUpdate, subscriberId: subscriberId, responseType: AtomSubscriptionUpdate.self)
-            .do(
-                onNext: { log.info("🎧 AtomSubscriptionUpdate: \($0)") },
-                onError: { log.error("💩 AtomSubscriptionUpdate: \($0)") }
-            )
             .map { $0.toAtomObservation() }
             .flatMap { (atomObservations: [AtomObservation]) -> Observable<AtomObservation> in
-                log.warning(atomObservations)
                 return Observable.from(atomObservations)
-            }.do(
-                onNext: { log.info("⚛️ AtomObservation: \($0)") },
-                onError: { log.error("💩 AtomObservation: \($0)") }
-            )
+            }
     }
     
     func observeAtomStatusNotifications(subscriberId: SubscriberId) -> Observable<AtomStatusEvent> {

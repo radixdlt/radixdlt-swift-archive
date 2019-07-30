@@ -46,9 +46,9 @@ public extension TransferTokensActionToParticleGroupsMapper {
             throw TransferError.amountNotMultipleOfGranularity(amount: transfer.amount, tokenGranularity: tokenDefinitionParticle.granularity)
         }
         
-        var (particleGroup, remainder) = transferToRecipientInParticleGroupWithRemainder(upTransferrableParticles: upTransferrableParticles, transfer: transfer)
-        
-        guard let tokensToRecipient = particleGroup.firstParticle(ofType: TransferrableTokensParticle.self, spin: .up) else {
+        var (particles, remainder) = transferToRecipientInParticlesWithRemainder(upTransferrableParticles: upTransferrableParticles, transfer: transfer)
+
+        guard let tokensToRecipient = particles.firstParticle(ofType: TransferrableTokensParticle.self, spin: .up) else {
             incorrectImplementation("Should have created a Transfer to the recipient")
         }
         
@@ -62,17 +62,20 @@ public extension TransferTokensActionToParticleGroupsMapper {
                 resourceIdentifier: rri
             ).withSpin(.up)
             
-            particleGroup += returnedToSender
+            particles += returnedToSender
         }
         
+        let metaData: MetaData
         if let attachment = transfer.attachment {
-            let attachmentBase64 = Base64String(data: attachment)
-            let attachmentMetaData: MetaData = [MetaDataKey.attachment: attachmentBase64.stringValue]
-            let mergedMetaData = particleGroup.metaData.merging(with: attachmentMetaData) { current, new in return new }
-            particleGroup = ParticleGroup(spunParticles: particleGroup.spunParticles, metaData: mergedMetaData)
-        }
+            metaData = [.attachment: Base64String(data: attachment).stringValue]
+        } else { metaData = [:] }
         
-        return ParticleGroups(groups: particleGroup)
+        return [
+            ParticleGroup(
+                spunParticles: particles,
+                metaData: metaData
+            )
+        ]
     }
 }
 
@@ -89,7 +92,10 @@ public extension DefaultTransferTokensActionToParticleGroupsMapper {
 
 // MARK: - Private Helpers
 private extension TransferTokensActionToParticleGroupsMapper {
-    func transferToRecipientInParticleGroupWithRemainder(upTransferrableParticles: [UpParticle<TransferrableTokensParticle>], transfer: TransferTokenAction) -> (group: ParticleGroup, remainder: PositiveAmount?) {
+    func transferToRecipientInParticlesWithRemainder(
+        upTransferrableParticles: [UpParticle<TransferrableTokensParticle>],
+        transfer: TransferTokenAction
+    ) -> (particles: [AnySpunParticle], remainder: PositiveAmount?) {
         
         let tokenConsumables = upTransferrableParticles.map { $0.particle }
 
@@ -113,10 +119,11 @@ private extension TransferTokensActionToParticleGroupsMapper {
         
         let toRecipient = TransferrableTokensParticle.toRecipient(in: transfer, permissions: permissions, granularity: granularity).withSpin(.up)
         
-        let toRecipientParticleGroup = ParticleGroup(toRecipient + consumedTokens)
+        let toRecipientParticles = toRecipient + consumedTokens
         
         let remainder = try? PositiveAmount(signedAmount: SignedAmount(amount: consumerQuantity) - SignedAmount(amount: transfer.amount))
-        return (group: toRecipientParticleGroup, remainder: remainder)
+        
+        return (particles: toRecipientParticles, remainder: remainder)
     }
 }
 
