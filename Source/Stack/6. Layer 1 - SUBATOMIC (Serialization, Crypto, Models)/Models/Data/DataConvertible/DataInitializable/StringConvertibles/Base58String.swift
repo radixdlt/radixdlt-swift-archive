@@ -46,9 +46,9 @@ public extension Data {
 public extension Base58String {
     
     init(data: Data) {
-        let bytes = data.bytes
-        var x = data.unsignedBigInteger
-        let alphabet = String.base58Alphabet.toData()
+        let bytes: [Byte] = data.bytes
+        var x: BigUnsignedInt = data.unsignedBigInteger
+        let alphabet: Data = String.base58Alphabet.toData()
         let radix = BigUnsignedInt(alphabet.count)
         
         var answer = [UInt8]()
