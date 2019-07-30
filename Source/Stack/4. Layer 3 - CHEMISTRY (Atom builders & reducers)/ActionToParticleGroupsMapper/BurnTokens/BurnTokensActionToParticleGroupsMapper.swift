@@ -8,16 +8,6 @@
 
 import Foundation
 
-public struct BurnTokensAction: UserAction {
-    public let address: Address
-    public let tokenDefinitionReference: ResourceIdentifier
-    public let amount: PositiveAmount
-}
-
-public extension BurnTokensAction {
-    var nameOfAction: UserActionName { return .burnTokens }
-}
-
 public protocol BurnTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action == BurnTokensAction {}
 
 public extension BurnTokensActionToParticleGroupsMapper {

@@ -8,11 +8,6 @@
 
 import Foundation
 
-public struct PutUniqueIdAction: UserAction {}
-public extension PutUniqueIdAction {
-    var nameOfAction: UserActionName { return .putUnique }
-}
-
 public protocol PutUniqueActionToParticleGroupsMapper: StatelessActionToParticleGroupsMapper where Action == PutUniqueIdAction {}
 
 public final class DefaultPutUniqueActionToParticleGroupsMapper: PutUniqueActionToParticleGroupsMapper { }
