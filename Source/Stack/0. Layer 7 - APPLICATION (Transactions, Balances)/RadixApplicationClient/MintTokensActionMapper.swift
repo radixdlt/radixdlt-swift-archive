@@ -34,7 +34,7 @@ public final class DefaultMintTokensActionToParticleGroupsMapper: MintTokensActi
 
 public extension DefaultMintTokensActionToParticleGroupsMapper {
     typealias Action = MintTokensAction
-    func particleGroups(for action: Action, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
+    func particleGroups(for action: Action, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
         implementMe()
     }
 }

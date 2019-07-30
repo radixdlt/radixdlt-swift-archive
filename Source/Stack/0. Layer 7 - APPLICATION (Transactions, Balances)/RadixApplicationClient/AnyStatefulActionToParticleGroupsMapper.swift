@@ -13,7 +13,7 @@ public struct AnyStatefulActionToParticleGroupsMapper: BaseStatefulActionToParti
     private let _actionType: () -> UserAction.Type
     private let _matchesType: (UserAction.Type) -> Bool
     private let _requiredStateForAnAction: (UserAction) -> [AnyShardedParticleStateId]
-    private let _particleGroupsForAnAction: (UserAction, [ParticleConvertible]) throws -> ParticleGroups
+    private let _particleGroupsForAnAction: (UserAction, [AnyUpParticle]) throws -> ParticleGroups
     
     public init<Concrete>(_ concrete: Concrete) where Concrete: StatefulActionToParticleGroupsMapper {
         
@@ -47,7 +47,7 @@ public extension AnyStatefulActionToParticleGroupsMapper {
         return _requiredStateForAnAction(userAction)
     }
     
-    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
+    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
         return try _particleGroupsForAnAction(userAction, upParticles)
     }
     

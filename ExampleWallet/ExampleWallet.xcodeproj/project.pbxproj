@@ -14,7 +14,6 @@
 		E6ABA7F022C3C6B200536DC7 /* Unsafe︕！Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79922C3C6B200536DC7 /* Unsafe︕！Cache.swift */; };
 		E6ABA7F122C3C6B200536DC7 /* FormValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79C22C3C6B200536DC7 /* FormValidator.swift */; };
 		E6ABA7F222C3C6B200536DC7 /* Driver+Empty.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79E22C3C6B200536DC7 /* Driver+Empty.swift */; };
-		E6ABA7F322C3C6B200536DC7 /* FilterNil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA79F22C3C6B200536DC7 /* FilterNil.swift */; };
 		E6ABA7F422C3C6B200536DC7 /* Driver+Operator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A022C3C6B200536DC7 /* Driver+Operator.swift */; };
 		E6ABA7F522C3C6B200536DC7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A122C3C6B200536DC7 /* ActivityIndicator.swift */; };
 		E6ABA7F622C3C6B200536DC7 /* UIView+Spacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7A322C3C6B200536DC7 /* UIView+Spacer.swift */; };
@@ -90,7 +89,6 @@
 		E6ABA79922C3C6B200536DC7 /* Unsafe︕！Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Unsafe︕！Cache.swift"; sourceTree = "<group>"; };
 		E6ABA79C22C3C6B200536DC7 /* FormValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormValidator.swift; sourceTree = "<group>"; };
 		E6ABA79E22C3C6B200536DC7 /* Driver+Empty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Empty.swift"; sourceTree = "<group>"; };
-		E6ABA79F22C3C6B200536DC7 /* FilterNil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterNil.swift; sourceTree = "<group>"; };
 		E6ABA7A022C3C6B200536DC7 /* Driver+Operator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Driver+Operator.swift"; sourceTree = "<group>"; };
 		E6ABA7A122C3C6B200536DC7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		E6ABA7A322C3C6B200536DC7 /* UIView+Spacer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Spacer.swift"; sourceTree = "<group>"; };
@@ -246,7 +244,6 @@
 			isa = PBXGroup;
 			children = (
 				E6ABA79E22C3C6B200536DC7 /* Driver+Empty.swift */,
-				E6ABA79F22C3C6B200536DC7 /* FilterNil.swift */,
 				E6ABA7A022C3C6B200536DC7 /* Driver+Operator.swift */,
 				E6ABA7A122C3C6B200536DC7 /* ActivityIndicator.swift */,
 			);
@@ -550,7 +547,6 @@
 				E6ABA82C22C3C6B200536DC7 /* WalletView.swift in Sources */,
 				E6ABA81922C3C6B200536DC7 /* ChooseWalletCoordinator.swift in Sources */,
 				E6ABA7FE22C3C6B200536DC7 /* StaticEmptyInitializable.swift in Sources */,
-				E6ABA7F322C3C6B200536DC7 /* FilterNil.swift in Sources */,
 				E6ABA82422C3C6B200536DC7 /* AppNavigator.swift in Sources */,
 				E6ABA81122C3C6B200536DC7 /* CreateNewWalletView.swift in Sources */,
 				E6ABA7F422C3C6B200536DC7 /* Driver+Operator.swift in Sources */,

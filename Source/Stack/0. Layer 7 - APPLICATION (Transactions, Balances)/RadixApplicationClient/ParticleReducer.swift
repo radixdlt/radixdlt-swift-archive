@@ -11,18 +11,18 @@ import Foundation
 /// Base protocol for `ParticleReducer`, trick to enable easy type-erasure of `ParticleReducer`
 public protocol BaseParticleReducer {    
     func anInitialState<S>() -> S where S: ApplicationState
-    func reduce<S>(aState: S, particle: ParticleConvertible) -> S where S: ApplicationState
+    func reduce<S>(aState: S, upParticle: AnyUpParticle) -> S where S: ApplicationState
 }
 
 public protocol ParticleReducer: BaseParticleReducer {
     associatedtype State: ApplicationState
     var initialState: State { get }
-    func reduce(state: State, particle: ParticleConvertible) -> State
+    func reduce(state: State, upParticle: AnyUpParticle) -> State
 }
 
 public extension ParticleReducer {
-    func reduceFromInitialState(particles: [ParticleConvertible]) -> State {
-        return particles.reduce(initialState, reduce)
+    func reduceFromInitialState(upParticles: [AnyUpParticle]) -> State {
+        return upParticles.reduce(initialState, reduce)
     }
 }
 
@@ -35,9 +35,9 @@ public extension ParticleReducer {
         return initial
     }
     
-    func reduce<S>(aState: S, particle: ParticleConvertible) -> S where S: ApplicationState {
+    func reduce<S>(aState: S, upParticle: AnyUpParticle) -> S where S: ApplicationState {
         let state = castOrKill(instance: aState, toType: State.self)
-        let aReducedState = reduce(state: state, particle: particle)
+        let aReducedState = reduce(state: state, upParticle: upParticle)
         return castOrKill(instance: aReducedState, toType: S.self)
      
     }

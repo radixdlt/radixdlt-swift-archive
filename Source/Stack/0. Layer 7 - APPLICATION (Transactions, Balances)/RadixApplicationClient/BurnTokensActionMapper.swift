@@ -36,7 +36,7 @@ public final class DefaultBurnTokensActionToParticleGroupsMapper: BurnTokensActi
 
 public extension DefaultBurnTokensActionToParticleGroupsMapper {
    
-    func particleGroups(for action: BurnTokensAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
+    func particleGroups(for action: BurnTokensAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
         implementMe()
     }
 }

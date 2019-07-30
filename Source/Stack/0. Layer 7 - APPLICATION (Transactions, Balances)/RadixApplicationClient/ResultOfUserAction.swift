@@ -20,7 +20,7 @@ public enum ResultOfUserAction: Throwing {
         completable: Completable
     )
     
-    case failedToExecuteAction(FailedAction)
+    case failedToStageAction(FailedToStageAction)
 }
 
 // MARK: Convenience Init
@@ -51,35 +51,15 @@ public extension ResultOfUserAction {
 
 // Throwing
 public extension ResultOfUserAction {
-    enum Error: Swift.Error, Equatable {
-        case failedToStageAction(FailedAction)
+    enum Error: Swift.Error {
+        case failedToStageAction(FailedToStageAction)
         case failedToSubmitAtom(SubmitAtomError)
     }
 }
 
-public struct FailedAction: Swift.Error, Equatable {
-    let error: Error
+public struct FailedToStageAction: Swift.Error {
+    let error: Swift.Error
     let userAction: UserAction
-    
-    public static func == (lhs: FailedAction, rhs: FailedAction) -> Bool {
-        return lhs.error == rhs.error
-    }
-}
-
-public extension FailedAction {
-    enum Error: Swift.Error, Equatable {
-        case failedToTransferTokens(TransferError)
-    }
-}
-
-internal extension FailedAction.Error {
-    init(swiftError: Swift.Error) {
-        if let transferError = swiftError as? TransferError {
-            self = .failedToTransferTokens(transferError)
-        } else {
-            unexpectedlyMissedToCatch(error: swiftError)
-        }
-    }
 }
 
 // MARK: RxBlocking
@@ -88,7 +68,7 @@ public extension ResultOfUserAction {
         switch self {
         case .pendingSending(_, let updates, _):
             return updates
-        case .failedToExecuteAction(let failedAction):
+        case .failedToStageAction(let failedAction):
             return Observable<SubmitAtomAction>.error(Error.failedToStageAction(failedAction))
         }
     }
@@ -97,7 +77,7 @@ public extension ResultOfUserAction {
         switch self {
         case .pendingSending(_, _, let completable):
             return completable
-        case .failedToExecuteAction(let failedAction):
+        case .failedToStageAction(let failedAction):
             return Completable.error(Error.failedToStageAction(failedAction))
         }
     }

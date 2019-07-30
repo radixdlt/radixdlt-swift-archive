@@ -23,8 +23,8 @@ public struct TokenBalanceReferencesState: ApplicationState, DictionaryConvertib
 
 public extension TokenBalanceReferencesState {
 
-    func mergingWithTransferrableTokensParticle(_ transferrableTokensParticle: TransferrableTokensParticle) -> TokenBalanceReferencesState {
-        let stateFromParticle = TokenBalanceReferencesState(reducing: [TokenReferenceBalance(transferrableTokensParticle: transferrableTokensParticle)])
+    func mergingWithTransferrableTokensParticle(_ transferrableTokensParticle: UpParticle<TransferrableTokensParticle>) -> TokenBalanceReferencesState {
+        let stateFromParticle = TokenBalanceReferencesState(reducing: [TokenReferenceBalance(upTransferrableTokensParticle: transferrableTokensParticle)])
         return mergingWithState(stateFromParticle)
     }
     

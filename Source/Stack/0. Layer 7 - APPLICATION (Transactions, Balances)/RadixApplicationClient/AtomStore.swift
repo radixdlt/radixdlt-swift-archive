@@ -23,7 +23,7 @@ public protocol AtomStore {
     /// which are then processed by the local store
     func atomObservations(of address: Address) -> Observable<AtomObservation>
     
-    func upParticles(at address: Address, stagedUuid: UUID?) -> [ParticleConvertible]
+    func upParticles(at address: Address, stagedUuid: UUID?) -> [AnyUpParticle]
     
     /// Stores an Atom (wrapped in AtomObservation) under a given destination (Address) and not
     func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode)
@@ -112,7 +112,7 @@ public extension InMemoryAtomStore {
 
     }
     
-    func upParticles(at address: Address, stagedUuid: UUID?) -> [ParticleConvertible] {
+    func upParticles(at address: Address, stagedUuid: UUID?) -> [AnyUpParticle] {
         var upParticles = particleIndex.filter {
             guard $0.key.getParticle().shardables()?.contains(address) == true else { return false }
             var spinParticleIndex = $0.value
@@ -137,6 +137,7 @@ public extension InMemoryAtomStore {
         return upParticles
             .asSet.asArray // remove any duplicates
             .map { $0.getParticle() }
+            .map { AnyUpParticle(particle: $0) }
     }
     
     func stateParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID) {

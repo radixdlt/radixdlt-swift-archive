@@ -164,7 +164,11 @@ struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGrou
 //    }
     
     func particleGroups(for action: Action) -> ParticleGroups {
-        return try! particleGroups(for: action, upParticles: [tokenDefinitionParticle, transferrableTokensParticle])
+        return try! particleGroups(for: action, upParticles: [
+            AnyUpParticle(particle: tokenDefinitionParticle),
+            AnyUpParticle(particle: transferrableTokensParticle)
+            ]
+        )
     }
     
 //    func particleGroups(for transfer: TransferTokenAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {

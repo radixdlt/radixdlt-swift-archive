@@ -18,7 +18,7 @@ class TokenBalanceReducerTests: XCTestCase {
     
     func testSimpleBalance() {
         let reducer = TokenBalanceReferencesReducer()
-        let balances = reducer.reduceFromInitialState(particles: [transferrable(10)])
+        let balances = reducer.reduceFromInitialState(upParticles: [transferrable(10)])
         
         let balance = balances[xrd]
         XCTAssertEqual(balance?.amount, 10)
@@ -27,7 +27,7 @@ class TokenBalanceReducerTests: XCTestCase {
     func testMultipleMintedTokens() {
         let reducer = TokenBalanceReferencesReducer()
     
-        let balances = reducer.reduceFromInitialState(particles: [
+        let balances = reducer.reduceFromInitialState(upParticles: [
             transferrable(3),
             transferrable(5),
             transferrable(11)
@@ -43,10 +43,11 @@ private let xrd = ResourceIdentifier(address: address, name: "XRD")
 
 
 /// Assumes spin up
-private func transferrable(_ amount: NonNegativeAmount) -> TransferrableTokensParticle {
-    return TransferrableTokensParticle(
+private func transferrable(_ amount: NonNegativeAmount) -> AnyUpParticle {
+    let particle = TransferrableTokensParticle(
         amount: amount,
         address: address,
         tokenDefinitionReference: xrd
     )
+    return AnyUpParticle(particle: particle)
 }

@@ -224,6 +224,7 @@
 		E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */; };
 		E696AAD6226DE94900D19ED6 /* NodeInteracting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD5226DE94900D19ED6 /* NodeInteracting.swift */; };
 		E696AAD8226DEB8A00D19ED6 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD7226DEB8A00D19ED6 /* Magic.swift */; };
+		E699189E22F050AB00AF130F /* TransferredTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E699189D22F050AB00AF130F /* TransferredTokens.swift */; };
 		E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752222A18F5C00AC631B /* Encryptor.swift */; };
 		E69E752522A1901000AC631B /* MetaDataOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752422A1901000AC631B /* MetaDataOwner.swift */; };
 		E69E752722A1903600AC631B /* AtomToDecryptedMessageMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752622A1903600AC631B /* AtomToDecryptedMessageMapper.swift */; };
@@ -810,6 +811,7 @@
 		E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountBalancing.swift; sourceTree = "<group>"; };
 		E696AAD5226DE94900D19ED6 /* NodeInteracting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInteracting.swift; sourceTree = "<group>"; };
 		E696AAD7226DEB8A00D19ED6 /* Magic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Magic.swift; sourceTree = "<group>"; };
+		E699189D22F050AB00AF130F /* TransferredTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferredTokens.swift; sourceTree = "<group>"; };
 		E69E752222A18F5C00AC631B /* Encryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryptor.swift; sourceTree = "<group>"; };
 		E69E752422A1901000AC631B /* MetaDataOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataOwner.swift; sourceTree = "<group>"; };
 		E69E752622A1903600AC631B /* AtomToDecryptedMessageMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToDecryptedMessageMapper.swift; sourceTree = "<group>"; };
@@ -2101,6 +2103,24 @@
 			path = NodeInteracting;
 			sourceTree = "<group>";
 		};
+		E699189B22F0508A00AF130F /* Pending */ = {
+			isa = PBXGroup;
+			children = (
+				E689DBAA225F8F3200340CF3 /* TransferTokenAction.swift */,
+				E6D15680227056F800AC3438 /* CreateTokenAction.swift */,
+				E68BD819229ECBBB00FCE4D3 /* SendMessageAction.swift */,
+			);
+			path = Pending;
+			sourceTree = "<group>";
+		};
+		E699189C22F0509A00AF130F /* Executed */ = {
+			isa = PBXGroup;
+			children = (
+				E699189D22F050AB00AF130F /* TransferredTokens.swift */,
+			);
+			path = Executed;
+			sourceTree = "<group>";
+		};
 		E69E752A22A1B47900AC631B /* SentMessage */ = {
 			isa = PBXGroup;
 			children = (
@@ -2523,9 +2543,8 @@
 		E6D1567F227056D800AC3438 /* UserActions */ = {
 			isa = PBXGroup;
 			children = (
-				E689DBAA225F8F3200340CF3 /* TransferTokenAction.swift */,
-				E6D15680227056F800AC3438 /* CreateTokenAction.swift */,
-				E68BD819229ECBBB00FCE4D3 /* SendMessageAction.swift */,
+				E699189C22F0509A00AF130F /* Executed */,
+				E699189B22F0508A00AF130F /* Pending */,
 			);
 			path = UserActions;
 			sourceTree = "<group>";
@@ -3943,6 +3962,7 @@
 				E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */,
 				E6E279502271CD1C0067D46E /* JSONPrefix.swift in Sources */,
 				E6166BE62260AF77003A9442 /* DefaultNodeConnection.swift in Sources */,
+				E699189E22F050AB00AF130F /* TransferredTokens.swift in Sources */,
 				E626E20222B41B750046D2AC /* AnyStatelessActionToParticleGroupsMapper.swift in Sources */,
 				E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */,
 				E62EFDCE224937A400B6DAD6 /* HTTPRequestInterceptor.swift in Sources */,

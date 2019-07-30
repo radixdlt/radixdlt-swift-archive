@@ -23,7 +23,6 @@ public struct TokenBalance: Equatable, Throwing {
 public extension TokenBalance {
     
     enum Error: Swift.Error, Equatable {
-        case addressMismatch
         case tokenDefinitionReferenceMismatch
         case transferrableTokens
     }
@@ -31,10 +30,6 @@ public extension TokenBalance {
     init(tokenDefinition: TokenConvertible, tokenReferenceBalance: TokenReferenceBalance) throws {
         if tokenDefinition.tokenDefinitionReference != tokenReferenceBalance.tokenResourceIdentifier {
             throw Error.tokenDefinitionReferenceMismatch
-        }
-        
-        if tokenDefinition.address != tokenReferenceBalance.owner {
-            throw Error.addressMismatch
         }
         
         self.init(

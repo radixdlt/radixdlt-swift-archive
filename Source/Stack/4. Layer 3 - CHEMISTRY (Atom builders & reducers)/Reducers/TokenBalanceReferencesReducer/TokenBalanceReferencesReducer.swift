@@ -17,11 +17,11 @@ public extension TokenBalanceReferencesReducer {
         return TokenBalanceReferencesState()
     }
     
-    func reduce(state: State, particle: ParticleConvertible) -> State {
-        guard let transferrableTokensParticle = particle as? TransferrableTokensParticle else {
+    func reduce(state: State, upParticle: AnyUpParticle) -> State {
+        guard let upTransferrableTokensParticle = try? UpParticle<TransferrableTokensParticle>(anyUpParticle: upParticle) else {
             return state
         }
-        return state.mergingWithTransferrableTokensParticle(transferrableTokensParticle)
+        return state.mergingWithTransferrableTokensParticle(upTransferrableTokensParticle)
     }
 
 }

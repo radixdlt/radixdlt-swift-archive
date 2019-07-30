@@ -20,10 +20,11 @@ public struct DefaultTransferTokensActionToParticleGroupsMapper:
 // MARK: - TransferTokensActionToParticleGroupsMapper
 public extension TransferTokensActionToParticleGroupsMapper {
     
-    func particleGroups(for transfer: TransferTokenAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
+    // swiftlint:disable:next function_body_length
+    func particleGroups(for transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
         let rri = transfer.tokenResourceIdentifier
         
-        let upTransferrableParticles = upParticles.compactMap { $0 as? TransferrableTokensParticle }.filter { $0.tokenDefinitionReference == rri }
+        let upTransferrableParticles = upParticles.compactMap { try? UpParticle<TransferrableTokensParticle>(anyUpParticle: $0) }.filter { $0.particle.tokenDefinitionReference == rri }
         
         let tokenBalanceOfSender = try TokenReferenceBalance(upTransferrableTokensParticles: upTransferrableParticles, tokenIdentifier: rri, owner: transfer.sender)
         
@@ -36,7 +37,7 @@ public extension TransferTokensActionToParticleGroupsMapper {
             )
         }
         
-        guard let tokenDefinitionParticle = upParticles.compactMap({ $0 as? TokenDefinitionParticle }).first(where: { $0.identifier == rri }) else {
+        guard let tokenDefinitionParticle = upParticles.compactMap({ $0.particle as? TokenDefinitionParticle }).first(where: { $0.identifier == rri }) else {
             log.warning("Expected to found TokenDefinitionParticle with RRI: \(rri), amongst up particles: \(upParticles), but found none.")
             throw TransferError.foundNoTokenDefinition(forIdentifier: rri)
         }
@@ -64,6 +65,13 @@ public extension TransferTokensActionToParticleGroupsMapper {
             particleGroup += returnedToSender
         }
         
+        if let attachment = transfer.attachment {
+            let attachmentBase64 = Base64String(data: attachment)
+            let attachmentMetaData: MetaData = [MetaDataKey.attachment: attachmentBase64.stringValue]
+            let mergedMetaData = particleGroup.metaData.merging(with: attachmentMetaData) { current, new in return new }
+            particleGroup = ParticleGroup(spunParticles: particleGroup.spunParticles, metaData: mergedMetaData)
+        }
+        
         return ParticleGroups(groups: particleGroup)
     }
 }
@@ -81,22 +89,24 @@ public extension DefaultTransferTokensActionToParticleGroupsMapper {
 
 // MARK: - Private Helpers
 private extension TransferTokensActionToParticleGroupsMapper {
-    func transferToRecipientInParticleGroupWithRemainder(upTransferrableParticles tokenConsumables: [TransferrableTokensParticle], transfer: TransferTokenAction) -> (group: ParticleGroup, remainder: PositiveAmount?) {
+    func transferToRecipientInParticleGroupWithRemainder(upTransferrableParticles: [UpParticle<TransferrableTokensParticle>], transfer: TransferTokenAction) -> (group: ParticleGroup, remainder: PositiveAmount?) {
+        
+        let tokenConsumables = upTransferrableParticles.map { $0.particle }
 
         assert(!tokenConsumables.isEmpty, "No consumables")
         assert(!tokenConsumables.contains(where: { $0.tokenDefinitionReference != transfer.tokenResourceIdentifier }), "Consumables contains incompatible tokens")
         
         var consumerQuantity: NonNegativeAmount = 0
-        let checkIfTransactionAmountIsCovered = { consumerQuantity >= transfer.amount }
+        let isTransactionAmountCoveredYet = { consumerQuantity >= transfer.amount }
         
         var consumedTokens = [AnySpunParticle]()
         
-        for unspentToken in tokenConsumables where !checkIfTransactionAmountIsCovered() {
+        for unspentToken in tokenConsumables where !isTransactionAmountCoveredYet() {
             consumerQuantity += unspentToken.amount
             consumedTokens += unspentToken.withSpin(.down)
         }
         
-        assert(checkIfTransactionAmountIsCovered(), "The implementation of this function is incorrect, we should have asserted that we had balance enough earlier in this function")
+        assert(isTransactionAmountCoveredYet(), "The implementation of this function is incorrect, we should have asserted that we had balance enough earlier in this function")
         
         let permissions = tokenConsumables[0].permissions
         let granularity = tokenConsumables[0].granularity

@@ -13,7 +13,7 @@ public struct AnyParticleReducer: BaseParticleReducer {
     private let _stateType: () -> Any.Type
     private let _matchesType: (Any.Type) -> Bool
     private let _initialState: () -> Any
-    private let _reduce: (Any, ParticleConvertible) -> Any
+    private let _reduce: (Any, AnyUpParticle) -> Any
     
     public init<Concrete>(_ concrete: Concrete) where Concrete: ParticleReducer {
         // swiftlint:disable:next identifier_name
@@ -23,7 +23,7 @@ public struct AnyParticleReducer: BaseParticleReducer {
         self._initialState = { concrete.initialState }
         self._reduce = {
             let state = castOrKill(instance: $0, toType: State)
-            return concrete.reduce(state: state, particle: $1)
+            return concrete.reduce(state: state, upParticle: $1)
         }
     }
 }
@@ -45,9 +45,9 @@ public extension AnyParticleReducer {
         )
     }
     
-    func reduce<S>(aState: S, particle: ParticleConvertible) -> S where S: ApplicationState {
+    func reduce<S>(aState: S, upParticle: AnyUpParticle) -> S where S: ApplicationState {
         return castOrKill(
-            instance: self._reduce(aState, particle),
+            instance: self._reduce(aState, upParticle),
             toType: S.self
         )
     }

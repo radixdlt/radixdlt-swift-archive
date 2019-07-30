@@ -187,7 +187,32 @@ extension ResultOfUserAction {
     func blockingAssertThrows<SpecificError>(
         error expectedError: SpecificError,
         timeout: TimeInterval? = .default
-        ) where SpecificError: Swift.Error, SpecificError: Equatable {
-        return self.toCompletable().blockingAssertThrows(error: expectedError, timeout: timeout)
+    ) where SpecificError: Swift.Error, SpecificError: Equatable {
+        
+        return self.toCompletable()
+            .blockingAssertThrows(
+                error: expectedError,
+                timeout: timeout
+        ) {
+            guard let userActionError = $0 as? ResultOfUserAction.Error else {
+                XCTFail("Expected `ResultOfUserAction.Error`")
+                return nil
+            }
+            
+            switch userActionError {
+            case .failedToStageAction(let anyFailedToStageActionError):
+                guard let failedToStageActionError = anyFailedToStageActionError.error as? SpecificError else {
+                    XCTFail("Expected `SpecificError`")
+                    return nil
+                }
+                return failedToStageActionError
+            case .failedToSubmitAtom(let anySubmitAtomError):
+                guard let submitAtomError = anySubmitAtomError as? SpecificError else {
+                    XCTFail("Expected `SpecificError`")
+                    return nil
+                }
+                return submitAtomError
+            }
+        }
     }
 }

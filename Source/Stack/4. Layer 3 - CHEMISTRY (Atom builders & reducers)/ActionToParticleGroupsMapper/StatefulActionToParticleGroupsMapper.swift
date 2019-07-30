@@ -10,17 +10,17 @@ import Foundation
 
 public protocol BaseStatefulActionToParticleGroupsMapper {
     func requiredStateForAnAction(_ userAction: UserAction) -> [AnyShardedParticleStateId]
-    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups
+    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups
 }
 
 public protocol StatefulActionToParticleGroupsMapper: BaseStatefulActionToParticleGroupsMapper {
     associatedtype Action: UserAction
     func requiredState(for action: Action) -> [AnyShardedParticleStateId]
-    func particleGroups(for action: Action, upParticles: [ParticleConvertible]) throws -> ParticleGroups
+    func particleGroups(for action: Action, upParticles: [AnyUpParticle]) throws -> ParticleGroups
 }
 
 public extension StatefulActionToParticleGroupsMapper {
-    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
+    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
 
         // TODO throw error instead of fatalError?
         let action = castOrKill(instance: userAction, toType: Action.self)

@@ -18,7 +18,8 @@ public extension TokenDefinitionsReducer {
         return TokenDefinitionsState()
     }
     
-    func reduce(state: State, particle: ParticleConvertible) -> State {
+    func reduce(state: State, upParticle: AnyUpParticle) -> State {
+        let particle = upParticle.particle
         if let tokenDefinitionParticle = particle as? TokenDefinitionParticle {
             return state.mergeWithTokenDefinitionParticle(tokenDefinitionParticle)
         } else if let unallocatedTokensParticle = particle as? UnallocatedTokensParticle {

@@ -55,4 +55,5 @@ public extension MetaDataKey {
     static let application: MetaDataKey = "application"
     static let contentType: MetaDataKey = "contentType"
     static let encrypted: MetaDataKey = "encrypted"
+    static let attachment: MetaDataKey = "attachement"
 }

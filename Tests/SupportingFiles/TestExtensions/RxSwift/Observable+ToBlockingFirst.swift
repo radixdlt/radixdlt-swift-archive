@@ -72,9 +72,16 @@ extension ObservableConvertibleType where Element == Never { /* Completable */
     
     func blockingAssertThrows<SpecificError>(
         error expectedError: SpecificError,
-        timeout: TimeInterval? = .default
+        timeout: TimeInterval? = .default,
+        errorMapper: ((Swift.Error) -> SpecificError?)? = nil
     ) where SpecificError: Swift.Error, SpecificError: Equatable {
-        self.toBlocking(timeout: timeout).expectToThrow(error: expectedError)
+        
+        self.toBlocking(timeout: timeout)
+            .expectToThrow(
+                error: expectedError,
+                errorMapper: errorMapper
+            )
+        
     }
     
     func blockingAssertThrowsRPCErrorUnrecognizedJson<SpecificError>(
@@ -110,9 +117,15 @@ extension Observable {
     
     func blockingAssertThrows<SpecificError>(
         error expectedError: SpecificError,
-        timeout: TimeInterval? = .default
+        timeout: TimeInterval? = .default,
+        errorMapper: ((Swift.Error) -> SpecificError?)? = nil
     ) where SpecificError: Swift.Error, SpecificError: Equatable {
-        toBlocking(timeout: timeout).expectToThrow(error: expectedError)
+        
+        toBlocking(timeout: timeout)
+            .expectToThrow(
+                error: expectedError,
+                errorMapper: errorMapper
+            )
     }
     
     func blockingTakeFirst(
@@ -174,7 +187,6 @@ extension Observable {
             .toBlocking(timeout: timeout)
             .getElement(
                 at: takeElementAt,
-                timeout: timeout,
                 failOnTimeout: failOnTimeout,
                 failOnNil: failOnNil,
                 function: function,
@@ -215,7 +227,6 @@ enum ElementAt {
 extension BlockingObservable {
     func getElement(
         at getElementAt: ElementAt = .first,
-        timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnNil: Bool = true,
         function: String = #function,
@@ -251,7 +262,8 @@ extension BlockingObservable {
     }
     
     func expectToThrow<SpecificError>(
-        error expectedError: SpecificError
+        error expectedError: SpecificError,
+        errorMapper: ((Swift.Error) -> SpecificError?)? = nil
     )
         where
         SpecificError: Swift.Error,
@@ -260,13 +272,15 @@ extension BlockingObservable {
         switch materialize() {
         case .completed: return XCTFail("Expected error, but got `completed` instead")
         case .failed(_, let anyError):
-        guard let error = anyError as? SpecificError else {
-            return XCTFail("Got error as expected, but it has the wrong type, got error:\n<\(anyError)>\n, but expected error:\n<\(expectedError)>\n")
-        }
-        XCTAssertEqual(error, expectedError)
+            
+            let mapToSpecificError = errorMapper ?? { $0 as? SpecificError }
+            
+            guard let mappedError = mapToSpecificError(anyError) else {
+                return XCTFail("Got error as expected, but it has the wrong type, got error:\n<\(anyError)>\n, but expected error:\n<\(expectedError)>\n")
+            }
+            XCTAssertEqual(mappedError, expectedError)
         }
     }
-    
     
     func expectToThrowRPCErrorUnrecognizedJson<SpecificError>(
         expectedErrorType: SpecificError.Type,

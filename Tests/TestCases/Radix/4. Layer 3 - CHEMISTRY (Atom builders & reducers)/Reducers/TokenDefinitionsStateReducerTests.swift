@@ -16,7 +16,7 @@ class TokenDefinitionsStateReducerTests: XCTestCase {
         
         let expectedRri = tokenDefinitionParticle.identifier
         let reducer = TokenDefinitionsReducer()
-        let state = reducer.reduce(state: .init(), particle: tokenDefinitionParticle)
+        let state = reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
         XCTAssertNil(state.tokenState(identifier: expectedRri), "No supply info yet, cannot make state")
         guard let tokenDefinition = state.tokenDefinition(identifier: expectedRri) else { return XCTFail("expected TokenDefintion") }
         
@@ -38,15 +38,15 @@ class TokenDefinitionsStateReducerTests: XCTestCase {
         print(try! RadixJSONEncoder().encode(unallocatedTokensParticle).toString())
         
         let reducer = TokenDefinitionsReducer()
-        let state_Un = reducer.reduce(state: .init(), particle: unallocatedTokensParticle)
-        let state_Un_Td = reducer.reduce(state: state_Un, particle: tokenDefinitionParticle)
+        let state_Un = reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: unallocatedTokensParticle))
+        let state_Un_Td = reducer.reduce(state: state_Un, upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
         
         XCTAssertEqual(state_Un_Td.tokenState(identifier: expecteRri)?.totalSupply, 100)
         XCTAssertEqual(state_Un_Td.tokenState(identifier: expecteRri)?.tokenSupplyType, .mutable)
 
         // Assert that no action is performed on `TransferrableTokensParticle`. Is this really correct?
         let transferrableTokensParticle = TransferrableTokensParticle(token: tokenDefinitionParticle, amount: .irrelevant)
-        XCTAssertEqual(state_Un, reducer.reduce(state: state_Un, particle: transferrableTokensParticle))
+        XCTAssertEqual(state_Un, reducer.reduce(state: state_Un, upParticle: AnyUpParticle(particle: transferrableTokensParticle)))
         
     }
 

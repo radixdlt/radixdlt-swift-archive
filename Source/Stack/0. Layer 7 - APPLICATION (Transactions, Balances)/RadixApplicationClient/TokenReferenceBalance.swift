@@ -26,8 +26,10 @@ public struct TokenReferenceBalance: Equatable, Throwing {
 
 public extension TokenReferenceBalance {
     
-    /// TransferrableTokensParticle MUST have spin up.
-    init(transferrableTokensParticle particle: TransferrableTokensParticle) {
+    init(upTransferrableTokensParticle upParticle: UpParticle<TransferrableTokensParticle>) {
+        
+        let particle = upParticle.particle
+        
         self.init(
             tokenResourceIdentifier: particle.tokenDefinitionReference,
             amount: particle.amount,
@@ -35,8 +37,14 @@ public extension TokenReferenceBalance {
         )
     }
     
-    /// TransferrableTokensParticle'a MUST have spin up.
-    init(upTransferrableTokensParticles tokenConsumables: [TransferrableTokensParticle], tokenIdentifier: ResourceIdentifier, owner: Address) throws {
+    init(
+        upTransferrableTokensParticles: [UpParticle<TransferrableTokensParticle>],
+        tokenIdentifier: ResourceIdentifier,
+        owner: Address
+    ) throws {
+        
+        let tokenConsumables = upTransferrableTokensParticles.map { $0.particle }
+        
         if tokenConsumables.contains(where: { $0.tokenDefinitionReference != tokenIdentifier }) {
             throw Error.tokenDefinitionReferenceMismatch
         }

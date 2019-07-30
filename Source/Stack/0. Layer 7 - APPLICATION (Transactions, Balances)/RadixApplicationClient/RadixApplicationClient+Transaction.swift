@@ -48,16 +48,15 @@ extension RadixApplicationClient {
             let requiredState = api.requiredState(for: action)
             let particles = requiredState.flatMap { requiredStateContext in
                 api.atomStore.upParticles(at: requiredStateContext.address, stagedUuid: uuid)
-                    .filter { type(of: $0) == requiredStateContext.particleType }
+                    .filter { type(of: $0.particle) == requiredStateContext.particleType }
             }
             do {
                 try statefulMapper.particleGroupsForAnAction(action, upParticles: particles).forEach {
                     api.atomStore.stateParticleGroup($0, uuid: uuid)
                 }
             } catch {
-                let reason = FailedAction.Error(swiftError: error)
-                let failedAction = FailedAction(error: reason, userAction: action)
-                errorWhileStagingAction = ResultOfUserAction.failedToExecuteAction(failedAction)
+                let failed = FailedToStageAction(error: error, userAction: action)
+                errorWhileStagingAction = ResultOfUserAction.failedToStageAction(failed)
                 // revert and previously staged particle groups for the given UUID if we got an error
                 api.atomStore.clearStagedParticleGroups(for: uuid)
             }

@@ -66,7 +66,7 @@ public extension RadixApplicationClient {
         return atomStore.onSync(address: address)
             .map { [unowned self] date in
                 let upParticles = self.atomStore.upParticles(at: address, stagedUuid: nil)
-                let reducedState = reducer.reduceFromInitialState(particles: upParticles)
+                let reducedState = reducer.reduceFromInitialState(upParticles: upParticles)
                 return reducedState
         }
     }
@@ -98,7 +98,7 @@ public extension RadixApplicationClient {
     func execute(
         actions: [UserAction],
         ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent
-        ) -> ResultOfUserAction {
+    ) -> ResultOfUserAction {
         let transaction = Transaction(api: self)
         actions.forEach { transaction.stage(action: $0) }
         return transaction.commitAndPush(ifNoSigningKeyPresent: noKeyPresentStrategy)
@@ -112,15 +112,27 @@ public extension RadixApplicationClient {
     }
     
     func observeBalances(at address: Address) -> Observable<TokenBalances> {
-        return Observable.combineLatest(
-            self.observeBalanceReferences(at: address),
-            self.observeTokenDefinitions(at: address)
-        ) {
-            try TokenBalances(
-                balanceReferencesState: $0,
-                tokenDefinitionsState: $1
-            )
-        }.debug()
+        
+        let tokenBalanceListObservable: Observable<[TokenBalance]> = observeBalanceReferences(at: address)
+            .flatMap { (tokenBalanceReferencesStateForAddress: TokenBalanceReferencesState) -> Observable<[TokenBalance]> in
+            
+                let tokenBalanceList: [Observable<TokenBalance>] = tokenBalanceReferencesStateForAddress
+                .dictionary
+                .values
+                .map { (tokenReferenceBalance: TokenReferenceBalance) -> Observable<TokenBalance> in
+                let rriOfToken = tokenReferenceBalance.tokenResourceIdentifier
+                return self.observeTokenDefinitions(at: rriOfToken.address).map { (tokenDefinitionState: TokenDefinitionsState) -> TokenBalance in
+                    
+                    guard let tokenDefinition = tokenDefinitionState.tokenDefinition(identifier: rriOfToken) else { incorrectImplementation("Expected token definition") }
+                    
+                    return try TokenBalance(tokenDefinition: tokenDefinition, tokenReferenceBalance: tokenReferenceBalance)
+                }
+            }
+            
+            return Observable.combineLatest(tokenBalanceList) { $0 }
+        }
+    
+        return tokenBalanceListObservable.map { TokenBalances(balances: $0) }
     }
     
     // MARK: - AccountBalance
@@ -131,33 +143,12 @@ public extension RadixApplicationClient {
     }
     
     // MARK: - History of Executed Actions
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokenAction> {
-        return observeActions(ofType: TransferTokenAction.self, at: address)
+    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferredTokens> {
+        return observeActions(ofType: TransferredTokens.self, at: address)
     }
     
     func observeMessages(toOrFrom address: Address) -> Observable<SentMessage> {
         return observeActions(ofType: SentMessage.self, at: address)
-    }
-    
-    func create(
-        token createTokenAction: CreateTokenAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) -> ResultOfUserAction {
-        return execute(action: createTokenAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
-    }
-    
-    func transfer(
-        tokens transferTokensAction: TransferTokenAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) -> ResultOfUserAction {
-        return self.execute(action: transferTokensAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
-    }
-    
-    func send(
-        message sendMessageAction: SendMessageAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) -> ResultOfUserAction {
-        return self.execute(action: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
     
     func execute(
@@ -165,36 +156,6 @@ public extension RadixApplicationClient {
         ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
     ) -> ResultOfUserAction {
         return execute(actions: [action], ifNoSigningKeyPresent: noKeyPresentStrategy)
-    }
-
-    func sendPlainTextMessage(
-        _ plainText: String,
-        encoding: String.Encoding = .default,
-        to recipient: Ownable,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) -> ResultOfUserAction {
-        
-        let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
-        return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
-    }
-    
-    func sendEncryptedMessage(
-        _ textToEncrypt: String,
-        encoding: String.Encoding = .default,
-        to recipient: Ownable,
-        canAlsoBeDecryptedBy extraDecryptors: [Ownable]? = nil,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) -> ResultOfUserAction {
-        
-        let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(
-            and: extraDecryptors,
-            from: addressOfActiveAccount,
-            to: recipient,
-            text: textToEncrypt,
-            encoding: encoding
-        )
-        
-        return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
  
     var nativeTokenIdentifier: ResourceIdentifier {
@@ -214,7 +175,7 @@ public extension RadixApplicationClient {
         return observeTokenDefinitions(at: addressOfActiveAccount)
     }
     
-    func observeMyTokenTransfers() -> Observable<TransferTokenAction> {
+    func observeMyTokenTransfers() -> Observable<TransferredTokens> {
         return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
     }
     
@@ -264,40 +225,16 @@ public extension RadixApplicationClient {
     func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
         return identity.selectAccount(accountSelector)
     }
-
-    func createToken(
-        name: Name,
-        symbol: Symbol,
-        description: Description,
-        supply initialSupplyType: CreateTokenAction.InitialSupply,
-        granularity: Granularity = .default,
-        ifNoSigningKeyPresent: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) throws -> ResultOfUserAction {
-        
-        let createTokenAction = try CreateTokenAction(
-            creator: addressOfActiveAccount,
-            name: name,
-            symbol: symbol,
-            description: description,
-            supply: initialSupplyType,
-            granularity: granularity
-        )
-        
-        return self.create(
-            token: createTokenAction,
-            ifNoSigningKeyPresent: ifNoSigningKeyPresent
-        )
-    }
 }
 
 // MARK: - Internal
 internal extension RadixApplicationClient {
     func observeTokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
-        return observeState(ofType: TokenDefinitionsState.self, at: address).debug()
+        return observeState(ofType: TokenDefinitionsState.self, at: address)
     }
     
     func observeBalanceReferences(at address: Address) -> Observable<TokenBalanceReferencesState> {
-        return observeState(ofType: TokenBalanceReferencesState.self, at: address).debug()
+        return observeState(ofType: TokenBalanceReferencesState.self, at: address)
     }
     
     var atomPuller: AtomPuller {
@@ -391,5 +328,110 @@ private extension RadixApplicationClient {
         }
         // swiftlint:disable:next force_try
         return try! SomeParticleReducer<State>(any: reducer)
+    }
+}
+
+// MARK: Execute UserAction
+public extension RadixApplicationClient {
+    
+    func create(
+        token createTokenAction: CreateTokenAction,
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+        ) -> ResultOfUserAction {
+        return execute(action: createTokenAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
+    }
+    
+    func transfer(
+        tokens transferTokensAction: TransferTokenAction,
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+        ) -> ResultOfUserAction {
+        return self.execute(action: transferTokensAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
+    }
+    
+    func send(
+        message sendMessageAction: SendMessageAction,
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+        ) -> ResultOfUserAction {
+        return self.execute(action: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
+    }
+}
+
+// MARK: UserAction Convenience
+public extension RadixApplicationClient {
+    
+    func sendPlainTextMessage(
+        _ plainText: String,
+        encoding: String.Encoding = .default,
+        to recipient: Ownable,
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+        ) -> ResultOfUserAction {
+        
+        let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
+        return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
+    }
+    
+    func sendEncryptedMessage(
+        _ textToEncrypt: String,
+        encoding: String.Encoding = .default,
+        to recipient: Ownable,
+        canAlsoBeDecryptedBy extraDecryptors: [Ownable]? = nil,
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+        ) -> ResultOfUserAction {
+        
+        let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(
+            and: extraDecryptors,
+            from: addressOfActiveAccount,
+            to: recipient,
+            text: textToEncrypt,
+            encoding: encoding
+        )
+        
+        return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
+    }
+    
+    func createToken(
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        supply initialSupplyType: CreateTokenAction.InitialSupply,
+        granularity: Granularity = .default,
+        ifNoSigningKeyPresent: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+        ) throws -> ResultOfUserAction {
+        
+        let createTokenAction = try CreateTokenAction(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: initialSupplyType,
+            granularity: granularity
+        )
+        
+        return self.create(
+            token: createTokenAction,
+            ifNoSigningKeyPresent: ifNoSigningKeyPresent
+        )
+    }
+    
+    func transferTokens(
+        identifier tokenIdentifier: ResourceIdentifier,
+        to recipient: Ownable,
+        amount: PositiveAmount,
+        attachment: Data? = nil,
+        from specifiedSender: Ownable? = nil,
+        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
+    ) -> ResultOfUserAction {
+        
+        let sender = specifiedSender ?? addressOfActiveAccount
+        
+        let transferAction = TransferTokenAction(
+            from: sender,
+            to: recipient,
+            amount: amount,
+            tokenResourceIdentifier: tokenIdentifier,
+            attachment: attachment
+        )
+        
+        return self.transfer(tokens: transferAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
     }
 }
