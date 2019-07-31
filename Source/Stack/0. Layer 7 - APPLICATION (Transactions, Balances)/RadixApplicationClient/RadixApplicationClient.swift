@@ -11,7 +11,14 @@ import RxSwift
 import RxSwiftExt
 import RxOptional
 
-public final class RadixApplicationClient: AccountBalancing, TokenTransferring, TokenCreating, MessageSending {
+// swiftlint:disable file_length opening_brace colon
+public final class RadixApplicationClient:
+    AccountBalancing,
+    TokenTransferring,
+    TokenCreating,
+    MessageSending
+{
+    // swiftlint:enable opening_brace colon
     
     /// The chosen Radix universe, a network of nodes running a specific version of the Radix Node Runner software
     public let universe: RadixUniverse
@@ -28,7 +35,10 @@ public final class RadixApplicationClient: AccountBalancing, TokenTransferring, 
     /// A list of type-erased reducers of `Particle`s into `ApplicationState`, from which we can derive e.g. token balance and token definitions.
     private let particlesToStateReducers: [AnyParticleReducer]
     
-    /// A list of type-erased mappers from requested/pending `UserAction` to `ParticleGroups`s. Stateless and Stateful ActionToParticleGroupMapper's merged together as Stateful mappers. A `Stateless` mapper has no dependency on ledger/application state, e.g. sending a message, transferring tokens on the other hand is dependent on your balance, thus `Stateful`.
+    /// A list of type-erased mappers from requested/pending `UserAction` to `ParticleGroups`s.
+    /// Stateless and Stateful ActionToParticleGroupMapper's merged together as Stateful mappers.
+    /// A `Stateless` mapper has no dependency on ledger/application state, e.g. sending a message,
+    /// transferring tokens on the other hand is dependent on your balance, thus `Stateful`.
     private let actionMappers: [AnyStatefulActionToParticleGroupsMapper]
 
     /// A mapper from `Atom` to `AtomWithFee`
@@ -127,7 +137,12 @@ public extension RadixApplicationClient {
 // MARK: Application State
 public extension RadixApplicationClient {
     
-    func observeState<State>(ofType stateType: State.Type, at address: Address) -> Observable<State> where State: ApplicationState {
+    func observeState<State>(
+        ofType stateType: State.Type,
+        at address: Address
+    ) -> Observable<State>
+        where State: ApplicationState {
+        
         let reducer = particlesToStateReducer(for: stateType)
         return atomStore.onSync(address: address)
             .map { [unowned self] date in
@@ -137,7 +152,11 @@ public extension RadixApplicationClient {
         }
     }
     
-    func observeActions<SpecificExecutedAction>(ofType actionType: SpecificExecutedAction.Type, at address: Address) -> Observable<SpecificExecutedAction> where SpecificExecutedAction: ExecutedAction {
+    func observeActions<SpecificExecutedAction>(
+        ofType actionType: SpecificExecutedAction.Type,
+        at address: Address
+    ) -> Observable<SpecificExecutedAction>
+        where SpecificExecutedAction: ExecutedAction {
         
         let mapper = atomToExecutedActionMapper(for: actionType)
         let account = activeAccount
