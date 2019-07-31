@@ -11,23 +11,27 @@ import RxSwift
 import RxSwiftExt
 import RxOptional
 
-// swiftlint:disable file_length
-
-public final class RadixApplicationClient {
+public final class RadixApplicationClient: AccountBalancing, TokenTransferring, TokenCreating, MessageSending {
     
+    /// The chosen Radix universe, a network of nodes running a specific version of the Radix Node Runner software
     public let universe: RadixUniverse
-    public private(set) var identity: AbstractIdentity
-    public var activeAccount: Account
     
+    /// A holder of accounts belonging to the same person, with or without signing (`private`) keys.
+    public private(set) var identity: AbstractIdentity
+    
+    /// Not all accounts of `identity` contain a signing (`private`) key, but all user actions (such as transferring tokens, sending messages etc) requires a cryptographic signature by the signing key, this strategy specifies what to do in those scenarios, and can be changed later in time.
+    public var strategyNoSigningKeyIsPresent: StrategyNoSigningKeyIsPresent = .throwErrorDirectly
+    
+    /// A list of type-erased mappers from `Atom` to `ExecutedAction` (the already executed version of `UserAction`).
     private let atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper]
+    
+    /// A list of type-erased reducers of `Particle`s into `ApplicationState`, from which we can derive e.g. token balance and token definitions.
     private let particlesToStateReducers: [AnyParticleReducer]
     
-    /// Action to Particle Mappers which can mapToParticleGroups without any dependency on ledger state
-    private let statelessActionToParticleGroupsMappers: [AnyStatelessActionToParticleGroupsMapper]
-    
-    /// Action to Particle Mappers which require dependencies on the ledger
-    private let statefulActionToParticleGroupsMappers: [AnyStatefulActionToParticleGroupsMapper]
-    
+    /// A list of type-erased mappers from requested/pending `UserAction` to `ParticleGroups`s. Stateless and Stateful ActionToParticleGroupMapper's merged together as Stateful mappers. A `Stateless` mapper has no dependency on ledger/application state, e.g. sending a message, transferring tokens on the other hand is dependent on your balance, thus `Stateful`.
+    private let actionMappers: [AnyStatefulActionToParticleGroupsMapper]
+
+    /// A mapper from `Atom` to `AtomWithFee`
     private let feeMapper: FeeMapper
     
     private let disposeBag = DisposeBag()
@@ -39,28 +43,90 @@ public final class RadixApplicationClient {
         atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper] = .default,
         particlesToStateReducers: [AnyParticleReducer] = .default,
         statelessActionToParticleGroupsMappers: [AnyStatelessActionToParticleGroupsMapper] = .default,
-        statefulActionToParticleGroupsMappers: [AnyStatefulActionToParticleGroupsMapper] = .default,
-        selectActiveAccount accountSelection: AbstractIdentity.AccountSelector = { $0[0] }
+        statefulActionToParticleGroupsMappers: [AnyStatefulActionToParticleGroupsMapper] = .default
     ) {
         self.universe = universe
         self.identity = identity
         
+        self.feeMapper = feeMapper
         self.atomToExecutedActionMappers = atomToExecutedActionMappers
         self.particlesToStateReducers = particlesToStateReducers
-        self.statelessActionToParticleGroupsMappers = statelessActionToParticleGroupsMappers
-        self.statefulActionToParticleGroupsMappers = statefulActionToParticleGroupsMappers
-        self.activeAccount = identity.selectAccount(accountSelection)
-        self.feeMapper = feeMapper
+        
+        self.actionMappers = {
+            let statefulFromStateless = statelessActionToParticleGroupsMappers.map {
+                AnyStatefulActionToParticleGroupsMapper(anyStatelessMapper: $0)
+            }
+            return statefulActionToParticleGroupsMappers + statefulFromStateless
+        }()
     }
 }
 
+// MARK: Convenience Init
 public extension RadixApplicationClient {
     
+    /// Initializes a RadixApplicationClient from a BootstrapConfig
     convenience init(bootstrapConfig: BootstrapConfig, identity: AbstractIdentity) {
         let universe = DefaultRadixUniverse(bootstrapConfig: bootstrapConfig)
         self.init(identity: identity, universe: universe)
     }
+}
 
+// MARK: TokenCreating
+public extension RadixApplicationClient {
+    func create(token createTokenAction: CreateTokenAction) -> ResultOfUserAction {
+        return execute(actions: createTokenAction)
+    }
+    
+    /// Returns a hot observable of the latest state of token definitions at the user's address
+    func observeMyTokenDefinitions() -> Observable<TokenDefinitionsState> {
+        return observeTokenDefinitions(at: addressOfActiveAccount)
+    }
+}
+
+// MARK: TokenTransferring
+public extension RadixApplicationClient {
+    func transfer(tokens transferTokensAction: TransferTokenAction) -> ResultOfUserAction {
+        return execute(actions: transferTokensAction)
+    }
+    
+    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferredTokens> {
+        return observeActions(ofType: TransferredTokens.self, at: address)
+    }
+}
+
+// MARK: MessageSending
+public extension RadixApplicationClient {
+    func send(message sendMessageAction: SendMessageAction) -> ResultOfUserAction {
+        return execute(actions: sendMessageAction)
+    }
+    
+    func observeMessages(toOrFrom address: Address) -> Observable<SentMessage> {
+        return observeActions(ofType: SentMessage.self, at: address)
+    }
+}
+
+// MARK: AccountBalancing
+public extension RadixApplicationClient {
+    
+    func observeBalances(at address: Address) -> Observable<TokenBalances> {
+        return observeBalanceReferences(at: address).flatMap {
+            Observable.combineLatest($0.dictionary.values
+                .map { tokenReferenceBalance -> Observable<TokenBalance> in
+                    let rriOfToken = tokenReferenceBalance.tokenResourceIdentifier
+                    return self.observeTokenDefinitions(at: rriOfToken.address).map { tokenDefinitionState -> TokenBalance in
+                        
+                        guard let tokenDefinition = tokenDefinitionState.tokenDefinition(identifier: rriOfToken) else { incorrectImplementation("Expected token definition") }
+                        
+                        return try TokenBalance(tokenDefinition: tokenDefinition, tokenReferenceBalance: tokenReferenceBalance)
+                    }
+            }) { $0 } /* Observable.combineLatest continued */
+        }.map { TokenBalances(balances: $0) }
+    }
+}
+
+// MARK: Application State
+public extension RadixApplicationClient {
+    
     func observeState<State>(ofType stateType: State.Type, at address: Address) -> Observable<State> where State: ApplicationState {
         let reducer = particlesToStateReducer(for: stateType)
         return atomStore.onSync(address: address)
@@ -83,79 +149,28 @@ public extension RadixApplicationClient {
             }.flatMap { mapper.map(atom: $0, account: account) }
     }
     
-    func pull(address: Address) -> Disposable {
-        return atomPuller.pull(address: address).subscribe()
+    func observeTokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
+        return observeState(ofType: TokenDefinitionsState.self, at: address)
     }
     
-    func addFee(to atom: Atom) -> Single<AtomWithFee> {
-        return feeMapper.feeBasedOn(
-            atom: atom,
-            universeConfig: universeConfig,
-            key: activeAccount.publicKey
-        )
+    func observeBalanceReferences(at address: Address) -> Observable<TokenBalanceReferencesState> {
+        return observeState(ofType: TokenBalanceReferencesState.self, at: address)
+    }
+}
+
+// MARK: Public
+public extension RadixApplicationClient {
+    
+    var universeConfig: UniverseConfig {
+        return universe.config
     }
     
-    func execute(
-        actions: [UserAction],
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent
-    ) -> ResultOfUserAction {
-        let transaction = Transaction(api: self)
-        actions.forEach { transaction.stage(action: $0) }
-        return transaction.commitAndPush(ifNoSigningKeyPresent: noKeyPresentStrategy)
-    }
- 
-    func observeTokenDefinition(identifier: ResourceIdentifier) -> Observable<TokenDefinition> {
-        let address = identifier.address
-        return observeTokenDefinitions(at: address).map {
-            $0.tokenDefinition(identifier: identifier)
-        }.ifNilReturnEmpty()
+    var magic: Magic {
+        return universeConfig.magic
     }
     
-    func observeBalances(at address: Address) -> Observable<TokenBalances> {
-        
-        let tokenBalanceListObservable: Observable<[TokenBalance]> = observeBalanceReferences(at: address)
-            .flatMap { (tokenBalanceReferencesStateForAddress: TokenBalanceReferencesState) -> Observable<[TokenBalance]> in
-            
-                let tokenBalanceList: [Observable<TokenBalance>] = tokenBalanceReferencesStateForAddress
-                .dictionary
-                .values
-                .map { (tokenReferenceBalance: TokenReferenceBalance) -> Observable<TokenBalance> in
-                let rriOfToken = tokenReferenceBalance.tokenResourceIdentifier
-                return self.observeTokenDefinitions(at: rriOfToken.address).map { (tokenDefinitionState: TokenDefinitionsState) -> TokenBalance in
-                    
-                    guard let tokenDefinition = tokenDefinitionState.tokenDefinition(identifier: rriOfToken) else { incorrectImplementation("Expected token definition") }
-                    
-                    return try TokenBalance(tokenDefinition: tokenDefinition, tokenReferenceBalance: tokenReferenceBalance)
-                }
-            }
-            
-            return Observable.combineLatest(tokenBalanceList) { $0 }
-        }
-    
-        return tokenBalanceListObservable.map { TokenBalances(balances: $0) }
-    }
-    
-    // MARK: - AccountBalance
-    func observeBalance(of tokenIdentifier: ResourceIdentifier, for address: Address) -> Observable<TokenBalance?> {
-        return observeBalances(at: address).map {
-            $0.balance(of: tokenIdentifier)
-        }
-    }
-    
-    // MARK: - History of Executed Actions
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferredTokens> {
-        return observeActions(ofType: TransferredTokens.self, at: address)
-    }
-    
-    func observeMessages(toOrFrom address: Address) -> Observable<SentMessage> {
-        return observeActions(ofType: SentMessage.self, at: address)
-    }
-    
-    func execute(
-        action: UserAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) -> ResultOfUserAction {
-        return execute(actions: [action], ifNoSigningKeyPresent: noKeyPresentStrategy)
+    var nativeTokenDefinition: TokenDefinition {
+        return universe.nativeTokenDefinition
     }
  
     var nativeTokenIdentifier: ResourceIdentifier {
@@ -169,74 +184,30 @@ public extension RadixApplicationClient {
     func addressOf(account: Account) -> Address {
         return account.addressFromMagic(magic)
     }
-
-    /// Returns a hot observable of the latest state of token definitions at the user's address
-    func observeMyTokenDefinitions() -> Observable<TokenDefinitionsState> {
-        return observeTokenDefinitions(at: addressOfActiveAccount)
+    
+    @discardableResult
+    func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
+        return identity.selectAccount(accountSelector)
     }
     
-    func observeMyTokenTransfers() -> Observable<TransferredTokens> {
-        return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
-    }
-    
-    func observeMyBalances() -> Observable<TokenBalances> {
-        return observeBalances(at: addressOfActiveAccount)
-    }
-    
-    func observeMyBalance(of tokenIdentifier: ResourceIdentifier) -> Observable<TokenBalance?> {
-        return observeBalance(of: tokenIdentifier, for: addressOfActiveAccount)
-    }
-    
-    func observeMyBalanceOfNativeTokens() -> Observable<TokenBalance?> {
-        return observeMyBalance(of: nativeTokenIdentifier)
-    }
-    
-    func observeMyBalanceOfNativeTokensOrZero() -> Observable<TokenBalance> {
-        return observeMyBalanceOfNativeTokens()
-            .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
-    }
-    
-    func observeMyMessages() -> Observable<SentMessage> {
-        return observeMessages(toOrFrom: addressOfActiveAccount)
+    func pull(address: Address) -> Disposable {
+        return atomPuller.pull(address: address).subscribe()
     }
     
     func pull() -> Disposable {
         return pull(address: addressOfActiveAccount)
     }
     
-    func balanceOfNativeTokensOrZero(for address: Address) -> Observable<TokenBalance> {
-        return observeBalance(of: nativeTokenIdentifier, for: address)
-            .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: address))
-    }
-    
-    var universeConfig: UniverseConfig {
-        return universe.config
-    }
-    
-    var magic: Magic {
-        return universeConfig.magic
-    }
-    
-    var nativeTokenDefinition: TokenDefinition {
-        return universe.nativeTokenDefinition
-    }
-    
-    @discardableResult
-    func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
-        return identity.selectAccount(accountSelector)
+    func observeTokenDefinition(identifier: ResourceIdentifier) -> Observable<TokenDefinition> {
+        let address = identifier.address
+        return observeTokenDefinitions(at: address).map {
+            $0.tokenDefinition(identifier: identifier)
+        }.ifNilReturnEmpty()
     }
 }
 
-// MARK: - Internal
-internal extension RadixApplicationClient {
-    func observeTokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
-        return observeState(ofType: TokenDefinitionsState.self, at: address)
-    }
-    
-    func observeBalanceReferences(at address: Address) -> Observable<TokenBalanceReferencesState> {
-        return observeState(ofType: TokenBalanceReferencesState.self, at: address)
-    }
-    
+// MARK: - Private
+private extension RadixApplicationClient {
     var atomPuller: AtomPuller {
         return universe.atomPuller
     }
@@ -245,13 +216,10 @@ internal extension RadixApplicationClient {
         return universe.atomStore
     }
     
-    func actionMapperFor(action: UserAction) -> AnyStatefulActionToParticleGroupsMapper {
-        guard let mapper = actionMappers.first(where: { $0.matches(someAction: action) }) else {
-            incorrectImplementation("Found no ActionToParticleGroupsMapper for action: \(action), you probably just added a new UserAction but forgot to add its corresponding ActionToParticleGroupsMapper to the list?")
-        }
-        return mapper
+    var activeAccount: Account {
+        return identity.activeAccount
     }
-    
+
     func requiredState(for action: UserAction) -> [AnyShardedParticleStateId] {
         guard let mapper = actionMappers.first(where: { (mapper) -> Bool in
             return mapper.matches(someAction: action)
@@ -259,8 +227,16 @@ internal extension RadixApplicationClient {
         return mapper.requiredStateForAnAction(action)
     }
     
-    func sign(atom: Single<UnsignedAtom>, ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent) -> Single<SignedAtom> {
-        if activeAccount.privateKey == nil, case .throwErrorDirectly = noKeyPresentStrategy {
+    func addFee(to atom: Atom) -> Single<AtomWithFee> {
+        return feeMapper.feeBasedOn(
+            atom: atom,
+            universeConfig: universeConfig,
+            key: activeAccount.publicKey
+        )
+    }
+    
+    func sign(atom: Single<UnsignedAtom>) -> Single<SignedAtom> {
+        if activeAccount.privateKey == nil, case .throwErrorDirectly = self.strategyNoSigningKeyIsPresent {
             return Single.error(SigningError.noSigningKeyPresentButWasExpectedToBe)
         }
         return atom.flatMap { [unowned self] in
@@ -268,7 +244,12 @@ internal extension RadixApplicationClient {
         }
     }
     
-    func createAtomSubmission(atom atomSingle: Single<SignedAtom>, completeOnAtomStoredOnly: Bool, originNode: Node?) -> ResultOfUserAction {
+    func createAtomSubmission(
+        atom atomSingle: Single<SignedAtom>,
+        completeOnAtomStoredOnly: Bool,
+        originNode: Node?
+    ) -> ResultOfUserAction {
+        
         let cachedAtom = atomSingle.cache()
         let updates = cachedAtom
             .flatMapObservable { [unowned self] (atom: SignedAtom) -> Observable<SubmitAtomAction> in
@@ -297,163 +278,82 @@ internal extension RadixApplicationClient {
         
         return result
     }
-}
-
-// MARK: - Private
-private extension RadixApplicationClient {
     
-    /// Stateless and Stateful ActionToParticleGroupMapper's merged as Stateful mappers
-    var actionMappers: [AnyStatefulActionToParticleGroupsMapper] {
-        let statefulFromStateless = statelessActionToParticleGroupsMappers.map {
-            AnyStatefulActionToParticleGroupsMapper(anyStatelessMapper: $0)
+    func execute(actions: UserAction..., originNode: Node? = nil) -> ResultOfUserAction {
+        let uuid = UUID()
+        
+        for action in actions {
+            do {
+                try stage(action: action, uuid: uuid)
+            } catch {
+                atomStore.clearStagedParticleGroups(for: uuid)
+                let failed = FailedToStageAction(error: error, userAction: action)
+                return ResultOfUserAction.failedToStageAction(failed)
+            }
         }
-        let merged = statefulActionToParticleGroupsMappers + statefulFromStateless
-        return merged
+        
+        return commitAndPush(uuid: uuid, toNode: originNode)
     }
-
+    
+    func buildAtom(uuid: UUID) -> Single<UnsignedAtom> {
+        guard let particleGroups = universe.atomStore.clearStagedParticleGroups(for: uuid) else {
+            incorrectImplementation("Found no staged ParticleGroups for UUID: \(uuid), but expected to.")
+        }
+        let atom = Atom(particleGroups: particleGroups)
+        
+        return addFee(to: atom).map {
+            try UnsignedAtom(atomWithPow: $0)
+        }
+    }
+    
+    func commitAndPush(uuid: UUID, toNode originNode: Node? = nil) -> ResultOfUserAction {
+        
+        log.verbose("Committing and pushing transaction (actions -> Atom -> POW -> Sign -> ResultOfUserAction)")
+        
+        let unsignedAtom = buildAtom(uuid: uuid)
+        let signedAtom = sign(atom: unsignedAtom)
+        
+        return createAtomSubmission(
+            atom: signedAtom,
+            completeOnAtomStoredOnly: false,
+            originNode: originNode
+        )
+    }
+    
+    func stage(action: UserAction, uuid: UUID) throws {
+        let statefulMapper = actionMapperFor(action: action)
+        let requiredState = self.requiredState(for: action)
+        let particles = requiredState.flatMap { requiredStateContext in
+            atomStore.upParticles(at: requiredStateContext.address, stagedUuid: uuid)
+                .filter { type(of: $0.particle) == requiredStateContext.particleType }
+        }
+        try statefulMapper.particleGroupsForAnAction(action, upParticles: particles).forEach {
+            atomStore.stateParticleGroup($0, uuid: uuid)
+        }
+    }
+    
     func atomToExecutedActionMapper<ExecutedAction>(for actionType: ExecutedAction.Type) -> SomeAtomToExecutedActionMapper<ExecutedAction> {
         guard let mapper = atomToExecutedActionMappers.first(where: { $0.matches(actionType: actionType) }) else {
-            fatalError("found no mapper")
+             incorrectImplementation("Found no AtomToExecutedActionMapper for action of type: \(actionType), you probably just added a new ExecutedAction but forgot to add its corresponding mapper to the list?")
         }
         do {
             return try SomeAtomToExecutedActionMapper(any: mapper)
-        } catch {
-            fatalError("bad mapper")
-        }
+        } catch { unexpectedlyMissedToCatch(error: error) }
     }
     
     func particlesToStateReducer<State>(for stateType: State.Type) -> SomeParticleReducer<State> where State: ApplicationState {
         guard let reducer = particlesToStateReducers.first(where: {  $0.matches(stateType: stateType) }) else {
-            incorrectImplementation("no reducer")
+            incorrectImplementation("Found no ParticleReducer for state of type: \(stateType), you probably just added a new ApplicationState but forgot to add its corresponding reducer to the list?")
         }
-        // swiftlint:disable:next force_try
-        return try! SomeParticleReducer<State>(any: reducer)
-    }
-}
-
-// MARK: Execute UserAction
-public extension RadixApplicationClient {
-    
-    func create(
-        token createTokenAction: CreateTokenAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-        ) -> ResultOfUserAction {
-        return execute(action: createTokenAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
+        do {
+            return try SomeParticleReducer<State>(any: reducer)
+        } catch { unexpectedlyMissedToCatch(error: error) }
     }
     
-    func transfer(
-        tokens transferTokensAction: TransferTokenAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-        ) -> ResultOfUserAction {
-        return self.execute(action: transferTokensAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
-    }
-    
-    func send(
-        message sendMessageAction: SendMessageAction,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-        ) -> ResultOfUserAction {
-        return self.execute(action: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
-    }
-}
-
-// MARK: UserAction Convenience
-public extension RadixApplicationClient {
-    
-    func sendPlainTextMessage(
-        _ plainText: String,
-        encoding: String.Encoding = .default,
-        to recipient: Ownable,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-        ) -> ResultOfUserAction {
-        
-        let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
-        return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
-    }
-    
-    func sendEncryptedMessage(
-        _ textToEncrypt: String,
-        encoding: String.Encoding = .default,
-        to recipient: Ownable,
-        canAlsoBeDecryptedBy extraDecryptors: [Ownable]? = nil,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-        ) -> ResultOfUserAction {
-        
-        let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(
-            and: extraDecryptors,
-            from: addressOfActiveAccount,
-            to: recipient,
-            text: textToEncrypt,
-            encoding: encoding
-        )
-        
-        return self.send(message: sendMessageAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
-    }
-    
-    func createToken(
-        name: Name,
-        symbol: Symbol,
-        description: Description,
-        supply initialSupplyType: CreateTokenAction.InitialSupply,
-        granularity: Granularity = .default,
-        ifNoSigningKeyPresent: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) throws -> ResultOfUserAction {
-        
-        let createTokenAction = try CreateTokenAction(
-            creator: addressOfActiveAccount,
-            name: name,
-            symbol: symbol,
-            description: description,
-            supply: initialSupplyType,
-            granularity: granularity
-        )
-        
-        return self.create(
-            token: createTokenAction,
-            ifNoSigningKeyPresent: ifNoSigningKeyPresent
-        )
-    }
-    
-    func transferTokens(
-        identifier tokenIdentifier: ResourceIdentifier,
-        to recipient: Ownable,
-        amount: PositiveAmount,
-        message: String,
-        messageEncoding: String.Encoding = .default,
-        from specifiedSender: Ownable? = nil,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) -> ResultOfUserAction {
-        
-        let attachment = message.toData(encodingForced: messageEncoding)
-
-        return transferTokens(
-            identifier: tokenIdentifier,
-            to: recipient,
-            amount: amount,
-            attachment: attachment,
-            from: specifiedSender,
-            ifNoSigningKeyPresent: noKeyPresentStrategy
-        )
-    }
-    
-    func transferTokens(
-        identifier tokenIdentifier: ResourceIdentifier,
-        to recipient: Ownable,
-        amount: PositiveAmount,
-        attachment: Data? = nil,
-        from specifiedSender: Ownable? = nil,
-        ifNoSigningKeyPresent noKeyPresentStrategy: StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent = .throwErrorDirectly
-    ) -> ResultOfUserAction {
-        
-        let sender = specifiedSender ?? addressOfActiveAccount
-        
-        let transferAction = TransferTokenAction(
-            from: sender,
-            to: recipient,
-            amount: amount,
-            tokenResourceIdentifier: tokenIdentifier,
-            attachment: attachment
-        )
-        
-        return self.transfer(tokens: transferAction, ifNoSigningKeyPresent: noKeyPresentStrategy)
+    func actionMapperFor(action: UserAction) -> AnyStatefulActionToParticleGroupsMapper {
+        guard let mapper = actionMappers.first(where: { $0.matches(someAction: action) }) else {
+            incorrectImplementation("Found no ActionToParticleGroupsMapper for action: \(action), you probably just added a new UserAction but forgot to add its corresponding mapper to the list?")
+        }
+        return mapper
     }
 }

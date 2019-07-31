@@ -1,5 +1,5 @@
 //
-//  StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent.swift
+//  StrategyNoSigningKeyIsPresent.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-06-14.
@@ -9,13 +9,13 @@
 import Foundation
 import RxSwift
 
-public enum StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent {
+public enum StrategyNoSigningKeyIsPresent {
     case throwErrorDirectly
     case promptUserToProvideKey(PromptUserToProvideSigningKey)
 }
 
-public extension StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent {
-    static func onResult(_ onResult: @escaping PromptUserToProvideSigningKey.OnResult) -> StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent {
+public extension StrategyNoSigningKeyIsPresent {
+    static func onResult(_ onResult: @escaping PromptUserToProvideSigningKey.OnResult) -> StrategyNoSigningKeyIsPresent {
         return .promptUserToProvideKey(PromptUserToProvideSigningKey(onResult: onResult))
     }
 }

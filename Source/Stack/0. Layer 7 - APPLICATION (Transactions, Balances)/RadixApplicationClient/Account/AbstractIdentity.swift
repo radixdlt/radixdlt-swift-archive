@@ -8,28 +8,30 @@
 
 import Foundation
 
-public final class AbstractIdentity: Throwing, CustomStringConvertible {
-    public typealias AccountSelector = ([Account]) -> Account
+public final class AbstractIdentity: CustomStringConvertible {
+    public typealias AccountSelector = (NonEmptyArray<Account>) -> Account
+    
     public var alias: String?
-    public private(set) var accounts: [Account]
-    public init(accounts: [Account], alias: String? = nil) throws {
-        if accounts.isEmpty {
-            throw Error.mustContainAtLeastOneAccount
-        }
+    public private(set) var accounts: NonEmptyArray<Account>
+    public private(set) var activeAccount: Account
+    
+    public init(
+        accounts: NonEmptyArray<Account>,
+        alias: String? = nil,
+        selectInitialActiveAccount: AccountSelector = { $0.first }
+    ) throws {
+        
         self.accounts = accounts
         self.alias = alias
+        self.activeAccount = selectInitialActiveAccount(accounts)
     }
 }
 
 public extension AbstractIdentity {
+    
+    @discardableResult
     func selectAccount(_ selector: AccountSelector) -> Account {
         return selector(accounts)
-    }
-}
-
-public extension AbstractIdentity {
-    enum Error: Int, Swift.Error, Equatable {
-        case mustContainAtLeastOneAccount
     }
 }
 

@@ -28,6 +28,7 @@ public struct NonEmptyArray<ElementInArray>:
     }
 }
 
+// MARK: ArrayInitializable
 public extension NonEmptyArray {
     init(elements: [Element]) {
         do {
@@ -38,8 +39,19 @@ public extension NonEmptyArray {
     }
 }
 
+// MARK: Throwing
 public extension NonEmptyArray {
     enum Error: Swift.Error {
         case arrayCannotBeEmpty
+    }
+}
+
+// MARK: Public
+public extension NonEmptyArray {
+    var first: Element {
+        guard let first = elements.first else {
+            incorrectImplementation("A non empty array should indeed contain at least one element")
+        }
+        return first
     }
 }

@@ -199,7 +199,7 @@
 		E68BD823229EDA2000FCE4D3 /* SendMessageActionToParticleGroupsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD822229EDA2000FCE4D3 /* SendMessageActionToParticleGroupsMapperTests.swift */; };
 		E68BD82522A0331800FCE4D3 /* MetaDataCommonValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */; };
 		E68BD82722A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */; };
-		E696AAD0226DE6F700D19ED6 /* Transacting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AACF226DE6F700D19ED6 /* Transacting.swift */; };
+		E696AAD0226DE6F700D19ED6 /* TokenTransferring.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AACF226DE6F700D19ED6 /* TokenTransferring.swift */; };
 		E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */; };
 		E696AAD8226DEB8A00D19ED6 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD7226DEB8A00D19ED6 /* Magic.swift */; };
 		E699189E22F050AB00AF130F /* TransferredTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E699189D22F050AB00AF130F /* TransferredTokens.swift */; };
@@ -276,7 +276,6 @@
 		E6ABA76F22C3594C00536DC7 /* RadixNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA76E22C3594C00536DC7 /* RadixNetwork.swift */; };
 		E6ABA77322C3596D00536DC7 /* FetchAtomsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA77222C3596D00536DC7 /* FetchAtomsAction.swift */; };
 		E6B2CE0722D886A600E6F68E /* IntInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B2CE0622D886A600E6F68E /* IntInitializable.swift */; };
-		E6CABA0722D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0622D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift */; };
 		E6CABA0922D4BC6300B6D00C /* SigningError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0822D4BC6300B6D00C /* SigningError.swift */; };
 		E6CABA0D22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0C22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift */; };
 		E6CABA0F22D4C35500B6D00C /* ResponseOnFireAndForgetRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0E22D4C35500B6D00C /* ResponseOnFireAndForgetRequest.swift */; };
@@ -759,7 +758,7 @@
 		E68BD822229EDA2000FCE4D3 /* SendMessageActionToParticleGroupsMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageActionToParticleGroupsMapperTests.swift; sourceTree = "<group>"; };
 		E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataCommonValue.swift; sourceTree = "<group>"; };
 		E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DictionaryConvertible+ArrayInitializable.swift"; sourceTree = "<group>"; };
-		E696AACF226DE6F700D19ED6 /* Transacting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transacting.swift; sourceTree = "<group>"; };
+		E696AACF226DE6F700D19ED6 /* TokenTransferring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenTransferring.swift; sourceTree = "<group>"; };
 		E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountBalancing.swift; sourceTree = "<group>"; };
 		E696AAD7226DEB8A00D19ED6 /* Magic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Magic.swift; sourceTree = "<group>"; };
 		E699189D22F050AB00AF130F /* TransferredTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferredTokens.swift; sourceTree = "<group>"; };
@@ -834,7 +833,6 @@
 		E6ABA76E22C3594C00536DC7 /* RadixNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixNetwork.swift; sourceTree = "<group>"; };
 		E6ABA77222C3596D00536DC7 /* FetchAtomsAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAtomsAction.swift; sourceTree = "<group>"; };
 		E6B2CE0622D886A600E6F68E /* IntInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntInitializable.swift; sourceTree = "<group>"; };
-		E6CABA0622D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RadixApplicationClient+Transaction.swift"; sourceTree = "<group>"; };
 		E6CABA0822D4BC6300B6D00C /* SigningError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningError.swift; sourceTree = "<group>"; };
 		E6CABA0C22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RadixApplicationClient+Array+Mapper+Reducers.swift"; sourceTree = "<group>"; };
 		E6CABA0E22D4C35500B6D00C /* ResponseOnFireAndForgetRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseOnFireAndForgetRequest.swift; sourceTree = "<group>"; };
@@ -1743,7 +1741,6 @@
 				E6FCB66522F0C90000ECC01B /* Models */,
 				E6FCB66422F0C8F200ECC01B /* BootStrap */,
 				E689DB82225F655100340CF3 /* RadixApplicationClient.swift */,
-				E6CABA0622D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift */,
 				E6CABA0C22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift */,
 				E6CABA0822D4BC6300B6D00C /* SigningError.swift */,
 				E626E1ED22B3FDA70046D2AC /* StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent.swift */,
@@ -1773,7 +1770,7 @@
 			children = (
 				E69E753022A1B9C200AC631B /* MessageSending */,
 				E6725649228AEBC2004631F1 /* TokenCreating */,
-				E696AACE226DE6B900D19ED6 /* Transacting */,
+				E696AACE226DE6B900D19ED6 /* TokenTransferring */,
 				E689DB81225F653F00340CF3 /* RadixApplicationClient */,
 				E6A507EF224E69F400128123 /* AccountBalancing */,
 				E6040E612240F87C0065AEC2 /* RadixIdentity */,
@@ -1978,12 +1975,12 @@
 			path = SendMessage;
 			sourceTree = "<group>";
 		};
-		E696AACE226DE6B900D19ED6 /* Transacting */ = {
+		E696AACE226DE6B900D19ED6 /* TokenTransferring */ = {
 			isa = PBXGroup;
 			children = (
-				E696AACF226DE6F700D19ED6 /* Transacting.swift */,
+				E696AACF226DE6F700D19ED6 /* TokenTransferring.swift */,
 			);
-			path = Transacting;
+			path = TokenTransferring;
 			sourceTree = "<group>";
 		};
 		E696AAD1226DE82B00D19ED6 /* TokenBalanceState */ = {
@@ -3859,7 +3856,7 @@
 				E606FC4322CB55B100A7E52E /* NodeSelection.swift in Sources */,
 				E6E2792F2271CD1C0067D46E /* Secp256k1.swift in Sources */,
 				E69E755322AA338600AC631B /* ProofOfWorkWorking.swift in Sources */,
-				E696AAD0226DE6F700D19ED6 /* Transacting.swift in Sources */,
+				E696AAD0226DE6F700D19ED6 /* TokenTransferring.swift in Sources */,
 				E626E1F622B400240046D2AC /* MintTokensActionToParticleGroupsMapper.swift in Sources */,
 				E6E2794C2271CD1C0067D46E /* PrefixedJsonDecodable.swift in Sources */,
 				E606FC3622CB467600A7E52E /* GetUniverseConfigActionRequest.swift in Sources */,
@@ -4009,7 +4006,6 @@
 				E606FC4B22CB5E2200A7E52E /* WebSocketsEpic.swift in Sources */,
 				E6E279672271CD1C0067D46E /* BigInteger+StringConversion.swift in Sources */,
 				E6E279522271CD1C0067D46E /* ParticleType.swift in Sources */,
-				E6CABA0722D4BC3D00B6D00C /* RadixApplicationClient+Transaction.swift in Sources */,
 				E626E1EC22B3FD390046D2AC /* SubmitAtomError.swift in Sources */,
 				E6E2795B2271CD1C0067D46E /* DSONPrefixedDataConvertible.swift in Sources */,
 				E640F63C225E21E600855256 /* Int+BitsPerByte.swift in Sources */,

@@ -93,8 +93,7 @@ class SendMessageTests: LocalhostNodeTest {
         
         // WHEN: Alice tries to send a message to Bob claming to be from Clara
         let result = application.send(
-            message: SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: clara, to: bob, text: "Hey Bob, this is Clara."),
-            ifNoSigningKeyPresent: .throwErrorDirectly
+            message: SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: clara, to: bob, text: "Hey Bob, this is Clara.")
         )
  
         // THEN: I see that action fails with a validation error
