@@ -14,15 +14,8 @@ public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
     /// The channel this JSON RPC client utilizes for messaging
     public let channel: FullDuplexCommunicationChannel
     
-    // swiftlint:disable:next identifier_name
-    private var WARNING_MANUALLY_CREATING_RETAIN_CYCLE_REMOVE_THIS︕！WHEN_YOU_SEE_THIS︕！: DefaultRPCClient!
     public init(channel: FullDuplexCommunicationChannel) {
         self.channel = channel
-        WARNING_MANUALLY_CREATING_RETAIN_CYCLE_REMOVE_THIS︕！WHEN_YOU_SEE_THIS︕！ = self
-    }
-    
-    deinit {
-        log.error("🧨")
     }
 }
 

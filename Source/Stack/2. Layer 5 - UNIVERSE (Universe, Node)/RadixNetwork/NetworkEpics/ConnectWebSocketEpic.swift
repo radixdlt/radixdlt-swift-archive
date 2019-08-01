@@ -64,11 +64,8 @@ public final class RadixJsonRpcAutoConnectEpic: NetworkWebsocketEpic {
     public init(webSockets: WebSocketsEpic.WebSockets) {
         self.webSockets = webSockets
     }
-    
-    deinit {
-        log.warning("🧨")
-    }
 }
+
 public extension RadixJsonRpcAutoConnectEpic {
     func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
         return actions

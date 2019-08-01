@@ -21,10 +21,6 @@ public final class DefaultAtomPuller: AtomPuller {
     public init(networkController: RadixNetworkController) {
         self.networkController = networkController
     }
-    
-    deinit {
-        log.warning("🧨")
-    }
 }
 
 public extension DefaultAtomPuller {

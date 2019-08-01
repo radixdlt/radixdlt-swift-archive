@@ -76,10 +76,6 @@ public extension WebSocketsEpic {
         fileprivate init() {
             self.newSocketsToNodeSubject = PublishSubject()
         }
-        
-        deinit {
-            log.warning("🧨")
-        }
     }
 }
 

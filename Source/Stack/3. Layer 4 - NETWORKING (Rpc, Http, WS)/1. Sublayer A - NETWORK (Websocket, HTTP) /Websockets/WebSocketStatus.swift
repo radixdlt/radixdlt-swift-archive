@@ -12,7 +12,6 @@ public enum WebSocketStatus: String, Hashable, CustomStringConvertible, CaseIter
     case disconnected
     
     case connecting
-//    case connected
     case ready
 
     case closing
@@ -20,9 +19,6 @@ public enum WebSocketStatus: String, Hashable, CustomStringConvertible, CaseIter
 }
 
 public extension WebSocketStatus {
-//    var isConnected: Bool {
-//        return statusIs(.connected)
-//    }
     
     var isReady: Bool {
         return statusIs(.ready)

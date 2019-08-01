@@ -20,9 +20,6 @@ public final class DefaultSendMessageActionToParticleGroupsMapper: SendMessageAc
         self.generateSharedKey = sharedKeyGenerator
         self.encryptedPayloadJsonEncoder = encryptedPayloadJsonEncoder
     }
-    deinit {
-        log.warning("🧨")
-    }
 }
 public extension DefaultSendMessageActionToParticleGroupsMapper {
 

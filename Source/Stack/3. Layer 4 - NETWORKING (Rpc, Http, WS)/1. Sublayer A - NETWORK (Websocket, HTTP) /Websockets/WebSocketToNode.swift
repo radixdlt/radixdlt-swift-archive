@@ -63,7 +63,6 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
     }
     
     deinit {
-        log.warning("🧨")
         closeDisregardingListeners()
     }
 }
@@ -126,10 +125,6 @@ private extension WebSocketToNode {
         stateSubject.onNext(.closing)
         socket?.disconnect()
     }
-    
-//    var isConnected: Bool {
-//        return hasStatus(.connected)
-//    }
 
     func hasStatus(_ status: WebSocketStatus) -> Bool {
         do {
@@ -150,11 +145,10 @@ private extension WebSocketToNode {
 public extension WebSocketToNode {
     func websocketDidConnect(socket: WebSocketClient) {
         log.verbose("Websocket did connect, to node: \(node)")
-//        stateSubject.onNext(.connected)
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Swift.Error?) {
-        log.warning("Websocket closed")
+        log.info("Websocket closed")
         guard !isClosing else {
             self.socket = nil
             return stateSubject.onNext(.disconnected)

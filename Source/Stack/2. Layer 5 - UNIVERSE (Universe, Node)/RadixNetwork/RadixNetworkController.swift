@@ -67,17 +67,11 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
                 self.dispatch(nodeAction: $0)
             },
             onError: {
-                incorrectImplementation("Error: \($0)")
-                // TODO change to the line below, remove fatalError
-//                networkStateSubject.onError($0)
+                networkStateSubject.onError($0)
             }
         ).disposed(by: disposeBag)
         
         reducedNodeActions.connect().disposed(by: disposeBag)
-    }
-    
-    deinit {
-        log.warning("🧨")
     }
 }
 

@@ -33,12 +33,6 @@ public final class DefaultRadixUniverse: RadixUniverse {
         self.nativeTokenDefinition = try config.nativeTokenDefinition()
         self.atomPuller = DefaultAtomPuller(networkController: networkController)
         self.atomStore = atomStore
-        
-        log.verbose("(Default)RadixUniverse created")
-    }
-
-    deinit {
-        log.warning("🧨")
     }
 }
 
