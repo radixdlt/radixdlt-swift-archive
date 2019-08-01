@@ -54,7 +54,7 @@ public extension RPCError {
     var description: String {
         switch self {
         case .failedToDecodeResponse(let decodingError, let decodableType, let fromJson): return "Received non error response from API, but failed to decode it into type: <\(decodableType)>, decoding error: <\(decodingError)>, from json: <\(fromJson)>"
-        case .metaError(let decodingError): return "Recived specific API error, but failed to parse it, meta error: \(decodingError)"
+        case .metaError(let decodingError): return "Received specific API error, but failed to parse it, meta error: \(decodingError)"
         case .unrecognizedJson(let jsonString): return "Error parsing unrecognized json: `\(jsonString)`"
         case .requestError(let requestError): return "Request error: `\(requestError)`"
         }

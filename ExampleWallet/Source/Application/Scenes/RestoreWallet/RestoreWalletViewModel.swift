@@ -63,7 +63,7 @@ extension RestoreWalletViewModel: ViewModelType {
 
         input.restoreTrigger
             .withLatestFrom(identity).do(onNext: {
-                let radixApi = DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhost, identity: $0)
+                let radixApi = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: $0)
                 self.navigator?.toMain(radixApplicationClient: radixApi)
             }).drive().disposed(by: bag)
 
@@ -77,7 +77,7 @@ private extension RestoreWalletViewModel {
     func identityFromPrivateKey(privateKey: PrivateKey, alias: String? = "restored") -> AbstractIdentity {
         let keyPair: KeyPair = KeyPair(private: privateKey)
         let account: Account = Account.privateKeyPresent(keyPair)
-        let identity = try! AbstractIdentity(accounts: [account], alias: alias)
+        let identity = AbstractIdentity(accounts: [account], alias: alias)
         return identity
     }
 }

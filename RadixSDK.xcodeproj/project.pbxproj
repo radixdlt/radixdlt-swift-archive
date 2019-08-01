@@ -534,6 +534,14 @@
 		E6FCB65E22F0C79A00ECC01B /* PutUniqueIdAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB65D22F0C79A00ECC01B /* PutUniqueIdAction.swift */; };
 		E6FCB66222F0C7FE00ECC01B /* BurnTokensAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB66122F0C7FE00ECC01B /* BurnTokensAction.swift */; };
 		E6FCB66822F2EDD500ECC01B /* AddressOfAccountDeriving.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB66722F2EDD500ECC01B /* AddressOfAccountDeriving.swift */; };
+		E6FCB66C22F3076600ECC01B /* SubmitAtomActionCompleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB66B22F3076600ECC01B /* SubmitAtomActionCompleted.swift */; };
+		E6FCB66E22F3077400ECC01B /* SubmitAtomActionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB66D22F3077400ECC01B /* SubmitAtomActionRequest.swift */; };
+		E6FCB67022F3078200ECC01B /* SubmitAtomActionSend.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB66F22F3078200ECC01B /* SubmitAtomActionSend.swift */; };
+		E6FCB67222F3078E00ECC01B /* SubmitAtomActionRecived.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB67122F3078E00ECC01B /* SubmitAtomActionRecived.swift */; };
+		E6FCB67422F3079B00ECC01B /* SubmitAtomActionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB67322F3079B00ECC01B /* SubmitAtomActionStatus.swift */; };
+		E6FCB67722F3081800ECC01B /* AtomNotStoredReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB67622F3081800ECC01B /* AtomNotStoredReason.swift */; };
+		E6FCB67922F3082400ECC01B /* AtomStatusNotStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB67822F3082400ECC01B /* AtomStatusNotStored.swift */; };
+		E6FCB67B22F308A700ECC01B /* DiscoverMoreNodesActionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB67A22F308A700ECC01B /* DiscoverMoreNodesActionError.swift */; };
 		E6FF7E48229C1D1C00BC22EA /* Shards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF7E47229C1D1C00BC22EA /* Shards.swift */; };
 		E6FF7E4A229C1F1900BC22EA /* NonEmptySet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF7E49229C1F1900BC22EA /* NonEmptySet.swift */; };
 		E6FF7E4C229C4E8100BC22EA /* Array+AppendingElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF7E4B229C4E8100BC22EA /* Array+AppendingElement.swift */; };
@@ -1096,6 +1104,14 @@
 		E6FCB65D22F0C79A00ECC01B /* PutUniqueIdAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutUniqueIdAction.swift; sourceTree = "<group>"; };
 		E6FCB66122F0C7FE00ECC01B /* BurnTokensAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurnTokensAction.swift; sourceTree = "<group>"; };
 		E6FCB66722F2EDD500ECC01B /* AddressOfAccountDeriving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressOfAccountDeriving.swift; sourceTree = "<group>"; };
+		E6FCB66B22F3076600ECC01B /* SubmitAtomActionCompleted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAtomActionCompleted.swift; sourceTree = "<group>"; };
+		E6FCB66D22F3077400ECC01B /* SubmitAtomActionRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAtomActionRequest.swift; sourceTree = "<group>"; };
+		E6FCB66F22F3078200ECC01B /* SubmitAtomActionSend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAtomActionSend.swift; sourceTree = "<group>"; };
+		E6FCB67122F3078E00ECC01B /* SubmitAtomActionRecived.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAtomActionRecived.swift; sourceTree = "<group>"; };
+		E6FCB67322F3079B00ECC01B /* SubmitAtomActionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitAtomActionStatus.swift; sourceTree = "<group>"; };
+		E6FCB67622F3081800ECC01B /* AtomNotStoredReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomNotStoredReason.swift; sourceTree = "<group>"; };
+		E6FCB67822F3082400ECC01B /* AtomStatusNotStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStatusNotStored.swift; sourceTree = "<group>"; };
+		E6FCB67A22F308A700ECC01B /* DiscoverMoreNodesActionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMoreNodesActionError.swift; sourceTree = "<group>"; };
 		E6FF7E47229C1D1C00BC22EA /* Shards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shards.swift; sourceTree = "<group>"; };
 		E6FF7E49229C1F1900BC22EA /* NonEmptySet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonEmptySet.swift; sourceTree = "<group>"; };
 		E6FF7E4B229C4E8100BC22EA /* Array+AppendingElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+AppendingElement.swift"; sourceTree = "<group>"; };
@@ -1748,6 +1764,7 @@
 				E6FCB66722F2EDD500ECC01B /* AddressOfAccountDeriving.swift */,
 				E626E1ED22B3FDA70046D2AC /* StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent.swift */,
 				E626E1EB22B3FD390046D2AC /* SubmitAtomError.swift */,
+				E6FCB67A22F308A700ECC01B /* DiscoverMoreNodesActionError.swift */,
 				E626E1FB22B41A4F0046D2AC /* FeeMapper.swift */,
 				E626E1EF22B3FFE70046D2AC /* ResultOfUserAction.swift */,
 			);
@@ -1856,7 +1873,7 @@
 				E6CB4B3E22C633E300B7382A /* AtomStatusObservationCancelling.swift */,
 				E6CB4B4022C633F600B7382A /* AtomStatus.swift */,
 				E689DBA7225F887300340CF3 /* AtomsByAddressSubscribing.swift */,
-				E6CB4B4222C6340300B7382A /* AtomStatusEvent.swift */,
+				E6FCB67522F3080C00ECC01B /* AtomStatusEvent */,
 				E6474ACB22661DDE009C4FDC /* HTTPClientOwner.swift */,
 				E689DBA1225F87F200340CF3 /* NodeInfoRequesting.swift */,
 				E6474ACD22661E04009C4FDC /* NodeAddressRequesting.swift */,
@@ -3569,7 +3586,7 @@
 		E6FCB66022F0C7DE00ECC01B /* NodeActions */ = {
 			isa = PBXGroup;
 			children = (
-				E626E1F922B41A420046D2AC /* SubmitAtomAction.swift */,
+				E6FCB66A22F3074D00ECC01B /* SubmitAtomAction */,
 			);
 			path = NodeActions;
 			sourceTree = "<group>";
@@ -3607,6 +3624,29 @@
 				E626E1E122B3FA2A0046D2AC /* Account.swift */,
 			);
 			path = Account;
+			sourceTree = "<group>";
+		};
+		E6FCB66A22F3074D00ECC01B /* SubmitAtomAction */ = {
+			isa = PBXGroup;
+			children = (
+				E626E1F922B41A420046D2AC /* SubmitAtomAction.swift */,
+				E6FCB66B22F3076600ECC01B /* SubmitAtomActionCompleted.swift */,
+				E6FCB66D22F3077400ECC01B /* SubmitAtomActionRequest.swift */,
+				E6FCB67122F3078E00ECC01B /* SubmitAtomActionRecived.swift */,
+				E6FCB67322F3079B00ECC01B /* SubmitAtomActionStatus.swift */,
+				E6FCB66F22F3078200ECC01B /* SubmitAtomActionSend.swift */,
+			);
+			path = SubmitAtomAction;
+			sourceTree = "<group>";
+		};
+		E6FCB67522F3080C00ECC01B /* AtomStatusEvent */ = {
+			isa = PBXGroup;
+			children = (
+				E6CB4B4222C6340300B7382A /* AtomStatusEvent.swift */,
+				E6FCB67822F3082400ECC01B /* AtomStatusNotStored.swift */,
+				E6FCB67622F3081800ECC01B /* AtomNotStoredReason.swift */,
+			);
+			path = AtomStatusEvent;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3767,6 +3807,7 @@
 				E6A508AE224E713F00128123 /* TokenDefinitionParticle.swift in Sources */,
 				E6025402225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift in Sources */,
 				E6E2792B2271CD1C0067D46E /* SignableMessage.swift in Sources */,
+				E6FCB66E22F3077400ECC01B /* SubmitAtomActionRequest.swift in Sources */,
 				E606FC3222CB466200A7E52E /* GetLivePeersActionResult.swift in Sources */,
 				E6FCB65E22F0C79A00ECC01B /* PutUniqueIdAction.swift in Sources */,
 				E6E279892271CD1C0067D46E /* DataConvertible.swift in Sources */,
@@ -3807,6 +3848,7 @@
 				E606FC4D22CB5E3500A7E52E /* FetchAtomsEpic.swift in Sources */,
 				E62EFDE3224A4D6F00B6DAD6 /* WebSocketToNode.swift in Sources */,
 				E689DBB6225F954800340CF3 /* NodeNetworkDetails.swift in Sources */,
+				E6FCB67022F3078200ECC01B /* SubmitAtomActionSend.swift in Sources */,
 				E606FC2822CB462100A7E52E /* ConnectWebSocketAction.swift in Sources */,
 				E626E1F422B400030046D2AC /* AtomToExecutedActionsMapper.swift in Sources */,
 				E6E2793B2271CD1C0067D46E /* PrivateKey.swift in Sources */,
@@ -3814,11 +3856,15 @@
 				E6A7479522CB9F7000DACEA0 /* GetNodeInfoActionResult.swift in Sources */,
 				E6E2793A2271CD1C0067D46E /* KeyPair.swift in Sources */,
 				E6CABA0F22D4C35500B6D00C /* ResponseOnFireAndForgetRequest.swift in Sources */,
+				E6FCB67222F3078E00ECC01B /* SubmitAtomActionRecived.swift in Sources */,
+				E6FCB67922F3082400ECC01B /* AtomStatusNotStored.swift in Sources */,
 				E6E2799D2271CD1C0067D46E /* ValidValueInitializable.swift in Sources */,
 				E6474AC6226614C2009C4FDC /* Host+Localhost.swift in Sources */,
 				E69E754D22AA32BA00AC631B /* ApplicationState.swift in Sources */,
 				E6A508AA224E713F00128123 /* TokenDefinitionParticle+Decodable.swift in Sources */,
 				E6A508C6224EAD5700128123 /* TokenBalanceState.swift in Sources */,
+				E6FCB66C22F3076600ECC01B /* SubmitAtomActionCompleted.swift in Sources */,
+				E6FCB67422F3079B00ECC01B /* SubmitAtomActionStatus.swift in Sources */,
 				E6474ACE22661E04009C4FDC /* NodeAddressRequesting.swift in Sources */,
 				E6E2799C2271CD1C0067D46E /* StringConvertible.swift in Sources */,
 				E6A508A9224E713F00128123 /* UniqueParticle.swift in Sources */,
@@ -3917,11 +3963,13 @@
 				E6A508B0224E713F00128123 /* ParticleConvertible.swift in Sources */,
 				E6E279342271CD1C0067D46E /* Mnemonic.swift in Sources */,
 				E6D4B33D223F9DEC004FC83A /* Date+ExpressibleByStringLiteral.swift in Sources */,
+				E6FCB67722F3081800ECC01B /* AtomNotStoredReason.swift in Sources */,
 				E6D4B36922400F41004FC83A /* SetAlgebra+Intersecting.swift in Sources */,
 				E6E279702271CD1C0067D46E /* TokenConvertible.swift in Sources */,
 				E6E2796B2271CD1C0067D46E /* StringDictionary.swift in Sources */,
 				E6E279622271CD1C0067D46E /* EncodableKeyValue.swift in Sources */,
 				E6ED1A4C21F8ACB700654105 /* Int+DataConvertible.swift in Sources */,
+				E6FCB67B22F308A700ECC01B /* DiscoverMoreNodesActionError.swift in Sources */,
 				E6E2797E2271CD1C0067D46E /* EUID.swift in Sources */,
 				E6E2796C2271CD1C0067D46E /* ArrayInitializable.swift in Sources */,
 				E6A508B2224E713F00128123 /* Addresses.swift in Sources */,

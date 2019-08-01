@@ -47,7 +47,7 @@ extension ChooseWalletCoordinator {
 }
 
 protocol ChooseWalletNavigator: AnyObject {
-    func toMain(radixApplicationClient: DefaultRadixApplicationClient)
+    func toMain(radixApplicationClient: RadixApplicationClient)
     func toChooseWallet()
     func toCreateNewWallet()
     func toRestoreWallet()
@@ -55,7 +55,7 @@ protocol ChooseWalletNavigator: AnyObject {
 
 extension ChooseWalletCoordinator: ChooseWalletNavigator {
 
-    func toMain(radixApplicationClient: DefaultRadixApplicationClient) {
+    func toMain(radixApplicationClient: RadixApplicationClient) {
         navigation?.toMain(radixApplicationClient: radixApplicationClient, shouldSaveIdentity: true)
     }
 

@@ -28,7 +28,7 @@ public protocol AtomStore {
     /// Stores an Atom (wrapped in AtomObservation) under a given destination (Address) and not
     func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode)
     
-    func stateParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID)
+    func stageParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID)
 
     @discardableResult
     func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups?
@@ -122,7 +122,10 @@ public extension InMemoryAtomStore {
                 return false
             }
             let uppingAtoms = spinParticleIndex.valueForKey(key: .up, ifAbsent: { Set() })
-            return uppingAtoms.contains(where: { atoms[$0]?.isStore == true })
+            return uppingAtoms.contains(where: { atom in
+                guard let atomObservation = self.atoms.valueFor(key: atom) else { return false }
+                return atomObservation.isStore
+            })
         }
         .map { $0.key }
         
@@ -140,7 +143,7 @@ public extension InMemoryAtomStore {
             .map { AnyUpParticle(particle: $0) }
     }
     
-    func stateParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID) {
+    func stageParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID) {
         let stagedAtom: Atom
         if let atomInStaged = stagedAtoms.valueFor(key: uuid) {
             let groups: ParticleGroups = atomInStaged.particleGroups + particleGroup
@@ -159,8 +162,8 @@ public extension InMemoryAtomStore {
     
     @discardableResult
     func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups? {
+        defer { stagedParticleIndex.removeValue(forKey: uuid) }
         guard let atom = stagedAtoms.removeValue(forKey: uuid) else { return nil }
-        stagedParticleIndex.removeValue(forKey: uuid)
         return atom.particleGroups
     }
     

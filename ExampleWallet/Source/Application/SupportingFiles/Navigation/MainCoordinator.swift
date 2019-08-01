@@ -33,11 +33,11 @@ final class MainCoordinator: Coordinator {
 
     var childCoordinators = [AnyCoordinator]()
 
-    private unowned let radixApplicationClient: DefaultRadixApplicationClient
+    private unowned let radixApplicationClient: RadixApplicationClient
     private weak var navigation: AppNavigation?
     private let disposeBag = DisposeBag()
 
-    init(navigationController: UINavigationController, radixApplicationClient: DefaultRadixApplicationClient, navigation: AppNavigation) {
+    init(navigationController: UINavigationController, radixApplicationClient: RadixApplicationClient, navigation: AppNavigation) {
         self.navigation = navigation
         self.navigationController = navigationController
         self.radixApplicationClient = radixApplicationClient

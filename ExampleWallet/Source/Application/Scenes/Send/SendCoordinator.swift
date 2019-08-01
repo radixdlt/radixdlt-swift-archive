@@ -31,9 +31,9 @@ import RadixSDK
 final class SendCoordinator {
 
     private weak var navigationController: UINavigationController?
-    private unowned let radixApplicationClient: DefaultRadixApplicationClient
+    private unowned let radixApplicationClient: RadixApplicationClient
 
-    init(navigationController: UINavigationController, radixApplicationClient: DefaultRadixApplicationClient) {
+    init(navigationController: UINavigationController, radixApplicationClient: RadixApplicationClient) {
         self.navigationController = navigationController
         self.radixApplicationClient = radixApplicationClient
     }

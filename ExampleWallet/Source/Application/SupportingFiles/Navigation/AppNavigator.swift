@@ -39,7 +39,7 @@ extension AppCoordinator: Coordinator {
     func start() {
         if let identity = Unsafe︕！Cache.radixIdentity {
             toMain(
-                radixApplicationClient: DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhost, identity: identity),
+                radixApplicationClient: RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: identity),
                 shouldSaveIdentity: false
             )
         } else {
@@ -50,7 +50,7 @@ extension AppCoordinator: Coordinator {
 
 protocol AppNavigation: AnyObject {
     func toChooseWallet()
-    func toMain(radixApplicationClient: DefaultRadixApplicationClient, shouldSaveIdentity: Bool)
+    func toMain(radixApplicationClient: RadixApplicationClient, shouldSaveIdentity: Bool)
 }
 
 // MARK: - Private
@@ -63,7 +63,7 @@ extension AppCoordinator: AppNavigation {
         chooseWalletCoordinator.start()
     }
 
-    func toMain(radixApplicationClient: DefaultRadixApplicationClient, shouldSaveIdentity: Bool = true) {
+    func toMain(radixApplicationClient: RadixApplicationClient, shouldSaveIdentity: Bool = true) {
         if shouldSaveIdentity {
             Unsafe︕！Cache.unsafe︕！Store(identity: radixApplicationClient.identity)
         }

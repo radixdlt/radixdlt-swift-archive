@@ -33,9 +33,9 @@ final class SettingsViewModel {
     private let bag = DisposeBag()
     
     private weak var navigation: SettingsNavigator?
-    private unowned let radixApplicationClient: DefaultRadixApplicationClient
+    private unowned let radixApplicationClient: RadixApplicationClient
 
-    init(navigation: SettingsNavigator, radixApplicationClient: DefaultRadixApplicationClient) {
+    init(navigation: SettingsNavigator, radixApplicationClient: RadixApplicationClient) {
         self.navigation = navigation
         self.radixApplicationClient = radixApplicationClient
     }

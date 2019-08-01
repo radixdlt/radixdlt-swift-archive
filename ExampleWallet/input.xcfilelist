@@ -5,6 +5,7 @@ $(SRCROOT)/../Carthage/Build/iOS/BigInt.framework
 $(SRCROOT)/../Carthage/Build/iOS/BitcoinKit.framework
 $(SRCROOT)/../Carthage/Build/iOS/CryptoSwift.framework
 
+$(SRCROOT)/../Carthage/Build/iOS/RxBlocking.framework
 $(SRCROOT)/../Carthage/Build/iOS/RxCocoa.framework
 $(SRCROOT)/../Carthage/Build/iOS/RxOptional.framework
 $(SRCROOT)/../Carthage/Build/iOS/RxRelay.framework

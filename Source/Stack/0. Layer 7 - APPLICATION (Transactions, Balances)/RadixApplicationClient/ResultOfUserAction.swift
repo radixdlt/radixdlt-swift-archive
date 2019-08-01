@@ -32,8 +32,8 @@ public extension ResultOfUserAction {
         let completable = updates.ofType(SubmitAtomActionStatus.self)
             .lastOrError()
             .flatMapCompletable { submitAtomActionStatus in
-                let statusNotification = submitAtomActionStatus.statusNotification
-                switch statusNotification {
+                let statusEvent = submitAtomActionStatus.statusEvent
+                switch statusEvent {
                 case .stored: return Completable.completed()
                 case .notStored(let reason):
                     log.warning("Not stored, reason: \(reason)")

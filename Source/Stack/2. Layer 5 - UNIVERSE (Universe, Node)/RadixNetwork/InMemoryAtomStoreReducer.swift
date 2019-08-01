@@ -28,9 +28,9 @@ public extension InMemoryAtomStoreReducer {
         }
 
         if let submitAtomActionStatus = action as? SubmitAtomActionStatus {
-            let atomStatusNotification = submitAtomActionStatus.statusNotification
+            let atomStatusEvent = submitAtomActionStatus.statusEvent
             let atom = submitAtomActionStatus.atom
-            if atomStatusNotification == .stored {
+            if atomStatusEvent == .stored {
                 atom.addresses().forEach { addressInAtom in
                     func store(atomObservation: AtomObservation) {
                         atomStore.store(atomObservation: atomObservation, address: addressInAtom, notifyListenerMode: .notifyOnAtomUpdateAndSync)

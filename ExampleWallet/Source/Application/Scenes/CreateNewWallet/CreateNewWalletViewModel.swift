@@ -34,7 +34,7 @@ final class CreateNewWalletViewModel {
 
     private weak var navigator: CreateNewWalletNavigator?
 
-//    private unowned let radixApplicationClient: DefaultRadixApplicationClient
+//    private unowned let radixApplicationClient: RadixApplicationClient
 
     init(navigator: CreateNewWalletNavigator) {
         self.navigator = navigator
@@ -71,7 +71,7 @@ extension CreateNewWalletViewModel: ViewModelType {
 //        input.createWalletTrigger.withLatestFrom(validEncryptionPassword.filterNil()) { $1 }
             input.createWalletTrigger.withLatestFrom(input.identityAlias).map { [unowned self] in
                 let identity = self.newIdentity(alias: $0)
-                return DefaultRadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhost, identity: identity)
+                return RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: identity)
 //                    .createNewWallet(encryptionPassword: $0, kdf: .scrypt)
 //                    .asDriverOnErrorReturnEmpty()
             }
@@ -91,7 +91,7 @@ private extension CreateNewWalletViewModel {
     func newIdentity(alias: String?) -> AbstractIdentity {
         let keyPair: KeyPair = KeyPair()
         let account: Account = Account.privateKeyPresent(keyPair)
-        let identity = try! AbstractIdentity(accounts: [account], alias: alias)
+        let identity = AbstractIdentity(accounts: [account], alias: alias)
         return identity
     }
 }

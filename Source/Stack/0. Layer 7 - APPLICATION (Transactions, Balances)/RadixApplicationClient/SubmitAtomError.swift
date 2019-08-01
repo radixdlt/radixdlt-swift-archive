@@ -8,13 +8,17 @@
 
 import Foundation
 
-public struct SubmitAtomError: ErrorMappedFromRPCError, Equatable {
+public struct SubmitAtomError: ErrorMappedFromRPCError, Equatable, CustomStringConvertible {
     public let rpcError: RPCError
     init(rpcError: RPCError) {
         self.rpcError = rpcError
     }
 }
 
-public struct DiscoverMoreNodesActionError: NodeAction {
-    public let reason: Swift.Error
+public extension SubmitAtomError {
+    var description: String {
+        return """
+            SubmitAtomError(\(rpcError))
+        """
+    }
 }

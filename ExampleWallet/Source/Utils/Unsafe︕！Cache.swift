@@ -78,12 +78,12 @@ extension AbstractIdentity: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let accounts = try container.decode([Account].self, forKey: CodingKeys.accounts)
         let alias = try container.decodeIfPresent(String.self, forKey: .alias)
-        try self.init(accounts: accounts, alias: alias)
+        self.init(accounts: NonEmptyArray(accounts), alias: alias)
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(accounts, forKey: CodingKeys.accounts)
+        try container.encode(accounts.elements, forKey: CodingKeys.accounts)
         try container.encodeIfPresent(alias, forKey: .alias)
     }
 }

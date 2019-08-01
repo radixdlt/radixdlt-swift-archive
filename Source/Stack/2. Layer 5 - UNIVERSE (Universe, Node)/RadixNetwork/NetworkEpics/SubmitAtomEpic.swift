@@ -51,7 +51,7 @@ private extension SubmitAtomEpic {
     // swiftlint:disable:next function_body_length
     func submitAtom(sendAction: SubmitAtomActionSend, toNode node: Node) -> Observable<NodeAction> {
         let websocketToNode = webSockets.webSocket(to: node, shouldConnect: false)
-        let rpcClient =  DefaultRPCClient(channel: websocketToNode) // RPCClientsRetainer.rpcClient(websocket: websocketToNode)
+        let rpcClient =  DefaultRPCClient(channel: websocketToNode)
         let subscriberId = SubscriberId(uuid: UUID())
         let atom = sendAction.atom
 
@@ -60,11 +60,10 @@ private extension SubmitAtomEpic {
 
             let pushAtomAndObserveItsStatusDisposable = rpcClient
                 .observeAtomStatusNotifications(subscriberId: subscriberId)
-                .flatMap { statusNotification -> Observable<NodeAction> in
+                .flatMap { statusEvent -> Observable<NodeAction> in
+                    let statusAction = SubmitAtomActionStatus(sendAction: sendAction, node: node, statusEvent: statusEvent)
 
-                    let statusAction = SubmitAtomActionStatus(sendAction: sendAction, node: node, statusNotification: statusNotification)
-
-                    if statusNotification == .stored || !sendAction.isCompletingOnStoreOnly {
+                    if statusEvent == .stored || !sendAction.isCompletingOnStoreOnly {
                         return Observable.of(
                             statusAction,
                             SubmitAtomActionCompleted(sendAction: sendAction, node: node)
@@ -77,14 +76,14 @@ private extension SubmitAtomEpic {
                         .sendGetAtomStatusNotifications(atomIdentifier: atom.identifier(), subscriberId: subscriberId)
                         .andThen(rpcClient.pushAtom(atom))
                         .subscribe(
-                            onCompleted: { observer.onNext(SubmitAtomActionRecived(sendAction: sendAction, node: node)) },
+                            onCompleted: { observer.onNext(SubmitAtomActionReceived(sendAction: sendAction, node: node)) },
                             onError: { error in
                                 if let submitAtomError = error as? SubmitAtomError {
                                     observer.onNext(
                                         SubmitAtomActionStatus(
                                             sendAction: sendAction,
                                             node: node,
-                                            statusNotification: .notStored(reason: AtomNotStoredReason(.evictedInvalidAtom, error: submitAtomError)))
+                                            statusEvent: .notStored(reason: AtomNotStoredReason(.evictedInvalidAtom, error: submitAtomError)))
                                     )
                                     observer.onNext(
                                         SubmitAtomActionCompleted(sendAction: sendAction, node: node)

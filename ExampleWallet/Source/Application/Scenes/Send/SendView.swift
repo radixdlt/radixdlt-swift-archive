@@ -35,8 +35,8 @@ final class SendView: ScrollingStackView {
     private lazy var recipientAddressField = UITextField.Style("To address", text: Address.with(privateKey: 1).stringValue).make()
     private lazy var amountToSendField = UITextField.Style("Rads", text: "1234").make()
 
-    private lazy var sendButton: UIButton = "Send"
-//    private lazy var transactionIdentifierLabel: UILabel = "No tx"
+    private lazy var sendButton = UIButton.Style("Send", isEnabled: false).make()
+    private lazy var submittedAtomStatusLabel = UILabel.Style(numberOfLines: 0).make()
 
     // MARK: - StackViewStyling
     lazy var stackViewStyle: UIStackView.Style = [
@@ -44,13 +44,9 @@ final class SendView: ScrollingStackView {
         recipientAddressField,
         amountToSendField,
         sendButton,
-//        transactionIdentifierLabel,
+        submittedAtomStatusLabel,
         .spacer
     ]
-
-    override func setup() {
-//        sendButton.isEnabled = false
-    }
 }
 
 // MARK: - SingleContentView
@@ -71,7 +67,8 @@ extension SendView: ViewModelled {
             viewModel.isFetchingBalance         --> rx.isRefreshing,
             viewModel.isSendButtonEnabled       --> sendButton.rx.isEnabled,
             viewModel.myAddress                 --> walletBalanceView.rx.address,
-            viewModel.myXrdBalance                 --> walletBalanceView.rx.balance
+            viewModel.myXrdBalance              --> walletBalanceView.rx.balance,
+            viewModel.statusOfSubmittedAtom     --> submittedAtomStatusLabel.rx.text
         ]
     }
 }

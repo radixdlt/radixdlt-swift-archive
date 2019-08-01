@@ -38,13 +38,13 @@ final class RestoreWalletCoordinator: AnyCoordinator {
 
 public protocol RestoreWalletNavigator: AnyObject {
     func toRestoreWallet()
-    func toMain(radixApplicationClient: DefaultRadixApplicationClient)
+    func toMain(radixApplicationClient: RadixApplicationClient)
 }
 
 // MARK: - Navigator
 extension RestoreWalletCoordinator: RestoreWalletNavigator {
 
-    func toMain(radixApplicationClient: DefaultRadixApplicationClient) {
+    func toMain(radixApplicationClient: RadixApplicationClient) {
         navigator?.toMain(radixApplicationClient: radixApplicationClient)
     }
 

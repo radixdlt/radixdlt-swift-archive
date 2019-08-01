@@ -44,12 +44,12 @@ extension CreateNewWalletCoordinator: AnyCoordinator {
 
 protocol CreateNewWalletNavigator: AnyObject {
     func toCreateWallet()
-    func toMain(radixApplicationClient: DefaultRadixApplicationClient)
+    func toMain(radixApplicationClient: RadixApplicationClient)
 }
 
 extension CreateNewWalletCoordinator: CreateNewWalletNavigator {
 
-    func toMain(radixApplicationClient: DefaultRadixApplicationClient) {
+    func toMain(radixApplicationClient: RadixApplicationClient) {
         navigator?.toMain(radixApplicationClient: radixApplicationClient)
     }
 

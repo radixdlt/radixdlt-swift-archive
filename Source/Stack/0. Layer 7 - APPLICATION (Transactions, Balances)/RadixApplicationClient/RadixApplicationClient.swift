@@ -345,7 +345,7 @@ private extension RadixApplicationClient {
                 .filter { type(of: $0.particle) == requiredStateContext.particleType }
         }
         try statefulMapper.particleGroupsForAnAction(action, upParticles: particles).forEach {
-            atomStore.stateParticleGroup($0, uuid: uuid)
+            atomStore.stageParticleGroup($0, uuid: uuid)
         }
     }
     

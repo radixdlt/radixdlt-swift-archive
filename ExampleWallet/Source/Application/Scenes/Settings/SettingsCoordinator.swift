@@ -38,8 +38,8 @@ final class SettingsCoordinator: AnyCoordinator {
 
     private weak var navigation: AppNavigation?
 
-    private unowned let radixApplicationClient: DefaultRadixApplicationClient
-    init(navigationController: UINavigationController?, navigation: AppNavigation, radixApplicationClient: DefaultRadixApplicationClient) {
+    private unowned let radixApplicationClient: RadixApplicationClient
+    init(navigationController: UINavigationController?, navigation: AppNavigation, radixApplicationClient: RadixApplicationClient) {
         self.navigationController = navigationController
         self.navigation = navigation
         self.radixApplicationClient = radixApplicationClient
