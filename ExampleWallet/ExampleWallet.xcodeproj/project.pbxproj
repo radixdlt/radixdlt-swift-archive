@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E61E599222F3203500EC7119 /* RadixSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83022C3C79800536DC7 /* RadixSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6A7479122CB869400DACEA0 /* RxSwiftExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A7478E22CB869400DACEA0 /* RxSwiftExt.framework */; };
 		E6A7479222CB869400DACEA0 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A7478F22CB869400DACEA0 /* RxRelay.framework */; };
 		E6A7479322CB869400DACEA0 /* RxOptional.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6A7479022CB869400DACEA0 /* RxOptional.framework */; };
@@ -80,6 +81,20 @@
 		E6EDCDA422C3E47E008AE5D0 /* SendViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA7CC22C3C6B200536DC7 /* SendViewModel.swift */; };
 		E6FCB66922F3017800ECC01B /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6ABA83822C3C95600536DC7 /* RxBlocking.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E61E599122F3202000EC7119 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E61E599222F3203500EC7119 /* RadixSDK.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		E6A7478E22CB869400DACEA0 /* RxSwiftExt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwiftExt.framework; path = ../Carthage/Build/iOS/RxSwiftExt.framework; sourceTree = "<group>"; };
@@ -457,6 +472,7 @@
 				E6ABA77A22C3C56D00536DC7 /* Frameworks */,
 				E6ABA77B22C3C56D00536DC7 /* Resources */,
 				E6ABA84C22C3CA8B00536DC7 /* Carthage */,
+				E61E599122F3202000EC7119 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -733,7 +749,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7SPGKHD4HZ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -744,9 +760,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.ExampleWallet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.ios.example.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Radix iOS Dev Wildcard";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -757,7 +773,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7SPGKHD4HZ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -768,7 +784,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.ExampleWallet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.ios.example.wallet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
