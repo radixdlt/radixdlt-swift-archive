@@ -16,7 +16,9 @@ public final class RadixApplicationClient:
     AccountBalancing,
     TokenTransferring,
     TokenCreating,
-    MessageSending
+    MessageSending,
+    AddressOfAccountDeriving,
+    Magical
 {
     // swiftlint:enable opening_brace colon
     
@@ -118,8 +120,8 @@ public extension RadixApplicationClient {
 // MARK: AccountBalancing
 public extension RadixApplicationClient {
     
-    func observeBalances(at address: Address) -> Observable<TokenBalances> {
-        return observeBalanceReferences(at: address).flatMap {
+    func observeBalances(ownedBy owner: Ownable) -> Observable<TokenBalances> {
+        return observeBalanceReferences(at: owner.address).flatMap {
             Observable.combineLatest($0.dictionary.values
                 .map { tokenReferenceBalance -> Observable<TokenBalance> in
                     let rriOfToken = tokenReferenceBalance.tokenResourceIdentifier
@@ -198,10 +200,6 @@ public extension RadixApplicationClient {
     
     var addressOfActiveAccount: Address {
         return activeAccount.addressFromMagic(magic)
-    }
-    
-    func addressOf(account: Account) -> Address {
-        return account.addressFromMagic(magic)
     }
     
     @discardableResult

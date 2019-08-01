@@ -23,7 +23,7 @@ public extension TokenBalances {
 }
 
 public extension TokenBalances {
-    func balance(of identifier: ResourceIdentifier) -> TokenBalance? {
+    func balance(ofToken identifier: ResourceIdentifier) -> TokenBalance? {
         return balancePerToken[identifier]
     }
 }

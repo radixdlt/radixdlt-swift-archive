@@ -24,7 +24,7 @@ class TransferTokensTests: LocalhostNodeTest {
         super.setUp()
         continueAfterFailure = false
         
-        aliceIdentity = AbstractIdentity.init(alias: "Alice")
+        aliceIdentity = AbstractIdentity(alias: "Alice")
         bobAccount = Account()
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
@@ -34,16 +34,16 @@ class TransferTokensTests: LocalhostNodeTest {
     func testTransferTokenWithGranularityOf1() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         // WHEN: Alice transfer tokens she owns, to Bob
-        let createToken = createTokenAction(address: alice, supply: .fixed(to: 30))
+        let (tokenCreation, rri) = try! application.createToken(name: "Alice Coin", symbol: "AC", description: "Best coin", supply: .fixed(to: 30))
+        // createTokenAction(address: alice, supply: .fixed(to: 30))
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-        let rri = createToken.identifier
         guard let myTokenDef = application.observeTokenDefinition(identifier: rri).blockingTakeFirst(timeout: 2) else { return }
         XCTAssertEqual(myTokenDef.symbol, "AC")
         
-        guard let myBalanceOrNilBeforeTx = application.observeMyBalance(of: rri).blockingTakeFirst(timeout: 2) else { return }
+        guard let myBalanceOrNilBeforeTx = application.observeMyBalance(ofToken: rri).blockingTakeFirst(timeout: 2) else { return }
         guard let myBalanceBeforeTx = myBalanceOrNilBeforeTx else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(myBalanceBeforeTx.token.tokenDefinitionReference, rri)
         XCTAssertEqual(myBalanceBeforeTx.amount, 30)
@@ -56,11 +56,11 @@ class TransferTokensTests: LocalhostNodeTest {
             transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
 
-        guard let myBalanceOrNilAfterTx = application.observeMyBalance(of: rri).blockingTakeLast(timeout: 3) else { return }
+        guard let myBalanceOrNilAfterTx = application.observeMyBalance(ofToken: rri).blockingTakeLast(timeout: 3) else { return }
         guard let myBalanceAfterTx = myBalanceOrNilAfterTx else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(myBalanceAfterTx.amount, 20)
         
-        guard let bobsBalanceOrNilAfterTx = application.observeBalance(of: rri, for: bob).blockingTakeFirst(timeout: 3) else { return }
+        guard let bobsBalanceOrNilAfterTx = application.observeBalance(ofToken: rri, ownedBy: bob).blockingTakeFirst(timeout: 3) else { return }
         guard let bobsBalanceAfterTx = bobsBalanceOrNilAfterTx else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(bobsBalanceAfterTx.amount, 10)
         

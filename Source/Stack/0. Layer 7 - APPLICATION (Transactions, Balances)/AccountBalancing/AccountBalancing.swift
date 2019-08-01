@@ -14,8 +14,8 @@ public protocol AccountBalancing {
     var addressOfActiveAccount: Address { get }
     var nativeTokenDefinition: TokenDefinition { get }
         
-    func observeBalances(at address: Address) -> Observable<TokenBalances>
-    func observeBalance(of tokenIdentifier: ResourceIdentifier, for address: Address) -> Observable<TokenBalance?>
+    func observeBalances(ownedBy owner: Ownable) -> Observable<TokenBalances>
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: Ownable) -> Observable<TokenBalance?>
 }
 
 public extension AccountBalancing {
@@ -24,22 +24,22 @@ public extension AccountBalancing {
         return nativeTokenDefinition.tokenDefinitionReference
     }
     
-    func observeBalance(of tokenIdentifier: ResourceIdentifier, for address: Address) -> Observable<TokenBalance?> {
-        return observeBalances(at: address).map {
-            $0.balance(of: tokenIdentifier)
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: Ownable) -> Observable<TokenBalance?> {
+        return observeBalances(ownedBy: owner).map {
+            $0.balance(ofToken: tokenIdentifier)
         }
     }
     
     func observeMyBalances() -> Observable<TokenBalances> {
-        return observeBalances(at: addressOfActiveAccount)
+        return observeBalances(ownedBy: addressOfActiveAccount)
     }
     
-    func observeMyBalance(of tokenIdentifier: ResourceIdentifier) -> Observable<TokenBalance?> {
-        return observeBalance(of: tokenIdentifier, for: addressOfActiveAccount)
+    func observeMyBalance(ofToken tokenIdentifier: ResourceIdentifier) -> Observable<TokenBalance?> {
+        return observeBalance(ofToken: tokenIdentifier, ownedBy: addressOfActiveAccount)
     }
     
     func observeMyBalanceOfNativeTokens() -> Observable<TokenBalance?> {
-        return observeMyBalance(of: nativeTokenIdentifier)
+        return observeMyBalance(ofToken: nativeTokenIdentifier)
     }
     
     func observeMyBalanceOfNativeTokensOrZero() -> Observable<TokenBalance> {
@@ -47,8 +47,8 @@ public extension AccountBalancing {
             .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
     }
     
-    func balanceOfNativeTokensOrZero(for address: Address) -> Observable<TokenBalance> {
-        return observeBalance(of: nativeTokenIdentifier, for: address)
-            .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: address))
+    func balanceOfNativeTokensOrZero(ownedBy owner: Ownable) -> Observable<TokenBalance> {
+        return observeBalance(ofToken: nativeTokenIdentifier, ownedBy: owner)
+            .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: owner))
     }
 }

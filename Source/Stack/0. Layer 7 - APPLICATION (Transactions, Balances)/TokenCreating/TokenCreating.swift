@@ -20,13 +20,14 @@ public protocol TokenCreating {
 }
 
 public extension TokenCreating {
+    
     func createToken(
         name: Name,
         symbol: Symbol,
         description: Description,
         supply initialSupplyType: CreateTokenAction.InitialSupply,
         granularity: Granularity = .default
-        ) throws -> ResultOfUserAction {
+        ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
         let createTokenAction = try CreateTokenAction(
             creator: addressOfActiveAccount,
@@ -37,6 +38,6 @@ public extension TokenCreating {
             granularity: granularity
         )
         
-        return self.create(token: createTokenAction)
+        return (create(token: createTokenAction), createTokenAction.identifier)
     }
 }

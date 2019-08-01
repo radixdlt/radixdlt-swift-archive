@@ -13,10 +13,10 @@ public struct TokenBalance: Equatable, Throwing {
     public let amount: NonNegativeAmount
     public let owner: Address
     
-    public init(token tokenConvertible: TokenConvertible, amount: NonNegativeAmount, owner: Address) {
+    public init(token tokenConvertible: TokenConvertible, amount: NonNegativeAmount, owner: Ownable) {
         self.token = TokenDefinition(tokenConvertible: tokenConvertible)
         self.amount = amount
-        self.owner = owner
+        self.owner = owner.address
     }
 }
 
@@ -39,7 +39,7 @@ public extension TokenBalance {
         )
     }
     
-    static func zero(token: TokenDefinition, ownedBy address: Address) -> TokenBalance {
-        return TokenBalance(token: token, amount: .zero, owner: address)
+    static func zero(token: TokenDefinition, ownedBy owner: Ownable) -> TokenBalance {
+        return TokenBalance(token: token, amount: .zero, owner: owner)
     }
 }

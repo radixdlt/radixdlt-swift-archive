@@ -17,7 +17,7 @@ class BalanceOfNativeTokenFromGenesisAtomsTests: XCTestCase {
         let application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity())
         let address: Address = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
         application.pull(address: address).disposed(by: disposeBag)
-        guard let xrdBalance = application.balanceOfNativeTokensOrZero(for: address).blockingTakeFirst(timeout: 4) else { return }
+        guard let xrdBalance = application.balanceOfNativeTokensOrZero(ownedBy: address).blockingTakeFirst(timeout: 4) else { return }
         XCTAssertEqual(xrdBalance.amount, "1000000000000000000000000000")
     }
 }
