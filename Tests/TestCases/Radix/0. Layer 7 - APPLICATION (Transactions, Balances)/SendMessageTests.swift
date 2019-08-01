@@ -143,23 +143,14 @@ extension RPCError {
 }
 
 extension AbstractIdentity {
-    convenience init(alias: String? = nil) {
-        try! self.init(accounts: [Account()], alias: alias)
-    }
-    
     convenience init(privateKey: PrivateKey, alias: String? = nil) {
-        try! self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
+        self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
     }
 }
 
 extension Account {
     init() {
         let keyPair = KeyPair()
-        self = .privateKeyPresent(keyPair)
-    }
-    
-    init(privateKey: PrivateKey) {
-        let keyPair = KeyPair(private: privateKey)
         self = .privateKeyPresent(keyPair)
     }
 }

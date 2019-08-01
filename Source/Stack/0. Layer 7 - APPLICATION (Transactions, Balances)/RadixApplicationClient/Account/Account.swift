@@ -49,3 +49,10 @@ public extension Account {
         implementMe()
     }
 }
+
+public extension Account {
+    init(privateKey: PrivateKey) {
+        let keyPair = KeyPair(private: privateKey)
+        self = .privateKeyPresent(keyPair)
+    }
+}
