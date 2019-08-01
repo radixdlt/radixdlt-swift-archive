@@ -7,16 +7,21 @@
 //
 
 import Foundation
+import RxSwift
 
 public protocol AtomSigning {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> SignedAtom
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom>
 }
 
 // MARK: - Default Implementation
-public extension AtomSigning where Self: Signing, Self: PublicKeyOwner {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> SignedAtom {
-        let signatureId = publicKey.hashId
-        let signature = try Signer.sign(unsignedAtom, privateKey: privateKey)
-        return unsignedAtom.signed(signature: signature, signatureId: signatureId)
+public extension AtomSigning where Self: SigningRequesting, Self: PublicKeyOwner {
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom> {
+        let signatureId = publicKey.hashEUID
+        
+        return privateKeyForSigning.map {
+            try Signer.sign(unsignedAtom, privateKey: $0)
+        }.map {
+            unsignedAtom.signed(signature: $0, signatureId: signatureId)
+        }
     }
 }

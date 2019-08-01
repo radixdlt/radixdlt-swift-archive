@@ -80,15 +80,6 @@ private extension ProofOfWork {
     }
 }
 
-internal extension Magic {
-    // MARK: - Endianess (Matching Java library ByteStream `putInt`)
-    func toFourBigEndianBytes() -> [Byte] {
-        let magic4Bytes = CFSwapInt32HostToBig(UInt32(value)).bytes
-        assert(magic4Bytes.count == 4)
-        return magic4Bytes
-    }
-}
-
 // MARK: - Endianess (Matching Java library ByteStream `putLong`)
 internal extension Nonce {
     func toEightBigEndianBytes() -> [Byte] {

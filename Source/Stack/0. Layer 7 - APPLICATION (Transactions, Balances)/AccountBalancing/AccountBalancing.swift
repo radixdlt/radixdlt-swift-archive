@@ -9,69 +9,46 @@
 import Foundation
 import RxSwift
 
-public struct AccountBalances {
-    public let account: Address
-    public let balances: BalancePerToken
-}
-
-public extension AccountBalances {
-    func balance(of tokenIdentifier: ResourceIdentifier) -> AccountBalanceOf {
-        
-        return AccountBalanceOf(
-            account: account,
-            balance: balances.balanceOrZero(of: tokenIdentifier, address: account)
-        )
-    }
-}
-
-public struct AccountBalanceOf {
-    public let account: Address
-    public let balance: TokenBalance
-}
-
 public protocol AccountBalancing {
-    func getBalances(for address: Address) -> Observable<AccountBalances>
-    func getBalances(for address: Address, ofToken token: ResourceIdentifier) -> Observable<AccountBalanceOf>
+    
+    var addressOfActiveAccount: Address { get }
+    var nativeTokenDefinition: TokenDefinition { get }
+        
+    func observeBalances(ownedBy owner: Ownable) -> Observable<TokenBalances>
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: Ownable) -> Observable<TokenBalance?>
 }
 
-// MARK: - Default Implementation
 public extension AccountBalancing {
- 
-    func getBalances(for address: Address, ofToken token: ResourceIdentifier) -> Observable<AccountBalanceOf> {
-        return getBalances(for: address) .map { $0.balance(of: token) }
-    }
-}
-
-public extension AccountBalancing where Self: IdentityHolder {
-    func getMyBalances() -> Observable<AccountBalances> {
-        let myAddress = identity.address
-        return getBalances(for: myAddress)
+    
+    var nativeTokenIdentifier: ResourceIdentifier {
+        return nativeTokenDefinition.tokenDefinitionReference
     }
     
-    func getMyBalance(of tokenIdentifier: ResourceIdentifier) -> Observable<AccountBalanceOf> {
-        return getMyBalances().map { $0.balance(of: tokenIdentifier) }
-    }
-}
-
-// MARK: - AccountBalancing + NodeInteracting
-public extension AccountBalancing where Self: NodeInteractingSubscribe {
-    func getBalances(for address: Address) -> Observable<AccountBalances> {
-        log.info("Getting balances for address: \(address)")
-        return nodeSubscriber.subscribe(to: address)
-            .storedAtomsOnly()
-            .map { $0.flatMap { $0.tokensBalances() }.filter { $0.address == address } }
-            .map { TokenBalanceReducer().reduce(tokenBalances: $0) }
-            .map { AccountBalances(account: address, balances: $0) }
-    }
-}
-
-private extension ObservableType where E == [AtomUpdate] {
-    func storedAtomsOnly() -> Observable<[Atom]> {
-        return self.asObservable().map { (atomUpdates: [AtomUpdate]) -> [Atom] in
-            return atomUpdates.compactMap {
-                guard $0.action == .store else { return nil }
-                return $0.atom
-            }
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: Ownable) -> Observable<TokenBalance?> {
+        return observeBalances(ownedBy: owner).map {
+            $0.balance(ofToken: tokenIdentifier)
         }
+    }
+    
+    func observeMyBalances() -> Observable<TokenBalances> {
+        return observeBalances(ownedBy: addressOfActiveAccount)
+    }
+    
+    func observeMyBalance(ofToken tokenIdentifier: ResourceIdentifier) -> Observable<TokenBalance?> {
+        return observeBalance(ofToken: tokenIdentifier, ownedBy: addressOfActiveAccount)
+    }
+    
+    func observeMyBalanceOfNativeTokens() -> Observable<TokenBalance?> {
+        return observeMyBalance(ofToken: nativeTokenIdentifier)
+    }
+    
+    func observeMyBalanceOfNativeTokensOrZero() -> Observable<TokenBalance> {
+        return observeMyBalanceOfNativeTokens()
+            .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
+    }
+    
+    func balanceOfNativeTokensOrZero(ownedBy owner: Ownable) -> Observable<TokenBalance> {
+        return observeBalance(ofToken: nativeTokenIdentifier, ownedBy: owner)
+            .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: owner))
     }
 }

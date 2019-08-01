@@ -10,32 +10,34 @@ import Foundation
 import RxSwift
 
 public protocol TokenCreating {
-    /// Creates a token
-    func create(token: CreateTokenAction) -> SingleWanted<ResourceIdentifier>
+    
+    var addressOfActiveAccount: Address { get }
+    
+    /// Creates a new kind of Token
+    func create(token: CreateTokenAction) -> ResultOfUserAction
+    
+    func observeMyTokenDefinitions() -> Observable<TokenDefinitionsState>
 }
 
-// swiftlint:disable opening_brace
-
-public extension TokenCreating
-where
-    Self: NodeInteractingSubmit,
-    Self: Magical,
-    Self: AtomSigning,
-    Self: ProofOfWorkWorking,
-    Self: TokensDefinitionsReferencing
-{
-    // swiftlint:enable opening_brace
-    func create(token createToken: CreateTokenAction) -> SingleWanted<ResourceIdentifier> {
+public extension TokenCreating {
+    
+    func createToken(
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        supply initialSupplyType: CreateTokenAction.InitialSupply,
+        granularity: Granularity = .default
+        ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
-        log.info("\(createToken.creator) creates new token: \(createToken.identifier)")
+        let createTokenAction = try CreateTokenAction(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: initialSupplyType,
+            granularity: granularity
+        )
         
-        let actionToParticleGroupsMapper = DefaultCreateTokenActionToParticleGroupsMapper()
-        
-        let atom = actionToParticleGroupsMapper.particleGroups(for: createToken).wrapInAtom()
-        return performProvableWorkThenSignAndSubmit(atom: atom, powWorker: proofOfWorkWorker)
-            .map { createToken.identifier }
-            .do(onNext: {
-                self.tokens.add(token: Token(tokenConvertible: createToken), resourceIdentifier: $0)
-            })
+        return (create(token: createTokenAction), createTokenAction.identifier)
     }
 }

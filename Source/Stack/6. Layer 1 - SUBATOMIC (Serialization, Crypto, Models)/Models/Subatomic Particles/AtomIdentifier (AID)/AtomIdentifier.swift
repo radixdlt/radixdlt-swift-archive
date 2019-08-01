@@ -12,6 +12,9 @@ import Foundation
 
 /// An Atom Identifier - also known as `AID` - made up of 192 bits of truncated hash and 64 bits of a selected shard.
 /// The AID is used so that Atoms can be located using just this identifier.
+///
+/// This is an example of an AID: `"9b3ff63d7a055e037f0d52b0e6382e07388927a66b2cc97c56abab3870585f04"`
+///
 public struct AtomIdentifier:
     Throwing,
     DataInitializable,
@@ -85,7 +88,7 @@ public extension AtomIdentifier {
             throw Error.incorrectByteCount(expected: AtomIdentifier.byteCount, butGot: data.length)
         }
         let truncatedHash = data.prefix(AtomIdentifier.byteCountHash)
-        let shard = try Shard(data: data.suffix(AtomIdentifier.byteCountShard))
+        let shard = try Shard(data: CFSwapInt64BigToHost(UInt64(data: data.suffix(AtomIdentifier.byteCountShard))).asData)
         
         try self.init(truncatedHash: truncatedHash, shard: shard)
     }
@@ -94,7 +97,7 @@ public extension AtomIdentifier {
 // MARK: - DataConvertible
 public extension AtomIdentifier {
     var asData: Data {
-        return truncatedHash + shard
+        return truncatedHash + CFSwapInt64HostToBig(UInt64(truncatingIfNeeded: shard))
     }
 }
 
@@ -126,6 +129,7 @@ private extension AtomIdentifier {
     ///
     static func selectShard(in shards: Shards, basedOnHash hash: RadixHash) -> Shard {
         let targetShardIndex = Int(hash[0]) % shards.count
-        return shards.sorted(by: Shard.areInIncreasingOrderUnsigned)[targetShardIndex]
+        let targetShard = shards.sorted(by: Shard.areInIncreasingOrderUnsigned)[targetShardIndex]
+        return targetShard
     }
 }

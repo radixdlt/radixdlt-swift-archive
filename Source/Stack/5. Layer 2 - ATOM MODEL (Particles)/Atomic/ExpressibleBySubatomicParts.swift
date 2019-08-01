@@ -103,6 +103,12 @@ public extension ExpressibleBySubatomicParts where Self: Atomic {
         
         return properties
     }
+    
+    var postProcess: Process {
+        return { proccessed, _ in
+            return proccessed
+        }
+    }
 }
 
 // MARK: - ArrayInitializable

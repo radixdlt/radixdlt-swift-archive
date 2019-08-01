@@ -34,10 +34,7 @@ public extension AnySpunParticle {
     }
     
     func mapToSpunParticle<P>(with: P.Type) -> SpunParticle<P>? {
-        guard let castedParticle = particle as? P else {
-            return nil
-        }
-        return SpunParticle(spin: spin, particle: castedParticle)
+        return try? SpunParticle<P>(anySpunParticle: self)
     }
 }
 

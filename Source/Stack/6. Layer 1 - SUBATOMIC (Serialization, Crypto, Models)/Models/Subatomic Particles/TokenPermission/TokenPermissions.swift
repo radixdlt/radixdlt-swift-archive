@@ -48,6 +48,25 @@ public struct TokenPermissions:
     }
 }
 
+// MARK: - Access Permissions
+public extension TokenPermissions {
+    var mintPermission: TokenPermission {
+        return valueOfRequiredPermission(.mint)
+    }
+    var burnPermission: TokenPermission {
+        return valueOfRequiredPermission(.burn)
+    }
+}
+
+private extension TokenPermissions {
+    func valueOfRequiredPermission(_ key: TokenTransition) -> TokenPermission {
+        guard let permission = dictionary[key] else {
+            incorrectImplementation("Expected value for required permission with key: \(key), but got none")
+        }
+        return permission
+    }
+}
+
 // MARK: - Throwing
 public extension TokenPermissions {
     enum Error: Swift.Error, Equatable {

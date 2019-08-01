@@ -29,12 +29,44 @@ public extension Atomic {
     func shards() throws -> Shards {
         let shards = spunParticles()
             .map { $0.particle }
-            .compactMap { $0.shardables() }
-            .flatMap { $0 }
-            .map { $0.publicKey.shard }
+            .flatMap { $0.destinations() }
+            .map { $0.shard }
         
         return try Shards(set: shards.asSet)
     }
+    
+    // HACK
+    func requiredFirstShards() throws -> Shards {
+        if particles(spin: .down).isEmpty {
+            return try shards()
+        } else {
+            let shards = self.spunParticles()
+                .filter(spin: .down)
+                .map { $0.particle }
+                .compactMap { $0.shardables() }
+                .flatMap { $0.elements }
+                .map { $0.shard }
+            return try Shards(set: shards.asSet)
+        }
+    }
+    
+    func addresses() -> Addresses {
+        let addresses: [Address] = spunParticles()
+            .map { $0.particle }
+            .compactMap { $0.shardables() }
+            .flatMap { $0.elements }
+        
+        return Addresses(addresses)
+    }
+    
+//    func destinationAddresses() -> Addresses {
+//        let addresses: [Address] = spunParticles()
+//            .map { $0.particle }
+//            .compactMap { $0.destinations() }
+//            .flatMap { $0.elements }
+//
+//        return Addresses(addresses)
+//    }
 }
 
 public extension Atomic where Self: RadixHashable {
@@ -47,6 +79,10 @@ public extension Atomic where Self: RadixHashable {
         }
     }
     
+    var shortAid: String {
+        return String(identifier().stringValue.suffix(4))
+    }
+    
     // MARK: Equatable
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.radixHash == rhs.radixHash
@@ -54,12 +90,12 @@ public extension Atomic where Self: RadixHashable {
     
     // MARK: - CustomStringConvertible
     var description: String {
-        return "Atom(\(hashId))"
+        return "Atom(\(hashEUID))"
     }
     
     // MARK: - CustomDebugStringConvertible
     var debugDescription: String {
-        return "Atom(\(hashId), pg#\(particleGroups.count), p#\(spunParticles().count), md#\(metaData.count), s#\(signatures.count))"
+        return "Atom(\(hashEUID), pg#\(particleGroups.count), p#\(spunParticles().count), md#\(metaData.count), s#\(signatures.count))"
     }
     
     var signable: Signable {
@@ -79,14 +115,6 @@ public extension Atomic {
     
     func messageParticles() -> [MessageParticle] {
         return spunParticles().compactMap(type: MessageParticle.self)
-    }
-    
-    func tokensBalances() -> [TokenBalance] {
-        return spunParticles().compactMap {
-            $0.mapToSpunParticle(with: TransferrableTokensParticle.self)
-        }.map {
-            TokenBalance(spunTransferrable: $0)
-        }
     }
     
     func particlesOfType<P>(_ type: P.Type, spin: Spin? = nil) -> [P] where P: ParticleConvertible {

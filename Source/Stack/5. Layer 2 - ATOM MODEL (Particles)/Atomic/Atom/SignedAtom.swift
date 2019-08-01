@@ -12,28 +12,29 @@ import Foundation
 
 public struct SignedAtom:
     AtomContainer,
-    Throwing
+    Throwing,
+    CustomStringConvertible
 {
     // swiftlint:enable colon opening_brace
     
-    public let proofOfWorkAtom: ProofOfWorkedAtom
+    public let atomWithFee: AtomWithFee
     public let signatureId: EUID
     public let signature: Signature
     
-    public init(proofOfWorkAtom: ProofOfWorkedAtom, signatureId: EUID) throws {
+    public init(proofOfWorkAtom: AtomWithFee, signatureId: EUID) throws {
         guard !proofOfWorkAtom.signatures.isEmpty else {
             throw Error.atomIsNotSigned
         }
         guard let signature = proofOfWorkAtom.signatures[signatureId] else {
             throw Error.atomSignaturesDoesNotContainId
         }
-        self.proofOfWorkAtom = proofOfWorkAtom
+        self.atomWithFee = proofOfWorkAtom
         self.signatureId = signatureId
         self.signature = signature
     }
 }
 
-// MARK: - Throwin
+// MARK: - Throwing
 public extension SignedAtom {
     enum Error: Swift.Error {
         case atomIsNotSigned
@@ -43,7 +44,14 @@ public extension SignedAtom {
 
 // MARK: - AtomContainer
 public extension SignedAtom {
-    var wrappedAtom: ProofOfWorkedAtom {
-        return proofOfWorkAtom
+    var wrappedAtom: AtomWithFee {
+        return atomWithFee
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension SignedAtom {
+    var description: String {
+        return "SignedAtom(id: \(atomWithFee.identifier())"
     }
 }

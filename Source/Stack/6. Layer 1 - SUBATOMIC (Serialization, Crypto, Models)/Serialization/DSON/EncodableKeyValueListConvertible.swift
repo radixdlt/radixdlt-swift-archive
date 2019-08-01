@@ -23,11 +23,19 @@ public extension Encodable where Self: EncodableKeyValueListConvertible {
         guard let serializerVersionCodingKey = CodingKeys(stringValue: jsonKeyVersion) else {
             incorrectImplementation("You MUST declare a CodingKey having the string value `\(jsonKeyVersion)` in your encodable model.")
         }
+        
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(serializerVersion, forKey: serializerVersionCodingKey)
         
         if let modelTypeSpecifying = self as? RadixModelTypeStaticSpecifying {
             try container.encode(modelTypeSpecifying.serializer, forKey: serializerValueCodingKey)
+        }
+        
+        if let destinationsOwner = self as? DestinationsOwner {
+            guard let destinationsCodingKey = CodingKeys(stringValue: jsonKeyDestinations) else {
+                incorrectImplementation("You MUST declare a CodingKey having the string value `\(jsonKeyDestinations)` in your encodable model.")
+            }
+            try container.encode(destinationsOwner.destinations(), forKey: destinationsCodingKey)
         }
         
         try encodableKeyValues().forEach {

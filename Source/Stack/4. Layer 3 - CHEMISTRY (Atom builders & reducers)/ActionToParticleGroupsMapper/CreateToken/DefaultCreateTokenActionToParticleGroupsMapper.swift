@@ -8,13 +8,13 @@
 
 import Foundation
 
-public struct DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenActionToParticleGroupsMapper {}
+public final class DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenActionToParticleGroupsMapper {}
 
 public extension CreateTokenActionToParticleGroupsMapper {
     func particleGroups(for action: CreateTokenAction) -> ParticleGroups {
 
         let token = TokenDefinitionParticle(createTokenAction: action)
-        let unallocated = UnallocatedTokensParticle(token: token, amount: .maxValue256Bits)
+        let unallocated = UnallocatedTokensParticle.maxSupplyForNewToken(token)
         let rriParticle = ResourceIdentifierParticle(token: token)
         
         let tokenCreationGroup: ParticleGroup = [
@@ -23,18 +23,20 @@ public extension CreateTokenActionToParticleGroupsMapper {
             unallocated.withSpin(.up)
         ]
 
-        guard let positiveInitialSupply = try? PositiveAmount(nonNegative: action.initialSupply) else {
+        let initialSupply = action.initialSupply
+        guard let positiveInitialSupply = initialSupply.positiveAmount else {
             return [tokenCreationGroup]
         }
         
-        let minted = TransferrableTokensParticle(token: token, amount: positiveInitialSupply)
+        let amount = NonNegativeAmount(positive: positiveInitialSupply)
+        let minted = TransferrableTokensParticle(token: token, amount: amount)
         
         var mintGroup: ParticleGroup = [
             unallocated.withSpin(.down),
             minted.withSpin(.up)
         ]
         
-        if let positiveLeftOverSupply = try? PositiveAmount(nonNegative: NonNegativeAmount.maxValue256Bits - action.initialSupply) {
+        if let positiveLeftOverSupply = initialSupply.subtractedFromMax {
             let unallocatedFromLeftOverSupply = UnallocatedTokensParticle(token: token, amount: positiveLeftOverSupply)
             mintGroup += unallocatedFromLeftOverSupply.withSpin(.up)
         }

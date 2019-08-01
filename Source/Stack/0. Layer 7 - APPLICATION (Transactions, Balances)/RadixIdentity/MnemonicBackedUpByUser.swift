@@ -10,24 +10,61 @@ import Foundation
 
 #if os(OSX)
 import AppKit.NSTouch
-public typealias TouchType = NSTouch.TouchType
+public typealias TouchByUser = NSTouch
 #elseif os(iOS) || os(tvOS) || os(watchOS)
 import UIKit.UITouch
-public typealias TouchType = UITouch.TouchType
+public typealias TouchByUser = UITouch
 #endif
 
 /// Abstraction of an active user decision
-public class UserInputAction {
-    public init(touchType _: TouchType) {
+public class UserInputAction: Throwing {
+    
+    #if DEBUG
+    // Done! Use this to allow testing.
+    internal init() {}
+    #endif
+    
+    public init(touchByUser: TouchByUser) throws {
         // require touch to initiate this abstraction of an active user decision
-        #if DEBUG
-        // Done! Use this to allow testing.
-        #else
+        
         guard Thread.isMainThread else {
-            incorrectImplementation("User actions occur on main thread")
+            throw Error.touchDidNotOccurOnMainThreadWhichIsRequired
+        }
+        
+        #if os(OSX)
+        guard touchByUser.device != nil else {
+            throw Error.touchDidNotOriginateFromAnyDeviceWhichIsRequired
+        }
+        #elseif os(iOS) || os(tvOS) || os(watchOS)
+        guard touchByUser.view != nil else {
+            throw Error.touchDidNotOriginateFromAnyViewWhichIsRequired
         }
         #endif
     }
 }
 
-public class MnemonicBackedUpByUser: UserInputAction {}
+public extension UserInputAction {
+    enum Error: Swift.Error, Equatable {
+        case touchDidNotOccurOnMainThreadWhichIsRequired
+        
+        #if os(OSX)
+        case touchDidNotOriginateFromAnyDeviceWhichIsRequired
+        #elseif os(iOS) || os(tvOS) || os(watchOS)
+        case touchDidNotOriginateFromAnyViewWhichIsRequired
+        #endif
+        
+    }
+}
+
+public class MnemonicBackedUpByUser: UserInputAction {
+    #if DEBUG
+    // Done! Use this to allow testing.
+    internal init(mnemonic _: Mnemonic) {
+        super.init()
+    }
+    #endif
+    
+    public init(mnemonic _: Mnemonic, touchByUser: TouchByUser) throws {
+        try super.init(touchByUser: touchByUser)
+    }
+}

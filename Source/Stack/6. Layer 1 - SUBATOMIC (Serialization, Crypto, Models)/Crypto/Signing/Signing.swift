@@ -7,7 +7,18 @@
 //
 
 import Foundation
+import RxSwift
 
-public protocol Signing {
+public protocol SigningRequesting {
+    var privateKeyForSigning: Single<PrivateKey> { get }
+}
+
+public protocol Signing: SigningRequesting {
     var privateKey: PrivateKey { get }
+}
+
+public extension Signing {
+    var privateKeyForSigning: Single<PrivateKey> {
+        return Single.just(privateKey)
+    }
 }

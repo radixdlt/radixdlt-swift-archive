@@ -30,3 +30,10 @@ public extension ArrayInitializable {
         self.init(elements: elements)
     }
 }
+
+public extension ArrayInitializable where Self: ArrayConvertible {
+    static func + (lhs: Self, element: Element) -> Self {
+        let merged: [Element] = lhs.elements + element
+        return Self.init(elements: merged)
+    }
+}

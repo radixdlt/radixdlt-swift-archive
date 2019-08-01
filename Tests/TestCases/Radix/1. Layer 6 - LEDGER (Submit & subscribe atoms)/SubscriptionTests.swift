@@ -12,7 +12,26 @@ import RxSwift
 import RxTest
 import RxBlocking
 
-class SubscriptionTests: WebsocketTest {
+extension DefaultNodeInteraction {
+    convenience init(_ nodeDiscovery: NodeDiscovery) {
+        self.init(withNode: nodeDiscovery.loadNodes().map { $0[0] })
+    }
+}
+
+extension DefaultNodeConnection {
+    static func byNodeDiscovery(_ nodeDiscovery: NodeDiscovery) -> Observable<DefaultNodeConnection> {
+        return nodeDiscovery.loadNodes().map { nodes -> DefaultNodeConnection in
+            let node = nodes[0]
+            return DefaultNodeConnection(
+                node: node,
+                rpcClient: RPCClientsRetainer.rpcClient(node: node),
+                restClient: RESTClientsRetainer.restClient(node: node)
+            )
+        }
+    }
+}
+
+class SubscriptionTests: LocalhostNodeTest {
     
     override func setUp() {
         super.setUp()
@@ -75,45 +94,22 @@ class SubscriptionTests: WebsocketTest {
         // THEN: I see that action fails with a validation error
         request.blockingAssertThrows(
             error: RPCError.subscriberIdAlreadyInUse(subscriberId),
-            timeout: RxTimeInterval.enoughForPOW
+            timeout: .enoughForPOW
         )
     }
 
 }
 
-private let magic: Magic = 63799298
+//private let magic: Magic = 63799298
 private let xrdAddress: Address = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
-
-
-private extension RadixIdentity {
-    init(privateKey: PrivateKey) {
-        self.init(private: privateKey, magic: magic)
-    }
-    
-    init() {
-        self.init(magic: magic)
-    }
-}
-
-extension MaterializedSequenceResult {
-    var wasSuccessful: Bool {
-        switch self {
-        case .completed: return true
-        case .failed: return false
-        }
-    }
-    
-    func assertThrows<E>(error expectedError: E) -> Bool where E: Swift.Error & Equatable {
-        guard let mappedError = mapToError(type: E.self) else {
-            return false
-        }
-        return mappedError == expectedError
-    }
-    
-    func mapToError<E>(type expectedErrorType: E.Type) -> E? where E: Swift.Error & Equatable {
-        switch self {
-        case .completed: return nil
-        case .failed(_, let anyThrowedError): return anyThrowedError as? E
-        }
-    }
-}
+//
+//
+//private extension RadixIdentity {
+//    init(privateKey: PrivateKey) {
+//        self.init(private: privateKey, magic: magic)
+//    }
+//
+//    init() {
+//        self.init(magic: magic)
+//    }
+//}

@@ -107,8 +107,8 @@ public extension Sequence where Element == ParticleGroup {
     }
 }
 
-public extension ParticleGroup {
+public extension Sequence where Element == AnySpunParticle {
     func firstParticle<P>(ofType type: P.Type, spin: Spin? = nil) -> P? {
-        return spunParticles.filter(spin: spin).compactMap { $0.particle as? P }.first
+        return self.filter(spin: spin).compactMap { $0.particle as? P }.first
     }
 }

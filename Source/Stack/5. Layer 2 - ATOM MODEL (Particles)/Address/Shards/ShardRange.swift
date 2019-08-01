@@ -16,7 +16,8 @@ public struct ShardRange:
     RangeExpression,
     Equatable,
     Hashable,
-    Codable
+    Codable,
+    CustomStringConvertible
 {
 
     // swiftlint:enable colon opening_brace
@@ -27,6 +28,13 @@ public struct ShardRange:
     
     public init(range: Range<Bound>) {
         self.range = range
+    }
+}
+
+// MARK: - CustomStringConvertible
+public extension ShardRange {
+    var description: String {
+        return "(\(range.lowerBound), \(range.upperBound))"
     }
 }
 

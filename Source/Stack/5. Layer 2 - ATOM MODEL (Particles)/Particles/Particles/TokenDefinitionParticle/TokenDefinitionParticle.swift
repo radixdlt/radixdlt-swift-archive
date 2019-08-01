@@ -38,7 +38,7 @@ public struct TokenDefinitionParticle:
     public let address: Address
     public let granularity: Granularity
     public let permissions: TokenPermissions
-    public let icon: Data?
+    public let iconUrl: URL?
     
     public init(
         symbol: Symbol,
@@ -47,7 +47,7 @@ public struct TokenDefinitionParticle:
         address: Address,
         granularity: Granularity = .default,
         permissions: TokenPermissions = .default,
-        icon: Data? = nil
+        iconUrl: URL? = nil
     ) {
         self.symbol = symbol
         self.name = name
@@ -55,7 +55,7 @@ public struct TokenDefinitionParticle:
         self.address = address
         self.granularity = granularity
         self.permissions = permissions
-        self.icon = icon
+        self.iconUrl = iconUrl
     }
 }
 
@@ -75,7 +75,26 @@ public extension TokenDefinitionParticle {
             description: action.description,
             address: action.creator,
             granularity: action.granularity,
-            permissions: action.supplyType.tokenPermissions
+            permissions: action.tokenSupplyType.tokenPermissions,
+            iconUrl: action.iconUrl
         )
+    }
+}
+
+// MARK: - TokenDefinitionReferencing
+public extension TokenDefinitionParticle {
+    var tokenDefinitionReference: ResourceIdentifier {
+        return ResourceIdentifier(address: address, symbol: symbol)
+    }
+}
+
+// MARK: - TokenConvertible
+public extension TokenDefinitionParticle {
+    var tokenDefinedBy: Address {
+        return address
+    }
+    
+    var tokenSupplyType: SupplyType {
+        return SupplyType(tokenPermissions: permissions)
     }
 }

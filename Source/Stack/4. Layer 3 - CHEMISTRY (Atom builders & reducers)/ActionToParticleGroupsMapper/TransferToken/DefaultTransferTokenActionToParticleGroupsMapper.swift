@@ -1,5 +1,5 @@
 //
-//  DefaultTransferTokenActionToParticleGroupsMapper.swift
+//  DefaultTransferTokensActionToParticleGroupsMapper.swift
 //  RadixSDK iOS
 //
 //  Created by Alexander Cyon on 2019-04-29.
@@ -10,87 +10,120 @@ import Foundation
 
 // swiftlint:disable colon opening_brace
 
-public struct DefaultTransferTokenActionToParticleGroupsMapper:
-    TransferTokenActionToParticleGroupsMapper,
+public struct DefaultTransferTokensActionToParticleGroupsMapper:
+    TransferTokensActionToParticleGroupsMapper,
     Throwing
 {
     // swiftlint:enable colon opening_brace
 }
 
-// MARK: - TransferTokenActionToParticleGroupsMapper
-public extension TransferTokenActionToParticleGroupsMapper {
+// MARK: - TransferTokensActionToParticleGroupsMapper
+public extension TransferTokensActionToParticleGroupsMapper {
     
-    func particleGroups(for transfer: Action, currentBalance tokenBalance: TokenBalance) throws -> ParticleGroups {
- 
-        guard
-            let balance = try? PositiveAmount(signedAmount: tokenBalance.amount),
-            balance >= transfer.amount
-        else {
-            throw TransferError.insufficientFunds
-        }
-      
-        var (particleGroup, remainder) = transferToRecipientInParticleGroupWithRemainder(tokenBalance: tokenBalance, transfer: transfer)
+    // swiftlint:disable:next function_body_length
+    func particleGroups(for transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
+        let rri = transfer.tokenResourceIdentifier
         
-        guard let tokensToRecipient = particleGroup.firstParticle(ofType: TransferrableTokensParticle.self, spin: .up) else {
+        let upTransferrableParticles = upParticles.compactMap { try? UpParticle<TransferrableTokensParticle>(anyUpParticle: $0) }.filter { $0.particle.tokenDefinitionReference == rri }
+        
+        let tokenBalanceOfSender = try TokenReferenceBalance(upTransferrableTokensParticles: upTransferrableParticles, tokenIdentifier: rri, owner: transfer.sender)
+        
+        guard
+            tokenBalanceOfSender.amount >= transfer.amount
+        else {
+            throw TransferError.insufficientFunds(
+                currentBalance: tokenBalanceOfSender.amount,
+                butTriedToTransfer: transfer.amount
+            )
+        }
+        
+        guard let tokenDefinitionParticle = upParticles.compactMap({ $0.particle as? TokenDefinitionParticle }).first(where: { $0.identifier == rri }) else {
+            log.warning("Expected to found TokenDefinitionParticle with RRI: \(rri), amongst up particles: \(upParticles), but found none.")
+            throw TransferError.foundNoTokenDefinition(forIdentifier: rri)
+        }
+        
+        guard transfer.amount.isExactMultipleOfGranularity(tokenDefinitionParticle.granularity) else {
+            throw TransferError.amountNotMultipleOfGranularity(amount: transfer.amount, tokenGranularity: tokenDefinitionParticle.granularity)
+        }
+        
+        var (particles, remainder) = transferToRecipientInParticlesWithRemainder(upTransferrableParticles: upTransferrableParticles, transfer: transfer)
+
+        guard let tokensToRecipient = particles.firstParticle(ofType: TransferrableTokensParticle.self, spin: .up) else {
             incorrectImplementation("Should have created a Transfer to the recipient")
         }
         
         // Remainder to sender
         if let remainder = remainder {
             let returnedToSender = TransferrableTokensParticle.returnToSender(
-                of: transfer,
+                transfer.sender,
                 amount: remainder,
                 permissions: tokensToRecipient.permissions,
-                granularity: tokensToRecipient.granularity
+                granularity: tokensToRecipient.granularity,
+                resourceIdentifier: rri
             ).withSpin(.up)
             
-            particleGroup += returnedToSender
+            particles += returnedToSender
         }
         
-        return ParticleGroups(groups: particleGroup)
+        let metaData: MetaData
+        if let attachment = transfer.attachment {
+            metaData = [.attachment: Base64String(data: attachment).stringValue]
+        } else { metaData = [:] }
+        
+        return [
+            ParticleGroup(
+                spunParticles: particles,
+                metaData: metaData
+            )
+        ]
     }
 }
 
 public enum TransferError: Swift.Error, Equatable {
-    case insufficientFunds
-    case amountNotMultipleOfGranularity
+    case insufficientFunds(currentBalance: NonNegativeAmount, butTriedToTransfer: PositiveAmount)
+    case foundNoTokenDefinition(forIdentifier: ResourceIdentifier)
+    case amountNotMultipleOfGranularity(amount: PositiveAmount, tokenGranularity: Granularity)
 }
 
 // MARK: - Throwing
-public extension DefaultTransferTokenActionToParticleGroupsMapper {
+public extension DefaultTransferTokensActionToParticleGroupsMapper {
     typealias Error = TransferError
 }
 
 // MARK: - Private Helpers
-private extension TransferTokenActionToParticleGroupsMapper {
-    func transferToRecipientInParticleGroupWithRemainder(tokenBalance: TokenBalance, transfer: TransferTokenAction) -> (group: ParticleGroup, remainder: PositiveAmount?) {
+private extension TransferTokensActionToParticleGroupsMapper {
+    func transferToRecipientInParticlesWithRemainder(
+        upTransferrableParticles: [UpParticle<TransferrableTokensParticle>],
+        transfer: TransferTokenAction
+    ) -> (particles: [AnySpunParticle], remainder: PositiveAmount?) {
         
-        let tokenConsumables: [TransferrableTokensParticle] = tokenBalance.unconsumedTransferrable.values
-            .filter { $0.tokenDefinitionReference == transfer.tokenResourceIdentifier }
+        let tokenConsumables = upTransferrableParticles.map { $0.particle }
+
+        assert(!tokenConsumables.isEmpty, "No consumables")
+        assert(!tokenConsumables.contains(where: { $0.tokenDefinitionReference != transfer.tokenResourceIdentifier }), "Consumables contains incompatible tokens")
         
-        assert(!tokenConsumables.isEmpty, "No consumables, the implementation of `TokenBalance` is incorrect.")
-        
-        var consumerQuantity: PositiveAmount = 0
-        let checkIfTransactionAmountIsCovered = { consumerQuantity >= transfer.amount }
+        var consumerQuantity: NonNegativeAmount = 0
+        let isTransactionAmountCoveredYet = { consumerQuantity >= transfer.amount }
         
         var consumedTokens = [AnySpunParticle]()
         
-        for unspentToken in tokenConsumables where !checkIfTransactionAmountIsCovered() {
+        for unspentToken in tokenConsumables where !isTransactionAmountCoveredYet() {
             consumerQuantity += unspentToken.amount
             consumedTokens += unspentToken.withSpin(.down)
         }
         
-        assert(checkIfTransactionAmountIsCovered(), "The implementation of this function is incorrect, we should have asserted that we had balance enough earlier in this function")
+        assert(isTransactionAmountCoveredYet(), "The implementation of this function is incorrect, we should have asserted that we had balance enough earlier in this function")
         
         let permissions = tokenConsumables[0].permissions
         let granularity = tokenConsumables[0].granularity
         
         let toRecipient = TransferrableTokensParticle.toRecipient(in: transfer, permissions: permissions, granularity: granularity).withSpin(.up)
         
-        let toRecipientParticleGroup = ParticleGroup(toRecipient + consumedTokens)
+        let toRecipientParticles = toRecipient + consumedTokens
         
         let remainder = try? PositiveAmount(signedAmount: SignedAmount(amount: consumerQuantity) - SignedAmount(amount: transfer.amount))
-        return (group: toRecipientParticleGroup, remainder: remainder)
+        
+        return (particles: toRecipientParticles, remainder: remainder)
     }
 }
 
@@ -102,7 +135,7 @@ private extension TransferrableTokensParticle {
     ) -> TransferrableTokensParticle {
         
         return TransferrableTokensParticle(
-            amount: transfer.amount,
+            amount: NonNegativeAmount(positive: transfer.amount),
             address: transfer.recipient,
             tokenDefinitionReference: transfer.tokenResourceIdentifier,
             permissions: permissions,
@@ -111,19 +144,23 @@ private extension TransferrableTokensParticle {
     }
     
     // https://www.youtube.com/watch?v=PU5xxh5UX4U
+    // swiftlint:disable:next function_parameter_count
     static func returnToSender(
-        of transfer: TransferTokenAction,
+        _ sender: Address,
         amount: PositiveAmount,
         permissions: TokenPermissions,
-        granularity: Granularity
+        granularity: Granularity,
+        resourceIdentifier: ResourceIdentifier
     ) -> TransferrableTokensParticle {
         
         return TransferrableTokensParticle(
-            amount: amount,
-            address: transfer.sender,
-            tokenDefinitionReference: transfer.tokenResourceIdentifier,
+            amount: NonNegativeAmount(positive: amount),
+            address: sender,
+            tokenDefinitionReference: resourceIdentifier,
             permissions: permissions,
             granularity: granularity
         )
     }
 }
+
+typealias ParticleHashId = HashEUID

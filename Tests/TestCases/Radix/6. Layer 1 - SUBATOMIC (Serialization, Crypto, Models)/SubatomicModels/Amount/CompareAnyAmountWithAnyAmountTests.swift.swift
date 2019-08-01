@@ -83,9 +83,9 @@ class CompareAnyAmountWithAnyAmountTests: XCTestCase {
         assertLessThan(a, b)
     }
     
-    func testComparePositiveAmountZeroWithNonNegativeAmountPlus1() {
-        let a: PositiveAmount = 0
-        let b: NonNegativeAmount = 1
+    func testComparePositiveAmountOneWithNonNegativeAmountZero() {
+        let a: NonNegativeAmount = 0
+        let b: PositiveAmount = 1
         assertGreaterThan(b, a)
         assertLessThan(a, b)
     }

@@ -25,23 +25,29 @@ This is a **sneak peak** of the **coming** Application Layer API
 The `RadixApplicationClient` is the API layer this library exposes to you as a client developer. It allows you to create & transfer tokens, fetch balances and send messages.
 
 ```swift
-typealias RadixApplicationClient = Transacting & AccountBalancing & TokenCreating & MessageSending
+final class RadixApplicationClient:
+    AccountBalancing,
+    TokenTransferring,
+    TokenCreating,
+    MessageSending
+{ ... }
 
 protocol TokenCreating {
-    func create(token: CreateTokenAction) -> Single<ResourceIdentifier>
+    func create(token: CreateTokenAction) -> ResultOfUserAction
 }
 
-protocol Transacting {
-    func transfer(tokens: TransferTokenAction) -> Completable
+protocol TokenTransferring {
+    func transfer(tokens: TransferTokenAction) -> ResultOfUserAction
 }
 
 protocol AccountBalancing {
-    func getBalances(for address: Address) -> Observable<AccountBalances>
-    func getBalances(for address: Address, ofToken token: ResourceIdentifier) -> Observable<AccountBalanceOf>
+    /// `Ownable` is a protocol for something that can return a Radix `Address` (`Address` conforms to `Ownable`, returning `self`).
+    func observeBalances(ownedBy owner: Ownable) -> Observable<TokenBalances>
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: Ownable) -> Observable<TokenBalance?>
 }
 
 protocol MessageSending {
-    func sendMessage(_ message: SendMessageAction) -> Completable
+    func sendMessage(_ message: SendMessageAction) -> ResultOfUserAction
 }
 ```
 
@@ -49,79 +55,71 @@ protocol MessageSending {
 
 Here are some example usages. The code below is an excerpt of an existing the unit test [`TransferTokensTests.swift`](https://github.com/radixdlt/radixdlt-swift/blob/develop/Tests/TestCases/Radix/0.%20Layer%207%20-%20APPLICATION%20(Transactions%2C%20Balances)/TransferTokensTests.swift)
 
-(In the Swift code below, for the sake of readability, we have written out the result as if the API's were synchronous. As you saw in above these methods they are asynchronous returning `Observables`, so we have omitted the appropriate [`toBlocking`](https://github.com/ReactiveX/RxSwift/blob/master/RxBlocking/ObservableConvertibleType+Blocking.swift) call.)
-
 #### Create Token
 
 ```swift
-let alice = RadixIdentity()
+let aliceIdentity = AbstractIdentity(alias: "Alice")
 
-// Instantiate a RadixApplicationClient connecting to a `localhost` in this example, with Alice identity
-let application = DefaultRadixApplicationClient(node: .localhost, identity: alice)
+let application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
 
-// Alice defines her own token
-let createToken = CreateTokenAction(
-    creator: alice.address,
-    name: "Alice Coin",
-    symbol: "AC",
-    description: "Best coin",
-    supplyType: .fixed,
-    initialSupply: 30
-)
+/// A Radix `Address` is dependent on `RadixUniverse` of the `RadixApplicationClient`. Betanet, Alphanet, Mainnet are examples of different Universes.
+let alice: Address = application.addressOfActiveAccount
 
-// Alice creates a new token with an initial supply of 30. An instance of `ResourceIdentifier` (RRI) is
-// returned, which uniquely identifies Alice's coin, having this format:
-// "/<ALICE_ADDRESS>/AC", "AC" matching the `symbol`, chosen in init of `CreateTokenAction`.
-let rriAliceCoin = application.create(token: createToken) 
+/// Alice defines her own token, resulting in a tuple, where first parameter is the pending result of the action,
+/// the second is the Radix Resource Identifier (RRI) of the newly created token. The RRI uniquely identifies Alice's coin
+/// having this format:  "/<ALICE_ADDRESS>/AC", "AC" matching the `symbol`
+let (result, rriAliceCoin) = application.createToken(name: "Alice Coin", symbol: "AC", description: "Best coin", supply: .fixed(to: 30))
+assert(rriAliceCoin == "/\(alice)/AC")
 ```
 
 #### Get token balance
 
 ```swift
-let bob = RadixIdentity()
+let bob: Address = application.addressOf(account: Account()) 
 
-var alicesBalanceOfHerCoin = application.getMyBalance(of: rriAliceCoin)
-var bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rriAliceCoin)
+var alicesBalanceOfHerCoin = application.observeMyBalance(ofToken: rriAliceCoin)
+var bobsBalanceOfAliceCoin = application.observeBalance(ofToken: rriAliceCoin, ownedBy: bob)
 
-assert(alicesBalanceOfHerCoin.balance == 30, "Alice's balance should equal `30`(initialSupply)")
-assert(bobsBalanceOfAliceCoin.balance == 0, "Bob's balance should equal `0`")
+assert(alicesBalanceOfHerCoin.amount == 30, "Alice's balance should equal `30`(initialSupply)")
+assert(bobsBalanceOfAliceCoin.amount == 0, "Bob's balance should equal `0`")
 ```
 
 #### Transfer tokens
 
 ```swift
 // Alice sends 10 coins to Bob
-let transfer = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rriAliceCoin)
+application.transferTokens(
+    identifier: rriAliceCoin, 
+    to: bob, // `from` address defaults to the identity passed in th e
+    amount: 10, // type`PositiveAmount`, conforming to `ExpressibleByIntegerLiteral`
+    message: "For taxi fare" // Optional
+)
 
-application.transfer(tokens: transfer).take(1)
+alicesBalanceOfHerCoin = application.observeMyBalance(ofToken: rriAliceCoin)
+bobsBalanceOfAliceCoin = application.observeBalance(ofToken: rriAliceCoin, ownedBy: bob)
 
-alicesBalanceOfHerCoin = application.getMyBalance(of: rriAliceCoin)
-bobsBalanceOfAliceCoin = application.getBalances(for: bob.address, ofToken: rriAliceCoin)
-
-assert(alicesBalanceOfHerCoin.balance == 20, "Alice's balance should equal `20`")
-assert(bobsBalanceOfAliceCoin.balance == 10, "Bob's balance should equal `10`")
+assert(alicesBalanceOfHerCoin.amount == 20, "Alice's balance should equal `20`")
+assert(bobsBalanceOfAliceCoin.amount == 10, "Bob's balance should equal `10`")
 
 ```
 
 #### Send Message
 ```swift
 // `application` is initialzed above using Alice's identity
-application.sendMessage("Hi Bob, this is a secret message from Alice", to: bob, encryption: .encrypt)
-
-// But messagess are encrypted by default so we can just write:
-application.sendMessage("Hi Bob, this is a secret message from Alice", to: bob)
+application.sendEncryptedMessage("Hi Bob, this is a secret message from Alice", to: bob)
 
 // Plain text messages (i.e. no encryption) can be sent like so
-application.sendMessage("Hi Bob (and the world) from Alice", to: bob, encryption: .plainText)
+application.sendPlainTextMessage("Hi Bob (and the world) from Alice", to: bob)
 
 // You can even include some third parties to be able to read the encrypted message
-let clara = RadixIdentity()
-let diana = RadixIdentity()
+let clara: Address = application.addressOf(account: Account()) 
+let diana: Address = application.addressOf(account: Account()) 
 
-application.sendMessage(
+
+application.sendEncryptedMessage(
     "Hi Bob! Clara and Diana can also decrypt this encrypted message", 
     to: bob,
-    encryption: .encrypt(cc: [clara, diana]) 
+    canAlsoBeDecryptedBy: [clara, diana]) 
 )
 ```
 
@@ -132,6 +130,18 @@ application.sendMessage(
 Install it from the [App Store](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12).
 
 **Make sure that you have a simulator installed**, by starting Xcode - agree to Terms and Conditions and install any additional dependency if needed - navigate to *Settings -> Components* and verify that you see at least one installed *iPhone Simulator* in the list.
+
+#### Xcode Settings
+
+Enabling parallel builds (if your computer has lots of RAM)
+```bash
+defaults write com.apple.dt.Xcode BuildSystemScheduleInherentlyParallelCommandsExclusively -bool NO
+```
+
+Showing build times in order to reduce it by focusing on complex code
+```bash
+defaults write com.apple.dt.Xcode ShowBuildOperationDuration -bool YES
+```
 
 ### 1. Clone this repo
 ```bash
@@ -214,26 +224,26 @@ In Xcode run the tests by pressing `CMD` + `U`, verify that everything is workin
 Some rough, inaccurate attempt to map components within this library to the [OSI Model](https://en.wikipedia.org/wiki/OSI_model)
 to help with understanding of the different layers and trying to ease separation of concern.
 
-| LEVEL | NAME                                    		| FUNCTION                                                                	| COMPONENTS                                                        |
-|-------|-----------------------------------------------|---------------------------------------------------------------------------|-------------------------------------------------------------------|
-| 7     | [Application](#layer-7---application)   		| Transfer & create token, account balance 									| `ApplicationClient`, `RadixIdentity`                         		|
-| 6     | [Ledger](#layer-6---ledger)             		| Subscribing to and submission of atoms          							| `NodeInteraction`, `AtomUpdate`                                   |
-| 5     | [Node Connection](#layer-5---node-connection) | Connection to a node's RPC and REST API's 								| `Node`, `NodeConnection`, `Universe`                         		|
-| 4     | [Network](#layer-4---network)           		| Network (Websocket, HTTP) and transport (RPC, REST)                   	| `RPCClient`, `RESTClient`, `WebsocketToNode                       |
-| 3     | [Chemistry](#layer-3---chemistry)       		| Mapping user action to atoms and reducing atoms to state (e.g. balance) 	| `CreateTokenAction`, `TransferTokenAction`, `TokenBalanceReducer` |
-| 2     | [Atom Model](#layer-2---atom-model)     		| Radix multi-purpose "transaction" packaged in the `Atom`.               	| `Atom`, `ParticleGroup`, `Spin` and particles                     |
-| 1     | [Subatomic](#layer-1---subatomic)     		| (De- &) serialization, crypto and models.                               	|  `DSONEncodable`, ECC, `HexString`, `Amount` etc...               |
+| LEVEL | NAME                                    		| FUNCTION                                                                	| COMPONENTS                                                             
+|-------|-----------------------------------------------|---------------------------------------------------------------------------|------------------------------------------------------------------------
+| 7     | [Application](#layer-7---application)   		| Transfer & create token, account balance 									| `RadixApplicationClient`, `AbstractIdentity`                         		 
+| 6     | [Ledger](#layer-6---ledger)             		| Fetching and storing of Atoms                 							| `AtomStore`, `AtomObservation`                                   
+| 5     | [Universe](#layer-5---universe)               | RadixUniverse, RadixNetwork, RadixNode and interaction with the nodes     | `Node`, `Universe`, `RadixNetwork`, `NodeAction`
+| 4     | [Networking](#layer-4---networking)           | Networking (Websocket, HTTP) and transport (RPC, REST)                   	| `RPCClient`, `RESTClient`, `WebsocketToNode`                           
+| 3     | [Chemistry](#layer-3---chemistry)       		| Mapping user action to atoms and reducing atoms to state (e.g. balance) 	| `UserAction`, `ActionToParticlesMapper`, `AtomToExecutedActionReducer` 
+| 2     | [Atom Model](#layer-2---atom-model)     		| Radix multi-purpose "transaction" packaged in the `Atom`.               	| `Atom`, `ParticleGroup`, `Spin` and particles                          
+| 1     | [Subatomic](#layer-1---subatomic)     		| (De- &) serialization, crypto and models.                               	|  `DSONEncodable`, ECC, `HexString`, `Amount` etc...                    
 
 #### Layer 7 - Application
 High level application API for creating tokens, transferring tokens and fetching account balance, and more.
 
 #### Layer 6 - Ledger
-Subscribe to atoms for a certain Radix address and submit new atoms to the ledger.
+Fetching and storing atoms
 
-#### Layer 5 - Node Connection
+#### Layer 5 - Universe
 Connect to a Node and access its RPC and REST API's, please see the [API docs here](https://docs.radixdlt.com/node-api/) for a list of existing API's/
 
-#### Layer 4 - Network
+#### Layer 4 - Networking
 Networking (Websocket, HTTP) and transport (RPC, REST).
 
 #### Layer 3 - Chemistry

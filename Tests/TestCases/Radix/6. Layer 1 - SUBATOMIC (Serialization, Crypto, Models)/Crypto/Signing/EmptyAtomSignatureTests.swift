@@ -17,14 +17,14 @@ class EmptyAtomSignatureTests: XCTestCase {
         let atom = Atom(metaData: ChronoMetaData.timestamp(0))
         
         // WHEN
-        // I calculate the hashId
-        let hashId = atom.hashId
+        // I calculate the hashEUID
+        let hashEUID = atom.hashEUID
         
         // THEN
-        // It should match the hashId produced by the Java library
+        // It should match the hashEUID produced by the Java library
         let calculatedByJavaLib: EUID = "e50964da69e6672a98d5e3c1b1d73fb3"
         XCTAssertEqual(
-            hashId,
+            hashEUID,
             calculatedByJavaLib,
             "should match java lib"
         )

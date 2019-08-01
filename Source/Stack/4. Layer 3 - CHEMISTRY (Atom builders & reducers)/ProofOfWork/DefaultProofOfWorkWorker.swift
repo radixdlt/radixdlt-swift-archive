@@ -11,7 +11,10 @@ import RxSwift
 
 public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
     private let dispatchQueue = DispatchQueue(label: "Radix.DefaultProofOfWorkWorker", qos: .userInitiated)
-    public init() {}
+    private let defaultNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros
+    public init(defaultNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default) {
+        self.defaultNumberOfLeadingZeros = defaultNumberOfLeadingZeros
+    }
     
     deinit {
         log.verbose("POW Worker deinit")
@@ -25,9 +28,8 @@ public extension DefaultProofOfWorkWorker {
         seed: Data,
         magic: Magic,
         numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default
-    ) -> Observable<ProofOfWork> {
-        
-        return Observable.create { [unowned self] observer in
+    ) -> Single<ProofOfWork> {
+        return Single.create { [unowned self] single in
             var powDone = false
             self.dispatchQueue.async {
                 log.verbose("POW started")
@@ -38,12 +40,12 @@ public extension DefaultProofOfWorkWorker {
                 ) { resultOfWork in
                     switch resultOfWork {
                     case .failure(let error):
-                        observer.onError(error)
+//                        observer.onError(error)
+                        single(.error(error))
                     case .success(let pow):
                         powDone = true
                         log.verbose("POW done")
-                        observer.onNext(pow)
-                        observer.onCompleted()
+                        single(.success(pow))
                     }
                 }
             }
@@ -82,5 +84,14 @@ internal extension DefaultProofOfWorkWorker {
         
         let pow = ProofOfWork(seed: seed, targetNumberOfLeadingZeros: targetNumberOfLeadingZeros, magic: magic, nonce: nonce)
         done(.success(pow))
+    }
+}
+
+extension DefaultProofOfWorkWorker: FeeMapper {}
+public extension DefaultProofOfWorkWorker {
+    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> Single<AtomWithFee> {
+        return work(atom: atom, magic: universeConfig.magic, numberOfLeadingZeros: self.defaultNumberOfLeadingZeros).map {
+            try AtomWithFee(atomWithoutPow: atom, proofOfWork: $0)
+        }
     }
 }

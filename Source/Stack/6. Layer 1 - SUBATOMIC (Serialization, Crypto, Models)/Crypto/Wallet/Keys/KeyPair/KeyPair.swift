@@ -8,13 +8,15 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// Holds an EC private key and public key
 public struct KeyPair:
     PublicKeyOwner,
-    Signing {
-    // swiftlint:enable colon
+    Signing,
+    Hashable
+{
+    // swiftlint:enable colon opening_brace
 
     public let privateKey: PrivateKey
     public let publicKey: PublicKey
@@ -41,5 +43,16 @@ public extension KeyPair {
     func encryptPrivateKey(withPublicKey publicKeyUsedToEncrypt: PublicKey) throws -> EncryptedPrivateKey {
         let encryptedPrivateKeyData = try publicKeyUsedToEncrypt.encrypt(privateKey.asData)
         return EncryptedPrivateKey(data: encryptedPrivateKeyData)
+    }
+}
+
+// MARK: - Equtable
+public extension PublicKeyOwner {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.publicKey == rhs.publicKey
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(publicKey)
     }
 }

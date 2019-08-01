@@ -64,7 +64,7 @@ public extension PublicKey {
 // MARK: - Sharded
 public extension PublicKey {
     var shard: Shard {
-        return hashId.shard
+        return hashEUID.shard
     }
 }
 
@@ -79,6 +79,13 @@ public extension PublicKey {
 public extension PublicKey {
     var radixHash: RadixHash {
         return RadixHash(unhashedData: compressedData)
+    }
+}
+
+// MARK: - Equtable
+public extension PublicKey {
+    static func == (lhs: PublicKey, rhs: PublicKey) -> Bool {
+        return lhs.compressedData == rhs.compressedData
     }
 }
 

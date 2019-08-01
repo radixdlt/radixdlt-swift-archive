@@ -14,18 +14,18 @@ class CreateTokenActionTests: XCTestCase {
     
     func testAssertThatInitialSupplyMustMatchGranularity() {
         
-        func createGran3(initialSupply: NonNegativeAmount) throws -> CreateTokenAction {
+        func createGran3(initialSupply: Supply) throws -> CreateTokenAction {
             return try createAction(supply: .mutable(initial: initialSupply), granularity: 3)
         }
         
-        func assertThrows(initialSupply: NonNegativeAmount) {
+        func assertThrows(initialSupply: Supply) {
             XCTAssertThrowsSpecificError(
                 try createGran3(initialSupply: initialSupply),
                 CreateTokenAction.Error.initialSupplyNotMultipleOfGranularity
             )
         }
         
-        func assertNoThrow(initialSupply: NonNegativeAmount) {
+        func assertNoThrow(initialSupply: Supply) {
             XCTAssertNoThrow(try createGran3(initialSupply: initialSupply))
         }
         
@@ -63,7 +63,13 @@ private extension CreateTokenActionTests {
 // MARK: - IRRELEVANT For this test
 private extension Address {
     static var irrelevant: Address {
-        return RadixIdentity(magic: .irrelevant).address
+        return Address(magic: .irrelevant, publicKey: .irrelevant)
+    }
+}
+
+private extension PublicKey {
+    static var irrelevant: PublicKey {
+        return PublicKey(private: PrivateKey())
     }
 }
 

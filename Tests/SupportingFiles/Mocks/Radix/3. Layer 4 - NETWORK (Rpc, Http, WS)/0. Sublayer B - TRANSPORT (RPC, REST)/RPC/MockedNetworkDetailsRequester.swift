@@ -10,15 +10,15 @@ import Foundation
 @testable import RadixSDK
 import RxSwift
 
-struct MockedNetworkDetailsRequester: NodeNetworkDetailsRequesting {
-    private let single: SingleWanted<NodeNetworkDetails>
-    init(_ single: SingleWanted<NodeNetworkDetails>) {
-        self.single = single
-    }
-    init(subject: PublishSubject<NodeNetworkDetails>) {
-        self.init(subject.asObservable())
-    }
-    func networkDetails() -> SingleWanted<NodeNetworkDetails> {
-        return single
-    }
-}
+//struct MockedNetworkDetailsRequester: NodeNetworkDetailsRequesting {
+//    private let single: Single<NodeNetworkDetails>
+//    init(_ single: Single<NodeNetworkDetails>) {
+//        self.single = single
+//    }
+//    init(subject: PublishSubject<NodeNetworkDetails>) {
+//        self.init(subject.asObservable())
+//    }
+//    func networkDetails() -> Single<NodeNetworkDetails> {
+//        return single
+//    }
+//}

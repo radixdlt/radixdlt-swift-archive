@@ -37,7 +37,6 @@ public extension Encryptor {
         
         let jsonStringWithEscapedForwardSlash = String(data: jsonDataWithEscapedForwardSlash)
         
-        // swiftlint:disable:next identifier_name
         let jsonStringWithNonEscapedForwardSlash = jsonStringWithEscapedForwardSlash.replacingOccurrences(of: "\\/", with: "/")
         
         return jsonStringWithNonEscapedForwardSlash.toData(encodingForced: encoding)

@@ -74,19 +74,6 @@ private let jsonStringAtomWithJustMetaData = """
 }
 """
 
-extension RadixHash: ExpressibleByStringLiteral {
-    public init(stringLiteral value: String) {
-        do {
-            let hexString = try HexString(string: value)
-            guard hexString.length == 64 else {
-                fatalError("HexString should be 64 chars long")
-            }
-            self.init(unhashedData: hexString.asData, hashedBy: SkipHashing())
-        } catch {
-            fatalError("bad string passed")
-        }
-    }
-}
 
 public struct SkipHashing: Hashing {
     public init() {}

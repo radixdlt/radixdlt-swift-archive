@@ -11,19 +11,22 @@ import XCTest
 
 class AtomIdentifierTests: XCTestCase {
     
-    let alice = RadixIdentity(privateKey: 1)
-    let bob = RadixIdentity(privateKey: 2)
+//    let alice = RadixIdentity(privateKey: 1)
+//    let bob = RadixIdentity(privateKey: 2)
+    
+    let alice = Address(privateKey: 1)
+    let bob = Address(privateKey: 2)
     
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
         
-        XCTAssertEqual(alice.address, "JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun")
-        XCTAssertEqual(alice.address.hashId, "b1cd0a4eb6d1cea5eb288fb4474ac403")
+        XCTAssertEqual(alice, "JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun")
+        XCTAssertEqual(alice.hashEUID, "b1cd0a4eb6d1cea5eb288fb4474ac403")
         XCTAssertEqual(alice.shard, -5634836225579692379)
         
-        XCTAssertEqual(bob.address, "JFeqmatdMyjxNce38w3pEfDeJ9CV6NCkygDt3kXtivHLsP3p846")
-        XCTAssertEqual(bob.address.hashId, "e142e5bb89503e3210b1f2c893eb5c12")
+        XCTAssertEqual(bob, "JFeqmatdMyjxNce38w3pEfDeJ9CV6NCkygDt3kXtivHLsP3p846")
+        XCTAssertEqual(bob.hashEUID, "e142e5bb89503e3210b1f2c893eb5c12")
         XCTAssertEqual(bob.shard, -2214955473087480270)
     }
     
@@ -82,6 +85,16 @@ class AtomIdentifierTests: XCTestCase {
         }
     }
     
+    func testEndianessNegativeShards() {
+        let aidString: String = "126fd230a7cab9d9766f1065d498c4ac80ad2b754af1889fb1cd0a4eb6d1cea5"
+        let aidFromString = AtomIdentifier(stringLiteral: aidString)
+        let shard: Shard = -5634836225579692379
+        XCTAssertEqual(aidFromString.shard, shard)
+        XCTAssertEqual(aidString, aidFromString.hex)
+        let aidFromHashAndShard = try! AtomIdentifier(hash: "126fd230a7cab9d9766f1065d498c4ac80ad2b754af1889fdafeb316d52c54e0", shard: shard)
+        XCTAssertEqual(aidFromHashAndShard, aidFromString)
+    }
+    
     func testAtomIdentifierForAtomFromCreateTokenAction() {
         
         let createTokenAction = try! CreateTokenAction(
@@ -104,11 +117,17 @@ class AtomIdentifierTests: XCTestCase {
         
         let consumables = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TransferrableTokensParticle.self) }
         XCTAssertEqual(consumables.count, 1)
-        let startBalance = TokenBalance(spunTransferrable: consumables[0])
+        let tokenDefinitionParticles = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TokenDefinitionParticle.self) }
+        XCTAssertEqual(tokenDefinitionParticles.count, 1)
+        
+        let mapper = StatelessTransferTokensParticleGroupMapper(
+            tokenDefinitionParticle: tokenDefinitionParticles[0].particle,
+            transferrableTokensParticle: consumables[0].particle
+        )
         
         let atomFromTransfer = testAidOfAtomFrom(
             action: transferTokens,
-            mapper: StatefulTransferTokensParticleGroupMapper(currentBalance: startBalance),
+            mapper: mapper,
             expectedAidShard: .eitherIn([alice.shard, bob.shard])
         )
         XCTAssertEqual(try! atomFromTransfer.shards(), [alice.shard, bob.shard])
@@ -127,17 +146,34 @@ private enum ShardAssertion {
     }
 }
 
-struct StatefulTransferTokensParticleGroupMapper: StatelessActionToParticleGroupsMapper, TransferTokenActionToParticleGroupsMapper {
-    
-    private let currentBalance: TokenBalance
-    
-    init(currentBalance: TokenBalance) {
-        self.currentBalance = currentBalance
+struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGroupsMapper, TransferTokensActionToParticleGroupsMapper {
+
+    private let tokenDefinitionParticle: TokenDefinitionParticle
+    private let transferrableTokensParticle: TransferrableTokensParticle
+
+    init(
+        tokenDefinitionParticle: TokenDefinitionParticle,
+        transferrableTokensParticle: TransferrableTokensParticle
+    ) {
+        self.tokenDefinitionParticle = tokenDefinitionParticle
+        self.transferrableTokensParticle = transferrableTokensParticle
     }
+
+//    func particleGroups(for action: Action) -> ParticleGroups {
+//        return try! particleGroups(for: action, currentBalance: self.currentBalance)
+//    }
     
     func particleGroups(for action: Action) -> ParticleGroups {
-        return try! particleGroups(for: action, currentBalance: self.currentBalance)
+        return try! particleGroups(for: action, upParticles: [
+            AnyUpParticle(particle: tokenDefinitionParticle),
+            AnyUpParticle(particle: transferrableTokensParticle)
+            ]
+        )
     }
+    
+//    func particleGroups(for transfer: TransferTokenAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
+//
+//    }
 }
 
 private extension AtomIdentifierTests {
@@ -162,7 +198,7 @@ private extension AtomIdentifierTests {
         )
         
         let aid = atom.identifier()
-        
+        print(aid.stringValue)
         XCTAssertTrue(expectedAidShard.assert(actual: aid.shard), "Actual shard not found in expected, actual: \(aid.shard)")
         
         return atom
@@ -171,13 +207,14 @@ private extension AtomIdentifierTests {
 
 
 private let magic: Magic = 63799298
-private extension RadixIdentity {
+private extension Address {
     init() {
-        self.init(magic: magic)
+        self.init(privateKey: PrivateKey())
     }
-    
+
     init(privateKey: PrivateKey) {
-        self.init(private: privateKey, magic: magic)
+        let publicKey = PublicKey(private: privateKey)
+        self.init(magic: magic, publicKey: publicKey)
     }
 }
 

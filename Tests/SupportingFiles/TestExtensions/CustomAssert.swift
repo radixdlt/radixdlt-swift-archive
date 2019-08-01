@@ -71,13 +71,13 @@ func XCTAssertThrowsSpecificError<ExpectedError>(
         }
 }
 
-func XCTAssertThrowsSpecificErrorType<E>(
+func XCTAssertThrowsSpecificErrorType<Error>(
     _ codeThatThrows: @autoclosure () throws -> Void,
-    _ errorType: E.Type,
+    _ errorType: Error.Type,
     _ message: String = ""
-) where E: Swift.Error & Equatable {
+) where Error: Swift.Error & Equatable {
     XCTAssertThrowsError(try codeThatThrows(), message) { someError in
-        XCTAssertTrue(someError is E, "Expected code to throw error of type: <\(E.self)>, but got error: <\(someError)>, of type: <\(type(of: someError))>")
+        XCTAssertTrue(someError is Error, "Expected code to throw error of type: <\(Error.self)>, but got error: <\(someError)>, of type: <\(type(of: someError))>")
     }
 }
 

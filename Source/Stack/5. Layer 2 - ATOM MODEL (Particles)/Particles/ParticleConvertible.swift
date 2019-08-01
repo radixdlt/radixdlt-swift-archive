@@ -8,11 +8,22 @@
 
 import Foundation
 
+public typealias PublicKeyHashEUID = HashEUID
+public protocol DestinationsOwner {
+    func destinations() -> [PublicKeyHashEUID]
+}
+
 /// An abstract type bundling together particles
-public protocol ParticleConvertible: RadixHashable, DSONEncodable, Codable {
+public protocol ParticleConvertible: RadixHashable, DSONEncodable, Codable, DestinationsOwner {
     var particleType: ParticleType { get }
     
     func shardables() -> Addresses?
+}
+
+public extension DestinationsOwner where Self: Accountable {
+    func destinations() -> [PublicKeyHashEUID] {
+        return addresses.elements.map { $0.publicKey.hashEUID }.sorted()
+    }
 }
 
 public extension ParticleConvertible {
@@ -35,3 +46,4 @@ public extension ParticleConvertible where Self: RadixModelTypeStaticSpecifying 
         }
     }
 }
+

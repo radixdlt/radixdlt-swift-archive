@@ -23,8 +23,8 @@ type_name:
     warning: 3
     error: 2
   max_length:
-    warning: 50
-    error:  60
+    warning: 60
+    error:  70
 
 file_length:
   warning: 200
@@ -36,13 +36,14 @@ identifier_name:
     warning: 3
     error: 2
   max_length:
-    warning: 35
-    error:  45
+    warning: 60
+    error:  70
   excluded:
     - id
     - to
     - in
     - of
+    - by
     - i
     - r
     - s
@@ -58,5 +59,11 @@ function_parameter_count:
   - 5 # error
 
 function_body_length:
-  - 20 # warning
-  - 30 # error
+  - 30 # warning
+  - 40 # error
+
+generic_type_name:
+  max_length:
+    warning: 30
+    error:  35
+

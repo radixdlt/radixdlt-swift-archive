@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum Spin: Int, Equatable, Codable, CustomStringConvertible {
+public enum Spin: Int, Hashable, Codable, CustomStringConvertible {
     case neutral = 0
     // swiftlint:disable:next identifier_name
     case up = 1

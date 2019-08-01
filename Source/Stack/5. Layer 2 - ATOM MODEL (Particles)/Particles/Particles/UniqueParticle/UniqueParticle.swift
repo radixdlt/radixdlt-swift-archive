@@ -40,7 +40,7 @@ public struct UniqueParticle:
 public extension UniqueParticle {
 
     enum CodingKeys: String, CodingKey {
-        case serializer, version
+        case serializer, version, destinations
         case address, name, nonce
     }
     
