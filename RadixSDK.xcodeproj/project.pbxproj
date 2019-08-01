@@ -533,6 +533,7 @@
 		E6FCB65B22F0C76900ECC01B /* MintTokensAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB65A22F0C76900ECC01B /* MintTokensAction.swift */; };
 		E6FCB65E22F0C79A00ECC01B /* PutUniqueIdAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB65D22F0C79A00ECC01B /* PutUniqueIdAction.swift */; };
 		E6FCB66222F0C7FE00ECC01B /* BurnTokensAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB66122F0C7FE00ECC01B /* BurnTokensAction.swift */; };
+		E6FCB66822F2EDD500ECC01B /* AddressOfAccountDeriving.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB66722F2EDD500ECC01B /* AddressOfAccountDeriving.swift */; };
 		E6FF7E48229C1D1C00BC22EA /* Shards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF7E47229C1D1C00BC22EA /* Shards.swift */; };
 		E6FF7E4A229C1F1900BC22EA /* NonEmptySet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF7E49229C1F1900BC22EA /* NonEmptySet.swift */; };
 		E6FF7E4C229C4E8100BC22EA /* Array+AppendingElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF7E4B229C4E8100BC22EA /* Array+AppendingElement.swift */; };
@@ -1094,6 +1095,7 @@
 		E6FCB65A22F0C76900ECC01B /* MintTokensAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintTokensAction.swift; sourceTree = "<group>"; };
 		E6FCB65D22F0C79A00ECC01B /* PutUniqueIdAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutUniqueIdAction.swift; sourceTree = "<group>"; };
 		E6FCB66122F0C7FE00ECC01B /* BurnTokensAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurnTokensAction.swift; sourceTree = "<group>"; };
+		E6FCB66722F2EDD500ECC01B /* AddressOfAccountDeriving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressOfAccountDeriving.swift; sourceTree = "<group>"; };
 		E6FF7E47229C1D1C00BC22EA /* Shards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shards.swift; sourceTree = "<group>"; };
 		E6FF7E49229C1F1900BC22EA /* NonEmptySet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonEmptySet.swift; sourceTree = "<group>"; };
 		E6FF7E4B229C4E8100BC22EA /* Array+AppendingElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+AppendingElement.swift"; sourceTree = "<group>"; };
@@ -1397,14 +1399,14 @@
 			path = ThirdParty;
 			sourceTree = "<group>";
 		};
-		E637564822B7DB7000C4F9A2 /* Ledger */ = {
+		E637564822B7DB7000C4F9A2 /* AtomStore */ = {
 			isa = PBXGroup;
 			children = (
 				E626E1DF22B3F9F90046D2AC /* AtomStore.swift */,
 				E626E1E322B3FA3A0046D2AC /* AtomNotificationMode.swift */,
 				E626E1DB22B3F9AB0046D2AC /* AtomPuller.swift */,
 			);
-			path = Ledger;
+			path = AtomStore;
 			sourceTree = "<group>";
 		};
 		E637564922B7DB7700C4F9A2 /* RadixNetwork */ = {
@@ -1574,13 +1576,13 @@
 			path = Mocks;
 			sourceTree = "<group>";
 		};
-		E6550EE6224BBD9100160267 /* Node+Discovery */ = {
+		E6550EE6224BBD9100160267 /* Node */ = {
 			isa = PBXGroup;
 			children = (
 				E6ED1A2B21F7CE9C00654105 /* Node.swift */,
 				E689DBBC225F9B6700340CF3 /* URLFormatter.swift */,
 			);
-			path = "Node+Discovery";
+			path = Node;
 			sourceTree = "<group>";
 		};
 		E672562A228AB284004631F1 /* Radix */ = {
@@ -1743,6 +1745,7 @@
 				E689DB82225F655100340CF3 /* RadixApplicationClient.swift */,
 				E6CABA0C22D4BC9200B6D00C /* RadixApplicationClient+Array+Mapper+Reducers.swift */,
 				E6CABA0822D4BC6300B6D00C /* SigningError.swift */,
+				E6FCB66722F2EDD500ECC01B /* AddressOfAccountDeriving.swift */,
 				E626E1ED22B3FDA70046D2AC /* StrategyForWhenActionRequiresSigningKeyWhichIsNotPresent.swift */,
 				E626E1EB22B3FD390046D2AC /* SubmitAtomError.swift */,
 				E626E1FB22B41A4F0046D2AC /* FeeMapper.swift */,
@@ -1756,8 +1759,8 @@
 			children = (
 				E689DB87225F77E500340CF3 /* 0. Layer 7 - APPLICATION (Transactions, Balances) */,
 				E689DB88225F77FF00340CF3 /* 1. Layer 6 - LEDGER (Submit & subscribe atoms) */,
-				E689DB89225F782600340CF3 /* 2. Layer 5 - NODE CONNECTION (Universe, Node) */,
-				E689DB9D225F84C400340CF3 /* 3. Layer 4 - NETWORK (Rpc, Http, WS) */,
+				E689DB89225F782600340CF3 /* 2. Layer 5 - UNIVERSE (Universe, Node) */,
+				E689DB9D225F84C400340CF3 /* 3. Layer 4 - NETWORKING (Rpc, Http, WS) */,
 				E689DB8C225F78CA00340CF3 /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */,
 				E689DB8D225F7A1400340CF3 /* 5. Layer 2 - ATOM MODEL (Particles) */,
 				E6E278732271CD1C0067D46E /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */,
@@ -1781,21 +1784,21 @@
 		E689DB88225F77FF00340CF3 /* 1. Layer 6 - LEDGER (Submit & subscribe atoms) */ = {
 			isa = PBXGroup;
 			children = (
-				E637564922B7DB7700C4F9A2 /* RadixNetwork */,
-				E637564822B7DB7000C4F9A2 /* Ledger */,
-				E689DBA0225F86ED00340CF3 /* NodeInfo */,
+				E637564822B7DB7000C4F9A2 /* AtomStore */,
 			);
 			path = "1. Layer 6 - LEDGER (Submit & subscribe atoms)";
 			sourceTree = "<group>";
 		};
-		E689DB89225F782600340CF3 /* 2. Layer 5 - NODE CONNECTION (Universe, Node) */ = {
+		E689DB89225F782600340CF3 /* 2. Layer 5 - UNIVERSE (Universe, Node) */ = {
 			isa = PBXGroup;
 			children = (
+				E689DBA0225F86ED00340CF3 /* NodeInfo */,
+				E637564922B7DB7700C4F9A2 /* RadixNetwork */,
 				E6FCB66022F0C7DE00ECC01B /* NodeActions */,
 				E689DB7F225F644D00340CF3 /* Universe */,
-				E6550EE6224BBD9100160267 /* Node+Discovery */,
+				E6550EE6224BBD9100160267 /* Node */,
 			);
-			path = "2. Layer 5 - NODE CONNECTION (Universe, Node)";
+			path = "2. Layer 5 - UNIVERSE (Universe, Node)";
 			sourceTree = "<group>";
 		};
 		E689DB8A225F786500340CF3 /* 0. Sublayer B - TRANSPORT (RPC, REST) */ = {
@@ -1909,13 +1912,13 @@
 			path = UnallocatedTokensParticle;
 			sourceTree = "<group>";
 		};
-		E689DB9D225F84C400340CF3 /* 3. Layer 4 - NETWORK (Rpc, Http, WS) */ = {
+		E689DB9D225F84C400340CF3 /* 3. Layer 4 - NETWORKING (Rpc, Http, WS) */ = {
 			isa = PBXGroup;
 			children = (
 				E689DB8A225F786500340CF3 /* 0. Sublayer B - TRANSPORT (RPC, REST) */,
 				E689DB8B225F788000340CF3 /* 1. Sublayer A - NETWORK (Websocket, HTTP)  */,
 			);
-			path = "3. Layer 4 - NETWORK (Rpc, Http, WS)";
+			path = "3. Layer 4 - NETWORKING (Rpc, Http, WS)";
 			sourceTree = "<group>";
 		};
 		E689DBA0225F86ED00340CF3 /* NodeInfo */ = {
@@ -3021,8 +3024,8 @@
 			children = (
 				E6E279AA2271CE250067D46E /* 0. Layer 7 - APPLICATION (Transactions, Balances) */,
 				E6E27A092271CE250067D46E /* 1. Layer 6 - LEDGER (Submit & subscribe atoms) */,
-				E6E279A32271CE250067D46E /* 2. Layer 5 - NODE CONNECTION (Universe, Node) */,
-				E6E279AD2271CE250067D46E /* 3. Layer 4 - NETWORK (Rpc, Http, WS) */,
+				E6E279A32271CE250067D46E /* 2. Layer 5 - UNIVERSE (Universe, Node) */,
+				E6E279AD2271CE250067D46E /* 3. Layer 4 - NETWORKING (Rpc, Http, WS) */,
 				E6E27A0D2271CE250067D46E /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */,
 				E6E27A0B2271CE250067D46E /* 5. Layer 2 - ATOM MODEL (Particles) */,
 				E6E279B72271CE250067D46E /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */,
@@ -3030,14 +3033,14 @@
 			path = Radix;
 			sourceTree = "<group>";
 		};
-		E6E279A32271CE250067D46E /* 2. Layer 5 - NODE CONNECTION (Universe, Node) */ = {
+		E6E279A32271CE250067D46E /* 2. Layer 5 - UNIVERSE (Universe, Node) */ = {
 			isa = PBXGroup;
 			children = (
 				E6E279A42271CE250067D46E /* NodeDiscovery */,
 				E6E279A62271CE250067D46E /* URLFormatter */,
 				E6E279A92271CE250067D46E /* Universe */,
 			);
-			path = "2. Layer 5 - NODE CONNECTION (Universe, Node)";
+			path = "2. Layer 5 - UNIVERSE (Universe, Node)";
 			sourceTree = "<group>";
 		};
 		E6E279A42271CE250067D46E /* NodeDiscovery */ = {
@@ -3075,12 +3078,12 @@
 			path = "0. Layer 7 - APPLICATION (Transactions, Balances)";
 			sourceTree = "<group>";
 		};
-		E6E279AD2271CE250067D46E /* 3. Layer 4 - NETWORK (Rpc, Http, WS) */ = {
+		E6E279AD2271CE250067D46E /* 3. Layer 4 - NETWORKING (Rpc, Http, WS) */ = {
 			isa = PBXGroup;
 			children = (
 				E6E279AF2271CE250067D46E /* 0. Sublayer B - TRANSPORT (RPC, REST) */,
 			);
-			path = "3. Layer 4 - NETWORK (Rpc, Http, WS)";
+			path = "3. Layer 4 - NETWORKING (Rpc, Http, WS)";
 			sourceTree = "<group>";
 		};
 		E6E279AF2271CE250067D46E /* 0. Sublayer B - TRANSPORT (RPC, REST) */ = {
@@ -3879,6 +3882,7 @@
 				E6E279502271CD1C0067D46E /* JSONPrefix.swift in Sources */,
 				E699189E22F050AB00AF130F /* TransferredTokens.swift in Sources */,
 				E626E20222B41B750046D2AC /* AnyStatelessActionToParticleGroupsMapper.swift in Sources */,
+				E6FCB66822F2EDD500ECC01B /* AddressOfAccountDeriving.swift in Sources */,
 				E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */,
 				E62EFDCE224937A400B6DAD6 /* HTTPRequestInterceptor.swift in Sources */,
 				E6CB4B3722C5FBAE00B7382A /* ObservableType_Extensions.swift in Sources */,
