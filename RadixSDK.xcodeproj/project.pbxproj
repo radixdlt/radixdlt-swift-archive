@@ -504,7 +504,6 @@
 		E6ED1A6521F8E69000654105 /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A6421F8E69000654105 /* NodeInfo.swift */; };
 		E6ED1A7821F8E78900654105 /* Optional+OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */; };
 		E6ED1A7C21F8E7E000654105 /* ObservableType_Extensions_Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A7B21F8E7E000654105 /* ObservableType_Extensions_Optional.swift */; };
-		E6F548372274A37100EE6311 /* RESTClientsRetainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F548362274A37100EE6311 /* RESTClientsRetainer.swift */; };
 		E6F548392277022500EE6311 /* GetTokenBalanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F548382277022500EE6311 /* GetTokenBalanceTests.swift */; };
 		E6F5483D22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */; };
 		E6F5483F22771E5200EE6311 /* UserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5483E22771E5200EE6311 /* UserAction.swift */; };
@@ -1078,7 +1077,6 @@
 		E6ED1A6421F8E69000654105 /* NodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInfo.swift; sourceTree = "<group>"; };
 		E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+OptionalType.swift"; sourceTree = "<group>"; };
 		E6ED1A7B21F8E7E000654105 /* ObservableType_Extensions_Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableType_Extensions_Optional.swift; sourceTree = "<group>"; };
-		E6F548362274A37100EE6311 /* RESTClientsRetainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTClientsRetainer.swift; sourceTree = "<group>"; };
 		E6F548382277022500EE6311 /* GetTokenBalanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetTokenBalanceTests.swift; sourceTree = "<group>"; };
 		E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatelessActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E6F5483E22771E5200EE6311 /* UserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAction.swift; sourceTree = "<group>"; };
@@ -1546,7 +1544,6 @@
 				E6CABA1022D4C36300B6D00C /* RPCClientError.swift */,
 				E62EFDFD224A4EC100B6DAD6 /* RPCClient.swift */,
 				E6CABA1222D4C39000B6D00C /* AtomSubscriptionCancelling.swift */,
-				E6F548362274A37100EE6311 /* RESTClientsRetainer.swift */,
 				E6474ADE22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift */,
 				E6474ADD22663D91009C4FDC /* JSONParameters */,
 				E6474AF022679261009C4FDC /* RPCRequest */,
@@ -4124,7 +4121,6 @@
 				E637564722B7CEFA00C4F9A2 /* RadixNodeState.swift in Sources */,
 				E6D15681227056F800AC3438 /* CreateTokenAction.swift in Sources */,
 				E6F548582277459A00EE6311 /* Amount+CompareWithAnyAmount.swift in Sources */,
-				E6F548372274A37100EE6311 /* RESTClientsRetainer.swift in Sources */,
 				E69E752722A1903600AC631B /* AtomToDecryptedMessageMapper.swift in Sources */,
 				E6E279882271CD1C0067D46E /* Symbol.swift in Sources */,
 				E6025404225CC413004B2F94 /* UniverseConfig+Presets.swift in Sources */,

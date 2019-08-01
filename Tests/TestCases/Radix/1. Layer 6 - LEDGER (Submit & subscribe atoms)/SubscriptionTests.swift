@@ -118,14 +118,3 @@ class SubscriptionTests: LocalhostNodeTest {
 
 //private let magic: Magic = 63799298
 private let xrdAddress: Address = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
-//
-//
-//private extension RadixIdentity {
-//    init(privateKey: PrivateKey) {
-//        self.init(private: privateKey, magic: magic)
-//    }
-//
-//    init() {
-//        self.init(magic: magic)
-//    }
-//}
