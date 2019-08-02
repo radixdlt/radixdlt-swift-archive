@@ -27,17 +27,17 @@ import RxSwift
 
 public final class RadixJsonRpcMethodEpic<Request, Result>: NetworkWebsocketEpic where Request: JsonRpcMethodNodeAction, Result: JsonRpcResultAction {
     
-    public typealias MethodCall = BiFunction<RPCClient, Request, Single<Result>>
+    public typealias MethodCall = (RPCClient, Request) -> Single<Result>
     
     public let webSockets: WebSocketsEpic.WebSockets
     private let methodCall: MethodCall
     
     private init(
         webSockets: WebSocketsEpic.WebSockets,
-        methodCall: @escaping (RPCClient, Request) -> Single<Result>
+        methodCall: @escaping MethodCall
     ) {
         self.webSockets = webSockets
-        self.methodCall = BiFunction(methodCall)
+        self.methodCall = methodCall
     }
 }
 
@@ -49,7 +49,7 @@ public extension RadixJsonRpcMethodEpic {
                 return self.waitForConnectionReturnWS(toNode: rpcMethod.node)
                     .map { DefaultRPCClient(channel: $0) }
                     .flatMap { rpcClient -> Single<Result> in
-                        return self.methodCall.apply(rpcClient, rpcMethod)
+                        return self.methodCall(rpcClient, rpcMethod)
                     }
             }.map { $0 }
     }

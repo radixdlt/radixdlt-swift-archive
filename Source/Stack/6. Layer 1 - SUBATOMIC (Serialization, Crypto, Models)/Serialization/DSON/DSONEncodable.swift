@@ -27,10 +27,14 @@ import SwiftCBOR
 
 // Trick so that we do not have to import `SwiftCBOR` in a lot of places
 public typealias CBOR = SwiftCBOR.CBOR
+
 public extension CBOR {
+    // Two's complement
     static func int64(_ int: Int64) -> CBOR {
         if int < 0 {
-            return CBOR.negativeInt(UInt64(abs(int)-1))
+            var absolute = UInt64(abs(int))
+            absolute -= 1
+            return CBOR.negativeInt(absolute)
         } else {
             return CBOR.unsignedInt(UInt64(int))
         }

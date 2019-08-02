@@ -42,7 +42,6 @@
 		E606FC4D22CB5E3500A7E52E /* FetchAtomsEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC4C22CB5E3500A7E52E /* FetchAtomsEpic.swift */; };
 		E606FC4F22CB5E4200A7E52E /* WebSocketEventsEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC4E22CB5E4200A7E52E /* WebSocketEventsEpic.swift */; };
 		E606FC5122CB5E4E00A7E52E /* ConnectWebSocketEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC5022CB5E4E00A7E52E /* ConnectWebSocketEpic.swift */; };
-		E606FC5322CB78B900A7E52E /* Function.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC5222CB78B900A7E52E /* Function.swift */; };
 		E612720A22F4298500DCF19C /* PositiveSupply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E612720922F4298500DCF19C /* PositiveSupply.swift */; };
 		E615C51322B790F100604E90 /* ParticleReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51222B790F100604E90 /* ParticleReducer.swift */; };
 		E615C51522B791D800604E90 /* TokenDefinitionsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51422B791D800604E90 /* TokenDefinitionsReducer.swift */; };
@@ -620,7 +619,6 @@
 		E606FC4C22CB5E3500A7E52E /* FetchAtomsEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAtomsEpic.swift; sourceTree = "<group>"; };
 		E606FC4E22CB5E4200A7E52E /* WebSocketEventsEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEventsEpic.swift; sourceTree = "<group>"; };
 		E606FC5022CB5E4E00A7E52E /* ConnectWebSocketEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectWebSocketEpic.swift; sourceTree = "<group>"; };
-		E606FC5222CB78B900A7E52E /* Function.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Function.swift; sourceTree = "<group>"; };
 		E612720922F4298500DCF19C /* PositiveSupply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositiveSupply.swift; sourceTree = "<group>"; };
 		E615C51222B790F100604E90 /* ParticleReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleReducer.swift; sourceTree = "<group>"; };
 		E615C51422B791D800604E90 /* TokenDefinitionsReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDefinitionsReducer.swift; sourceTree = "<group>"; };
@@ -1208,7 +1206,6 @@
 			isa = PBXGroup;
 			children = (
 				E606FC3C22CB46D300A7E52E /* KeyValueTuple.swift */,
-				E606FC5222CB78B900A7E52E /* Function.swift */,
 			);
 			path = DTOs;
 			sourceTree = "<group>";
@@ -3903,7 +3900,6 @@
 				E6E2797B2271CD1C0067D46E /* TokenPermission.swift in Sources */,
 				E64641ED22F3482700E05034 /* FixedSupplyTokenDefinitionParticle+Decodable.swift in Sources */,
 				E6E279612271CD1C0067D46E /* DSONEncodable.swift in Sources */,
-				E606FC5322CB78B900A7E52E /* Function.swift in Sources */,
 				E6E279552271CD1C0067D46E /* DSONOutput.swift in Sources */,
 				E61EB9AB22D87379007826D3 /* TokenDefinitionsState+Value+Partial.swift in Sources */,
 				E6E279602271CD1C0067D46E /* DSONPrefixSpecifying.swift in Sources */,

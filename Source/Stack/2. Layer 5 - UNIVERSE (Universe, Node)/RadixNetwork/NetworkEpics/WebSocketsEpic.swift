@@ -58,13 +58,14 @@ public extension NetworkWebsocketEpic {
 }
 
 public final class WebSocketsEpic: RadixNetworkEpic {
-    public typealias EpicsFromWebSockets = [Function<WebSockets, NetworkWebsocketEpic>]
+    public typealias EpicFromWebSocket = (WebSockets) -> NetworkWebsocketEpic
+    public typealias EpicsFromWebSockets = [EpicFromWebSocket]
     private let epicFromWebsockets: EpicsFromWebSockets
 
     private var _retainingVariableEpics = [NetworkWebsocketEpic]()
     
-    public init(epicFromWebsockets: [(WebSockets) -> NetworkWebsocketEpic]) {
-        self.epicFromWebsockets = epicFromWebsockets.map { Function($0) }
+    public init(epicFromWebsockets: EpicsFromWebSockets) {
+        self.epicFromWebsockets = epicFromWebsockets
     }
 }
 
@@ -73,8 +74,8 @@ public extension WebSocketsEpic {
         let webSockets = WebSockets()
         return Observable.merge(
             epicFromWebsockets
-                .map { [unowned self] in
-                    let newEpic = $0.apply(webSockets)
+                .map { [unowned self] epicFromWebSocket in
+                    let newEpic = epicFromWebSocket(webSockets)
                     self._retainingVariableEpics.append(newEpic)
                     return newEpic
                 }
