@@ -36,13 +36,121 @@ public extension MintTokensActionToParticleGroupsMapper {
     }
 }
 
-public final class DefaultMintTokensActionToParticleGroupsMapper: MintTokensActionToParticleGroupsMapper {
+public final class DefaultMintTokensActionToParticleGroupsMapper: MintTokensActionToParticleGroupsMapper, Throwing {
     public init() {}
 }
 
 public extension DefaultMintTokensActionToParticleGroupsMapper {
+    
     typealias Action = MintTokensAction
+    
     func particleGroups(for action: Action, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
-        implementMe()
+        try ensureTokenExists(mintAction: action, upParticles: upParticles)
+        
+        let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
+            transitioner: { try TransferrableTokensParticle(amount: $0, unallocatedToken: $1, address: action.ownerOfTokensToMint) },
+            transitionedCombiner: { $0 },
+            migrator: UnallocatedTokensParticle.init(amount:basedOn:),
+            migratedCombiner: { $0 },
+            amountMapper: { $0.amount.amount }
+        )
+        
+        let spunParticles = try transitioner.particlesFrom(mint: action, upParticles: upParticles)
+        
+        return [
+            ParticleGroup(spunParticles: spunParticles)
+        ]
+    }
+}
+
+// MARK: - Throwing
+public extension DefaultMintTokensActionToParticleGroupsMapper {
+    typealias Error = MintError
+}
+
+public enum MintError: Swift.Error, Equatable {
+    
+    case unknownToken(identifier: ResourceIdentifier)
+    
+    case tokenOverMint(
+        token: ResourceIdentifier,
+        maxSupply: NonNegativeAmount,
+        currentSupply: PositiveAmount,
+        byMintingAmount: PositiveAmount
+    )
+}
+
+private extension DefaultMintTokensActionToParticleGroupsMapper {
+    func ensureTokenExists(mintAction: MintTokensAction, upParticles: [AnyUpParticle]) throws {
+        let rri = mintAction.tokenDefinitionReferece
+        
+        let upMutableSupplyTokenDefinitionParticles = upParticles
+            .compactMap { try? UpParticle<MutableSupplyTokenDefinitionParticle>(anyUpParticle: $0) }
+            .filter { $0.particle.tokenDefinitionReference == rri }
+        
+        if upMutableSupplyTokenDefinitionParticles.isEmpty {
+            throw Error.unknownToken(identifier: rri)
+        }
+    }
+}
+
+private extension TransferrableTokensParticle {
+    
+    init(amount: NonNegativeAmount, unallocatedToken: UnallocatedTokensParticle, address: Address) throws {
+        let positiveAmount = try PositiveAmount(nonNegative: amount)
+        try self.init(
+            amount: positiveAmount,
+            address: address,
+            tokenDefinitionReference: unallocatedToken.tokenDefinitionReference,
+            permissions: unallocatedToken.permissions,
+            granularity: unallocatedToken.granularity
+        )
+    }
+}
+
+private extension UnallocatedTokensParticle {
+    init(amount nonNegativeAmount: NonNegativeAmount, basedOn unallocatedToken: UnallocatedTokensParticle) throws {
+        let amount = try Supply(nonNegativeAmount: nonNegativeAmount)
+        self.init(
+            amount: amount,
+            tokenDefinitionReference: unallocatedToken.tokenDefinitionReference,
+            permissions: unallocatedToken.permissions,
+            granularity: unallocatedToken.granularity
+        )
+    }
+}
+
+private extension FungibleParticleTransitioner where From == UnallocatedTokensParticle, To == TransferrableTokensParticle {
+    func transition(mint: MintTokensAction, upParticles: [AnyUpParticle]) throws -> Transition {
+        let rri = mint.tokenDefinitionReferece
+
+        let upUnallocatedParticles = upParticles
+            .compactMap { try? UpParticle<UnallocatedTokensParticle>(anyUpParticle: $0) }
+            .filter { $0.particle.tokenDefinitionReference == rri }
+        
+        let unallocatedTokensParticles = upUnallocatedParticles.map { $0.particle }
+        
+        let transition: Transition
+        do {
+            transition = try self.transition(unconsumedFungibles: unallocatedTokensParticles, toAmount: mint.amount.asNonNegative)
+        } catch Error.notEnoughFungibles(_, let balance) {
+            
+            guard let currentSupply = try? Supply.subtractingFromMax(amount: balance) else {
+                incorrectImplementation("Should alsways be able to derive current supply.")
+            }
+            
+            throw MintError.tokenOverMint(
+                token: rri,
+                maxSupply: Supply.maxAmountValue,
+                currentSupply: currentSupply,
+                byMintingAmount: mint.amount
+            )
+        }
+        return transition
+    }
+    
+    func particlesFrom(mint: MintTokensAction, upParticles: [AnyUpParticle]) throws -> [AnySpunParticle] {
+        let transition = try self.transition(mint: mint, upParticles: upParticles)
+        return transition.toSpunParticles()
     }
 }

@@ -91,6 +91,20 @@ private extension TokenDefinitionsStateReducerTests {
     }
 }
 
+private extension TransferrableTokensParticle {
+    init(
+        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
+        amount: PositiveAmount) throws {
+        try self.init(
+            amount: amount,
+            address: token.address,
+            tokenDefinitionReference: token.tokenDefinitionReference,
+            permissions: token.permissions,
+            granularity: token.granularity
+        )
+    }
+}
+
 private func makeMutableSupplyTokenDefinitionParticle(tokenPermissions: TokenPermissions) -> MutableSupplyTokenDefinitionParticle {
     return MutableSupplyTokenDefinitionParticle(
         symbol: "TEST",

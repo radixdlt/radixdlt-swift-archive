@@ -27,6 +27,7 @@ import Foundation
 public struct MintTokensAction: UserAction {
     public let tokenDefinitionReferece: ResourceIdentifier
     public let amount: PositiveAmount
+    public let ownerOfTokensToMint: Address
 }
 
 public extension MintTokensAction {

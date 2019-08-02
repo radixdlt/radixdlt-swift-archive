@@ -79,33 +79,6 @@ public extension TransferrableTokensParticle {
     }
 }
 
-// MARK: - From MutableSupplyTokenDefinitionParticle
-public extension TransferrableTokensParticle {
-    init(
-        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
-        amount: PositiveAmount) throws {
-        try self.init(
-            amount: amount,
-            address: token.address,
-            tokenDefinitionReference: token.tokenDefinitionReference,
-            permissions: token.permissions,
-            granularity: token.granularity
-        )
-    }
-    
-    init(
-        fixedSupplyToken token: FixedSupplyTokenDefinitionParticle,
-        amount: PositiveAmount) throws {
-        try self.init(
-            amount: amount,
-            address: token.address,
-            tokenDefinitionReference: token.tokenDefinitionReference,
-            permissions: TokenPermissions.empty,
-            granularity: token.granularity
-        )
-    }
-}
-
 // MARK: Decodable
 public extension TransferrableTokensParticle {
     

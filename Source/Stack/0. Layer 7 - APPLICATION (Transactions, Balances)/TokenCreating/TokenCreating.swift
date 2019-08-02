@@ -27,8 +27,6 @@ import RxSwift
 
 public protocol TokenCreating {
     
-    var addressOfActiveAccount: Address { get }
-    
     /// Creates a new kind of Token
     func create(token: CreateTokenAction) -> ResultOfUserAction
     
@@ -38,15 +36,16 @@ public protocol TokenCreating {
 public extension TokenCreating {
     
     func createToken(
+        creator: Ownable,
         name: Name,
         symbol: Symbol,
         description: Description,
         supply initialSupplyType: CreateTokenAction.InitialSupply,
         granularity: Granularity = .default
-        ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
         let createTokenAction = try CreateTokenAction(
-            creator: addressOfActiveAccount,
+            creator: creator.address,
             name: name,
             symbol: symbol,
             description: description,
@@ -55,5 +54,25 @@ public extension TokenCreating {
         )
         
         return (create(token: createTokenAction), createTokenAction.identifier)
+    }
+}
+
+public extension TokenCreating where Self: ActiveAccountOwner {
+   
+    func createToken(
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        supply initialSupplyType: CreateTokenAction.InitialSupply,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+        
+        return try createToken(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: initialSupplyType
+        )
     }
 }

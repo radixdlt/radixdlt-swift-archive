@@ -39,6 +39,21 @@ public extension Function {
     }
 }
 
+public struct UnaryOperation<Argument> {
+    
+    private let _apply: (Argument) -> Argument
+    
+    public init(_ apply: @escaping (Argument) -> Argument) {
+        self._apply = apply
+    }
+}
+
+public extension UnaryOperation {
+    func apply(_ argument: Argument) -> Argument {
+        return self._apply(argument)
+    }
+}
+
 public struct BiFunction<Argument0, Argument1, Return> {
     
     private let _apply: (Argument0, Argument1) -> Return

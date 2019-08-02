@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,38 +24,34 @@
 
 import Foundation
 
-/// A transfer of a non-zero amount of a certain token between two Radix accounts
-public struct TransferTokenAction: UserAction, TokenTransfer {
+public protocol TokenMinting {
     
-    public let sender: Address
-    public let recipient: Address
-    public let amount: PositiveAmount
-    public let tokenResourceIdentifier: ResourceIdentifier
-    
-    public let attachment: Data?
-    
-    public init(
-        from sender: Ownable,
-        to recipient: Ownable,
+    /// Mints new tokens of the TokenDefinition kind
+    func mintTokens(_ action: MintTokensAction) -> ResultOfUserAction
+}
+
+public extension TokenMinting {
+    func mintTokens(
         amount: PositiveAmount,
-        tokenResourceIdentifier: ResourceIdentifier,
-        attachment: Data? = nil
-    ) {
-        self.sender = sender.address
-        self.recipient = recipient.address
-        self.amount = amount
-        self.tokenResourceIdentifier = tokenResourceIdentifier
-        self.attachment = attachment
+        ofType tokenDefinitionReferece: ResourceIdentifier,
+        credit ownerOfTokensToMint: Ownable
+    ) -> ResultOfUserAction {
+    
+        let mintAction = MintTokensAction(
+            tokenDefinitionReferece: tokenDefinitionReferece,
+            amount: amount,
+            ownerOfTokensToMint: ownerOfTokensToMint.address
+        )
+        
+        return mintTokens(mintAction)
     }
 }
 
-public extension TransferTokenAction {
-    var nameOfAction: UserActionName { return .transferTokens }
-}
-
-public extension TransferTokenAction {
-    var metaDataFromAttachmentOrEmpty: MetaData {
-        guard let attachment = attachment else { return [:] }
-        return [.attachment: Base64String(data: attachment).stringValue]
+public extension TokenMinting where Self: ActiveAccountOwner {
+    func mintTokens(
+        amount: PositiveAmount,
+        ofType tokenDefinitionReferece: ResourceIdentifier
+    ) -> ResultOfUserAction {
+        return mintTokens(amount: amount, ofType: tokenDefinitionReferece, credit: addressOfActiveAccount)
     }
 }

@@ -144,6 +144,9 @@ class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
     }
 }
 
+typealias ParticleHashId = HashEUID
+
+
 private extension UniverseConfigBetanetJSONDecodingTest {
     
     func configWithName(_ nameOfConfig: String) -> UniverseConfig? {

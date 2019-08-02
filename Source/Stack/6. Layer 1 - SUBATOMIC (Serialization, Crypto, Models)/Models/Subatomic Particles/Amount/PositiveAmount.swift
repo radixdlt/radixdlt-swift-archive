@@ -64,6 +64,13 @@ public extension PositiveAmount {
     }
 }
 
+// MARK: - To NonNegativeAmount
+public extension PositiveAmount {
+    var asNonNegative: NonNegativeAmount {
+        return NonNegativeAmount(positive: self)
+    }
+}
+
 // MARK: - From SignedAmount
 public extension PositiveAmount {
     init(signedAmount: SignedAmount) throws {
