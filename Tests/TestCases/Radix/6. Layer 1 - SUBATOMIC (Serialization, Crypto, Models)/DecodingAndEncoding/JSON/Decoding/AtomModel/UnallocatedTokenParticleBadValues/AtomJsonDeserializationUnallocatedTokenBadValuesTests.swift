@@ -47,7 +47,7 @@ class AtomJsonDeserializationUnallocatedTokenBadValuesTests: AtomJsonDeserializa
                                     "granularity": ":u20:1",
                                     "nonce": 992284943125945,
                                     "permissions": {
-                                        "mint": ":str:token_creation_only",
+                                        "mint": ":str:token_owner_only",
                                         "burn": ":str:none"
                                     },
                                     "amount": ":u20:100000",

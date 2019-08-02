@@ -23,3 +23,8 @@
 //
 
 import Foundation
+
+public enum SupplyType: Int, Hashable {
+    case fixed
+    case mutable
+}

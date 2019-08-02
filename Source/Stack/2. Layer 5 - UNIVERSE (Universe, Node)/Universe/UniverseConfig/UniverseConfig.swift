@@ -77,12 +77,12 @@ public struct UniverseConfig:
         
         try UniverseConfig.nativeTokenDefinitionFrom(genesis: genesis)
         
-        guard
-            let hashIdFromApi = hashIdFromApi,
-            hashIdFromApi == self.hashEUID
-        else {
-            throw Error.hashIdFromApiDoesNotMatchCalculated
+        if let hashIdFromApi = hashIdFromApi {
+            guard hashIdFromApi == self.hashEUID else {
+                throw Error.hashIdFromApiDoesNotMatchCalculated
+            }
         }
+  
     }
 }
 
@@ -185,8 +185,8 @@ private extension UniverseConfig {
     @discardableResult
     static func nativeTokenDefinitionFrom(genesis: Atoms) throws -> TokenDefinition {
         let tokenDefinitions: [TokenDefinition] = genesis.atoms
-            .flatMap { $0.particlesOfType(TokenDefinitionParticle.self, spin: .up) }
-            .map { TokenDefinition(particle: $0) }
+            .flatMap { $0.particlesOfType(FixedSupplyTokenDefinitionParticle.self, spin: .up) }
+            .map { TokenDefinition(tokenConvertible: $0) }
         
         let count = tokenDefinitions.count
         if count == 1 {

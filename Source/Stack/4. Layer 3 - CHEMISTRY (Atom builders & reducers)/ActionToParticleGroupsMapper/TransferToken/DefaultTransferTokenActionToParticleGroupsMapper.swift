@@ -53,16 +53,21 @@ public extension TransferTokensActionToParticleGroupsMapper {
             )
         }
         
-        guard let tokenDefinitionParticle = upParticles.compactMap({ $0.particle as? TokenDefinitionParticle }).first(where: { $0.identifier == rri }) else {
-            log.warning("Expected to found TokenDefinitionParticle with RRI: \(rri), amongst up particles: \(upParticles), but found none.")
+        let tokenDefinition: TokenConvertible
+        if let mutableSupplyTokenDefinitionParticle = upParticles.compactMap({ $0.particle as? MutableSupplyTokenDefinitionParticle }).first(where: { $0.tokenDefinitionReference == rri }) {
+            tokenDefinition = mutableSupplyTokenDefinitionParticle
+        } else if let fixedSupplyTokenDefinitionsParticle =  upParticles.compactMap({ $0.particle as? FixedSupplyTokenDefinitionParticle }).first(where: { $0.tokenDefinitionReference == rri }) {
+            tokenDefinition = fixedSupplyTokenDefinitionsParticle
+        } else {
+            log.warning("Expected to found MutableSupplyTokenDefinitionParticle or FixedSupplyTokenDefinitionParticle with RRI: \(rri), amongst up particles: \(upParticles), but found none.")
             throw TransferError.foundNoTokenDefinition(forIdentifier: rri)
         }
         
-        guard transfer.amount.isExactMultipleOfGranularity(tokenDefinitionParticle.granularity) else {
-            throw TransferError.amountNotMultipleOfGranularity(amount: transfer.amount, tokenGranularity: tokenDefinitionParticle.granularity)
+        guard transfer.amount.isExactMultipleOfGranularity(tokenDefinition.granularity) else {
+            throw TransferError.amountNotMultipleOfGranularity(amount: transfer.amount, tokenGranularity: tokenDefinition.granularity)
         }
         
-        var (particles, remainder) = transferToRecipientInParticlesWithRemainder(upTransferrableParticles: upTransferrableParticles, transfer: transfer)
+        var (particles, remainder) = try transferToRecipientInParticlesWithRemainder(upTransferrableParticles: upTransferrableParticles, transfer: transfer)
 
         guard let tokensToRecipient = particles.firstParticle(ofType: TransferrableTokensParticle.self, spin: .up) else {
             incorrectImplementation("Should have created a Transfer to the recipient")
@@ -70,7 +75,7 @@ public extension TransferTokensActionToParticleGroupsMapper {
         
         // Remainder to sender
         if let remainder = remainder {
-            let returnedToSender = TransferrableTokensParticle.returnToSender(
+            let returnedToSender = try TransferrableTokensParticle.returnToSender(
                 transfer.sender,
                 amount: remainder,
                 permissions: tokensToRecipient.permissions,
@@ -111,7 +116,7 @@ private extension TransferTokensActionToParticleGroupsMapper {
     func transferToRecipientInParticlesWithRemainder(
         upTransferrableParticles: [UpParticle<TransferrableTokensParticle>],
         transfer: TransferTokenAction
-    ) -> (particles: [AnySpunParticle], remainder: PositiveAmount?) {
+    ) throws -> (particles: [AnySpunParticle], remainder: PositiveAmount?) {
         
         let tokenConsumables = upTransferrableParticles.map { $0.particle }
 
@@ -124,7 +129,7 @@ private extension TransferTokensActionToParticleGroupsMapper {
         var consumedTokens = [AnySpunParticle]()
         
         for unspentToken in tokenConsumables where !isTransactionAmountCoveredYet() {
-            consumerQuantity += unspentToken.amount
+            consumerQuantity += NonNegativeAmount(positive: unspentToken.amount)
             consumedTokens += unspentToken.withSpin(.down)
         }
         
@@ -133,7 +138,7 @@ private extension TransferTokensActionToParticleGroupsMapper {
         let permissions = tokenConsumables[0].permissions
         let granularity = tokenConsumables[0].granularity
         
-        let toRecipient = TransferrableTokensParticle.toRecipient(in: transfer, permissions: permissions, granularity: granularity).withSpin(.up)
+        let toRecipient = try TransferrableTokensParticle.toRecipient(in: transfer, permissions: permissions, granularity: granularity).withSpin(.up)
         
         let toRecipientParticles = toRecipient + consumedTokens
         
@@ -148,10 +153,10 @@ private extension TransferrableTokensParticle {
         in transfer: TransferTokenAction,
         permissions: TokenPermissions,
         granularity: Granularity
-    ) -> TransferrableTokensParticle {
+        ) throws -> TransferrableTokensParticle {
         
-        return TransferrableTokensParticle(
-            amount: NonNegativeAmount(positive: transfer.amount),
+        return try TransferrableTokensParticle(
+            amount: transfer.amount,
             address: transfer.recipient,
             tokenDefinitionReference: transfer.tokenResourceIdentifier,
             permissions: permissions,
@@ -167,10 +172,10 @@ private extension TransferrableTokensParticle {
         permissions: TokenPermissions,
         granularity: Granularity,
         resourceIdentifier: ResourceIdentifier
-    ) -> TransferrableTokensParticle {
+    ) throws -> TransferrableTokensParticle {
         
-        return TransferrableTokensParticle(
-            amount: NonNegativeAmount(positive: amount),
+        return try TransferrableTokensParticle(
+            amount: amount,
             address: sender,
             tokenDefinitionReference: resourceIdentifier,
             permissions: permissions,

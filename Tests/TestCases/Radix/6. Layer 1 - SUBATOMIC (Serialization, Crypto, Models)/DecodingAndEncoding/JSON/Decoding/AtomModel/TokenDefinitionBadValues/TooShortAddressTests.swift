@@ -29,7 +29,7 @@ class TooShortAddressTests: AtomJsonDeserializationChangeJson {
     
     func testJsonDecodingAddressTooShort() {
         // GIVEN
-        let badJson = self.replaceValueInParticle(for: .address, with: ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCe")
+        let badJson = self.replaceValueInParticle(for: .rri, with: ":rri:/JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCe/XRD")
 
         XCTAssertThrowsSpecificError(
             // WHEN

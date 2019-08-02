@@ -30,14 +30,14 @@ class AddressInvalidChecksumTests: AtomJsonDeserializationChangeJson {
     
     func testJsonDecodingAddressInvalidChecksum() {
         // GIVEN
-        let badJson = self.replaceValueInParticle(for: .address, with: ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCea")
+        let badJson = self.replaceValueInParticle(for: .rri, with: ":rri:/JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCea/XRD")
 
         XCTAssertThrowsSpecificError(
             // WHEN
             // I try decoding the bad json string into an Atom
             try decode(Atom.self, jsonString: badJson),
             // THEN
-            Address.Error.checksumMismatch,
+            ResourceIdentifier.Error.badAddress(error: Address.Error.checksumMismatch),
             "Decoding should fail to deserialize JSON with an invalid checksum in address"
         )
     }

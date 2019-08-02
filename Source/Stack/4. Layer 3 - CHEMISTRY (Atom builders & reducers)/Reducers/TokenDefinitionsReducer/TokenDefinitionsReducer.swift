@@ -36,8 +36,10 @@ public extension TokenDefinitionsReducer {
     
     func reduce(state: State, upParticle: AnyUpParticle) -> State {
         let particle = upParticle.particle
-        if let tokenDefinitionParticle = particle as? TokenDefinitionParticle {
-            return state.mergeWithTokenDefinitionParticle(tokenDefinitionParticle)
+        if let mutableSupplyTokenDefinitionParticle = particle as? MutableSupplyTokenDefinitionParticle {
+            return state.mergeWithTokenConvertible(mutableSupplyTokenDefinitionParticle)
+        } else if let fixedSupplyTokenDefinitionsParticle = particle as? FixedSupplyTokenDefinitionParticle {
+            return state.mergeWithTokenConvertible(fixedSupplyTokenDefinitionsParticle)
         } else if let unallocatedTokensParticle = particle as? UnallocatedTokensParticle {
             return state.mergeWithUnallocatedTokensParticle(unallocatedTokensParticle)
         } else {

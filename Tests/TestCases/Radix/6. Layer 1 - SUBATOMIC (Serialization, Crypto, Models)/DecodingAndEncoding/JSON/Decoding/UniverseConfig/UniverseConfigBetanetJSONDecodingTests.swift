@@ -114,7 +114,7 @@ class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
 //    }
 //
 //    func testTokenDefinitionParticle() {
-//        doTest(expectedHashId: "eca1b185226c606815f534ced6b2c704", particleType: TokenDefinitionParticle.self) {
+//        doTest(expectedHashId: "eca1b185226c606815f534ced6b2c704", particleType: MutableSupplyTokenDefinitionParticle.self) {
 //            """
 //            {
 //                "symbol": ":str:XRD",
@@ -122,7 +122,7 @@ class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
 //                "granularity": ":u20:1",
 //                "permissions": {
 //                    "burn": ":str:none",
-//                    "mint": ":str:token_creation_only"
+//                    "mint": ":str:token_owner_only"
 //                },
 //                "destinations": [
 //                    ":uid:56abab3870585f04d015d55adf600bc7"

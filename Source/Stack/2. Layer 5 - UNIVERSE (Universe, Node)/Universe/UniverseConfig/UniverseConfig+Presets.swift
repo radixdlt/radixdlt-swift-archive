@@ -40,12 +40,10 @@ private extension UniverseConfig {
     static func config(fromResource resource: String) -> UniverseConfig {
         guard
             case let bundle = Bundle(for: ClassInBundle.self),
-//            let path = bundle.path(forResource: resource, ofType: "json") else {
             let url = bundle.url(forResource: resource, withExtension: "json") else {
                 incorrectImplementation("Config file '\(resource)' not found in Bundle.")
         }
         do {
-//            let url = URL(fileURLWithPath: path)
             let data = try Data(contentsOf: url)
             return try
                 JSONDecoder().decode(UniverseConfig.self, from: data)

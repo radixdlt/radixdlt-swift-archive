@@ -31,7 +31,7 @@ public extension MintTokensActionToParticleGroupsMapper {
         let address = mintTokensAction.tokenDefinitionReferece.address
         return [
             AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: UnallocatedTokensParticle.self, address: address)),
-            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: TokenDefinitionParticle.self, address: address))
+            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: MutableSupplyTokenDefinitionParticle.self, address: address))
         ]
     }
 }

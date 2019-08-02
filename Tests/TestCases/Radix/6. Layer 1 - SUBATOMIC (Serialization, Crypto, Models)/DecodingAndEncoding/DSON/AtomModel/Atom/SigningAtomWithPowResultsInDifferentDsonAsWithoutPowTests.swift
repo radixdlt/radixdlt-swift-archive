@@ -35,7 +35,7 @@ import XCTest
 //    private lazy var atom: Atom = {
 //        let address = Address(magic: magic, publicKey: identity.publicKey)
 //        
-//        let tokenDefinitionParticle = TokenDefinitionParticle(
+//        let tokenDefinitionParticle = MutableSupplyTokenDefinitionParticle(
 //            symbol: "XRD",
 //            name: "Rads",
 //            description: "Native currency of Radix",

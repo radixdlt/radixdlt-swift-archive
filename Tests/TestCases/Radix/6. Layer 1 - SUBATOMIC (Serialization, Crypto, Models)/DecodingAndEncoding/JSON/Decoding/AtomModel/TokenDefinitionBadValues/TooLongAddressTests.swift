@@ -30,7 +30,7 @@ class TooLongAddressTests: AtomJsonDeserializationChangeJson {
     func testJsonDecodingTokenDefinitionParticleAddressTooLong() {
         // GIVEN
         // Json with an address with 52 chars instead of max 51
-        let badJson = self.replaceValueInParticle(for: .address, with: ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCeiA")
+        let badJson = self.replaceValueInParticle(for: .rri, with: ":rri:/JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCeiA/XRD")
 
         XCTAssertThrowsSpecificError(
             // WHEN

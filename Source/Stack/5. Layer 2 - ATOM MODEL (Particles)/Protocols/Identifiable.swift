@@ -38,7 +38,7 @@ import Foundation
 ///
 /// - seeAlso: `TokenDefinitionReferencing`
 /// - seeAlso: `ResourceIdentifier`
-/// - seeAlso: `TokenDefinitionParticle`
+/// - seeAlso: `MutableSupplyTokenDefinitionParticle`
 public protocol Identifiable:
     Accountable,
     Hashable

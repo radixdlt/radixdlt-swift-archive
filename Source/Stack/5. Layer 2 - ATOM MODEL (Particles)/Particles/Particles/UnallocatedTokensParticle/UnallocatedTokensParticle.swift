@@ -57,10 +57,10 @@ public struct UnallocatedTokensParticle:
     }
 }
 
-// MARK: - From TokenDefinitionParticle
+// MARK: - From MutableSupplyTokenDefinitionParticle
 public extension UnallocatedTokensParticle {
     init(
-        token: TokenDefinitionParticle,
+        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
         amount: Supply
     ) {
         self.init(
@@ -122,7 +122,7 @@ public extension UnallocatedTokensParticle {
 }
 
 public extension UnallocatedTokensParticle {
-    static func maxSupplyForNewToken(_ token: TokenDefinitionParticle) -> UnallocatedTokensParticle {
-        return UnallocatedTokensParticle(token: token, amount: .max)
+    static func maxSupplyForNewToken(mutableSupplyToken token: MutableSupplyTokenDefinitionParticle) -> UnallocatedTokensParticle {
+        return UnallocatedTokensParticle(mutableSupplyToken: token, amount: .max)
     }
 }

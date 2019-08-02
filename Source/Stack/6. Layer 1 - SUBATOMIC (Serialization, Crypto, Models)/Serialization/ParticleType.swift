@@ -26,7 +26,8 @@ import Foundation
 
 public enum ParticleType {
     case message
-    case tokenDefinition
+    case mutableSupplyTokenDefinition
+    case fixedSupplyTokenDefinition
     case unallocated
     case transferrable
     case resourceIdentifier
@@ -42,24 +43,26 @@ public extension ParticleType {
 internal extension ParticleType {
     init(serializer: RadixModelType) throws {
         switch serializer {
-        case .unallocatedTokensParticle:    self = .unallocated
-        case .uniqueParticle:               self = .unique
-        case .transferrableTokensParticle:  self = .transferrable
-        case .messageParticle:              self = .message
-        case .resourceIdentifierParticle:   self = .resourceIdentifier
-        case .tokenDefinitionParticle:      self = .tokenDefinition
-        default:                            throw Error.notParticle
+        case .unallocatedTokensParticle:            self = .unallocated
+        case .uniqueParticle:                       self = .unique
+        case .transferrableTokensParticle:          self = .transferrable
+        case .messageParticle:                      self = .message
+        case .resourceIdentifierParticle:           self = .resourceIdentifier
+        case .mutableSupplyTokenDefinitionParticle: self = .mutableSupplyTokenDefinition
+        case .fixedSupplyTokenDefinitionParticle:   self = .fixedSupplyTokenDefinition
+        default:                                    throw Error.notParticle
         }
     }
     
     var serializer: RadixModelType {
         switch self {
-        case .unallocated:          return .unallocatedTokensParticle
-        case .message:              return .messageParticle
-        case .unique:               return .uniqueParticle
-        case .resourceIdentifier:   return .resourceIdentifierParticle
-        case .transferrable:        return .transferrableTokensParticle
-        case .tokenDefinition:      return .tokenDefinitionParticle
+        case .unallocated:                  return .unallocatedTokensParticle
+        case .message:                      return .messageParticle
+        case .unique:                       return .uniqueParticle
+        case .resourceIdentifier:           return .resourceIdentifierParticle
+        case .transferrable:                return .transferrableTokensParticle
+        case .mutableSupplyTokenDefinition: return .mutableSupplyTokenDefinitionParticle
+        case .fixedSupplyTokenDefinition:   return .fixedSupplyTokenDefinitionParticle
         }
     }
 }

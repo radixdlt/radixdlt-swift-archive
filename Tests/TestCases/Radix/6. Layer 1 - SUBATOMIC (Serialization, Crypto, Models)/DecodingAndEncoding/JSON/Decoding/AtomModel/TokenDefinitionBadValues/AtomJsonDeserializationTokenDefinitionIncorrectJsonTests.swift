@@ -35,7 +35,7 @@ class AtomJsonDeserializationChangeJson: XCTestCase {
     
     lazy var jsonData = self.jsonString().toData()
     
-    func replaceValueInParticle(for key: TokenDefinitionParticle.CodingKeys, with replacement: Any) -> String {
+    func replaceValueInParticle(for key: MutableSupplyTokenDefinitionParticle.CodingKeys, with replacement: Any) -> String {
       return replaceValueInParticle(for: key.stringValue, with: replacement)
     }
         
@@ -123,8 +123,7 @@ private let tokenDefintionJson = """
                     "\(RadixModelType.jsonKey)": "\(RadixModelType.spunParticle.serializerId)",
                     "spin": 1,
                     "particle": {
-                        "\(RadixModelType.jsonKey)": "\(RadixModelType.tokenDefinitionParticle.serializerId)",
-                        "symbol": ":str:BAD",
+                        "\(RadixModelType.jsonKey)": "\(RadixModelType.mutableSupplyTokenDefinitionParticle.serializerId)",
                         "name": ":str:BadCoin",
                         "description": ":str:Some TokenDefinition",
                         "granularity": ":u20:1",
@@ -132,7 +131,7 @@ private let tokenDefintionJson = """
                             "burn": ":str:none",
                             "mint": ":str:none"
                         },
-                        "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                        "rri": ":rri:/JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei/BAD"
                     }
                 }
             ],

@@ -60,8 +60,4 @@ public extension TokenDefinition {
             tokenSupplyType: token.tokenSupplyType
         )
     }
-    
-    init(particle: TokenDefinitionParticle) {
-        self.init(tokenConvertible: particle)
-    }
 }

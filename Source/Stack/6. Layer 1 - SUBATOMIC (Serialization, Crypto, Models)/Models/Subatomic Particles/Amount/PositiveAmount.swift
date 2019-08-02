@@ -50,6 +50,13 @@ public extension PositiveAmount {
     }
 }
 
+// MARK: Presets
+public extension PositiveAmount {
+    static var one: PositiveAmount {
+        return PositiveAmount(validated: 1)
+    }
+}
+
 // MARK: - From NonNegativeAmount
 public extension PositiveAmount {
     init(nonNegative: NonNegativeAmount) throws {

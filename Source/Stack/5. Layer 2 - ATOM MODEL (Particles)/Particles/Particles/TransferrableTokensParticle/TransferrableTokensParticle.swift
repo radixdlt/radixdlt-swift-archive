@@ -34,6 +34,7 @@ public struct TransferrableTokensParticle:
     Accountable,
     RadixCodable,
     RadixModelTypeStaticSpecifying,
+    Throwing,
     CustomStringConvertible
 {
     // swiftlint:enable colon opening_brace
@@ -45,18 +46,23 @@ public struct TransferrableTokensParticle:
     public let granularity: Granularity
     public let planck: Planck
     public let nonce: Nonce
-    public let amount: NonNegativeAmount
+    public let amount: PositiveAmount
     public let permissions: TokenPermissions
     
     public init(
-        amount: NonNegativeAmount,
+        amount: PositiveAmount,
         address: Address,
         tokenDefinitionReference: ResourceIdentifier,
         permissions: TokenPermissions = .default,
         granularity: Granularity = .default,
         nonce: Nonce = Nonce(),
         planck: Planck = Planck()
-    ) {
+    ) throws {
+        
+        guard amount.isExactMultipleOfGranularity(granularity) else {
+            throw Error.amountNotMultipleOfGranularity(amount: amount, tokenGranularity: granularity)
+        }
+        
         self.address = address
         self.granularity = granularity
         self.nonce = nonce
@@ -67,16 +73,34 @@ public struct TransferrableTokensParticle:
     }
 }
 
-// MARK: - From TokenDefinitionParticle
+public extension TransferrableTokensParticle {
+    enum Error: Swift.Error, Equatable {
+        case amountNotMultipleOfGranularity(amount: PositiveAmount, tokenGranularity: Granularity)
+    }
+}
+
+// MARK: - From MutableSupplyTokenDefinitionParticle
 public extension TransferrableTokensParticle {
     init(
-        token: TokenDefinitionParticle,
-        amount: NonNegativeAmount) {
-        self.init(
+        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
+        amount: PositiveAmount) throws {
+        try self.init(
             amount: amount,
             address: token.address,
             tokenDefinitionReference: token.tokenDefinitionReference,
             permissions: token.permissions,
+            granularity: token.granularity
+        )
+    }
+    
+    init(
+        fixedSupplyToken token: FixedSupplyTokenDefinitionParticle,
+        amount: PositiveAmount) throws {
+        try self.init(
+            amount: amount,
+            address: token.address,
+            tokenDefinitionReference: token.tokenDefinitionReference,
+            permissions: TokenPermissions.empty,
             granularity: token.granularity
         )
     }
@@ -95,15 +119,15 @@ public extension TransferrableTokensParticle {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let address = try container.decode(Address.self, forKey: .address)
-        let permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
+        let permissions = try container.decodeIfPresent(TokenPermissions.self, forKey: .permissions) ?? TokenPermissions.empty
         
         let granularity = try container.decode(Granularity.self, forKey: .granularity)
         let nonce = try container.decode(Nonce.self, forKey: .nonce)
         let planck = try container.decode(Planck.self, forKey: .planck)
-        let amount = try container.decode(NonNegativeAmount.self, forKey: .amount)
+        let amount = try container.decode(PositiveAmount.self, forKey: .amount)
         let tokenDefinitionReference = try container.decode(ResourceIdentifier.self, forKey: .tokenDefinitionReference)
         
-        self.init(
+        try self.init(
             amount: amount,
             address: address,
             tokenDefinitionReference: tokenDefinitionReference,
@@ -122,11 +146,11 @@ public extension TransferrableTokensParticle {
             EncodableKeyValue(key: .address, value: address),
             EncodableKeyValue(key: .amount, value: amount),
             EncodableKeyValue(key: .tokenDefinitionReference, value: tokenDefinitionReference),
-            EncodableKeyValue(key: .permissions, value: permissions),
+            EncodableKeyValue(key: .permissions, nonEmpty: permissions),
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .nonce, value: nonce),
             EncodableKeyValue(key: .planck, value: planck)
-        ]
+        ].compactMap { $0 }
     }
 }
 

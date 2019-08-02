@@ -29,7 +29,7 @@ class TooLongSymbolTests: AtomJsonDeserializationChangeJson {
     
     func testJsonDecodingSymbolTooLong() {
         // GIVEN
-        let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:01234567890123456")
+        let badJson = self.replaceValueInParticle(for: .rri, with: ":rri:/JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei/0123456789123456")
         
         XCTAssertThrowsSpecificError(
             // WHEN

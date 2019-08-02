@@ -42,10 +42,6 @@ public extension TokenDefinitionsState.Value {
         self = .partial(.supply(TokenDefinitionsState.SupplyInfo(tokenSupplyStateConvertible: supplyState)))
     }
     
-    init(tokenDefinitionParticle: TokenDefinitionParticle) {
-        self.init(tokenConvertible: tokenDefinitionParticle)
-    }
-    
     init(unallocatedTokensParticle: UnallocatedTokensParticle) {
         self = .partial(.supply(TokenDefinitionsState.SupplyInfo(unallocatedTokensParticle: unallocatedTokensParticle)))
     }

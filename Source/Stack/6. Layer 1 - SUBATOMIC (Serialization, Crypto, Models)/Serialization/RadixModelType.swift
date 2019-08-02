@@ -27,31 +27,32 @@ import Foundation
 public enum RadixModelType: String, Codable, CaseIterable {
 
     // MARK: "api"
-    case radixSystem                    = "api.system"
-    case atomEvent                      = "api.atom_event"
+    case radixSystem                            = "api.system"
+    case atomEvent                              = "api.atom_event"
     
     // MARK: "crypto"
-    case signature                      = "crypto.ecdsa_signature"
-
+    case signature                              = "crypto.ecdsa_signature"
+    
     // MARK: "network"
-    case nodeInfo                       = "network.peer"
-    case udpNodeInfo                    = "network.udp_peer"
-    case tcpNodeInfo                    = "network.tcp_peer"
+    case nodeInfo                               = "network.peer"
+    case udpNodeInfo                            = "network.udp_peer"
+    case tcpNodeInfo                            = "network.tcp_peer"
     
     // MARK: "radix"
-    case shardSpace                     = "radix.shard.space"
-    case atom                           = "radix.atom"
-    case particleGroup                  = "radix.particle_group"
-    case spunParticle                   = "radix.spun_particle"
-    case universeConfig                 = "radix.universe"
-
+    case shardSpace                             = "radix.shard.space"
+    case atom                                   = "radix.atom"
+    case particleGroup                          = "radix.particle_group"
+    case spunParticle                           = "radix.spun_particle"
+    case universeConfig                         = "radix.universe"
+    
     // MARK: - Particles
-    case messageParticle                = "radix.particles.message"
-    case resourceIdentifierParticle     = "radix.particles.rri"
-    case tokenDefinitionParticle        = "radix.particles.token_definition"
-    case unallocatedTokensParticle      = "radix.particles.unallocated_tokens"
-    case transferrableTokensParticle    = "radix.particles.transferrable_tokens"
-    case uniqueParticle                 = "radix.particles.unique"
+    case messageParticle                        = "radix.particles.message"
+    case resourceIdentifierParticle             = "radix.particles.rri"
+    case fixedSupplyTokenDefinitionParticle     = "radix.particles.fixed_supply_token_definition"
+    case mutableSupplyTokenDefinitionParticle   = "radix.particles.mutable_supply_token_definition"
+    case unallocatedTokensParticle              = "radix.particles.unallocated_tokens"
+    case transferrableTokensParticle            = "radix.particles.transferrable_tokens"
+    case uniqueParticle                         = "radix.particles.unique"
 }
 
 public extension RadixModelType {

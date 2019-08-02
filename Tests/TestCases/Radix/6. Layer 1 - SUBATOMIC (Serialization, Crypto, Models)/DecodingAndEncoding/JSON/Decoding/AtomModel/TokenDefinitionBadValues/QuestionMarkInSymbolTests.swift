@@ -30,7 +30,7 @@ class QuestionMarkInSymbolTests: AtomJsonDeserializationChangeJson {
     func testJsonDecodingSymbolBadChars() {
         
         // GIVEN
-        let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:BAD?")
+        let badJson = self.replaceValueInParticle(for: .rri, with: ":rri:/JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei/BAD?")
         
         XCTAssertThrowsSpecificError(
             // WHEN

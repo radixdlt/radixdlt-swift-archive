@@ -28,21 +28,33 @@ import XCTest
 class TokenDefinitionsStateReducerTests: XCTestCase {
 
     func testTokenWithNoMint() {
-        let tokenDefinitionParticle = makeTokenDefinitionParticle(tokenPermissions: [.mint: .tokenCreationOnly])
+        let tokenDefinitionParticle = makeMutableSupplyTokenDefinitionParticle(tokenPermissions: [.mint: .all])
         
-        let expectedRri = tokenDefinitionParticle.identifier
+        let expectedRri = tokenDefinitionParticle.tokenDefinitionReference
         let reducer = TokenDefinitionsReducer()
         let state = reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
         XCTAssertNil(state.tokenState(identifier: expectedRri), "No supply info yet, cannot make state")
         guard let tokenDefinition = state.tokenDefinition(identifier: expectedRri) else { return XCTFail("expected TokenDefintion") }
         
-        assertValuesIn(tokenDefinition: tokenDefinition)
+        assertValuesIn(tokenDefinition: tokenDefinition, expectedTokenSupplyType: .mutable)
+    }
+    
+    func testFixedTokenWithNoMint() {
+        let tokenDefinitionParticle = makeFixedSupplyTokenDefinitionParticle(supply: .one)
+        
+        let expectedRri = tokenDefinitionParticle.tokenDefinitionReference
+        let reducer = TokenDefinitionsReducer()
+        let state = reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
+        XCTAssertNil(state.tokenState(identifier: expectedRri), "No supply info yet, cannot make state")
+        guard let tokenDefinition = state.tokenDefinition(identifier: expectedRri) else { return XCTFail("expected TokenDefintion") }
+        
+        assertValuesIn(tokenDefinition: tokenDefinition, expectedTokenSupplyType: .fixed)
     }
 
     func testTokenWithMint() {
-        let tokenDefinitionParticle = makeTokenDefinitionParticle(tokenPermissions: [.mint: .tokenOwnerOnly])
+        let tokenDefinitionParticle = makeMutableSupplyTokenDefinitionParticle(tokenPermissions: [.mint: .tokenOwnerOnly])
         
-        let expecteRri = tokenDefinitionParticle.identifier
+        let expecteRri = tokenDefinitionParticle.tokenDefinitionReference
         
         let hundred: PositiveAmount = 100
         
@@ -60,8 +72,8 @@ class TokenDefinitionsStateReducerTests: XCTestCase {
         XCTAssertEqual(state_Un_Td.tokenState(identifier: expecteRri)?.totalSupply, 100)
         XCTAssertEqual(state_Un_Td.tokenState(identifier: expecteRri)?.tokenSupplyType, .mutable)
 
-        // Assert that no action is performed on `TransferrableTokensParticle`. Is this really correct?
-        let transferrableTokensParticle = TransferrableTokensParticle(token: tokenDefinitionParticle, amount: .irrelevant)
+        // Assert that no action is performed on `TransferrableTokensParticle`.
+        let transferrableTokensParticle = try! TransferrableTokensParticle(mutableSupplyToken: tokenDefinitionParticle, amount: .irrelevant)
         XCTAssertEqual(state_Un, reducer.reduce(state: state_Un, upParticle: AnyUpParticle(particle: transferrableTokensParticle)))
         
     }
@@ -69,8 +81,8 @@ class TokenDefinitionsStateReducerTests: XCTestCase {
 }
 
 private extension TokenDefinitionsStateReducerTests {
-    func assertValuesIn(tokenDefinition: TokenDefinition) {
-        XCTAssertEqual(tokenDefinition.tokenSupplyType, .fixed)
+    func assertValuesIn(tokenDefinition: TokenDefinition, expectedTokenSupplyType: SupplyType) {
+        XCTAssertEqual(tokenDefinition.tokenSupplyType, expectedTokenSupplyType)
         XCTAssertEqual(tokenDefinition.symbol, "TEST")
         XCTAssertEqual(tokenDefinition.name, "Test")
         XCTAssertEqual(tokenDefinition.tokenDefinedBy, "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor")
@@ -79,8 +91,8 @@ private extension TokenDefinitionsStateReducerTests {
     }
 }
 
-private func makeTokenDefinitionParticle(tokenPermissions: TokenPermissions) -> TokenDefinitionParticle {
-    return TokenDefinitionParticle(
+private func makeMutableSupplyTokenDefinitionParticle(tokenPermissions: TokenPermissions) -> MutableSupplyTokenDefinitionParticle {
+    return MutableSupplyTokenDefinitionParticle(
         symbol: "TEST",
         name: "Test",
         description: "Testing Testing",
@@ -90,6 +102,17 @@ private func makeTokenDefinitionParticle(tokenPermissions: TokenPermissions) -> 
     )
 }
 
-private extension NonNegativeAmount {
-    static var irrelevant: NonNegativeAmount { return 42 }
+private func makeFixedSupplyTokenDefinitionParticle(supply: PositiveAmount) -> FixedSupplyTokenDefinitionParticle {
+    return FixedSupplyTokenDefinitionParticle(
+        symbol: "TEST",
+        name: "Test",
+        description: "Testing Testing",
+        address: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+        supply: supply,
+        granularity: .default
+    )
+}
+
+private extension PositiveAmount {
+    static var irrelevant: PositiveAmount { return 42 }
 }

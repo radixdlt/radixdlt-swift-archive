@@ -48,7 +48,7 @@ public extension TokenReferenceBalance {
         
         self.init(
             tokenResourceIdentifier: particle.tokenDefinitionReference,
-            amount: particle.amount,
+            amount: NonNegativeAmount(positive: particle.amount),
             owner: particle.address
         )
     }
@@ -69,9 +69,13 @@ public extension TokenReferenceBalance {
             throw Error.addressMismatch
         }
         
-        let amount: NonNegativeAmount = tokenConsumables.map({ $0.amount }).reduce(NonNegativeAmount.zero) { $0 + $1 }
+        let amount: NonNegativeAmount = tokenConsumables.map({ NonNegativeAmount(positive: $0.amount) }).reduce(NonNegativeAmount.zero) { $0 + $1 }
         
-        self.init(tokenResourceIdentifier: tokenIdentifier, amount: amount, owner: owner)
+        self.init(
+            tokenResourceIdentifier: tokenIdentifier,
+            amount: amount,
+            owner: owner
+        )
     }
     
     enum Error: Swift.Error, Equatable {

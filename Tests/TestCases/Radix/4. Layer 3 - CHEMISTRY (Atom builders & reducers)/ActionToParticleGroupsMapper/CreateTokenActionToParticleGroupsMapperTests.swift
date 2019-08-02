@@ -37,29 +37,16 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
         continueAfterFailure = false
     }
     
-    func testTokenCreationWithoutInitialSupply() {
-        
-        let createTokenAction = try! CreateTokenAction(
-            creator: address,
-            name: "Cyon",
-            symbol: "CCC",
-            description: "Cyon Crypto Coin is the worst shit coin",
-            supply: .mutable(initial: 0)
-        )
-        
-        let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
-        XCTAssertEqual(particleGroups.count, 1)
-        guard let group = particleGroups.first else { return }
-        
-        assertCorrectnessTokenCreationGroup(group, testPermissions: false)
+    func testMutableSupplyTokenCreationWithoutInitialSupply() {
+        doTestTokenCreation(initialSupply: .mutable(initial: 0))
     }
     
     func testTokenCreationWithInitialSupplyPartial() {
-        doTestTokenCreation(initialSupply: 1000)
+        doTestTokenCreation(initialSupply: .fixed(to: 1000))
     }
     
     func testTokenCreationWithInitialSupplyAll() {
-        doTestTokenCreation(initialSupply: Supply.max)
+        doTestTokenCreation(initialSupply: .fixed(to: PositiveSupply.max))
     }
     
     func testAssertMaxSupplySubtractedFromMaxIsNil() {
@@ -77,33 +64,43 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
 }
 
 private extension CreateTokenActionToParticleGroupsMapperTests {
-    func doTestTokenCreation(initialSupply: Supply) {
+    func doTestTokenCreation(initialSupply: CreateTokenAction.InitialSupply) {
         let createTokenAction = try! CreateTokenAction(
             creator: address,
             name: "Cyon",
             symbol: "CCC",
             description: "Cyon Crypto Coin is the worst shit coin",
-            supply: .fixed(to: initialSupply)
+            supply: initialSupply
         )
         
         let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
-        XCTAssertEqual(particleGroups.count, 2)
         guard let tokenCreationGroup = particleGroups.first else { return }
-        assertCorrectnessTokenCreationGroup(tokenCreationGroup)
-        let mintTokenGroup = particleGroups[1]
+        assertCorrectnessTokenCreationGroup(tokenCreationGroup, testPermissions: initialSupply.isFixed)
         
-        assertCorrectnessMintTokenGroup(
-            mintTokenGroup,
-            tokenCreationGroup: tokenCreationGroup,
-            initialSupply: initialSupply,
-            createTokenAction: createTokenAction
-        )
+    
+        
+        switch initialSupply {
+        case .fixed: break
+        case .mutable(let maybeInitial):
+            guard let mutableInitialSupply = maybeInitial,
+                mutableInitialSupply.amount > 0 else { return }
+            
+            XCTAssertEqual(particleGroups.count, 2)
+            let mintTokenGroup = particleGroups[1]
+            
+            assertCorrectnessMintTokenGroup(
+                mintTokenGroup,
+                tokenCreationGroup: tokenCreationGroup,
+                initialSupply: mutableInitialSupply.positiveAmount!,
+                createTokenAction: createTokenAction
+            )
+        }
     }
     
     func assertCorrectnessMintTokenGroup(
         _ mintTokenGroup: ParticleGroup,
         tokenCreationGroup: ParticleGroup,
-        initialSupply: Supply,
+        initialSupply initialSupplyAmount: PositiveAmount,
         createTokenAction: CreateTokenAction
         ) {
         
@@ -114,6 +111,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
                 return XCTFail("Expected UnallocatedTokensParticle at index 2 in ParticleGroup at index 0")
         }
         
+        let initialSupply = try! Supply(positiveAmount: initialSupplyAmount)
         
         let expectUnallocatedFromLeftOverSupply: Bool
         if let leftOverSupply = initialSupply.subtractedFromMax {
@@ -163,12 +161,12 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
     }
     
     
-    func assertCorrectnessTokenCreationGroup(_ group: ParticleGroup, testPermissions: Bool = true) {
+    func assertCorrectnessTokenCreationGroup(_ group: ParticleGroup, testPermissions: Bool) {
         let spunParticles = group.spunParticles
         XCTAssertEqual(spunParticles.count, 3)
         guard
             let spunRriParticle = spunParticles[0].mapToSpunParticle(with: ResourceIdentifierParticle.self),
-            let spunTokenDefinitionParticle = spunParticles[1].mapToSpunParticle(with: TokenDefinitionParticle.self),
+            let spunTokenDefinitionParticle = spunParticles[1].mapToSpunParticle(with: MutableSupplyTokenDefinitionParticle.self),
             let spunUnallocatedTokensParticle = spunParticles[2].mapToSpunParticle(with: UnallocatedTokensParticle.self)
             else { return }
         XCTAssertEqual(spunRriParticle.spin, .down)
@@ -194,7 +192,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         
         if testPermissions {
             XCTAssertAllEqual(
-                [.mint: .tokenCreationOnly, .burn: .none],
+                [.mint: .tokenOwnerOnly, .burn: .none],
                 tokenDefinitionParticle.permissions,
                 unallocatedTokensParticle.permissions
             )

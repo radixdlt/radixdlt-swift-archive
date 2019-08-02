@@ -24,18 +24,28 @@
 
 import Foundation
 
-// MARK: - EncodableKeyValueListConvertible
-public extension TokenDefinitionParticle {
-    
-    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-        return [
-            EncodableKeyValue(key: .symbol, value: symbol),
-            EncodableKeyValue(key: .iconUrl, ifPresent: try? StringValue(string: iconUrl?.absoluteString)),
-            EncodableKeyValue(key: .description, value: description),
-            EncodableKeyValue(key: .granularity, value: granularity),
-            EncodableKeyValue(key: .permissions, value: permissions),
-            EncodableKeyValue(key: .address, value: address),
-            EncodableKeyValue(key: .name, value: name)
-        ].compactMap { $0 }
+// MARK: - Decodable
+public extension FixedSupplyTokenDefinitionParticle {
+    init(from decoder: Decoder) throws {
+        
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        name = try container.decode(Name.self, forKey: .name)
+        description = try container.decode(Description.self, forKey: .description)
+        rri = try container.decode(ResourceIdentifier.self, forKey: .rri)
+        
+        // Even though we are using `ResourceIdentifier`, the `name` part of it should follow the constraints of `Symbol`.
+        _ = try Symbol(string: rri.name)
+        
+        granularity = try container.decode(Granularity.self, forKey: .granularity)
+        supply = try container.decode(PositiveAmount.self, forKey: .supply)
+        iconUrl = URL(string: try container.decodeIfPresent(StringValue.self, forKey: .iconUrl)?.value)
+    }
+}
+
+private extension URL {
+    init?(string: String?) {
+        guard let urlString = string else { return nil }
+        self.init(string: urlString)
     }
 }

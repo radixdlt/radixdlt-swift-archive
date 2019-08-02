@@ -24,9 +24,17 @@
 
 import Foundation
 
-// MARK: - Identifiable
-public extension TokenDefinitionParticle {
-    var identifier: ResourceIdentifier {
-        return ResourceIdentifier(address: address, symbol: symbol)
+// MARK: - EncodableKeyValueListConvertible
+public extension FixedSupplyTokenDefinitionParticle {
+    
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        return [
+            EncodableKeyValue(key: .iconUrl, ifPresent: try? StringValue(string: iconUrl?.absoluteString)),
+            EncodableKeyValue(key: .description, value: description),
+            EncodableKeyValue(key: .granularity, value: granularity),
+            EncodableKeyValue(key: .supply, value: supply),
+            EncodableKeyValue(key: .rri, value: rri),
+            EncodableKeyValue(key: .name, value: name)
+        ].compactMap { $0 }
     }
 }

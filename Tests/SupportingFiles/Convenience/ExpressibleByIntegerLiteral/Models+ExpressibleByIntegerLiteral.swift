@@ -61,3 +61,17 @@ public extension Supply {
         }
     }
 }
+
+
+// MARK: - ExpressibleByIntegerLiteral
+extension PositiveSupply: ExpressibleByIntegerLiteral {}
+public extension PositiveSupply {
+    init(integerLiteral unvalidated: Int) {
+        do {
+            let amount = try PositiveAmount(integer: unvalidated)
+            try self.init(amount: amount)
+        } catch {
+            badLiteralValue(unvalidated, error: error)
+        }
+    }
+}
