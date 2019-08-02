@@ -101,8 +101,8 @@ public extension TokenDefinitionsState {
         }
     }
     
-    func mergeWithTokenDefinitionParticle(_ tokenDefinitionParticle: TokenDefinitionParticle) -> TokenDefinitionsState {
-        let value = Value(tokenDefinitionParticle: tokenDefinitionParticle)
+    func mergeWithTokenConvertible(_ tokenConvertible: TokenConvertible) -> TokenDefinitionsState {
+        let value = Value(tokenConvertible: tokenConvertible)
         let otherState = TokenDefinitionsState(reducingValues: [value])
         return merging(with: otherState)
     }

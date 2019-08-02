@@ -111,7 +111,7 @@ class TransferTokensTests: LocalhostNodeTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
       
         // WHEN: Alice tries to transfer tokens with a larger amount than her current balance, to Bob
-        let initialSupply: Supply = 30
+        let initialSupply: PositiveAmount = 30
         let createToken = createTokenAction(address: alice, supply: .fixed(to: initialSupply))
         XCTAssertTrue(
             application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -122,7 +122,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         // THEN:  I see that action fails with error `InsufficientFunds`
         transfer.blockingAssertThrows(
-            error: TransferError.insufficientFunds(currentBalance: initialSupply.amount, butTriedToTransfer: amount)
+            error: TransferError.insufficientFunds(currentBalance: NonNegativeAmount(positive: initialSupply), butTriedToTransfer: amount)
         )
     }
     

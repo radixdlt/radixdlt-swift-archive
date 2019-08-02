@@ -22,22 +22,12 @@
 // SOFTWARE.
 //
 
-@testable import RadixSDK
-import XCTest
+import Foundation
 
-class TooShortSymbolTests: AtomJsonDeserializationChangeJson {
-    
-    func testJsonDecodingSymbolTooShort() {
-        // GIVEN
-        let badJson = self.replaceValueInParticle(for: .symbol, with: ":str:")
+public extension FixedSupplyTokenDefinitionParticle {
+    enum CodingKeys: String, CodingKey {
+        case serializer, version, destinations
         
-        XCTAssertThrowsSpecificError(
-            // WHEN
-            // I try decoding the bad json string into an Atom
-            try decode(Atom.self, jsonString: badJson),
-            // THEN
-            PrefixedStringWithValue.Error.noValueFound,
-            "Decoding should fail to deserialize JSON with empty symbol"
-        )
+        case rri, name, description, granularity, supply, iconUrl
     }
 }

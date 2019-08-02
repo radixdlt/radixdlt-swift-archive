@@ -29,7 +29,7 @@ import Foundation
 /// The smallest non-divisible amount of subunits one can have is introduced. For the formal definition read [RIP - Tokens][1].
 ///
 /// - seeAlso:
-/// `TokenDefinitionParticle`
+/// `MutableSupplyTokenDefinitionParticle`
 ///
 /// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
 ///

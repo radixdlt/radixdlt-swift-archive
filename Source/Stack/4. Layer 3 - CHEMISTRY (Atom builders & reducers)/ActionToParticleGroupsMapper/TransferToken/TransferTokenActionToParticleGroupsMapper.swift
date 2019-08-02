@@ -32,7 +32,14 @@ public extension TransferTokensActionToParticleGroupsMapper {
         return [
             AnyShardedParticleStateId(
                 ShardedParticleStateId(
-                    typeOfParticle: TokenDefinitionParticle.self,
+                    typeOfParticle: MutableSupplyTokenDefinitionParticle.self,
+                    address: transferAction.tokenResourceIdentifier.address
+                )
+            ),
+            
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(
+                    typeOfParticle: FixedSupplyTokenDefinitionParticle.self,
                     address: transferAction.tokenResourceIdentifier.address
                 )
             ),

@@ -84,8 +84,10 @@ public extension AnySpunParticle {
             particle = try container.decode(TransferrableTokensParticle.self, forKey: .particle)
         case .unallocated:
             particle = try container.decode(UnallocatedTokensParticle.self, forKey: .particle)
-        case .tokenDefinition:
-            particle = try container.decode(TokenDefinitionParticle.self, forKey: .particle)
+        case .mutableSupplyTokenDefinition:
+            particle = try container.decode(MutableSupplyTokenDefinitionParticle.self, forKey: .particle)
+        case .fixedSupplyTokenDefinition:
+            particle = try container.decode(FixedSupplyTokenDefinitionParticle.self, forKey: .particle)
         case .unique:
             particle = try container.decode(UniqueParticle.self, forKey: .particle)
         case .resourceIdentifier:
@@ -102,8 +104,10 @@ public extension AnySpunParticle {
         let encodableParticle: EncodableKeyValue<CodingKeys>
         if let messageParticle = particle as? MessageParticle {
             encodableParticle = EncodableKeyValue(key: .particle, value: messageParticle)
-        } else if let tokenDefinitionParticle = particle as? TokenDefinitionParticle {
-            encodableParticle = EncodableKeyValue(key: .particle, value: tokenDefinitionParticle)
+        } else if let mutableSupplyTokenDefinitionParticle = particle as? MutableSupplyTokenDefinitionParticle {
+            encodableParticle = EncodableKeyValue(key: .particle, value: mutableSupplyTokenDefinitionParticle)
+        } else if let fixedSupplyTokenDefinitionParticle = particle as? FixedSupplyTokenDefinitionParticle {
+            encodableParticle = EncodableKeyValue(key: .particle, value: fixedSupplyTokenDefinitionParticle)
         } else if let transferrableTokensParticle = particle as? TransferrableTokensParticle {
             encodableParticle = EncodableKeyValue(key: .particle, value: transferrableTokensParticle)
         } else if let unallocatedTokenParticle = particle as? UnallocatedTokensParticle {

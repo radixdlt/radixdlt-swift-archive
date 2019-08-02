@@ -26,7 +26,7 @@ import Foundation
 
 // swiftlint:disable colon opening_brace
 
-/// A type that references a `TokenDefinitionParticle` using a `ResourceIdentifier`.
+/// A type that references a `MutableSupplyTokenDefinitionParticle` using a `ResourceIdentifier`.
 ///
 /// Although this protocol looks very similar to `Identifiable` - which also has
 /// a `ResourceIdentifier` property, they are used differently. This is the counterpart
@@ -34,7 +34,7 @@ import Foundation
 ///
 /// - seeAlso: `Identifiable`
 /// - seeAlso: `ResourceIdentifier`
-/// - seeAlso: `TokenDefinitionParticle`
+/// - seeAlso: `MutableSupplyTokenDefinitionParticle`
 public protocol TokenDefinitionReferencing:
     Accountable,
     Ownable

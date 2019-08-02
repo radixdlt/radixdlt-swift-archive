@@ -38,11 +38,11 @@ class NodeDiscoveryTests: LocalhostNodeTest {
         XCTAssertEqual(node.websocketsUrl.url.absoluteString, "ws://localhost:8080/rpc")
     }
     
-    func testNodeFinder() {
-        let nodeFinder = OriginNodeFinder.betanet
-        let originNode = nodeFinder.findSomeOriginNode().blockingTakeFirst()
-        XCTAssertNotNil(originNode)
-    }
+//    func testNodeFinder() {
+//        let nodeFinder = OriginNodeFinder.betanet
+//        let originNode = nodeFinder.findSomeOriginNode().blockingTakeFirst()
+//        XCTAssertNotNil(originNode)
+//    }
     
     // This is kind of a test of my mock
 //    func testLoadNodesMockedGoodJson() {

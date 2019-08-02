@@ -59,8 +59,8 @@ private let xrd = ResourceIdentifier(address: address, name: "XRD")
 
 
 /// Assumes spin up
-private func transferrable(_ amount: NonNegativeAmount) -> AnyUpParticle {
-    let particle = TransferrableTokensParticle(
+private func transferrable(_ amount: PositiveAmount) -> AnyUpParticle {
+    let particle = try! TransferrableTokensParticle(
         amount: amount,
         address: address,
         tokenDefinitionReference: xrd

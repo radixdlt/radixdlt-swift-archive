@@ -29,23 +29,34 @@ public final class DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenAc
 public extension CreateTokenActionToParticleGroupsMapper {
     func particleGroups(for action: CreateTokenAction) -> ParticleGroups {
 
-        let token = TokenDefinitionParticle(createTokenAction: action)
-        let unallocated = UnallocatedTokensParticle.maxSupplyForNewToken(token)
-        let rriParticle = ResourceIdentifierParticle(token: token)
+        switch action.tokenSupplyType {
+        case .mutable: return mutableSupplyTokenParticleGroups(for: action)
+        case .fixed: return fixedSupplyTokenParticleGroups(for: action)
+        }
+    }
+}
+
+private extension CreateTokenActionToParticleGroupsMapper {
+    func mutableSupplyTokenParticleGroups(for action: CreateTokenAction) -> ParticleGroups {
+        
+        let mutableSupplyToken = MutableSupplyTokenDefinitionParticle(createTokenAction: action)
+        let unallocated = UnallocatedTokensParticle.maxSupplyForNewToken(mutableSupplyToken: mutableSupplyToken)
+        let rriParticle = ResourceIdentifierParticle(token: mutableSupplyToken)
         
         let tokenCreationGroup: ParticleGroup = [
             rriParticle.withSpin(.down),
-            token.withSpin(.up),
+            mutableSupplyToken.withSpin(.up),
             unallocated.withSpin(.up)
         ]
-
+        
         let initialSupply = action.initialSupply
         guard let positiveInitialSupply = initialSupply.positiveAmount else {
             return [tokenCreationGroup]
         }
         
-        let amount = NonNegativeAmount(positive: positiveInitialSupply)
-        let minted = TransferrableTokensParticle(token: token, amount: amount)
+        guard let minted = try? TransferrableTokensParticle(mutableSupplyToken: mutableSupplyToken, amount: positiveInitialSupply) else {
+            incorrectImplementation("Should not be able to init CreateTokenAction with non matching granularity and amount.")
+        }
         
         var mintGroup: ParticleGroup = [
             unallocated.withSpin(.down),
@@ -53,13 +64,36 @@ public extension CreateTokenActionToParticleGroupsMapper {
         ]
         
         if let positiveLeftOverSupply = initialSupply.subtractedFromMax {
-            let unallocatedFromLeftOverSupply = UnallocatedTokensParticle(token: token, amount: positiveLeftOverSupply)
+            let unallocatedFromLeftOverSupply = UnallocatedTokensParticle(mutableSupplyToken: mutableSupplyToken, amount: positiveLeftOverSupply)
             mintGroup += unallocatedFromLeftOverSupply.withSpin(.up)
         }
         
         return [
             tokenCreationGroup,
             mintGroup
+        ]
+    }
+    
+    func fixedSupplyTokenParticleGroups(for action: CreateTokenAction) -> ParticleGroups {
+        guard let amount = try? PositiveAmount(nonNegative: action.initialSupply.amount) else {
+            incorrectImplementation("Amount should always be positive for FixedSupply")
+        }
+        
+        let fixedSupplyToken = FixedSupplyTokenDefinitionParticle(createTokenAction: action)
+        let rriParticle = ResourceIdentifierParticle(token: fixedSupplyToken)
+     
+        guard let tokens = try? TransferrableTokensParticle(fixedSupplyToken: fixedSupplyToken, amount: amount) else {
+            incorrectImplementation("Should not be able to init CreateTokenAction with non matching granularity and amount.")
+        }
+        
+        let tokenCreationGroup: ParticleGroup = [
+            rriParticle.withSpin(.down),
+            fixedSupplyToken.withSpin(.up),
+            tokens.withSpin(.up)
+        ]
+    
+        return [
+            tokenCreationGroup
         ]
     }
 }

@@ -40,7 +40,6 @@ public enum TokenPermission: String,
 
     // swiftlint:enable opening_brace
 
-    case tokenCreationOnly = "token_creation_only"
     case tokenOwnerOnly = "token_owner_only"
     case all = "all"
     case none = "none"

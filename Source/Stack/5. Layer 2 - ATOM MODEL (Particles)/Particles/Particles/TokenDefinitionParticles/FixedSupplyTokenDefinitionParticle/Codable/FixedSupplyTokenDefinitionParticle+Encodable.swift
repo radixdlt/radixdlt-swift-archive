@@ -22,23 +22,19 @@
 // SOFTWARE.
 //
 
-@testable import RadixSDK
-import XCTest
+import Foundation
 
-class QuestionMarkInSymbolTests: AtomJsonDeserializationChangeJson {
+// MARK: - EncodableKeyValueListConvertible
+public extension FixedSupplyTokenDefinitionParticle {
     
-    func testJsonDecodingSymbolBadChars() {
-        
-        // GIVEN
-        let badJson = self.replaceValueInParticle(for: .rri, with: ":rri:/JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei/BAD?")
-        
-        XCTAssertThrowsSpecificError(
-            // WHEN
-            // I try decoding the bad json string into an Atom
-            try decode(Atom.self, jsonString: badJson),
-            // THEN
-            InvalidStringError.invalidCharacters(expectedCharacters: CharacterSet.numbersAndUppercaseAtoZ, butGot: "?"),
-            "Decoding should fail to deserialize JSON with empty symbol"
-        )
+    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
+        return [
+            EncodableKeyValue(key: .iconUrl, ifPresent: try? StringValue(string: iconUrl?.absoluteString)),
+            EncodableKeyValue(key: .description, value: description),
+            EncodableKeyValue(key: .granularity, value: granularity),
+            EncodableKeyValue(key: .supply, value: supply),
+            EncodableKeyValue(key: .rri, value: rri),
+            EncodableKeyValue(key: .name, value: name)
+        ].compactMap { $0 }
     }
 }

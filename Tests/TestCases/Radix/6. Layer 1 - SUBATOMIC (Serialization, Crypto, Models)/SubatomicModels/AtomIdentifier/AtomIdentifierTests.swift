@@ -133,11 +133,16 @@ class AtomIdentifierTests: XCTestCase {
         
         let consumables = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TransferrableTokensParticle.self) }
         XCTAssertEqual(consumables.count, 1)
-        let tokenDefinitionParticles = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TokenDefinitionParticle.self) }
-        XCTAssertEqual(tokenDefinitionParticles.count, 1)
+        
+        let mutableSupplyTokenDefinitionParticles = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: MutableSupplyTokenDefinitionParticle.self) }
+        
+        let fixedSupplyTokenDefinitionParticles = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: FixedSupplyTokenDefinitionParticle.self) }
+        
+        XCTAssertEqual((mutableSupplyTokenDefinitionParticles.count + fixedSupplyTokenDefinitionParticles.count), 1)
         
         let mapper = StatelessTransferTokensParticleGroupMapper(
-            tokenDefinitionParticle: tokenDefinitionParticles[0].particle,
+            mutableSupplyTokenDefinitionParticle: mutableSupplyTokenDefinitionParticles.first?.particle,
+            fixedSupplyTokenDefinitionParticle: fixedSupplyTokenDefinitionParticles.first?.particle,
             transferrableTokensParticle: consumables[0].particle
         )
         
@@ -164,14 +169,17 @@ private enum ShardAssertion {
 
 struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGroupsMapper, TransferTokensActionToParticleGroupsMapper {
 
-    private let tokenDefinitionParticle: TokenDefinitionParticle
+    private let mutableSupplyTokenDefinitionParticle: MutableSupplyTokenDefinitionParticle?
+    private let fixedSupplyTokenDefinitionParticle: FixedSupplyTokenDefinitionParticle?
     private let transferrableTokensParticle: TransferrableTokensParticle
 
     init(
-        tokenDefinitionParticle: TokenDefinitionParticle,
+        mutableSupplyTokenDefinitionParticle: MutableSupplyTokenDefinitionParticle?,
+        fixedSupplyTokenDefinitionParticle: FixedSupplyTokenDefinitionParticle?,
         transferrableTokensParticle: TransferrableTokensParticle
     ) {
-        self.tokenDefinitionParticle = tokenDefinitionParticle
+        self.mutableSupplyTokenDefinitionParticle = mutableSupplyTokenDefinitionParticle
+        self.fixedSupplyTokenDefinitionParticle = fixedSupplyTokenDefinitionParticle
         self.transferrableTokensParticle = transferrableTokensParticle
     }
 
@@ -180,11 +188,18 @@ struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGrou
 //    }
     
     func particleGroups(for action: Action) -> ParticleGroups {
-        return try! particleGroups(for: action, upParticles: [
-            AnyUpParticle(particle: tokenDefinitionParticle),
-            AnyUpParticle(particle: transferrableTokensParticle)
-            ]
-        )
+        
+        var upParticles: [AnyUpParticle] = [AnyUpParticle(particle: transferrableTokensParticle)]
+        
+        if let fixed = fixedSupplyTokenDefinitionParticle {
+            upParticles.append(AnyUpParticle(particle: fixed))
+        }
+        
+        if let mutable = mutableSupplyTokenDefinitionParticle {
+            upParticles.append(AnyUpParticle(particle: mutable))
+        }
+        
+        return try! particleGroups(for: action, upParticles: upParticles)
     }
     
 //    func particleGroups(for transfer: TransferTokenAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {

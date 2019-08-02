@@ -26,32 +26,23 @@ import Foundation
 
 // swiftlint:disable colon
 
-/// For every new kind of Token, a Token Definition must be submitted that describes what the token is (e.g. its name) and how it should behave (e.g. only owner can mint tokens).
-///
-/// The specified properties - both general information about the Token and constraints on its use (e.g. only owner can mint tokens) are included in the Token Particle.
-/// For the formal definition read [RIP - Tokens][1].
-///
-/// - seeAlso:
-/// `TokenDefinitionParticle`
-///
-/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
-///
-public struct TokenDefinitionParticle:
+/// Defines a new kind of Token with mutable supply
+public struct MutableSupplyTokenDefinitionParticle:
     ParticleConvertible,
     RadixModelTypeStaticSpecifying,
     TokenConvertible,
     RadixCodable,
     RadixHashable,
     DSONEncodable,
+    Accountable,
     Hashable {
 // swiftlint:enable colon
     
-    public static let serializer = RadixModelType.tokenDefinitionParticle
+    public static let serializer = RadixModelType.mutableSupplyTokenDefinitionParticle
     
-    public let symbol: Symbol
     public let name: Name
     public let description: Description
-    public let address: Address
+    public let rri: ResourceIdentifier
     public let granularity: Granularity
     public let permissions: TokenPermissions
     public let iconUrl: URL?
@@ -62,13 +53,12 @@ public struct TokenDefinitionParticle:
         description: Description,
         address: Address,
         granularity: Granularity = .default,
-        permissions: TokenPermissions = .default,
+        permissions: TokenPermissions = .mutableSupplyToken,
         iconUrl: URL? = nil
     ) {
-        self.symbol = symbol
         self.name = name
         self.description = description
-        self.address = address
+        self.rri = ResourceIdentifier(address: address, symbol: symbol)
         self.granularity = granularity
         self.permissions = permissions
         self.iconUrl = iconUrl
@@ -76,41 +66,53 @@ public struct TokenDefinitionParticle:
 }
 
 // MARK: - Hashable
-public extension TokenDefinitionParticle {
+public extension MutableSupplyTokenDefinitionParticle {
     func hash(into hasher: inout Hasher) {
         hasher.combine(radixHash)
     }
 }
 
+// MARK: - Accountable
+public extension MutableSupplyTokenDefinitionParticle {
+    var addresses: Addresses {
+        return Addresses([tokenDefinedBy])
+    }
+}
+
 // MARK: - From CreateTokenAction
-public extension TokenDefinitionParticle {
+public extension MutableSupplyTokenDefinitionParticle {
     init(createTokenAction action: CreateTokenAction) {
+        
         self.init(
             symbol: action.symbol,
             name: action.name,
             description: action.description,
             address: action.creator,
             granularity: action.granularity,
-            permissions: action.tokenSupplyType.tokenPermissions,
             iconUrl: action.iconUrl
         )
     }
 }
 
 // MARK: - TokenDefinitionReferencing
-public extension TokenDefinitionParticle {
+public extension MutableSupplyTokenDefinitionParticle {
     var tokenDefinitionReference: ResourceIdentifier {
-        return ResourceIdentifier(address: address, symbol: symbol)
+        return rri
     }
 }
 
 // MARK: - TokenConvertible
-public extension TokenDefinitionParticle {
+public extension MutableSupplyTokenDefinitionParticle {
+    
+    var symbol: Symbol {
+        return Symbol(validated: tokenDefinitionReference.name)
+    }
+    
     var tokenDefinedBy: Address {
-        return address
+        return tokenDefinitionReference.address
     }
     
     var tokenSupplyType: SupplyType {
-        return SupplyType(tokenPermissions: permissions)
+        return .mutable
     }
 }

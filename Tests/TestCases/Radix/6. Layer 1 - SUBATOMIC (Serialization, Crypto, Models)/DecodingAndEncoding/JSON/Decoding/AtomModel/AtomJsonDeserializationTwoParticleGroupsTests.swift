@@ -44,9 +44,9 @@ class AtomJsonDeserializationTwoParticleGroupsTests: XCTestCase {
         }
         XCTAssertEqual(messageParticle.textMessage, "Hello Radix!")
         
-        // It has a TokenDefinitionParticle
-        guard let tokenDefinitionParticle = atom.particlesOfType(TokenDefinitionParticle.self, spin: .up).first else {
-            return XCTFail("Expected prescene of a TokenDefinitionParticle")
+        // It has a MutableSupplyTokenDefinitionParticle
+        guard let tokenDefinitionParticle = atom.particlesOfType(MutableSupplyTokenDefinitionParticle.self, spin: .up).first else {
+            return XCTFail("Expected prescene of a MutableSupplyTokenDefinitionParticle")
         }
         XCTAssertEqual(tokenDefinitionParticle.symbol, "CCC")
         
@@ -84,8 +84,7 @@ private let jsonForAtomWith2ParticleGroups = """
                     "\(RadixModelType.jsonKey)": "\(RadixModelType.spunParticle.serializerId)",
                     "spin": 1,
                     "particle": {
-                        "\(RadixModelType.jsonKey)": "\(RadixModelType.tokenDefinitionParticle.serializerId)",
-                        "symbol": ":str:CCC",
+                        "\(RadixModelType.jsonKey)": "\(RadixModelType.mutableSupplyTokenDefinitionParticle.serializerId)",
                         "name": ":str:Cyon",
                         "description": ":str:Cyon Crypto Coin is the worst shit coin",
                         "metaData": {
@@ -95,9 +94,9 @@ private let jsonForAtomWith2ParticleGroups = """
                         "granularity": ":u20:1",
                         "permissions": {
                             "burn": ":str:none",
-                            "mint": ":str:\(TokenPermission.tokenCreationOnly.rawValue)"
+                            "mint": ":str:\(TokenPermission.tokenOwnerOnly.rawValue)"
                         },
-                        "address": ":adr:JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei"
+                        "rri": ":rri:/JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei/CCC"
                     }
                 },
                 {
@@ -126,7 +125,7 @@ private let jsonForAtomWith2ParticleGroups = """
                         "granularity": ":u20:1",
                         "nonce": 992284943125945,
                         "permissions": {
-                            "mint": ":str:token_creation_only",
+                            "mint": ":str:token_owner_only",
                             "burn": ":str:none"
                         },
                         "amount": ":u20:1000000000000000000000000000",

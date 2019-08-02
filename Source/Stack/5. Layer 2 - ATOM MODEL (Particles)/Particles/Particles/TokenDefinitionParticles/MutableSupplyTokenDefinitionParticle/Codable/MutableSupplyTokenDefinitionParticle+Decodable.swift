@@ -24,10 +24,28 @@
 
 import Foundation
 
-public extension TokenDefinitionParticle {
-    enum CodingKeys: String, CodingKey {
-        case serializer, version, destinations
+// MARK: - Decodable
+public extension MutableSupplyTokenDefinitionParticle {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        case symbol, name, description, address, granularity, permissions, iconUrl
+        name = try container.decode(Name.self, forKey: .name)
+        description = try container.decode(Description.self, forKey: .description)
+        rri = try container.decode(ResourceIdentifier.self, forKey: .rri)
+        
+        // Even though we are using `ResourceIdentifier`, the `name` part of it should follow the constraints of `Symbol`.
+        _ = try Symbol(string: rri.name)
+        
+        granularity = try container.decode(Granularity.self, forKey: .granularity)
+        permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
+        iconUrl = URL(string: try container.decodeIfPresent(StringValue.self, forKey: .iconUrl)?.value)
+        
+    }
+}
+
+private extension URL {
+    init?(string: String?) {
+        guard let urlString = string else { return nil }
+        self.init(string: urlString)
     }
 }

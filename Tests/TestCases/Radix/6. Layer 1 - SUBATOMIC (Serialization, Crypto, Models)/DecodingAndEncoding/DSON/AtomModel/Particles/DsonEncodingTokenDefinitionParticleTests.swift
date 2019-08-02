@@ -31,13 +31,13 @@ class DsonEncodingTokenDefinitionParticleTests: XCTestCase {
 
     func testDsonEncodingOfTokenDefinitionParticle() {
         
-        let tokenDefinitionParticle = TokenDefinitionParticle(
+        let tokenDefinitionParticle = MutableSupplyTokenDefinitionParticle(
             symbol: "POW",
             name: "Proof of Work",
             description: "Radix POW",
             address: "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
             granularity: 1,
-            permissions: [.burn: .none, .mint: .tokenCreationOnly]
+            permissions: [.burn: .none, .mint: .tokenOwnerOnly]
         )
         
         guard let dsonHex = dsonHexStringOrFail(tokenDefinitionParticle) else { return }

@@ -48,9 +48,9 @@ public struct ResourceIdentifierParticle:
     
 }
 
-// MARK: - From TokenDefinitionParticle
+// MARK: - From MutableSupplyTokenDefinitionParticle
 public extension ResourceIdentifierParticle {
-    init(token: TokenDefinitionParticle) {
+    init(token: TokenConvertible) {
         self.init(resourceIdentifier: token.tokenDefinitionReference)
     }
 }
