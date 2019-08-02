@@ -33,6 +33,15 @@ public struct SignedAmount: Amount, SignedNumeric {
     public init(validated: Magnitude) {
         self.magnitude = validated
     }
+    
+    public init(bigUnsignedInt: BigUnsignedInt) {
+        let selfMagnitude = Magnitude.init(sign: .plus, magnitude: bigUnsignedInt)
+        self.init(validated: selfMagnitude)
+    }
+    
+    public init<NNA>(nonNegative: NNA) where NNA: NonNegativeAmountConvertible {
+        self.init(bigUnsignedInt: nonNegative.magnitude)
+    }
 }
 
 // MARK: - Amount

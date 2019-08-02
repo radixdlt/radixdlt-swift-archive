@@ -48,7 +48,7 @@ public struct CreateTokenAction: UserAction, Throwing, TokenConvertible, TokenSu
         switch initialSupplyType {
         case .fixed(let positiveInitialSupply):
             self.tokenSupplyType = .fixed
-            self.initialSupply = try Supply(positiveAmount: positiveInitialSupply)
+            self.initialSupply = Supply(positiveSupply: positiveInitialSupply)
         case .mutable(let nonNegativeInitialSupply):
             self.tokenSupplyType = .mutable
             self.initialSupply = nonNegativeInitialSupply ?? .zero
@@ -98,7 +98,6 @@ public extension CreateTokenAction {
     }
 }
 
-public typealias PositiveSupply = PositiveAmount
 public extension CreateTokenAction {
     
     enum InitialSupply {

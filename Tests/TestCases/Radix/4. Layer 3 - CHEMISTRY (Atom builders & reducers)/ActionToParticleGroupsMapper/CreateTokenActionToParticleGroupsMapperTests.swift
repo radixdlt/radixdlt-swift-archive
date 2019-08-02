@@ -38,21 +38,6 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
     }
     
     func testMutableSupplyTokenCreationWithoutInitialSupply() {
-//
-//        let createTokenAction = try! CreateTokenAction(
-//            creator: address,
-//            name: "Cyon",
-//            symbol: "CCC",
-//            description: "Cyon Crypto Coin is the worst shit coin",
-//            supply: .mutable(initial: 0)
-//        )
-//
-//        let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
-//        XCTAssertEqual(particleGroups.count, 1)
-//        guard let group = particleGroups.first else { return }
-//
-//        assertCorrectnessTokenCreationGroup(group, testPermissions: false)
-        
         doTestTokenCreation(initialSupply: .mutable(initial: 0))
     }
     
@@ -61,8 +46,7 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
     }
     
     func testTokenCreationWithInitialSupplyAll() {
-//        doTestTokenCreation(initialSupply: try! PositiveAmount(nonNegative: Supply.maxAmountValue))
-        doTestTokenCreation(initialSupply: .fixed(to: try! PositiveAmount(nonNegative: Supply.maxAmountValue)))
+        doTestTokenCreation(initialSupply: .fixed(to: PositiveSupply.max))
     }
     
     func testAssertMaxSupplySubtractedFromMaxIsNil() {
@@ -111,8 +95,6 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
                 createTokenAction: createTokenAction
             )
         }
-        
-     
     }
     
     func assertCorrectnessMintTokenGroup(

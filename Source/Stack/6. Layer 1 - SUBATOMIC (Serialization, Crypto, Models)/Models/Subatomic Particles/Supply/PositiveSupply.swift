@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,7 +26,7 @@ import Foundation
 
 // swiftlint:disable colon opening_brace
 
-public struct Supply:
+public struct PositiveSupply:
     Throwing,
     ValueValidating,
     Hashable,
@@ -34,28 +34,24 @@ public struct Supply:
 {
     // swiftlint:enable colon opening_brace
     
-    public let amount: NonNegativeAmount
+    public let amount: PositiveAmount
     
-    public init(nonNegativeAmount: NonNegativeAmount) throws {
-        self.amount = try Supply.validate(nonNegativeAmount)
+    public init(amount: PositiveAmount) throws {
+        self.amount = try PositiveSupply.validate(amount)
     }
 }
 
 // MARK: - Convenience Init
-public extension Supply {
+public extension PositiveSupply {
     
     init<AmountType>(subtractingFromMax amountToSubtractFromMax: AmountType) throws where AmountType: NonNegativeAmountConvertible {
-        try self.init(positiveAmount: Supply.subtractingFromMax(amount: amountToSubtractFromMax))
-    }
-    
-    init(positiveAmount: PositiveAmount) throws {
-        try self.init(nonNegativeAmount: NonNegativeAmount(positive: positiveAmount))
+        try self.init(amount: Supply.subtractingFromMax(amount: amountToSubtractFromMax))
     }
     
     init(unallocatedTokensParticle: UnallocatedTokensParticle) {
         do {
             let unallocatedAmount = unallocatedTokensParticle.amount.amount
-            try self.init(positiveAmount: Supply.subtractingFromMax(amount: unallocatedAmount))
+            try self.init(amount: Supply.subtractingFromMax(amount: unallocatedAmount))
         } catch {
             unexpectedlyMissedToCatch(error: error)
         }
@@ -63,11 +59,11 @@ public extension Supply {
 }
 
 // MARK: - ValueValidating
-public extension Supply {
-
-    static let maxAmountValue = NonNegativeAmount.maxValue256Bits
+public extension PositiveSupply {
     
-    static func validate(_ value: NonNegativeAmount) throws -> NonNegativeAmount {
+    static let maxAmountValue = PositiveAmount.maxValue256Bits
+    
+    static func validate(_ value: PositiveAmount) throws -> PositiveAmount {
         if value > Supply.maxAmountValue {
             throw Error.cannotExceedUInt256MaxValue
         }
@@ -76,52 +72,53 @@ public extension Supply {
 }
 
 // MARK: - Convenience
-public extension Supply {
-    var positiveAmount: PositiveAmount? {
-        return try? PositiveAmount(nonNegative: amount)
-    }
+public extension PositiveSupply {
     
-    var subtractedFromMax: Supply? {
-        guard let positiveLeftOverSupplyAmount = try? Supply.subtractingFromMax(amount: self.amount) else { return nil }
-        return try? Supply(positiveAmount: positiveLeftOverSupplyAmount)
+    var subtractedFromMax: PositiveSupply? {
+        guard let positiveLeftOverSupplyAmount = try? PositiveSupply.subtractingFromMax(amount: self.amount) else { return nil }
+        return try? PositiveSupply(amount: positiveLeftOverSupplyAmount)
     }
     
     static func subtractingFromMax<AmountType>(amount: AmountType) throws -> PositiveAmount where AmountType: NonNegativeAmountConvertible {
-        return try PositiveAmount(nonNegative: Supply.maxAmountValue - NonNegativeAmount(validated: amount.magnitude))
+        let subtracted: SignedAmount = SignedAmount(nonNegative: PositiveSupply.maxAmountValue) - SignedAmount(nonNegative: amount)
+        guard subtracted.isPositive else {
+            throw Error.mustBePositive
+        }
+        return try PositiveAmount(nonNegative: subtracted.abs)
     }
 }
 
 // MARK: - Arthimetic
-public extension Supply {
-    func add(_ other: Supply) throws -> Supply {
-        return try Supply(nonNegativeAmount: amount + other.amount)
+public extension PositiveSupply {
+    func add(_ other: PositiveSupply) throws -> PositiveSupply {
+        return try PositiveSupply(amount: amount + other.amount)
     }
 }
 
 // MARK: - Throwing
-public extension Supply {
+public extension PositiveSupply {
     enum Error: Swift.Error, Equatable {
+        case mustBePositive
         case cannotExceedUInt256MaxValue
     }
 }
 
 // MARK: - CustomStringConvertible
-public extension Supply {
+public extension PositiveSupply {
     var description: String {
         return amount.description
     }
 }
 
 // MARK: - Presets
-public extension Supply {
+public extension PositiveSupply {
     // swiftlint:disable force_try
-    static let max = try! Supply(nonNegativeAmount: Supply.maxAmountValue)
-    static let zero = try! Supply(nonNegativeAmount: 0)
+    static let max = try! PositiveSupply(amount: PositiveSupply.maxAmountValue)
     // swiftlint:enable force_try
 }
 
 // MARK: - Convenience
-public extension Supply {
+public extension PositiveSupply {
     func isExactMultipleOfGranularity(_ granularity: Granularity) -> Bool {
         return amount.isExactMultipleOfGranularity(granularity)
     }
