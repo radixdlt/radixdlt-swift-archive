@@ -85,4 +85,47 @@ class MintTokensTests: LocalhostNodeTest {
         
     }
 
+    func testMintFailsDueUnknownRRI() {
+        // GIVEN: Radix identity Alice and an application layer action MintToken
+        let mint = application.mintTokens(amount:ofType:) // this variable holds the mintTokens function
+        
+        // WHEN Alice call Mint on RRI for some nonexisting FoobarToken
+        let foobarToken: ResourceIdentifier = "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/FoobarToken"
+        let minting = mint(123, foobarToken)
+        
+        // THEN: an error unknownToken is thrown
+        minting.blockingAssertThrows(
+            error: MintError.unknownToken(identifier: foobarToken)
+        )
+    }
+    
+    func testMintFailsDueToExceedingTheGreatestPossibleSupply() {
+        // GIVEN: Radix identity Alice and an application layer action MintToken
+        let mint = application.mintTokens(amount:ofType:) // this variable holds the mintTokens function
+        
+        // GIVEN: ... and a previously created FooToken which has a supply of max - 10 tokens, for which Alice has the appropriate permissions.
+        let (tokenCreation, fooToken) = try! application.createToken(
+            name: "FooToken",
+            symbol: "FOO",
+            description: "Fooeset coin",
+            supply: .mutable(initial: Supply(subtractingFromMax: 10))
+        )
+        
+        XCTAssertTrue(
+            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
+        
+        // WHEN: Alice call Mint(20) on FooToken
+        let minting = mint(20, fooToken)
+        
+        // THEN: an error supplyExcceedsMax is thrown
+        minting.blockingAssertThrows(
+            error: MintError.tokenOverMint(
+                token: fooToken,
+                maxSupply: Supply.maxAmountValue,
+                currentSupply: PositiveSupply.maxAmountValue - 10,
+                byMintingAmount: 20
+            )
+        )
+    }
 }

@@ -56,10 +56,8 @@ class TokenDefinitionsStateReducerTests: XCTestCase {
         
         let expecteRri = tokenDefinitionParticle.tokenDefinitionReference
         
-        let hundred: PositiveAmount = 100
-        
         let unallocatedTokensParticle = UnallocatedTokensParticle(
-            amount: try! Supply(subtractingFromMax: hundred),
+            amount: try! Supply(subtractingFromMax: 100),
             tokenDefinitionReference: expecteRri
         )
         
