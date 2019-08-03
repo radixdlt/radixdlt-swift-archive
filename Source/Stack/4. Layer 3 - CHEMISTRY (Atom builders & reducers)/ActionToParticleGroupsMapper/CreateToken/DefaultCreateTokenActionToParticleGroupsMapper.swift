@@ -119,7 +119,7 @@ private extension TransferrableTokensParticle {
             amount: amount,
             address: token.address,
             tokenDefinitionReference: token.tokenDefinitionReference,
-            permissions: TokenPermissions.empty,
+            permissions: nil,
             granularity: token.granularity
         )
     }
