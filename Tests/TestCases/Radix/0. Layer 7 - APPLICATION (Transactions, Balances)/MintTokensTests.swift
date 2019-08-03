@@ -163,4 +163,28 @@ class MintTokensTests: LocalhostNodeTest {
             )
         )
     }
+    
+    func testMintFailDueToSupplyBeingFixed() {
+        // GIVEN: Radix identity Alice and an application layer action MintToken, and a previously created FooToken, which has FIXED supply
+        let (tokenCreation, fooToken) = try! application.createToken(
+            name: "FooToken",
+            symbol: "ALICE",
+            description: "Created By Alice",
+            supply: .fixed(to: 10)
+        )
+        
+        XCTAssertTrue(
+            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
+
+        // WHEN: Alice call Mint for FooToken
+        let minting = application.mintTokens(amount: 2, ofType: fooToken)
+        
+        // THEN: an error unknownToken is thrown
+        minting.blockingAssertThrows(
+            error: MintError.tokenHasFixedSupplyThusItCannotBeMinted(identifier: fooToken)
+        )
+        
+    }
+    
 }

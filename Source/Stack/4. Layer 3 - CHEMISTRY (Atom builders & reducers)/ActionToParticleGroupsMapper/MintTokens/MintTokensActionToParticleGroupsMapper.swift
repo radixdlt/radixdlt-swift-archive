@@ -31,7 +31,10 @@ public extension MintTokensActionToParticleGroupsMapper {
         let tokenDefinitionAddress = mintTokensAction.tokenDefinitionReferece.address
         return [
             AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: UnallocatedTokensParticle.self, address: tokenDefinitionAddress)),
-            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: MutableSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress))
+            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: MutableSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress)),
+            
+            // Include `FixedSupplyTokenDefinitionParticle` to see if the RRI of the token to Mint exists, but has FixedSupply.
+            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: FixedSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress))
         ]
     }
 }
@@ -85,17 +88,31 @@ public enum MintError: Swift.Error, Equatable {
         whichRequiresPermission: TokenPermission,
         creatorOfToken: Address
     )
+    
+    case tokenHasFixedSupplyThusItCannotBeMinted(
+        identifier: ResourceIdentifier
+    )
 }
 
 private extension DefaultMintTokensActionToParticleGroupsMapper {
     
     func ensureTokenExistsAndThatMinterHasPermissionToMintIt(mintAction: MintTokensAction, upParticles: [AnyUpParticle]) throws {
         let rri = mintAction.tokenDefinitionReferece
+        
         guard let mutableSupplyTokensParticle = upParticles
             .compactMap({ try? UpParticle<MutableSupplyTokenDefinitionParticle>(anyUpParticle: $0) })
             .first(where: { $0.particle.tokenDefinitionReference == rri })
             .map({ $0.particle }) else {
-                 throw Error.unknownToken(identifier: rri)
+                
+                let foundFixedSupplyTokenWithMatchingIdentifier = upParticles
+                    .compactMap({ try? UpParticle<FixedSupplyTokenDefinitionParticle>(anyUpParticle: $0) })
+                    .first(where: { $0.particle.tokenDefinitionReference == rri }) != nil
+                
+                if foundFixedSupplyTokenWithMatchingIdentifier {
+                    throw Error.tokenHasFixedSupplyThusItCannotBeMinted(identifier: rri)
+                } else {
+                    throw Error.unknownToken(identifier: rri)
+                }
         }
         
         guard mutableSupplyTokensParticle.canBeMinted(by: mintAction.minter) else {
