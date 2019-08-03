@@ -147,7 +147,7 @@ public extension RadixApplicationClient {
 // MARK: AccountBalancing
 public extension RadixApplicationClient {
     
-    func observeBalances(ownedBy owner: Ownable) -> Observable<TokenBalances> {
+    func observeBalances(ownedBy owner: AddressConvertible) -> Observable<TokenBalances> {
         return observeBalanceReferences(at: owner.address).flatMap {
             Observable.combineLatest($0.dictionary.values
                 .map { tokenReferenceBalance -> Observable<TokenBalance> in

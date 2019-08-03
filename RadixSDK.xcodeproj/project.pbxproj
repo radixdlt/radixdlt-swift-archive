@@ -259,7 +259,7 @@
 		E6A508B2224E713F00128123 /* Addresses.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50858224E713F00128123 /* Addresses.swift */; };
 		E6A508B3224E713F00128123 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5085A224E713F00128123 /* Address.swift */; };
 		E6A508B4224E713F00128123 /* ParticleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5085C224E713F00128123 /* ParticleGroup.swift */; };
-		E6A508B5224E713F00128123 /* Ownable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5085E224E713F00128123 /* Ownable.swift */; };
+		E6A508B5224E713F00128123 /* AddressConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5085E224E713F00128123 /* AddressConvertible.swift */; };
 		E6A508B7224E713F00128123 /* Accountable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50861224E713F00128123 /* Accountable.swift */; };
 		E6A508B8224E713F00128123 /* Chronological.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50862224E713F00128123 /* Chronological.swift */; };
 		E6A508B9224E713F00128123 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50863224E713F00128123 /* Identifiable.swift */; };
@@ -833,7 +833,7 @@
 		E6A50858224E713F00128123 /* Addresses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Addresses.swift; sourceTree = "<group>"; };
 		E6A5085A224E713F00128123 /* Address.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		E6A5085C224E713F00128123 /* ParticleGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleGroup.swift; sourceTree = "<group>"; };
-		E6A5085E224E713F00128123 /* Ownable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ownable.swift; sourceTree = "<group>"; };
+		E6A5085E224E713F00128123 /* AddressConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressConvertible.swift; sourceTree = "<group>"; };
 		E6A50861224E713F00128123 /* Accountable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accountable.swift; sourceTree = "<group>"; };
 		E6A50862224E713F00128123 /* Chronological.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chronological.swift; sourceTree = "<group>"; };
 		E6A50863224E713F00128123 /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
@@ -2299,7 +2299,7 @@
 		E6A5085D224E713F00128123 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				E6A5085E224E713F00128123 /* Ownable.swift */,
+				E6A5085E224E713F00128123 /* AddressConvertible.swift */,
 				E640F637225DFC3D00855256 /* PublicKeyOwner.swift */,
 				E6A50861224E713F00128123 /* Accountable.swift */,
 				E6A50862224E713F00128123 /* Chronological.swift */,
@@ -3932,7 +3932,7 @@
 				E6E2799E2271CD1C0067D46E /* StringInitializable.swift in Sources */,
 				E6E279382271CD1C0067D46E /* PublicKey.swift in Sources */,
 				E689DB83225F655100340CF3 /* RadixApplicationClient.swift in Sources */,
-				E6A508B5224E713F00128123 /* Ownable.swift in Sources */,
+				E6A508B5224E713F00128123 /* AddressConvertible.swift in Sources */,
 				E6E279762271CD1C0067D46E /* SignedAmount.swift in Sources */,
 				E626E1E622B3FB530046D2AC /* TokenBalance.swift in Sources */,
 				E689DBAB225F8F3200340CF3 /* TransferTokenAction.swift in Sources */,

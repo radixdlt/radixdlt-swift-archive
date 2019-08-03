@@ -37,7 +37,7 @@ public extension MessageSending {
     func sendPlainTextMessage(
         _ plainText: String,
         encoding: String.Encoding = .default,
-        to recipient: Ownable
+        to recipient: AddressConvertible
         ) -> ResultOfUserAction {
         
         let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
@@ -48,8 +48,8 @@ public extension MessageSending {
     func sendEncryptedMessage(
         _ textToEncrypt: String,
         encoding: String.Encoding = .default,
-        to recipient: Ownable,
-        canAlsoBeDecryptedBy extraDecryptors: [Ownable]? = nil
+        to recipient: AddressConvertible,
+        canAlsoBeDecryptedBy extraDecryptors: [AddressConvertible]? = nil
         ) -> ResultOfUserAction {
         
         let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(

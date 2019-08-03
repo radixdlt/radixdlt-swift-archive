@@ -36,11 +36,11 @@ public protocol TokenTransferring {
 public extension TokenTransferring {
     func transferTokens(
         identifier tokenIdentifier: ResourceIdentifier,
-        to recipient: Ownable,
+        to recipient: AddressConvertible,
         amount: PositiveAmount,
         message: String,
         messageEncoding: String.Encoding = .default,
-        from specifiedSender: Ownable? = nil
+        from specifiedSender: AddressConvertible? = nil
         ) -> ResultOfUserAction {
         
         let attachment = message.toData(encodingForced: messageEncoding)
@@ -56,10 +56,10 @@ public extension TokenTransferring {
     
     func transferTokens(
         identifier tokenIdentifier: ResourceIdentifier,
-        to recipient: Ownable,
+        to recipient: AddressConvertible,
         amount: PositiveAmount,
         attachment: Data? = nil,
-        from specifiedSender: Ownable? = nil
+        from specifiedSender: AddressConvertible? = nil
         ) -> ResultOfUserAction {
         
         let sender = specifiedSender ?? addressOfActiveAccount

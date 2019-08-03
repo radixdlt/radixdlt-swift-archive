@@ -39,7 +39,7 @@ public struct Address:
     ExactLengthSpecifying,
     DataInitializable,
     StringRepresentable,
-    Ownable,
+    AddressConvertible,
     PublicKeyOwner,
     Sharded,
     RadixHashable,
@@ -174,7 +174,7 @@ public extension Address {
     }
 }
 
-// MARK: - Ownable
+// MARK: - AddressConvertible
 public extension Address {
     var address: Address {
         return self

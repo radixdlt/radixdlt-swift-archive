@@ -70,7 +70,7 @@ public extension PublicKey {
     var asData: Data { return compressedData }
 }
 
-// MARK: - Ownable
+// MARK: - AddressConvertible
 public extension PublicKey {
     var publicKey: PublicKey {
         return self

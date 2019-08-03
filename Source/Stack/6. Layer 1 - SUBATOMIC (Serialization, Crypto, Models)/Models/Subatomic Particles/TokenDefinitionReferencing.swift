@@ -37,13 +37,13 @@ import Foundation
 /// - seeAlso: `MutableSupplyTokenDefinitionParticle`
 public protocol TokenDefinitionReferencing:
     Accountable,
-    Ownable
+    AddressConvertible
 {
     // swiftlint:enable colon opening_brace
     var tokenDefinitionReference: ResourceIdentifier { get }
 }
 
-// MARK: - Ownable
+// MARK: - AddressConvertible
 public extension TokenDefinitionReferencing {
     var address: Address {
         return tokenDefinitionReference.address

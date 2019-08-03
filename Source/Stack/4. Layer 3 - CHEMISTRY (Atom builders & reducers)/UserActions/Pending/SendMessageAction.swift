@@ -31,8 +31,8 @@ public struct SendMessageAction: UserAction, ChatMessage {
     public let encryptionMode: MessageEncryptionMode
     
     internal init(
-        from sender: Ownable,
-        to recipient: Ownable,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         payload: Data,
         encryption encryptionMode: EncryptionMode = .encryptedDecryptableOnlyByRecipientAndSender
     ) {
@@ -52,8 +52,8 @@ internal extension SendMessageAction {
     init(
         text: String,
         encoding: String.Encoding = .default,
-        from sender: Ownable,
-        to recipient: Ownable,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         encryption encryptionMode: EncryptionMode = .encryptedDecryptableOnlyByRecipientAndSender
     ) {
         let payload = text.toData(encodingForced: encoding)
@@ -71,8 +71,8 @@ public extension SendMessageAction {
 public extension SendMessageAction {
     
     static func plainText(
-        from sender: Ownable,
-        to recipient: Ownable,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         payload: Data
     ) -> SendMessageAction {
         
@@ -85,8 +85,8 @@ public extension SendMessageAction {
     }
     
     static func encryptedDecryptableOnlyByRecipientAndSender(
-        from sender: Ownable,
-        to recipient: Ownable,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         payload: Data
     ) -> SendMessageAction {
         
@@ -99,10 +99,10 @@ public extension SendMessageAction {
     }
     
     static func encrypted(
-        from sender: Ownable,
-        to recipient: Ownable,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         payload: Data,
-        onlyDecryptableBy: [Ownable]
+        onlyDecryptableBy: [AddressConvertible]
     ) -> SendMessageAction {
         
         return SendMessageAction(
@@ -118,8 +118,8 @@ public extension SendMessageAction {
 public extension SendMessageAction {
     
     static func plainText(
-        from sender: Ownable,
-        to recipient: Ownable,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         text: String,
         encoding: String.Encoding = .default
     ) -> SendMessageAction {
@@ -133,9 +133,9 @@ public extension SendMessageAction {
     }
     
     static func encrypted(
-        from sender: Ownable,
-        to recipient: Ownable,
-        onlyDecryptableBy: [Ownable],
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
+        onlyDecryptableBy: [AddressConvertible],
         text: String,
         encoding: String.Encoding = .default
     ) -> SendMessageAction {
@@ -150,15 +150,15 @@ public extension SendMessageAction {
     }
     
     static func encryptedDecryptableBySenderAndRecipient(
-        and extraDecryptors: [Ownable]? = nil,
-        from sender: Ownable,
-        to recipient: Ownable,
+        and extraDecryptors: [AddressConvertible]? = nil,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         text: String,
         encoding: String.Encoding = .default
     ) -> SendMessageAction {
         
         // "or possibly more": https://www.youtube.com/watch?v=-9-cQTGdWHA&feature=youtu.be&t=68
-        var senderAndRecipientOrPossibleMore: [Ownable] = [sender, recipient]
+        var senderAndRecipientOrPossibleMore: [AddressConvertible] = [sender, recipient]
         if let extraDecryptors = extraDecryptors {
             senderAndRecipientOrPossibleMore.append(contentsOf: extraDecryptors)
         }
@@ -167,8 +167,8 @@ public extension SendMessageAction {
     }
     
     static func encryptedDecryptableOnlyByRecipientAndSender(
-        from sender: Ownable,
-        to recipient: Ownable,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         text: String,
         encoding: String.Encoding = .default
     ) -> SendMessageAction {
@@ -182,15 +182,15 @@ public extension SendMessageAction {
     enum EncryptionMode {
         case plainText
 
-        public typealias EncryptionSpecifyDecryptors = ([Ownable]) -> MessageEncryptionMode
+        public typealias EncryptionSpecifyDecryptors = ([AddressConvertible]) -> MessageEncryptionMode
         case encryptionSpecifyDecryptors(EncryptionSpecifyDecryptors)
-        case encryption(onlyDecryptableBy: [Ownable])
+        case encryption(onlyDecryptableBy: [AddressConvertible])
     }
 }
 
 public extension SendMessageAction.EncryptionMode {
     
-    func messageEncryptionMode(sender: Ownable, recipient: Ownable) -> MessageEncryptionMode {
+    func messageEncryptionMode(sender: AddressConvertible, recipient: AddressConvertible) -> MessageEncryptionMode {
         switch self {
         case .plainText:
             return .plainText
@@ -201,7 +201,7 @@ public extension SendMessageAction.EncryptionMode {
         }
     }
     
-    static func encrypted(decryptableOnlyBy decryptors: [Ownable]) -> SendMessageAction.EncryptionMode {
+    static func encrypted(decryptableOnlyBy decryptors: [AddressConvertible]) -> SendMessageAction.EncryptionMode {
         return .encryption(onlyDecryptableBy: decryptors)
     }
     
