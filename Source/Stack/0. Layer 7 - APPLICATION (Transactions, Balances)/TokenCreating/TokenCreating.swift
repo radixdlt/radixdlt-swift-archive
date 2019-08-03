@@ -42,6 +42,7 @@ public extension TokenCreating {
         symbol: Symbol,
         description: Description,
         supply initialSupplyType: CreateTokenAction.InitialSupply,
+        iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
@@ -51,10 +52,53 @@ public extension TokenCreating {
             symbol: symbol,
             description: description,
             supply: initialSupplyType,
-            granularity: granularity
+            granularity: granularity,
+            iconUrl: iconUrl
         )
         
         return (create(token: createTokenAction), createTokenAction.identifier)
+    }
+    
+    func createFixedSupplyToken(
+        creator: AddressConvertible,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        supply: PositiveSupply = .max,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+
+        return try createToken(
+            creator: creator,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: .fixed(to: supply),
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+    
+    func createMultiIssuanceToken(
+        creator: AddressConvertible,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        initialSupply: Supply? = nil,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+        
+        return try createToken(
+            creator: creator,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: .mutable(initial: initialSupply),
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
     }
 }
 
@@ -65,6 +109,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         symbol: Symbol,
         description: Description,
         supply initialSupplyType: CreateTokenAction.InitialSupply,
+        iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
@@ -73,7 +118,49 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             name: name,
             symbol: symbol,
             description: description,
-            supply: initialSupplyType
+            supply: initialSupplyType,
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+    
+    func createFixedSupplyToken(
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        supply: PositiveSupply = .max,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+        
+        return try createFixedSupplyToken(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            iconUrl: iconUrl,
+            supply: supply,
+            granularity: granularity
+        )
+    }
+    
+    func createMultiIssuanceToken(
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        initialSupply: Supply? = nil,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+        
+        return try createMultiIssuanceToken(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            iconUrl: iconUrl,
+            initialSupply: initialSupply,
+            granularity: granularity
         )
     }
 }
