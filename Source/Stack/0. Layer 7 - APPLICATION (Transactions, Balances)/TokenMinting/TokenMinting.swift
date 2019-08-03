@@ -34,13 +34,17 @@ public extension TokenMinting {
     func mintTokens(
         amount: PositiveAmount,
         ofType tokenDefinitionReferece: ResourceIdentifier,
-        credit ownerOfTokensToMint: Ownable
+        minter: AddressConvertible,
+        credit creditSomeoneElseThanMinter: AddressConvertible? = nil
     ) -> ResultOfUserAction {
     
+        let creditNewlyMintedTokensTo = creditSomeoneElseThanMinter ?? minter
+        
         let mintAction = MintTokensAction(
             tokenDefinitionReferece: tokenDefinitionReferece,
             amount: amount,
-            ownerOfTokensToMint: ownerOfTokensToMint.address
+            minter: minter.address,
+            creditNewlyMintedTokensTo: creditNewlyMintedTokensTo.address
         )
         
         return mintTokens(mintAction)
@@ -50,8 +54,15 @@ public extension TokenMinting {
 public extension TokenMinting where Self: ActiveAccountOwner {
     func mintTokens(
         amount: PositiveAmount,
-        ofType tokenDefinitionReferece: ResourceIdentifier
+        ofType tokenDefinitionReferece: ResourceIdentifier,
+        credit creditSomeoneElseThanMinter: AddressConvertible? = nil
     ) -> ResultOfUserAction {
-        return mintTokens(amount: amount, ofType: tokenDefinitionReferece, credit: addressOfActiveAccount)
+        
+        return mintTokens(
+            amount: amount,
+            ofType: tokenDefinitionReferece,
+            minter: addressOfActiveAccount,
+            credit: creditSomeoneElseThanMinter
+        )
     }
 }

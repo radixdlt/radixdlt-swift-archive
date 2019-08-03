@@ -28,10 +28,10 @@ public protocol MintTokensActionToParticleGroupsMapper: StatefulActionToParticle
 
 public extension MintTokensActionToParticleGroupsMapper {
     func requiredState(for mintTokensAction: Action) -> [AnyShardedParticleStateId] {
-        let address = mintTokensAction.tokenDefinitionReferece.address
+        let tokenDefinitionAddress = mintTokensAction.tokenDefinitionReferece.address
         return [
-            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: UnallocatedTokensParticle.self, address: address)),
-            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: MutableSupplyTokenDefinitionParticle.self, address: address))
+            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: UnallocatedTokensParticle.self, address: tokenDefinitionAddress)),
+            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: MutableSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress))
         ]
     }
 }
@@ -45,10 +45,10 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
     typealias Action = MintTokensAction
     
     func particleGroups(for action: Action, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
-        try ensureTokenExists(mintAction: action, upParticles: upParticles)
+        try ensureTokenExistsAndThatMinterHasPermissionToMintIt(mintAction: action, upParticles: upParticles)
         
         let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
-            transitioner: { try TransferrableTokensParticle(amount: $0, unallocatedToken: $1, address: action.ownerOfTokensToMint) },
+            transitioner: { try TransferrableTokensParticle(amount: $0, unallocatedToken: $1, address: action.creditNewlyMintedTokensTo) },
             transitionedCombiner: { $0 },
             migrator: UnallocatedTokensParticle.init(amount:basedOn:),
             migratedCombiner: { $0 },
@@ -78,18 +78,33 @@ public enum MintError: Swift.Error, Equatable {
         currentSupply: PositiveAmount,
         byMintingAmount: PositiveAmount
     )
+    
+    case lackingPermissions(
+        of: Address,
+        toMintToken: ResourceIdentifier,
+        whichRequiresPermission: TokenPermission,
+        creatorOfToken: Address
+    )
 }
 
 private extension DefaultMintTokensActionToParticleGroupsMapper {
-    func ensureTokenExists(mintAction: MintTokensAction, upParticles: [AnyUpParticle]) throws {
+    
+    func ensureTokenExistsAndThatMinterHasPermissionToMintIt(mintAction: MintTokensAction, upParticles: [AnyUpParticle]) throws {
         let rri = mintAction.tokenDefinitionReferece
+        guard let mutableSupplyTokensParticle = upParticles
+            .compactMap({ try? UpParticle<MutableSupplyTokenDefinitionParticle>(anyUpParticle: $0) })
+            .first(where: { $0.particle.tokenDefinitionReference == rri })
+            .map({ $0.particle }) else {
+                 throw Error.unknownToken(identifier: rri)
+        }
         
-        let upMutableSupplyTokenDefinitionParticles = upParticles
-            .compactMap { try? UpParticle<MutableSupplyTokenDefinitionParticle>(anyUpParticle: $0) }
-            .filter { $0.particle.tokenDefinitionReference == rri }
-        
-        if upMutableSupplyTokenDefinitionParticles.isEmpty {
-            throw Error.unknownToken(identifier: rri)
+        guard mutableSupplyTokensParticle.canBeMinted(by: mintAction.minter) else {
+            throw Error.lackingPermissions(
+                of: mintAction.minter,
+                toMintToken: rri,
+                whichRequiresPermission: mutableSupplyTokensParticle.permissions.mintPermission,
+                creatorOfToken: mutableSupplyTokensParticle.address
+            )
         }
     }
 }
