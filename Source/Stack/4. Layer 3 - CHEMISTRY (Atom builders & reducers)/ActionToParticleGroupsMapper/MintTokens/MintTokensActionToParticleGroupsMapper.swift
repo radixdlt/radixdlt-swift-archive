@@ -48,7 +48,7 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
     typealias Action = MintTokensAction
     
     func particleGroups(for action: Action, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
-        try ensureTokenExistsAndThatMinterHasPermissionToMintIt(mintAction: action, upParticles: upParticles)
+        try validateInput(mintAction: action, upParticles: upParticles)
         
         let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
             transitioner: { try TransferrableTokensParticle(amount: $0, unallocatedToken: $1, address: action.creditNewlyMintedTokensTo) },
@@ -92,11 +92,17 @@ public enum MintError: Swift.Error, Equatable {
     case tokenHasFixedSupplyThusItCannotBeMinted(
         identifier: ResourceIdentifier
     )
+    
+    case amountNotMultipleOfGranularity(
+        token: ResourceIdentifier,
+        triedToMintAmount: PositiveAmount,
+        whichIsNotMultipleOfGranularity: Granularity
+    )
 }
 
 private extension DefaultMintTokensActionToParticleGroupsMapper {
     
-    func ensureTokenExistsAndThatMinterHasPermissionToMintIt(mintAction: MintTokensAction, upParticles: [AnyUpParticle]) throws {
+    func validateInput(mintAction: MintTokensAction, upParticles: [AnyUpParticle]) throws {
         let rri = mintAction.tokenDefinitionReferece
         
         guard let mutableSupplyTokensParticle = upParticles
@@ -123,6 +129,18 @@ private extension DefaultMintTokensActionToParticleGroupsMapper {
                 creatorOfToken: mutableSupplyTokensParticle.address
             )
         }
+        
+        let mintAmount = mintAction.amount
+        let granularity = mutableSupplyTokensParticle.granularity
+        guard mintAmount.isExactMultipleOfGranularity(granularity) else {
+            throw Error.amountNotMultipleOfGranularity(
+                token: rri,
+                triedToMintAmount: mintAmount,
+                whichIsNotMultipleOfGranularity: granularity
+            )
+        }
+        
+        // All is well.
     }
 }
 
