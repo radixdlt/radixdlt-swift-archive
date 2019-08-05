@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,27 +24,39 @@
 
 import Foundation
 
-public final class TokenDefinitionsReducer: ParticleReducer {}
-
-public extension TokenDefinitionsReducer {
+public protocol TokenBurning {
     
-    typealias State = TokenDefinitionsState
+    /// Burns tokens of the TokenDefinition kind
+    func burnTokens(_ action: BurnTokensAction) -> ResultOfUserAction
+}
 
-    var initialState: TokenDefinitionsState {
-        return TokenDefinitionsState()
+public extension TokenBurning {
+    func burnTokens(
+        amount: PositiveAmount,
+        ofType tokenDefinitionReference: ResourceIdentifier,
+        burner: AddressConvertible
+    ) -> ResultOfUserAction {
+        
+        let burnAction = BurnTokensAction(
+            tokenDefinitionReference: tokenDefinitionReference,
+            amount: amount,
+            burner: burner.address
+        )
+        
+        return burnTokens(burnAction)
     }
-    
-    func reduce(state: State, upParticle: AnyUpParticle) -> State {
-        let particle = upParticle.particle
-        if let mutableSupplyTokenDefinitionParticle = particle as? MutableSupplyTokenDefinitionParticle {
-            return state.mergeWithMutableSupplyTokenDefinitionParticle(mutableSupplyTokenDefinitionParticle)
-        } else if let fixedSupplyTokenDefinitionsParticle = particle as? FixedSupplyTokenDefinitionParticle {
-            return state.mergeWithFixedSupplyTokenDefinitionParticle(fixedSupplyTokenDefinitionsParticle)
-        } else if let unallocatedTokensParticle = particle as? UnallocatedTokensParticle {
-            return state.mergeWithUnallocatedTokensParticle(unallocatedTokensParticle)
-        } else {
-            return state
-        }
-    }
+}
 
+public extension TokenBurning where Self: ActiveAccountOwner {
+    func burnTokens(
+        amount: PositiveAmount,
+        ofType tokenDefinitionReference: ResourceIdentifier
+    ) -> ResultOfUserAction {
+        
+        return burnTokens(
+            amount: amount,
+            ofType: tokenDefinitionReference,
+            burner: addressOfActiveAccount
+        )
+    }
 }

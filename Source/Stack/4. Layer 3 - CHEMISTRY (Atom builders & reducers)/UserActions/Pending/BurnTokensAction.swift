@@ -25,9 +25,9 @@
 import Foundation
 
 public struct BurnTokensAction: UserAction {
-    public let address: Address
     public let tokenDefinitionReference: ResourceIdentifier
     public let amount: PositiveAmount
+    public let burner: Address
 }
 
 public extension BurnTokensAction {

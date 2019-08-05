@@ -214,6 +214,8 @@
 		E69D851822F4818F0039A207 /* MintTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D851722F4818F0039A207 /* MintTokensTests.swift */; };
 		E69D851B22F483460039A207 /* TokenMinting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D851A22F483460039A207 /* TokenMinting.swift */; };
 		E69D851D22F484D30039A207 /* ActiveAccountOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D851C22F484D30039A207 /* ActiveAccountOwner.swift */; };
+		E69D851F22F7555E0039A207 /* BurnTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D851E22F7555E0039A207 /* BurnTokensTests.swift */; };
+		E69D852222F755D10039A207 /* TokenBurning.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D852122F755D10039A207 /* TokenBurning.swift */; };
 		E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752222A18F5C00AC631B /* Encryptor.swift */; };
 		E69E752522A1901000AC631B /* MetaDataOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752422A1901000AC631B /* MetaDataOwner.swift */; };
 		E69E752722A1903600AC631B /* AtomToDecryptedMessageMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752622A1903600AC631B /* AtomToDecryptedMessageMapper.swift */; };
@@ -786,6 +788,8 @@
 		E69D851722F4818F0039A207 /* MintTokensTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintTokensTests.swift; sourceTree = "<group>"; };
 		E69D851A22F483460039A207 /* TokenMinting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenMinting.swift; sourceTree = "<group>"; };
 		E69D851C22F484D30039A207 /* ActiveAccountOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveAccountOwner.swift; sourceTree = "<group>"; };
+		E69D851E22F7555E0039A207 /* BurnTokensTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurnTokensTests.swift; sourceTree = "<group>"; };
+		E69D852122F755D10039A207 /* TokenBurning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBurning.swift; sourceTree = "<group>"; };
 		E69E752222A18F5C00AC631B /* Encryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryptor.swift; sourceTree = "<group>"; };
 		E69E752422A1901000AC631B /* MetaDataOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataOwner.swift; sourceTree = "<group>"; };
 		E69E752622A1903600AC631B /* AtomToDecryptedMessageMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToDecryptedMessageMapper.swift; sourceTree = "<group>"; };
@@ -1835,6 +1839,7 @@
 			children = (
 				E69E753022A1B9C200AC631B /* MessageSending */,
 				E6725649228AEBC2004631F1 /* TokenCreating */,
+				E69D852022F755B00039A207 /* TokenBurning */,
 				E69D851922F483160039A207 /* TokenMinting */,
 				E696AACE226DE6B900D19ED6 /* TokenTransferring */,
 				E689DB81225F653F00340CF3 /* RadixApplicationClient */,
@@ -2097,6 +2102,14 @@
 				E69D851A22F483460039A207 /* TokenMinting.swift */,
 			);
 			path = TokenMinting;
+			sourceTree = "<group>";
+		};
+		E69D852022F755B00039A207 /* TokenBurning */ = {
+			isa = PBXGroup;
+			children = (
+				E69D852122F755D10039A207 /* TokenBurning.swift */,
+			);
+			path = TokenBurning;
 			sourceTree = "<group>";
 		};
 		E69E753022A1B9C200AC631B /* MessageSending */ = {
@@ -3151,6 +3164,7 @@
 				E6F548382277022500EE6311 /* GetTokenBalanceTests.swift */,
 				E6725647228AE98F004631F1 /* TransferTokensTests.swift */,
 				E69D851722F4818F0039A207 /* MintTokensTests.swift */,
+				E69D851E22F7555E0039A207 /* BurnTokensTests.swift */,
 				E69E753322A294D800AC631B /* SendMessageTests.swift */,
 			);
 			path = "0. Layer 7 - APPLICATION (Transactions, Balances)";
@@ -3920,6 +3934,7 @@
 				E6FCB67222F3078E00ECC01B /* SubmitAtomActionRecived.swift in Sources */,
 				E6FCB67922F3082400ECC01B /* AtomStatusNotStored.swift in Sources */,
 				E6E2799D2271CD1C0067D46E /* ValidValueInitializable.swift in Sources */,
+				E69D852222F755D10039A207 /* TokenBurning.swift in Sources */,
 				E6474AC6226614C2009C4FDC /* Host+Localhost.swift in Sources */,
 				E69E754D22AA32BA00AC631B /* ApplicationState.swift in Sources */,
 				E6A508AA224E713F00128123 /* MutableSupplyTokenDefinitionParticle+Decodable.swift in Sources */,
@@ -4358,6 +4373,7 @@
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
 				E64641F122F361F500E05034 /* TooLongSymbolTests.swift in Sources */,
 				E6E27A3D2271CE250067D46E /* DSONEncodingAddressHolderTests.swift in Sources */,
+				E69D851F22F7555E0039A207 /* BurnTokensTests.swift in Sources */,
 				E6E27A442271CE250067D46E /* TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

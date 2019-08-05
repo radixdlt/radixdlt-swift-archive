@@ -27,19 +27,19 @@ import Foundation
 public final class DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenActionToParticleGroupsMapper {}
 
 public extension CreateTokenActionToParticleGroupsMapper {
-    func particleGroups(for action: CreateTokenAction) -> ParticleGroups {
+    func particleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
 
         switch action.tokenSupplyType {
-        case .mutable: return mutableSupplyTokenParticleGroups(for: action)
-        case .fixed: return fixedSupplyTokenParticleGroups(for: action)
+        case .mutable: return try mutableSupplyTokenParticleGroups(for: action)
+        case .fixed: return try fixedSupplyTokenParticleGroups(for: action)
         }
     }
 }
 
 private extension CreateTokenActionToParticleGroupsMapper {
-    func mutableSupplyTokenParticleGroups(for action: CreateTokenAction) -> ParticleGroups {
+    func mutableSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
         
-        let mutableSupplyToken = MutableSupplyTokenDefinitionParticle(createTokenAction: action)
+        let mutableSupplyToken = try MutableSupplyTokenDefinitionParticle(createTokenAction: action)
         let unallocated = UnallocatedTokensParticle.maxSupplyForNewToken(mutableSupplyToken: mutableSupplyToken)
         let rriParticle = ResourceIdentifierParticle(token: mutableSupplyToken)
         
@@ -74,17 +74,13 @@ private extension CreateTokenActionToParticleGroupsMapper {
         ]
     }
     
-    func fixedSupplyTokenParticleGroups(for action: CreateTokenAction) -> ParticleGroups {
-        guard let amount = try? PositiveAmount(nonNegative: action.initialSupply.amount) else {
-            incorrectImplementation("Amount should always be positive for FixedSupply")
-        }
+    func fixedSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
+        let amount = try PositiveAmount(nonNegative: action.initialSupply.amount)
         
         let fixedSupplyToken = FixedSupplyTokenDefinitionParticle(createTokenAction: action)
         let rriParticle = ResourceIdentifierParticle(token: fixedSupplyToken)
      
-        guard let tokens = try? TransferrableTokensParticle(fixedSupplyToken: fixedSupplyToken, amount: amount) else {
-            incorrectImplementation("Should not be able to init CreateTokenAction with non matching granularity and amount.")
-        }
+        let tokens = try TransferrableTokensParticle(fixedSupplyToken: fixedSupplyToken, amount: amount)
         
         let tokenCreationGroup: ParticleGroup = [
             rriParticle.withSpin(.down),
@@ -99,7 +95,7 @@ private extension CreateTokenActionToParticleGroupsMapper {
 }
 
 // MARK: - TransferrableTokensParticle from TokenDefinitionParticles
-private extension TransferrableTokensParticle {
+internal extension TransferrableTokensParticle {
     init(
         mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
         amount: PositiveAmount) throws {

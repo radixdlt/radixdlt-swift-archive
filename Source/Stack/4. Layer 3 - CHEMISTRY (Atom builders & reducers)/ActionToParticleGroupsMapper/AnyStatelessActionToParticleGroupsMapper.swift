@@ -28,19 +28,19 @@ public struct AnyStatelessActionToParticleGroupsMapper: BaseStatelessActionToPar
     
     private let _actionType: () -> UserAction.Type
     private let _matchesType: (UserAction.Type) -> Bool
-    private let _particleGroupsForAnAction: (UserAction) -> ParticleGroups
+    private let _particleGroupsForAnAction: (UserAction) throws -> ParticleGroups
     
     public init<Concrete>(_ concrete: Concrete) where Concrete: StatelessActionToParticleGroupsMapper {
         self._actionType = { Concrete.Action.self }
         self._matchesType = { return $0 == Concrete.Action.self }
         
-        self._particleGroupsForAnAction = { concrete.particleGroupsForAnAction($0) }
+        self._particleGroupsForAnAction = { try concrete.particleGroupsForAnAction($0) }
     }
 }
 
 public extension AnyStatelessActionToParticleGroupsMapper {
-    func particleGroupsForAnAction(_ userAction: UserAction) -> ParticleGroups {
-        return self._particleGroupsForAnAction(userAction)
+    func particleGroupsForAnAction(_ userAction: UserAction) throws -> ParticleGroups {
+        return try self._particleGroupsForAnAction(userAction)
     }
     
     func matches<Action>(actionType: Action.Type) -> Bool where Action: UserAction {

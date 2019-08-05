@@ -39,10 +39,10 @@ public final class DefaultSendMessageActionToParticleGroupsMapper: SendMessageAc
 }
 public extension DefaultSendMessageActionToParticleGroupsMapper {
 
-    func particleGroups(for action: SendMessageAction) -> ParticleGroups {
+    func particleGroups(for action: SendMessageAction) throws -> ParticleGroups {
         var particles = [AnySpunParticle]()
 
-        let (payload, encryptorParticle) = encryptDataIfNeeded(action: action)
+        let (payload, encryptorParticle) = try encryptDataIfNeeded(action: action)
         
         if let encryptorParticle = encryptorParticle {
             particles += encryptorParticle
@@ -73,33 +73,31 @@ private extension DefaultSendMessageActionToParticleGroupsMapper {
         }
     }
     
-    func encryptDataIfNeeded(action sendMessageAction: SendMessageAction) -> (data: Data, encryptorParticle: AnySpunParticle?) {
+    func encryptDataIfNeeded(action sendMessageAction: SendMessageAction) throws -> (data: Data, encryptorParticle: AnySpunParticle?) {
         var encryptorParticle: AnySpunParticle?
-        let payload: Data = !sendMessageAction.shouldBeEncrypted ? sendMessageAction.payload : {
-            do {
-                let sharedKey = generateSharedKey()
-                let readers = readersOf(message: sendMessageAction)
-                
-                let encryptedPrivateKeys = try readers.map { try sharedKey.encryptPrivateKey(withPublicKey: $0) }
-                let encryptor = Encryptor(protectors: encryptedPrivateKeys)
-                
-                let encryptorPayload = try encryptor.encodePayload(encoder: encryptedPayloadJsonEncoder)
-                
-                let messageEncryptorParticle = MessageParticle(
-                    from: sendMessageAction.sender,
-                    to: sendMessageAction.recipient,
-                    payload: encryptorPayload,
-                    metaData: [
-                        MetaDataKey.application(.encryptor),
-                        MetaDataKey.contentType(.applicationJson)
-                    ]
-                )
-                    
-                encryptorParticle = messageEncryptorParticle.withSpin(.up)
-                
-                let encryptedMessage = try sharedKey.publicKey.encrypt(sendMessageAction.payload)
-                return encryptedMessage
-            } catch { incorrectImplementation("Failed to encrypt message, error: \(error)") }
+        let payload: Data = try !sendMessageAction.shouldBeEncrypted ? sendMessageAction.payload : {
+            let sharedKey = generateSharedKey()
+            let readers = readersOf(message: sendMessageAction)
+            
+            let encryptedPrivateKeys = try readers.map { try sharedKey.encryptPrivateKey(withPublicKey: $0) }
+            let encryptor = Encryptor(protectors: encryptedPrivateKeys)
+            
+            let encryptorPayload = try encryptor.encodePayload(encoder: encryptedPayloadJsonEncoder)
+            
+            let messageEncryptorParticle = MessageParticle(
+                from: sendMessageAction.sender,
+                to: sendMessageAction.recipient,
+                payload: encryptorPayload,
+                metaData: [
+                    MetaDataKey.application(.encryptor),
+                    MetaDataKey.contentType(.applicationJson)
+                ]
+            )
+            
+            encryptorParticle = messageEncryptorParticle.withSpin(.up)
+            
+            let encryptedMessage = try sharedKey.publicKey.encrypt(sendMessageAction.payload)
+            return encryptedMessage
         }()
         
         return (data: payload, encryptorParticle: encryptorParticle)

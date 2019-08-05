@@ -30,7 +30,7 @@ public final class DefaultPutUniqueActionToParticleGroupsMapper: PutUniqueAction
 
 public extension DefaultPutUniqueActionToParticleGroupsMapper {
     typealias Action = PutUniqueIdAction
-    func particleGroups(for action: Action) -> ParticleGroups {
+    func particleGroups(for action: Action) throws -> ParticleGroups {
         implementMe()
     }
 }

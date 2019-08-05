@@ -104,7 +104,7 @@ private extension TransferrableTokensParticle {
 }
 
 private func makeMutableSupplyTokenDefinitionParticle(tokenPermissions: TokenPermissions) -> MutableSupplyTokenDefinitionParticle {
-    return MutableSupplyTokenDefinitionParticle(
+    return try! MutableSupplyTokenDefinitionParticle(
         symbol: "TEST",
         name: "Test",
         description: "Testing Testing",

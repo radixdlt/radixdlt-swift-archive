@@ -43,7 +43,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
         
-        let particleGroupsForMessage = mapper.particleGroups(for: sendMessageAction)
+        let particleGroupsForMessage = try! mapper.particleGroups(for: sendMessageAction)
         
         let mockedTimestamp = TimeConverter.dateFrom(millisecondsSince1970: 123456789)
 
@@ -96,7 +96,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         let sendMessageAction = SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: alice, to: bob, text: message)
         
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
-        let atom = mapper.particleGroups(for: sendMessageAction).wrapInAtom()
+        let atom = try! mapper.particleGroups(for: sendMessageAction).wrapInAtom()
         let atomToDecryptedMessagesMapper = DefaultAtomToDecryptedMessageMapper()
 
         func ensureCanBeDecrypted(by account: AccountOwner) {
@@ -135,7 +135,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         
         XCTAssertFalse(sendMessageAction.shouldBeEncrypted)
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
-        let atom = mapper.particleGroups(for: sendMessageAction).wrapInAtom()
+        let atom = try! mapper.particleGroups(for: sendMessageAction).wrapInAtom()
         let atomToDecryptedMessagesMapper = DefaultAtomToDecryptedMessageMapper()
         
         func ensureNonEncryptedMessageCanBeRead(by account: AccountOwner) {

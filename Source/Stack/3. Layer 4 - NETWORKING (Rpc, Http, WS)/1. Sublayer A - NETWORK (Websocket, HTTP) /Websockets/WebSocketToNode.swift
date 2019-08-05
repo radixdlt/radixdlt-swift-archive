@@ -164,7 +164,7 @@ public extension WebSocketToNode {
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Swift.Error?) {
-        log.info("Websocket closed")
+        log.debug("Websocket closed")
         guard !isClosing else {
             self.socket = nil
             return stateSubject.onNext(.disconnected)

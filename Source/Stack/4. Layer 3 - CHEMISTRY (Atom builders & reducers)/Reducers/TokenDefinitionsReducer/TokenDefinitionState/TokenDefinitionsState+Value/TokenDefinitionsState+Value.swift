@@ -34,8 +34,12 @@ public extension TokenDefinitionsState {
 // MARK: - Convenience Init
 public extension TokenDefinitionsState.Value {
     
-    init(tokenConvertible: TokenConvertible) {
-        self = .partial(.tokenDefinition(TokenDefinition(tokenConvertible: tokenConvertible)))
+    init(mutableSupplyTokenDefinition: MutableSupplyTokenDefinitionParticle) {
+        self.init(tokenConvertible: mutableSupplyTokenDefinition)
+    }
+    
+    init(fixedSupplyTokenDefinition: FixedSupplyTokenDefinitionParticle) {
+        self.init(tokenConvertible: fixedSupplyTokenDefinition)
     }
     
     init(supplyState: TokenSupplyStateConvertible) {
@@ -45,6 +49,13 @@ public extension TokenDefinitionsState.Value {
     init(unallocatedTokensParticle: UnallocatedTokensParticle) {
         self = .partial(.supply(TokenDefinitionsState.SupplyInfo(unallocatedTokensParticle: unallocatedTokensParticle)))
     }
+}
+
+private extension TokenDefinitionsState.Value {
+    init(tokenConvertible: TokenConvertible) {
+        self = .partial(.tokenDefinition(TokenDefinition(tokenConvertible: tokenConvertible)))
+    }
+    
 }
 
 // MARK: - TokenDefinitionReferencing

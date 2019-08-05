@@ -100,6 +100,15 @@ public extension Supply {
     func add(_ other: Supply) throws -> Supply {
         return try Supply(nonNegativeAmount: amount + other.amount)
     }
+    
+    func overflowsWhenAdding(_ other: Supply) -> Bool {
+        do {
+            _ = try add(other)
+            return false
+        } catch Error.cannotExceedUInt256MaxValue {
+            return true
+        } catch { unexpectedlyMissedToCatch(error: error) }
+    }
 }
 
 // MARK: - Throwing

@@ -35,6 +35,7 @@ public struct MutableSupplyTokenDefinitionParticle:
     RadixHashable,
     DSONEncodable,
     Accountable,
+    Throwing,
     Hashable {
 // swiftlint:enable colon
     
@@ -55,13 +56,25 @@ public struct MutableSupplyTokenDefinitionParticle:
         granularity: Granularity = .default,
         permissions: TokenPermissions = .mutableSupplyToken,
         iconUrl: URL? = nil
-    ) {
+    ) throws {
+        let mintPermission = permissions.mintPermission
+        guard mintPermission == .all || mintPermission == .tokenOwnerOnly else {
+            throw Error.someoneMustHavePermissionToMintToken(incorrectMintPermissionPassed: mintPermission)
+        }
+        
         self.name = name
         self.description = description
         self.rri = ResourceIdentifier(address: address, symbol: symbol)
         self.granularity = granularity
         self.permissions = permissions
         self.iconUrl = iconUrl
+    }
+}
+
+// MARK: Throwing
+public extension MutableSupplyTokenDefinitionParticle {
+    enum Error: Swift.Error, Equatable {
+        case someoneMustHavePermissionToMintToken(incorrectMintPermissionPassed: TokenPermission)
     }
 }
 
@@ -81,9 +94,9 @@ public extension MutableSupplyTokenDefinitionParticle {
 
 // MARK: - From CreateTokenAction
 public extension MutableSupplyTokenDefinitionParticle {
-    init(createTokenAction action: CreateTokenAction) {
+    init(createTokenAction action: CreateTokenAction) throws {
         
-        self.init(
+        try self.init(
             symbol: action.symbol,
             name: action.name,
             description: action.description,

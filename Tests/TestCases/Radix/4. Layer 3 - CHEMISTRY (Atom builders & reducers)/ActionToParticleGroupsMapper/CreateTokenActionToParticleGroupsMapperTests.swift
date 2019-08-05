@@ -73,7 +73,8 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
             supply: initialSupply
         )
         
-        let particleGroups = DefaultCreateTokenActionToParticleGroupsMapper().particleGroups(for: createTokenAction)
+        let mapper = DefaultCreateTokenActionToParticleGroupsMapper()
+        let particleGroups = try! mapper.particleGroups(for: createTokenAction)
         guard let tokenCreationGroup = particleGroups.first else { return }
         assertCorrectnessTokenCreationGroup(tokenCreationGroup, testPermissions: initialSupply.isFixed)
         
