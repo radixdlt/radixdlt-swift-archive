@@ -30,7 +30,8 @@ public struct UnallocatedTokensParticle:
     ParticleConvertible,
     RadixCodable,
     RadixModelTypeStaticSpecifying,
-    Accountable
+    Accountable,
+    CustomStringConvertible
 {
     // swiftlint:enable colon opening_brace
 
@@ -48,7 +49,8 @@ public struct UnallocatedTokensParticle:
         permissions: TokenPermissions = .default,
         granularity: Granularity = .default,
         nonce: Nonce = Nonce()
-        ) {
+    ) {
+        
         self.granularity = granularity
         self.nonce = nonce
         self.amount = amount
@@ -69,6 +71,21 @@ public extension UnallocatedTokensParticle {
             permissions: token.permissions,
             granularity: token.granularity
         )
+    }
+}
+
+// MARK: CustomStringConvertible
+public extension UnallocatedTokensParticle {
+    var description: String {
+        return """
+        UnallocatedTokensParticle(
+            amount: \(amount)
+            rri: \(tokenDefinitionReference),
+            permissions: \(permissions),
+        
+            (omitted: [`granularity`, `nonce`])
+        )
+        """
     }
 }
 

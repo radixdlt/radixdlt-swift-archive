@@ -45,6 +45,7 @@ public struct TokenState:
     public let tokenDefinedBy: Address
     public let description: Description
     public let granularity: Granularity
+    public let iconUrl: URL?
     
     private init(
         totalSupply: Supply,
@@ -54,6 +55,7 @@ public struct TokenState:
         tokenDefinedBy: Address,
         description: Description,
         granularity: Granularity
+        iconUrl: URL?
     ) {
         self.totalSupply = totalSupply
         self.tokenSupplyType = tokenSupplyType
@@ -63,6 +65,7 @@ public struct TokenState:
         self.tokenDefinedBy = tokenDefinedBy
         self.description = description
         self.granularity = granularity
+        self.iconUrl = iconUrl
     }
 }
 

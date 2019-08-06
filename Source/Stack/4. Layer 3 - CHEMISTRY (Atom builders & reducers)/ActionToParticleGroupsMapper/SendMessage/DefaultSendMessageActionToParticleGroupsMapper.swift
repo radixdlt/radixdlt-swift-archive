@@ -32,7 +32,8 @@ public final class DefaultSendMessageActionToParticleGroupsMapper: SendMessageAc
     
     public init(
         sharedKeyGenerator: @escaping @autoclosure () -> KeyPair = KeyPair.init(),
-        encryptedPayloadJsonEncoder: JSONEncoder = JSONEncoder()    ) {
+        encryptedPayloadJsonEncoder: JSONEncoder = JSONEncoder()
+    ) {
         self.generateSharedKey = sharedKeyGenerator
         self.encryptedPayloadJsonEncoder = encryptedPayloadJsonEncoder
     }
