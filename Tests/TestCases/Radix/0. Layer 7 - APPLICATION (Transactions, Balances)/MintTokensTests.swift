@@ -187,4 +187,31 @@ class MintTokensTests: LocalhostNodeTest {
         
     }
     
+    func testMintFailDueToIncorrectGranularity() {
+        // GIVEN: Radix identity Alice and an application layer action MintToken, and a previously created FooToken, with a granularity of 3
+        let (tokenCreation, fooToken) = try! application.createToken(
+            name: "FooToken",
+            symbol: "ALICE",
+            description: "Created By Alice",
+            supply: .mutable(initial: 30),
+            granularity: 3
+        )
+        
+        XCTAssertTrue(
+            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
+        
+        // WHEN: Alice call Mint(2) for FooToken, where 3∤2 (3 does not divide 2)
+        let minting = application.mintTokens(amount: 2, ofType: fooToken)
+        
+        minting.blockingAssertThrows(
+            error: MintError.amountNotMultipleOfGranularity(
+                token: fooToken,
+                triedToMintAmount: 2,
+                whichIsNotMultipleOfGranularity: 3
+            )
+        )
+        
+    }
+    
 }
