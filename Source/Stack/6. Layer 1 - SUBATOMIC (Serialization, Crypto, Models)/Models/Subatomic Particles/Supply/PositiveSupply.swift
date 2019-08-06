@@ -41,23 +41,6 @@ public struct PositiveSupply:
     }
 }
 
-// MARK: - Convenience Init
-public extension PositiveSupply {
-    
-    init<AmountType>(subtractingFromMax amountToSubtractFromMax: AmountType) throws where AmountType: NonNegativeAmountConvertible {
-        try self.init(amount: Supply.subtractingFromMax(amount: amountToSubtractFromMax))
-    }
-    
-    init(unallocatedTokensParticle: UnallocatedTokensParticle) {
-        do {
-            let unallocatedAmount = unallocatedTokensParticle.amount.amount
-            try self.init(amount: Supply.subtractingFromMax(amount: unallocatedAmount))
-        } catch {
-            unexpectedlyMissedToCatch(error: error)
-        }
-    }
-}
-
 // MARK: - ValueValidating
 public extension PositiveSupply {
     
@@ -68,23 +51,6 @@ public extension PositiveSupply {
             throw Error.cannotExceedUInt256MaxValue
         }
         return value
-    }
-}
-
-// MARK: - Convenience
-public extension PositiveSupply {
-    
-    var subtractedFromMax: PositiveSupply? {
-        guard let positiveLeftOverSupplyAmount = try? PositiveSupply.subtractingFromMax(amount: self.amount) else { return nil }
-        return try? PositiveSupply(amount: positiveLeftOverSupplyAmount)
-    }
-    
-    static func subtractingFromMax<AmountType>(amount: AmountType) throws -> PositiveAmount where AmountType: NonNegativeAmountConvertible {
-        let subtracted: SignedAmount = SignedAmount(nonNegative: PositiveSupply.maxAmountValue) - SignedAmount(nonNegative: amount)
-        guard subtracted.isPositive else {
-            throw Error.mustBePositive
-        }
-        return try PositiveAmount(nonNegative: subtracted.abs)
     }
 }
 
