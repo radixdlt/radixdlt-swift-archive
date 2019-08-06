@@ -63,9 +63,15 @@ private extension CreateTokenActionToParticleGroupsMapper {
             minted.withSpin(.up)
         ]
         
-        if let positiveLeftOverSupply = initialSupply.subtractedFromMax {
-            let unallocatedFromLeftOverSupply = UnallocatedTokensParticle(mutableSupplyToken: mutableSupplyToken, amount: positiveLeftOverSupply)
+        if let positiveLeftOverSupply = try? Supply.init(subtractingFromMax: initialSupply.amount) {
+            
+            let unallocatedFromLeftOverSupply = UnallocatedTokensParticle(
+                mutableSupplyToken: mutableSupplyToken,
+                amount: positiveLeftOverSupply
+            )
+            
             mintGroup += unallocatedFromLeftOverSupply.withSpin(.up)
+            
         }
         
         return [

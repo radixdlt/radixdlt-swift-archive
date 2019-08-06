@@ -38,11 +38,4 @@ public extension TokenDefinitionsState.SupplyInfo {
             tokenDefinitionReference: tokenSupplyStateConvertible.tokenDefinitionReference
         )
     }
-    
-    init(unallocatedTokensParticle: UnallocatedTokensParticle) {
-        self.init(
-            totalSupply: Supply(unallocatedTokensParticle: unallocatedTokensParticle),
-            tokenDefinitionReference: unallocatedTokensParticle.tokenDefinitionReference
-        )
-    }
 }

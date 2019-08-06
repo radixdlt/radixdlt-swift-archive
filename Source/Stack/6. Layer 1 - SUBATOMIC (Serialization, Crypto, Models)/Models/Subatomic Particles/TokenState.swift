@@ -54,7 +54,7 @@ public struct TokenState:
         name: Name,
         tokenDefinedBy: Address,
         description: Description,
-        granularity: Granularity
+        granularity: Granularity,
         iconUrl: URL?
     ) {
         self.totalSupply = totalSupply
@@ -85,7 +85,8 @@ private extension TokenState {
             name: tokenDefinition.name,
             tokenDefinedBy: tokenDefinition.tokenDefinedBy,
             description: tokenDefinition.description,
-            granularity: tokenDefinition.granularity
+            granularity: tokenDefinition.granularity,
+            iconUrl: tokenDefinition.iconUrl
         )
     }
 }
@@ -130,12 +131,7 @@ public extension TokenState {
             throw Error.tokenDefinitionReferenceMismatch
         }
 
-        let updatedTotalSupply = try self.totalSupply.add(other.totalSupply)
-
-        return TokenState(
-            token: other,
-            totalSupply: updatedTotalSupply
-        )
+        return other
     }
 
     func mergingWithPartial(_ partial: TokenDefinitionsState.Value.Partial) throws -> TokenState {
@@ -152,5 +148,9 @@ public extension TokenState {
                 totalSupply: self.totalSupply
             )
         }
+    }
+    
+    func updatingSupply(to newSupply: Supply) -> TokenState {
+        return TokenState(token: self, totalSupply: newSupply)
     }
 }

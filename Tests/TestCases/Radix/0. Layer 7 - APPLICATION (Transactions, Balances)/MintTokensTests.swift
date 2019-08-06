@@ -121,8 +121,8 @@ class MintTokensTests: LocalhostNodeTest {
         minting.blockingAssertThrows(
             error: MintError.tokenOverMint(
                 token: fooToken,
-                maxSupply: Supply.maxAmountValue,
-                currentSupply: PositiveSupply.maxAmountValue - 10,
+                maxSupply: Supply.max,
+                currentSupply: try! Supply(subtractingFromMax: 10),
                 byMintingAmount: 20
             )
         )

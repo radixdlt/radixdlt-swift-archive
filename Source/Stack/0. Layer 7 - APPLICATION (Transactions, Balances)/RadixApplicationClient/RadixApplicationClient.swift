@@ -182,7 +182,7 @@ public extension RadixApplicationClient {
         return atomStore.onSync(address: address)
             .map { [unowned self] date in
                 let upParticles = self.atomStore.upParticles(at: address, stagedUuid: nil)
-                let reducedState = reducer.reduceFromInitialState(upParticles: upParticles)
+                let reducedState = try reducer.reduceFromInitialState(upParticles: upParticles)
                 return reducedState
         }
     }

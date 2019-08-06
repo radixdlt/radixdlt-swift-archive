@@ -49,20 +49,11 @@ public struct Supply:
 public extension Supply {
     
     init(subtractingFromMax amountToSubtractFromMax: NonNegativeAmount) throws {
-        try self.init(positiveAmount: Supply.subtractingFromMax(amount: amountToSubtractFromMax))
+        try self.init(nonNegativeAmount: Supply.maxAmountValue - amountToSubtractFromMax)
     }
     
     init(positiveAmount: PositiveAmount) throws {
         try self.init(nonNegativeAmount: NonNegativeAmount(positive: positiveAmount))
-    }
-    
-    init(unallocatedTokensParticle: UnallocatedTokensParticle) {
-        do {
-            let unallocatedAmount = unallocatedTokensParticle.amount.amount
-            try self.init(positiveAmount: Supply.subtractingFromMax(amount: unallocatedAmount))
-        } catch {
-            unexpectedlyMissedToCatch(error: error)
-        }
     }
 }
 
@@ -85,25 +76,29 @@ public extension Supply {
         return try? PositiveAmount(nonNegative: amount)
     }
     
-    var subtractedFromMax: Supply? {
-        guard let positiveLeftOverSupplyAmount = try? Supply.subtractingFromMax(amount: self.amount) else { return nil }
-        return try? Supply(positiveAmount: positiveLeftOverSupplyAmount)
+    func subtractedAmountFromMax() throws -> NonNegativeAmount {
+        return try Supply.subtractingFromMax(amount: amount)
     }
     
-    static func subtractingFromMax<AmountType>(amount: AmountType) throws -> PositiveAmount where AmountType: NonNegativeAmountConvertible {
-        return try PositiveAmount(nonNegative: Supply.maxAmountValue - NonNegativeAmount(validated: amount.magnitude))
+    static func subtractingFromMax(amount: NonNegativeAmount) throws -> NonNegativeAmount {
+        return try Supply.maxAmountValue.subtracting(amount)
     }
+    
 }
 
 // MARK: - Arthimetic
 public extension Supply {
-    func add(_ other: Supply) throws -> Supply {
+    func adding(_ other: Supply) throws -> Supply {
         return try Supply(nonNegativeAmount: amount + other.amount)
+    }
+    
+    func subtracting(_ other: Supply) throws -> Supply {
+        return try Supply(nonNegativeAmount: amount - other.amount)
     }
     
     func overflowsWhenAdding(_ other: Supply) -> Bool {
         do {
-            _ = try add(other)
+            _ = try adding(other)
             return false
         } catch Error.cannotExceedUInt256MaxValue {
             return true

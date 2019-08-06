@@ -31,9 +31,50 @@ public protocol NonNegativeAmountConvertible:
     UnsignedNumeric
 where
     Magnitude == BigUnsignedInt
-{}
+{
+    func subtracting(_ other: Self) throws -> Self
+}
 
 // swiftlint:enable colon opening_brace
+
+public extension NonNegativeAmountConvertible {
+    func subtracting(_ other: Self) throws -> Self {
+        let lhs = SignedAmount(nonNegative: self)
+        let rhs = SignedAmount(nonNegative: other)
+        let result = lhs - rhs
+        switch result.amountAndSign {
+        case .negative:
+            throw NonNegativeAmountError.subtractionResultsInNegativeValue(
+                lhs: lhs.abs,
+                rhs: rhs.abs,
+                negativeResult: result
+            )
+        case .zero:
+            do {
+                return try Self.init(validating: 0)
+            } catch {
+                throw NonNegativeAmountError.subtractionResultsInZeroWhichIsNotAllowed(
+                    lhs: lhs.abs,
+                    rhs: rhs.abs
+                )
+            }
+        case .positive(let positiveAmount):
+            return Self.init(validated: positiveAmount)
+        }
+    }
+}
+
+public enum NonNegativeAmountError: Swift.Error, Equatable {
+    case subtractionResultsInNegativeValue(
+        lhs: NonNegativeAmount,
+        rhs: NonNegativeAmount,
+        negativeResult: SignedAmount
+    )
+    case subtractionResultsInZeroWhichIsNotAllowed(
+        lhs: NonNegativeAmount,
+        rhs: NonNegativeAmount
+    )
+}
 
 // MARK: - Amount
 public extension NonNegativeAmountConvertible {

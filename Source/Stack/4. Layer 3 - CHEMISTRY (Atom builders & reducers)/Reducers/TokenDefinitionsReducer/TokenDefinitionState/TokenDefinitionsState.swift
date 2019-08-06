@@ -47,6 +47,10 @@ public extension TokenDefinitionsState {
     init(reducingValues values: [Value]) {
         self.init(dictionary: TokenDefinitionsState.reduce(values: values))
     }
+    
+    init(value: Value) {
+        self.init(reducingValues: [value])
+    }
 }
 
 // MARK: - Value Retrival
@@ -113,9 +117,39 @@ public extension TokenDefinitionsState {
         return merging(with: otherState)
     }
     
-    func mergeWithUnallocatedTokensParticle(_ unallocatedTokensParticle: UnallocatedTokensParticle) -> TokenDefinitionsState {
-        let value = Value(unallocatedTokensParticle: unallocatedTokensParticle)
-        let otherState = TokenDefinitionsState(reducingValues: [value])
+    func mergeWithUnallocatedTokensParticle(_ unallocatedTokensParticle: UnallocatedTokensParticle) throws -> TokenDefinitionsState {
+
+        let rri = unallocatedTokensParticle.tokenDefinitionReference
+        let otherState: TokenDefinitionsState
+        let supplyUsed: Supply
+        if let existingForRRI = valueFor(identifier: rri) {
+            switch existingForRRI {
+            case .full(let existingFullTokenState):
+                let existingSupply = existingFullTokenState.totalSupply
+                supplyUsed = try existingSupply.subtracting(unallocatedTokensParticle.amount)
+                otherState = TokenDefinitionsState(value: Value.full(existingFullTokenState.updatingSupply(to: supplyUsed)))
+            case .partial(let existingPartial):
+                switch existingPartial {
+                case .supply(let existingSupplyInfo):
+                    supplyUsed = try existingSupplyInfo.totalSupply.subtracting(unallocatedTokensParticle.amount)
+                    let supplyInfo = TokenDefinitionsState.SupplyInfo.init(totalSupply: supplyUsed, tokenDefinitionReference: rri)
+                    otherState = TokenDefinitionsState(value: Value(supplyState: supplyInfo))
+                case .tokenDefinition(let tokenDefinition):
+                    supplyUsed = try Supply(subtractingFromMax: unallocatedTokensParticle.amount.amount)
+                    let supplyInfo = TokenDefinitionsState.SupplyInfo.init(totalSupply: supplyUsed, tokenDefinitionReference: rri)
+                    let tokenState = try TokenState(token: tokenDefinition, supplyState: supplyInfo)
+                    otherState = TokenDefinitionsState(value: Value.full(tokenState))
+                }
+            }
+        } else {
+            do { // TODO: remove this do, let error be thrown
+                supplyUsed = try Supply(subtractingFromMax: unallocatedTokensParticle.amount.amount)
+                let supplyInfo = TokenDefinitionsState.SupplyInfo.init(totalSupply: supplyUsed, tokenDefinitionReference: rri)
+                otherState = TokenDefinitionsState(value: Value(supplyState: supplyInfo))
+            } catch {
+                incorrectImplementation("bad error: \(error)")
+            }
+        }
         return merging(with: otherState)
     }
     

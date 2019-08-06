@@ -84,8 +84,8 @@ public enum MintError: Swift.Error, Equatable {
     
     case tokenOverMint(
         token: ResourceIdentifier,
-        maxSupply: NonNegativeAmount,
-        currentSupply: PositiveAmount,
+        maxSupply: Supply,
+        currentSupply: Supply,
         byMintingAmount: PositiveAmount
     )
     
@@ -192,13 +192,13 @@ private extension FungibleParticleTransitioner where From == UnallocatedTokensPa
             transition = try self.transition(unconsumedFungibles: unallocatedTokensParticles, toAmount: mint.amount.asNonNegative)
         } catch Error.notEnoughFungibles(_, let balance) {
             
-            guard let currentSupply = try? Supply.subtractingFromMax(amount: balance) else {
+            guard let currentSupply = try? Supply(subtractingFromMax: balance) else {
                 incorrectImplementation("Should alsways be able to derive current supply.")
             }
             
             throw MintError.tokenOverMint(
                 token: rri,
-                maxSupply: Supply.maxAmountValue,
+                maxSupply: .max,
                 currentSupply: currentSupply,
                 byMintingAmount: mint.amount
             )

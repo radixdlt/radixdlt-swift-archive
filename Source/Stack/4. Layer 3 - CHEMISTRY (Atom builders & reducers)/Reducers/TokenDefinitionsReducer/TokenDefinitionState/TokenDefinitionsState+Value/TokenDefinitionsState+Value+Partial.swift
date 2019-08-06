@@ -66,10 +66,9 @@ internal extension TokenDefinitionsState.Value.Partial {
             )
             
         case (.supply(let currentSupplyInfo), .supply(let newSupplyInfo)):
-            let accumulatedSupply = try currentSupplyInfo.totalSupply.add(newSupplyInfo.totalSupply)
             
             let accumulatedSupplyInfo = TokenDefinitionsState.SupplyInfo(
-                totalSupply: accumulatedSupply,
+                totalSupply: newSupplyInfo.totalSupply,
                 tokenDefinitionReference: tokenDefinitionReference
             )
             

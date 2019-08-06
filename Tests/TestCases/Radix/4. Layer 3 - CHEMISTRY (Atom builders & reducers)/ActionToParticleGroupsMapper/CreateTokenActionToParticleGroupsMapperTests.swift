@@ -49,14 +49,13 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
         doTestTokenCreation(initialSupply: .fixed(to: PositiveSupply.max))
     }
     
-    func testAssertMaxSupplySubtractedFromMaxIsNil() {
-        XCTAssertNil(Supply.max.subtractedFromMax)
+    func testAssertMaxSupplySubtractedFromMaxIsZero() {
+        XCTAssertEqual(try Supply.max.subtractedAmountFromMax(), 0)
     }
     
     func testAssert100SubtractedFromMaxSupplyIsCorrectValue() {
         let hundred: Supply = 100
-        XCTAssertAllEqual(
-            hundred.subtractedFromMax,
+        XCTAssertEqual(
             try? Supply(subtractingFromMax: hundred.amount),
             try? Supply(nonNegativeAmount: Supply.maxAmountValue - hundred.amount)
         )
@@ -112,10 +111,8 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
                 return XCTFail("Expected UnallocatedTokensParticle at index 2 in ParticleGroup at index 0")
         }
         
-        let initialSupply = try! Supply(positiveAmount: initialSupplyAmount)
-        
         let expectUnallocatedFromLeftOverSupply: Bool
-        if let leftOverSupply = initialSupply.subtractedFromMax {
+        if let leftOverSupply = try? Supply(subtractingFromMax: initialSupplyAmount.asNonNegative) {
             expectUnallocatedFromLeftOverSupply = leftOverSupply.amount >= 1
         } else {
             expectUnallocatedFromLeftOverSupply = false
