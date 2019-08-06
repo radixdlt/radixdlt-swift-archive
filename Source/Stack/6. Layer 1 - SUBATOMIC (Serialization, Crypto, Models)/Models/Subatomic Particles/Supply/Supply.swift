@@ -93,7 +93,7 @@ public extension Supply {
     }
     
     func subtracting(_ other: Supply) throws -> Supply {
-        return try Supply(nonNegativeAmount: amount - other.amount)
+        return try Supply(nonNegativeAmount: try amount.subtracting(other.amount))
     }
     
     func overflowsWhenAdding(_ other: Supply) -> Bool {
