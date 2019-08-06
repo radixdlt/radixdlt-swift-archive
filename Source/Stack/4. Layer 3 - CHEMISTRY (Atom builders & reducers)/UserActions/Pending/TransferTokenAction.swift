@@ -35,8 +35,8 @@ public struct TransferTokenAction: UserAction, TokenTransfer {
     public let attachment: Data?
     
     public init(
-        from sender: Ownable,
-        to recipient: Ownable,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         amount: PositiveAmount,
         tokenResourceIdentifier: ResourceIdentifier,
         attachment: Data? = nil
@@ -53,3 +53,9 @@ public extension TransferTokenAction {
     var nameOfAction: UserActionName { return .transferTokens }
 }
 
+public extension TransferTokenAction {
+    var metaDataFromAttachmentOrEmpty: MetaData {
+        guard let attachment = attachment else { return [:] }
+        return [.attachment: Base64String(data: attachment).stringValue]
+    }
+}

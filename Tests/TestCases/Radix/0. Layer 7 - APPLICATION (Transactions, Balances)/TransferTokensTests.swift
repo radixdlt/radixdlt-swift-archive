@@ -99,11 +99,12 @@ class TransferTokensTests: LocalhostNodeTest {
 
         // WHEN: Alice tries to transfer tokens of some type she does not own, to Bob
         let amount: PositiveAmount = 10
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: ResourceIdentifier(address: alice.address, name: "notOwned")))
+        let unknownRRI = ResourceIdentifier(address: alice.address, name: "Unknown")
+        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: unknownRRI))
         
-        // THEN:  I see that action fails with error `InsufficientFunds`
+        // THEN:  I see that action fails with error `foundNoTokenDefinition`
         transfer.blockingAssertThrows(
-            error: TransferError.insufficientFunds(currentBalance: .zero, butTriedToTransfer: amount)
+            error: TransferError.foundNoTokenDefinition(forIdentifier: unknownRRI)
         )
     }
     

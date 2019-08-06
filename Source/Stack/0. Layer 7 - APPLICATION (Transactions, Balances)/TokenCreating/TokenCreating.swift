@@ -27,8 +27,6 @@ import RxSwift
 
 public protocol TokenCreating {
     
-    var addressOfActiveAccount: Address { get }
-    
     /// Creates a new kind of Token
     func create(token: CreateTokenAction) -> ResultOfUserAction
     
@@ -37,23 +35,132 @@ public protocol TokenCreating {
 
 public extension TokenCreating {
     
+    // swiftlint:disable:next function_parameter_count
+    func createToken(
+        creator: AddressConvertible,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        supply initialSupplyType: CreateTokenAction.InitialSupply,
+        iconUrl: URL? = nil,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+        
+        let createTokenAction = try CreateTokenAction(
+            creator: creator.address,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: initialSupplyType,
+            granularity: granularity,
+            iconUrl: iconUrl
+        )
+        
+        return (create(token: createTokenAction), createTokenAction.identifier)
+    }
+    
+    func createFixedSupplyToken(
+        creator: AddressConvertible,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        supply: PositiveSupply = .max,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+
+        return try createToken(
+            creator: creator,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: .fixed(to: supply),
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+    
+    func createMultiIssuanceToken(
+        creator: AddressConvertible,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        initialSupply: Supply? = nil,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+        
+        return try createToken(
+            creator: creator,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: .mutable(initial: initialSupply),
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+}
+
+public extension TokenCreating where Self: ActiveAccountOwner {
+   
     func createToken(
         name: Name,
         symbol: Symbol,
         description: Description,
         supply initialSupplyType: CreateTokenAction.InitialSupply,
+        iconUrl: URL? = nil,
         granularity: Granularity = .default
-        ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
-        let createTokenAction = try CreateTokenAction(
+        return try createToken(
             creator: addressOfActiveAccount,
             name: name,
             symbol: symbol,
             description: description,
             supply: initialSupplyType,
+            iconUrl: iconUrl,
             granularity: granularity
         )
+    }
+    
+    func createFixedSupplyToken(
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        supply: PositiveSupply = .max,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
-        return (create(token: createTokenAction), createTokenAction.identifier)
+        return try createFixedSupplyToken(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            iconUrl: iconUrl,
+            supply: supply,
+            granularity: granularity
+        )
+    }
+    
+    func createMultiIssuanceToken(
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        initialSupply: Supply? = nil,
+        granularity: Granularity = .default
+    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+        
+        return try createMultiIssuanceToken(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            iconUrl: iconUrl,
+            initialSupply: initialSupply,
+            granularity: granularity
+        )
     }
 }

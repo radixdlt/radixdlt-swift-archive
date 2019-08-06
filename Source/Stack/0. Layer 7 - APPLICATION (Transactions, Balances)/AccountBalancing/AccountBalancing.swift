@@ -30,8 +30,8 @@ public protocol AccountBalancing {
     var addressOfActiveAccount: Address { get }
     var nativeTokenDefinition: TokenDefinition { get }
         
-    func observeBalances(ownedBy owner: Ownable) -> Observable<TokenBalances>
-    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: Ownable) -> Observable<TokenBalance?>
+    func observeBalances(ownedBy owner: AddressConvertible) -> Observable<TokenBalances>
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> Observable<TokenBalance?>
 }
 
 public extension AccountBalancing {
@@ -40,7 +40,7 @@ public extension AccountBalancing {
         return nativeTokenDefinition.tokenDefinitionReference
     }
     
-    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: Ownable) -> Observable<TokenBalance?> {
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> Observable<TokenBalance?> {
         return observeBalances(ownedBy: owner).map {
             $0.balance(ofToken: tokenIdentifier)
         }
@@ -63,7 +63,7 @@ public extension AccountBalancing {
             .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
     }
     
-    func balanceOfNativeTokensOrZero(ownedBy owner: Ownable) -> Observable<TokenBalance> {
+    func balanceOfNativeTokensOrZero(ownedBy owner: AddressConvertible) -> Observable<TokenBalance> {
         return observeBalance(ofToken: nativeTokenIdentifier, ownedBy: owner)
             .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: owner))
     }

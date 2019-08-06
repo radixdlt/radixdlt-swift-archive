@@ -39,7 +39,8 @@ where
 public extension NonNegativeAmountConvertible {
     
     func negated() -> SignedAmount {
-        return SignedAmount(validated: SignedAmount.Magnitude(sign: .minus, magnitude: magnitude))
+        let negatedMagnitude: SignedAmount.Magnitude = .init(sign: .minus, magnitude: magnitude)
+        return SignedAmount(validated: negatedMagnitude)
     }
     
     var abs: NonNegativeAmount {

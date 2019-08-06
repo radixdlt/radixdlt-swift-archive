@@ -48,7 +48,7 @@ public struct Supply:
 // MARK: - Convenience Init
 public extension Supply {
     
-    init<AmountType>(subtractingFromMax amountToSubtractFromMax: AmountType) throws where AmountType: NonNegativeAmountConvertible {
+    init(subtractingFromMax amountToSubtractFromMax: NonNegativeAmount) throws {
         try self.init(positiveAmount: Supply.subtractingFromMax(amount: amountToSubtractFromMax))
     }
     

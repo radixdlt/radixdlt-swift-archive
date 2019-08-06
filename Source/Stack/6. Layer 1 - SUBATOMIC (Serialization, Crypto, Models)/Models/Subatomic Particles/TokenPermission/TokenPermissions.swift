@@ -40,6 +40,7 @@ import Foundation
 public struct TokenPermissions:
     DictionaryCodable,
     CBORDictionaryConvertible,
+    Throwing,
     Equatable
 {
     
@@ -52,6 +53,13 @@ public struct TokenPermissions:
         self.dictionary = dictionary
     }
     public init(validate map: Map) throws {
+        let keys = map.keys
+        guard keys.contains(.burn) else {
+            throw Error.burnMissing
+        }
+        guard keys.contains(.mint) else {
+            throw Error.mintMissing
+        }
         self.init(dictionary: map)
     }
 }
@@ -75,15 +83,19 @@ private extension TokenPermissions {
     }
 }
 
+// MARK: - Throwing
+public extension TokenPermissions {
+    enum Error: Swift.Error, Equatable {
+        case mintMissing
+        case burnMissing
+    }
+}
+
 // MARK: - Presets
 public extension TokenPermissions {
 
     static var all: TokenPermissions {
         return [.mint: .all, .burn: .all]
-    }
-    
-    static var empty: TokenPermissions {
-        return [:]
     }
     
     static var `default`: TokenPermissions = .all

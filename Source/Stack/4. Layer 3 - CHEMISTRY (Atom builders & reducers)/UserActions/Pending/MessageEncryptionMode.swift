@@ -25,7 +25,7 @@
 import Foundation
 
 public enum MessageEncryptionMode {
-    case encrypt(onlyDecryptableBy: [Ownable])
+    case encrypt(onlyDecryptableBy: [AddressConvertible])
     case plainText
 }
 

@@ -24,6 +24,6 @@
 
 import Foundation
 
-public protocol Ownable {
+public protocol AddressConvertible {
     var address: Address { get }
 }

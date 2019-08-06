@@ -43,8 +43,8 @@ public struct TransferredTokens: ExecutedAction, TokenTransfer {
     public let attachment: Data?
     
     public init(
-        from sender: Ownable,
-        to recipient: Ownable,
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
         amount: PositiveAmount,
         tokenResourceIdentifier: ResourceIdentifier,
         date: Date,

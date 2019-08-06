@@ -28,7 +28,7 @@ import Foundation
 
 public struct TransferrableTokensParticle:
     ParticleConvertible,
-    Ownable,
+    AddressConvertible,
     PublicKeyOwner,
     TokenDefinitionReferencing,
     Accountable,
@@ -47,13 +47,13 @@ public struct TransferrableTokensParticle:
     public let planck: Planck
     public let nonce: Nonce
     public let amount: PositiveAmount
-    public let permissions: TokenPermissions
+    public let permissions: TokenPermissions?
     
     public init(
         amount: PositiveAmount,
         address: Address,
         tokenDefinitionReference: ResourceIdentifier,
-        permissions: TokenPermissions = .default,
+        permissions: TokenPermissions? = .default,
         granularity: Granularity = .default,
         nonce: Nonce = Nonce(),
         planck: Planck = Planck()
@@ -73,36 +73,29 @@ public struct TransferrableTokensParticle:
     }
 }
 
+// MARK: Throwing
 public extension TransferrableTokensParticle {
     enum Error: Swift.Error, Equatable {
         case amountNotMultipleOfGranularity(amount: PositiveAmount, tokenGranularity: Granularity)
     }
 }
 
-// MARK: - From MutableSupplyTokenDefinitionParticle
-public extension TransferrableTokensParticle {
-    init(
-        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
-        amount: PositiveAmount) throws {
-        try self.init(
-            amount: amount,
-            address: token.address,
-            tokenDefinitionReference: token.tokenDefinitionReference,
-            permissions: token.permissions,
-            granularity: token.granularity
-        )
+// MARK: Check permissions
+public extension MutableSupplyTokenDefinitionParticle {
+    func canBeMinted(by minter: Address) -> Bool {
+        switch permissions.mintPermission {
+        case .none: return false
+        case .all: return true
+        case .tokenOwnerOnly: return self.address == minter
+        }
     }
     
-    init(
-        fixedSupplyToken token: FixedSupplyTokenDefinitionParticle,
-        amount: PositiveAmount) throws {
-        try self.init(
-            amount: amount,
-            address: token.address,
-            tokenDefinitionReference: token.tokenDefinitionReference,
-            permissions: TokenPermissions.empty,
-            granularity: token.granularity
-        )
+    func canBeBurned(by burner: Address) -> Bool {
+        switch permissions.burnPermission {
+        case .none: return false
+        case .all: return true
+        case .tokenOwnerOnly: return self.address == burner
+        }
     }
 }
 
@@ -119,7 +112,7 @@ public extension TransferrableTokensParticle {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let address = try container.decode(Address.self, forKey: .address)
-        let permissions = try container.decodeIfPresent(TokenPermissions.self, forKey: .permissions) ?? TokenPermissions.empty
+        let permissions = try container.decodeIfPresent(TokenPermissions.self, forKey: .permissions)
         
         let granularity = try container.decode(Granularity.self, forKey: .granularity)
         let nonce = try container.decode(Nonce.self, forKey: .nonce)
@@ -146,7 +139,7 @@ public extension TransferrableTokensParticle {
             EncodableKeyValue(key: .address, value: address),
             EncodableKeyValue(key: .amount, value: amount),
             EncodableKeyValue(key: .tokenDefinitionReference, value: tokenDefinitionReference),
-            EncodableKeyValue(key: .permissions, nonEmpty: permissions),
+            EncodableKeyValue(key: .permissions, ifPresent: permissions),
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .nonce, value: nonce),
             EncodableKeyValue(key: .planck, value: planck)
@@ -157,12 +150,14 @@ public extension TransferrableTokensParticle {
 // MARK: - CustomStringConvertible
 public extension TransferrableTokensParticle {
     var description: String {
+        
+        let permissionString = permissions.ifPresent { "permissions: \($0),\n" }
+        
         return """
         TransferrableTokensParticle(
             address: \(address),
             rri: \(tokenDefinitionReference),
-            amount: \(amount),
-            permissions: \(permissions),
+            amount: \(amount),\(permissionString)
             (omitted: `planck, `granularity`, `nonce`)
         )
         """

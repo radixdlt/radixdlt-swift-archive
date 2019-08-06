@@ -56,10 +56,8 @@ class TokenDefinitionsStateReducerTests: XCTestCase {
         
         let expecteRri = tokenDefinitionParticle.tokenDefinitionReference
         
-        let hundred: PositiveAmount = 100
-        
         let unallocatedTokensParticle = UnallocatedTokensParticle(
-            amount: try! Supply(subtractingFromMax: hundred),
+            amount: try! Supply(subtractingFromMax: 100),
             tokenDefinitionReference: expecteRri
         )
         
@@ -88,6 +86,20 @@ private extension TokenDefinitionsStateReducerTests {
         XCTAssertEqual(tokenDefinition.tokenDefinedBy, "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor")
         XCTAssertEqual(tokenDefinition.granularity, .default)
         XCTAssertEqual(tokenDefinition.description, "Testing Testing")
+    }
+}
+
+private extension TransferrableTokensParticle {
+    init(
+        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
+        amount: PositiveAmount) throws {
+        try self.init(
+            amount: amount,
+            address: token.address,
+            tokenDefinitionReference: token.tokenDefinitionReference,
+            permissions: token.permissions,
+            granularity: token.granularity
+        )
     }
 }
 

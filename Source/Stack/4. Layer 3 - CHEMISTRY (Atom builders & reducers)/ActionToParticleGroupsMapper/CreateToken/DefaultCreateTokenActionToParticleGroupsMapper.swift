@@ -97,3 +97,30 @@ private extension CreateTokenActionToParticleGroupsMapper {
         ]
     }
 }
+
+// MARK: - TransferrableTokensParticle from TokenDefinitionParticles
+private extension TransferrableTokensParticle {
+    init(
+        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
+        amount: PositiveAmount) throws {
+        try self.init(
+            amount: amount,
+            address: token.address,
+            tokenDefinitionReference: token.tokenDefinitionReference,
+            permissions: token.permissions,
+            granularity: token.granularity
+        )
+    }
+    
+    init(
+        fixedSupplyToken token: FixedSupplyTokenDefinitionParticle,
+        amount: PositiveAmount) throws {
+        try self.init(
+            amount: amount,
+            address: token.address,
+            tokenDefinitionReference: token.tokenDefinitionReference,
+            permissions: nil,
+            granularity: token.granularity
+        )
+    }
+}

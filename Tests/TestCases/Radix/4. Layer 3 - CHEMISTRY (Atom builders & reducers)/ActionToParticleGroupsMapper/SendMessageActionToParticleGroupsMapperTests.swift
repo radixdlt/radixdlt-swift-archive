@@ -178,7 +178,7 @@ extension Account: AccountOwner {
 }
 
 
-private struct AccountWithAddress: SigningRequesting, Ownable, Equatable, AccountOwner {
+private struct AccountWithAddress: SigningRequesting, AddressConvertible, Equatable, AccountOwner {
     let address: Address
     let account: Account
     
