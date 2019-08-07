@@ -51,45 +51,29 @@ public extension TokenDefinitionsReducer {
 
 private extension TokenDefinitionsState {
     func mergingWithNewTokenDefinition(_ tokenConvertible: TokenConvertible) -> TokenDefinitionsState {
-        let rri = tokenConvertible.tokenDefinitionReference
         let newTokenDefinition = TokenDefinition(tokenConvertible: tokenConvertible)
         
-        guard let existingValue = valueFor(identifier: rri) else {
-            return setting(value: .justToken(newTokenDefinition))
-        }
-        
-        if let supply = existingValue.supply {
+        if let existingValue = valueFor(identifier: tokenConvertible.tokenDefinitionReference), let supply = existingValue.supply {
             return setting(value: .full(TokenState(token: newTokenDefinition, supply: supply)))
         } else {
             return setting(value: .justToken(newTokenDefinition))
         }
+        
     }
     
     func mergingWithUnallocatedTokensParticle(_ unallocatedTokensParticle: UnallocatedTokensParticle) throws -> TokenDefinitionsState {
         let rri = unallocatedTokensParticle.tokenDefinitionReference
         
-        guard let existingValue = valueFor(identifier: rri) else {
-            return setting(value:
-                .justUnallocated(
-                    amount: try Supply(subtractingFromMax: unallocatedTokensParticle.amount.amount),
-                    tokenDefinitionReference: rri
-                )
-            )
-        }
-
-        switch existingValue {
-        case .full(let existingFull):
-            return setting(value:
-                .full(try existingFull.reducingSupply(by: unallocatedTokensParticle.amount))
-            )
-        case .justToken(let token):
-            let supply = try Supply(subtractingFromMax: unallocatedTokensParticle.amount.amount)
-            return setting(value: .full(TokenState(token: token, supply: supply)))
-        case .justUnallocated(let existingSupply, _):
-            let supply = try existingSupply.subtracting(unallocatedTokensParticle.amount)
-            return setting(value: .justUnallocated(amount: supply, tokenDefinitionReference: rri))
-        }
+        let existingValue = valueFor(identifier: rri)
+        let existingSupplyOrMax = existingValue?.supply ?? Supply.max
+        let updatedSupply = try existingSupplyOrMax.subtracting(unallocatedTokensParticle.amount)
         
+        switch existingValue {
+        case .none, .some(.justUnallocated):
+            return setting(value: .justUnallocated(amount: updatedSupply, tokenDefinitionReference: rri))
+        case .some(.full(let token as TokenConvertible)), .some(.justToken(let token as TokenConvertible)):
+            return setting(value: .full(TokenState(token: token, supply: updatedSupply)))
+        }
     }
     
     func setting(value: Value) -> TokenDefinitionsState {

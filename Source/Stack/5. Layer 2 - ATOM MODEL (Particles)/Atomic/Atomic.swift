@@ -75,14 +75,6 @@ public extension Atomic {
         return Addresses(addresses)
     }
     
-//    func destinationAddresses() -> Addresses {
-//        let addresses: [Address] = spunParticles()
-//            .map { $0.particle }
-//            .compactMap { $0.destinations() }
-//            .flatMap { $0.elements }
-//
-//        return Addresses(addresses)
-//    }
 }
 
 public extension Atomic where Self: RadixHashable {
