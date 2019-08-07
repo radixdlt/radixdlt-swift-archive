@@ -29,7 +29,6 @@ import Foundation
 public struct TokenDefinitionsState:
     ApplicationState,
     DictionaryConvertible,
-    Throwing,
     Equatable
 {
     // swiftlint:enable colon opening_brace
@@ -42,7 +41,45 @@ public struct TokenDefinitionsState:
     }
 }
 
+// MARK: Value
+public extension TokenDefinitionsState {
+    enum Value: TokenDefinitionReferencing, Equatable {
+        case justToken(TokenDefinition)
+        case justSupply(Supply, forToken: ResourceIdentifier)
+        case full(TokenState)
+    }
+}
+
+public extension TokenDefinitionsState.Value {
+    var tokenDefinitionReference: ResourceIdentifier {
+        switch self {
+        case .full(let tokenState): return tokenState.tokenDefinitionReference
+        case .justToken(let token): return token.tokenDefinitionReference
+        case .justSupply(_, let rri): return rri
+        }
+    }
+    
+    var supply: Supply? {
+        switch self {
+        case .full(let tokenState): return tokenState.totalSupply
+        case .justSupply(let supply, _): return supply
+        case .justToken: return nil
+        }
+    }
+}
+
 // MARK: - Value Retrival
+public extension TokenDefinitionsState.Value {
+    var full: TokenState? {
+        guard case .full(let tokenState) = self else { return nil }
+        return tokenState
+    }
+    
+    var isFull: Bool {
+        return full != nil
+    }
+}
+
 public extension TokenDefinitionsState {
     func tokenDefinition(identifier: ResourceIdentifier) -> TokenDefinition? {
         guard let value = valueFor(identifier: identifier) else {
@@ -67,12 +104,5 @@ public extension TokenDefinitionsState {
         case .full(let tokenState): return tokenState
         default: return nil
         }
-    }
-}
-
-// MARK: - Throwing
-public extension TokenDefinitionsState {
-    enum Error: Swift.Error, Equatable {
-        case tokenDefinitionReferenceMismatch
     }
 }

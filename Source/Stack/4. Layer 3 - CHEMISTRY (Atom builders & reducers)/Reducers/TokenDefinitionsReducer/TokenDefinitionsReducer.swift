@@ -24,15 +24,13 @@
 
 import Foundation
 
-public final class TokenDefinitionsReducer: ParticleReducer {}
+public struct TokenDefinitionsReducer: ParticleReducer {
+    public let initialState = TokenDefinitionsState()
+}
 
 public extension TokenDefinitionsReducer {
     
     typealias State = TokenDefinitionsState
-
-    var initialState: TokenDefinitionsState {
-        return TokenDefinitionsState()
-    }
     
     func reduce(state currentState: State, upParticle: AnyUpParticle) throws -> State {
 

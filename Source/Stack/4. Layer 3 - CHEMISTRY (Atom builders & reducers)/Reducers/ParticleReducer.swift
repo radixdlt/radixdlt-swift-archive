@@ -37,6 +37,7 @@ public protocol ParticleReducer: BaseParticleReducer {
 }
 
 public extension ParticleReducer {
+    
     func reduceFromInitialState(upParticles: [AnyUpParticle]) throws -> State {
         return try upParticles.reduce(initialState, reduce)
     }

@@ -54,7 +54,6 @@
 		E61EB99C22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB99B22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */; };
 		E61EB9A222D86F56007826D3 /* Supply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A122D86F56007826D3 /* Supply.swift */; };
 		E61EB9A422D87130007826D3 /* SupplyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A322D87130007826D3 /* SupplyType.swift */; };
-		E61EB9A622D87306007826D3 /* TokenDefinitionsState+Value.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A522D87306007826D3 /* TokenDefinitionsState+Value.swift */; };
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
 		E621BE832298394D00E97542 /* AtomIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E621BE822298394D00E97542 /* AtomIdentifier.swift */; };
@@ -630,7 +629,6 @@
 		E61EB99B22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceOfNativeTokenFromGenesisAtomsTests.swift; sourceTree = "<group>"; };
 		E61EB9A122D86F56007826D3 /* Supply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supply.swift; sourceTree = "<group>"; };
 		E61EB9A322D87130007826D3 /* SupplyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyType.swift; sourceTree = "<group>"; };
-		E61EB9A522D87306007826D3 /* TokenDefinitionsState+Value.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TokenDefinitionsState+Value.swift"; sourceTree = "<group>"; };
 		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
 		E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RadixSDK-Info.plist"; sourceTree = "<group>"; };
 		E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RadixSDKTests-Info.plist"; sourceTree = "<group>"; };
@@ -1229,7 +1227,8 @@
 		E61EB99D22D86EC2007826D3 /* TokenDefinitionsReducer */ = {
 			isa = PBXGroup;
 			children = (
-				E6DC275D22C3FDE40049BB3C /* TokenDefinitionState */,
+				E6A507F4224E6AEA00128123 /* TokenDefinition.swift */,
+				E6DC275E22C3FDFB0049BB3C /* TokenDefinitionsState.swift */,
 				E615C51422B791D800604E90 /* TokenDefinitionsReducer.swift */,
 			);
 			path = TokenDefinitionsReducer;
@@ -1242,14 +1241,6 @@
 				E615C51622B791E800604E90 /* TokenBalanceReferencesReducer.swift */,
 			);
 			path = TokenBalanceReferencesReducer;
-			sourceTree = "<group>";
-		};
-		E61EB9A922D87366007826D3 /* TokenDefinitionsState+Value */ = {
-			isa = PBXGroup;
-			children = (
-				E61EB9A522D87306007826D3 /* TokenDefinitionsState+Value.swift */,
-			);
-			path = "TokenDefinitionsState+Value";
 			sourceTree = "<group>";
 		};
 		E620AB4021E783F600B36EC2 /* Source */ = {
@@ -2590,16 +2581,6 @@
 				E6D325B721EF35AD00851F4E /* Secp256k1RFC6979Tests.swift */,
 			);
 			path = Signatures;
-			sourceTree = "<group>";
-		};
-		E6DC275D22C3FDE40049BB3C /* TokenDefinitionState */ = {
-			isa = PBXGroup;
-			children = (
-				E6A507F4224E6AEA00128123 /* TokenDefinition.swift */,
-				E6DC275E22C3FDFB0049BB3C /* TokenDefinitionsState.swift */,
-				E61EB9A922D87366007826D3 /* TokenDefinitionsState+Value */,
-			);
-			path = TokenDefinitionState;
 			sourceTree = "<group>";
 		};
 		E6E278732271CD1C0067D46E /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */ = {
@@ -4047,7 +4028,6 @@
 				E69E752922A1B39E00AC631B /* SentMessage.swift in Sources */,
 				E67129A522C228AE004F6D0A /* Reducer.swift in Sources */,
 				E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */,
-				E61EB9A622D87306007826D3 /* TokenDefinitionsState+Value.swift in Sources */,
 				E6FF7E4C229C4E8100BC22EA /* Array+AppendingElement.swift in Sources */,
 				E60253FF225CA1C2004B2F94 /* UnallocatedTokensParticle.swift in Sources */,
 				E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */,
