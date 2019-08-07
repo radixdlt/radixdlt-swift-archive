@@ -58,9 +58,9 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
         try validateInput(mintAction: action, upParticles: upParticles)
         
         let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
-            transitioner: { try TransferrableTokensParticle(amount: $0, unallocatedToken: $1, address: action.creditNewlyMintedTokensTo) },
+            transitioner: { try TransferrableTokensParticle(unallocatedTokensParticle: $0, amount: $1, address: action.creditNewlyMintedTokensTo) },
             transitionedCombiner: { $0 },
-            migrator: UnallocatedTokensParticle.init(amount:basedOn:),
+            migrator: UnallocatedTokensParticle.init(unallocatedTokensParticle:amount:),
             migratedCombiner: { $0 },
             amountMapper: { $0.amount.amount }
         )
@@ -148,32 +148,6 @@ private extension DefaultMintTokensActionToParticleGroupsMapper {
         }
         
         // All is well.
-    }
-}
-
-internal extension TransferrableTokensParticle {
-    
-    init(amount: NonNegativeAmount, unallocatedToken: UnallocatedTokensParticle, address: Address) throws {
-        let positiveAmount = try PositiveAmount(nonNegative: amount)
-        try self.init(
-            amount: positiveAmount,
-            address: address,
-            tokenDefinitionReference: unallocatedToken.tokenDefinitionReference,
-            permissions: unallocatedToken.permissions,
-            granularity: unallocatedToken.granularity
-        )
-    }
-}
-
-internal extension UnallocatedTokensParticle {
-    init(amount nonNegativeAmount: NonNegativeAmount, basedOn unallocatedToken: UnallocatedTokensParticle) throws {
-        let amount = try Supply(nonNegativeAmount: nonNegativeAmount)
-        self.init(
-            amount: amount,
-            tokenDefinitionReference: unallocatedToken.tokenDefinitionReference,
-            permissions: unallocatedToken.permissions,
-            granularity: unallocatedToken.granularity
-        )
     }
 }
 

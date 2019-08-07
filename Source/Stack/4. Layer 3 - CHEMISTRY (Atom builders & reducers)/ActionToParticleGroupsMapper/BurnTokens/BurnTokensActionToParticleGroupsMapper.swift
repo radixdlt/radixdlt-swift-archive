@@ -84,10 +84,10 @@ public extension DefaultBurnTokensActionToParticleGroupsMapper {
     func particleGroups(for action: BurnTokensAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
         try validateInput(burnAction: action, upParticles: upParticles)
         
-        let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, UnallocatedTokensParticle>.init(
-            transitioner: UnallocatedTokensParticle.init(amount:transferrableTokensParticle:),
+        let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, UnallocatedTokensParticle>(
+            transitioner: UnallocatedTokensParticle.init(transferrableTokensParticle:amount:),
             transitionedCombiner: { $0 },
-            migrator: TransferrableTokensParticle.init(amount:basedOn:),
+            migrator: TransferrableTokensParticle.init(transferrableTokensParticle:amount:),
             migratedCombiner: TransferrableTokensParticle.reducing(particles:),
             amountMapper: { $0.amount.asNonNegative }
         )
@@ -141,24 +141,6 @@ private extension DefaultBurnTokensActionToParticleGroupsMapper {
         }
         
         // All is well.
-    }
-}
-
-private extension UnallocatedTokensParticle {
-    init(amount nonNegativeAmount: NonNegativeAmount, transferrableTokensParticle: TransferrableTokensParticle) throws {
-        
-        let amount = try Supply(nonNegativeAmount: nonNegativeAmount)
-        
-        guard let permissions = transferrableTokensParticle.permissions else {
-            incorrectImplementation("Is it OK for TransferrableTokensParticle to lack permissions? What to do?")
-        }
-        
-        self.init(
-            amount: amount,
-            tokenDefinitionReference: transferrableTokensParticle.tokenDefinitionReference,
-            permissions: permissions,
-            granularity: transferrableTokensParticle.granularity
-        )
     }
 }
 

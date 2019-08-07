@@ -40,7 +40,7 @@ private extension CreateTokenActionToParticleGroupsMapper {
     func mutableSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
         
         let mutableSupplyToken = try MutableSupplyTokenDefinitionParticle(createTokenAction: action)
-        let unallocated = UnallocatedTokensParticle.maxSupplyForNewToken(mutableSupplyToken: mutableSupplyToken)
+        let unallocated = UnallocatedTokensParticle.maxSupplyForNewToken(mutableSupplyTokenDefinitionParticle: mutableSupplyToken)
         let rriParticle = ResourceIdentifierParticle(token: mutableSupplyToken)
         
         let tokenCreationGroup: ParticleGroup = [
@@ -54,7 +54,7 @@ private extension CreateTokenActionToParticleGroupsMapper {
             return [tokenCreationGroup]
         }
         
-        guard let minted = try? TransferrableTokensParticle(mutableSupplyToken: mutableSupplyToken, amount: positiveInitialSupply) else {
+        guard let minted = try? TransferrableTokensParticle.init(mutableSupplyTokenDefinitionParticle: mutableSupplyToken, amount: positiveInitialSupply) else {
             incorrectImplementation("Should not be able to init CreateTokenAction with non matching granularity and amount.")
         }
         
@@ -63,11 +63,11 @@ private extension CreateTokenActionToParticleGroupsMapper {
             minted.withSpin(.up)
         ]
         
-        if let positiveLeftOverSupply = try? Supply.init(subtractingFromMax: initialSupply.amount) {
+        if let positiveLeftOverSupply = try? PositiveSupply(subtractedFromMax: initialSupply) {
             
             let unallocatedFromLeftOverSupply = UnallocatedTokensParticle(
-                mutableSupplyToken: mutableSupplyToken,
-                amount: positiveLeftOverSupply
+                mutableSupplyTokenDefinitionParticle: mutableSupplyToken,
+                positiveSupply: positiveLeftOverSupply
             )
             
             mintGroup += unallocatedFromLeftOverSupply.withSpin(.up)
@@ -81,12 +81,13 @@ private extension CreateTokenActionToParticleGroupsMapper {
     }
     
     func fixedSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
-        let amount = try PositiveAmount(nonNegative: action.initialSupply.amount)
+        
+        let positiveSupply = try PositiveSupply(supply: action.initialSupply)
         
         let fixedSupplyToken = FixedSupplyTokenDefinitionParticle(createTokenAction: action)
         let rriParticle = ResourceIdentifierParticle(token: fixedSupplyToken)
      
-        let tokens = try TransferrableTokensParticle(fixedSupplyToken: fixedSupplyToken, amount: amount)
+        let tokens = try TransferrableTokensParticle(fixedSupplyTokenDefinitionParticle: fixedSupplyToken, positiveSupply: positiveSupply)
         
         let tokenCreationGroup: ParticleGroup = [
             rriParticle.withSpin(.down),
@@ -100,29 +101,3 @@ private extension CreateTokenActionToParticleGroupsMapper {
     }
 }
 
-// MARK: - TransferrableTokensParticle from TokenDefinitionParticles
-internal extension TransferrableTokensParticle {
-    init(
-        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
-        amount: PositiveAmount) throws {
-        try self.init(
-            amount: amount,
-            address: token.address,
-            tokenDefinitionReference: token.tokenDefinitionReference,
-            permissions: token.permissions,
-            granularity: token.granularity
-        )
-    }
-    
-    init(
-        fixedSupplyToken token: FixedSupplyTokenDefinitionParticle,
-        amount: PositiveAmount) throws {
-        try self.init(
-            amount: amount,
-            address: token.address,
-            tokenDefinitionReference: token.tokenDefinitionReference,
-            permissions: nil,
-            granularity: token.granularity
-        )
-    }
-}

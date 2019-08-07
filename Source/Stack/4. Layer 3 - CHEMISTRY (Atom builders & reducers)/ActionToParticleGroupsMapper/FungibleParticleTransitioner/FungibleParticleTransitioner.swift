@@ -26,9 +26,9 @@ import Foundation
 
 public final class FungibleParticleTransitioner<From, To>: Throwing where From: ParticleConvertible, To: ParticleConvertible {
     
-    private let transitioner: (NonNegativeAmount, From) throws -> To
+    private let transitioner: (From, NonNegativeAmount) throws -> To
     private let transitionedCombiner: ([To]) throws -> [To]
-    private let migrator: (NonNegativeAmount, From) throws -> From
+    private let migrator: (From, NonNegativeAmount) throws -> From
     private let migratedCombiner: ([From]) throws -> [From]
     private let amountMapper: (From) throws -> NonNegativeAmount
     
@@ -37,9 +37,9 @@ public final class FungibleParticleTransitioner<From, To>: Throwing where From: 
     private var transitioned = [To]()
     
     public init(
-        transitioner: @escaping (NonNegativeAmount, From) throws -> To,
+        transitioner: @escaping (From, NonNegativeAmount) throws -> To,
         transitionedCombiner: @escaping ([To]) throws -> [To],
-        migrator: @escaping (NonNegativeAmount, From) throws -> From,
+        migrator: @escaping (From, NonNegativeAmount) throws -> From,
         migratedCombiner: @escaping ([From]) throws -> [From],
         amountMapper: @escaping (From) throws -> NonNegativeAmount
     ) {
@@ -54,9 +54,9 @@ public final class FungibleParticleTransitioner<From, To>: Throwing where From: 
 
 public extension FungibleParticleTransitioner where To == From {
     convenience init(
-        transitioner: @escaping (NonNegativeAmount, From) throws -> To,
+        transitioner: @escaping (From, NonNegativeAmount) throws -> To,
         transitionAndMigrateCombiner: @escaping ([From]) throws -> [To],
-        migrator: @escaping (NonNegativeAmount, From) throws -> From,
+        migrator: @escaping (From, NonNegativeAmount) throws -> From,
         amountMapper: @escaping (From) throws -> NonNegativeAmount
     ) {
         self.init(
@@ -92,13 +92,13 @@ private extension FungibleParticleTransitioner {
     
     func transition(amount: NonNegativeAmount, fungible: From) throws {
         transitioned.append(
-            try transitioner(amount, fungible)
+            try transitioner(fungible, amount)
         )
     }
     
     func migrate(amount: NonNegativeAmount, fungible: From) throws {
         migrated.append(
-            try migrator(amount, fungible)
+            try migrator(fungible, amount)
         )
     }
     

@@ -39,6 +39,20 @@ public struct PositiveSupply:
     public init(amount: PositiveAmount) throws {
         self.amount = try PositiveSupply.validate(amount)
     }
+    
+    public init(nonNegativeAmount: NonNegativeAmount) throws {
+        let positiveAmount = try PositiveAmount(nonNegative: nonNegativeAmount)
+        self.amount = try PositiveSupply.validate(positiveAmount)
+    }
+    
+    public init(supply: Supply) throws {
+        try self.init(nonNegativeAmount: supply.amount)
+    }
+    
+    public init(subtractedFromMax supplyToSubtractFromMax: Supply) throws {
+        let leftOverSupplyAmount = try supplyToSubtractFromMax.subtractedAmountFromMax()
+        try self.init(nonNegativeAmount: leftOverSupplyAmount)
+    }
 }
 
 // MARK: - ValueValidating

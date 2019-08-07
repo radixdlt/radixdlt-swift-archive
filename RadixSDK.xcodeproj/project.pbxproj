@@ -103,6 +103,8 @@
 		E62F35302273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62F352F2273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift */; };
 		E62F35372273378300B6779A /* DecodingError+ConvenienceInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62F35362273378300B6779A /* DecodingError+ConvenienceInit.swift */; };
 		E631DAC921F259BE0063F632 /* MnemonicBackedUpByUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E631DAC821F259BE0063F632 /* MnemonicBackedUpByUser.swift */; };
+		E6340C8122FAD77B0044BA97 /* UnallocatedTokensParticle+FromParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6340C8022FAD77B0044BA97 /* UnallocatedTokensParticle+FromParticle.swift */; };
+		E6340C8322FAD7AE0044BA97 /* TransferrableTokensParticle+FromParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6340C8222FAD7AE0044BA97 /* TransferrableTokensParticle+FromParticle.swift */; };
 		E637564522B7CE1400C4F9A2 /* RadixNetworkState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E637564422B7CE1400C4F9A2 /* RadixNetworkState.swift */; };
 		E637564722B7CEFA00C4F9A2 /* RadixNodeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E637564622B7CEFA00C4F9A2 /* RadixNodeState.swift */; };
 		E637564C22B7E31700C4F9A2 /* NodeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E637564B22B7E31700C4F9A2 /* NodeAction.swift */; };
@@ -681,6 +683,8 @@
 		E62F35342273376D00B6779A /* DecodingError+Equatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DecodingError+Equatable.swift"; sourceTree = "<group>"; };
 		E62F35362273378300B6779A /* DecodingError+ConvenienceInit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DecodingError+ConvenienceInit.swift"; sourceTree = "<group>"; };
 		E631DAC821F259BE0063F632 /* MnemonicBackedUpByUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemonicBackedUpByUser.swift; sourceTree = "<group>"; };
+		E6340C8022FAD77B0044BA97 /* UnallocatedTokensParticle+FromParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnallocatedTokensParticle+FromParticle.swift"; sourceTree = "<group>"; };
+		E6340C8222FAD7AE0044BA97 /* TransferrableTokensParticle+FromParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransferrableTokensParticle+FromParticle.swift"; sourceTree = "<group>"; };
 		E637564422B7CE1400C4F9A2 /* RadixNetworkState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixNetworkState.swift; sourceTree = "<group>"; };
 		E637564622B7CEFA00C4F9A2 /* RadixNodeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixNodeState.swift; sourceTree = "<group>"; };
 		E637564B22B7E31700C4F9A2 /* NodeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeAction.swift; sourceTree = "<group>"; };
@@ -1936,6 +1940,7 @@
 			isa = PBXGroup;
 			children = (
 				E6A50843224E713F00128123 /* TransferrableTokensParticle.swift */,
+				E6340C8222FAD7AE0044BA97 /* TransferrableTokensParticle+FromParticle.swift */,
 			);
 			path = TransferrableTokensParticle;
 			sourceTree = "<group>";
@@ -1960,6 +1965,7 @@
 			isa = PBXGroup;
 			children = (
 				E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */,
+				E6340C8022FAD77B0044BA97 /* UnallocatedTokensParticle+FromParticle.swift */,
 			);
 			path = UnallocatedTokensParticle;
 			sourceTree = "<group>";
@@ -3979,6 +3985,7 @@
 				E6FCB66822F2EDD500ECC01B /* AddressOfAccountDeriving.swift in Sources */,
 				E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */,
 				E62EFDCE224937A400B6DAD6 /* HTTPRequestInterceptor.swift in Sources */,
+				E6340C8122FAD77B0044BA97 /* UnallocatedTokensParticle+FromParticle.swift in Sources */,
 				E6CB4B3722C5FBAE00B7382A /* ObservableType_Extensions.swift in Sources */,
 				E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */,
 				E6A7479B22CC960800DACEA0 /* JsonRpcResultAction.swift in Sources */,
@@ -4082,6 +4089,7 @@
 				E689DB7D225F61BF00340CF3 /* DefaultHTTPClient.swift in Sources */,
 				E6E279A12271CD1C0067D46E /* Throwing.swift in Sources */,
 				E6E279492271CD1C0067D46E /* RadixJSONEncoder.swift in Sources */,
+				E6340C8322FAD7AE0044BA97 /* TransferrableTokensParticle+FromParticle.swift in Sources */,
 				E6E279512271CD1C0067D46E /* JSONPrefixSpecifying.swift in Sources */,
 				E6E279312271CD1C0067D46E /* HierarchicalDeterministicMasterSeed.swift in Sources */,
 				E6ED1A7821F8E78900654105 /* Optional+OptionalType.swift in Sources */,

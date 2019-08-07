@@ -59,21 +59,6 @@ public struct UnallocatedTokensParticle:
     }
 }
 
-// MARK: - From MutableSupplyTokenDefinitionParticle
-public extension UnallocatedTokensParticle {
-    init(
-        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
-        amount: Supply
-    ) {
-        self.init(
-            amount: amount,
-            tokenDefinitionReference: token.tokenDefinitionReference,
-            permissions: token.permissions,
-            granularity: token.granularity
-        )
-    }
-}
-
 // MARK: CustomStringConvertible
 public extension UnallocatedTokensParticle {
     var description: String {
@@ -135,11 +120,5 @@ public extension UnallocatedTokensParticle {
 public extension UnallocatedTokensParticle {
     var addresses: Addresses {
         return [tokenDefinitionReference.address]
-    }
-}
-
-public extension UnallocatedTokensParticle {
-    static func maxSupplyForNewToken(mutableSupplyToken token: MutableSupplyTokenDefinitionParticle) -> UnallocatedTokensParticle {
-        return UnallocatedTokensParticle(mutableSupplyToken: token, amount: .max)
     }
 }
