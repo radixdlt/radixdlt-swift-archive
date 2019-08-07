@@ -24,12 +24,10 @@
 
 import Foundation
 
-public typealias TokenStateConvertible = TokenConvertible & TokenSupplyStateConvertible
-
 // swiftlint:disable colon opening_brace
 
 public struct TokenState:
-    TokenStateConvertible,
+    TokenConvertible,
     Throwing,
     Hashable
 {
@@ -71,15 +69,14 @@ public struct TokenState:
 
 // MARK: - Convenience Initializers
 
-// MARK: Private Init
-private extension TokenState {
+internal extension TokenState {
     init(
         token tokenDefinition: TokenConvertible,
-        totalSupply: Supply
+        supply: Supply
     ) {
         
         self.init(
-            totalSupply: totalSupply,
+            totalSupply: supply,
             tokenSupplyType: tokenDefinition.tokenSupplyType,
             symbol: tokenDefinition.symbol,
             name: tokenDefinition.name,
@@ -91,66 +88,9 @@ private extension TokenState {
     }
 }
 
-// MARK: Public Init
-public extension TokenState {
-
-    init(
-        token tokenDefinition: TokenConvertible,
-        supplyState: TokenSupplyStateConvertible
-    ) throws {
-        
-        guard tokenDefinition.tokenDefinitionReference == supplyState.tokenDefinitionReference else {
-            throw Error.tokenDefinitionReferenceMismatch
-        }
-        self.init(
-            token: tokenDefinition,
-            totalSupply: supplyState.totalSupply
-        )
-    }
-    
-    init(tokenStateConvertible: TokenStateConvertible) {
-        self.init(
-            token: tokenStateConvertible,
-            totalSupply: tokenStateConvertible.totalSupply
-        )
-    }
-}
-
 // MARK: - Throwing
 public extension TokenState {
     enum Error: Swift.Error, Equatable {
         case tokenDefinitionReferenceMismatch
-    }
-}
-
-// MARK: - Merge
-public extension TokenState {
-    func merging(with other: TokenState) throws -> TokenState {
-
-        if other.tokenDefinitionReference != tokenDefinitionReference {
-            throw Error.tokenDefinitionReferenceMismatch
-        }
-
-        return other
-    }
-
-    func mergingWithPartial(_ partial: TokenDefinitionsState.Value.Partial) throws -> TokenState {
-        guard partial.tokenDefinitionReference == self.tokenDefinitionReference else {
-            throw Error.tokenDefinitionReferenceMismatch
-        }
-        
-        switch partial {
-        case .supply(let supplyInfo):
-            return try TokenState(token: self, supplyState: supplyInfo)
-        case .tokenDefinition(let tokenDefinition):
-            return TokenState(
-                token: tokenDefinition,
-                totalSupply: self.totalSupply
-            )
-        }
-    }
-    
-    func updatingSupply(to newSupply: Supply) -> TokenState {
-        return TokenState(token: self, totalSupply: newSupply)
     }
 }

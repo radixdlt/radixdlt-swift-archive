@@ -26,32 +26,10 @@ import Foundation
 
 public extension TokenDefinitionsState {
     enum Value: TokenDefinitionReferencing, Equatable {
-        case partial(Partial)
+        case justToken(TokenDefinition)
+        case justUnallocated(amount: Supply, tokenDefinitionReference: ResourceIdentifier)
         case full(TokenState)
     }
-}
-
-// MARK: - Convenience Init
-public extension TokenDefinitionsState.Value {
-    
-    init(mutableSupplyTokenDefinition: MutableSupplyTokenDefinitionParticle) {
-        self.init(tokenConvertible: mutableSupplyTokenDefinition)
-    }
-    
-    init(fixedSupplyTokenDefinition: FixedSupplyTokenDefinitionParticle) {
-        self.init(tokenConvertible: fixedSupplyTokenDefinition)
-    }
-    
-    init(supplyState: TokenSupplyStateConvertible) {
-        self = .partial(.supply(TokenDefinitionsState.SupplyInfo(tokenSupplyStateConvertible: supplyState)))
-    }
-}
-
-private extension TokenDefinitionsState.Value {
-    init(tokenConvertible: TokenConvertible) {
-        self = .partial(.tokenDefinition(TokenDefinition(tokenConvertible: tokenConvertible)))
-    }
-    
 }
 
 // MARK: - TokenDefinitionReferencing
@@ -59,29 +37,8 @@ public extension TokenDefinitionsState.Value {
     var tokenDefinitionReference: ResourceIdentifier {
         switch self {
         case .full(let tokenState): return tokenState.tokenDefinitionReference
-        case .partial(let partial): return partial.tokenDefinitionReference
-        }
-    }
-}
-
-// MARK: - Merge
-public extension TokenDefinitionsState.Value {
-    
-    func merging(with other: TokenDefinitionsState.Value) throws -> TokenDefinitionsState.Value {
-        switch (self, other) {
-            
-        case (.partial(let selfPartial), .partial(let otherPartial)):
-            return try selfPartial.merging(with: otherPartial)
-            
-        case (.full(let selfFull), .full(let otherFull)):
-            return .full(try selfFull.merging(with: otherFull))
-            
-        case (.partial(let selfPartial), .full(let otherFull)):
-            return .full(try otherFull.mergingWithPartial(selfPartial))
-            
-        case (.full(let selfFull), .partial(let otherPartial)):
-            return .full(try selfFull.mergingWithPartial(otherPartial))
-            
+        case .justToken(let token): return token.tokenDefinitionReference
+        case .justUnallocated(_, let rri): return rri
         }
     }
 }
@@ -95,10 +52,5 @@ public extension TokenDefinitionsState.Value {
     
     var isFull: Bool {
         return full != nil
-    }
-    
-    var isPartial: Bool {
-        guard case .partial = self else { return false }
-        return true
     }
 }

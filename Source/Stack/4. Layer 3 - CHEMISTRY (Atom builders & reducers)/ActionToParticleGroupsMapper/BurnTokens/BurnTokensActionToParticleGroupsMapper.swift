@@ -34,7 +34,6 @@ public extension BurnTokensActionToParticleGroupsMapper {
                 ShardedParticleStateId(typeOfParticle: TransferrableTokensParticle.self, address: burnTokensAction.burner)
             ),
             
-            
             // To verify that we have a mutable token at the given address
             AnyShardedParticleStateId(
                 ShardedParticleStateId(typeOfParticle: MutableSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress)
@@ -144,7 +143,6 @@ private extension DefaultBurnTokensActionToParticleGroupsMapper {
         // All is well.
     }
 }
-
 
 private extension UnallocatedTokensParticle {
     init(amount nonNegativeAmount: NonNegativeAmount, transferrableTokensParticle: TransferrableTokensParticle) throws {

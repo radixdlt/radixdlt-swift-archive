@@ -34,17 +34,90 @@ public extension TokenDefinitionsReducer {
         return TokenDefinitionsState()
     }
     
-    func reduce(state: State, upParticle: AnyUpParticle) throws -> State {
+    func reduce(state currentState: State, upParticle: AnyUpParticle) throws -> State {
+
         let particle = upParticle.particle
-        if let mutableSupplyTokenDefinitionParticle = particle as? MutableSupplyTokenDefinitionParticle {
-            return state.mergeWithMutableSupplyTokenDefinitionParticle(mutableSupplyTokenDefinitionParticle)
-        } else if let fixedSupplyTokenDefinitionsParticle = particle as? FixedSupplyTokenDefinitionParticle {
-            return state.mergeWithFixedSupplyTokenDefinitionParticle(fixedSupplyTokenDefinitionsParticle)
+
+        if let tokenConvertible = particle as? TokenConvertible {
+            return currentState.mergingWithNewTokenDefinition(tokenConvertible)
         } else if let unallocatedTokensParticle = particle as? UnallocatedTokensParticle {
-            return try state.mergeWithUnallocatedTokensParticle(unallocatedTokensParticle)
+            return try currentState.mergingWithUnallocatedTokensParticle(unallocatedTokensParticle)
         } else {
-            return state
+            return currentState
         }
     }
 
+}
+
+private extension TokenDefinitionsState {
+    func mergingWithNewTokenDefinition(_ tokenConvertible: TokenConvertible) -> TokenDefinitionsState {
+        let rri = tokenConvertible.tokenDefinitionReference
+        let newTokenDefinition = TokenDefinition(tokenConvertible: tokenConvertible)
+        
+        guard let existingValue = valueFor(identifier: rri) else {
+            return setting(value: .justToken(newTokenDefinition))
+        }
+        
+        if let supply = existingValue.supply {
+            return setting(value: .full(TokenState(token: newTokenDefinition, supply: supply)))
+        } else {
+            return setting(value: .justToken(newTokenDefinition))
+        }
+    }
+    
+    func mergingWithUnallocatedTokensParticle(_ unallocatedTokensParticle: UnallocatedTokensParticle) throws -> TokenDefinitionsState {
+        let rri = unallocatedTokensParticle.tokenDefinitionReference
+        
+        guard let existingValue = valueFor(identifier: rri) else {
+            return setting(value:
+                .justUnallocated(
+                    amount: try Supply(subtractingFromMax: unallocatedTokensParticle.amount.amount),
+                    tokenDefinitionReference: rri
+                )
+            )
+        }
+
+        switch existingValue {
+        case .full(let existingFull):
+            return setting(value:
+                .full(try existingFull.reducingSupply(by: unallocatedTokensParticle.amount))
+            )
+        case .justToken(let token):
+            let supply = try Supply(subtractingFromMax: unallocatedTokensParticle.amount.amount)
+            return setting(value: .full(TokenState(token: token, supply: supply)))
+        case .justUnallocated(let existingSupply, _):
+            let supply = try existingSupply.subtracting(unallocatedTokensParticle.amount)
+            return setting(value: .justUnallocated(amount: supply, tokenDefinitionReference: rri))
+        }
+        
+    }
+    
+    func setting(value: Value) -> TokenDefinitionsState {
+        let rri = value.tokenDefinitionReference
+        var mutableCopy = self
+        mutableCopy.dictionary[rri] = value
+        return mutableCopy
+    }
+}
+
+private extension TokenDefinitionsState.Value {
+    var supply: Supply? {
+        switch self {
+        case .full(let tokenState): return tokenState.totalSupply
+        case .justUnallocated(let supply, _): return supply
+        case .justToken: return nil
+        }
+    }
+}
+
+private extension TokenState {
+    func updatingSupply(to newSupply: Supply) -> TokenState {
+        return TokenState(token: self, supply: newSupply)
+    }
+    
+    func reducingSupply(by supplyToSubtract: Supply) throws -> TokenState {
+        let newSupply = try totalSupply.subtracting(supplyToSubtract)
+        return updatingSupply(to: newSupply)
+        
+    }
 }
