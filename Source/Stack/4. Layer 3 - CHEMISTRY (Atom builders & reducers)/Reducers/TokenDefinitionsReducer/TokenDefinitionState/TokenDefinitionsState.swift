@@ -51,7 +51,7 @@ public extension TokenDefinitionsState {
         switch value {
         case .full(let tokenState): return TokenDefinition(tokenConvertible: tokenState)
         case .justToken(let tokenDefinition): return tokenDefinition
-        case .justUnallocated: return nil
+        case .justSupply: return nil
         }
     }
     

@@ -27,7 +27,7 @@ import Foundation
 public extension TokenDefinitionsState {
     enum Value: TokenDefinitionReferencing, Equatable {
         case justToken(TokenDefinition)
-        case justUnallocated(amount: Supply, tokenDefinitionReference: ResourceIdentifier)
+        case justSupply(Supply, forToken: ResourceIdentifier)
         case full(TokenState)
     }
 }
@@ -38,7 +38,15 @@ public extension TokenDefinitionsState.Value {
         switch self {
         case .full(let tokenState): return tokenState.tokenDefinitionReference
         case .justToken(let token): return token.tokenDefinitionReference
-        case .justUnallocated(_, let rri): return rri
+        case .justSupply(_, let rri): return rri
+        }
+    }
+    
+    var supply: Supply? {
+        switch self {
+        case .full(let tokenState): return tokenState.totalSupply
+        case .justSupply(let supply, _): return supply
+        case .justToken: return nil
         }
     }
 }

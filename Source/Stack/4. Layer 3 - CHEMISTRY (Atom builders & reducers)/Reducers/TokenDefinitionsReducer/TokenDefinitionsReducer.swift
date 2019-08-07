@@ -69,8 +69,8 @@ private extension TokenDefinitionsState {
         let updatedSupply = try existingSupplyOrMax.subtracting(unallocatedTokensParticle.amount)
         
         switch existingValue {
-        case .none, .some(.justUnallocated):
-            return setting(value: .justUnallocated(amount: updatedSupply, tokenDefinitionReference: rri))
+        case .none, .some(.justSupply):
+            return setting(value: .justSupply(updatedSupply, forToken: rri))
         case .some(.full(let token as TokenConvertible)), .some(.justToken(let token as TokenConvertible)):
             return setting(value: .full(TokenState(token: token, supply: updatedSupply)))
         }
@@ -81,27 +81,5 @@ private extension TokenDefinitionsState {
         var mutableCopy = self
         mutableCopy.dictionary[rri] = value
         return mutableCopy
-    }
-}
-
-private extension TokenDefinitionsState.Value {
-    var supply: Supply? {
-        switch self {
-        case .full(let tokenState): return tokenState.totalSupply
-        case .justUnallocated(let supply, _): return supply
-        case .justToken: return nil
-        }
-    }
-}
-
-private extension TokenState {
-    func updatingSupply(to newSupply: Supply) -> TokenState {
-        return TokenState(token: self, supply: newSupply)
-    }
-    
-    func reducingSupply(by supplyToSubtract: Supply) throws -> TokenState {
-        let newSupply = try totalSupply.subtracting(supplyToSubtract)
-        return updatingSupply(to: newSupply)
-        
     }
 }
