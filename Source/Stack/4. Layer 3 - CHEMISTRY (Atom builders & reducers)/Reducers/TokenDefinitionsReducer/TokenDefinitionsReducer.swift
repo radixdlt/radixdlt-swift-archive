@@ -46,7 +46,6 @@ public extension TokenDefinitionsReducer {
             return currentState
         }
     }
-
 }
 
 private extension TokenDefinitionsState {
@@ -58,7 +57,6 @@ private extension TokenDefinitionsState {
         } else {
             return setting(value: .justToken(newTokenDefinition))
         }
-        
     }
     
     func mergingWithUnallocatedTokensParticle(_ unallocatedTokensParticle: UnallocatedTokensParticle) throws -> TokenDefinitionsState {

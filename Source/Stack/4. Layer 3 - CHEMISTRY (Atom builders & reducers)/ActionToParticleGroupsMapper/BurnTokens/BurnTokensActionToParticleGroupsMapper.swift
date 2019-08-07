@@ -150,7 +150,7 @@ private extension UnallocatedTokensParticle {
         let amount = try Supply(nonNegativeAmount: nonNegativeAmount)
         
         guard let permissions = transferrableTokensParticle.permissions else {
-            incorrectImplementation("Is it OK for UnallocatedTokensParticles to lack permissions? What to do?")
+            incorrectImplementation("Is it OK for TransferrableTokensParticle to lack permissions? What to do?")
         }
         
         self.init(
