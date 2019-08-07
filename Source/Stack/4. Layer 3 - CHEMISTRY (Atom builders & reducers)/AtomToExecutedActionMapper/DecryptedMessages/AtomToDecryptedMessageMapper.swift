@@ -31,18 +31,23 @@ public protocol AtomToDecryptedMessageMapper: AtomToSpecificExecutedActionMapper
 
 public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMapper {
     private let jsonDecoder: JSONDecoder
-    
-    public init(jsonDecoder: JSONDecoder = JSONDecoder()) {
+    private let activeAccount: Observable<Account>
+    public init(
+        activeAccount: Observable<Account>,
+        jsonDecoder: JSONDecoder = JSONDecoder()
+    ) {
         self.jsonDecoder = jsonDecoder
+        self.activeAccount = activeAccount
     }
 }
 
 public extension DefaultAtomToDecryptedMessageMapper {
-    typealias ExecutedAction = SentMessage
-    func map(atom: Atom, account: Account) -> Observable<ExecutedAction> {
-        return account.privateKeyForSigning
-            .asObservable()
-            .map {
+    func mapAtomToAction(_ atom: Atom) -> Observable<SentMessage?> {
+        guard atom.spunParticles().contains(where: { $0.particle is MessageParticle }) else { return Observable.just(nil) }
+        
+        return activeAccount.flatMap {
+            $0.privateKeyForSigning
+        }.map {
             try EncryptedMessageContext(atom: atom).decryptMessageIfNeeded(key: $0)
         }
     }
@@ -146,6 +151,7 @@ private extension EncryptedMessageContext {
 private extension EncryptedMessageContext {
     
     func decryptMessageIfNeeded(key: Signing) throws -> SentMessage {
+        print("🔓 decrypting message")
         switch payload {
         case .wasNotEncrypted(let data):
             return SentMessage(context: self, data: data, encryptionState: .wasNotEncrypted)

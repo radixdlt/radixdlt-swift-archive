@@ -36,7 +36,8 @@ public extension DefaultAtomToTokenTransferMapper {
     typealias SpecificExecutedAction = TransferredTokens
     
     // swiftlint:disable:next function_body_length
-    func map(atom: Atom, account: Account) -> Observable<SpecificExecutedAction> {
+    func mapAtomToAction(_ atom: Atom) -> Observable<TransferredTokens?> {
+        guard atom.spunParticles().contains(where: { $0.particle is TransferrableTokensParticle }) else { return Observable.just(nil) }
         
         // swiftlint:disable:next function_body_length
         func transferredTokensFromParticleGroup(_ particleGroup: ParticleGroup) -> [TransferredTokens] {
@@ -81,7 +82,7 @@ public extension DefaultAtomToTokenTransferMapper {
                     incorrectImplementation("should never happen, a transfer consists of one or two TransferrableTokensParticle in the same ParticleGroup. Two particles is used when 'change' needs to be returned to sender.")
                 }
           
-                guard let date = atom.timestamp else { incorrectImplementation("Should have timestamp") }
+                let date = atom.timestamp
                 guard let recipient = to else { incorrectImplementation("should have recipient") }
                 
                 // swiftlint:disable:next force_try force_unwrap

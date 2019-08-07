@@ -50,8 +50,8 @@ public final class RadixApplicationClient:
     /// Not all accounts of `identity` contain a signing (`private`) key, but all user actions (such as transferring tokens, sending messages etc) requires a cryptographic signature by the signing key, this strategy specifies what to do in those scenarios, and can be changed later in time.
     public var strategyNoSigningKeyIsPresent: StrategyNoSigningKeyIsPresent = .throwErrorDirectly
     
-    /// A list of type-erased mappers from `Atom` to `ExecutedAction` (the already executed version of `UserAction`).
-    private let atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper]
+    /// An mapper from an atom `A` to `Transaction`, which is a container of UserActions mapped to from the ParticleGroup's in atom `A`
+    private let atomToTransactionMapper: AtomToTransactionMapper
     
     /// A list of type-erased reducers of `Particle`s into `ApplicationState`, from which we can derive e.g. token balance and token definitions.
     private let particlesToStateReducers: [AnyParticleReducer]
@@ -70,8 +70,8 @@ public final class RadixApplicationClient:
     public init(
         identity: AbstractIdentity,
         universe: RadixUniverse,
+        atomToTransactionMapper: AtomToTransactionMapper,
         feeMapper: FeeMapper = DefaultProofOfWorkWorker(),
-        atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper] = .default,
         particlesToStateReducers: [AnyParticleReducer] = .default,
         statelessActionToParticleGroupsMappers: [AnyStatelessActionToParticleGroupsMapper] = .default,
         statefulActionToParticleGroupsMappers: [AnyStatefulActionToParticleGroupsMapper] = .default
@@ -79,8 +79,9 @@ public final class RadixApplicationClient:
         self.universe = universe
         self.identity = identity
         
+        self.atomToTransactionMapper = atomToTransactionMapper
         self.feeMapper = feeMapper
-        self.atomToExecutedActionMappers = atomToExecutedActionMappers
+       
         self.particlesToStateReducers = particlesToStateReducers
         
         self.actionMappers = {
@@ -98,7 +99,12 @@ public extension RadixApplicationClient {
     /// Initializes a RadixApplicationClient from a BootstrapConfig
     convenience init(bootstrapConfig: BootstrapConfig, identity: AbstractIdentity) {
         let universe = DefaultRadixUniverse(bootstrapConfig: bootstrapConfig)
-        self.init(identity: identity, universe: universe)
+        let atomToTransactionMapper = AtomToTransactionMapper(identity: identity)
+        self.init(
+            identity: identity,
+            universe: universe,
+            atomToTransactionMapper: atomToTransactionMapper
+        )
     }
 }
 
@@ -187,20 +193,36 @@ public extension RadixApplicationClient {
         }
     }
     
-    func observeActions<SpecificExecutedAction>(
-        ofType actionType: SpecificExecutedAction.Type,
-        at address: Address
-    ) -> Observable<SpecificExecutedAction>
-        where SpecificExecutedAction: ExecutedAction {
-        
-        let mapper = atomToExecutedActionMapper(for: actionType)
-        let account = activeAccount
-
+    func observeTransactions(at address: Address) -> Observable<ExecutedTransaction> {
         return atomStore.atomObservations(of: address)
             .filterMap { (atomObservation: AtomObservation) -> FilterMap<Atom> in
                 guard case .store(let atom, _, _) = atomObservation else { return .ignore }
                 return .map(atom)
-            }.flatMap { mapper.map(atom: $0, account: account) }
+            }.flatMap { [unowned atomToTransactionMapper] in
+                return atomToTransactionMapper.transactionFromAtom($0)
+            }
+    }
+    
+    /// Boolean `OR` of `actionTypes`
+    func observeTransactions(at address: Address, containingActionOfAnyType actionTypes: [UserAction.Type]) -> Observable<ExecutedTransaction> {
+        return observeTransactions(at: address).filter {
+            $0.contains(actionMatchingAnyType: actionTypes)
+        }
+    }
+    
+    /// Boolean `AND` of `requiredActionTypes`
+    func observeTransactions(at address: Address, containingActionsOfAllTypes requiredActionTypes: [UserAction.Type]) -> Observable<ExecutedTransaction> {
+        return observeTransactions(at: address).filter {
+            $0.contains(actionMatchingAll: requiredActionTypes)
+        }
+    }
+    
+    func observeActions<Action>(
+        ofType actionType: Action.Type,
+        at address: Address
+    ) -> Observable<Action> where Action: UserAction {
+        return observeTransactions(at: address)
+            .flatMap { Observable.from($0.actions(ofType: actionType)) }
     }
     
     func observeTokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
@@ -387,15 +409,6 @@ private extension RadixApplicationClient {
         try statefulMapper.particleGroupsForAnAction(action, upParticles: particles).forEach {
             atomStore.stageParticleGroup($0, uuid: uuid)
         }
-    }
-    
-    func atomToExecutedActionMapper<ExecutedAction>(for actionType: ExecutedAction.Type) -> SomeAtomToExecutedActionMapper<ExecutedAction> {
-        guard let mapper = atomToExecutedActionMappers.first(where: { $0.matches(actionType: actionType) }) else {
-             incorrectImplementation("Found no AtomToExecutedActionMapper for action of type: \(actionType), you probably just added a new ExecutedAction but forgot to add its corresponding mapper to the list?")
-        }
-        do {
-            return try SomeAtomToExecutedActionMapper(any: mapper)
-        } catch { unexpectedlyMissedToCatch(error: error) }
     }
     
     func particlesToStateReducer<State>(for stateType: State.Type) -> SomeParticleReducer<State> where State: ApplicationState {

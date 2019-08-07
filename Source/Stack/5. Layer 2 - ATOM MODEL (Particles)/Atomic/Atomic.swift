@@ -137,7 +137,7 @@ public extension Atomic {
             .map { $0.particle }
     }
     
-    var timestamp: Date? {
+    var timestamp: Date {
         return metaData.timestamp
     }
 }

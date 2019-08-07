@@ -24,19 +24,28 @@
 
 import Foundation
 
-// swiftlint:disable colon
+public typealias HashId = EUID
+public typealias PublicKeyHashId = HashId
+public typealias SignatureId = PublicKeyHashId
 
-/// An ECDSA signature
+// swiftlint:disable opening_brace colon
+
+/// A dictionary of PublicKey hashIds to ECDSA signatures.
 public struct Signatures:
     CBORDictionaryConvertible,
     Equatable,
     ExpressibleByDictionaryLiteral,
     Collection,
-    Codable {
-// swiftlint:enable colon
+    Codable
+{
+
+    // swiftlint:enable opening_brace colon
     
-    public typealias Key = EUID
+    /// Id (type: `EUID`) of `RadixHash` of `PublicKey` of signer.
+    public typealias Key = SignatureId
+
     public typealias Value = Signature
+
     public let dictionary: Map
     public init(dictionary: Map) {
         self.dictionary = dictionary

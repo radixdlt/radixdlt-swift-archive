@@ -88,7 +88,8 @@ public struct Signature:
 // MARK: - DataInitializable
 public extension Signature {
     init(data: Data) throws {
-        try Signature.validateLength(of: data)
+        do {
+            try Signature.validateLength(of: data)
         let byteCount = Signature.length / 2
         let rData = Data(data.prefix(byteCount))
         let sData = Data(data.suffix(byteCount))
@@ -96,6 +97,10 @@ public extension Signature {
             r: rData.unsignedBigInteger,
             s: sData.unsignedBigInteger
         )
+        } catch {
+            print("💣 CRITICAL BUG IN Signature error: \(error), fix me")
+            incorrectImplementation("should not crash if too few chars, signature might sometimes be 63 chars?")
+        }
     }
 }
 

@@ -23,13 +23,14 @@
 //
 
 import Foundation
+import RxSwift
 
 // MARK: - Presets
 public extension Array where Element == AnyAtomToExecutedActionMapper {
-    static var `default`: [AnyAtomToExecutedActionMapper] {
+    static func atomToActionMappers(activeAccount: Observable<Account>) -> [AnyAtomToExecutedActionMapper] {
         return [
-            AnyAtomToExecutedActionMapper(DefaultAtomToTokenTransferMapper()),
-            AnyAtomToExecutedActionMapper(DefaultAtomToDecryptedMessageMapper())
+            AnyAtomToExecutedActionMapper(any: DefaultAtomToTokenTransferMapper()),
+            AnyAtomToExecutedActionMapper(any: DefaultAtomToDecryptedMessageMapper(activeAccount: activeAccount) )
         ]
     }
 }

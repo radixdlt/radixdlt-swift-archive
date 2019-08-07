@@ -50,11 +50,11 @@ class SendMessageTests: LocalhostNodeTest {
         application.pull().disposed(by: disposeBag)
         let message = "Hey Bob, this is plain text"
         let result = application.sendPlainTextMessage(message, to: bob)
-
+        
         // THEN: I see that action completes successfully
-        XCTAssertTrue(result.blockUntilComplete(timeout: .enoughForPOW))
+        XCTAssertTrue(result.blockingWasSuccessfull(timeout: .enoughForPOW))
 
-        guard let sentMessage = application.observeMyMessages().blockingTakeLast(timeout: 2) else { return }
+        guard let sentMessage = application.observeMyMessages().blockingTakeFirst(timeout: 1) else { return }
         let decryptedMessage = sentMessage.payload.toString()
         XCTAssertEqual(decryptedMessage, message)
         XCTAssertNotEqual(decryptedMessage, "foobar")

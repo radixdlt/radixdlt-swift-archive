@@ -31,7 +31,12 @@ public final class AbstractIdentity: CustomStringConvertible {
     
     public var alias: String?
     public private(set) var accounts: NonEmptyArray<Account>
-    public private(set) var activeAccount: Account
+    public private(set) var activeAccount: Account {
+        didSet {
+            accountSubject.onNext(activeAccount)
+        }
+    }
+    private let accountSubject: BehaviorSubject<Account>
     
     public init(
         accounts: NonEmptyArray<Account>,
@@ -41,6 +46,7 @@ public final class AbstractIdentity: CustomStringConvertible {
         self.accounts = accounts
         self.alias = alias
         self.activeAccount = selectInitialActiveAccount(accounts)
+        self.accountSubject = BehaviorSubject(value: activeAccount)
     }
 }
 
@@ -103,7 +109,12 @@ public extension AbstractIdentity {
     
     @discardableResult
     func selectAccount(_ selector: AccountSelector) -> Account {
-        return selector(accounts)
+        self.activeAccount = selector(accounts)
+        return activeAccount
+    }
+    
+    var activeAccountObservable: Observable<Account> {
+        return accountSubject.asObservable()
     }
 }
 

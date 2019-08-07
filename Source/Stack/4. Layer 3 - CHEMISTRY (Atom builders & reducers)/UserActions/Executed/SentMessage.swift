@@ -30,7 +30,7 @@ public protocol ChatMessage {
     var payload: Data { get }
 }
 
-public struct SentMessage: ExecutedAction, ChatMessage {
+public struct SentMessage: UserAction, ChatMessage {
     public let sender: Address
     public let recipient: Address
     public let payload: Data
