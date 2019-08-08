@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,31 +24,39 @@
 
 import Foundation
 import RxSwift
-import RxSwiftExt
 
-extension ObservableConvertibleType {
-    func cache() -> Observable<Element> {
-        return self.asObservable().share(replay: 1, scope: .forever)
-    }
+public protocol StateSubscriber {
+    func observeState<State>(
+        ofType stateType: State.Type,
+        at address: Address
+    ) -> Observable<State> where State: ApplicationState
+}
 
-    func firstOrError() -> Single<Element> {
-        return self.asObservable().elementAt(0).take(1).asSingle()
-    }
+public final class DefaultStateSubsciber: StateSubscriber {
     
-    func lastOrError() -> Single<Element> {
-        // `count` is part of `RxSwiftExt`
-        return asObservable().count().flatMap {
-            return self.asObservable().elementAt($0 - 1)
-        }.take(1).asSingle()
-    }
+    private let atomStore: AtomStore
+    private let particlesToStateReducer: ParticlesToStateReducer
     
-    func flatMapIterable<Other>(_ selector: @escaping (Element) -> [Other]) -> Observable<Other> {
-        return asObservable().flatMap { (element: Element) -> Observable<Other> in
-            return Observable.from(selector(element))
+    public init(
+        atomStore: AtomStore,
+        particlesToStateReducer: ParticlesToStateReducer = DefaultParticlesToStateReducer.init()
+    ) {
+        self.atomStore = atomStore
+        self.particlesToStateReducer = particlesToStateReducer
+    }
+}
+
+public extension DefaultStateSubsciber {
+    func observeState<State>(
+        ofType stateType: State.Type,
+        at address: Address
+    ) -> Observable<State> where State: ApplicationState {
+        
+        return atomStore.onSync(address: address)
+            .map { [unowned self] date in
+                let upParticles = self.atomStore.upParticles(at: address, stagedUuid: nil)
+                let reducedState = try self.particlesToStateReducer.reduce(upParticles: upParticles, to: stateType)
+                return reducedState
         }
-    }
-    
-    func flatMapToSingle<Other>(_ selector: @escaping (Element) -> Single<Other>) -> Single<Other> {
-        return self.asObservable().flatMapSingle(selector).asSingle()
     }
 }

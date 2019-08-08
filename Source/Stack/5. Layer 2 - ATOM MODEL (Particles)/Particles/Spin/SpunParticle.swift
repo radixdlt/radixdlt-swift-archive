@@ -99,6 +99,7 @@ public struct AnyUpParticle: Throwing {
     
         self.init(particle: anySpunParticle.particle)
     }
+    
 }
 
 public extension AnyUpParticle {

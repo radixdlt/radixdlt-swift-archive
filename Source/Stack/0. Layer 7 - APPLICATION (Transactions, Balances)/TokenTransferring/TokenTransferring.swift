@@ -26,10 +26,9 @@ import Foundation
 import RxSwift
 
 /// Type that is can make transactions of different types between Radix accounts
-public protocol TokenTransferring {
-    var addressOfActiveAccount: Address { get }
+public protocol TokenTransferring: ActiveAccountOwner {
+
     func transfer(tokens: TransferTokenAction) -> ResultOfUserAction
-    
     func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferredTokens>
 }
 
