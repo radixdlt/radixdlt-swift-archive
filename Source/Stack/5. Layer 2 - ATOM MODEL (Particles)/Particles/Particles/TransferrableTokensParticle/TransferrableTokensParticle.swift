@@ -151,14 +151,15 @@ public extension TransferrableTokensParticle {
 public extension TransferrableTokensParticle {
     var description: String {
         
-        let permissionString = permissions.ifPresent { "permissions: \($0),\n" }
+        let permissionString = permissions.ifPresent { ",\npermissions: \($0),\n" }
         
         return """
         TransferrableTokensParticle(
             address: \(address),
             rri: \(tokenDefinitionReference),
-            amount: \(amount),\(permissionString)
-            (omitted: `planck, `granularity`, `nonce`)
+            amount: \(amount)\(permissionString)
+        
+            (omitted: [`planck, `granularity`, `nonce`])
         )
         """
     }

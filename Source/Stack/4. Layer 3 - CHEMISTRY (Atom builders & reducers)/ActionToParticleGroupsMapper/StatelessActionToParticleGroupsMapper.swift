@@ -25,18 +25,18 @@
 import Foundation
 
 public protocol BaseStatelessActionToParticleGroupsMapper {
-     func particleGroupsForAnAction(_ userAction: UserAction) -> ParticleGroups
+     func particleGroupsForAnAction(_ userAction: UserAction) throws -> ParticleGroups
 }
 
 public protocol StatelessActionToParticleGroupsMapper: BaseStatelessActionToParticleGroupsMapper {
     associatedtype Action: UserAction
-    func particleGroups(for action: Action) -> ParticleGroups
+    func particleGroups(for action: Action) throws -> ParticleGroups
 }
 
 public extension StatelessActionToParticleGroupsMapper {
     
-    func particleGroupsForAnAction(_ userAction: UserAction) -> ParticleGroups {
+    func particleGroupsForAnAction(_ userAction: UserAction) throws -> ParticleGroups {
         let action = castOrKill(instance: userAction, toType: Action.self)
-        return particleGroups(for: action)
+        return try particleGroups(for: action)
     }
 }

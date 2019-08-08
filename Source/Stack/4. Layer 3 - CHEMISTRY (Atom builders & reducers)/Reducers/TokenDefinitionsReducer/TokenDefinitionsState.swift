@@ -29,7 +29,6 @@ import Foundation
 public struct TokenDefinitionsState:
     ApplicationState,
     DictionaryConvertible,
-    Throwing,
     Equatable
 {
     // swiftlint:enable colon opening_brace
@@ -42,14 +41,45 @@ public struct TokenDefinitionsState:
     }
 }
 
-// MARK: - Convenience Init
+// MARK: Value
 public extension TokenDefinitionsState {
-    init(reducingValues values: [Value]) {
-        self.init(dictionary: TokenDefinitionsState.reduce(values: values))
+    enum Value: TokenDefinitionReferencing, Equatable {
+        case justToken(TokenDefinition)
+        case justSupply(Supply, forToken: ResourceIdentifier)
+        case full(TokenState)
+    }
+}
+
+public extension TokenDefinitionsState.Value {
+    var tokenDefinitionReference: ResourceIdentifier {
+        switch self {
+        case .full(let tokenState): return tokenState.tokenDefinitionReference
+        case .justToken(let token): return token.tokenDefinitionReference
+        case .justSupply(_, let rri): return rri
+        }
+    }
+    
+    var supply: Supply? {
+        switch self {
+        case .full(let tokenState): return tokenState.totalSupply
+        case .justSupply(let supply, _): return supply
+        case .justToken: return nil
+        }
     }
 }
 
 // MARK: - Value Retrival
+public extension TokenDefinitionsState.Value {
+    var full: TokenState? {
+        guard case .full(let tokenState) = self else { return nil }
+        return tokenState
+    }
+    
+    var isFull: Bool {
+        return full != nil
+    }
+}
+
 public extension TokenDefinitionsState {
     func tokenDefinition(identifier: ResourceIdentifier) -> TokenDefinition? {
         guard let value = valueFor(identifier: identifier) else {
@@ -57,11 +87,8 @@ public extension TokenDefinitionsState {
         }
         switch value {
         case .full(let tokenState): return TokenDefinition(tokenConvertible: tokenState)
-        case .partial(let partial):
-            switch partial {
-            case .supply: return nil
-            case .tokenDefinition(let tokenDefinition): return tokenDefinition
-            }
+        case .justToken(let tokenDefinition): return tokenDefinition
+        case .justSupply: return nil
         }
     }
     
@@ -75,51 +102,7 @@ public extension TokenDefinitionsState {
         }
         switch value {
         case .full(let tokenState): return tokenState
-        case .partial: return nil
+        default: return nil
         }
-    }
-}
-
-// MARK: - Throwing
-public extension TokenDefinitionsState {
-    enum Error: Swift.Error, Equatable {
-        case tokenDefinitionReferenceMismatch
-    }
-}
-
-// MARK: - Merging
-public extension TokenDefinitionsState {
-    static func reduce(values: [Value]) -> Map {
-        return Map(values.map { ($0.tokenDefinitionReference, $0) }, uniquingKeysWith: TokenDefinitionsState.conflictResolver)
-    }
-    
-    static var conflictResolver: (Value, Value) -> Value {
-        return { (current, new) in
-            do {
-                return try current.merging(with: new)
-            } catch { incorrectImplementation("Unhandled error: \(error)") }
-        }
-    }
-    
-    func mergeWithTokenConvertible(_ tokenConvertible: TokenConvertible) -> TokenDefinitionsState {
-        let value = Value(tokenConvertible: tokenConvertible)
-        let otherState = TokenDefinitionsState(reducingValues: [value])
-        return merging(with: otherState)
-    }
-    
-    func mergeWithUnallocatedTokensParticle(_ unallocatedTokensParticle: UnallocatedTokensParticle) -> TokenDefinitionsState {
-        let value = Value(unallocatedTokensParticle: unallocatedTokensParticle)
-        let otherState = TokenDefinitionsState(reducingValues: [value])
-        return merging(with: otherState)
-    }
-    
-    func merging(with other: TokenDefinitionsState) -> TokenDefinitionsState {
-        return TokenDefinitionsState(
-            dictionary: self.dictionary
-                .merging(
-                    other.dictionary,
-                    uniquingKeysWith: TokenDefinitionsState.conflictResolver
-                )
-        )
     }
 }

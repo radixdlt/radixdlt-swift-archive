@@ -30,7 +30,8 @@ public struct UnallocatedTokensParticle:
     ParticleConvertible,
     RadixCodable,
     RadixModelTypeStaticSpecifying,
-    Accountable
+    Accountable,
+    CustomStringConvertible
 {
     // swiftlint:enable colon opening_brace
 
@@ -48,7 +49,8 @@ public struct UnallocatedTokensParticle:
         permissions: TokenPermissions = .default,
         granularity: Granularity = .default,
         nonce: Nonce = Nonce()
-        ) {
+    ) {
+        
         self.granularity = granularity
         self.nonce = nonce
         self.amount = amount
@@ -57,18 +59,18 @@ public struct UnallocatedTokensParticle:
     }
 }
 
-// MARK: - From MutableSupplyTokenDefinitionParticle
+// MARK: CustomStringConvertible
 public extension UnallocatedTokensParticle {
-    init(
-        mutableSupplyToken token: MutableSupplyTokenDefinitionParticle,
-        amount: Supply
-    ) {
-        self.init(
-            amount: amount,
-            tokenDefinitionReference: token.tokenDefinitionReference,
-            permissions: token.permissions,
-            granularity: token.granularity
+    var description: String {
+        return """
+        UnallocatedTokensParticle(
+            amount: \(amount)
+            rri: \(tokenDefinitionReference),
+            permissions: \(permissions),
+        
+            (omitted: [`granularity`, `nonce`])
         )
+        """
     }
 }
 
@@ -118,11 +120,5 @@ public extension UnallocatedTokensParticle {
 public extension UnallocatedTokensParticle {
     var addresses: Addresses {
         return [tokenDefinitionReference.address]
-    }
-}
-
-public extension UnallocatedTokensParticle {
-    static func maxSupplyForNewToken(mutableSupplyToken token: MutableSupplyTokenDefinitionParticle) -> UnallocatedTokensParticle {
-        return UnallocatedTokensParticle(mutableSupplyToken: token, amount: .max)
     }
 }

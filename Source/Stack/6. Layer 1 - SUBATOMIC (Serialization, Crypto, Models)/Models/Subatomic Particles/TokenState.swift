@@ -24,12 +24,10 @@
 
 import Foundation
 
-public typealias TokenStateConvertible = TokenConvertible & TokenSupplyStateConvertible
-
 // swiftlint:disable colon opening_brace
 
 public struct TokenState:
-    TokenStateConvertible,
+    TokenConvertible,
     Throwing,
     Hashable
 {
@@ -45,6 +43,7 @@ public struct TokenState:
     public let tokenDefinedBy: Address
     public let description: Description
     public let granularity: Granularity
+    public let iconUrl: URL?
     
     private init(
         totalSupply: Supply,
@@ -53,7 +52,8 @@ public struct TokenState:
         name: Name,
         tokenDefinedBy: Address,
         description: Description,
-        granularity: Granularity
+        granularity: Granularity,
+        iconUrl: URL?
     ) {
         self.totalSupply = totalSupply
         self.tokenSupplyType = tokenSupplyType
@@ -63,51 +63,27 @@ public struct TokenState:
         self.tokenDefinedBy = tokenDefinedBy
         self.description = description
         self.granularity = granularity
+        self.iconUrl = iconUrl
     }
 }
 
 // MARK: - Convenience Initializers
 
-// MARK: Private Init
-private extension TokenState {
+internal extension TokenState {
     init(
         token tokenDefinition: TokenConvertible,
-        totalSupply: Supply
+        supply: Supply
     ) {
         
         self.init(
-            totalSupply: totalSupply,
+            totalSupply: supply,
             tokenSupplyType: tokenDefinition.tokenSupplyType,
             symbol: tokenDefinition.symbol,
             name: tokenDefinition.name,
             tokenDefinedBy: tokenDefinition.tokenDefinedBy,
             description: tokenDefinition.description,
-            granularity: tokenDefinition.granularity
-        )
-    }
-}
-
-// MARK: Public Init
-public extension TokenState {
-
-    init(
-        token tokenDefinition: TokenConvertible,
-        supplyState: TokenSupplyStateConvertible
-    ) throws {
-        
-        guard tokenDefinition.tokenDefinitionReference == supplyState.tokenDefinitionReference else {
-            throw Error.tokenDefinitionReferenceMismatch
-        }
-        self.init(
-            token: tokenDefinition,
-            totalSupply: supplyState.totalSupply
-        )
-    }
-    
-    init(tokenStateConvertible: TokenStateConvertible) {
-        self.init(
-            token: tokenStateConvertible,
-            totalSupply: tokenStateConvertible.totalSupply
+            granularity: tokenDefinition.granularity,
+            iconUrl: tokenDefinition.iconUrl
         )
     }
 }
@@ -116,38 +92,5 @@ public extension TokenState {
 public extension TokenState {
     enum Error: Swift.Error, Equatable {
         case tokenDefinitionReferenceMismatch
-    }
-}
-
-// MARK: - Merge
-public extension TokenState {
-    func merging(with other: TokenState) throws -> TokenState {
-
-        if other.tokenDefinitionReference != tokenDefinitionReference {
-            throw Error.tokenDefinitionReferenceMismatch
-        }
-
-        let updatedTotalSupply = try self.totalSupply.add(other.totalSupply)
-
-        return TokenState(
-            token: other,
-            totalSupply: updatedTotalSupply
-        )
-    }
-
-    func mergingWithPartial(_ partial: TokenDefinitionsState.Value.Partial) throws -> TokenState {
-        guard partial.tokenDefinitionReference == self.tokenDefinitionReference else {
-            throw Error.tokenDefinitionReferenceMismatch
-        }
-        
-        switch partial {
-        case .supply(let supplyInfo):
-            return try TokenState(token: self, supplyState: supplyInfo)
-        case .tokenDefinition(let tokenDefinition):
-            return TokenState(
-                token: tokenDefinition,
-                totalSupply: self.totalSupply
-            )
-        }
     }
 }

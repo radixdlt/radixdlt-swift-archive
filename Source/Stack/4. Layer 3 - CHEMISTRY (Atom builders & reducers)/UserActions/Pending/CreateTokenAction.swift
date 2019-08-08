@@ -24,7 +24,7 @@
 
 import Foundation
 
-public struct CreateTokenAction: UserAction, Throwing, TokenConvertible, TokenSupplyStateConvertible {
+public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
 
     public let creator: Address
     public let name: Name

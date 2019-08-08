@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,6 +24,39 @@
 
 import Foundation
 
-public protocol TokenSupplyStateConvertible: TokenDefinitionReferencing {
-    var totalSupply: Supply { get }
+public protocol TokenBurning {
+    
+    /// Burns tokens of the TokenDefinition kind
+    func burnTokens(_ action: BurnTokensAction) -> ResultOfUserAction
+}
+
+public extension TokenBurning {
+    func burnTokens(
+        amount: PositiveAmount,
+        ofType tokenDefinitionReference: ResourceIdentifier,
+        burner: AddressConvertible
+    ) -> ResultOfUserAction {
+        
+        let burnAction = BurnTokensAction(
+            tokenDefinitionReference: tokenDefinitionReference,
+            amount: amount,
+            burner: burner.address
+        )
+        
+        return burnTokens(burnAction)
+    }
+}
+
+public extension TokenBurning where Self: ActiveAccountOwner {
+    func burnTokens(
+        amount: PositiveAmount,
+        ofType tokenDefinitionReference: ResourceIdentifier
+    ) -> ResultOfUserAction {
+        
+        return burnTokens(
+            amount: amount,
+            ofType: tokenDefinitionReference,
+            burner: addressOfActiveAccount
+        )
+    }
 }

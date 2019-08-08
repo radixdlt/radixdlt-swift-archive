@@ -28,13 +28,20 @@ public protocol MintTokensActionToParticleGroupsMapper: StatefulActionToParticle
 
 public extension MintTokensActionToParticleGroupsMapper {
     func requiredState(for mintTokensAction: Action) -> [AnyShardedParticleStateId] {
-        let tokenDefinitionAddress = mintTokensAction.tokenDefinitionReferece.address
+        let tokenDefinitionAddress = mintTokensAction.tokenDefinitionReference.address
         return [
-            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: UnallocatedTokensParticle.self, address: tokenDefinitionAddress)),
-            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: MutableSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress)),
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(typeOfParticle: UnallocatedTokensParticle.self, address: tokenDefinitionAddress)
+            ),
+            
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(typeOfParticle: MutableSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress)
+            ),
             
             // Include `FixedSupplyTokenDefinitionParticle` to see if the RRI of the token to Mint exists, but has FixedSupply.
-            AnyShardedParticleStateId(ShardedParticleStateId(typeOfParticle: FixedSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress))
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(typeOfParticle: FixedSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress)
+            )
         ]
     }
 }
@@ -51,9 +58,9 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
         try validateInput(mintAction: action, upParticles: upParticles)
         
         let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
-            transitioner: { try TransferrableTokensParticle(amount: $0, unallocatedToken: $1, address: action.creditNewlyMintedTokensTo) },
+            transitioner: { try TransferrableTokensParticle(unallocatedTokensParticle: $0, amount: $1, address: action.creditNewlyMintedTokensTo) },
             transitionedCombiner: { $0 },
-            migrator: UnallocatedTokensParticle.init(amount:basedOn:),
+            migrator: UnallocatedTokensParticle.init(unallocatedTokensParticle:amount:),
             migratedCombiner: { $0 },
             amountMapper: { $0.amount.amount }
         )
@@ -77,8 +84,8 @@ public enum MintError: Swift.Error, Equatable {
     
     case tokenOverMint(
         token: ResourceIdentifier,
-        maxSupply: NonNegativeAmount,
-        currentSupply: PositiveAmount,
+        maxSupply: Supply,
+        currentSupply: Supply,
         byMintingAmount: PositiveAmount
     )
     
@@ -103,7 +110,7 @@ public enum MintError: Swift.Error, Equatable {
 private extension DefaultMintTokensActionToParticleGroupsMapper {
     
     func validateInput(mintAction: MintTokensAction, upParticles: [AnyUpParticle]) throws {
-        let rri = mintAction.tokenDefinitionReferece
+        let rri = mintAction.tokenDefinitionReference
         
         guard let mutableSupplyTokensParticle = upParticles
             .compactMap({ try? UpParticle<MutableSupplyTokenDefinitionParticle>(anyUpParticle: $0) })
@@ -144,35 +151,9 @@ private extension DefaultMintTokensActionToParticleGroupsMapper {
     }
 }
 
-private extension TransferrableTokensParticle {
-    
-    init(amount: NonNegativeAmount, unallocatedToken: UnallocatedTokensParticle, address: Address) throws {
-        let positiveAmount = try PositiveAmount(nonNegative: amount)
-        try self.init(
-            amount: positiveAmount,
-            address: address,
-            tokenDefinitionReference: unallocatedToken.tokenDefinitionReference,
-            permissions: unallocatedToken.permissions,
-            granularity: unallocatedToken.granularity
-        )
-    }
-}
-
-private extension UnallocatedTokensParticle {
-    init(amount nonNegativeAmount: NonNegativeAmount, basedOn unallocatedToken: UnallocatedTokensParticle) throws {
-        let amount = try Supply(nonNegativeAmount: nonNegativeAmount)
-        self.init(
-            amount: amount,
-            tokenDefinitionReference: unallocatedToken.tokenDefinitionReference,
-            permissions: unallocatedToken.permissions,
-            granularity: unallocatedToken.granularity
-        )
-    }
-}
-
 private extension FungibleParticleTransitioner where From == UnallocatedTokensParticle, To == TransferrableTokensParticle {
     func transition(mint: MintTokensAction, upParticles: [AnyUpParticle]) throws -> Transition {
-        let rri = mint.tokenDefinitionReferece
+        let rri = mint.tokenDefinitionReference
 
         let upUnallocatedParticles = upParticles
             .compactMap { try? UpParticle<UnallocatedTokensParticle>(anyUpParticle: $0) }
@@ -185,13 +166,13 @@ private extension FungibleParticleTransitioner where From == UnallocatedTokensPa
             transition = try self.transition(unconsumedFungibles: unallocatedTokensParticles, toAmount: mint.amount.asNonNegative)
         } catch Error.notEnoughFungibles(_, let balance) {
             
-            guard let currentSupply = try? Supply.subtractingFromMax(amount: balance) else {
+            guard let currentSupply = try? Supply(subtractingFromMax: balance) else {
                 incorrectImplementation("Should alsways be able to derive current supply.")
             }
             
             throw MintError.tokenOverMint(
                 token: rri,
-                maxSupply: Supply.maxAmountValue,
+                maxSupply: .max,
                 currentSupply: currentSupply,
                 byMintingAmount: mint.amount
             )

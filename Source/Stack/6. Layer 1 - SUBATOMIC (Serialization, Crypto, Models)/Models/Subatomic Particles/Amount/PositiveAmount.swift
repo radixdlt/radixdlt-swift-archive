@@ -77,7 +77,8 @@ public extension PositiveAmount {
         switch signedAmount.amountAndSign {
         case .positive(let positive):
             self.init(validated: positive)
-        case .zero: throw Error.amountCannotBeZero
+        case .zero:
+            throw Error.amountCannotBeZero
         case .negative: throw Error.amountCannotBeNegative
         }
     }

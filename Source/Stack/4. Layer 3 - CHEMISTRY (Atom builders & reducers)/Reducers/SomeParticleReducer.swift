@@ -27,11 +27,11 @@ import Foundation
 public struct SomeParticleReducer<State: ApplicationState>: ParticleReducer, Throwing {
     
     public let initialState: State
-    private let _reduce: (State, AnyUpParticle) -> State
+    private let _reduce: (State, AnyUpParticle) throws -> State
     
     public init<Concrete>(_ concrete: Concrete) where Concrete: ParticleReducer, Concrete.State == State {
         self.initialState = concrete.initialState
-        self._reduce = { concrete.reduce(state: $0, upParticle: $1) }
+        self._reduce = { try concrete.reduce(state: $0, upParticle: $1) }
     }
     
     public init(any: AnyParticleReducer) throws {
@@ -39,7 +39,7 @@ public struct SomeParticleReducer<State: ApplicationState>: ParticleReducer, Thr
             throw Error.stateTypeMismatch
         }
         self.initialState = any.anInitialState()
-        self._reduce = { any.reduce(aState: $0, upParticle: $1) }
+        self._reduce = { try any.reduce(aState: $0, upParticle: $1) }
     }
 }
 
@@ -49,7 +49,7 @@ public extension SomeParticleReducer {
         case stateTypeMismatch
     }
     
-    func reduce(state: State, upParticle: AnyUpParticle) -> State {
-        return self._reduce(state, upParticle)
+    func reduce(state: State, upParticle: AnyUpParticle) throws -> State {
+        return try self._reduce(state, upParticle)
     }
 }

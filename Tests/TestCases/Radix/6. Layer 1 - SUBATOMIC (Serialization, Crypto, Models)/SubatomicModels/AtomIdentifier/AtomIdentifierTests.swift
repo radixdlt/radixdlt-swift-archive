@@ -182,12 +182,8 @@ struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGrou
         self.fixedSupplyTokenDefinitionParticle = fixedSupplyTokenDefinitionParticle
         self.transferrableTokensParticle = transferrableTokensParticle
     }
-
-//    func particleGroups(for action: Action) -> ParticleGroups {
-//        return try! particleGroups(for: action, currentBalance: self.currentBalance)
-//    }
     
-    func particleGroups(for action: Action) -> ParticleGroups {
+    func particleGroups(for action: Action) throws -> ParticleGroups {
         
         var upParticles: [AnyUpParticle] = [AnyUpParticle(particle: transferrableTokensParticle)]
         
@@ -201,10 +197,6 @@ struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGrou
         
         return try! particleGroups(for: action, upParticles: upParticles)
     }
-    
-//    func particleGroups(for transfer: TransferTokenAction, upParticles: [ParticleConvertible]) throws -> ParticleGroups {
-//
-//    }
 }
 
 private extension AtomIdentifierTests {
@@ -218,7 +210,7 @@ private extension AtomIdentifierTests {
         Action == Mapper.Action
     {
         
-        let particleGroup = mapper.particleGroups(for: action)
+        let particleGroup = try! mapper.particleGroups(for: action)
         
         let date = TimeConverter.dateFrom(millisecondsSince1970: 237)
         let metaData = ChronoMetaData.timestamp(date)

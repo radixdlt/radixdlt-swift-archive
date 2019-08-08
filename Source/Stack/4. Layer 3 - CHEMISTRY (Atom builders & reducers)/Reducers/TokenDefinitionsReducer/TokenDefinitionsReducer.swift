@@ -24,27 +24,58 @@
 
 import Foundation
 
-public final class TokenDefinitionsReducer: ParticleReducer {}
+public struct TokenDefinitionsReducer: ParticleReducer {
+    public let initialState = TokenDefinitionsState()
+}
 
 public extension TokenDefinitionsReducer {
     
     typealias State = TokenDefinitionsState
-
-    var initialState: TokenDefinitionsState {
-        return TokenDefinitionsState()
-    }
     
-    func reduce(state: State, upParticle: AnyUpParticle) -> State {
+    func reduce(state currentState: State, upParticle: AnyUpParticle) throws -> State {
+
         let particle = upParticle.particle
-        if let mutableSupplyTokenDefinitionParticle = particle as? MutableSupplyTokenDefinitionParticle {
-            return state.mergeWithTokenConvertible(mutableSupplyTokenDefinitionParticle)
-        } else if let fixedSupplyTokenDefinitionsParticle = particle as? FixedSupplyTokenDefinitionParticle {
-            return state.mergeWithTokenConvertible(fixedSupplyTokenDefinitionsParticle)
+
+        if let tokenConvertible = particle as? TokenConvertible {
+            return currentState.mergingWithNewTokenDefinition(tokenConvertible)
         } else if let unallocatedTokensParticle = particle as? UnallocatedTokensParticle {
-            return state.mergeWithUnallocatedTokensParticle(unallocatedTokensParticle)
+            return try currentState.mergingWithUnallocatedTokensParticle(unallocatedTokensParticle)
         } else {
-            return state
+            return currentState
         }
     }
+}
 
+private extension TokenDefinitionsState {
+    func mergingWithNewTokenDefinition(_ tokenConvertible: TokenConvertible) -> TokenDefinitionsState {
+        let newTokenDefinition = TokenDefinition(tokenConvertible: tokenConvertible)
+        
+        if let existingValue = valueFor(identifier: tokenConvertible.tokenDefinitionReference), let supply = existingValue.supply {
+            return setting(value: .full(TokenState(token: newTokenDefinition, supply: supply)))
+        } else {
+            return setting(value: .justToken(newTokenDefinition))
+        }
+    }
+    
+    func mergingWithUnallocatedTokensParticle(_ unallocatedTokensParticle: UnallocatedTokensParticle) throws -> TokenDefinitionsState {
+        let rri = unallocatedTokensParticle.tokenDefinitionReference
+        
+        let existingValue = valueFor(identifier: rri)
+        let existingSupplyOrMax = existingValue?.supply ?? Supply.max
+        let updatedSupply = try existingSupplyOrMax.subtracting(unallocatedTokensParticle.amount)
+        
+        switch existingValue {
+        case .none, .some(.justSupply):
+            return setting(value: .justSupply(updatedSupply, forToken: rri))
+        case .some(.full(let token as TokenConvertible)), .some(.justToken(let token as TokenConvertible)):
+            return setting(value: .full(TokenState(token: token, supply: updatedSupply)))
+        }
+    }
+    
+    func setting(value: Value) -> TokenDefinitionsState {
+        let rri = value.tokenDefinitionReference
+        var mutableCopy = self
+        mutableCopy.dictionary[rri] = value
+        return mutableCopy
+    }
 }

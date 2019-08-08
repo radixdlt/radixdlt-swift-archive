@@ -36,16 +36,14 @@ public struct DefaultTransferTokensActionToParticleGroupsMapper:
 // MARK: - TransferTokensActionToParticleGroupsMapper
 public extension TransferTokensActionToParticleGroupsMapper {
     
-    private typealias TTP = TransferrableTokensParticle
-    
     func particleGroups(for transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
         
-        try ensureAmountIsExactMultipleOFGranularity(transfer: transfer, upParticles: upParticles)
+        try validateInput(transfer: transfer, upParticles: upParticles)
         
-        let transitioner = FungibleParticleTransitioner<TTP, TTP>(
-            transitioner: { try TTP.init(amount: $0, basedOn: $1, address: transfer.recipient) },
-            transitionAndMigrateCombiner: TTP.reducing(particles:),
-            migrator: TTP.init(amount:basedOn:),
+        let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, TransferrableTokensParticle>(
+            transitioner: { try TransferrableTokensParticle(transferrableTokensParticle: $0, amount: $1, address: transfer.recipient) },
+            transitionAndMigrateCombiner: TransferrableTokensParticle.reducing(particles:),
+            migrator: TransferrableTokensParticle.init(transferrableTokensParticle:amount:),
             amountMapper: { $0.amount.asNonNegative }
         )
         
@@ -61,7 +59,7 @@ public extension TransferTokensActionToParticleGroupsMapper {
 }
 
 private extension TransferTokensActionToParticleGroupsMapper {
-    func ensureAmountIsExactMultipleOFGranularity(transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws {
+    func validateInput(transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws {
         let rri = transfer.tokenResourceIdentifier
         
         let tokenDefinition: TokenConvertible
@@ -80,37 +78,12 @@ private extension TransferTokensActionToParticleGroupsMapper {
     }
 }
 
-private extension TransferrableTokensParticle {
+internal extension TransferrableTokensParticle {
     static func reducing(particles: [TransferrableTokensParticle]) throws -> [TransferrableTokensParticle] {
         guard let firstParticle = particles.first else { return [] }
         let amount = particles.map { $0.amount.asNonNegative }.reduce(NonNegativeAmount.zero, +)
-        let single = try TransferrableTokensParticle.init(amount: amount, basedOn: firstParticle)
+        let single = try TransferrableTokensParticle(transferrableTokensParticle: firstParticle, amount: amount)
         return [single]
-    }
-    
-    init(amount: NonNegativeAmount, basedOn transferrableTokensParticle: TransferrableTokensParticle) throws {
-        try self.init(
-            amount: amount,
-            basedOn: transferrableTokensParticle,
-            address: transferrableTokensParticle.address
-        )
-    }
-    
-    init(
-        amount nonNegativeAmount: NonNegativeAmount,
-        basedOn transferrableTokensParticle: TransferrableTokensParticle,
-        address: Address
-    ) throws {
-        
-        let positiveAmount = try PositiveAmount(nonNegative: nonNegativeAmount)
-        
-        try self.init(
-            amount: positiveAmount,
-            address: address,
-            tokenDefinitionReference: transferrableTokensParticle.tokenDefinitionReference,
-            permissions: transferrableTokensParticle.permissions,
-            granularity: transferrableTokensParticle.granularity
-        )
     }
 }
 

@@ -39,22 +39,19 @@ public struct PositiveSupply:
     public init(amount: PositiveAmount) throws {
         self.amount = try PositiveSupply.validate(amount)
     }
-}
-
-// MARK: - Convenience Init
-public extension PositiveSupply {
     
-    init<AmountType>(subtractingFromMax amountToSubtractFromMax: AmountType) throws where AmountType: NonNegativeAmountConvertible {
-        try self.init(amount: Supply.subtractingFromMax(amount: amountToSubtractFromMax))
+    public init(nonNegativeAmount: NonNegativeAmount) throws {
+        let positiveAmount = try PositiveAmount(nonNegative: nonNegativeAmount)
+        self.amount = try PositiveSupply.validate(positiveAmount)
     }
     
-    init(unallocatedTokensParticle: UnallocatedTokensParticle) {
-        do {
-            let unallocatedAmount = unallocatedTokensParticle.amount.amount
-            try self.init(amount: Supply.subtractingFromMax(amount: unallocatedAmount))
-        } catch {
-            unexpectedlyMissedToCatch(error: error)
-        }
+    public init(supply: Supply) throws {
+        try self.init(nonNegativeAmount: supply.amount)
+    }
+    
+    public init(subtractedFromMax supplyToSubtractFromMax: Supply) throws {
+        let leftOverSupplyAmount = try supplyToSubtractFromMax.subtractedAmountFromMax()
+        try self.init(nonNegativeAmount: leftOverSupplyAmount)
     }
 }
 
@@ -68,23 +65,6 @@ public extension PositiveSupply {
             throw Error.cannotExceedUInt256MaxValue
         }
         return value
-    }
-}
-
-// MARK: - Convenience
-public extension PositiveSupply {
-    
-    var subtractedFromMax: PositiveSupply? {
-        guard let positiveLeftOverSupplyAmount = try? PositiveSupply.subtractingFromMax(amount: self.amount) else { return nil }
-        return try? PositiveSupply(amount: positiveLeftOverSupplyAmount)
-    }
-    
-    static func subtractingFromMax<AmountType>(amount: AmountType) throws -> PositiveAmount where AmountType: NonNegativeAmountConvertible {
-        let subtracted: SignedAmount = SignedAmount(nonNegative: PositiveSupply.maxAmountValue) - SignedAmount(nonNegative: amount)
-        guard subtracted.isPositive else {
-            throw Error.mustBePositive
-        }
-        return try PositiveAmount(nonNegative: subtracted.abs)
     }
 }
 

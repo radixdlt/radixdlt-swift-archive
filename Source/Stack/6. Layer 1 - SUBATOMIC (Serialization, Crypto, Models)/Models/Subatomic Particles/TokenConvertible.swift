@@ -30,6 +30,7 @@ public protocol TokenConvertible: TokenDefinitionReferencing {
     var tokenDefinedBy: Address { get }
     var granularity: Granularity { get }
     var description: Description { get }
+    var iconUrl: URL? { get }
     var tokenSupplyType: SupplyType { get }
 }
 

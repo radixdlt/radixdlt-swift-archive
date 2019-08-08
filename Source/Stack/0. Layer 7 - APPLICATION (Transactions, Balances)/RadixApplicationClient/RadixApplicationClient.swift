@@ -33,6 +33,7 @@ public final class RadixApplicationClient:
     TokenTransferring,
     TokenCreating,
     TokenMinting,
+    TokenBurning,
     MessageSending,
     AddressOfAccountDeriving,
     ActiveAccountOwner,
@@ -115,11 +116,16 @@ public extension RadixApplicationClient {
 
 // MARK: TokenMinting
 public extension RadixApplicationClient {
-    
     func mintTokens(_ action: MintTokensAction) -> ResultOfUserAction {
         return execute(actions: action)
     }
-    
+}
+
+// MARK: TokenBurning
+public extension RadixApplicationClient {
+    func burnTokens(_ action: BurnTokensAction) -> ResultOfUserAction {
+        return execute(actions: action)
+    }
 }
 
 // MARK: TokenTransferring
@@ -176,7 +182,7 @@ public extension RadixApplicationClient {
         return atomStore.onSync(address: address)
             .map { [unowned self] date in
                 let upParticles = self.atomStore.upParticles(at: address, stagedUuid: nil)
-                let reducedState = reducer.reduceFromInitialState(upParticles: upParticles)
+                let reducedState = try reducer.reduceFromInitialState(upParticles: upParticles)
                 return reducedState
         }
     }

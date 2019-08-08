@@ -24,25 +24,45 @@
 
 import Foundation
 
-public extension TokenDefinitionsState {
-    struct SupplyInfo: TokenSupplyStateConvertible, Equatable {
-        public let totalSupply: Supply
-        public let tokenDefinitionReference: ResourceIdentifier
+public struct TokenDefinition: TokenConvertible, Hashable {
+    public let symbol: Symbol
+    public let name: Name
+    public let tokenDefinedBy: Address
+    public let granularity: Granularity
+    public let description: Description
+    public let tokenSupplyType: SupplyType
+    public let iconUrl: URL?
+    
+    public init(
+        symbol: Symbol,
+        name: Name,
+        tokenDefinedBy: Address,
+        granularity: Granularity,
+        description: Description,
+        tokenSupplyType: SupplyType,
+        iconUrl: URL?
+
+    ) {
+        self.name = name
+        self.symbol = symbol
+        self.granularity = granularity
+        self.tokenDefinedBy = tokenDefinedBy
+        self.description = description
+        self.tokenSupplyType = tokenSupplyType
+        self.iconUrl = iconUrl
     }
 }
 
-public extension TokenDefinitionsState.SupplyInfo {
-    init(tokenSupplyStateConvertible: TokenSupplyStateConvertible) {
+public extension TokenDefinition {
+    init(tokenConvertible token: TokenConvertible) {
         self.init(
-            totalSupply: tokenSupplyStateConvertible.totalSupply,
-            tokenDefinitionReference: tokenSupplyStateConvertible.tokenDefinitionReference
-        )
-    }
-    
-    init(unallocatedTokensParticle: UnallocatedTokensParticle) {
-        self.init(
-            totalSupply: Supply(unallocatedTokensParticle: unallocatedTokensParticle),
-            tokenDefinitionReference: unallocatedTokensParticle.tokenDefinitionReference
+            symbol: token.symbol,
+            name: token.name,
+            tokenDefinedBy: token.tokenDefinedBy,
+            granularity: token.granularity,
+            description: token.description,
+            tokenSupplyType: token.tokenSupplyType,
+            iconUrl: token.iconUrl
         )
     }
 }

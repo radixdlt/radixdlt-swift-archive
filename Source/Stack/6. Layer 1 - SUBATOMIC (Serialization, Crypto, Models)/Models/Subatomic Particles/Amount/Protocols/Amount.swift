@@ -84,7 +84,6 @@ public extension Amount {
                          willOverflowIf: lhs is UnsignedNumeric && rhs > lhs,
                          operation: -)
     }
-    
 }
 
 // MARK: - Numeric Operators Inout

@@ -25,8 +25,11 @@
 import Foundation
 import RxSwift
 
-public protocol MessageSending {
-    var addressOfActiveAccount: Address { get }
+/// Important that `MessageSending` conforms to `ActiveAccountOwner` so that we can verify that the address
+/// of a message `sender` is the same as the `addressOfActiveAccount` that signs the message. In order
+/// to prevent incorrect input (which would fail at a later stage anyway) whre Alice claims to be
+/// Carol, when sending a message to Bob.
+public protocol MessageSending: ActiveAccountOwner {
     
     /// Sends a message
     func send(message: SendMessageAction) -> ResultOfUserAction
