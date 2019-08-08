@@ -285,6 +285,29 @@ public extension RadixApplicationClient {
     }
 }
 
+internal extension RadixApplicationClient {
+    
+    func execute(actions: UserAction..., originNode: Node? = nil) -> ResultOfUserAction {
+        return execute(actions: actions, originNode: originNode)
+    }
+    
+    func execute(actions: [UserAction], originNode: Node? = nil) -> ResultOfUserAction {
+        let uuid = UUID()
+        
+        for action in actions {
+            do {
+                try stage(action: action, uuid: uuid)
+            } catch {
+                atomStore.clearStagedParticleGroups(for: uuid)
+                let failed = FailedToStageAction(error: error, userAction: action)
+                return ResultOfUserAction.failedToStageAction(failed)
+            }
+        }
+        
+        return commitAndPush(uuid: uuid, toNode: originNode)
+    }
+}
+
 // MARK: - Private
 private extension RadixApplicationClient {
     var atomPuller: AtomPuller {
@@ -356,22 +379,6 @@ private extension RadixApplicationClient {
         }
         
         return result
-    }
-    
-    func execute(actions: UserAction..., originNode: Node? = nil) -> ResultOfUserAction {
-        let uuid = UUID()
-        
-        for action in actions {
-            do {
-                try stage(action: action, uuid: uuid)
-            } catch {
-                atomStore.clearStagedParticleGroups(for: uuid)
-                let failed = FailedToStageAction(error: error, userAction: action)
-                return ResultOfUserAction.failedToStageAction(failed)
-            }
-        }
-        
-        return commitAndPush(uuid: uuid, toNode: originNode)
     }
     
     func buildAtom(uuid: UUID) -> Single<UnsignedAtom> {

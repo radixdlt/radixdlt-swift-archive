@@ -71,8 +71,8 @@ public struct DER:
 
 // MARK: - Methods
 public extension DER {
-    func decoded() -> Data {
-        return DERDecoder.decodeData(derEncodedData)
+    func decodedRandS() -> (r: Data, s: Data) {
+        return DERDecoder.decodeRSParts(derEncodedData)
     }
 }
 

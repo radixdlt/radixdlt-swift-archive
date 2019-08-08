@@ -48,47 +48,43 @@ class BurnTokensTests: LocalhostNodeTest {
     private let disposeBag = DisposeBag()
     func testBurnMintBurnMintBurnMint() {
         
-        // GIVEN: Radix identity Alice and an application layer action BurnToken
-        let (tokenCreation, fooToken) = try! application.createToken(
+        let createTokenAction = try! CreateTokenAction(
+            creator: alice,
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
             supply: .mutable(initial: nil)
         )
         
+        let fooToken = createTokenAction.identifier
+        
+        func burn(amount: PositiveAmount) -> UserAction {
+            return BurnTokensAction(tokenDefinitionReference: fooToken, amount: amount, burner: alice)
+        }
+        
+        func mint(amount: PositiveAmount) -> UserAction {
+            return MintTokensAction(tokenDefinitionReference: fooToken, amount: amount, minter: alice)
+        }
+    
+        let transaction = NewTransaction {[
+            createTokenAction,
+            mint(amount: 100),   // 100
+            burn(amount: 3),     // 97
+            mint(amount: 5),     // 102
+            burn(amount: 7),    // 95
+            mint(amount: 13),    // 108
+            burn(amount: 17),    // 91
+        ]}
+        
+        let result = transaction.commitAndPush(radixClient: application)
+
+        
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            result.blockingWasSuccessfull(timeout: 30)
         )
         
-        let tokenStatesObservable = application.observeTokenState(identifier: fooToken)
-        tokenStatesObservable.subscribe(
-            onNext: { print("✅ Supply of FooToken: \($0.totalSupply)") },
-            onError: { fatalError("Error: \($0)") }
-        ).disposed(by: disposeBag)
-        
-        func burn(amount: PositiveAmount) {
-            XCTAssertTrue(
-                application.burnTokens(amount: amount, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
-            )
-        }
-        
-        func mint(amount: PositiveAmount) {
-            XCTAssertTrue(
-                application.mintTokens(amount: amount, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
-            )
-        }
-        
-        mint(amount: 100)   // 100
-        burn(amount: 3)     // 97
-        mint(amount: 5)     // 102
-        burn(amount: 7)     // 95
-        mint(amount: 13)    // 108
-        burn(amount: 17)    // 91
-        
-//        guard let tokenStates = try? tokenStatesObservable.take(7).toBlocking(timeout: nil).toArray() else {
-//            return
-//        }
-//        XCTAssertEqual(tokenStates.map { $0.totalSupply }, [0, 100, 97, 102, 95, 108, 91])
+        guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: 35) else { return }
+        XCTAssertEqual(tokenState.totalSupply, 91)
     }
     
     func testBurnSuccessful() {

@@ -29,6 +29,18 @@ public struct MintTokensAction: UserAction {
     public let amount: PositiveAmount
     public let minter: Address
     public let creditNewlyMintedTokensTo: Address
+    
+    public init(
+        tokenDefinitionReference: ResourceIdentifier,
+        amount: PositiveAmount,
+        minter: Address,
+        creditNewlyMintedTokensTo: Address? = nil
+    ) {
+        self.tokenDefinitionReference = tokenDefinitionReference
+        self.amount = amount
+        self.minter = minter
+        self.creditNewlyMintedTokensTo = creditNewlyMintedTokensTo ?? minter
+    }
 }
 
 public extension MintTokensAction {

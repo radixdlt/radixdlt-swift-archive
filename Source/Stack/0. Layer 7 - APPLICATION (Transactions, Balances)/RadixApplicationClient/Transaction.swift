@@ -24,13 +24,19 @@
 
 import Foundation
 
-public protocol Transaction {
-    var identifier: AtomIdentifier { get }
+public protocol AnyIdentifiable: CustomStringConvertible {}
+public struct Identifier<I> where I: AnyIdentifiable {}
+extension AtomIdentifier: AnyIdentifiable {}
+extension UUID: AnyIdentifiable {}
+extension ResourceIdentifier: AnyIdentifiable {}
+
+public protocol TransactionConvertible {
+    var identifier: AnyIdentifiable { get }
     var sentAt: Date { get }
     var actions: [UserAction] { get }
 }
 
-public extension Transaction {
+public extension TransactionConvertible {
     func containsAction<Action>(ofType actionType: Action.Type) -> Bool where Action: UserAction {
         return actions.contains(where: { type(of: $0) == actionType })
     }
@@ -55,8 +61,8 @@ public extension Transaction {
     }
 }
 
-public struct ExecutedTransaction: Transaction, ArrayConvertible {
-    public let identifier: AtomIdentifier
+public struct ExecutedTransaction: TransactionConvertible, ArrayConvertible {
+    public let identifier: AnyIdentifiable
     public let sentAt: Date
     public let actions: [UserAction]
     
@@ -92,28 +98,29 @@ public extension ExecutedTransaction {
     var elements: [Element] { return actions }
 }
 
-public struct NewTransaction: Transaction {
-    public let identifier: AtomIdentifier
+public struct NewTransaction: TransactionConvertible {
+    private let uuid: UUID
+    public var identifier: AnyIdentifiable { return uuid }
     public let sentAt: Date
     public let actions: [UserAction]
     
     private init(
-        identifier: AtomIdentifier,
-        sentAt: Date,
+        uuid: UUID = .init(),
+        sentAt: Date = .init(),
         actions: [UserAction]
     ) {
-        self.identifier = identifier
+        self.uuid = uuid
         self.sentAt = sentAt
         self.actions = actions
     }
 }
 
 public extension NewTransaction {
+    init(makeActions: () -> [UserAction]) {
+        self.init(actions: makeActions())
+    }
     
-    final class Builder {
-        private var stagedActions: [UserAction] = .init()
-        func stage(action: UserAction) {
-            
-        }
+    func commitAndPush(radixClient: RadixApplicationClient) -> ResultOfUserAction {
+        return radixClient.execute(actions: actions, originNode: nil)
     }
 }

@@ -88,8 +88,7 @@ public struct Signature:
 // MARK: - DataInitializable
 public extension Signature {
     init(data: Data) throws {
-        do {
-            try Signature.validateLength(of: data)
+        try Signature.validateLength(of: data)
         let byteCount = Signature.length / 2
         let rData = Data(data.prefix(byteCount))
         let sData = Data(data.suffix(byteCount))
@@ -97,17 +96,17 @@ public extension Signature {
             r: rData.unsignedBigInteger,
             s: sData.unsignedBigInteger
         )
-        } catch {
-            print("💣 CRITICAL BUG IN Signature error: \(error), fix me")
-            incorrectImplementation("should not crash if too few chars, signature might sometimes be 63 chars?")
-        }
     }
 }
 
 // MARK: - DERInitializable
 public extension Signature {
     init(der: DER) throws {
-        try self.init(data: der.decoded())
+        let (rData, sData) = der.decodedRandS()
+        try self.init(
+            r: rData.unsignedBigInteger,
+            s: sData.unsignedBigInteger
+        )
     }
 }
 
