@@ -6,6 +6,7 @@
 
 ## Table of contents
 
+- [Changelog](CHANGELOG.md)
 - [Features](#features)
 - [Getting started](#getting-started)
 - [Architecture](#architecture)
