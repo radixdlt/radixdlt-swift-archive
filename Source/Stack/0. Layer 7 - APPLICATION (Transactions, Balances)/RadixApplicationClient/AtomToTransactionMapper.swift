@@ -27,27 +27,11 @@ import RxSwift
 import RxSwiftExt
 import RxOptional
 
-public final class AtomToTransactionMapper {
-    
-    /// A list of type-erased mappers from `Atom` to `UserAction`
-    private let atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper]
-    
-    public init(identity: AbstractIdentity) {
-        atomToExecutedActionMappers = .atomToActionMappers(activeAccount: identity.activeAccountObservable)
-    }
+public protocol AtomToTransactionMapper {
+    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction>
 }
 
 public extension AtomToTransactionMapper {
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
-        return Observable.combineLatest(
-            atomToExecutedActionMappers.map { $0.mapAtomSomeUserAction(atom) }
-        ) { $0 } // Observable<[UserAction?]>
-            .map { $0.compactMap { $0 } } // Observable<[UserAction]>
-            .map { try? NonEmptyArray(unvalidated: $0) } // Observable<NonEmptyArray?>
-            .filterNil() // Observable<NonEmptyArray>
-            .map { ExecutedTransaction(atom: atom, actions: $0) }
-    }
-    
     /// Boolean `OR` of `actionTypes`
     func transactionFrom(atom: Atom, actionMatchingAnyType actionTypes: [UserAction.Type]) -> Observable<ExecutedTransaction> {
         return transactionFromAtom(atom).filter {
@@ -60,5 +44,33 @@ public extension AtomToTransactionMapper {
         return transactionFromAtom(atom).filter {
             $0.contains(actionMatchingAll: requiredActionTypes)
         }
+    }
+}
+
+public final class DefaultAtomToTransactionMapper: AtomToTransactionMapper {
+    
+    /// A list of type-erased mappers from `Atom` to `UserAction`
+    private let atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper]
+    
+    public init(activeAccount: Observable<Account>) {
+        atomToExecutedActionMappers = .atomToActionMappers(activeAccount: activeAccount)
+    }
+}
+
+public extension DefaultAtomToTransactionMapper {
+    convenience init(identity: AbstractIdentity) {
+        self.init(activeAccount: identity.activeAccountObservable)
+    }
+}
+
+public extension DefaultAtomToTransactionMapper {
+    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
+        return Observable.combineLatest(
+            atomToExecutedActionMappers.map { $0.mapAtomSomeUserAction(atom) }
+        ) { $0 } // Observable<[UserAction?]>
+            .map { $0.compactMap { $0 } } // Observable<[UserAction]>
+            .map { try? NonEmptyArray(unvalidated: $0) } // Observable<NonEmptyArray?>
+            .filterNil() // Observable<NonEmptyArray>
+            .map { ExecutedTransaction(atom: atom, actions: $0) }
     }
 }

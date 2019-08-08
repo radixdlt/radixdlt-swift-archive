@@ -151,7 +151,6 @@ private extension EncryptedMessageContext {
 private extension EncryptedMessageContext {
     
     func decryptMessageIfNeeded(key: Signing) throws -> SentMessage {
-        print("🔓 decrypting message")
         switch payload {
         case .wasNotEncrypted(let data):
             return SentMessage(context: self, data: data, encryptionState: .wasNotEncrypted)

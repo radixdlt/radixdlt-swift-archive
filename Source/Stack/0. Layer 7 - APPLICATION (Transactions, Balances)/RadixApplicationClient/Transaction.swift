@@ -24,14 +24,7 @@
 
 import Foundation
 
-public protocol AnyIdentifiable: CustomStringConvertible {}
-public struct Identifier<I> where I: AnyIdentifiable {}
-extension AtomIdentifier: AnyIdentifiable {}
-extension UUID: AnyIdentifiable {}
-extension ResourceIdentifier: AnyIdentifiable {}
-
 public protocol TransactionConvertible {
-    var identifier: AnyIdentifiable { get }
     var sentAt: Date { get }
     var actions: [UserAction] { get }
 }
@@ -62,30 +55,26 @@ public extension TransactionConvertible {
 }
 
 public struct ExecutedTransaction: TransactionConvertible, ArrayConvertible {
-    public let identifier: AnyIdentifiable
+    public let atomIdentifier: AtomIdentifier
     public let sentAt: Date
     public let actions: [UserAction]
     
     private init(
-        identifier: AtomIdentifier,
+        atomIdentifier: AtomIdentifier,
         sentAt: Date,
         actions: [UserAction]
     ) {
-        self.identifier = identifier
+        self.atomIdentifier = atomIdentifier
         self.sentAt = sentAt
         self.actions = actions
-        
-        print("⚛️ ExecutedTransaction, actions: \(actions)")
     }
 }
 
 public extension ExecutedTransaction {
     
     init(atom: Atom, actions: NonEmptyArray<UserAction>) {
-        
-        print("⚛️ ExecutedTransaction.init")
         self.init(
-            identifier: atom.identifier(),
+            atomIdentifier: atom.identifier(),
             sentAt: atom.timestamp,
             actions: actions.elements
         )
@@ -99,8 +88,7 @@ public extension ExecutedTransaction {
 }
 
 public struct NewTransaction: TransactionConvertible {
-    private let uuid: UUID
-    public var identifier: AnyIdentifiable { return uuid }
+    public let uuid: UUID
     public let sentAt: Date
     public let actions: [UserAction]
     
@@ -118,9 +106,5 @@ public struct NewTransaction: TransactionConvertible {
 public extension NewTransaction {
     init(makeActions: () -> [UserAction]) {
         self.init(actions: makeActions())
-    }
-    
-    func commitAndPush(radixClient: RadixApplicationClient) -> ResultOfUserAction {
-        return radixClient.execute(actions: actions, originNode: nil)
     }
 }

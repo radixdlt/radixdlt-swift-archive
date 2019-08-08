@@ -76,9 +76,8 @@ class BurnTokensTests: LocalhostNodeTest {
             burn(amount: 17),    // 91
         ]}
         
-        let result = transaction.commitAndPush(radixClient: application)
+        let result = application.send(transaction: transaction)
 
-        
         XCTAssertTrue(
             result.blockingWasSuccessfull(timeout: 30)
         )

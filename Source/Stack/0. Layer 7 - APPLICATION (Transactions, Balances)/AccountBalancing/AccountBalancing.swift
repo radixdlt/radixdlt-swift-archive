@@ -25,9 +25,8 @@
 import Foundation
 import RxSwift
 
-public protocol AccountBalancing {
+public protocol AccountBalancing: ActiveAccountOwner {
     
-    var addressOfActiveAccount: Address { get }
     var nativeTokenDefinition: TokenDefinition { get }
         
     func observeBalances(ownedBy owner: AddressConvertible) -> Observable<TokenBalances>
