@@ -37,8 +37,8 @@ public extension DefaultAtomToUniqueIdMapper {
     
     typealias SpecificExecutedAction = PutUniqueIdAction
     
-    func mapAtomToAction(_ atom: Atom) -> Observable<PutUniqueIdAction?> {
-        guard atom.containsAnyUniqueParticle(spin: .up) else { return .just(nil) }
+    func mapAtomToActions(_ atom: Atom) -> Observable<[PutUniqueIdAction]> {
+        guard atom.containsAnyUniqueParticle(spin: .up) else { return .just([]) }
         
         var uniqueActions = [PutUniqueIdAction]()
         for particleGroup in atom {
@@ -53,7 +53,7 @@ public extension DefaultAtomToUniqueIdMapper {
             )
         }
         
-        guard !uniqueActions.isEmpty else { return .just(nil) }
-        return Observable.from(uniqueActions)
+        guard !uniqueActions.isEmpty else { return .just([]) }
+        return Observable.of(uniqueActions)
     }
 }

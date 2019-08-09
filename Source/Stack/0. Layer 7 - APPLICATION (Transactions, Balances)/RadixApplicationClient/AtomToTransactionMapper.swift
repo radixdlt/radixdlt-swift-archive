@@ -64,9 +64,11 @@ public extension DefaultAtomToTransactionMapper {
 }
 
 public extension DefaultAtomToTransactionMapper {
+
     func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
         return Observable.combineLatest(
-            atomToExecutedActionMappers.map { $0.mapAtomSomeUserAction(atom) }
-        ) { ExecutedTransaction(atom: atom, actions: $0) }
+            atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
+        ) { $0.flatMap { $0 } }.map { ExecutedTransaction(atom: atom, actions: $0) }
     }
+    
 }

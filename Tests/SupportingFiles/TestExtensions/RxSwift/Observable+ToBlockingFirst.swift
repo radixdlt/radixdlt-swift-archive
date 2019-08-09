@@ -74,7 +74,7 @@ extension ObservableConvertibleType where Element == Never { /* Completable */
             if let rxError = error as? RxError {
                 if case .timeout = rxError {
                     if failOnTimeout {
-                        XCTFail("Timeout, \(description)")
+                        XCTFail("Timeout after \(timeout!)s, \(description)")
                     }
                 }
             } else {

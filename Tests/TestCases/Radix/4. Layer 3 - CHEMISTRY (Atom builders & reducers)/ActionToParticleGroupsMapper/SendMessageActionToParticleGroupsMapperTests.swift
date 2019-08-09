@@ -155,15 +155,15 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
 }
 
 func decryptMessage(in atom: Atom, account accountOwner: AccountOwner) throws -> SentMessage  {
-    guard let decryptedMessage = DefaultAtomToDecryptedMessageMapper(
+    guard let decryptedMessages = DefaultAtomToDecryptedMessageMapper(
         activeAccount: .just(accountOwner.account)
-    ).mapAtomToAction(atom).blockingTakeFirst() else {
+    ).mapAtomToActions(atom).blockingTakeFirst(),
+        let decryptedMessage = decryptedMessages.first
+    else {
         throw DecryptMessageErrorInTest.unknownError
     }
-    guard let doubleUnwrapped = decryptedMessage else {
-        throw DecryptMessageErrorInTest.unknownError
-    }
-    return doubleUnwrapped
+
+    return decryptedMessage
 }
 
 enum DecryptMessageErrorInTest: Swift.Error, Equatable {

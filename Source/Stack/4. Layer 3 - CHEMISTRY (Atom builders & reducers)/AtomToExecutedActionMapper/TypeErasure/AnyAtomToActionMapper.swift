@@ -27,17 +27,17 @@ import RxSwift
 
 public struct AnyAtomToExecutedActionMapper: BaseAtomToUserActionMapper {
     
-    private let _mapAtomSomeUserAction: (Atom) -> Observable<UserAction?>
+    private let _mapAtomSomeUserActions: (Atom) -> Observable<[UserAction]>
     
     public init<Concrete>(any concrete: Concrete) where Concrete: BaseAtomToUserActionMapper {
-        self._mapAtomSomeUserAction = {
-            return concrete.mapAtomSomeUserAction($0)
+        self._mapAtomSomeUserActions = {
+            return concrete.mapAtomSomeUserActions($0)
         }
     }
 }
 
 public extension AnyAtomToExecutedActionMapper {
-    func mapAtomSomeUserAction(_ atom: Atom) -> Observable<UserAction?> {
-        return self._mapAtomSomeUserAction(atom)
+    func mapAtomSomeUserActions(_ atom: Atom) -> Observable<[UserAction]> {
+        return self._mapAtomSomeUserActions(atom)
     }
 }

@@ -36,10 +36,10 @@ public extension DefaultAtomToTokenTransferMapper {
     typealias SpecificExecutedAction = TransferredTokens
     
     // swiftlint:disable:next function_body_length
-    func mapAtomToAction(_ atom: Atom) -> Observable<TransferredTokens?> {
+    func mapAtomToActions(_ atom: Atom) -> Observable<[TransferredTokens]> {
 
         guard atom.containsAnyTransferrableTokensParticles(spin: .down) else {
-            return .just(nil)
+            return .just([])
         }
         
         // swiftlint:disable:next function_body_length
@@ -112,6 +112,6 @@ public extension DefaultAtomToTokenTransferMapper {
         
         let transferredTokensList: [TransferredTokens] = atom.particleGroups.flatMap(transferredTokensFromParticleGroup)
         
-        return Observable.from(transferredTokensList)
+        return Observable.of(transferredTokensList)
     }
 }

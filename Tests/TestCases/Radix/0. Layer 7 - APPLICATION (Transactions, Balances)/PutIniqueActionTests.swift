@@ -36,7 +36,6 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
     private var application: RadixApplicationClient!
     private var alice: Address!
     private var bob: Address!
-    private var fooToken: ResourceIdentifier!
     
     override func setUp() {
         super.setUp()
@@ -47,30 +46,20 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobAccount)
-        
-        let (tokenCreation, rri) = try! application.createToken(
-            name: "FooToken",
-            symbol: "FOO",
-            description: "Fooest token ever",
-            supply: .mutableZeroSupply
-        )
-
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
-        )
-        
-        fooToken = rri
     }
     
-    func testAC1() {
+    func testSendTransactionWithSingleUniqueId() {
 
+        // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        
+        // WHEN: Alice sends a `Transaction` containing a `UniqueId` with the string `"foobar"`
         let transaction = Transaction {[
-            MintTokensAction(tokenDefinitionReference: fooToken, amount: 1, minter: alice),
-            PutUniqueIdAction(uniqueMaker: alice, string: "Baz")
+            PutUniqueIdAction(uniqueMaker: alice, string: "foobar")
         ]}
         
         XCTAssertTrue(
             application.send(transaction: transaction)
+                // THEN: the Transaction is successfully sent
                 .blockingWasSuccessfull(timeout: .enoughForPOW)
         )
 
@@ -80,6 +69,35 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
 
         XCTAssertEqual(putUniqueActions.count, 1)
         let putUniqueAction = putUniqueActions[0]
-        XCTAssertEqual(putUniqueAction.string, "Baz")
+        
+        // THEN: AND we can read out the `UniqueId` string `"foobar"`
+        XCTAssertEqual(putUniqueAction.string, "foobar")
+    }
+    
+    func testSendTransactionWithTwoUniqueIds() {
+        
+        // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        
+        // WHEN: Alice sends a `Transaction` containing two UniqueId with the string "foo" and "bar” respectively
+        let transaction = Transaction {[
+            PutUniqueIdAction(uniqueMaker: alice, string: "foo"),
+            PutUniqueIdAction(uniqueMaker: alice, string: "bar")
+        ]}
+        
+        XCTAssertTrue(
+            application.send(transaction: transaction)
+                // THEN: the Transaction is successfully sent
+                .blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
+        
+        guard let executedTransaction: ExecutedTransaction = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingTakeFirst(timeout: 1) else { return }
+        
+        let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
+        
+        XCTAssertEqual(putUniqueActions.count, 2)
+        
+        // THEN: AND we can read out the UniqueId strings "foo" and "bar”.
+        XCTAssertEqual(putUniqueActions[0].string, "foo")
+        XCTAssertEqual(putUniqueActions[1].string, "bar")
     }
 }
