@@ -24,4 +24,42 @@
 
 import Foundation
 
-public protocol CreateTokenActionToParticleGroupsMapper: StatelessActionToParticleGroupsMapper where Action == CreateTokenAction {}
+public protocol CreateTokenActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper, Throwing where Action == CreateTokenAction, Error == CreateTokenError {}
+
+public extension CreateTokenActionToParticleGroupsMapper {
+    // TODO When StatefulActionToParticleGroupsMapper uses `spunPartices: [AnySpunParticle]` instead of `upParticles: [AnyUpParticle]` we need only to look for RRIParticles with spin `.down`
+    func requiredState(for createTokenAction: CreateTokenAction) -> [AnyShardedParticleStateId] {
+
+        let address = createTokenAction.creator
+        
+        return [
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(
+                    typeOfParticle: MutableSupplyTokenDefinitionParticle.self,
+                    address: address
+                )
+            ),
+            
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(
+                    typeOfParticle: FixedSupplyTokenDefinitionParticle.self,
+                    address: address
+                )
+            ),
+            
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(
+                    typeOfParticle: UniqueParticle.self,
+                    address: address
+                )
+            )
+        ]
+    }
+}
+
+public enum CreateTokenError: Swift.Error, Equatable {
+    case rriAlreadyUsedByUniqueId(identifier: ResourceIdentifier)
+    case rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier)
+    case rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier)
+    case nonMatchingAddress(activeAddress: Address, butActionStatesAddress: Address)
+}

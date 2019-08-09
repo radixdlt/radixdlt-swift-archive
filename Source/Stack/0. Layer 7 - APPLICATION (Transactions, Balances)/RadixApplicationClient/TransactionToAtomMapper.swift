@@ -25,7 +25,7 @@
 import Foundation
 
 public protocol TransactionToAtomMapper {
-    func atomFrom(transaction: Transaction) throws -> Atom
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom
 }
 
 public final class DefaultTransactionToAtomMapper: TransactionToAtomMapper {
@@ -69,12 +69,12 @@ public extension DefaultTransactionToAtomMapper {
 }
 
 public extension DefaultTransactionToAtomMapper {
-    func atomFrom(transaction: Transaction) throws -> Atom {
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
         let uuid = transaction.uuid
         
         for action in transaction.actions {
             do {
-                try stage(action: action, uuid: uuid)
+                try stage(action: action, uuid: uuid, addressOfActiveAccount: addressOfActiveAccount)
             } catch {
                 atomStore.clearStagedParticleGroups(for: uuid)
                 throw FailedToStageAction(error: error, userAction: action)
@@ -104,7 +104,7 @@ private extension DefaultTransactionToAtomMapper {
         return mapper.requiredStateForAnAction(action)
     }
     
-    func stage(action: UserAction, uuid: UUID) throws {
+    func stage(action: UserAction, uuid: UUID, addressOfActiveAccount: Address) throws {
         let statefulMapper = actionMapperFor(action: action)
         let requiredState = self.requiredState(for: action)
         
@@ -113,7 +113,7 @@ private extension DefaultTransactionToAtomMapper {
                 .filter { type(of: $0.someParticle) == requiredStateContext.particleType }
         }
         
-        try statefulMapper.particleGroupsForAnAction(action, upParticles: particles).forEach {
+        try statefulMapper.particleGroupsForAnAction(action, upParticles: particles, addressOfActiveAccount: addressOfActiveAccount).forEach {
             atomStore.stageParticleGroup($0, uuid: uuid)
         }
     }

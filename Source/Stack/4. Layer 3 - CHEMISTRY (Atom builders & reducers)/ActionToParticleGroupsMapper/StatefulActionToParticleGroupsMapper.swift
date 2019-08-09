@@ -26,21 +26,23 @@ import Foundation
 
 public protocol BaseStatefulActionToParticleGroupsMapper {
     func requiredStateForAnAction(_ userAction: UserAction) -> [AnyShardedParticleStateId]
-    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups
+    
+    // TODO replace`upParticles: [AnyUpParticle]` with `spunPartices: [AnySpunParticle]`, since for many Mappers we would like to look for RRIParticles with spin `.down` to see of an RRI is already in use
+    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups
 }
 
 public protocol StatefulActionToParticleGroupsMapper: BaseStatefulActionToParticleGroupsMapper {
     associatedtype Action: UserAction
     func requiredState(for action: Action) -> [AnyShardedParticleStateId]
-    func particleGroups(for action: Action, upParticles: [AnyUpParticle]) throws -> ParticleGroups
+    func particleGroups(for action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups
 }
 
 public extension StatefulActionToParticleGroupsMapper {
-    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
+    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
 
         // TODO throw error instead of fatalError?
         let action = castOrKill(instance: userAction, toType: Action.self)
-        return try particleGroups(for: action, upParticles: upParticles)
+        return try particleGroups(for: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
     }
     
     func requiredStateForAnAction(_ userAction: UserAction) -> [AnyShardedParticleStateId] {

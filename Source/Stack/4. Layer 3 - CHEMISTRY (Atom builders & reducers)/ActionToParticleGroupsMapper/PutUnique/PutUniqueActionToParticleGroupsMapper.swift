@@ -25,7 +25,45 @@
 import Foundation
 
 // MARK: PutUniqueActionToParticleGroupsMapper
-public protocol PutUniqueActionToParticleGroupsMapper: StatelessActionToParticleGroupsMapper where Action == PutUniqueIdAction {}
+public protocol PutUniqueActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper, Throwing where Action == PutUniqueIdAction, Error == PutUniqueIdError {}
+
+public enum PutUniqueIdError: Swift.Error, Equatable {
+    case uniqueIdAlreadyUsed(string: String)
+    case rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier)
+    case rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier)
+    case nonMatchingAddress(activeAddress: Address, butActionStatesAddress: Address)
+}
+
+public extension PutUniqueActionToParticleGroupsMapper {
+    
+    // TODO When StatefulActionToParticleGroupsMapper uses `spunPartices: [AnySpunParticle]` instead of `upParticles: [AnyUpParticle]` we need only to look for RRIParticles with spin `.down`
+    func requiredState(for putUniqueIdAction: PutUniqueIdAction) -> [AnyShardedParticleStateId] {
+        let rriAddress = putUniqueIdAction.uniqueMaker
+
+        return [
+            // To verify that we haven't already used that RRI for UniqueId
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(typeOfParticle: UniqueParticle.self, address: rriAddress)
+            ),
+            
+            // To verify that we haven't already used that RRI for MutableSupplyTokenDefinitionParticle
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(
+                    typeOfParticle: MutableSupplyTokenDefinitionParticle.self,
+                    address: rriAddress
+                )
+            ),
+            
+            // To verify that we haven't already used that RRI for FixedSupplyTokenDefinitionParticle
+            AnyShardedParticleStateId(
+                ShardedParticleStateId(
+                    typeOfParticle: FixedSupplyTokenDefinitionParticle.self,
+                    address: rriAddress
+                )
+            )
+        ]
+    }
+}
 
 // MARK: DefaultPutUniqueActionToParticleGroupsMapper
 public final class DefaultPutUniqueActionToParticleGroupsMapper: PutUniqueActionToParticleGroupsMapper { }
@@ -33,7 +71,9 @@ public final class DefaultPutUniqueActionToParticleGroupsMapper: PutUniqueAction
 public extension DefaultPutUniqueActionToParticleGroupsMapper {
     typealias Action = PutUniqueIdAction
 
-    func particleGroups(for action: Action) throws -> ParticleGroups {
+    func particleGroups(for action: PutUniqueIdAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
+        try validateInput(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+        
         let uniqueParticle = UniqueParticle(address: action.uniqueMaker, string: action.string)
         let rriParticle = ResourceIdentifierParticle(resourceIdentifier: uniqueParticle.identifier)
         
@@ -43,5 +83,29 @@ public extension DefaultPutUniqueActionToParticleGroupsMapper {
         ]
         
         return [spunParticles.wrapInGroup()]
+    }
+}
+
+private extension DefaultPutUniqueActionToParticleGroupsMapper {
+    func validateInput(action: PutUniqueIdAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
+        guard action.uniqueMaker == addressOfActiveAccount else {
+            throw Error.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: action.uniqueMaker)
+        }
+        
+        let rri = action.identifier
+        
+        if upParticles.containsAnyUniqueParticle(matchingIdentifier: rri) {
+            throw Error.uniqueIdAlreadyUsed(string: rri.name)
+        }
+        
+        if upParticles.containsAnyMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
+            throw Error.rriAlreadyUsedByMutableSupplyToken(identifier: rri)
+        }
+        
+        if upParticles.containsAnyFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
+            throw Error.rriAlreadyUsedByFixedSupplyToken(identifier: rri)
+        }
+        
+        // All is well
     }
 }

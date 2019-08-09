@@ -81,7 +81,7 @@ public enum BurnError: Swift.Error, Equatable {
 
 public extension DefaultBurnTokensActionToParticleGroupsMapper {
    
-    func particleGroups(for action: BurnTokensAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
+    func particleGroups(for action: BurnTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
         try validateInput(burnAction: action, upParticles: upParticles)
         
         let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, UnallocatedTokensParticle>(
@@ -106,7 +106,7 @@ private extension DefaultBurnTokensActionToParticleGroupsMapper {
         let rri = burnAction.tokenDefinitionReference
         
         guard let mutableSupplyTokensParticle = upParticles.firstMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) else {
-            if upParticles.containsFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
+            if upParticles.containsAnyFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
                 throw Error.tokenHasFixedSupplyThusItCannotBeBurned(identifier: rri)
             } else {
                 throw Error.unknownToken(identifier: rri)

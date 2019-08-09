@@ -24,7 +24,7 @@
 
 import Foundation
 
-public protocol TransferTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action == TransferTokenAction {}
+public protocol TransferTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper, Throwing where Action == TransferTokenAction, Error == TransferError {}
 
 public extension TransferTokensActionToParticleGroupsMapper {
     

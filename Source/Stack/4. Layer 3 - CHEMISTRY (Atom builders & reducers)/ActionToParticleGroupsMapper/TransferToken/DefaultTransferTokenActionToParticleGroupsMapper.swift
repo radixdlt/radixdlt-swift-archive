@@ -24,21 +24,14 @@
 
 import Foundation
 
-// swiftlint:disable colon opening_brace
-
-public struct DefaultTransferTokensActionToParticleGroupsMapper:
-    TransferTokensActionToParticleGroupsMapper,
-    Throwing
-{
-    // swiftlint:enable colon opening_brace
-}
+public struct DefaultTransferTokensActionToParticleGroupsMapper: TransferTokensActionToParticleGroupsMapper {}
 
 // MARK: - TransferTokensActionToParticleGroupsMapper
 public extension TransferTokensActionToParticleGroupsMapper {
     
-    func particleGroups(for transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
+    func particleGroups(for transfer: TransferTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
         
-        try validateInput(transfer: transfer, upParticles: upParticles)
+        try validateInput(transfer: transfer, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
         
         let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, TransferrableTokensParticle>(
             transitioner: { try TransferrableTokensParticle(transferrableTokensParticle: $0, amount: $1, address: transfer.recipient) },
@@ -59,7 +52,12 @@ public extension TransferTokensActionToParticleGroupsMapper {
 }
 
 private extension TransferTokensActionToParticleGroupsMapper {
-    func validateInput(transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws {
+    func validateInput(transfer: TransferTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
+
+        guard transfer.sender == addressOfActiveAccount else {
+            throw Error.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: transfer.sender)
+        }
+
         let rri = transfer.tokenResourceIdentifier
         
         let tokenDefinition: TokenConvertible
@@ -98,11 +96,7 @@ public enum TransferError: Swift.Error, Equatable {
     case insufficientFunds(currentBalance: NonNegativeAmount, butTriedToTransfer: PositiveAmount)
     case foundNoTokenDefinition(forIdentifier: ResourceIdentifier)
     case amountNotMultipleOfGranularity(amount: PositiveAmount, tokenGranularity: Granularity)
-}
-
-// MARK: - Throwing
-public extension DefaultTransferTokensActionToParticleGroupsMapper {
-    typealias Error = TransferError
+    case nonMatchingAddress(activeAddress: Address, butActionStatesAddress: Address)
 }
 
 private extension FungibleParticleTransitioner where From == TransferrableTokensParticle, To == TransferrableTokensParticle {

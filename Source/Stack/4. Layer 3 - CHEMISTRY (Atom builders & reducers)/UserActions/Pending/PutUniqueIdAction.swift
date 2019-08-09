@@ -34,6 +34,12 @@ public extension PutUniqueIdAction {
 }
 
 public extension PutUniqueIdAction {
+    var identifier: ResourceIdentifier {
+        return ResourceIdentifier(address: uniqueMaker, name: string)
+    }
+}
+
+public extension PutUniqueIdAction {
     
     init(uniqueParticle: UniqueParticle) {
         let rri = uniqueParticle.identifier

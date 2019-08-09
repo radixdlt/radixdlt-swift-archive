@@ -45,7 +45,7 @@ public extension TransactionMaker {
     }
 }
 
-public final class DefaultTransactionMaker: TransactionMaker {
+public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDeriving, Magical {
     
     /// A mapper from a container of `UserAction`s the user wants to perform, to an `Atom` ready to be pushed to the Radix network (some node).
     private let transactionToAtomMapper: TransactionToAtomMapper
@@ -96,9 +96,16 @@ public extension DefaultTransactionMaker {
     }
 }
 
+// MARK: Magical
+public extension DefaultTransactionMaker {
+    var magic: Magic { return universeConfig.magic }
+}
+
 public extension DefaultTransactionMaker {
     func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+        
         do {
+            
             let unsignedAtom = try buildAtomFrom(transaction: transaction)
             
             let signedAtom = sign(atom: unsignedAtom).do(onSuccess: {
@@ -176,11 +183,18 @@ private extension DefaultTransactionMaker {
         return result
     }
     
-    func buildAtomFrom(transaction: Transaction) throws -> Single<UnsignedAtom> {
-        let atom = try transactionToAtomMapper.atomFrom(transaction: transaction)
-        return addFee(to: atom).map {
-            try UnsignedAtom(atomWithPow: $0)
+    var addressOfActiveAccount: Observable<Address> {
+        return activeAccount.map { [unowned self] in
+            self.addressOf(account: $0)
         }
-        
+    }
+    
+    func buildAtomFrom(transaction: Transaction) throws -> Single<UnsignedAtom> {
+        return addressOfActiveAccount.flatMapToSingle { [unowned self] in
+            let atom = try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: $0)
+            return self.addFee(to: atom).map {
+                try UnsignedAtom(atomWithPow: $0)
+            }
+        }
     }
 }

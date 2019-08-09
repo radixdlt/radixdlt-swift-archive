@@ -48,7 +48,7 @@ extension ObservableConvertibleType {
         }
     }
     
-    func flatMapToSingle<Other>(_ selector: @escaping (Element) -> Single<Other>) -> Single<Other> {
+    func flatMapToSingle<Other>(_ selector: @escaping (Element) throws -> Single<Other>) -> Single<Other> {
         return self.asObservable().flatMapSingle(selector).asSingle()
     }
 }

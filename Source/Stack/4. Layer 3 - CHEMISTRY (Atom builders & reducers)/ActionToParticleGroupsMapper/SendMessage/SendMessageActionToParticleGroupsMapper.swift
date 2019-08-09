@@ -24,4 +24,8 @@
 
 import Foundation
 
-public protocol SendMessageActionToParticleGroupsMapper: StatelessActionToParticleGroupsMapper where Action == SendMessageAction {}
+public protocol SendMessageActionToParticleGroupsMapper: StatelessActionToParticleGroupsMapper, Throwing where Action == SendMessageAction, Error == SendMessageError {}
+
+public enum SendMessageError: Swift.Error, Equatable {
+     case nonMatchingAddress(activeAddress: Address, butActionStatesAddress: Address)
+}

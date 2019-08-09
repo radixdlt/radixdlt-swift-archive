@@ -24,7 +24,8 @@
 
 import Foundation
 
-public struct Transaction: TransactionConvertible, CustomStringConvertible {
+public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStringConvertible {
+    
     public let uuid: UUID
     public let sentAt: Date
     public let actions: [UserAction]
@@ -44,6 +45,12 @@ public extension Transaction {
     init(makeActions: () -> [UserAction]) {
         self.init(actions: makeActions())
     }
+}
+
+// MARK: ArrayConvertible
+public extension Transaction {
+    typealias Element = UserAction
+    var elements: [Element] { return actions }
 }
 
 public extension Transaction {

@@ -27,8 +27,11 @@ import Foundation
 public final class DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenActionToParticleGroupsMapper {}
 
 public extension CreateTokenActionToParticleGroupsMapper {
-    func particleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
-
+    
+    func particleGroups(for action: CreateTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
+        
+        try validateInput(tokenCreation: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+        
         switch action.tokenSupplyType {
         case .mutable: return try mutableSupplyTokenParticleGroups(for: action)
         case .fixed: return try fixedSupplyTokenParticleGroups(for: action)
@@ -37,6 +40,29 @@ public extension CreateTokenActionToParticleGroupsMapper {
 }
 
 private extension CreateTokenActionToParticleGroupsMapper {
+    
+    func validateInput(tokenCreation: CreateTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
+        guard tokenCreation.creator == addressOfActiveAccount else {
+            throw Error.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: tokenCreation.creator)
+        }
+
+        let rri = tokenCreation.identifier
+        
+        if upParticles.containsAnyUniqueParticle(matchingIdentifier: rri) {
+            throw Error.rriAlreadyUsedByUniqueId(identifier: rri)
+        }
+        
+        if upParticles.containsAnyMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
+            throw Error.rriAlreadyUsedByMutableSupplyToken(identifier: rri)
+        }
+        
+        if upParticles.containsAnyFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
+           throw Error.rriAlreadyUsedByFixedSupplyToken(identifier: rri)
+        }
+        
+        // All is well
+    }
+    
     func mutableSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
         
         let mutableSupplyToken = try MutableSupplyTokenDefinitionParticle(createTokenAction: action)
@@ -54,7 +80,7 @@ private extension CreateTokenActionToParticleGroupsMapper {
             return [tokenCreationGroup]
         }
         
-        guard let minted = try? TransferrableTokensParticle.init(mutableSupplyTokenDefinitionParticle: mutableSupplyToken, amount: positiveInitialSupply) else {
+        guard let minted = try? TransferrableTokensParticle(mutableSupplyTokenDefinitionParticle: mutableSupplyToken, amount: positiveInitialSupply) else {
             incorrectImplementation("Should not be able to init CreateTokenAction with non matching granularity and amount.")
         }
         

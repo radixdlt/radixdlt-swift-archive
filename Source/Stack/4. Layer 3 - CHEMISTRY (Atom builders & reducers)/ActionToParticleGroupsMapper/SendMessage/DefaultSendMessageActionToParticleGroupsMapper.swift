@@ -38,9 +38,14 @@ public final class DefaultSendMessageActionToParticleGroupsMapper: SendMessageAc
         self.encryptedPayloadJsonEncoder = encryptedPayloadJsonEncoder
     }
 }
+
 public extension DefaultSendMessageActionToParticleGroupsMapper {
 
-    func particleGroups(for action: SendMessageAction) throws -> ParticleGroups {
+    func particleGroups(for action: SendMessageAction, addressOfActiveAccount: Address) throws -> ParticleGroups {
+        guard action.sender == addressOfActiveAccount else {
+            throw Error.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: action.sender)
+        }
+        
         var particles = [AnySpunParticle]()
 
         let (payload, encryptorParticle) = try encryptDataIfNeeded(action: action)

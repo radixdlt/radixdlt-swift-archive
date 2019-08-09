@@ -200,24 +200,61 @@ public extension SpunParticlesOwner {
     }
     
     // MARK: Contains
-    func containsAnyMessageParticle(spin: Spin? = nil) -> Bool {
-        return !messageParticles(spin: spin).isEmpty
+    func containsAnyMessageParticle(
+        spin: Spin? = nil,
+        where filterCondition: ((MessageParticle) throws -> Bool)? = nil
+    ) -> Bool {
+        return firstMessageParticle(spin: spin, where: filterCondition) != nil
     }
     
-    func containsAnyTransferrableTokensParticles(spin: Spin? = nil) -> Bool {
-        return !transferrableTokensParticles(spin: spin).isEmpty
+    func containsAnyTransferrableTokensParticles(
+        spin: Spin? = nil,
+        where filterCondition: ((TransferrableTokensParticle) throws -> Bool)? = nil
+    ) -> Bool {
+        return firstTransferrableTokensParticle(spin: spin, where: filterCondition) != nil
     }
     
-    func containsAnyUniqueParticle(spin: Spin? = nil) -> Bool {
-        return !uniqueParticles(spin: spin).isEmpty
+    func containsAnyUniqueParticle(
+        spin: Spin? = nil,
+        where filterCondition: ((UniqueParticle) throws -> Bool)? = nil
+    ) -> Bool {
+        return firstUniqueParticle(spin: spin, where: filterCondition) != nil
+    }
+    
+    func containsAnyFixedSupplyTokenDefinitionParticle(
+        spin: Spin? = nil,
+        where filterCondition: ((FixedSupplyTokenDefinitionParticle) throws -> Bool)? = nil
+    ) -> Bool {
+        return firstFixedSupplyTokenDefinitionParticle(spin: spin, where: filterCondition) != nil
+    }
+    
+    func containsAnyMutableSupplyTokenDefinitionParticle(
+        spin: Spin? = nil,
+        where filterCondition: ((MutableSupplyTokenDefinitionParticle) throws -> Bool)? = nil
+    ) -> Bool {
+        return firstMutableSupplyTokenDefinitionParticle(spin: spin, where: filterCondition) != nil
     }
     
     // MARK: Contains with RRI
-    func containsFixedSupplyTokenDefinitionParticle(
+    func containsAnyFixedSupplyTokenDefinitionParticle(
+        matchingIdentifier rri: ResourceIdentifier,
+        spin: Spin? = nil
+    ) -> Bool {
+        return containsAnyFixedSupplyTokenDefinitionParticle(spin: spin) { $0.tokenDefinitionReference == rri }
+    }
+    
+    func containsAnyMutableSupplyTokenDefinitionParticle(
         matchingIdentifier rri: ResourceIdentifier,
         spin: Spin? = nil
         ) -> Bool {
-        return firstFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri, spin: spin) != nil
+        return containsAnyMutableSupplyTokenDefinitionParticle(spin: spin) { $0.tokenDefinitionReference == rri }
+    }
+    
+    func containsAnyUniqueParticle(
+        matchingIdentifier rri: ResourceIdentifier,
+        spin: Spin? = nil
+        ) -> Bool {
+        return containsAnyUniqueParticle(spin: spin) { $0.identifier == rri }
     }
 }
 

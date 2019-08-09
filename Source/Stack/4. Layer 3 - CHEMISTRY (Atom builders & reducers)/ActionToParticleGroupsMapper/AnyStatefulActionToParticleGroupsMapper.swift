@@ -29,7 +29,7 @@ public struct AnyStatefulActionToParticleGroupsMapper: BaseStatefulActionToParti
     private let _actionType: () -> UserAction.Type
     private let _matchesType: (UserAction.Type) -> Bool
     private let _requiredStateForAnAction: (UserAction) -> [AnyShardedParticleStateId]
-    private let _particleGroupsForAnAction: (UserAction, [AnyUpParticle]) throws -> ParticleGroups
+    private let _particleGroupsForAnAction: (UserAction, [AnyUpParticle], Address) throws -> ParticleGroups
     
     public init<Concrete>(_ concrete: Concrete) where Concrete: StatefulActionToParticleGroupsMapper {
         
@@ -37,7 +37,7 @@ public struct AnyStatefulActionToParticleGroupsMapper: BaseStatefulActionToParti
         self._matchesType = { return $0 == Concrete.Action.self }
         
         self._requiredStateForAnAction = { concrete.requiredStateForAnAction($0) }
-        self._particleGroupsForAnAction = { try concrete.particleGroupsForAnAction($0, upParticles: $1) }
+        self._particleGroupsForAnAction = { try concrete.particleGroupsForAnAction($0, upParticles: $1, addressOfActiveAccount: $2) }
     }
 }
 
@@ -63,8 +63,8 @@ public extension AnyStatefulActionToParticleGroupsMapper {
         return _requiredStateForAnAction(userAction)
     }
     
-    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
-        return try _particleGroupsForAnAction(userAction, upParticles)
+    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
+        return try _particleGroupsForAnAction(userAction, upParticles, addressOfActiveAccount)
     }
     
 }
@@ -77,7 +77,7 @@ public extension AnyStatefulActionToParticleGroupsMapper {
         self._matchesType = { return $0 == StatelessMapper.Action.self }
         
         self._requiredStateForAnAction = { _ in return [] }
-        self._particleGroupsForAnAction = { action, _ in return try statelessMapper.particleGroupsForAnAction(action) }
+        self._particleGroupsForAnAction = { action, _, address in return try statelessMapper.particleGroupsForAnAction(action, addressOfActiveAccount: address) }
         
     }
     
@@ -85,6 +85,6 @@ public extension AnyStatefulActionToParticleGroupsMapper {
         self._actionType = { anyStatelessMapper.actionType }
         self._matchesType = { return anyStatelessMapper.matches(someActionType: $0) }
         self._requiredStateForAnAction = { _ in return [] }
-        self._particleGroupsForAnAction = { action, _ in return try anyStatelessMapper.particleGroupsForAnAction(action) }
+        self._particleGroupsForAnAction = { action, _, address in return try anyStatelessMapper.particleGroupsForAnAction(action, addressOfActiveAccount: address) }
     }
 }

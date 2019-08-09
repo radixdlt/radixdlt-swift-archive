@@ -100,4 +100,90 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         XCTAssertEqual(putUniqueActions[0].string, "foo")
         XCTAssertEqual(putUniqueActions[1].string, "bar")
     }
+    
+    func testFailPuttingTwoEqualUniqueIdInOneTransaction() {
+        // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        
+        // WHEN: Alice sends a `Transaction` containing two UniqueId with with the same string
+        let transaction = Transaction {[
+            PutUniqueIdAction(uniqueMaker: alice, string: "foo"),
+            PutUniqueIdAction(uniqueMaker: alice, string: "foo")
+        ]}
+        
+        let resultOfUniqueMaking = application.send(transaction: transaction)
+        
+        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+        resultOfUniqueMaking.blockingAssertThrows(
+            error: PutUniqueIdError.uniqueIdAlreadyUsed(string: "foo")
+        )
+    }
+    
+    
+    func testFailPuttingAnUniqueIdUsedInAPreviousTransaction() {
+        // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        
+        let putUniqueAction = PutUniqueIdAction(uniqueMaker: alice, string: "foo")
+        
+        XCTAssertTrue(
+           application.putUniqueId(putUniqueAction)
+                .blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
+        
+        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+        application.putUniqueId(putUniqueAction).blockingAssertThrows(
+            error: PutUniqueIdError.uniqueIdAlreadyUsed(string: "foo")
+        )
+    }
+    
+    func testFailPuttingSameUniqueIdAsMutableToken() {
+        // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        
+        // WHEN: Alice sends a `Transaction` containing a MutableSupplyToken and a UniqueId with the same RRI
+        let transaction = Transaction {[
+            try! CreateTokenAction(creator: alice, name: .irrelevant, symbol: "FOO", description: .irrelevant, supply: .mutable(initial: nil)),
+            PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
+        ]}
+        
+        let resultOfUniqueMaking = application.send(transaction: transaction)
+        
+        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+        resultOfUniqueMaking.blockingAssertThrows(
+            error: PutUniqueIdError.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))
+        )
+    }
+    
+    func testFailPuttingSameUniqueIdAsFixedSupplyToken() {
+        // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        
+        // WHEN: Alice sends a `Transaction` containing a FixedSupplyToken and a UniqueId with the same RRI
+        let transaction = Transaction {[
+            try! CreateTokenAction(creator: alice, name: .irrelevant, symbol: "FOO", description: .irrelevant, supply: .fixed(to: 42)),
+            PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
+        ]}
+        
+        let resultOfUniqueMaking = application.send(transaction: transaction)
+        
+        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+        resultOfUniqueMaking.blockingAssertThrows(
+            error: PutUniqueIdError.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))
+        )
+    }
+    
+    func testFailAliceUsingBobsAddress() {
+        // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        let aliceApp = application!
+        
+        // WHEN: Alice sends a `Transaction` with a UniqueId using Bob's address
+        let transaction = Transaction {[
+            PutUniqueIdAction(uniqueMaker: bob, string: "foo"),
+        ]}
+        
+        let resultOfUniqueMaking = aliceApp.send(transaction: transaction)
+        
+        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+        resultOfUniqueMaking.blockingAssertThrows(
+            error: PutUniqueIdError.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)
+        )
+    }
 }
+

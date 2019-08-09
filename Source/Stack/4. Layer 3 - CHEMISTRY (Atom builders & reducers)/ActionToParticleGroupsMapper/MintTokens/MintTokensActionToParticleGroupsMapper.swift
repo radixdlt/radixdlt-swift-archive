@@ -54,7 +54,7 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
     
     typealias Action = MintTokensAction
     
-    func particleGroups(for action: Action, upParticles: [AnyUpParticle]) throws -> ParticleGroups {
+    func particleGroups(for action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
         try validateInput(mintAction: action, upParticles: upParticles)
         
         let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
@@ -113,7 +113,7 @@ private extension DefaultMintTokensActionToParticleGroupsMapper {
         let rri = mintAction.tokenDefinitionReference
 
         guard let mutableSupplyTokensParticle = upParticles.firstMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) else {
-            if upParticles.containsFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
+            if upParticles.containsAnyFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
                 throw Error.tokenHasFixedSupplyThusItCannotBeMinted(identifier: rri)
             } else {
                 throw Error.unknownToken(identifier: rri)

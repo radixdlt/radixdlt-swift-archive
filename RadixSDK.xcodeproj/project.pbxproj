@@ -119,6 +119,8 @@
 		E637565A22BA2C6A00C4F9A2 /* localnet.json in Resources */ = {isa = PBXBuildFile; fileRef = E637565922BA2C6A00C4F9A2 /* localnet.json */; };
 		E63B206F22FD648600D6FF79 /* Particles+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B206E22FD648600D6FF79 /* Particles+Filtering.swift */; };
 		E63B207222FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B207122FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift */; };
+		E63B207422FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B207322FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift */; };
+		E63B207622FDB45E00D6FF79 /* CreateTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B207522FDB45E00D6FF79 /* CreateTokenTests.swift */; };
 		E640F638225DFC3D00855256 /* PublicKeyOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F637225DFC3D00855256 /* PublicKeyOwner.swift */; };
 		E640F63C225E21E600855256 /* Int+BitsPerByte.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63B225E21E600855256 /* Int+BitsPerByte.swift */; };
 		E640F63F225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */; };
@@ -709,6 +711,8 @@
 		E637565922BA2C6A00C4F9A2 /* localnet.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = localnet.json; sourceTree = "<group>"; };
 		E63B206E22FD648600D6FF79 /* Particles+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Particles+Filtering.swift"; sourceTree = "<group>"; };
 		E63B207122FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToUniqueIdMapper.swift; sourceTree = "<group>"; };
+		E63B207322FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResultOfUserAction+BlockingWait.swift"; sourceTree = "<group>"; };
+		E63B207522FDB45E00D6FF79 /* CreateTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTokenTests.swift; sourceTree = "<group>"; };
 		E640F637225DFC3D00855256 /* PublicKeyOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyOwner.swift; sourceTree = "<group>"; };
 		E640F63B225E21E600855256 /* Int+BitsPerByte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+BitsPerByte.swift"; sourceTree = "<group>"; };
 		E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProofOfWork+NumberOfLeadingZeros.swift"; sourceTree = "<group>"; };
@@ -2602,6 +2606,7 @@
 				E6A508D2224FB67400128123 /* RxTest */,
 				E6A4ABBD221EBA9A006C5CA8 /* Foundation */,
 				E6E27A562271EF2B0067D46E /* CustomAssert.swift */,
+				E63B207322FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift */,
 			);
 			path = TestExtensions;
 			sourceTree = "<group>";
@@ -3202,6 +3207,7 @@
 				E61EB99A22D75B2E007826D3 /* OfflineTests */,
 				E6F548382277022500EE6311 /* GetTokenBalanceTests.swift */,
 				E6725647228AE98F004631F1 /* TransferTokensTests.swift */,
+				E63B207522FDB45E00D6FF79 /* CreateTokenTests.swift */,
 				E69D851722F4818F0039A207 /* MintTokensTests.swift */,
 				E68DFA2F22FC58320050F69E /* PutIniqueActionTests.swift */,
 				E69D851E22F7555E0039A207 /* BurnTokensTests.swift */,
@@ -4360,6 +4366,7 @@
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
 				E62F35302273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E6E27A2A2271CE250067D46E /* TooShortDescriptionTests.swift in Sources */,
+				E63B207622FDB45E00D6FF79 /* CreateTokenTests.swift in Sources */,
 				E6E27A522271CE250067D46E /* TokenBalanceReducerTests.swift in Sources */,
 				E6E27A402271CE250067D46E /* CBOREncodingPrimitivesStringTests.swift in Sources */,
 				E6E27A462271CE250067D46E /* SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift in Sources */,
@@ -4382,6 +4389,7 @@
 				E6E27A3B2271CE250067D46E /* UniverseConfigBetanetJSONDecodingTests.swift in Sources */,
 				E6725648228AE98F004631F1 /* TransferTokensTests.swift in Sources */,
 				E68BD816229EAD9D00FCE4D3 /* ShardSpaceTests.swift in Sources */,
+				E63B207422FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift in Sources */,
 				E6E27A492271CE250067D46E /* ResourceIdentifierTests.swift in Sources */,
 				E6E27A352271CE250067D46E /* IncorrectSpinValueTests.swift in Sources */,
 				E6E27A372271CE250067D46E /* TooShortAddressTests.swift in Sources */,
