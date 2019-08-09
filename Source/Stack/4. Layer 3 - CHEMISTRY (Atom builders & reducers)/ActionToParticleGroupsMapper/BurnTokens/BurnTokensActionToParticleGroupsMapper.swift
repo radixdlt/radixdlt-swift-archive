@@ -105,20 +105,12 @@ private extension DefaultBurnTokensActionToParticleGroupsMapper {
     func validateInput(burnAction: BurnTokensAction, upParticles: [AnyUpParticle]) throws {
         let rri = burnAction.tokenDefinitionReference
         
-        guard let mutableSupplyTokensParticle = upParticles
-            .compactMap({ try? UpParticle<MutableSupplyTokenDefinitionParticle>(anyUpParticle: $0) })
-            .first(where: { $0.particle.tokenDefinitionReference == rri })
-            .map({ $0.particle }) else {
-                
-                let foundFixedSupplyTokenWithMatchingIdentifier = upParticles
-                    .compactMap({ try? UpParticle<FixedSupplyTokenDefinitionParticle>(anyUpParticle: $0) })
-                    .first(where: { $0.particle.tokenDefinitionReference == rri }) != nil
-                
-                if foundFixedSupplyTokenWithMatchingIdentifier {
-                    throw Error.tokenHasFixedSupplyThusItCannotBeBurned(identifier: rri)
-                } else {
-                    throw Error.unknownToken(identifier: rri)
-                }
+        guard let mutableSupplyTokensParticle = upParticles.firstMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) else {
+            if upParticles.containsFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
+                throw Error.tokenHasFixedSupplyThusItCannotBeBurned(identifier: rri)
+            } else {
+                throw Error.unknownToken(identifier: rri)
+            }
         }
         
         guard mutableSupplyTokensParticle.canBeBurned(by: burnAction.burner) else {
@@ -154,11 +146,7 @@ private extension FungibleParticleTransitioner where
     func transition(burn: BurnTokensAction, upParticles: [AnyUpParticle]) throws -> Transition {
         let rri = burn.tokenDefinitionReference
         
-        let upTransferrableTokensParticles = upParticles
-            .compactMap { try? UpParticle<TransferrableTokensParticle>(anyUpParticle: $0) }
-            .filter { $0.particle.tokenDefinitionReference == rri }
-        
-        let transferrableTokensParticles = upTransferrableTokensParticles.map { $0.particle }
+        let transferrableTokensParticles = upParticles.transferrableTokensParticles { $0.tokenDefinitionReference == rri }
         
         let transition: Transition
         do {

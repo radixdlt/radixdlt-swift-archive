@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,21 +24,32 @@
 
 import Foundation
 
-public extension Sequence where Element == Atom {
-    func particleGroups() -> [ParticleGroup] {
-        return flatMap({ $0.particleGroups })
-    }
-    
-    func spunParticles(spin: Spin? = nil) -> [AnySpunParticle] {
-        let particles = particleGroups().flatMap { $0.spunParticles }
-        guard let spin = spin else {
-            return particles
-        }
-        return particles.filter(spin: spin)
-    }
-    
-    func upParticles<P>(type: P.Type) -> [P] where P: ParticleConvertible {
-        return spunParticles(spin: .up).compactMap(type: type)
-    }
+public protocol TransactionConvertible {
+    var sentAt: Date { get }
+    var actions: [UserAction] { get }
+}
 
+public extension TransactionConvertible {
+    func containsAction<Action>(ofType actionType: Action.Type) -> Bool where Action: UserAction {
+        return actions.contains(where: { type(of: $0) == actionType })
+    }
+    
+    /// Boolean OR of `actionTypes`
+    func contains(actionMatchingAnyType actionTypes: [UserAction.Type]) -> Bool {
+        return actions.contains(where: { action in
+            let typeOfAction = type(of: action)
+            return actionTypes.contains(where: { $0 == typeOfAction }) }
+        )
+    }
+    
+    /// Boolean AND of `actionTypes`
+    func contains(actionMatchingAll actionTypes: [UserAction.Type]) -> Bool {
+        return actionTypes.reduce(true, { (goodSoFar, requiredActionType) -> Bool in
+            return goodSoFar && self.actions.contains(where: { type(of: $0) == requiredActionType })
+        })
+    }
+    
+    func actions<Action>(ofType actionType: Action.Type) -> [Action] where Action: UserAction {
+        return actions.compactMap { $0 as? Action }
+    }
 }

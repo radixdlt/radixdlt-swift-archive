@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,50 +24,45 @@
 
 import Foundation
 
-// swiftlint:disable colon opening_brace
-
-public struct SignedAtom:
-    AtomContainer,
-    Throwing,
-    CustomStringConvertible
-{
-    // swiftlint:enable colon opening_brace
+public struct ExecutedTransaction: TransactionConvertible, ArrayConvertible, CustomStringConvertible {
+    public let atomIdentifier: AtomIdentifier
+    public let sentAt: Date
+    public let actions: [UserAction]
     
-    public let atomWithFee: AtomWithFee
-    public let signatureId: EUID
-    public let signature: Signature
+    private init(
+        atomIdentifier: AtomIdentifier,
+        sentAt: Date,
+        actions: [UserAction]
+        ) {
+        self.atomIdentifier = atomIdentifier
+        self.sentAt = sentAt
+        self.actions = actions
+    }
+}
+
+public extension ExecutedTransaction {
     
-    public init(proofOfWorkAtom: AtomWithFee, signatureId: EUID) throws {
-        guard !proofOfWorkAtom.signatures.isEmpty else {
-            throw Error.atomIsNotSigned
-        }
-        guard let signature = proofOfWorkAtom.signatures[signatureId] else {
-            throw Error.atomSignaturesDoesNotContainId
-        }
-        self.atomWithFee = proofOfWorkAtom
-        self.signatureId = signatureId
-        self.signature = signature
+    init(atom: Atom, actions optionalActions: [UserAction?]) {
+        let actions = optionalActions.compactMap { $0 }
+        self.init(
+            atomIdentifier: atom.identifier(),
+            sentAt: atom.timestamp,
+            actions: actions
+        )
     }
 }
 
-// MARK: - Throwing
-public extension SignedAtom {
-    enum Error: Swift.Error {
-        case atomIsNotSigned
-        case atomSignaturesDoesNotContainId
-    }
+// MARK: ArrayConvertible
+public extension ExecutedTransaction {
+    typealias Element = UserAction
+    var elements: [Element] { return actions }
 }
 
-// MARK: - AtomContainer
-public extension SignedAtom {
-    var wrappedAtom: AtomWithFee {
-        return atomWithFee
-    }
-}
-
-// MARK: - CustomStringConvertible
-public extension SignedAtom {
+public extension ExecutedTransaction {
     var description: String {
-        return "SignedAtom(aid: \(atomWithFee.shortAid)"
+        let actionsString = actions.map { $0.nameOfAction.rawValue }.joined(separator: ", ")
+        return """
+        ExecutedTransaction(atomId: \(atomIdentifier.shortAid), actions: \(actionsString))
+        """
     }
 }

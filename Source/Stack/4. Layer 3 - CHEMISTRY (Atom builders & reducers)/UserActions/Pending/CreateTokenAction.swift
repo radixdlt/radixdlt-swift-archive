@@ -107,6 +107,11 @@ public extension CreateTokenAction {
 }
 
 public extension CreateTokenAction.InitialSupply {
+    
+    static var mutableZeroSupply: CreateTokenAction.InitialSupply {
+        return .mutable(initial: nil)
+    }
+    
     var isMutable: Bool {
         switch self {
         case .fixed: return false

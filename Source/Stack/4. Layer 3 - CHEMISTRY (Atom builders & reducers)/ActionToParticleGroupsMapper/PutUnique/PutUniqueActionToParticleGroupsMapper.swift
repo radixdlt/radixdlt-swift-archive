@@ -24,13 +24,24 @@
 
 import Foundation
 
+// MARK: PutUniqueActionToParticleGroupsMapper
 public protocol PutUniqueActionToParticleGroupsMapper: StatelessActionToParticleGroupsMapper where Action == PutUniqueIdAction {}
 
+// MARK: DefaultPutUniqueActionToParticleGroupsMapper
 public final class DefaultPutUniqueActionToParticleGroupsMapper: PutUniqueActionToParticleGroupsMapper { }
 
 public extension DefaultPutUniqueActionToParticleGroupsMapper {
     typealias Action = PutUniqueIdAction
+
     func particleGroups(for action: Action) throws -> ParticleGroups {
-        implementMe()
+        let uniqueParticle = UniqueParticle(address: action.uniqueMaker, string: action.string)
+        let rriParticle = ResourceIdentifierParticle(resourceIdentifier: uniqueParticle.identifier)
+        
+        let spunParticles = [
+            rriParticle.withSpin(.down),
+            uniqueParticle.withSpin(.up)
+        ]
+        
+        return [spunParticles.wrapInGroup()]
     }
 }

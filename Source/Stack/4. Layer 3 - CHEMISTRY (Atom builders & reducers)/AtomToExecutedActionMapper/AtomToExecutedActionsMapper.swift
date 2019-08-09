@@ -31,13 +31,7 @@ public protocol AtomToSpecificExecutedActionMapper: BaseAtomToUserActionMapper {
 }
 
 public extension AtomToSpecificExecutedActionMapper {
-    
-//    func map<Action>(atom: Atom, toActionType _: Action.Type) -> Observable<Action> where Action: UserAction {
-//        return mapAtomToAction(atom).map {
-//            castOrKill(instance: $0, toType: Action.self)
-//        }
-//    }
-    
+        
     func mapAtomSomeUserAction(_ atom: Atom) -> Observable<UserAction?> {
         return mapAtomToAction(atom).map { $0 }
     }

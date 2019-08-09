@@ -67,10 +67,6 @@ public extension DefaultAtomToTransactionMapper {
     func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
         return Observable.combineLatest(
             atomToExecutedActionMappers.map { $0.mapAtomSomeUserAction(atom) }
-        ) { $0 } // Observable<[UserAction?]>
-            .map { $0.compactMap { $0 } } // Observable<[UserAction]>
-            .map { try? NonEmptyArray(unvalidated: $0) } // Observable<NonEmptyArray?>
-            .filterNil() // Observable<NonEmptyArray>
-            .map { ExecutedTransaction(atom: atom, actions: $0) }
+        ) { ExecutedTransaction(atom: atom, actions: $0) }
     }
 }

@@ -24,8 +24,19 @@
 
 import Foundation
 
-public struct PutUniqueIdAction: UserAction {}
+public struct PutUniqueIdAction: UserAction {
+    public let uniqueMaker: Address
+    public let string: String
+}
 
 public extension PutUniqueIdAction {
     var nameOfAction: UserActionName { return .putUnique }
+}
+
+public extension PutUniqueIdAction {
+    
+    init(uniqueParticle: UniqueParticle) {
+        let rri = uniqueParticle.identifier
+        self.init(uniqueMaker: rri.address, string: rri.name)
+    }
 }

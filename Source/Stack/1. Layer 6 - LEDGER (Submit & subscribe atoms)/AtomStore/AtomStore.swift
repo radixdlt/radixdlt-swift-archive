@@ -203,7 +203,7 @@ public extension InMemoryAtomStore {
         // If a new hard observed atoms conflicts with a previously stored atom,
         // stored atom must be deleted
         if atomObservation.isNonSoftStore {
-            spunParticlesInAtomLoop: for spunParticle in atom.spunParticles() {
+            spunParticlesInAtomLoop: for spunParticle in atom.spunParticles {
                 guard
                     let spinParticleIndex = particleIndex.valueFor(key: AnyParticle(someParticle: spunParticle.particle)),
                     let atomsInIndex = spinParticleIndex.valueFor(key: spunParticle.spin)
@@ -231,7 +231,7 @@ public extension InMemoryAtomStore {
         } else {
             includeAtom = atomObservation.isStore
             isSoftToHard = false
-            atom.spunParticles().forEach { spunParticle in
+            atom.spunParticles.forEach { spunParticle in
                 let key = AnyParticle(someParticle: spunParticle.particle)
                 let spinParticleIndex = particleIndex.valueForKey(key: key) { [Spin: Set<Atom>]() }
                 particleIndex[key] = spinParticleIndex.merging([spunParticle.spin: [atom].asSet], uniquingKeysWith: { $0.union($1) })
@@ -257,7 +257,7 @@ public extension InMemoryAtomStore {
 
 private extension InMemoryAtomStore {
     func softDeleteDependentsOf(atom: Atom) {
-        let upParticles = atom.spunParticles().filter(spin: .up)
+        let upParticles = atom.spunParticles.filter(spin: .up)
         for upParticle in upParticles {
             guard
                 let particleSpinIndex = particleIndex.valueFor(key: AnyParticle(someParticle: upParticle.particle)),

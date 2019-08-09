@@ -24,6 +24,10 @@
 
 import Foundation
 
+public protocol SpunParticlesOwner {
+    var spunParticles: [AnySpunParticle] { get }
+}
+
 public extension ParticleConvertible {
     func withSpin(_ spin: Spin = .up) -> AnySpunParticle {
         return AnySpunParticle(spin: spin, particle: self)
@@ -34,6 +38,7 @@ public extension ParticleConvertible {
 
 /// Grouping of Particles relating to each other also holding some metadata
 public struct ParticleGroup:
+    SpunParticlesOwner,
     RadixCodable,
     RadixHashable,
     ArrayConvertible,
@@ -117,14 +122,3 @@ public extension ParticleGroup {
     }
 }
 
-public extension Sequence where Element == ParticleGroup {
-    func firstParticle<P>(ofType type: P.Type, spin: Spin? = nil) -> P? {
-        return compactMap { $0.firstParticle(ofType: type, spin: spin) }.first
-    }
-}
-
-public extension Sequence where Element == AnySpunParticle {
-    func firstParticle<P>(ofType type: P.Type, spin: Spin? = nil) -> P? {
-        return self.filter(spin: spin).compactMap { $0.particle as? P }.first
-    }
-}

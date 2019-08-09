@@ -73,6 +73,15 @@ public extension AtomIdentifier {
     var stringValue: String {
         return asData.hex
     }
+    
+    var shortAid: String {
+        let idString = stringValue
+        return [
+            idString.prefix(4),
+            "...",
+            idString.suffix(4)
+            ].joined()
+    }
 }
 
 // MARK: - Equatable

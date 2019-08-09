@@ -24,7 +24,7 @@
 
 import Foundation
 
-public protocol Atomic: RadixModelTypeStaticSpecifying {
+public protocol Atomic: SpunParticlesOwner, RadixModelTypeStaticSpecifying {
     var particleGroups: ParticleGroups { get }
     var signatures: Signatures { get }
     var metaData: ChronoMetaData { get }
@@ -43,7 +43,7 @@ public extension Atomic {
     /// Shard of each destination address of this atom
     /// This set ought to never be empty
     func shards() throws -> Shards {
-        let shards = spunParticles()
+        let shards = spunParticles
             .map { $0.particle }
             .flatMap { $0.destinations() }
             .map { $0.shard }
@@ -56,7 +56,7 @@ public extension Atomic {
         if particles(spin: .down).isEmpty {
             return try shards()
         } else {
-            let shards = self.spunParticles()
+            let shards = spunParticles
                 .filter(spin: .down)
                 .map { $0.particle }
                 .compactMap { $0.shardables() }
@@ -67,7 +67,7 @@ public extension Atomic {
     }
     
     func addresses() -> Addresses {
-        let addresses: [Address] = spunParticles()
+        let addresses: [Address] = spunParticles
             .map { $0.particle }
             .compactMap { $0.shardables() }
             .flatMap { $0.elements }
@@ -88,7 +88,7 @@ public extension Atomic where Self: RadixHashable {
     }
     
     var shortAid: String {
-        return String(identifier().stringValue.suffix(4))
+        return identifier().shortAid
     }
     
     // MARK: Equatable
@@ -103,7 +103,7 @@ public extension Atomic where Self: RadixHashable {
     
     // MARK: - CustomDebugStringConvertible
     var debugDescription: String {
-        return "Atom(\(hashEUID), pg#\(particleGroups.count), p#\(spunParticles().count), md#\(metaData.count), s#\(signatures.count))"
+        return "Atom(\(hashEUID), pg#\(particleGroups.count), p#\(spunParticles.count), md#\(metaData.count), s#\(signatures.count))"
     }
     
     var signable: Signable {
@@ -113,28 +113,8 @@ public extension Atomic where Self: RadixHashable {
 
 public extension Atomic {
     
-    func spunParticles() -> [AnySpunParticle] {
-        return particleGroups.flatMap { $0.spunParticles }
-    }
-    
-    func particles() -> [ParticleConvertible] {
-        return spunParticles().map { $0.particle }
-    }
-    
-    func messageParticles() -> [MessageParticle] {
-        return spunParticles().compactMap(type: MessageParticle.self)
-    }
-    
-    func particlesOfType<P>(_ type: P.Type, spin: Spin? = nil) -> [P] where P: ParticleConvertible {
-        return spunParticles()
-            .filter(spin: spin)
-            .compactMap(type: P.self)
-    }
-    
-    func particles(spin: Spin) -> [ParticleConvertible] {
-        return spunParticles()
-            .filter(spin: spin)
-            .map { $0.particle }
+    var spunParticles: [AnySpunParticle] {
+        return particleGroups.spunParticles
     }
     
     var timestamp: Date {

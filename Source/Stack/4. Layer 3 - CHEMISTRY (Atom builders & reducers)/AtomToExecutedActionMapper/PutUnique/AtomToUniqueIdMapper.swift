@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,51 +23,37 @@
 //
 
 import Foundation
+import RxSwift
 
-// swiftlint:disable colon opening_brace
+// MARK: AtomToUniqueIdMapper
+public protocol AtomToUniqueIdMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == PutUniqueIdAction {}
 
-public struct SignedAtom:
-    AtomContainer,
-    Throwing,
-    CustomStringConvertible
-{
-    // swiftlint:enable colon opening_brace
+// MARK: DefaultAtomToUniqueIdMapper
+public final class DefaultAtomToUniqueIdMapper: AtomToUniqueIdMapper {
+    public init() {}
+}
+
+public extension DefaultAtomToUniqueIdMapper {
     
-    public let atomWithFee: AtomWithFee
-    public let signatureId: EUID
-    public let signature: Signature
+    typealias SpecificExecutedAction = PutUniqueIdAction
     
-    public init(proofOfWorkAtom: AtomWithFee, signatureId: EUID) throws {
-        guard !proofOfWorkAtom.signatures.isEmpty else {
-            throw Error.atomIsNotSigned
+    func mapAtomToAction(_ atom: Atom) -> Observable<PutUniqueIdAction?> {
+        guard atom.containsAnyUniqueParticle(spin: .up) else { return .just(nil) }
+        
+        var uniqueActions = [PutUniqueIdAction]()
+        for particleGroup in atom {
+            guard
+                let rriParticle = particleGroup.firstRRIParticle(spin: .down),
+                case let rri = rriParticle.resourceIdentifier,
+                let uniqueParticle = particleGroup.firstUniqueParticle(matchingIdentifier: rri, spin: .up)
+                else { continue }
+            
+            uniqueActions.append(
+                PutUniqueIdAction(uniqueParticle: uniqueParticle)
+            )
         }
-        guard let signature = proofOfWorkAtom.signatures[signatureId] else {
-            throw Error.atomSignaturesDoesNotContainId
-        }
-        self.atomWithFee = proofOfWorkAtom
-        self.signatureId = signatureId
-        self.signature = signature
-    }
-}
-
-// MARK: - Throwing
-public extension SignedAtom {
-    enum Error: Swift.Error {
-        case atomIsNotSigned
-        case atomSignaturesDoesNotContainId
-    }
-}
-
-// MARK: - AtomContainer
-public extension SignedAtom {
-    var wrappedAtom: AtomWithFee {
-        return atomWithFee
-    }
-}
-
-// MARK: - CustomStringConvertible
-public extension SignedAtom {
-    var description: String {
-        return "SignedAtom(aid: \(atomWithFee.shortAid)"
+        
+        guard !uniqueActions.isEmpty else { return .just(nil) }
+        return Observable.from(uniqueActions)
     }
 }

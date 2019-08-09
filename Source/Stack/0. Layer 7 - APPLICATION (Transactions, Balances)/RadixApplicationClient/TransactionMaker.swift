@@ -26,17 +26,17 @@ import Foundation
 import RxSwift
 
 public protocol TransactionMaker {
-    func send(transaction: NewTransaction, toOriginNode: Node?) -> ResultOfUserAction
+    func send(transaction: Transaction, toOriginNode: Node?) -> ResultOfUserAction
 }
 
 public extension TransactionMaker {
     
-    func send(transaction: NewTransaction) -> ResultOfUserAction {
+    func send(transaction: Transaction) -> ResultOfUserAction {
         return send(transaction: transaction, toOriginNode: nil)
     }
     
     func execute(actions: [UserAction], originNode: Node? = nil) -> ResultOfUserAction {
-        let transaction = NewTransaction { actions }
+        let transaction = Transaction { actions }
         return send(transaction: transaction, toOriginNode: originNode)
     }
     
@@ -97,11 +97,13 @@ public extension DefaultTransactionMaker {
 }
 
 public extension DefaultTransactionMaker {
-    func send(transaction: NewTransaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+    func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
         do {
             let unsignedAtom = try buildAtomFrom(transaction: transaction)
             
-            let signedAtom = sign(atom: unsignedAtom)
+            let signedAtom = sign(atom: unsignedAtom).do(onSuccess: {
+                log.debug("Atom(id: `\($0.shortAid)`) from \(transaction)")
+            })
             
             return createAtomSubmission(
                 atom: signedAtom,
@@ -174,7 +176,7 @@ private extension DefaultTransactionMaker {
         return result
     }
     
-    func buildAtomFrom(transaction: NewTransaction) throws -> Single<UnsignedAtom> {
+    func buildAtomFrom(transaction: Transaction) throws -> Single<UnsignedAtom> {
         let atom = try transactionToAtomMapper.atomFrom(transaction: transaction)
         return addFee(to: atom).map {
             try UnsignedAtom(atomWithPow: $0)

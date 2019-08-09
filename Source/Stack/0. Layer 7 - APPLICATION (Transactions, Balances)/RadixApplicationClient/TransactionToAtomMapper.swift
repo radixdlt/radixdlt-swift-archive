@@ -25,7 +25,7 @@
 import Foundation
 
 public protocol TransactionToAtomMapper {
-    func atomFrom(transaction: NewTransaction) throws -> Atom
+    func atomFrom(transaction: Transaction) throws -> Atom
 }
 
 public final class DefaultTransactionToAtomMapper: TransactionToAtomMapper {
@@ -69,7 +69,7 @@ public extension DefaultTransactionToAtomMapper {
 }
 
 public extension DefaultTransactionToAtomMapper {
-    func atomFrom(transaction: NewTransaction) throws -> Atom {
+    func atomFrom(transaction: Transaction) throws -> Atom {
         let uuid = transaction.uuid
         
         for action in transaction.actions {
@@ -107,10 +107,12 @@ private extension DefaultTransactionToAtomMapper {
     func stage(action: UserAction, uuid: UUID) throws {
         let statefulMapper = actionMapperFor(action: action)
         let requiredState = self.requiredState(for: action)
+        
         let particles = requiredState.flatMap { requiredStateContext in
             atomStore.upParticles(at: requiredStateContext.address, stagedUuid: uuid)
-                .filter { type(of: $0.particle) == requiredStateContext.particleType }
+                .filter { type(of: $0.someParticle) == requiredStateContext.particleType }
         }
+        
         try statefulMapper.particleGroupsForAnAction(action, upParticles: particles).forEach {
             atomStore.stageParticleGroup($0, uuid: uuid)
         }

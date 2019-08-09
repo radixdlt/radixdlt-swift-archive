@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,15 +24,16 @@
 
 import Foundation
 
-public extension Sequence where Element == AnySpunParticle {
-    func compactMap<P>(type: P.Type) -> [P] where P: ParticleConvertible {
-        return compactMap { $0.particle as? P }
-    }
-    
-    func filter(spin: Spin?) -> [AnySpunParticle] {
-        guard let spin = spin else {
-            return [AnySpunParticle](self)
-        }
-        return filter { $0.spin == spin }
+public protocol UniqueMaking: ActiveAccountOwner {
+    func putUniqueId(_ putUniqueAction: PutUniqueIdAction) -> ResultOfUserAction
+}
+
+public extension UniqueMaking {
+    func putUnique(string: String) -> ResultOfUserAction {
+        let putUniqueIdAction = PutUniqueIdAction(
+            uniqueMaker: addressOfActiveAccount,
+            string: string
+        )
+        return putUniqueId(putUniqueIdAction)
     }
 }

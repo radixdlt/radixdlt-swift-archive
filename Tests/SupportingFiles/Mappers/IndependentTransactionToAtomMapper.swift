@@ -40,7 +40,7 @@ struct IndependentTransactionToAtomMapper: TransactionToAtomMapper {
         }()
     }
     
-    func atomFrom(transaction: NewTransaction) throws -> Atom {
+    func atomFrom(transaction: Transaction) throws -> Atom {
         var upParticlesFromTx = [AnyUpParticle]()
         
         var particleGroupsFromTx = [ParticleGroup]()

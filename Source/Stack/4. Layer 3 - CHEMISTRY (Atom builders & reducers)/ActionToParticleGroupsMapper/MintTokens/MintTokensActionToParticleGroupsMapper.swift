@@ -111,21 +111,13 @@ private extension DefaultMintTokensActionToParticleGroupsMapper {
     
     func validateInput(mintAction: MintTokensAction, upParticles: [AnyUpParticle]) throws {
         let rri = mintAction.tokenDefinitionReference
-        
-        guard let mutableSupplyTokensParticle = upParticles
-            .compactMap({ try? UpParticle<MutableSupplyTokenDefinitionParticle>(anyUpParticle: $0) })
-            .first(where: { $0.particle.tokenDefinitionReference == rri })
-            .map({ $0.particle }) else {
-                
-                let foundFixedSupplyTokenWithMatchingIdentifier = upParticles
-                    .compactMap({ try? UpParticle<FixedSupplyTokenDefinitionParticle>(anyUpParticle: $0) })
-                    .first(where: { $0.particle.tokenDefinitionReference == rri }) != nil
-                
-                if foundFixedSupplyTokenWithMatchingIdentifier {
-                    throw Error.tokenHasFixedSupplyThusItCannotBeMinted(identifier: rri)
-                } else {
-                    throw Error.unknownToken(identifier: rri)
-                }
+
+        guard let mutableSupplyTokensParticle = upParticles.firstMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) else {
+            if upParticles.containsFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
+                throw Error.tokenHasFixedSupplyThusItCannotBeMinted(identifier: rri)
+            } else {
+                throw Error.unknownToken(identifier: rri)
+            }
         }
         
         guard mutableSupplyTokensParticle.canBeMinted(by: mintAction.minter) else {
@@ -154,12 +146,8 @@ private extension DefaultMintTokensActionToParticleGroupsMapper {
 private extension FungibleParticleTransitioner where From == UnallocatedTokensParticle, To == TransferrableTokensParticle {
     func transition(mint: MintTokensAction, upParticles: [AnyUpParticle]) throws -> Transition {
         let rri = mint.tokenDefinitionReference
-
-        let upUnallocatedParticles = upParticles
-            .compactMap { try? UpParticle<UnallocatedTokensParticle>(anyUpParticle: $0) }
-            .filter { $0.particle.tokenDefinitionReference == rri }
         
-        let unallocatedTokensParticles = upUnallocatedParticles.map { $0.particle }
+        let unallocatedTokensParticles = upParticles.unallocatedTokensParticles { $0.tokenDefinitionReference == rri }
         
         let transition: Transition
         do {

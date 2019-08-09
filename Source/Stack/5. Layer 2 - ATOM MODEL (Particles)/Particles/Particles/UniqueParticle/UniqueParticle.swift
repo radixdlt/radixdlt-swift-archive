@@ -38,12 +38,12 @@ public struct UniqueParticle:
 
     public static let serializer = RadixModelType.uniqueParticle
     public let address: Address
-    public let name: Name
+    public let name: String
     public let nonce: Nonce
     
     public init(
         address: Address,
-        uniqueName name: Name,
+        string name: String,
         nonce: Nonce = Nonce()
     ) {
         self.address = address
@@ -63,14 +63,14 @@ public extension UniqueParticle {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         address = try container.decode(Address.self, forKey: .address)
-        name = try container.decode(Name.self, forKey: .name)
+        name = try container.decode(StringValue.self, forKey: .name).value
         nonce = try container.decode(Nonce.self, forKey: .nonce)
     }
     
     func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
         return [
             EncodableKeyValue(key: .address, value: address),
-            EncodableKeyValue(key: .name, value: name),
+            EncodableKeyValue(key: .name, value: StringValue(validated: name)),
             EncodableKeyValue(key: .nonce, value: nonce)
         ]
     }
@@ -79,6 +79,6 @@ public extension UniqueParticle {
 // MARK: - Identifiable
 public extension UniqueParticle {
     var identifier: ResourceIdentifier {
-        return ResourceIdentifier(address: address, name: name.stringValue)
+        return ResourceIdentifier(address: address, name: name)
     }
 }

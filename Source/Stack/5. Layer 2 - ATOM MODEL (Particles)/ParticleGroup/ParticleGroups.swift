@@ -29,6 +29,7 @@ import Foundation
 /// Collection of ParticleGroups
 public struct ParticleGroups:
     ArrayCodable,
+    SpunParticlesOwner,
     DSONArrayConvertible {
  // swiftlint:enable colon
     
@@ -60,5 +61,12 @@ public extension ParticleGroups {
 public extension ParticleGroups {
     func wrapInAtom() -> Atom {
         return Atom(metaData: .timeNow, particleGroups: self)
+    }
+}
+
+public extension ParticleGroups {
+    
+    var spunParticles: [AnySpunParticle] {
+        return particleGroups.flatMap { $0.spunParticles }
     }
 }

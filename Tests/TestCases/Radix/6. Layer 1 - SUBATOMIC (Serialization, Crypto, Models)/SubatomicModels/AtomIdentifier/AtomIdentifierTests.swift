@@ -131,19 +131,20 @@ class AtomIdentifierTests: XCTestCase {
         
         let transferTokens = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
         
-        let consumables = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TransferrableTokensParticle.self) }
+        let consumables = createTokenAtom.transferrableTokensParticles(spin: .up)
+        
         XCTAssertEqual(consumables.count, 1)
-        
-        let mutableSupplyTokenDefinitionParticles = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: MutableSupplyTokenDefinitionParticle.self) }
-        
-        let fixedSupplyTokenDefinitionParticles = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: FixedSupplyTokenDefinitionParticle.self) }
+     
+        let mutableSupplyTokenDefinitionParticles = createTokenAtom.mutableSupplyTokenDefinitionParticles(spin: .up)
+      
+        let fixedSupplyTokenDefinitionParticles = createTokenAtom.fixedSupplyTokenDefinitionParticles(spin: .up)
         
         XCTAssertEqual((mutableSupplyTokenDefinitionParticles.count + fixedSupplyTokenDefinitionParticles.count), 1)
         
         let mapper = StatelessTransferTokensParticleGroupMapper(
-            mutableSupplyTokenDefinitionParticle: mutableSupplyTokenDefinitionParticles.first?.particle,
-            fixedSupplyTokenDefinitionParticle: fixedSupplyTokenDefinitionParticles.first?.particle,
-            transferrableTokensParticle: consumables[0].particle
+            mutableSupplyTokenDefinitionParticle: mutableSupplyTokenDefinitionParticles.first,
+            fixedSupplyTokenDefinitionParticle: fixedSupplyTokenDefinitionParticles.first,
+            transferrableTokensParticle: consumables[0]
         )
         
         let atomFromTransfer = testAidOfAtomFrom(

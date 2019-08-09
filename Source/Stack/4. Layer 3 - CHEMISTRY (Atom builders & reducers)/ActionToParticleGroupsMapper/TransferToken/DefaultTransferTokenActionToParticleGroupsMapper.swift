@@ -63,10 +63,17 @@ private extension TransferTokensActionToParticleGroupsMapper {
         let rri = transfer.tokenResourceIdentifier
         
         let tokenDefinition: TokenConvertible
-        if let mutableSupplyTokenDefinitionParticle = upParticles.compactMap({ $0.particle as? MutableSupplyTokenDefinitionParticle }).first(where: { $0.tokenDefinitionReference == rri }) {
+        
+        if let mutableSupplyTokenDefinitionParticle = upParticles
+            .firstMutableSupplyTokenDefinitionParticle(where: { $0.tokenDefinitionReference == rri }) {
+            
             tokenDefinition = mutableSupplyTokenDefinitionParticle
-        } else if let fixedSupplyTokenDefinitionsParticle =  upParticles.compactMap({ $0.particle as? FixedSupplyTokenDefinitionParticle }).first(where: { $0.tokenDefinitionReference == rri }) {
+            
+        } else if let fixedSupplyTokenDefinitionsParticle =  upParticles
+            .firstFixedSupplyTokenDefinitionParticle(where: { $0.tokenDefinitionReference == rri }) {
+            
             tokenDefinition = fixedSupplyTokenDefinitionsParticle
+            
         } else {
             log.warning("Expected to found MutableSupplyTokenDefinitionParticle or FixedSupplyTokenDefinitionParticle with RRI: \(rri), amongst up particles: \(upParticles), but found none.")
             throw TransferError.foundNoTokenDefinition(forIdentifier: rri)
@@ -101,8 +108,9 @@ public extension DefaultTransferTokensActionToParticleGroupsMapper {
 private extension FungibleParticleTransitioner where From == TransferrableTokensParticle, To == TransferrableTokensParticle {
     func transition(transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws -> Transition {
         let rri = transfer.tokenResourceIdentifier
-        let upTransferrableParticles = upParticles.compactMap { try? UpParticle<TransferrableTokensParticle>(anyUpParticle: $0) }.filter { $0.particle.tokenDefinitionReference == rri }
-        let transferrableTokensParticles = upTransferrableParticles.map { $0.particle }
+        
+        let transferrableTokensParticles = upParticles.transferrableTokensParticles { $0.tokenDefinitionReference == rri }
+        
         let transition: Transition
         do {
             transition = try self.transition(unconsumedFungibles: transferrableTokensParticles, toAmount: transfer.amount.asNonNegative)
