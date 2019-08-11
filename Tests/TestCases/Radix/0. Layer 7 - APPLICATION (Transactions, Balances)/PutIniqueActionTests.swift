@@ -170,17 +170,17 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
     }
     
     func testFailAliceUsingBobsAddress() {
-        // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        // GIVEN: dentities Alice and a Bob and a RadixApplicationClient connected to some Radix node
         let aliceApp = application!
         
-        // WHEN: Alice sends a `Transaction` with a UniqueId using Bob's address
+        // WHEN: Alice sends a Transaction containing a UniqueId specifying Bob’s address
         let transaction = Transaction {[
             PutUniqueIdAction(uniqueMaker: bob, string: "foo"),
         ]}
         
         let resultOfUniqueMaking = aliceApp.send(transaction: transaction)
         
-        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+        // THEN: an error `nonMatchingAddress` is thrown
         resultOfUniqueMaking.blockingAssertThrows(
             error: PutUniqueIdError.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)
         )
