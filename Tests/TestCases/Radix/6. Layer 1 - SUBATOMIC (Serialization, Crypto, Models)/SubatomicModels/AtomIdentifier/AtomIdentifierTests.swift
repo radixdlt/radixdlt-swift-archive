@@ -131,24 +131,30 @@ class AtomIdentifierTests: XCTestCase {
         
         let transferTokens = TransferTokenAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
         
-        let consumables = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: TransferrableTokensParticle.self) }
+        let consumables = createTokenAtom.transferrableTokensParticles(spin: .up)
+        
         XCTAssertEqual(consumables.count, 1)
-        
-        let mutableSupplyTokenDefinitionParticles = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: MutableSupplyTokenDefinitionParticle.self) }
-        
-        let fixedSupplyTokenDefinitionParticles = createTokenAtom.spunParticles().compactMap { $0.mapToSpunParticle(with: FixedSupplyTokenDefinitionParticle.self) }
+     
+        let mutableSupplyTokenDefinitionParticles = createTokenAtom.mutableSupplyTokenDefinitionParticles(spin: .up)
+      
+        let fixedSupplyTokenDefinitionParticles = createTokenAtom.fixedSupplyTokenDefinitionParticles(spin: .up)
         
         XCTAssertEqual((mutableSupplyTokenDefinitionParticles.count + fixedSupplyTokenDefinitionParticles.count), 1)
         
-        let mapper = StatelessTransferTokensParticleGroupMapper(
-            mutableSupplyTokenDefinitionParticle: mutableSupplyTokenDefinitionParticles.first?.particle,
-            fixedSupplyTokenDefinitionParticle: fixedSupplyTokenDefinitionParticles.first?.particle,
-            transferrableTokensParticle: consumables[0].particle
-        )
+        var upParticles: [AnyUpParticle] = [AnyUpParticle(particle: consumables[0])]
+        
+        if let fixed = fixedSupplyTokenDefinitionParticles.first {
+            upParticles.append(AnyUpParticle(particle: fixed))
+        }
+        
+        if let mutable = mutableSupplyTokenDefinitionParticles.first {
+            upParticles.append(AnyUpParticle(particle: mutable))
+        }
         
         let atomFromTransfer = testAidOfAtomFrom(
             action: transferTokens,
-            mapper: mapper,
+            mapper: DefaultTransferTokensActionToParticleGroupsMapper(),
+            upParticles: upParticles,
             expectedAidShard: .eitherIn([alice.shard, bob.shard])
         )
         XCTAssertEqual(try! atomFromTransfer.shards(), [alice.shard, bob.shard])
@@ -167,50 +173,19 @@ private enum ShardAssertion {
     }
 }
 
-struct StatelessTransferTokensParticleGroupMapper: StatelessActionToParticleGroupsMapper, TransferTokensActionToParticleGroupsMapper {
-
-    private let mutableSupplyTokenDefinitionParticle: MutableSupplyTokenDefinitionParticle?
-    private let fixedSupplyTokenDefinitionParticle: FixedSupplyTokenDefinitionParticle?
-    private let transferrableTokensParticle: TransferrableTokensParticle
-
-    init(
-        mutableSupplyTokenDefinitionParticle: MutableSupplyTokenDefinitionParticle?,
-        fixedSupplyTokenDefinitionParticle: FixedSupplyTokenDefinitionParticle?,
-        transferrableTokensParticle: TransferrableTokensParticle
-    ) {
-        self.mutableSupplyTokenDefinitionParticle = mutableSupplyTokenDefinitionParticle
-        self.fixedSupplyTokenDefinitionParticle = fixedSupplyTokenDefinitionParticle
-        self.transferrableTokensParticle = transferrableTokensParticle
-    }
-    
-    func particleGroups(for action: Action) throws -> ParticleGroups {
-        
-        var upParticles: [AnyUpParticle] = [AnyUpParticle(particle: transferrableTokensParticle)]
-        
-        if let fixed = fixedSupplyTokenDefinitionParticle {
-            upParticles.append(AnyUpParticle(particle: fixed))
-        }
-        
-        if let mutable = mutableSupplyTokenDefinitionParticle {
-            upParticles.append(AnyUpParticle(particle: mutable))
-        }
-        
-        return try! particleGroups(for: action, upParticles: upParticles)
-    }
-}
-
 private extension AtomIdentifierTests {
     @discardableResult
     func testAidOfAtomFrom<Action, Mapper>(
         action: Action,
         mapper: Mapper,
+        upParticles: [AnyUpParticle] = [],
         expectedAidShard: ShardAssertion
         ) -> Atom
-        where Mapper: StatelessActionToParticleGroupsMapper,
+        where Mapper: StatefulActionToParticleGroupsMapper,
         Action == Mapper.Action
     {
         
-        let particleGroup = try! mapper.particleGroups(for: action)
+        let particleGroup = try! mapper.particleGroups(for: action, upParticles: upParticles, addressOfActiveAccount: alice)
         
         let date = TimeConverter.dateFrom(millisecondsSince1970: 237)
         let metaData = ChronoMetaData.timestamp(date)

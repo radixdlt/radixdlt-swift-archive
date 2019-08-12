@@ -74,7 +74,7 @@ extension ObservableConvertibleType where Element == Never { /* Completable */
             if let rxError = error as? RxError {
                 if case .timeout = rxError {
                     if failOnTimeout {
-                        XCTFail("Timeout, \(description)")
+                        XCTFail("Timeout after \(timeout!)s, \(description)")
                     }
                 }
             } else {
@@ -99,25 +99,6 @@ extension ObservableConvertibleType where Element == Never { /* Completable */
             )
         
     }
-    
-    func blockingAssertThrowsRPCErrorUnrecognizedJson<SpecificError>(
-        timeout: TimeInterval? = .default,
-        expectedErrorType: SpecificError.Type,
-        containingString expectedSubStringInUnrecognizedStringError: String,
-        function: String = #function,
-        file: String = #file,
-        line: Int = #line,
-        deriveUnreconizedJsonError: @escaping (SpecificError) -> String?
-    ) where SpecificError: Swift.Error {
-        
-        self.toBlocking(timeout: timeout).expectToThrowRPCErrorUnrecognizedJson(
-            expectedErrorType: expectedErrorType,
-            containingString: expectedSubStringInUnrecognizedStringError,
-            function: function, file: file, line: line,
-            deriveUnreconizedJsonError: deriveUnreconizedJsonError
-        )
-    }
-    
 }
 
 extension TimeInterval {
@@ -298,35 +279,6 @@ extension BlockingObservable {
         }
     }
     
-    func expectToThrowRPCErrorUnrecognizedJson<SpecificError>(
-        expectedErrorType: SpecificError.Type,
-        containingString expectedSubStringInUnrecognizedStringError: String,
-        function: String = #function,
-        file: String = #file,
-        line: Int = #line,
-        deriveUnreconizedJsonError: (SpecificError) -> String?
-    ) where SpecificError: Swift.Error {
-        
-        let description = "\(function) in \(file), at line: \(line)"
-        
-        switch materialize() {
-        case .completed: return XCTFail("Expected error, but got `completed` instead")
-        case .failed(_, let anyError):
-            guard let error = anyError as? SpecificError else {
-                return XCTFail("Got error as expected, but it has the wrong type, got error:\n<\(anyError)>\n, but expected type:\n<\(SpecificError.self)>\n")
-            }
-            
-            guard let deriveUnreconizedJsonStringFromError = deriveUnreconizedJsonError(error) else {
-                return XCTFail("Could not derive any <unreconized JSON string> from error: `\(error)`, but expected one")
-            }
-            XCTAssertTrue(deriveUnreconizedJsonStringFromError.contains(expectedSubStringInUnrecognizedStringError),
-                          "Test \(description) failed, `deriveUnreconizedJsonStringFromError`: \(deriveUnreconizedJsonStringFromError) DID NOT contain `expectedSubStringInUnrecognizedStringError`: \(expectedSubStringInUnrecognizedStringError)"
-            )
-            
-        }
-    }
-    
-
     func getArray(
         timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,

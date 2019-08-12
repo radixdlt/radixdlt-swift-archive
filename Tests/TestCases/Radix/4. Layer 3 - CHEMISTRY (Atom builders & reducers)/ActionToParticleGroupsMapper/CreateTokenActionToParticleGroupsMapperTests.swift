@@ -73,7 +73,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         )
         
         let mapper = DefaultCreateTokenActionToParticleGroupsMapper()
-        let particleGroups = try! mapper.particleGroups(for: createTokenAction)
+        let particleGroups = try! mapper.particleGroups(for: createTokenAction, upParticles: [], addressOfActiveAccount: address)
         guard let tokenCreationGroup = particleGroups.first else { return }
         assertCorrectnessTokenCreationGroup(tokenCreationGroup, testPermissions: initialSupply.isFixed)
         

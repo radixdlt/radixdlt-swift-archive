@@ -35,6 +35,8 @@ class TransferTokensTests: LocalhostNodeTest {
     private var application: RadixApplicationClient!
     private var alice: Address!
     private var bob: Address!
+    private var carolAccount: Account!
+    private var carol: Address!
     
     override func setUp() {
         super.setUp()
@@ -42,9 +44,11 @@ class TransferTokensTests: LocalhostNodeTest {
         
         aliceIdentity = AbstractIdentity(alias: "Alice")
         bobAccount = Account()
+        carolAccount = Account()
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobAccount)
+        carol = application.addressOf(account: carolAccount)
     }
     
     func testTransferTokenWithGranularityOf1() {
@@ -104,7 +108,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         // THEN:  I see that action fails with error `foundNoTokenDefinition`
         transfer.blockingAssertThrows(
-            error: TransferError.foundNoTokenDefinition(forIdentifier: unknownRRI)
+            error: TransferError.consumeError(.unknownToken(identifier: unknownRRI))
         )
     }
     
@@ -165,8 +169,33 @@ class TransferTokensTests: LocalhostNodeTest {
         
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
         transfer.blockingAssertThrows(
-            error: TransferError.amountNotMultipleOfGranularity(amount: amountToSend, tokenGranularity: granularity),
+            error: TransferError.consumeError(
+                .amountNotMultipleOfGranularity(
+                    token: rri,
+                    triedToConsumeAmount: amountToSend,
+                    whichIsNotMultipleOfGranularity: granularity
+                )
+            ),
             timeout: .enoughForPOW
+        )
+    }
+    
+    func testFailingTransferAliceTriesToSpendCarolsCoins() {
+        // GIVEN: a RadixApplicationClient and identities Alice and Bob
+        
+        let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: 10)
+        
+        XCTAssertTrue(
+            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
+        let rri = createToken.identifier
+        
+        // WHEN: Alice tries to spend Carols coins
+        let transfer = application.transfer(tokens: TransferTokenAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
+        
+        // THEN: I see that it fails
+        transfer.blockingAssertThrows(
+            error: TransferError.consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol))
         )
     }
     

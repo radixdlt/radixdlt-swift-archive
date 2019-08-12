@@ -44,5 +44,6 @@ public struct MintTokensAction: UserAction {
 }
 
 public extension MintTokensAction {
+    var user: Address { return minter }
     var nameOfAction: UserActionName { return .mintTokens }
 }

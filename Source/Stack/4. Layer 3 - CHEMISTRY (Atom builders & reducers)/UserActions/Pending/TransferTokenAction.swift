@@ -25,7 +25,7 @@
 import Foundation
 
 /// A transfer of a non-zero amount of a certain token between two Radix accounts
-public struct TransferTokenAction: UserAction, TokenTransfer {
+public struct TransferTokenAction: ConsumeTokensAction, TokenTransfer {
     
     public let sender: Address
     public let recipient: Address
@@ -50,7 +50,9 @@ public struct TransferTokenAction: UserAction, TokenTransfer {
 }
 
 public extension TransferTokenAction {
+    var user: Address { return sender }
     var nameOfAction: UserActionName { return .transferTokens }
+    var identifierForTokenToConsume: ResourceIdentifier { return tokenResourceIdentifier }
 }
 
 public extension TransferTokenAction {

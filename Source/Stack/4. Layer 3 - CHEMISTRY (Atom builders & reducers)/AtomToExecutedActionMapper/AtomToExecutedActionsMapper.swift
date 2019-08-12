@@ -27,18 +27,12 @@ import RxSwift
 
 public protocol AtomToSpecificExecutedActionMapper: BaseAtomToUserActionMapper {
     associatedtype SpecificExecutedAction: UserAction
-    func mapAtomToAction(_ atom: Atom) -> Observable<SpecificExecutedAction?>
+    func mapAtomToActions(_ atom: Atom) -> Observable<[SpecificExecutedAction]>
 }
 
 public extension AtomToSpecificExecutedActionMapper {
-    
-//    func map<Action>(atom: Atom, toActionType _: Action.Type) -> Observable<Action> where Action: UserAction {
-//        return mapAtomToAction(atom).map {
-//            castOrKill(instance: $0, toType: Action.self)
-//        }
-//    }
-    
-    func mapAtomSomeUserAction(_ atom: Atom) -> Observable<UserAction?> {
-        return mapAtomToAction(atom).map { $0 }
+        
+    func mapAtomSomeUserActions(_ atom: Atom) -> Observable<[UserAction]> {
+        return mapAtomToActions(atom).map { actions in return actions.map { $0 } }
     }
 }

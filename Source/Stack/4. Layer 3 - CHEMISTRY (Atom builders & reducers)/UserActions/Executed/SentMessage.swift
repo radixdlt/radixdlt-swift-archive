@@ -70,5 +70,6 @@ public extension SentMessage.EncryptionState {
 
 // MARK: UserAction
 public extension SentMessage {
+    var user: Address { return sender }
     var nameOfAction: UserActionName { return .sentMessage }
 }

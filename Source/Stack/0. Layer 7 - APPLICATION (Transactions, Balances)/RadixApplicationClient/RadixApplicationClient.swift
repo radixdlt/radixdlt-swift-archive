@@ -36,6 +36,7 @@ public final class RadixApplicationClient:
     TokenMinting,
     TokenBurning,
     MessageSending,
+    UniqueMaking,
     TransactionMaker,
     StateSubscriber,
     TransactionSubscriber,
@@ -113,7 +114,7 @@ public extension RadixApplicationClient {
 
 // MARK: TransactionMaker
 public extension RadixApplicationClient {
-    func send(transaction: NewTransaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+    func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
         return transactionMaker.send(transaction: transaction, toOriginNode: originNode)
     }
 }
@@ -163,6 +164,13 @@ public extension RadixApplicationClient {
     
     func observeMessages(toOrFrom address: Address) -> Observable<SentMessage> {
         return observeActions(ofType: SentMessage.self, at: address)
+    }
+}
+
+// MARK: UniqueMaking
+public extension RadixApplicationClient {
+    func putUniqueId(_ putUniqueAction: PutUniqueIdAction) -> ResultOfUserAction {
+        return execute(actions: putUniqueAction)
     }
 }
 

@@ -28,6 +28,7 @@ import Foundation
 
 /// Small container for a `Particle` and its `Spin`. The reason why we do not want to add the `Spin` as a property on the Particle itself is that it would change the Hash of the particle.
 public struct AnySpunParticle:
+    SpunParticleContainer,
     RadixModelTypeStaticSpecifying,
     RadixCodable,
     RadixHashable,
@@ -41,6 +42,18 @@ public struct AnySpunParticle:
     public init(spin: Spin = .down, particle: ParticleConvertible) {
         self.spin = spin
         self.particle = particle
+    }
+}
+
+public extension AnySpunParticle {
+    var someParticle: ParticleConvertible {
+        return particle
+    }
+}
+
+public extension Array where Element == AnySpunParticle {
+    func wrapInGroup() -> ParticleGroup {
+        return ParticleGroup(spunParticles: self)
     }
 }
 

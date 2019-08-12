@@ -33,6 +33,8 @@ class BurnTokensTests: LocalhostNodeTest {
     private var application: RadixApplicationClient!
     private var alice: Address!
     private var bob: Address!
+    private var carolAccount: Account!
+    private var carol: Address!
     
     override func setUp() {
         super.setUp()
@@ -43,6 +45,8 @@ class BurnTokensTests: LocalhostNodeTest {
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobIdentity.activeAccount)
+        carolAccount = Account()
+        carol = application.addressOf(account: carolAccount)
     }
     
     private let disposeBag = DisposeBag()
@@ -66,7 +70,7 @@ class BurnTokensTests: LocalhostNodeTest {
             return MintTokensAction(tokenDefinitionReference: fooToken, amount: amount, minter: alice)
         }
     
-        let transaction = NewTransaction {[
+        let transaction = Transaction {[
             createTokenAction,
             mint(amount: 100),   // 100
             burn(amount: 3),     // 97
@@ -136,7 +140,7 @@ class BurnTokensTests: LocalhostNodeTest {
         
         // THEN: an error unknownToken is thrown
         burning.blockingAssertThrows(
-            error: BurnError.unknownToken(identifier: foobarToken)
+            error: BurnError.consumeError(.unknownToken(identifier: foobarToken))
         )
     }
     
@@ -202,6 +206,29 @@ class BurnTokensTests: LocalhostNodeTest {
         )
     }
     
+    func testFailingBurnAliceTriesToBurnCarolsCoins() {
+        // GIVEN: a RadixApplicationClient and identities Alice and Bob
+        
+        let (tokenCreation, fooToken) = try! application.createToken(
+            name: "FooToken",
+            symbol: "ALICE",
+            description: "Created By Alice",
+            supply: .mutable(initial: 1000)
+        )
+        
+        XCTAssertTrue(
+            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
+        
+        // WHEN: Alice tries to burn Carols coins
+        let transfer = application.burnTokens(BurnTokensAction(tokenDefinitionReference: fooToken, amount: 10, burner: carol))
+        
+        // THEN: I see that it fails
+        transfer.blockingAssertThrows(
+            error: BurnError.consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol))
+        )
+    }
+    
     func testBurnFailDueToSupplyBeingFixed() {
         // GIVEN: Radix identity Alice and an application layer action BurnToken, and a previously created FooToken, which has FIXED supply
         let (tokenCreation, fooToken) = try! application.createToken(
@@ -243,10 +270,12 @@ class BurnTokensTests: LocalhostNodeTest {
         let burning = application.burnTokens(amount: 2, ofType: fooToken)
         
         burning.blockingAssertThrows(
-            error: BurnError.amountNotMultipleOfGranularity(
-                token: fooToken,
-                triedToBurnAmount: 2,
-                whichIsNotMultipleOfGranularity: 3
+            error: BurnError.consumeError(
+                .amountNotMultipleOfGranularity(
+                    token: fooToken,
+                    triedToConsumeAmount: 2,
+                    whichIsNotMultipleOfGranularity: 3
+                )
             )
         )
         

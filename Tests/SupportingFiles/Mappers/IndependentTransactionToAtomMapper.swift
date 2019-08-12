@@ -40,14 +40,14 @@ struct IndependentTransactionToAtomMapper: TransactionToAtomMapper {
         }()
     }
     
-    func atomFrom(transaction: NewTransaction) throws -> Atom {
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
         var upParticlesFromTx = [AnyUpParticle]()
         
         var particleGroupsFromTx = [ParticleGroup]()
         
         for action in transaction.actions {
             let statefulMapper = actionMapperFor(action: action)
-            let particleGroups = try statefulMapper.particleGroupsForAnAction(action, upParticles: upParticlesFromTx)
+            let particleGroups = try statefulMapper.particleGroupsForAnAction(action, upParticles: upParticlesFromTx, addressOfActiveAccount: addressOfActiveAccount)
             
             for particleGroup in particleGroups {
                 let upParticlesFromAction = try particleGroup.spunParticles.filter(spin: .up).map(AnyUpParticle.init(anySpunParticle:))

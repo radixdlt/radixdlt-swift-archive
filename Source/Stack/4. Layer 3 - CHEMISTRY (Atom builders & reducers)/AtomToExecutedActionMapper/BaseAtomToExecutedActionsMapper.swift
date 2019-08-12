@@ -26,9 +26,5 @@ import Foundation
 import RxSwift
 
 public protocol BaseAtomToUserActionMapper {
-    func mapAtomSomeUserAction(_ atom: Atom) -> Observable<UserAction?>
+    func mapAtomSomeUserActions(_ atom: Atom) -> Observable<[UserAction]>
 }
-
-//public protocol BaseAtomToSpecificExecutedActionMapper {
-//    func map<Action>(atom: Atom, toActionType _: Action.Type) -> Observable<Action> where Action: UserAction
-//}

@@ -111,13 +111,11 @@ class SendMessageTests: LocalhostNodeTest {
         let result = application.send(
             message: SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: clara, to: bob, text: "Hey Bob, this is Clara.")
         )
- 
-        // THEN: I see that action fails with a validation error
-        result.toCompletable().blockingAssertThrowsRPCErrorUnrecognizedJson(
-            timeout: .enoughForPOW,
-            expectedErrorType: ResultOfUserAction.Error.self,
-            containingString: "message must be signed by sender: \(clara.address.base58String)"
-        ) { $0.unrecognizedJsonStringFromError }
+
+        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+        result.blockingAssertThrows(
+            error: SendMessageError.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: clara)
+        )
         
     }
     
@@ -139,25 +137,6 @@ class SendMessageTests: LocalhostNodeTest {
     }
 }
 
-extension ResultOfUserAction.Error {
-    var unrecognizedJsonStringFromError: String? {
-        switch self {
-        case .failedToSubmitAtom(let submitAtomError):
-            return submitAtomError.rpcError.unrecognizedJsonStringFromError
-        case .failedToStageAction: return nil
-        }
-    }
-}
-
-extension RPCError {
-    var unrecognizedJsonStringFromError: String? {
-        switch self {
-            case .unrecognizedJson(let unrecognizeJsonString): return unrecognizeJsonString
-            default: return nil
-        }
-    }
-}
-
 extension AbstractIdentity {
     convenience init(privateKey: PrivateKey, alias: String? = nil) {
         self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
@@ -168,57 +147,5 @@ extension Account {
     init() {
         let keyPair = KeyPair()
         self = .privateKeyPresent(keyPair)
-    }
-}
-
-extension ResultOfUserAction {
-    func blockingWasSuccessfull(
-        timeout: TimeInterval? = .default,
-        failOnTimeout: Bool = true,
-        failOnErrors: Bool = true,
-        function: String = #function,
-        file: String = #file,
-        line: Int = #line
-        ) -> Bool {
-        
-        return self.toCompletable().blockingWasSuccessfull(
-            timeout: timeout,
-            failOnTimeout: failOnTimeout,
-            failOnErrors: failOnErrors,
-            function: function, file: file, line: line
-        )
-        
-    }
-    
-    func blockingAssertThrows<SpecificError>(
-        error expectedError: SpecificError,
-        timeout: TimeInterval? = .default
-    ) where SpecificError: Swift.Error, SpecificError: Equatable {
-        
-        return self.toCompletable()
-            .blockingAssertThrows(
-                error: expectedError,
-                timeout: timeout
-        ) {
-            guard let userActionError = $0 as? ResultOfUserAction.Error else {
-                XCTFail("Expected `ResultOfUserAction.Error`")
-                return nil
-            }
-            
-            switch userActionError {
-            case .failedToStageAction(let anyFailedToStageActionError):
-                guard let failedToStageActionError = anyFailedToStageActionError.error as? SpecificError else {
-                    XCTFail("Expected `SpecificError`")
-                    return nil
-                }
-                return failedToStageActionError
-            case .failedToSubmitAtom(let anySubmitAtomError):
-                guard let submitAtomError = anySubmitAtomError as? SpecificError else {
-                    XCTFail("Expected `SpecificError`")
-                    return nil
-                }
-                return submitAtomError
-            }
-        }
     }
 }

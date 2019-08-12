@@ -185,7 +185,7 @@ private extension UniverseConfig {
     @discardableResult
     static func nativeTokenDefinitionFrom(genesis: Atoms) throws -> TokenDefinition {
         let tokenDefinitions: [TokenDefinition] = genesis.atoms
-            .flatMap { $0.particlesOfType(FixedSupplyTokenDefinitionParticle.self, spin: .up) }
+            .flatMap { $0.fixedSupplyTokenDefinitionParticles(spin: .up) }
             .map { TokenDefinition(tokenConvertible: $0) }
         
         let count = tokenDefinitions.count

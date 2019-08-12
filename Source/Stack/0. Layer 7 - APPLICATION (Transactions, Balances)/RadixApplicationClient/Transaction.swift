@@ -24,70 +24,8 @@
 
 import Foundation
 
-public protocol TransactionConvertible {
-    var sentAt: Date { get }
-    var actions: [UserAction] { get }
-}
-
-public extension TransactionConvertible {
-    func containsAction<Action>(ofType actionType: Action.Type) -> Bool where Action: UserAction {
-        return actions.contains(where: { type(of: $0) == actionType })
-    }
+public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStringConvertible {
     
-    /// Boolean OR of `actionTypes`
-    func contains(actionMatchingAnyType actionTypes: [UserAction.Type]) -> Bool {
-        return actions.contains(where: { action in
-            let typeOfAction = type(of: action)
-            return actionTypes.contains(where: { $0 == typeOfAction }) }
-        )
-    }
-    
-    /// Boolean AND of `actionTypes`
-    func contains(actionMatchingAll actionTypes: [UserAction.Type]) -> Bool {
-        return actionTypes.reduce(true, { (goodSoFar, requiredActionType) -> Bool in
-            return goodSoFar && self.actions.contains(where: { type(of: $0) == requiredActionType })
-        })
-    }
-    
-    func actions<Action>(ofType actionType: Action.Type) -> [Action] where Action: UserAction {
-        return actions.compactMap { $0 as? Action }
-    }
-}
-
-public struct ExecutedTransaction: TransactionConvertible, ArrayConvertible {
-    public let atomIdentifier: AtomIdentifier
-    public let sentAt: Date
-    public let actions: [UserAction]
-    
-    private init(
-        atomIdentifier: AtomIdentifier,
-        sentAt: Date,
-        actions: [UserAction]
-    ) {
-        self.atomIdentifier = atomIdentifier
-        self.sentAt = sentAt
-        self.actions = actions
-    }
-}
-
-public extension ExecutedTransaction {
-    
-    init(atom: Atom, actions: NonEmptyArray<UserAction>) {
-        self.init(
-            atomIdentifier: atom.identifier(),
-            sentAt: atom.timestamp,
-            actions: actions.elements
-        )
-    }
-}
-
-// MARK: ArrayConvertible
-public extension ExecutedTransaction {
-    typealias Element = UserAction
-    var elements: [Element] { return actions }
-}
-
-public struct NewTransaction: TransactionConvertible {
     public let uuid: UUID
     public let sentAt: Date
     public let actions: [UserAction]
@@ -103,8 +41,23 @@ public struct NewTransaction: TransactionConvertible {
     }
 }
 
-public extension NewTransaction {
+public extension Transaction {
     init(makeActions: () -> [UserAction]) {
         self.init(actions: makeActions())
+    }
+}
+
+// MARK: ArrayConvertible
+public extension Transaction {
+    typealias Element = UserAction
+    var elements: [Element] { return actions }
+}
+
+public extension Transaction {
+    var description: String {
+        let actionsString = actions.map { $0.nameOfAction.rawValue }.joined(separator: ", ")
+        return """
+        Transaction(actions: \(actionsString))
+        """
     }
 }

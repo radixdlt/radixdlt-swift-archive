@@ -90,31 +90,31 @@ private extension PublicKey {
 }
 
 
-private extension Magic {
+extension Magic {
     static var irrelevant: Magic {
         return 1
     }
 }
 
-private extension String {
+extension String {
     static var irrelevant: String {
         return "irrelevant"
     }
 }
 
-private extension Symbol {
+extension Symbol {
     static var irrelevant: Symbol {
         return "IRR"
     }
 }
 
-private extension Name {
+extension Name {
     static var irrelevant: Name {
         return "Irrelevant"
     }
 }
 
-private extension Description {
+extension Description {
     static var irrelevant: Description {
         return "Irrelevant description"
     }

@@ -30,7 +30,7 @@ import Foundation
 /// - seeAlso:
 /// `ParticleGroup`
 ///
-public struct Atom: Atomic, ExpressibleBySubatomicParts {
+public struct Atom: Atomic, ExpressibleBySubatomicParts, ArrayConvertible {
     
     public let particleGroups: ParticleGroups
     public let signatures: Signatures
@@ -45,4 +45,10 @@ public struct Atom: Atomic, ExpressibleBySubatomicParts {
         self.signatures = signatures
         self.metaData = metaData
     }
+}
+
+// MARK: ArrayConvertible
+public extension Atom {
+    typealias Element = ParticleGroup
+    var elements: [Element] { return particleGroups.elements }
 }

@@ -42,13 +42,15 @@ public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMa
 }
 
 public extension DefaultAtomToDecryptedMessageMapper {
-    func mapAtomToAction(_ atom: Atom) -> Observable<SentMessage?> {
-        guard atom.spunParticles().contains(where: { $0.particle is MessageParticle }) else { return Observable.just(nil) }
+    func mapAtomToActions(_ atom: Atom) -> Observable<[SentMessage]> {
+        guard atom.containsAnyMessageParticle() else { return Observable.just([]) }
         
         return activeAccount.flatMap {
             $0.privateKeyForSigning
         }.map {
             try EncryptedMessageContext(atom: atom).decryptMessageIfNeeded(key: $0)
+        }.map {
+            [$0]
         }
     }
 }

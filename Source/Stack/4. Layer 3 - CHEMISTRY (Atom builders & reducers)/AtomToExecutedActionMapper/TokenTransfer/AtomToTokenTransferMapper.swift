@@ -36,14 +36,18 @@ public extension DefaultAtomToTokenTransferMapper {
     typealias SpecificExecutedAction = TransferredTokens
     
     // swiftlint:disable:next function_body_length
-    func mapAtomToAction(_ atom: Atom) -> Observable<TransferredTokens?> {
-        guard atom.spunParticles().contains(where: { $0.particle is TransferrableTokensParticle }) else { return Observable.just(nil) }
+    func mapAtomToActions(_ atom: Atom) -> Observable<[TransferredTokens]> {
+
+        guard atom.containsAnyTransferrableTokensParticles(spin: .down) else {
+            return .just([])
+        }
         
         // swiftlint:disable:next function_body_length
         func transferredTokensFromParticleGroup(_ particleGroup: ParticleGroup) -> [TransferredTokens] {
             guard let anyConsumed = particleGroup.firstParticle(ofType: TransferrableTokensParticle.self, spin: .down) else {
                 return []
             }
+            
             let sender = anyConsumed.address
             
             var dictionary = [ResourceIdentifier: [Address: SignedAmount]]()
@@ -62,7 +66,7 @@ public extension DefaultAtomToTokenTransferMapper {
                     dictionary[particle.tokenDefinitionReference] = mapForRRi
                 }
             
-            particleGroup.spunParticles.filter(spin: .down).compactMap({ $0.particle as? TransferrableTokensParticle }).forEach {
+            particleGroup.transferrableTokensParticles(spin: .down).forEach {
                 guard $0.address == sender else {
                     incorrectImplementation("different senders...")
                 }
@@ -108,6 +112,6 @@ public extension DefaultAtomToTokenTransferMapper {
         
         let transferredTokensList: [TransferredTokens] = atom.particleGroups.flatMap(transferredTokensFromParticleGroup)
         
-        return Observable.from(transferredTokensList)
+        return Observable.of(transferredTokensList)
     }
 }

@@ -26,17 +26,17 @@ import Foundation
 import RxSwift
 
 public protocol TransactionMaker {
-    func send(transaction: NewTransaction, toOriginNode: Node?) -> ResultOfUserAction
+    func send(transaction: Transaction, toOriginNode: Node?) -> ResultOfUserAction
 }
 
 public extension TransactionMaker {
     
-    func send(transaction: NewTransaction) -> ResultOfUserAction {
+    func send(transaction: Transaction) -> ResultOfUserAction {
         return send(transaction: transaction, toOriginNode: nil)
     }
     
     func execute(actions: [UserAction], originNode: Node? = nil) -> ResultOfUserAction {
-        let transaction = NewTransaction { actions }
+        let transaction = Transaction { actions }
         return send(transaction: transaction, toOriginNode: originNode)
     }
     
@@ -45,7 +45,7 @@ public extension TransactionMaker {
     }
 }
 
-public final class DefaultTransactionMaker: TransactionMaker {
+public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDeriving, Magical {
     
     /// A mapper from a container of `UserAction`s the user wants to perform, to an `Atom` ready to be pushed to the Radix network (some node).
     private let transactionToAtomMapper: TransactionToAtomMapper
@@ -96,12 +96,21 @@ public extension DefaultTransactionMaker {
     }
 }
 
+// MARK: Magical
 public extension DefaultTransactionMaker {
-    func send(transaction: NewTransaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+    var magic: Magic { return universeConfig.magic }
+}
+
+public extension DefaultTransactionMaker {
+    func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+        
         do {
+            
             let unsignedAtom = try buildAtomFrom(transaction: transaction)
             
-            let signedAtom = sign(atom: unsignedAtom)
+            let signedAtom = sign(atom: unsignedAtom).do(onSuccess: {
+                log.debug("Atom(id: `\($0.shortAid)`) from \(transaction)")
+            })
             
             return createAtomSubmission(
                 atom: signedAtom,
@@ -174,11 +183,18 @@ private extension DefaultTransactionMaker {
         return result
     }
     
-    func buildAtomFrom(transaction: NewTransaction) throws -> Single<UnsignedAtom> {
-        let atom = try transactionToAtomMapper.atomFrom(transaction: transaction)
-        return addFee(to: atom).map {
-            try UnsignedAtom(atomWithPow: $0)
+    var addressOfActiveAccount: Observable<Address> {
+        return activeAccount.map { [unowned self] in
+            self.addressOf(account: $0)
         }
-        
+    }
+    
+    func buildAtomFrom(transaction: Transaction) throws -> Single<UnsignedAtom> {
+        return addressOfActiveAccount.flatMapToSingle { [unowned self] in
+            let atom = try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: $0)
+            return self.addFee(to: atom).map {
+                try UnsignedAtom(atomWithPow: $0)
+            }
+        }
     }
 }

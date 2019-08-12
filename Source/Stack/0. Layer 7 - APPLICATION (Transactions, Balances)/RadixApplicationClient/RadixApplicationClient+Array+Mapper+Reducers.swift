@@ -30,7 +30,8 @@ public extension Array where Element == AnyAtomToExecutedActionMapper {
     static func atomToActionMappers(activeAccount: Observable<Account>) -> [AnyAtomToExecutedActionMapper] {
         return [
             AnyAtomToExecutedActionMapper(any: DefaultAtomToTokenTransferMapper()),
-            AnyAtomToExecutedActionMapper(any: DefaultAtomToDecryptedMessageMapper(activeAccount: activeAccount) )
+            AnyAtomToExecutedActionMapper(any: DefaultAtomToDecryptedMessageMapper(activeAccount: activeAccount) ),
+            AnyAtomToExecutedActionMapper(any: DefaultAtomToUniqueIdMapper())
         ]
     }
 }
@@ -49,7 +50,9 @@ public extension Array where Element == AnyStatefulActionToParticleGroupsMapper 
         return [
             AnyStatefulActionToParticleGroupsMapper(DefaultMintTokensActionToParticleGroupsMapper()),
             AnyStatefulActionToParticleGroupsMapper(DefaultBurnTokensActionToParticleGroupsMapper()),
-            AnyStatefulActionToParticleGroupsMapper(DefaultTransferTokensActionToParticleGroupsMapper())
+            AnyStatefulActionToParticleGroupsMapper(DefaultTransferTokensActionToParticleGroupsMapper()),
+            AnyStatefulActionToParticleGroupsMapper(DefaultPutUniqueActionToParticleGroupsMapper()),
+            AnyStatefulActionToParticleGroupsMapper(DefaultCreateTokenActionToParticleGroupsMapper())
         ]
     }
 }
@@ -57,9 +60,7 @@ public extension Array where Element == AnyStatefulActionToParticleGroupsMapper 
 public extension Array where Element == AnyStatelessActionToParticleGroupsMapper {
     static var `default`: [AnyStatelessActionToParticleGroupsMapper] {
         return [
-            AnyStatelessActionToParticleGroupsMapper(DefaultSendMessageActionToParticleGroupsMapper()),
-            AnyStatelessActionToParticleGroupsMapper(DefaultCreateTokenActionToParticleGroupsMapper()),
-            AnyStatelessActionToParticleGroupsMapper(DefaultPutUniqueActionToParticleGroupsMapper())
+            AnyStatelessActionToParticleGroupsMapper(DefaultSendMessageActionToParticleGroupsMapper())
         ]
     }
 }
