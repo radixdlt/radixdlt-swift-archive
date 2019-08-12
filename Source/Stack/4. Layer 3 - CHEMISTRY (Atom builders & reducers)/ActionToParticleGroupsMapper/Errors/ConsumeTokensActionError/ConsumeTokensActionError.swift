@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,26 +24,20 @@
 
 import Foundation
 
-public struct PutUniqueIdAction: UserAction, UniquelyIdentifiedAction {
-    public let uniqueMaker: Address
-    public let string: String
-}
-
-public extension PutUniqueIdAction {
-    var user: Address { return uniqueMaker }
-    var nameOfAction: UserActionName { return .putUnique }
-}
-
-public extension PutUniqueIdAction {
-    var identifier: ResourceIdentifier {
-        return ResourceIdentifier(address: uniqueMaker, name: string)
-    }
-}
-
-public extension PutUniqueIdAction {
+public enum ConsumeTokensActionError: Swift.Error, Equatable {
+    case unknownToken(identifier: ResourceIdentifier)
     
-    init(uniqueParticle: UniqueParticle) {
-        let rri = uniqueParticle.identifier
-        self.init(uniqueMaker: rri.address, string: rri.name)
-    }
+    case insufficientTokens(
+        token: ResourceIdentifier,
+        balance: NonNegativeAmount,
+        triedToConsumeAmount: PositiveAmount
+    )
+    
+    case amountNotMultipleOfGranularity(
+        token: ResourceIdentifier,
+        triedToConsumeAmount: PositiveAmount,
+        whichIsNotMultipleOfGranularity: Granularity
+    )
+    
+    case nonMatchingAddress(activeAddress: Address, butActionStatesAddress: Address)
 }

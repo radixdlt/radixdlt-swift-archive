@@ -49,7 +49,7 @@ class CreateTokenTests: LocalhostNodeTest {
         let tokenCreation = application.create(token: createTokenAction(creator: bob))
         
         tokenCreation.blockingAssertThrows(
-            error: CreateTokenError.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)
+            error: CreateTokenError.uniqueActionError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob))
         )
     }
     
@@ -66,7 +66,7 @@ class CreateTokenTests: LocalhostNodeTest {
         let tokenCreation = application.send(transaction: transaction)
         
         tokenCreation.blockingAssertThrows(
-            error: CreateTokenError.rriAlreadyUsedByUniqueId(identifier: rri)
+            error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByUniqueId(string: rri.name))
         )
     }
     
@@ -83,7 +83,7 @@ class CreateTokenTests: LocalhostNodeTest {
         let resultOfUniqueMaking = application.send(transaction: transaction)
         
         resultOfUniqueMaking.blockingAssertThrows(
-            error: CreateTokenError.rriAlreadyUsedByMutableSupplyToken(identifier: rri)
+            error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByMutableSupplyToken(identifier: rri))
         )
     }
     
@@ -100,7 +100,7 @@ class CreateTokenTests: LocalhostNodeTest {
         let resultOfUniqueMaking = application.send(transaction: transaction)
         
         resultOfUniqueMaking.blockingAssertThrows(
-            error: CreateTokenError.rriAlreadyUsedByFixedSupplyToken(identifier: rri)
+            error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByFixedSupplyToken(identifier: rri))
         )
     }
     

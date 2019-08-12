@@ -47,6 +47,7 @@ public extension MintTokensActionToParticleGroupsMapper {
 }
 
 public final class DefaultMintTokensActionToParticleGroupsMapper: MintTokensActionToParticleGroupsMapper, Throwing {
+    
     public init() {}
 }
 
@@ -55,7 +56,7 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
     typealias Action = MintTokensAction
     
     func particleGroups(for action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
-        try validateInput(mintAction: action, upParticles: upParticles)
+        try validateInput(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
         
         let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
             transitioner: { try TransferrableTokensParticle(unallocatedTokensParticle: $0, amount: $1, address: action.creditNewlyMintedTokensTo) },
@@ -70,6 +71,39 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
         return [
             ParticleGroup(spunParticles: spunParticles)
         ]
+    }
+    
+    func validateInput(action mintAction: MintTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
+        let rri = mintAction.tokenDefinitionReference
+        
+        guard let mutableSupplyTokensParticle = upParticles.firstMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) else {
+            if upParticles.containsAnyFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
+                throw Error.tokenHasFixedSupplyThusItCannotBeMinted(identifier: rri)
+            } else {
+                throw Error.unknownToken(identifier: rri)
+            }
+        }
+        
+        guard mutableSupplyTokensParticle.canBeMinted(by: mintAction.minter) else {
+            throw Error.lackingPermissions(
+                of: mintAction.minter,
+                toMintToken: rri,
+                whichRequiresPermission: mutableSupplyTokensParticle.permissions.mintPermission,
+                creatorOfToken: mutableSupplyTokensParticle.address
+            )
+        }
+        
+        let mintAmount = mintAction.amount
+        let granularity = mutableSupplyTokensParticle.granularity
+        guard mintAmount.isExactMultipleOfGranularity(granularity) else {
+            throw Error.amountNotMultipleOfGranularity(
+                token: rri,
+                triedToMintAmount: mintAmount,
+                whichIsNotMultipleOfGranularity: granularity
+            )
+        }
+        
+        // All is well.
     }
 }
 
@@ -105,42 +139,6 @@ public enum MintError: Swift.Error, Equatable {
         triedToMintAmount: PositiveAmount,
         whichIsNotMultipleOfGranularity: Granularity
     )
-}
-
-private extension DefaultMintTokensActionToParticleGroupsMapper {
-    
-    func validateInput(mintAction: MintTokensAction, upParticles: [AnyUpParticle]) throws {
-        let rri = mintAction.tokenDefinitionReference
-
-        guard let mutableSupplyTokensParticle = upParticles.firstMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) else {
-            if upParticles.containsAnyFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
-                throw Error.tokenHasFixedSupplyThusItCannotBeMinted(identifier: rri)
-            } else {
-                throw Error.unknownToken(identifier: rri)
-            }
-        }
-        
-        guard mutableSupplyTokensParticle.canBeMinted(by: mintAction.minter) else {
-            throw Error.lackingPermissions(
-                of: mintAction.minter,
-                toMintToken: rri,
-                whichRequiresPermission: mutableSupplyTokensParticle.permissions.mintPermission,
-                creatorOfToken: mutableSupplyTokensParticle.address
-            )
-        }
-        
-        let mintAmount = mintAction.amount
-        let granularity = mutableSupplyTokensParticle.granularity
-        guard mintAmount.isExactMultipleOfGranularity(granularity) else {
-            throw Error.amountNotMultipleOfGranularity(
-                token: rri,
-                triedToMintAmount: mintAmount,
-                whichIsNotMultipleOfGranularity: granularity
-            )
-        }
-        
-        // All is well.
-    }
 }
 
 private extension FungibleParticleTransitioner where From == UnallocatedTokensParticle, To == TransferrableTokensParticle {

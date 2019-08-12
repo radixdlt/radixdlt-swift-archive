@@ -24,12 +24,15 @@
 
 import Foundation
 
-public struct BurnTokensAction: UserAction {
+public struct BurnTokensAction: ConsumeTokensAction {
     public let tokenDefinitionReference: ResourceIdentifier
     public let amount: PositiveAmount
     public let burner: Address
 }
 
 public extension BurnTokensAction {
+    
+    var user: Address { return burner }
     var nameOfAction: UserActionName { return .burnTokens }
+    var identifierForTokenToConsume: ResourceIdentifier { return tokenDefinitionReference }
 }

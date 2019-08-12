@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,32 +24,6 @@
 
 import Foundation
 
-public protocol TransferTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper, Throwing where Action == TransferTokenAction, Error == TransferError {}
-
-public extension TransferTokensActionToParticleGroupsMapper {
-    
-    func requiredState(for transferAction: Action) -> [AnyShardedParticleStateId] {
-        return [
-            AnyShardedParticleStateId(
-                ShardedParticleStateId(
-                    typeOfParticle: MutableSupplyTokenDefinitionParticle.self,
-                    address: transferAction.tokenResourceIdentifier.address
-                )
-            ),
-            
-            AnyShardedParticleStateId(
-                ShardedParticleStateId(
-                    typeOfParticle: FixedSupplyTokenDefinitionParticle.self,
-                    address: transferAction.tokenResourceIdentifier.address
-                )
-            ),
-            
-            AnyShardedParticleStateId(
-                ShardedParticleStateId(
-                    typeOfParticle: TransferrableTokensParticle.self,
-                    address: transferAction.sender
-                )
-            )
-        ]
-    }
+public protocol UniqueActionErrorInitializable: Swift.Error, Equatable {
+    static func errorFrom(uniqueActionError: UniquelyIdentifiedActionError) -> Self
 }

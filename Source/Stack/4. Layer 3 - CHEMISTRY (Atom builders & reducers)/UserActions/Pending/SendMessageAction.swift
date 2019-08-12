@@ -44,6 +44,7 @@ public struct SendMessageAction: UserAction, ChatMessage {
 }
 
 public extension SendMessageAction {
+    var user: Address { return sender }
     var nameOfAction: UserActionName { return .sendMessage }
 }
 

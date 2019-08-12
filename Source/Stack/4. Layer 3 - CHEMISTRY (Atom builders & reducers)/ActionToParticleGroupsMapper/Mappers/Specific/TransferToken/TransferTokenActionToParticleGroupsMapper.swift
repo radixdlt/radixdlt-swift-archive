@@ -24,14 +24,14 @@
 
 import Foundation
 
-public struct DefaultTransferTokensActionToParticleGroupsMapper: TransferTokensActionToParticleGroupsMapper {}
+public protocol TransferTokensActionToParticleGroupsMapper: ConsumeTokenActionToParticleGroupsMapper, Throwing where Action == TransferTokenAction, Error == TransferError {}
 
 // MARK: - TransferTokensActionToParticleGroupsMapper
 public extension TransferTokensActionToParticleGroupsMapper {
     
     func particleGroups(for transfer: TransferTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
         
-        try validateInput(transfer: transfer, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+        try validateInputMappingConsumeTokensActionError(action: transfer, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
         
         let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, TransferrableTokensParticle>(
             transitioner: { try TransferrableTokensParticle(transferrableTokensParticle: $0, amount: $1, address: transfer.recipient) },
@@ -41,45 +41,13 @@ public extension TransferTokensActionToParticleGroupsMapper {
         )
         
         let particles = try transitioner.particlesFrom(transfer: transfer, upParticles: upParticles)
-    
+        
         return [
             ParticleGroup(
                 spunParticles: particles,
                 metaData: transfer.metaDataFromAttachmentOrEmpty
             )
         ]
-    }
-}
-
-private extension TransferTokensActionToParticleGroupsMapper {
-    func validateInput(transfer: TransferTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
-
-        guard transfer.sender == addressOfActiveAccount else {
-            throw Error.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: transfer.sender)
-        }
-
-        let rri = transfer.tokenResourceIdentifier
-        
-        let tokenDefinition: TokenConvertible
-        
-        if let mutableSupplyTokenDefinitionParticle = upParticles
-            .firstMutableSupplyTokenDefinitionParticle(where: { $0.tokenDefinitionReference == rri }) {
-            
-            tokenDefinition = mutableSupplyTokenDefinitionParticle
-            
-        } else if let fixedSupplyTokenDefinitionsParticle =  upParticles
-            .firstFixedSupplyTokenDefinitionParticle(where: { $0.tokenDefinitionReference == rri }) {
-            
-            tokenDefinition = fixedSupplyTokenDefinitionsParticle
-            
-        } else {
-            log.warning("Expected to found MutableSupplyTokenDefinitionParticle or FixedSupplyTokenDefinitionParticle with RRI: \(rri), amongst up particles: \(upParticles), but found none.")
-            throw TransferError.foundNoTokenDefinition(forIdentifier: rri)
-        }
-        
-        guard transfer.amount.isExactMultipleOfGranularity(tokenDefinition.granularity) else {
-            throw TransferError.amountNotMultipleOfGranularity(amount: transfer.amount, tokenGranularity: tokenDefinition.granularity)
-        }
     }
 }
 
@@ -92,11 +60,14 @@ internal extension TransferrableTokensParticle {
     }
 }
 
-public enum TransferError: Swift.Error, Equatable {
+public enum TransferError: ConsumeTokensActionErrorInitializable {
     case insufficientFunds(currentBalance: NonNegativeAmount, butTriedToTransfer: PositiveAmount)
-    case foundNoTokenDefinition(forIdentifier: ResourceIdentifier)
-    case amountNotMultipleOfGranularity(amount: PositiveAmount, tokenGranularity: Granularity)
-    case nonMatchingAddress(activeAddress: Address, butActionStatesAddress: Address)
+    case consumeError(ConsumeTokensActionError)
+}
+public extension TransferError {
+    static func errorFrom(consumeTokensActionError: ConsumeTokensActionError) -> TransferError {
+        return .consumeError(consumeTokensActionError)
+    }
 }
 
 private extension FungibleParticleTransitioner where From == TransferrableTokensParticle, To == TransferrableTokensParticle {

@@ -61,6 +61,7 @@ public struct TransferredTokens: UserAction, TokenTransfer {
 
 // MARK: UserAction
 public extension TransferredTokens {
+    var user: Address { return sender }
     var nameOfAction: UserActionName { return .transferredTokens }
 }
 

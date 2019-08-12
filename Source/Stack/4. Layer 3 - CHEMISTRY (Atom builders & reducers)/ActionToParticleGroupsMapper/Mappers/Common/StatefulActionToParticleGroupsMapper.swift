@@ -34,6 +34,7 @@ public protocol BaseStatefulActionToParticleGroupsMapper {
 public protocol StatefulActionToParticleGroupsMapper: BaseStatefulActionToParticleGroupsMapper {
     associatedtype Action: UserAction
     func requiredState(for action: Action) -> [AnyShardedParticleStateId]
+    func validateInput(action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws
     func particleGroups(for action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups
 }
 
