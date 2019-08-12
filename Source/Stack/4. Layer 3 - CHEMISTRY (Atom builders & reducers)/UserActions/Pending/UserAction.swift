@@ -45,5 +45,6 @@ public enum UserActionName: String, Hashable {
 }
 
 public protocol UserAction {
+    var user: Address { get }
     var nameOfAction: UserActionName { get }
 }

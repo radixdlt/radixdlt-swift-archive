@@ -51,13 +51,13 @@ public extension UnsignedAtom {
 
 // MARK: - Signing
 public extension UnsignedAtom {
-    func signed(signature: Signature, signatureId: EUID) -> SignedAtom {
+    func signed(signature: Signature, signatureId: SignatureId) -> SignedAtom {
         return wrappedAtom.withSignature(signature, signatureId: signatureId)
     }
 }
 
 private extension AtomWithFee {
-    func withSignature(_ signature: Signature, signatureId: EUID) -> SignedAtom {
+    func withSignature(_ signature: Signature, signatureId: SignatureId) -> SignedAtom {
         let atomWithPowAndSignature = Atom(
             metaData: metaData,
             signatures: signatures.inserting(value: signature, forKey: signatureId),

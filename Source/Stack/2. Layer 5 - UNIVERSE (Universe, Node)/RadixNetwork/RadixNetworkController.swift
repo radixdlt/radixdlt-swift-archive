@@ -26,8 +26,6 @@ import Foundation
 import RxSwift
 
 public protocol RadixNetworkController {
-    var networkState: Observable<RadixNetworkState> { get }
-    
     func dispatch(nodeAction: NodeAction)
     func getActions() -> Observable<NodeAction>
 }
@@ -38,7 +36,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
     private let nodeActionSubject: PublishSubject<NodeAction>
     private let reducedNodeActions: Observable<NodeAction>
     
-    public let networkState: Observable<RadixNetworkState>
+    private let networkState: Observable<RadixNetworkState>
     private let disposeBag = DisposeBag()
 
     private let _retainingVariableEpics: [RadixNetworkEpic]

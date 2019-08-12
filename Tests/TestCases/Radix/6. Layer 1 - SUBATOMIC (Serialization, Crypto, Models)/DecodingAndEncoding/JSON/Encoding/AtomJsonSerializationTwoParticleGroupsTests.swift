@@ -77,7 +77,7 @@ private let atom = Atom(
                 spin: .up,
                 particle: UniqueParticle(
                     address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
-                    uniqueName: "Sajjon"
+                    string: "Sajjon"
                 )
             )
         ])

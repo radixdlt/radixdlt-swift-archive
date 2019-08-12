@@ -33,7 +33,7 @@ public protocol TokenTransfer {
 }
 
 /// A transfer of a non-zero amount of a certain token between two Radix accounts
-public struct TransferredTokens: ExecutedAction, TokenTransfer {
+public struct TransferredTokens: UserAction, TokenTransfer {
     
     public let sender: Address
     public let recipient: Address
@@ -61,6 +61,7 @@ public struct TransferredTokens: ExecutedAction, TokenTransfer {
 
 // MARK: UserAction
 public extension TransferredTokens {
+    var user: Address { return sender }
     var nameOfAction: UserActionName { return .transferredTokens }
 }
 

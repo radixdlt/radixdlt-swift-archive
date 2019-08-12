@@ -68,6 +68,6 @@ public extension SignedAtom {
 // MARK: - CustomStringConvertible
 public extension SignedAtom {
     var description: String {
-        return "SignedAtom(id: \(atomWithFee.identifier())"
+        return "SignedAtom(aid: \(atomWithFee.shortAid)"
     }
 }

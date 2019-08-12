@@ -34,7 +34,7 @@ public extension TokenDefinitionsReducer {
     
     func reduce(state currentState: State, upParticle: AnyUpParticle) throws -> State {
 
-        let particle = upParticle.particle
+        let particle = upParticle.someParticle
 
         if let tokenConvertible = particle as? TokenConvertible {
             return currentState.mergingWithNewTokenDefinition(tokenConvertible)

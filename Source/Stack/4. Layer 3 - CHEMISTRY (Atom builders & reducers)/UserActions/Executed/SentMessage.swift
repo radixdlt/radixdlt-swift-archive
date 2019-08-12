@@ -30,7 +30,7 @@ public protocol ChatMessage {
     var payload: Data { get }
 }
 
-public struct SentMessage: ExecutedAction, ChatMessage {
+public struct SentMessage: UserAction, ChatMessage {
     public let sender: Address
     public let recipient: Address
     public let payload: Data
@@ -70,5 +70,6 @@ public extension SentMessage.EncryptionState {
 
 // MARK: UserAction
 public extension SentMessage {
+    var user: Address { return sender }
     var nameOfAction: UserActionName { return .sentMessage }
 }

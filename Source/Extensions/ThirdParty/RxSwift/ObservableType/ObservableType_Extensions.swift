@@ -30,7 +30,7 @@ extension ObservableType {
         return self.asSingle().flatMapCompletable(selector)
     }
     
-    func flatMapSingle<Other>(_ selector: @escaping (Element) -> Single<Other>) -> Observable<Other> {
+    func flatMapSingle<Other>(_ selector: @escaping (Element) throws -> Single<Other>) -> Observable<Other> {
         return self.take(1).asSingle().flatMap(selector).asObservable()
     }
 

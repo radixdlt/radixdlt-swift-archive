@@ -24,7 +24,15 @@
 
 import Foundation
 
-public struct SpunParticle<Particle>: Throwing where Particle: ParticleConvertible {
+public protocol ParticleContainer {
+    var someParticle: ParticleConvertible { get }
+}
+
+public protocol SpunParticleContainer: ParticleContainer {
+    var spin: Spin { get }
+}
+
+public struct SpunParticle<Particle>: SpunParticleContainer, Throwing where Particle: ParticleConvertible {
     
     public let spin: Spin
     public let particle: Particle
@@ -48,7 +56,11 @@ public extension SpunParticle {
     }
 }
 
-public struct UpParticle<Particle>: Throwing where Particle: ParticleConvertible {
+public extension SpunParticle {
+    var someParticle: ParticleConvertible { return particle }
+}
+
+public struct UpParticle<Particle>: SpunParticleContainer, Throwing where Particle: ParticleConvertible {
     
     public let particle: Particle
     
@@ -70,11 +82,16 @@ public struct UpParticle<Particle>: Throwing where Particle: ParticleConvertible
     }
     
     public init(anyUpParticle: AnyUpParticle) throws {
-        guard let particle = anyUpParticle.particle as? Particle else {
+        guard let particle = anyUpParticle.someParticle as? Particle else {
             throw Error.particleTypeMismatch
         }
         self.particle = particle
     }
+}
+
+public extension UpParticle {
+    var someParticle: ParticleConvertible { return particle }
+    var spin: Spin { return .up }
 }
 
 public extension UpParticle {
@@ -84,12 +101,12 @@ public extension UpParticle {
     }
 }
 
-public struct AnyUpParticle: Throwing {
-    public let particle: ParticleConvertible
+public struct AnyUpParticle: SpunParticleContainer, Throwing {
+    public let someParticle: ParticleConvertible
     
     /// Only use this initializer when you KNOW for sure that the spin is `Up`.
     internal init(particle: ParticleConvertible) {
-        self.particle = particle
+        self.someParticle = particle
     }
  
     public init(anySpunParticle: AnySpunParticle) throws {
@@ -99,7 +116,22 @@ public struct AnyUpParticle: Throwing {
     
         self.init(particle: anySpunParticle.particle)
     }
+    
 }
+
+public extension AnyUpParticle {
+    var spin: Spin { return .up }
+}
+
+extension Array: SpunParticlesOwner where Element: SpunParticleContainer {
+    public var spunParticles: [AnySpunParticle] {
+        return map { AnySpunParticle(spin: $0.spin, particle: $0.someParticle) }
+    }
+}
+
+//public protocol SpunParticlesOwner {
+//    var spunParticles: [AnySpunParticle] { get }
+//}
 
 public extension AnyUpParticle {
     enum Error: Swift.Error, Equatable {

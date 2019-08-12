@@ -89,7 +89,7 @@ struct DERDecoder {
         let type: DERDecoder.DERCode
         let data: Data
     }
-
+    
     enum DERCode: UInt8 {
         
         //All sequences should begin with this
@@ -131,7 +131,30 @@ struct DERDecoder {
         })
     }
     
-  
+    static func decodeRSParts(_ dataConvertible: DataConvertible) -> (r: Data, s: Data) {
+        let data = dataConvertible.asData
+        guard let asn1Objects = DERDecoder.decode(data: data) else {
+            incorrectImplementation("Should get data")
+        }
+        
+        let parts: [Data] = asn1Objects.map {
+            guard case .integerCode = $0.type else {
+                incorrectImplementation("expected integer")
+            }
+            let dataPart = $0.data
+            guard dataPart.count >= 31 && dataPart.count <= 33 else {
+                incorrectImplementation("Bad length of part, was: \(dataPart.count)")
+            }
+            return dataPart
+        }
+        
+        switch parts.countedElementsZeroOneTwoAndMany {
+        case .two(let first, let secondAndLast):
+            return (r: first, s: secondAndLast)
+        default: incorrectImplementation("expected 2 parts")
+        }
+    }
+    
     private static func decode(data: Data) -> [ASN1Object]? {
         
         let scanner = SimpleScanner(data: data)

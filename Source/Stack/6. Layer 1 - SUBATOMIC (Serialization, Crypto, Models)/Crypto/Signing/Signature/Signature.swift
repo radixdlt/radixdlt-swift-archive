@@ -102,7 +102,11 @@ public extension Signature {
 // MARK: - DERInitializable
 public extension Signature {
     init(der: DER) throws {
-        try self.init(data: der.decoded())
+        let (rData, sData) = der.decodedRandS()
+        try self.init(
+            r: rData.unsignedBigInteger,
+            s: sData.unsignedBigInteger
+        )
     }
 }
 

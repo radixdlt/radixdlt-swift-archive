@@ -24,7 +24,7 @@
 
 import Foundation
 
-public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
+public struct CreateTokenAction: UniquelyIdentifiedAction, Throwing, TokenConvertible {
 
     public let creator: Address
     public let name: Name
@@ -68,6 +68,7 @@ public struct CreateTokenAction: UserAction, Throwing, TokenConvertible {
 }
 
 public extension CreateTokenAction {
+    var user: Address { return creator }
     var nameOfAction: UserActionName { return .createToken }
 }
 
@@ -107,6 +108,11 @@ public extension CreateTokenAction {
 }
 
 public extension CreateTokenAction.InitialSupply {
+    
+    static var mutableZeroSupply: CreateTokenAction.InitialSupply {
+        return .mutable(initial: nil)
+    }
+    
     var isMutable: Bool {
         switch self {
         case .fixed: return false
