@@ -24,26 +24,4 @@
 
 import Foundation
 
-public struct PutUniqueIdAction: UserAction, UniquelyIdentifiedAction {
-    public let uniqueMaker: Address
-    public let string: String
-}
-
-public extension PutUniqueIdAction {
-    var user: Address { return uniqueMaker }
-    var nameOfAction: UserActionName { return .putUnique }
-}
-
-public extension PutUniqueIdAction {
-    var identifier: ResourceIdentifier {
-        return ResourceIdentifier(address: uniqueMaker, name: string)
-    }
-}
-
-public extension PutUniqueIdAction {
-    
-    init(uniqueParticle: UniqueParticle) {
-        let rri = uniqueParticle.identifier
-        self.init(uniqueMaker: rri.address, string: rri.name)
-    }
-}
+public struct DefaultTransferTokensActionToParticleGroupsMapper: TransferTokensActionToParticleGroupsMapper {}

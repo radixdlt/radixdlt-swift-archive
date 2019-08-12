@@ -24,26 +24,15 @@
 
 import Foundation
 
-public struct PutUniqueIdAction: UserAction, UniquelyIdentifiedAction {
-    public let uniqueMaker: Address
-    public let string: String
+public protocol CreateTokenActionToParticleGroupsMapper: UniquelyIdentifiedActionToParticleGroupsMapper, Throwing where Action == CreateTokenAction, Error == CreateTokenError {}
+
+public enum CreateTokenError: UniqueActionErrorInitializable {
+    case uniqueActionError(UniquelyIdentifiedActionError)
 }
 
-public extension PutUniqueIdAction {
-    var user: Address { return uniqueMaker }
-    var nameOfAction: UserActionName { return .putUnique }
-}
-
-public extension PutUniqueIdAction {
-    var identifier: ResourceIdentifier {
-        return ResourceIdentifier(address: uniqueMaker, name: string)
+public extension CreateTokenError {
+    static func errorFrom(uniqueActionError: UniquelyIdentifiedActionError) -> CreateTokenError {
+        return .uniqueActionError(uniqueActionError)
     }
-}
 
-public extension PutUniqueIdAction {
-    
-    init(uniqueParticle: UniqueParticle) {
-        let rri = uniqueParticle.identifier
-        self.init(uniqueMaker: rri.address, string: rri.name)
-    }
 }

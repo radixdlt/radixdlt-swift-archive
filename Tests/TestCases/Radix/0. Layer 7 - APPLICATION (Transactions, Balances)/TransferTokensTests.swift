@@ -108,7 +108,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         // THEN:  I see that action fails with error `foundNoTokenDefinition`
         transfer.blockingAssertThrows(
-            error: TransferError.foundNoTokenDefinition(forIdentifier: unknownRRI)
+            error: TransferError.consumeError(.unknownToken(identifier: unknownRRI))
         )
     }
     
@@ -169,7 +169,13 @@ class TransferTokensTests: LocalhostNodeTest {
         
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
         transfer.blockingAssertThrows(
-            error: TransferError.amountNotMultipleOfGranularity(amount: amountToSend, tokenGranularity: granularity),
+            error: TransferError.consumeError(
+                .amountNotMultipleOfGranularity(
+                    token: rri,
+                    triedToConsumeAmount: amountToSend,
+                    whichIsNotMultipleOfGranularity: granularity
+                )
+            ),
             timeout: .enoughForPOW
         )
     }
@@ -184,12 +190,12 @@ class TransferTokensTests: LocalhostNodeTest {
         )
         let rri = createToken.identifier
         
-        // WHEN: Alice tries to spen Carols coins
+        // WHEN: Alice tries to spend Carols coins
         let transfer = application.transfer(tokens: TransferTokenAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
         
         // THEN: I see that it fails
         transfer.blockingAssertThrows(
-            error: TransferError.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol)
+            error: TransferError.consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol))
         )
     }
     

@@ -114,7 +114,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         resultOfUniqueMaking.blockingAssertThrows(
-            error: PutUniqueIdError.uniqueIdAlreadyUsed(string: "foo")
+            error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
         )
     }
     
@@ -131,7 +131,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         application.putUniqueId(putUniqueAction).blockingAssertThrows(
-            error: PutUniqueIdError.uniqueIdAlreadyUsed(string: "foo")
+            error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
         )
     }
     
@@ -148,7 +148,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         resultOfUniqueMaking.blockingAssertThrows(
-            error: PutUniqueIdError.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))
+            error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
         )
     }
     
@@ -165,7 +165,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         resultOfUniqueMaking.blockingAssertThrows(
-            error: PutUniqueIdError.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))
+            error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
         )
     }
     
@@ -182,7 +182,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         // THEN: an error `nonMatchingAddress` is thrown
         resultOfUniqueMaking.blockingAssertThrows(
-            error: PutUniqueIdError.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)
+            error: PutUniqueIdError.uniqueError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob))
         )
     }
 }

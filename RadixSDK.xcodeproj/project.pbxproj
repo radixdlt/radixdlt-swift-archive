@@ -13,6 +13,19 @@
 		E6025402225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6025401225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift */; };
 		E6025404225CC413004B2F94 /* UniverseConfig+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6025403225CC413004B2F94 /* UniverseConfig+Presets.swift */; };
 		E6025406225CCCC6004B2F94 /* SpunParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6025405225CCCC6004B2F94 /* SpunParticle.swift */; };
+		E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */; };
+		E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */; };
+		E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */; };
+		E606F13823016A83004D4D3D /* UniquelyIdentifiedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F13723016A83004D4D3D /* UniquelyIdentifiedAction.swift */; };
+		E606F13A23016A94004D4D3D /* UniquelyIdentifiedActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F13923016A94004D4D3D /* UniquelyIdentifiedActionToParticleGroupsMapper.swift */; };
+		E606F13D23016AD0004D4D3D /* UniqueActionErrorInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F13C23016AD0004D4D3D /* UniqueActionErrorInitializable.swift */; };
+		E606F13F23016AE1004D4D3D /* UniquelyIdentifiedActionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F13E23016AE1004D4D3D /* UniquelyIdentifiedActionError.swift */; };
+		E606F14123016F60004D4D3D /* DefaultBurnTokensActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F14023016F60004D4D3D /* DefaultBurnTokensActionToParticleGroupsMapper.swift */; };
+		E606F14323016F75004D4D3D /* ConsumeTokensAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F14223016F75004D4D3D /* ConsumeTokensAction.swift */; };
+		E606F14523018888004D4D3D /* ConsumeTokensContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F14423018888004D4D3D /* ConsumeTokensContext.swift */; };
+		E606F149230188AF004D4D3D /* ConsumeTokensActionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F148230188AF004D4D3D /* ConsumeTokensActionError.swift */; };
+		E606F14B230188BC004D4D3D /* ConsumeTokensActionErrorInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F14A230188BC004D4D3D /* ConsumeTokensActionErrorInitializable.swift */; };
+		E606F150230188F2004D4D3D /* ConsumeTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F14F230188F2004D4D3D /* ConsumeTokenActionToParticleGroupsMapper.swift */; };
 		E606FC1122C9F85B00A7E52E /* RxOptional.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC0E22C9F85B00A7E52E /* RxOptional.framework */; };
 		E606FC1222C9F85B00A7E52E /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC0F22C9F85B00A7E52E /* RxRelay.framework */; };
 		E606FC1322C9F85B00A7E52E /* RxSwiftExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC1022C9F85B00A7E52E /* RxSwiftExt.framework */; };
@@ -169,7 +182,6 @@
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
 		E67129A322C2289C004F6D0A /* Consumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A222C2289C004F6D0A /* Consumer.swift */; };
 		E67129A522C228AE004F6D0A /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A422C228AE004F6D0A /* Reducer.swift */; };
-		E67129A722C25877004F6D0A /* ShardedParticleStateIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A622C25877004F6D0A /* ShardedParticleStateIdentifiable.swift */; };
 		E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672562D228AB284004631F1 /* MockedNetworkDetailsRequester.swift */; };
 		E6725646228AD438004631F1 /* SpinAmountArthitmeticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6725645228AD438004631F1 /* SpinAmountArthitmeticTests.swift */; };
 		E6725648228AE98F004631F1 /* TransferTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6725647228AE98F004631F1 /* TransferTokensTests.swift */; };
@@ -605,6 +617,19 @@
 		E6025401225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UniverseConfig+UniverseType.swift"; sourceTree = "<group>"; };
 		E6025403225CC413004B2F94 /* UniverseConfig+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UniverseConfig+Presets.swift"; sourceTree = "<group>"; };
 		E6025405225CCCC6004B2F94 /* SpunParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpunParticle.swift; sourceTree = "<group>"; };
+		E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateIdentifiable.swift; sourceTree = "<group>"; };
+		E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateId.swift; sourceTree = "<group>"; };
+		E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShardedParticleStateId.swift; sourceTree = "<group>"; };
+		E606F13723016A83004D4D3D /* UniquelyIdentifiedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniquelyIdentifiedAction.swift; sourceTree = "<group>"; };
+		E606F13923016A94004D4D3D /* UniquelyIdentifiedActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniquelyIdentifiedActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
+		E606F13C23016AD0004D4D3D /* UniqueActionErrorInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueActionErrorInitializable.swift; sourceTree = "<group>"; };
+		E606F13E23016AE1004D4D3D /* UniquelyIdentifiedActionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniquelyIdentifiedActionError.swift; sourceTree = "<group>"; };
+		E606F14023016F60004D4D3D /* DefaultBurnTokensActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBurnTokensActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
+		E606F14223016F75004D4D3D /* ConsumeTokensAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumeTokensAction.swift; sourceTree = "<group>"; };
+		E606F14423018888004D4D3D /* ConsumeTokensContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumeTokensContext.swift; sourceTree = "<group>"; };
+		E606F148230188AF004D4D3D /* ConsumeTokensActionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumeTokensActionError.swift; sourceTree = "<group>"; };
+		E606F14A230188BC004D4D3D /* ConsumeTokensActionErrorInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumeTokensActionErrorInitializable.swift; sourceTree = "<group>"; };
+		E606F14F230188F2004D4D3D /* ConsumeTokenActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumeTokenActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E606FC0E22C9F85B00A7E52E /* RxOptional.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxOptional.framework; path = Carthage/Build/iOS/RxOptional.framework; sourceTree = "<group>"; };
 		E606FC0F22C9F85B00A7E52E /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = Carthage/Build/iOS/RxRelay.framework; sourceTree = "<group>"; };
 		E606FC1022C9F85B00A7E52E /* RxSwiftExt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwiftExt.framework; path = Carthage/Build/iOS/RxSwiftExt.framework; sourceTree = "<group>"; };
@@ -759,7 +784,6 @@
 		E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStatusChecking.swift; sourceTree = "<group>"; };
 		E67129A222C2289C004F6D0A /* Consumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consumer.swift; sourceTree = "<group>"; };
 		E67129A422C228AE004F6D0A /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
-		E67129A622C25877004F6D0A /* ShardedParticleStateIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateIdentifiable.swift; sourceTree = "<group>"; };
 		E672562D228AB284004631F1 /* MockedNetworkDetailsRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedNetworkDetailsRequester.swift; sourceTree = "<group>"; };
 		E6725631228AB284004631F1 /* MockedHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedHTTPClient.swift; sourceTree = "<group>"; };
 		E6725645228AD438004631F1 /* SpinAmountArthitmeticTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinAmountArthitmeticTests.swift; sourceTree = "<group>"; };
@@ -1208,6 +1232,78 @@
 				E631DAC821F259BE0063F632 /* MnemonicBackedUpByUser.swift */,
 			);
 			path = RadixIdentity;
+			sourceTree = "<group>";
+		};
+		E606F130230151CB004D4D3D /* ShardedParticleStateId */ = {
+			isa = PBXGroup;
+			children = (
+				E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */,
+				E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */,
+				E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */,
+			);
+			path = ShardedParticleStateId;
+			sourceTree = "<group>";
+		};
+		E606F13B23016AC3004D4D3D /* UniqueActionError */ = {
+			isa = PBXGroup;
+			children = (
+				E606F13C23016AD0004D4D3D /* UniqueActionErrorInitializable.swift */,
+				E606F13E23016AE1004D4D3D /* UniquelyIdentifiedActionError.swift */,
+			);
+			path = UniqueActionError;
+			sourceTree = "<group>";
+		};
+		E606F14623018895004D4D3D /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				E606F147230188A3004D4D3D /* ConsumeTokensActionError */,
+				E606F13B23016AC3004D4D3D /* UniqueActionError */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		E606F147230188A3004D4D3D /* ConsumeTokensActionError */ = {
+			isa = PBXGroup;
+			children = (
+				E606F148230188AF004D4D3D /* ConsumeTokensActionError.swift */,
+				E606F14A230188BC004D4D3D /* ConsumeTokensActionErrorInitializable.swift */,
+			);
+			path = ConsumeTokensActionError;
+			sourceTree = "<group>";
+		};
+		E606F14C230188CC004D4D3D /* Mappers */ = {
+			isa = PBXGroup;
+			children = (
+				E606F14E230188D9004D4D3D /* Specific */,
+				E606F14D230188D3004D4D3D /* Common */,
+			);
+			path = Mappers;
+			sourceTree = "<group>";
+		};
+		E606F14D230188D3004D4D3D /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				E626E20322B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift */,
+				E626E21122B4F7EF0046D2AC /* StatefulActionToParticleGroupsMapper.swift */,
+				E606F13923016A94004D4D3D /* UniquelyIdentifiedActionToParticleGroupsMapper.swift */,
+				E606F14F230188F2004D4D3D /* ConsumeTokenActionToParticleGroupsMapper.swift */,
+				E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */,
+				E626E20122B41B750046D2AC /* AnyStatelessActionToParticleGroupsMapper.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		E606F14E230188D9004D4D3D /* Specific */ = {
+			isa = PBXGroup;
+			children = (
+				E68BD81B229ECCB200FCE4D3 /* SendMessage */,
+				E6FCB65C22F0C78500ECC01B /* MintTokens */,
+				E6F5484022771E6200EE6311 /* CreateToken */,
+				E6F5484322771E8800EE6311 /* TransferToken */,
+				E6FCB65F22F0C7B200ECC01B /* PutUnique */,
+				E6FCB66322F0C80F00ECC01B /* BurnTokens */,
+			);
+			path = Specific;
 			sourceTree = "<group>";
 		};
 		E606FC1922CA07D600A7E52E /* ObservableConvertibleType */ = {
@@ -2575,6 +2671,8 @@
 			children = (
 				E699189C22F0509A00AF130F /* Executed */,
 				E699189B22F0508A00AF130F /* Pending */,
+				E606F13723016A83004D4D3D /* UniquelyIdentifiedAction.swift */,
+				E606F14223016F75004D4D3D /* ConsumeTokensAction.swift */,
 			);
 			path = UserActions;
 			sourceTree = "<group>";
@@ -2582,18 +2680,11 @@
 		E6D156822270586700AC3438 /* ActionToParticleGroupsMapper */ = {
 			isa = PBXGroup;
 			children = (
+				E606F14C230188CC004D4D3D /* Mappers */,
 				E69D851422F45CF50039A207 /* FungibleParticleTransitioner */,
-				E626E20122B41B750046D2AC /* AnyStatelessActionToParticleGroupsMapper.swift */,
-				E626E20322B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift */,
-				E6FCB66322F0C80F00ECC01B /* BurnTokens */,
-				E6FCB65F22F0C7B200ECC01B /* PutUnique */,
-				E6FCB65C22F0C78500ECC01B /* MintTokens */,
-				E68BD81B229ECCB200FCE4D3 /* SendMessage */,
-				E6F5484322771E8800EE6311 /* TransferToken */,
-				E6F5484022771E6200EE6311 /* CreateToken */,
-				E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */,
-				E626E21122B4F7EF0046D2AC /* StatefulActionToParticleGroupsMapper.swift */,
-				E67129A622C25877004F6D0A /* ShardedParticleStateIdentifiable.swift */,
+				E606F14423018888004D4D3D /* ConsumeTokensContext.swift */,
+				E606F14623018895004D4D3D /* Errors */,
+				E606F130230151CB004D4D3D /* ShardedParticleStateId */,
 			);
 			path = ActionToParticleGroupsMapper;
 			sourceTree = "<group>";
@@ -3715,6 +3806,7 @@
 			isa = PBXGroup;
 			children = (
 				E626E20B22B41CD50046D2AC /* BurnTokensActionToParticleGroupsMapper.swift */,
+				E606F14023016F60004D4D3D /* DefaultBurnTokensActionToParticleGroupsMapper.swift */,
 			);
 			path = BurnTokens;
 			sourceTree = "<group>";
@@ -3915,6 +4007,7 @@
 				E6725658228C107B004631F1 /* DecodingError+Equatable.swift in Sources */,
 				E68BD821229ED06C00FCE4D3 /* EncryptedPrivateKey.swift in Sources */,
 				E6E279372271CD1C0067D46E /* Mnemonic+Generator.swift in Sources */,
+				E606F13D23016AD0004D4D3D /* UniqueActionErrorInitializable.swift in Sources */,
 				E6E279632271CD1C0067D46E /* AnyEncodableKeyValueList.swift in Sources */,
 				E6E2794F2271CD1C0067D46E /* PrefixedJsonEncodable.swift in Sources */,
 				E6E279532271CD1C0067D46E /* EncodableKeyValueListConvertible.swift in Sources */,
@@ -3945,6 +4038,7 @@
 				E6340C8D22FC2D090044BA97 /* TransactionMaker.swift in Sources */,
 				E6A508B7224E713F00128123 /* Accountable.swift in Sources */,
 				E6296C8B2292EF6000753FD5 /* AnyDecodable.swift in Sources */,
+				E606F13A23016A94004D4D3D /* UniquelyIdentifiedActionToParticleGroupsMapper.swift in Sources */,
 				E6E2795F2271CD1C0067D46E /* CBORConvertible.swift in Sources */,
 				E6A508AF224E713F00128123 /* MessageParticle.swift in Sources */,
 				E6CB4B3B22C633BB00B7382A /* AtomStatusObserving.swift in Sources */,
@@ -3957,6 +4051,8 @@
 				E696AAD8226DEB8A00D19ED6 /* Magic.swift in Sources */,
 				E68BD811229EAC1200FCE4D3 /* ShardSpace.swift in Sources */,
 				E6E279462271CD1C0067D46E /* RadixModelType.swift in Sources */,
+				E606F150230188F2004D4D3D /* ConsumeTokenActionToParticleGroupsMapper.swift in Sources */,
+				E606F14323016F75004D4D3D /* ConsumeTokensAction.swift in Sources */,
 				E6E2797B2271CD1C0067D46E /* TokenPermission.swift in Sources */,
 				E64641ED22F3482700E05034 /* FixedSupplyTokenDefinitionParticle+Decodable.swift in Sources */,
 				E6E279612271CD1C0067D46E /* DSONEncodable.swift in Sources */,
@@ -3999,6 +4095,7 @@
 				E689DBB3225F903F00340CF3 /* DefaultRESTClient.swift in Sources */,
 				E6A507E1224E17F200128123 /* AtomEvent.swift in Sources */,
 				E6E2798F2271CD1C0067D46E /* StringRepresentable.swift in Sources */,
+				E606F149230188AF004D4D3D /* ConsumeTokensActionError.swift in Sources */,
 				E6474AEF22674B17009C4FDC /* AtomWithFee.swift in Sources */,
 				E6F548562277458000EE6311 /* Amount+AmountAndSign.swift in Sources */,
 				E626E1F222B3FFF60046D2AC /* BaseAtomToExecutedActionsMapper.swift in Sources */,
@@ -4009,7 +4106,6 @@
 				E6474ACC22661DDE009C4FDC /* HTTPClientOwner.swift in Sources */,
 				E6CB4B3222C5FAFD00B7382A /* Completable_Extensions.swift in Sources */,
 				E6E279832271CD1C0067D46E /* MetaDataConvertible.swift in Sources */,
-				E67129A722C25877004F6D0A /* ShardedParticleStateIdentifiable.swift in Sources */,
 				E6474AEA22664056009C4FDC /* FullDuplexCommunicationChannel+RPC.swift in Sources */,
 				E6E279822271CD1C0067D46E /* MetaData.swift in Sources */,
 				E654778B22BFB3C500D968BD /* UniverseBootstrap.swift in Sources */,
@@ -4018,6 +4114,7 @@
 				E6CABA1322D4C39000B6D00C /* AtomSubscriptionCancelling.swift in Sources */,
 				E6FB03E221ECF186002CE331 /* Macros.swift in Sources */,
 				E615C51722B791E800604E90 /* TokenBalanceReferencesReducer.swift in Sources */,
+				E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */,
 				E606FC4922CB5E0C00A7E52E /* RadixJsonRpcMethodEpic.swift in Sources */,
 				E6E279942271CD1C0067D46E /* RequiringThatLengthIsMultipleOfN.swift in Sources */,
 				E6ABA77322C3596D00536DC7 /* FetchAtomsAction.swift in Sources */,
@@ -4030,6 +4127,7 @@
 				E6340C8922FC2CE00044BA97 /* ParticlesToStateReducer.swift in Sources */,
 				E696AAD0226DE6F700D19ED6 /* TokenTransferring.swift in Sources */,
 				E626E1F622B400240046D2AC /* MintTokensActionToParticleGroupsMapper.swift in Sources */,
+				E606F14523018888004D4D3D /* ConsumeTokensContext.swift in Sources */,
 				E6E2794C2271CD1C0067D46E /* PrefixedJsonDecodable.swift in Sources */,
 				E606FC3622CB467600A7E52E /* GetUniverseConfigActionRequest.swift in Sources */,
 				E6CB4B2D22C5100800B7382A /* RadixNetworkEpic.swift in Sources */,
@@ -4039,6 +4137,7 @@
 				E612720A22F4298500DCF19C /* PositiveSupply.swift in Sources */,
 				E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */,
 				E6ED1A4021F8836300654105 /* UniverseConfig.swift in Sources */,
+				E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */,
 				E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */,
 				E689DBA8225F887300340CF3 /* AtomsByAddressSubscribing.swift in Sources */,
 				E6340C8722FB1BFE0044BA97 /* AtomToTransactionMapper.swift in Sources */,
@@ -4129,6 +4228,7 @@
 				E6E279962271CD1C0067D46E /* LowerBound.swift in Sources */,
 				E6E279752271CD1C0067D46E /* PositiveAmount.swift in Sources */,
 				E6D156842270589200AC3438 /* DefaultCreateTokenActionToParticleGroupsMapper.swift in Sources */,
+				E606F14B230188BC004D4D3D /* ConsumeTokensActionErrorInitializable.swift in Sources */,
 				E64641EF22F3482700E05034 /* FixedSupplyTokenDefinitionParticle.swift in Sources */,
 				E606FC3422CB466C00A7E52E /* JsonRpcMethodNodeAction.swift in Sources */,
 				E6DC275F22C3FDFB0049BB3C /* TokenDefinitionsState.swift in Sources */,
@@ -4238,6 +4338,7 @@
 				E6474AD222661F03009C4FDC /* FullDuplexCommunicating.swift in Sources */,
 				E6F548502277454D00EE6311 /* AmountSign.swift in Sources */,
 				E6F5483D22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift in Sources */,
+				E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */,
 				E6474ADF22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift in Sources */,
 				E626E21222B4F7F00046D2AC /* StatefulActionToParticleGroupsMapper.swift in Sources */,
 				E6E2795C2271CD1C0067D46E /* RadixCodable.swift in Sources */,
@@ -4269,7 +4370,9 @@
 				E615C51D22B7B20B00604E90 /* MessageEncryptionMode.swift in Sources */,
 				E6FF7E48229C1D1C00BC22EA /* Shards.swift in Sources */,
 				E69E753222A1B9CD00AC631B /* MessageSending.swift in Sources */,
+				E606F14123016F60004D4D3D /* DefaultBurnTokensActionToParticleGroupsMapper.swift in Sources */,
 				E6A508A3224E713F00128123 /* TransferrableTokensParticle.swift in Sources */,
+				E606F13F23016AE1004D4D3D /* UniquelyIdentifiedActionError.swift in Sources */,
 				E6E2798D2271CD1C0067D46E /* DataConvertible+StringConversion.swift in Sources */,
 				E63B207222FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift in Sources */,
 				E6474AF22267931A009C4FDC /* ErrorMappedFromRPCError.swift in Sources */,
@@ -4296,6 +4399,7 @@
 				E6F5483F22771E5200EE6311 /* UserAction.swift in Sources */,
 				E69918A022F0982400AF130F /* Collection_Extensions.swift in Sources */,
 				E6E279332271CD1C0067D46E /* Mnemonic+Word.swift in Sources */,
+				E606F13823016A83004D4D3D /* UniquelyIdentifiedAction.swift in Sources */,
 				E672564B228AEBE0004631F1 /* TokenCreating.swift in Sources */,
 				E6474AC8226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift in Sources */,
 				E6E2798E2271CD1C0067D46E /* DataInitializable.swift in Sources */,

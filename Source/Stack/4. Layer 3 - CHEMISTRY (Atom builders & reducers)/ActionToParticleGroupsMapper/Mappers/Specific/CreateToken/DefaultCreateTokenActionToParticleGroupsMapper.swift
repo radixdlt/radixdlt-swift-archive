@@ -30,7 +30,7 @@ public extension CreateTokenActionToParticleGroupsMapper {
     
     func particleGroups(for action: CreateTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
         
-        try validateInput(tokenCreation: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+        try validateInputMappingUniqueActionError(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
         
         switch action.tokenSupplyType {
         case .mutable: return try mutableSupplyTokenParticleGroups(for: action)
@@ -40,28 +40,6 @@ public extension CreateTokenActionToParticleGroupsMapper {
 }
 
 private extension CreateTokenActionToParticleGroupsMapper {
-    
-    func validateInput(tokenCreation: CreateTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
-        guard tokenCreation.creator == addressOfActiveAccount else {
-            throw Error.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: tokenCreation.creator)
-        }
-
-        let rri = tokenCreation.identifier
-        
-        if upParticles.containsAnyUniqueParticle(matchingIdentifier: rri) {
-            throw Error.rriAlreadyUsedByUniqueId(identifier: rri)
-        }
-        
-        if upParticles.containsAnyMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
-            throw Error.rriAlreadyUsedByMutableSupplyToken(identifier: rri)
-        }
-        
-        if upParticles.containsAnyFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
-           throw Error.rriAlreadyUsedByFixedSupplyToken(identifier: rri)
-        }
-        
-        // All is well
-    }
     
     func mutableSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
         

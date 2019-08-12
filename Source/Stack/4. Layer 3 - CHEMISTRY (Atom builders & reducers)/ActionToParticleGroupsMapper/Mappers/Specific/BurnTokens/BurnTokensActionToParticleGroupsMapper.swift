@@ -24,36 +24,9 @@
 
 import Foundation
 
-public protocol BurnTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper, Throwing where Action == BurnTokensAction, Error == BurnError {}
+public protocol BurnTokensActionToParticleGroupsMapper: ConsumeTokenActionToParticleGroupsMapper, Throwing where Action == BurnTokensAction, Error == BurnError {}
 
-public extension BurnTokensActionToParticleGroupsMapper {
-    func requiredState(for burnTokensAction: Action) -> [AnyShardedParticleStateId] {
-        let tokenDefinitionAddress = burnTokensAction.tokenDefinitionReference.address
-        return [
-            AnyShardedParticleStateId(
-                ShardedParticleStateId(typeOfParticle: TransferrableTokensParticle.self, address: burnTokensAction.burner)
-            ),
-            
-            // To verify that we have a mutable token at the given address
-            AnyShardedParticleStateId(
-                ShardedParticleStateId(typeOfParticle: MutableSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress)
-            ),
-            
-            // Include `FixedSupplyTokenDefinitionParticle` to see if the RRI of the token to Burn exists, but has FixedSupply.
-            AnyShardedParticleStateId(
-                ShardedParticleStateId(typeOfParticle: FixedSupplyTokenDefinitionParticle.self, address: tokenDefinitionAddress)
-            )
-        ]
-    }
-}
-
-public final class DefaultBurnTokensActionToParticleGroupsMapper: BurnTokensActionToParticleGroupsMapper {
-    public init() {}
-}
-
-public enum BurnError: Swift.Error, Equatable {
-    
-    case unknownToken(identifier: ResourceIdentifier)
+public enum BurnError: ConsumeTokensActionErrorInitializable {
     
     case insufficientTokens(
         token: ResourceIdentifier,
@@ -72,17 +45,19 @@ public enum BurnError: Swift.Error, Equatable {
         identifier: ResourceIdentifier
     )
     
-    case amountNotMultipleOfGranularity(
-        token: ResourceIdentifier,
-        triedToBurnAmount: PositiveAmount,
-        whichIsNotMultipleOfGranularity: Granularity
-    )
+    case consumeError(ConsumeTokensActionError)
+}
+
+public extension BurnError {
+    static func errorFrom(consumeTokensActionError: ConsumeTokensActionError) -> BurnError {
+        return .consumeError(consumeTokensActionError)
+    }
 }
 
 public extension DefaultBurnTokensActionToParticleGroupsMapper {
    
     func particleGroups(for action: BurnTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
-        try validateInput(burnAction: action, upParticles: upParticles)
+        try validateInputMappingConsumeTokensActionError(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
         
         let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, UnallocatedTokensParticle>(
             transitioner: UnallocatedTokensParticle.init(transferrableTokensParticle:amount:),
@@ -98,41 +73,27 @@ public extension DefaultBurnTokensActionToParticleGroupsMapper {
             ParticleGroup(spunParticles: spunParticles)
         ]
     }
-}
-
-private extension DefaultBurnTokensActionToParticleGroupsMapper {
     
-    func validateInput(burnAction: BurnTokensAction, upParticles: [AnyUpParticle]) throws {
-        let rri = burnAction.tokenDefinitionReference
-        
-        guard let mutableSupplyTokensParticle = upParticles.firstMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) else {
-            if upParticles.containsAnyFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
-                throw Error.tokenHasFixedSupplyThusItCannotBeBurned(identifier: rri)
-            } else {
-                throw Error.unknownToken(identifier: rri)
+    func validateConsumeTokenAction(
+        _ action: Action,
+        consumeTokensContext: ConsumeTokensContext
+    ) throws {
+    
+        let rri = action.tokenDefinitionReference
+        switch consumeTokensContext {
+        case .fixedSupplyTokenDefinitionParticle:
+            throw Error.tokenHasFixedSupplyThusItCannotBeBurned(identifier: rri)
+        case .mutableSupplyTokenDefinitionParticle(let mutableSupplyTokenDefinitionsParticle):
+            guard mutableSupplyTokenDefinitionsParticle.canBeBurned(by: action.burner) else {
+                throw Error.lackingPermissions(
+                    of: action.burner,
+                    toBurnToken: rri,
+                    whichRequiresPermission: mutableSupplyTokenDefinitionsParticle.permissions.mintPermission,
+                    creatorOfToken: mutableSupplyTokenDefinitionsParticle.address
+                )
             }
+            
         }
-        
-        guard mutableSupplyTokensParticle.canBeBurned(by: burnAction.burner) else {
-            throw Error.lackingPermissions(
-                of: burnAction.burner,
-                toBurnToken: rri,
-                whichRequiresPermission: mutableSupplyTokensParticle.permissions.mintPermission,
-                creatorOfToken: mutableSupplyTokensParticle.address
-            )
-        }
-        
-        let burnAmount = burnAction.amount
-        let granularity = mutableSupplyTokensParticle.granularity
-        guard burnAmount.isExactMultipleOfGranularity(granularity) else {
-            throw Error.amountNotMultipleOfGranularity(
-                token: rri,
-                triedToBurnAmount: burnAmount,
-                whichIsNotMultipleOfGranularity: granularity
-            )
-        }
-        
-        // All is well.
     }
 }
 
