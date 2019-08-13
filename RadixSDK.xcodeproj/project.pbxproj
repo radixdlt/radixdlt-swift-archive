@@ -17,6 +17,7 @@
 		E60553FE2301A48500528510 /* SpunParticles+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60553FD2301A48500528510 /* SpunParticles+Filtering.swift */; };
 		E60554012301BB2B00528510 /* AtomToBurnTokenMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554002301BB2B00528510 /* AtomToBurnTokenMapper.swift */; };
 		E60554042302A9B000528510 /* AtomToTransferMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554032302A9B000528510 /* AtomToTransferMapperTests.swift */; };
+		E60554072302E22400528510 /* AtomToMintTokenMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554062302E22400528510 /* AtomToMintTokenMapper.swift */; };
 		E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */; };
 		E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */; };
 		E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */; };
@@ -624,6 +625,7 @@
 		E60553FD2301A48500528510 /* SpunParticles+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpunParticles+Filtering.swift"; sourceTree = "<group>"; };
 		E60554002301BB2B00528510 /* AtomToBurnTokenMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToBurnTokenMapper.swift; sourceTree = "<group>"; };
 		E60554032302A9B000528510 /* AtomToTransferMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToTransferMapperTests.swift; sourceTree = "<group>"; };
+		E60554062302E22400528510 /* AtomToMintTokenMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToMintTokenMapper.swift; sourceTree = "<group>"; };
 		E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateIdentifiable.swift; sourceTree = "<group>"; };
 		E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateId.swift; sourceTree = "<group>"; };
 		E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShardedParticleStateId.swift; sourceTree = "<group>"; };
@@ -1254,6 +1256,14 @@
 				E60554032302A9B000528510 /* AtomToTransferMapperTests.swift */,
 			);
 			path = AtomToExecutedActionMapper;
+			sourceTree = "<group>";
+		};
+		E60554052302E1E600528510 /* MintTokens */ = {
+			isa = PBXGroup;
+			children = (
+				E60554062302E22400528510 /* AtomToMintTokenMapper.swift */,
+			);
+			path = MintTokens;
 			sourceTree = "<group>";
 		};
 		E606F130230151CB004D4D3D /* ShardedParticleStateId */ = {
@@ -2558,6 +2568,7 @@
 		E6CB4B2322C4E70C00B7382A /* AtomToExecutedActionMapper */ = {
 			isa = PBXGroup;
 			children = (
+				E60554052302E1E600528510 /* MintTokens */,
 				E60553FF2301BB1F00528510 /* BurnTokens */,
 				E63B207022FD7AA500D6FF79 /* PutUnique */,
 				E6CB4B2622C4E83200B7382A /* TypeErasure */,
@@ -4372,6 +4383,7 @@
 				E606FC2422CB45FD00A7E52E /* AddNodeAction.swift in Sources */,
 				E606FC2222CA578000A7E52E /* DiscoverNodesEpic.swift in Sources */,
 				E6A507E4224E209200128123 /* RPCResponse.swift in Sources */,
+				E60554072302E22400528510 /* AtomToMintTokenMapper.swift in Sources */,
 				E6E279422271CD1C0067D46E /* Hashing.swift in Sources */,
 				E6CB4B4322C6340300B7382A /* AtomStatusEvent.swift in Sources */,
 				E69E753C22A9781700AC631B /* DecimalString.swift in Sources */,

@@ -24,6 +24,7 @@
 
 import XCTest
 @testable import RadixSDK
+import RxSwift
 
 class TransactionTests: LocalhostNodeTest {
     
@@ -79,6 +80,7 @@ class TransactionTests: LocalhostNodeTest {
         XCTAssertEqual(burnActionOne.tokenDefinitionReference, fooToken)
     }
     
+    private let bag = DisposeBag()
     func testTransactionWithMintPutUnique() {
         let (tokenCreation, fooToken) = try! application.createToken(
             name: "FooToken",
@@ -87,20 +89,24 @@ class TransactionTests: LocalhostNodeTest {
             supply: .mutable(initial: 35)
         )
         
+        application.observeTransactions(at: alice).subscribe(onNext: {
+            print("✅ tx: \($0)")
+        }).disposed(by: bag)
+        
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-//        let mintAndUniqueTx = Transaction {[
-//            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
-//            PutUniqueIdAction(uniqueMaker: alice, string: "mint")
-//        ]}
+        let mintAndUniqueTx = Transaction {[
+            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
+            PutUniqueIdAction(uniqueMaker: alice, string: "mint")
+        ]}
         
-//        XCTAssertTrue(
-//            application.send(transaction: mintAndUniqueTx)
-//                // THEN: the Transaction is successfully sent
-//                .blockingWasSuccessfull(timeout: .enoughForPOW)
-//        )
+        XCTAssertTrue(
+            application.send(transaction: mintAndUniqueTx)
+                // THEN: the Transaction is successfully sent
+                .blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
         
         let burnAndUniqueTx = Transaction {[
             BurnTokensAction.init(tokenDefinitionReference: fooToken, amount: 5, burner: alice),
@@ -122,10 +128,7 @@ class TransactionTests: LocalhostNodeTest {
 //                // THEN: the Transaction is successfully sent
 //                .blockingWasSuccessfull(timeout: .enoughForPOW)
 //        )
-        
-        guard let executedTransaction = application.observeTransactions(at: alice).blockingTakeFirst() else { return }
-        XCTAssertEqual(executedTransaction.actions.count, 2)
-        print("⚛️ executedTransaction: \(executedTransaction)")
+  
         
 //        guard let putUniqueTransactions = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingArrayTakeFirst(2, timeout: 1) else { return }
 //        XCTAssertEqual(putUniqueTransactions.count, 2)
