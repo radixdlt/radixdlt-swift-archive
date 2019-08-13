@@ -25,7 +25,7 @@
 import Foundation
 import RxSwift
 
-public protocol AtomToTokenTransferMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == TransferredTokens {}
+public protocol AtomToTokenTransferMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == TransferTokenAction {}
 
 public final class DefaultAtomToTokenTransferMapper: AtomToTokenTransferMapper {
     public init() {}
@@ -33,10 +33,10 @@ public final class DefaultAtomToTokenTransferMapper: AtomToTokenTransferMapper {
 
 public extension DefaultAtomToTokenTransferMapper {
     
-    typealias SpecificExecutedAction = TransferredTokens
+    typealias SpecificExecutedAction = TransferTokenAction
     
-    func mapAtomToActions(_ atom: Atom) -> Observable<[TransferredTokens]> {
-        var transferredTokens = [TransferredTokens]()
+    func mapAtomToActions(_ atom: Atom) -> Observable<[TransferTokenAction]> {
+        var transferredTokens = [TransferTokenAction]()
         
         for particleGroup in atom {
             guard let transfer = transferOfTokens(particleGroup: particleGroup, atomTimestamp: atom.timestamp) else { continue }
@@ -47,7 +47,7 @@ public extension DefaultAtomToTokenTransferMapper {
     }
 }
 
-private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date) -> TransferredTokens? {
+private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date) -> TransferTokenAction? {
     guard
         let someTransferrableTokensParticleDown = particleGroup.firstTransferrableTokensParticle(spin: .down),
         case let rri = someTransferrableTokensParticleDown.tokenDefinitionReference,
@@ -69,8 +69,14 @@ private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date)
     
     let signedAmount = SignedAmount.fromSpunTransferrableTokens(particles: invertedSpunTransferrableTokensParticles)
     guard let positiveAmount = try? PositiveAmount(signedAmount: signedAmount) else { return nil }
-    
-    return TransferredTokens(from: sender, to: recipient, amount: positiveAmount, tokenResourceIdentifier: rri, date: atomTimestamp, attachment: particleGroup.attatchmentData)
+
+    return TransferTokenAction(
+        from: sender,
+        to: recipient,
+        amount: positiveAmount,
+        tokenResourceIdentifier: rri,
+        attachment: particleGroup.attatchmentData
+    )
 }
 
 private extension ParticleGroup {

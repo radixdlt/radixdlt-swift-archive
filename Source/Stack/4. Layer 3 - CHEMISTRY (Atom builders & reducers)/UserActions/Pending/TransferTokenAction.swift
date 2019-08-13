@@ -25,7 +25,7 @@
 import Foundation
 
 /// A transfer of a non-zero amount of a certain token between two Radix accounts
-public struct TransferTokenAction: ConsumeTokensAction, TokenTransfer {
+public struct TransferTokenAction: ConsumeTokensAction {
     
     public let sender: Address
     public let recipient: Address
@@ -59,5 +59,13 @@ public extension TransferTokenAction {
     var metaDataFromAttachmentOrEmpty: MetaData {
         guard let attachment = attachment else { return [:] }
         return [.attachment: Base64String(data: attachment).stringValue]
+    }
+}
+
+// MARK: Attachment as Message
+public extension TransferTokenAction {
+    func attachedMessage(decodeAs encoding: String.Encoding = .default) -> String? {
+        guard let attachmentData = attachment else { return nil }
+        return String(data: attachmentData, encoding: encoding)
     }
 }

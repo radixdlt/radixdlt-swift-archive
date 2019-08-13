@@ -236,7 +236,6 @@
 		E696AAD0226DE6F700D19ED6 /* TokenTransferring.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AACF226DE6F700D19ED6 /* TokenTransferring.swift */; };
 		E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */; };
 		E696AAD8226DEB8A00D19ED6 /* Magic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD7226DEB8A00D19ED6 /* Magic.swift */; };
-		E699189E22F050AB00AF130F /* TransferredTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = E699189D22F050AB00AF130F /* TransferredTokens.swift */; };
 		E69918A022F0982400AF130F /* Collection_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E699189F22F0982400AF130F /* Collection_Extensions.swift */; };
 		E69D851622F45D040039A207 /* FungibleParticleTransitioner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D851522F45D040039A207 /* FungibleParticleTransitioner.swift */; };
 		E69D851822F4818F0039A207 /* MintTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D851722F4818F0039A207 /* MintTokensTests.swift */; };
@@ -836,7 +835,6 @@
 		E696AACF226DE6F700D19ED6 /* TokenTransferring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenTransferring.swift; sourceTree = "<group>"; };
 		E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountBalancing.swift; sourceTree = "<group>"; };
 		E696AAD7226DEB8A00D19ED6 /* Magic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Magic.swift; sourceTree = "<group>"; };
-		E699189D22F050AB00AF130F /* TransferredTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferredTokens.swift; sourceTree = "<group>"; };
 		E699189F22F0982400AF130F /* Collection_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection_Extensions.swift; sourceTree = "<group>"; };
 		E69D851522F45D040039A207 /* FungibleParticleTransitioner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FungibleParticleTransitioner.swift; sourceTree = "<group>"; };
 		E69D851722F4818F0039A207 /* MintTokensTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MintTokensTests.swift; sourceTree = "<group>"; };
@@ -2259,7 +2257,6 @@
 		E699189C22F0509A00AF130F /* Executed */ = {
 			isa = PBXGroup;
 			children = (
-				E699189D22F050AB00AF130F /* TransferredTokens.swift */,
 				E69E752822A1B39E00AC631B /* SentMessage.swift */,
 			);
 			path = Executed;
@@ -4180,7 +4177,6 @@
 				E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */,
 				E6340C9222FC4E140044BA97 /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6E279502271CD1C0067D46E /* JSONPrefix.swift in Sources */,
-				E699189E22F050AB00AF130F /* TransferredTokens.swift in Sources */,
 				E626E20222B41B750046D2AC /* AnyStatelessActionToParticleGroupsMapper.swift in Sources */,
 				E6FCB66822F2EDD500ECC01B /* AddressOfAccountDeriving.swift in Sources */,
 				E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */,

@@ -88,7 +88,6 @@ class TransferTokensTests: LocalhostNodeTest {
         XCTAssertEqual(myTransfer.sender, alice)
         XCTAssertEqual(myTransfer.recipient, bob)
         XCTAssertEqual(myTransfer.amount, 10)
-        XCTAssertGreaterThanOrEqual(myTransfer.date.timeIntervalSinceNow, -30) // max 30 seconds ago
         guard let decodedAttachedMessage = myTransfer.attachedMessage() else { return XCTFail("Expected attachment") }
         XCTAssertEqual(decodedAttachedMessage, attachedMessage)
         

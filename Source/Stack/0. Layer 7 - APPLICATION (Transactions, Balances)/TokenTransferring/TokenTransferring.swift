@@ -29,7 +29,7 @@ import RxSwift
 public protocol TokenTransferring: ActiveAccountOwner {
 
     func transfer(tokens: TransferTokenAction) -> ResultOfUserAction
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferredTokens>
+    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokenAction>
 }
 
 public extension TokenTransferring {
@@ -117,7 +117,7 @@ public extension TokenTransferring {
 }
 
 public extension TokenTransferring {
-    func observeMyTokenTransfers() -> Observable<TransferredTokens> {
+    func observeMyTokenTransfers() -> Observable<TransferTokenAction> {
         return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
     }
 }

@@ -167,8 +167,8 @@ public extension RadixApplicationClient {
         return execute(actions: transferTokensAction)
     }
     
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferredTokens> {
-        return observeActions(ofType: TransferredTokens.self, at: address)
+    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokenAction> {
+        return observeActions(ofType: TransferTokenAction.self, at: address)
     }
 }
 

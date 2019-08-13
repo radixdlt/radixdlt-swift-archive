@@ -39,9 +39,7 @@ public enum UserActionName: String, Hashable {
     case sendMessage
     
     // MARK: Executed Actions
-    
     case sentMessage
-    case transferredTokens
 }
 
 public protocol UserAction {
