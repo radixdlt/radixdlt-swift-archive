@@ -25,11 +25,11 @@
 import Foundation
 import RxSwift
 
-public protocol AtomToDecryptedMessageMapper: AtomToSpecificExecutedActionMapper, Throwing where
-    SpecificExecutedAction == SentMessage,
+public protocol AtomToSendMessageActionMapper: AtomToSpecificExecutedActionMapper, Throwing where
+    SpecificExecutedAction == SendMessageAction,
     Error == DecryptMessageFromAtomMapperError {}
 
-public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMapper {
+public final class DefaultAtomToSendMessageActionMapper: AtomToSendMessageActionMapper {
     private let activeAccount: Observable<Account>
     public init(
         activeAccount: Observable<Account>
@@ -38,8 +38,8 @@ public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMa
     }
 }
 
-public extension DefaultAtomToDecryptedMessageMapper {
-    func mapAtomToActions(_ atom: Atom) -> Observable<[SentMessage]> {
+public extension DefaultAtomToSendMessageActionMapper {
+    func mapAtomToActions(_ atom: Atom) -> Observable<[SendMessageAction]> {
         guard atom.containsAnyMessageParticle() else { return Observable.just([]) }
         
         return activeAccount.flatMap {
@@ -64,18 +64,15 @@ private struct EncryptedMessageContext {
         case wasNotEncrypted(Data)
     }
     
-    fileprivate let timestamp: Date
     fileprivate let sender: Address
     fileprivate let recipient: Address
     fileprivate let payload: Payload
     
     init(
-        timestamp: Date,
         sender: Address,
         recipient: Address,
         payload: Payload
-        ) {
-        self.timestamp = timestamp
+    ) {
         self.sender = sender
         self.recipient = recipient
         self.payload = payload
@@ -91,20 +88,20 @@ private extension EncryptedMessageContext {
             throw DecryptMessageFromAtomMapperError.zeroMessageParticlesFound(in: atom)
         }
         
-        try self.init(messageParticles: messageParticles, timestamp: atom.metaData.timestamp)
+        try self.init(messageParticles: messageParticles)
     }
     
-    init(messageParticles: [MessageParticle], timestamp: Date) throws {
+    init(messageParticles: [MessageParticle]) throws {
         guard let messageParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .message) else {
             throw DecryptMessageFromAtomMapperError.zeroMessageParticlesWithoutEncryptorMetaDataFound
         }
         
         let encryptorParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .encryptor)
         
-        try self.init(messageParticle: messageParticle, encryptorParticle: encryptorParticle, timestamp: timestamp)
+        try self.init(messageParticle: messageParticle, encryptorParticle: encryptorParticle)
     }
     
-    init(messageParticle: MessageParticle, encryptorParticle: MessageParticle?, timestamp: Date) throws {
+    init(messageParticle: MessageParticle, encryptorParticle: MessageParticle?) throws {
 
         try EncryptedMessageContext.ensureMetaDataApplication(value: .message, in: messageParticle)
         
@@ -127,7 +124,6 @@ private extension EncryptedMessageContext {
         }()
         
         self.init(
-            timestamp: timestamp,
             sender: messageParticle.from,
             recipient: messageParticle.to,
             payload: payload
@@ -149,16 +145,16 @@ private extension EncryptedMessageContext {
 // MARK: - Decrypt Message
 private extension EncryptedMessageContext {
     
-    func decryptMessageIfNeeded(key: Signing) throws -> SentMessage {
+    func decryptMessageIfNeeded(key: Signing) throws -> SendMessageAction {
         switch payload {
         case .wasNotEncrypted(let data):
-            return SentMessage(context: self, data: data, encryptionState: .wasNotEncrypted)
+            return SendMessageAction(context: self, data: data, decryptContext: .wasNotEncrypted)
         case .encrypted(let encryptedData, let encryptor):
             do {
                 let decryptedData = try encryptor.decrypt(data: encryptedData, using: key)
-                return SentMessage(context: self, data: decryptedData, encryptionState: .decrypted)
+                return SendMessageAction(context: self, data: decryptedData, decryptContext: .decrypted)
             } catch let decryptionError as ECIES.DecryptionError {
-                return SentMessage(context: self, data: encryptedData, encryptionState: .cannotDecrypt(error: decryptionError))
+                return SendMessageAction(context: self, data: encryptedData, decryptContext: .cannotDecrypt(error: decryptionError))
             } catch let unhandledError {
                 throw unhandledError
             }
@@ -167,18 +163,18 @@ private extension EncryptedMessageContext {
 }
 
 // MARK: SentMessage from Context
-private extension SentMessage {
+private extension SendMessageAction {
     init(
         context: EncryptedMessageContext,
         data: Data,
-        encryptionState: SentMessage.EncryptionState
-    ) {
+        decryptContext: EncryptionMode.DecryptedContext
+        ) {
+        
         self.init(
-            sender: context.sender,
-            recipient: context.recipient,
+            from: context.sender,
+            to: context.recipient,
             payload: data,
-            encryptionState: encryptionState,
-            timestamp: context.timestamp
+            decryption: decryptContext
         )
     }
 }

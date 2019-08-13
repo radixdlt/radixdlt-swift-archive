@@ -19,6 +19,12 @@
 		E60554042302A9B000528510 /* AtomToTransferMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554032302A9B000528510 /* AtomToTransferMapperTests.swift */; };
 		E60554072302E22400528510 /* AtomToMintTokenMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554062302E22400528510 /* AtomToMintTokenMapper.swift */; };
 		E605540A2302E57300528510 /* AtomToCreateTokenMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554092302E57300528510 /* AtomToCreateTokenMapper.swift */; };
+		E605540F2303153D00528510 /* SendMessageAction+Init+TextMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605540E2303153D00528510 /* SendMessageAction+Init+TextMessage.swift */; };
+		E60554112303157F00528510 /* SendMessageAction+EncryptionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554102303157F00528510 /* SendMessageAction+EncryptionMode.swift */; };
+		E60554142303160600528510 /* EncryptionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554132303160600528510 /* EncryptionMode.swift */; };
+		E60554172303164700528510 /* EncryptionMode+EncryptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554162303164700528510 /* EncryptionMode+EncryptContext.swift */; };
+		E60554192303167300528510 /* EncryptionMode+DecryptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554182303167300528510 /* EncryptionMode+DecryptContext.swift */; };
+		E605541C230316A900528510 /* EncryptionMode+EncryptContext+Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605541B230316A900528510 /* EncryptionMode+EncryptContext+Builder.swift */; };
 		E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */; };
 		E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */; };
 		E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */; };
@@ -67,7 +73,6 @@
 		E615C51722B791E800604E90 /* TokenBalanceReferencesReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51622B791E800604E90 /* TokenBalanceReferencesReducer.swift */; };
 		E615C51922B791FA00604E90 /* SomeParticleReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51822B791FA00604E90 /* SomeParticleReducer.swift */; };
 		E615C51B22B7AF0800604E90 /* Magical.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51A22B7AF0800604E90 /* Magical.swift */; };
-		E615C51D22B7B20B00604E90 /* MessageEncryptionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51C22B7B20B00604E90 /* MessageEncryptionMode.swift */; };
 		E6166BE022609C9F003A9442 /* DefaultRPCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6166BDF22609C9F003A9442 /* DefaultRPCClient.swift */; };
 		E6166BED2260CD5D003A9442 /* Port.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6166BEC2260CD5D003A9442 /* Port.swift */; };
 		E61EB99C22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB99B22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */; };
@@ -247,8 +252,7 @@
 		E69D852222F755D10039A207 /* TokenBurning.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69D852122F755D10039A207 /* TokenBurning.swift */; };
 		E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752222A18F5C00AC631B /* Encryptor.swift */; };
 		E69E752522A1901000AC631B /* MetaDataOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752422A1901000AC631B /* MetaDataOwner.swift */; };
-		E69E752722A1903600AC631B /* AtomToDecryptedMessageMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752622A1903600AC631B /* AtomToDecryptedMessageMapper.swift */; };
-		E69E752922A1B39E00AC631B /* SentMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752822A1B39E00AC631B /* SentMessage.swift */; };
+		E69E752722A1903600AC631B /* AtomToSendMessageActionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E752622A1903600AC631B /* AtomToSendMessageActionMapper.swift */; };
 		E69E753222A1B9CD00AC631B /* MessageSending.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753122A1B9CD00AC631B /* MessageSending.swift */; };
 		E69E753422A294D800AC631B /* SendMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753322A294D800AC631B /* SendMessageTests.swift */; };
 		E69E753C22A9781700AC631B /* DecimalString.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753B22A9781700AC631B /* DecimalString.swift */; };
@@ -628,6 +632,12 @@
 		E60554032302A9B000528510 /* AtomToTransferMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToTransferMapperTests.swift; sourceTree = "<group>"; };
 		E60554062302E22400528510 /* AtomToMintTokenMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToMintTokenMapper.swift; sourceTree = "<group>"; };
 		E60554092302E57300528510 /* AtomToCreateTokenMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToCreateTokenMapper.swift; sourceTree = "<group>"; };
+		E605540E2303153D00528510 /* SendMessageAction+Init+TextMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SendMessageAction+Init+TextMessage.swift"; sourceTree = "<group>"; };
+		E60554102303157F00528510 /* SendMessageAction+EncryptionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SendMessageAction+EncryptionMode.swift"; sourceTree = "<group>"; };
+		E60554132303160600528510 /* EncryptionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionMode.swift; sourceTree = "<group>"; };
+		E60554162303164700528510 /* EncryptionMode+EncryptContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EncryptionMode+EncryptContext.swift"; sourceTree = "<group>"; };
+		E60554182303167300528510 /* EncryptionMode+DecryptContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EncryptionMode+DecryptContext.swift"; sourceTree = "<group>"; };
+		E605541B230316A900528510 /* EncryptionMode+EncryptContext+Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EncryptionMode+EncryptContext+Builder.swift"; sourceTree = "<group>"; };
 		E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateIdentifiable.swift; sourceTree = "<group>"; };
 		E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateId.swift; sourceTree = "<group>"; };
 		E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShardedParticleStateId.swift; sourceTree = "<group>"; };
@@ -673,7 +683,6 @@
 		E615C51622B791E800604E90 /* TokenBalanceReferencesReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceReferencesReducer.swift; sourceTree = "<group>"; };
 		E615C51822B791FA00604E90 /* SomeParticleReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SomeParticleReducer.swift; sourceTree = "<group>"; };
 		E615C51A22B7AF0800604E90 /* Magical.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Magical.swift; sourceTree = "<group>"; };
-		E615C51C22B7B20B00604E90 /* MessageEncryptionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEncryptionMode.swift; sourceTree = "<group>"; };
 		E6166BDF22609C9F003A9442 /* DefaultRPCClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultRPCClient.swift; sourceTree = "<group>"; };
 		E6166BEC2260CD5D003A9442 /* Port.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Port.swift; sourceTree = "<group>"; };
 		E61EB99B22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceOfNativeTokenFromGenesisAtomsTests.swift; sourceTree = "<group>"; };
@@ -848,8 +857,7 @@
 		E69D852122F755D10039A207 /* TokenBurning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBurning.swift; sourceTree = "<group>"; };
 		E69E752222A18F5C00AC631B /* Encryptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryptor.swift; sourceTree = "<group>"; };
 		E69E752422A1901000AC631B /* MetaDataOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataOwner.swift; sourceTree = "<group>"; };
-		E69E752622A1903600AC631B /* AtomToDecryptedMessageMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToDecryptedMessageMapper.swift; sourceTree = "<group>"; };
-		E69E752822A1B39E00AC631B /* SentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentMessage.swift; sourceTree = "<group>"; };
+		E69E752622A1903600AC631B /* AtomToSendMessageActionMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToSendMessageActionMapper.swift; sourceTree = "<group>"; };
 		E69E753122A1B9CD00AC631B /* MessageSending.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSending.swift; sourceTree = "<group>"; };
 		E69E753322A294D800AC631B /* SendMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageTests.swift; sourceTree = "<group>"; };
 		E69E753B22A9781700AC631B /* DecimalString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalString.swift; sourceTree = "<group>"; };
@@ -1274,6 +1282,62 @@
 				E60554092302E57300528510 /* AtomToCreateTokenMapper.swift */,
 			);
 			path = CreateToken;
+			sourceTree = "<group>";
+		};
+		E605540B2303073F00528510 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				E606F13723016A83004D4D3D /* UniquelyIdentifiedAction.swift */,
+				E6F5483E22771E5200EE6311 /* UserAction.swift */,
+				E606F14223016F75004D4D3D /* ConsumeTokensAction.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		E605540C230314DC00528510 /* SendMessageAction */ = {
+			isa = PBXGroup;
+			children = (
+				E6055412230315F600528510 /* EncryptionMode */,
+				E605540D2303151C00528510 /* SendMessageAction+Init */,
+				E68BD819229ECBBB00FCE4D3 /* SendMessageAction.swift */,
+			);
+			path = SendMessageAction;
+			sourceTree = "<group>";
+		};
+		E605540D2303151C00528510 /* SendMessageAction+Init */ = {
+			isa = PBXGroup;
+			children = (
+				E605540E2303153D00528510 /* SendMessageAction+Init+TextMessage.swift */,
+			);
+			path = "SendMessageAction+Init";
+			sourceTree = "<group>";
+		};
+		E6055412230315F600528510 /* EncryptionMode */ = {
+			isa = PBXGroup;
+			children = (
+				E60554152303162B00528510 /* EncryptionMode */,
+				E60554102303157F00528510 /* SendMessageAction+EncryptionMode.swift */,
+			);
+			path = EncryptionMode;
+			sourceTree = "<group>";
+		};
+		E60554152303162B00528510 /* EncryptionMode */ = {
+			isa = PBXGroup;
+			children = (
+				E60554132303160600528510 /* EncryptionMode.swift */,
+				E60554182303167300528510 /* EncryptionMode+DecryptContext.swift */,
+				E605541A2303169000528510 /* EncryptionMode+EncryptContext */,
+			);
+			path = EncryptionMode;
+			sourceTree = "<group>";
+		};
+		E605541A2303169000528510 /* EncryptionMode+EncryptContext */ = {
+			isa = PBXGroup;
+			children = (
+				E60554162303164700528510 /* EncryptionMode+EncryptContext.swift */,
+				E605541B230316A900528510 /* EncryptionMode+EncryptContext+Builder.swift */,
+			);
+			path = "EncryptionMode+EncryptContext";
 			sourceTree = "<group>";
 		};
 		E606F130230151CB004D4D3D /* ShardedParticleStateId */ = {
@@ -2259,27 +2323,17 @@
 			path = TokenBalanceState;
 			sourceTree = "<group>";
 		};
-		E699189B22F0508A00AF130F /* Pending */ = {
+		E699189B22F0508A00AF130F /* Specific */ = {
 			isa = PBXGroup;
 			children = (
-				E6F5483E22771E5200EE6311 /* UserAction.swift */,
+				E605540C230314DC00528510 /* SendMessageAction */,
 				E6FCB65D22F0C79A00ECC01B /* PutUniqueIdAction.swift */,
 				E689DBAA225F8F3200340CF3 /* TransferTokenAction.swift */,
 				E6FCB66122F0C7FE00ECC01B /* BurnTokensAction.swift */,
 				E6FCB65A22F0C76900ECC01B /* MintTokensAction.swift */,
 				E6D15680227056F800AC3438 /* CreateTokenAction.swift */,
-				E615C51C22B7B20B00604E90 /* MessageEncryptionMode.swift */,
-				E68BD819229ECBBB00FCE4D3 /* SendMessageAction.swift */,
 			);
-			path = Pending;
-			sourceTree = "<group>";
-		};
-		E699189C22F0509A00AF130F /* Executed */ = {
-			isa = PBXGroup;
-			children = (
-				E69E752822A1B39E00AC631B /* SentMessage.swift */,
-			);
-			path = Executed;
+			path = Specific;
 			sourceTree = "<group>";
 		};
 		E69D851422F45CF50039A207 /* FungibleParticleTransitioner */ = {
@@ -2602,7 +2656,7 @@
 		E6CB4B2522C4E7E500B7382A /* DecryptedMessages */ = {
 			isa = PBXGroup;
 			children = (
-				E69E752622A1903600AC631B /* AtomToDecryptedMessageMapper.swift */,
+				E69E752622A1903600AC631B /* AtomToSendMessageActionMapper.swift */,
 			);
 			path = DecryptedMessages;
 			sourceTree = "<group>";
@@ -2714,10 +2768,8 @@
 		E6D1567F227056D800AC3438 /* UserActions */ = {
 			isa = PBXGroup;
 			children = (
-				E699189C22F0509A00AF130F /* Executed */,
-				E699189B22F0508A00AF130F /* Pending */,
-				E606F13723016A83004D4D3D /* UniquelyIdentifiedAction.swift */,
-				E606F14223016F75004D4D3D /* ConsumeTokensAction.swift */,
+				E605540B2303073F00528510 /* Common */,
+				E699189B22F0508A00AF130F /* Specific */,
 			);
 			path = UserActions;
 			sourceTree = "<group>";
@@ -4082,6 +4134,7 @@
 				E626E20022B41B350046D2AC /* AnyAtomToActionMapper.swift in Sources */,
 				E6CEE73021F5D4E000D745EC /* CharacterSet.swift in Sources */,
 				E6E279792271CD1C0067D46E /* UnsignedNumeric.swift in Sources */,
+				E605540F2303153D00528510 /* SendMessageAction+Init+TextMessage.swift in Sources */,
 				E6340C8D22FC2D090044BA97 /* TransactionMaker.swift in Sources */,
 				E6A508B7224E713F00128123 /* Accountable.swift in Sources */,
 				E6296C8B2292EF6000753FD5 /* AnyDecodable.swift in Sources */,
@@ -4186,6 +4239,7 @@
 				E6ED1A4021F8836300654105 /* UniverseConfig.swift in Sources */,
 				E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */,
 				E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */,
+				E605541C230316A900528510 /* EncryptionMode+EncryptContext+Builder.swift in Sources */,
 				E689DBA8225F887300340CF3 /* AtomsByAddressSubscribing.swift in Sources */,
 				E6340C8722FB1BFE0044BA97 /* AtomToTransactionMapper.swift in Sources */,
 				E6474AFB226795D6009C4FDC /* AtomContainer.swift in Sources */,
@@ -4194,6 +4248,7 @@
 				E60553FE2301A48500528510 /* SpunParticles+Filtering.swift in Sources */,
 				E640F638225DFC3D00855256 /* PublicKeyOwner.swift in Sources */,
 				E6474AF9226794D5009C4FDC /* ExpressibleBySubatomicParts.swift in Sources */,
+				E60554142303160600528510 /* EncryptionMode.swift in Sources */,
 				E6E2799A2271CD1C0067D46E /* MaxLengthSpecifying.swift in Sources */,
 				E606FC4F22CB5E4200A7E52E /* WebSocketEventsEpic.swift in Sources */,
 				E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */,
@@ -4251,7 +4306,6 @@
 				E62EFDBE22490BA900B6DAD6 /* Router.swift in Sources */,
 				E6A508E12251244000128123 /* BinaryInteger+RoundToMultipleOF.swift in Sources */,
 				E69D851622F45D040039A207 /* FungibleParticleTransitioner.swift in Sources */,
-				E69E752922A1B39E00AC631B /* SentMessage.swift in Sources */,
 				E67129A522C228AE004F6D0A /* Reducer.swift in Sources */,
 				E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */,
 				E6FF7E4C229C4E8100BC22EA /* Array+AppendingElement.swift in Sources */,
@@ -4278,6 +4332,7 @@
 				E606F14B230188BC004D4D3D /* ConsumeTokensActionErrorInitializable.swift in Sources */,
 				E64641EF22F3482700E05034 /* FixedSupplyTokenDefinitionParticle.swift in Sources */,
 				E606FC3422CB466C00A7E52E /* JsonRpcMethodNodeAction.swift in Sources */,
+				E60554192303167300528510 /* EncryptionMode+DecryptContext.swift in Sources */,
 				E6DC275F22C3FDFB0049BB3C /* TokenDefinitionsState.swift in Sources */,
 				E637564E22B7E3B700C4F9A2 /* RadixNetworkController.swift in Sources */,
 				E62EFDE1224A4D4600B6DAD6 /* FullDuplexCommunicationChannel.swift in Sources */,
@@ -4367,6 +4422,7 @@
 				E6E2792A2271CD1C0067D46E /* Signing.swift in Sources */,
 				E6CB4B3422C5FB0D00B7382A /* Single_Extensions.swift in Sources */,
 				E6E279732271CD1C0067D46E /* ResourceType.swift in Sources */,
+				E60554112303157F00528510 /* SendMessageAction+EncryptionMode.swift in Sources */,
 				E6A50888224E713F00128123 /* Atoms.swift in Sources */,
 				E6E2794B2271CD1C0067D46E /* PrefixedStringWithValue.swift in Sources */,
 				E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */,
@@ -4402,11 +4458,12 @@
 				E6E2792C2271CD1C0067D46E /* SignatureVerifier.swift in Sources */,
 				E626E1E422B3FA3A0046D2AC /* AtomNotificationMode.swift in Sources */,
 				E637564722B7CEFA00C4F9A2 /* RadixNodeState.swift in Sources */,
+				E60554172303164700528510 /* EncryptionMode+EncryptContext.swift in Sources */,
 				E6D15681227056F800AC3438 /* CreateTokenAction.swift in Sources */,
 				E6F548582277459A00EE6311 /* Amount+CompareWithAnyAmount.swift in Sources */,
 				E68DFA3422FC64290050F69E /* TransactionConvertible.swift in Sources */,
 				E6340C8B22FC2CF70044BA97 /* TransactionToAtomMapper.swift in Sources */,
-				E69E752722A1903600AC631B /* AtomToDecryptedMessageMapper.swift in Sources */,
+				E69E752722A1903600AC631B /* AtomToSendMessageActionMapper.swift in Sources */,
 				E6E279882271CD1C0067D46E /* Symbol.swift in Sources */,
 				E6025404225CC413004B2F94 /* UniverseConfig+Presets.swift in Sources */,
 				E626E20422B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift in Sources */,
@@ -4417,7 +4474,6 @@
 				E6E2797C2271CD1C0067D46E /* TokenTransition.swift in Sources */,
 				E626E1FA22B41A420046D2AC /* SubmitAtomAction.swift in Sources */,
 				E6E279212271CD1C0067D46E /* ECIES.swift in Sources */,
-				E615C51D22B7B20B00604E90 /* MessageEncryptionMode.swift in Sources */,
 				E6FF7E48229C1D1C00BC22EA /* Shards.swift in Sources */,
 				E69E753222A1B9CD00AC631B /* MessageSending.swift in Sources */,
 				E606F14123016F60004D4D3D /* DefaultBurnTokensActionToParticleGroupsMapper.swift in Sources */,

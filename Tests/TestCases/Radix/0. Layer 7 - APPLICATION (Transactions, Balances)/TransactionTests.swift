@@ -154,4 +154,5 @@ class TransactionTests: LocalhostNodeTest {
         guard case let uniqueActionInMintTxs = uniqueMintTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInMintTx = uniqueActionInMintTxs.first else { return XCTFail("Expected UniqueAction") }
         XCTAssertEqual(uniqueActionInMintTx.string, "mint")
     }
+
 }

@@ -52,9 +52,13 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
             particleGroups: particleGroupsForMessage
         )
         
-        func doTestResult(_ decryptedMessage: SentMessage, expectedEncryptionState: SentMessage.EncryptionState) {
-            XCTAssertEqual(decryptedMessage.encryptionState, expectedEncryptionState)
-            XCTAssertEqual(decryptedMessage.timestamp, mockedTimestamp)
+        func doTestResult(_ decryptedMessage: SendMessageAction, expectedEncryptionState: SendMessageAction.EncryptionMode.DecryptedContext) {
+            
+            guard let decryptionContext = decryptedMessage.decryptionContext else {
+                return XCTFail("Expected decryption context")
+            }
+            
+            XCTAssertEqual(decryptionContext, expectedEncryptionState)
             XCTAssertEqual(decryptedMessage.sender, alice.address)
             XCTAssertEqual(decryptedMessage.recipient, bob.address)
             if expectedEncryptionState == .decrypted {
@@ -100,7 +104,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
             XCTAssertNotThrows(
                 try decryptMessage(in: atom, account: account)
             ) { decryptedMessage in
-                XCTAssertEqual(decryptedMessage.encryptionState, .decrypted)
+                XCTAssertEqual(decryptedMessage.decryptionContext, .decrypted)
                 XCTAssertEqual(decryptedMessage.payload.toString(), message)
             }
         }
@@ -112,7 +116,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
             try decryptMessage(in: atom, account: clara)
         ) { decryptedMessage in
             XCTAssertEqual(
-                decryptedMessage.encryptionState,
+                decryptedMessage.decryptionContext,
                 .cannotDecrypt(error: .keyMismatch))
         }
     }
@@ -134,7 +138,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
         let atom = try! mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address).wrapInAtom()
         
-        let atomToDecryptedMessagesMapper = DefaultAtomToDecryptedMessageMapper(
+        let atomToDecryptedMessagesMapper = DefaultAtomToSendMessageActionMapper(
             activeAccount: .just(alice.account)
         )
         
@@ -142,7 +146,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
             XCTAssertNotThrows(
                 try decryptMessage(in: atom, account: account)
             ) { decryptedMessage in
-                XCTAssertEqual(decryptedMessage.encryptionState, .wasNotEncrypted)
+                XCTAssertEqual(decryptedMessage.decryptionContext, .wasNotEncrypted)
                 XCTAssertEqual(decryptedMessage.payload.toString(), message)
             }
         }
@@ -154,8 +158,8 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
     
 }
 
-func decryptMessage(in atom: Atom, account accountOwner: AccountOwner) throws -> SentMessage  {
-    guard let decryptedMessages = DefaultAtomToDecryptedMessageMapper(
+func decryptMessage(in atom: Atom, account accountOwner: AccountOwner) throws -> SendMessageAction  {
+    guard let decryptedMessages = DefaultAtomToSendMessageActionMapper(
         activeAccount: .just(accountOwner.account)
     ).mapAtomToActions(atom).blockingTakeFirst(),
         let decryptedMessage = decryptedMessages.first

@@ -178,8 +178,8 @@ public extension RadixApplicationClient {
         return execute(actions: sendMessageAction)
     }
     
-    func observeMessages(toOrFrom address: Address) -> Observable<SentMessage> {
-        return observeActions(ofType: SentMessage.self, at: address)
+    func observeMessages(toOrFrom address: Address) -> Observable<SendMessageAction> {
+        return observeActions(ofType: SendMessageAction.self, at: address)
     }
 }
 

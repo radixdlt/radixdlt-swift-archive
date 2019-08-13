@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,25 +24,32 @@
 
 import Foundation
 
-public enum UserActionName: String, Hashable {
+public extension SendMessageAction.EncryptionMode {
     
-    // MARK: Pending Actions
-    
-    // Stateful actions
-    case transferTokens
-    case burnTokens
-    case mintTokens
-    
-    // Stateless actions
-    case createToken
-    case putUnique
-    case sendMessage
-    
-    // MARK: Executed Actions
-    case sentMessage
+    enum DecryptedContext: Equatable {
+        /// Specifies that the payload in the SentMessage object WAS originally
+        /// encrypted and has been successfully decrypted to it's present byte array.
+        case decrypted
+        
+        /// Specifies that the payload in the SentMessage object was NOT
+        /// encrypted and the present data byte array just represents the original data.
+        case wasNotEncrypted
+        
+        /// Specifies that the data in the SentMessage object WAS encrypted
+        /// but could not be decrypted. The present data byte array represents the still
+        /// encrypted data.
+        case cannotDecrypt(error: ECIES.DecryptionError)
+    }
 }
 
-public protocol UserAction {
-    var user: Address { get }
-    var nameOfAction: UserActionName { get }
+public extension SendMessageAction.EncryptionMode.DecryptedContext {
+    
+    var isEncryptedButCannotDecrypt: Bool {
+        switch self {
+        case .cannotDecrypt(let reason):
+            log.info(reason)
+            return true
+        case .decrypted, .wasNotEncrypted: return false
+        }
+    }
 }

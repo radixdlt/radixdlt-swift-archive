@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,16 +24,27 @@
 
 import Foundation
 
-public enum MessageEncryptionMode {
-    case encrypt(onlyDecryptableBy: [AddressConvertible])
-    case plainText
-}
-
-public extension MessageEncryptionMode {
-    var isEncryptionUsed: Bool {
-        switch self {
-        case .encrypt: return true
-        case .plainText: return false
+public extension SendMessageAction {
+    var shouldBeEncrypted: Bool {
+        switch encryptionMode {
+        case .decryptContext: return false
+        case .encryptContext(let encryptContext):
+            return encryptContext.isEncryptionUsed
+        }
+    }
+    
+    var isEncryptedAndCannotDecrypt: Bool {
+        switch encryptionMode {
+        case .decryptContext(let decryptContext):
+            return decryptContext.isEncryptedButCannotDecrypt
+        case .encryptContext: return false
+        }
+    }
+    
+    var decryptionContext: SendMessageAction.EncryptionMode.DecryptedContext? {
+        switch encryptionMode {
+        case .decryptContext(let decryptContext): return decryptContext
+        case .encryptContext: return nil
         }
     }
 }

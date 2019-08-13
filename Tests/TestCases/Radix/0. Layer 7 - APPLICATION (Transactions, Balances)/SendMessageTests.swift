@@ -89,7 +89,7 @@ class SendMessageTests: LocalhostNodeTest {
         )
         
         guard let sentMessage = application.observeMyMessages().blockingTakeLast(timeout: 2) else { return }
-        XCTAssertTrue(sentMessage.encryptionState.isEncryptedButCannotDecrypt)
+        XCTAssertTrue(sentMessage.isEncryptedAndCannotDecrypt)
     }
     
     func testSendEmptyEncrypted() {

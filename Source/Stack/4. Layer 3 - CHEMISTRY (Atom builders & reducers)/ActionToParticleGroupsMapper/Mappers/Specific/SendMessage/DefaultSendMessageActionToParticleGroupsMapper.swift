@@ -71,11 +71,13 @@ private extension DefaultSendMessageActionToParticleGroupsMapper {
     
     /// PublicKey's that can decrypt the message
     func readersOf(message sendMessageAction: SendMessageAction) -> [PublicKey] {
+        
         switch sendMessageAction.encryptionMode {
-        case .encrypt(let readers):
+        case .encryptContext(.encrypt(let readers)):
             return readers.map { $0.address.publicKey }
-        case .plainText:
+        case .encryptContext(.plainText):
             incorrectImplementation("Dont call this function if you are not encrypting message")
+        case .decryptContext: incorrectImplementation("Dont use a `SendMessageActionToParticleGroupsMapper` for a derived `SendMessageAction`")
         }
     }
     
