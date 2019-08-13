@@ -119,33 +119,39 @@ class TransactionTests: LocalhostNodeTest {
                 .blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-//        let onlyUniqueTx = Transaction {[
-//            PutUniqueIdAction(uniqueMaker: alice, string: "unique")
-//        ]}
-//
-//        XCTAssertTrue(
-//            application.send(transaction: onlyUniqueTx)
-//                // THEN: the Transaction is successfully sent
-//                .blockingWasSuccessfull(timeout: .enoughForPOW)
-//        )
+        let onlyUniqueTx = Transaction {[
+            PutUniqueIdAction(uniqueMaker: alice, string: "unique")
+        ]}
+
+        XCTAssertTrue(
+            application.send(transaction: onlyUniqueTx)
+                // THEN: the Transaction is successfully sent
+                .blockingWasSuccessfull(timeout: .enoughForPOW)
+        )
   
         
-//        guard let putUniqueTransactions = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingArrayTakeFirst(2, timeout: 1) else { return }
-//        XCTAssertEqual(putUniqueTransactions.count, 2)
-//
-//
-//        guard let burnTxs = application.observeTransactions(at: alice, containingActionOfAnyType: [BurnTokensAction.self]).blockingArrayTakeFirst(1, timeout: 1) else { return }
-//        XCTAssertEqual(burnTxs.count, 1)
-//        XCTAssertEqual(burnTxs[0].actions.count, 2)
-//
-////        guard let burnOrMintTransactions = application.observeTransactions(at: alice, containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self]).blockingArrayTakeFirst(2, timeout: 1) else { return }
-////
-////        XCTAssertEqual(burnOrMintTransactions.count, 2)
-//
-////
-//        guard let uniqueBurnTransactions = application.observeTransactions(at: alice, containingActionsOfAllTypes: [PutUniqueIdAction.self, BurnTokensAction.self]).blockingTakeFirst() else { return }
-//
-//        guard case let uniqueActionInBurnTxs = uniqueBurnTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInBurnTx = uniqueActionInBurnTxs.first else { return XCTFail("Expected UniqueAction") }
-//        XCTAssertEqual(uniqueActionInBurnTx.string, "burn")
+        guard let putUniqueTransactions = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingArrayTakeFirst(3, timeout: 1) else { return }
+        XCTAssertEqual(
+            putUniqueTransactions.flatMap { $0.actions(ofType: PutUniqueIdAction.self) }.map { $0.string },
+            ["mint", "burn", "unique"]
+        )
+        
+        guard let burnTxs = application.observeTransactions(at: alice, containingActionOfAnyType: [BurnTokensAction.self]).blockingArrayTakeFirst(1, timeout: 1) else { return }
+        XCTAssertEqual(burnTxs.count, 1)
+        XCTAssertEqual(burnTxs[0].actions.count, 2)
+
+        guard let burnOrMintTransactions = application.observeTransactions(at: alice, containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self]).blockingArrayTakeFirst(2, timeout: 1) else { return }
+
+        XCTAssertEqual(burnOrMintTransactions.count, 2)
+
+        guard let uniqueBurnTransactions = application.observeTransactions(at: alice, containingActionsOfAllTypes: [PutUniqueIdAction.self, BurnTokensAction.self]).blockingTakeFirst() else { return }
+
+        guard case let uniqueActionInBurnTxs = uniqueBurnTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInBurnTx = uniqueActionInBurnTxs.first else { return XCTFail("Expected UniqueAction") }
+        XCTAssertEqual(uniqueActionInBurnTx.string, "burn")
+        
+        guard let uniqueMintTransactions = application.observeTransactions(at: alice, containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self]).blockingTakeFirst() else { return }
+        
+        guard case let uniqueActionInMintTxs = uniqueMintTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInMintTx = uniqueActionInMintTxs.first else { return XCTFail("Expected UniqueAction") }
+        XCTAssertEqual(uniqueActionInMintTx.string, "mint")
     }
 }

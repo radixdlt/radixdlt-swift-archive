@@ -29,8 +29,13 @@ import RxSwift
 public extension Array where Element == AnyAtomToExecutedActionMapper {
     static func atomToActionMappers(activeAccount: Observable<Account>) -> [AnyAtomToExecutedActionMapper] {
         return [
-            AnyAtomToExecutedActionMapper(any: DefaultAtomToTokenTransferMapper()),
             AnyAtomToExecutedActionMapper(any: DefaultAtomToDecryptedMessageMapper(activeAccount: activeAccount) ),
+
+            // `AtomToCreateTokenMapper` ought to come before `AtomToMintTokenMapper` so that order of actions
+            // in Transaction is `createToken` then `mint` for tokens with mutable initial supply.
+            AnyAtomToExecutedActionMapper(any: DefaultAtomToCreateTokenMapper()),
+            
+            AnyAtomToExecutedActionMapper(any: DefaultAtomToTokenTransferMapper()),
             AnyAtomToExecutedActionMapper(any: DefaultAtomToBurnTokenMapper()),
             AnyAtomToExecutedActionMapper(any: DefaultAtomToMintTokenMapper()),
             AnyAtomToExecutedActionMapper(any: DefaultAtomToUniqueIdMapper())

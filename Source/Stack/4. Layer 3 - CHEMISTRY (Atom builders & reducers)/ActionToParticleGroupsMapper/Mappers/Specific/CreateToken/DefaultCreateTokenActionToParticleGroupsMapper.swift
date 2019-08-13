@@ -91,12 +91,12 @@ private extension CreateTokenActionToParticleGroupsMapper {
         let fixedSupplyToken = FixedSupplyTokenDefinitionParticle(createTokenAction: action)
         let rriParticle = ResourceIdentifierParticle(token: fixedSupplyToken)
      
-        let tokens = try TransferrableTokensParticle(fixedSupplyTokenDefinitionParticle: fixedSupplyToken, positiveSupply: positiveSupply)
+        let transferrableTokensParticle = try TransferrableTokensParticle(fixedSupplyTokenDefinitionParticle: fixedSupplyToken, positiveSupply: positiveSupply)
         
         let tokenCreationGroup: ParticleGroup = [
             rriParticle.withSpin(.down),
             fixedSupplyToken.withSpin(.up),
-            tokens.withSpin(.up)
+            transferrableTokensParticle.withSpin(.up)
         ]
     
         return [

@@ -43,7 +43,7 @@ private func mintTokensActionFrom(particleGroup: ParticleGroup) -> MintTokensAct
     guard
         let unallocatedTokensParticle = particleGroup.firstUnallocatedTokensParticle(spin: .down),
         case let rri = unallocatedTokensParticle.tokenDefinitionReference,
-        let firstTransferrableTokensParticle = particleGroup.firstTransferrableTokensParticle(spin: .up, where: { $0.tokenDefinitionReference == rri })
+        let firstTransferrableTokensParticle = particleGroup.firstTransferrableTokensParticle(matchingIdentifier: rri, spin: .up)
         else { return nil }
     
     let minter = firstTransferrableTokensParticle.address
@@ -52,7 +52,7 @@ private func mintTokensActionFrom(particleGroup: ParticleGroup) -> MintTokensAct
     
     let signedAmount = SignedAmount.fromSpunTransferrableTokens(particles: spunTransferrableTokensParticles)
     guard let positiveAmount = try? PositiveAmount(signedAmount: signedAmount) else { return nil }
-    return MintTokensAction.init(tokenDefinitionReference: rri, amount: positiveAmount, minter: minter)
+    return MintTokensAction(tokenDefinitionReference: rri, amount: positiveAmount, minter: minter)
 }
 
 // MARK: DefaultAtomToMintTokenMapper
