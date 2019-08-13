@@ -38,6 +38,8 @@ public final class RadixApplicationClient:
     MessageSending,
     UniqueMaking,
     TransactionMaker,
+    TransactionToAtomMapper,
+    AtomToTransactionMapper,
     StateSubscriber,
     TransactionSubscriber,
     AddressOfAccountDeriving,
@@ -116,6 +118,20 @@ public extension RadixApplicationClient {
 public extension RadixApplicationClient {
     func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
         return transactionMaker.send(transaction: transaction, toOriginNode: originNode)
+    }
+}
+
+// MARK: TransactionToAtomMapper
+public extension RadixApplicationClient {
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
+        return try transactionMaker.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
+    }
+}
+
+// MARK: AtomToTransactionMapper
+public extension RadixApplicationClient {
+    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
+        return transactionSubscriber.transactionFromAtom(atom)
     }
 }
 

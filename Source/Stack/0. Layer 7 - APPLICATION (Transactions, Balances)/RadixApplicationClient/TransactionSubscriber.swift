@@ -27,7 +27,7 @@ import RxSwift
 import RxSwiftExt
 
 // MARK: TransactionSubscriber
-public protocol TransactionSubscriber {
+public protocol TransactionSubscriber: AtomToTransactionMapper {
     func observeTransactions(at address: Address) -> Observable<ExecutedTransaction>
 }
 
@@ -92,5 +92,12 @@ public extension DefaultTransactionSubscriber {
             }.flatMap { [unowned self] in
                 return self.atomToTransactionMapper.transactionFromAtom($0)
         }
+    }
+}
+
+// MARK: AtomToTransactionMapper
+public extension DefaultTransactionSubscriber {
+    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
+        return atomToTransactionMapper.transactionFromAtom(atom)
     }
 }

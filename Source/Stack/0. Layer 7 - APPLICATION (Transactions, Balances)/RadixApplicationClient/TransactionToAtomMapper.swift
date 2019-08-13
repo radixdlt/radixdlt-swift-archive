@@ -28,6 +28,12 @@ public protocol TransactionToAtomMapper {
     func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom
 }
 
+public extension TransactionToAtomMapper where Self: ActiveAccountOwner {
+    func atomFrom(transaction: Transaction) throws -> Atom {
+        return try atomFrom(transaction: transaction, addressOfActiveAccount: self.addressOfActiveAccount)
+    }
+}
+
 public final class DefaultTransactionToAtomMapper: TransactionToAtomMapper {
 
     private let atomStore: AtomStore

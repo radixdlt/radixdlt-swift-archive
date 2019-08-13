@@ -57,6 +57,15 @@ public extension SignedAmount {
     var sign: AmountSign {
         return AmountSign(signedInt: magnitude)
     }
+    
+    static func fromSpunTransferrableTokens(particles: [SpunParticle<TransferrableTokensParticle>]) -> SignedAmount {
+        let upParticles = particles.filter(spin: .up).map { $0.particle }
+        let downParticles = particles.filter(spin: .down).map { $0.particle }
+        
+        let amountFromUpParticles = NonNegativeAmount.fromTransferrableTokens(particles: upParticles)
+        let amountFromDownParticles = NonNegativeAmount.fromTransferrableTokens(particles: downParticles)
+        return SignedAmount(nonNegative: amountFromUpParticles) - SignedAmount(nonNegative: amountFromDownParticles)
+    }
 }
 
 // MARK: - Zero

@@ -13,6 +13,10 @@
 		E6025402225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6025401225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift */; };
 		E6025404225CC413004B2F94 /* UniverseConfig+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6025403225CC413004B2F94 /* UniverseConfig+Presets.swift */; };
 		E6025406225CCCC6004B2F94 /* SpunParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6025405225CCCC6004B2F94 /* SpunParticle.swift */; };
+		E60553FC230197C600528510 /* TransactionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60553FB230197C600528510 /* TransactionTests.swift */; };
+		E60553FE2301A48500528510 /* SpunParticles+Filtering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60553FD2301A48500528510 /* SpunParticles+Filtering.swift */; };
+		E60554012301BB2B00528510 /* AtomToBurnTokenMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554002301BB2B00528510 /* AtomToBurnTokenMapper.swift */; };
+		E60554042302A9B000528510 /* AtomToTransferMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554032302A9B000528510 /* AtomToTransferMapperTests.swift */; };
 		E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */; };
 		E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */; };
 		E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */; };
@@ -617,6 +621,10 @@
 		E6025401225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UniverseConfig+UniverseType.swift"; sourceTree = "<group>"; };
 		E6025403225CC413004B2F94 /* UniverseConfig+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UniverseConfig+Presets.swift"; sourceTree = "<group>"; };
 		E6025405225CCCC6004B2F94 /* SpunParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpunParticle.swift; sourceTree = "<group>"; };
+		E60553FB230197C600528510 /* TransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTests.swift; sourceTree = "<group>"; };
+		E60553FD2301A48500528510 /* SpunParticles+Filtering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpunParticles+Filtering.swift"; sourceTree = "<group>"; };
+		E60554002301BB2B00528510 /* AtomToBurnTokenMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToBurnTokenMapper.swift; sourceTree = "<group>"; };
+		E60554032302A9B000528510 /* AtomToTransferMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToTransferMapperTests.swift; sourceTree = "<group>"; };
 		E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateIdentifiable.swift; sourceTree = "<group>"; };
 		E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateId.swift; sourceTree = "<group>"; };
 		E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShardedParticleStateId.swift; sourceTree = "<group>"; };
@@ -1234,6 +1242,22 @@
 			path = RadixIdentity;
 			sourceTree = "<group>";
 		};
+		E60553FF2301BB1F00528510 /* BurnTokens */ = {
+			isa = PBXGroup;
+			children = (
+				E60554002301BB2B00528510 /* AtomToBurnTokenMapper.swift */,
+			);
+			path = BurnTokens;
+			sourceTree = "<group>";
+		};
+		E60554022302A99400528510 /* AtomToExecutedActionMapper */ = {
+			isa = PBXGroup;
+			children = (
+				E60554032302A9B000528510 /* AtomToTransferMapperTests.swift */,
+			);
+			path = AtomToExecutedActionMapper;
+			sourceTree = "<group>";
+		};
 		E606F130230151CB004D4D3D /* ShardedParticleStateId */ = {
 			isa = PBXGroup;
 			children = (
@@ -1606,6 +1630,7 @@
 			isa = PBXGroup;
 			children = (
 				E63B206E22FD648600D6FF79 /* Particles+Filtering.swift */,
+				E60553FD2301A48500528510 /* SpunParticles+Filtering.swift */,
 			);
 			path = "Particles+Filtering";
 			sourceTree = "<group>";
@@ -2536,6 +2561,7 @@
 		E6CB4B2322C4E70C00B7382A /* AtomToExecutedActionMapper */ = {
 			isa = PBXGroup;
 			children = (
+				E60553FF2301BB1F00528510 /* BurnTokens */,
 				E63B207022FD7AA500D6FF79 /* PutUnique */,
 				E6CB4B2622C4E83200B7382A /* TypeErasure */,
 				E6CB4B2522C4E7E500B7382A /* DecryptedMessages */,
@@ -3303,6 +3329,7 @@
 				E68DFA2F22FC58320050F69E /* PutIniqueActionTests.swift */,
 				E69D851E22F7555E0039A207 /* BurnTokensTests.swift */,
 				E69E753322A294D800AC631B /* SendMessageTests.swift */,
+				E60553FB230197C600528510 /* TransactionTests.swift */,
 			);
 			path = "0. Layer 7 - APPLICATION (Transactions, Balances)";
 			sourceTree = "<group>";
@@ -3654,6 +3681,7 @@
 		E6E27A0D2271CE250067D46E /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */ = {
 			isa = PBXGroup;
 			children = (
+				E60554022302A99400528510 /* AtomToExecutedActionMapper */,
 				E69E754722A98A0600AC631B /* Actions */,
 				E6E27A0E2271CE250067D46E /* ActionToParticleGroupsMapper */,
 				E6E27A0F2271CE250067D46E /* ProofOfWork */,
@@ -4144,6 +4172,7 @@
 				E6474AFB226795D6009C4FDC /* AtomContainer.swift in Sources */,
 				E6CB4B4122C633F600B7382A /* AtomStatus.swift in Sources */,
 				E689DBB1225F8FA900340CF3 /* RESTClient.swift in Sources */,
+				E60553FE2301A48500528510 /* SpunParticles+Filtering.swift in Sources */,
 				E640F638225DFC3D00855256 /* PublicKeyOwner.swift in Sources */,
 				E6474AF9226794D5009C4FDC /* ExpressibleBySubatomicParts.swift in Sources */,
 				E6E2799A2271CD1C0067D46E /* MaxLengthSpecifying.swift in Sources */,
@@ -4361,6 +4390,7 @@
 				E6E279882271CD1C0067D46E /* Symbol.swift in Sources */,
 				E6025404225CC413004B2F94 /* UniverseConfig+Presets.swift in Sources */,
 				E626E20422B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift in Sources */,
+				E60554012301BB2B00528510 /* AtomToBurnTokenMapper.swift in Sources */,
 				E6E2798A2271CD1C0067D46E /* DataConvertible+Concatenation+Operators.swift in Sources */,
 				E6FCB65B22F0C76900ECC01B /* MintTokensAction.swift in Sources */,
 				E637564522B7CE1400C4F9A2 /* RadixNetworkState.swift in Sources */,
@@ -4450,6 +4480,7 @@
 				E6E27A512271CE250067D46E /* ProofOfWorkTests.swift in Sources */,
 				E6E27A4D2271CE250067D46E /* EUIDTests.swift in Sources */,
 				E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */,
+				E60553FC230197C600528510 /* TransactionTests.swift in Sources */,
 				E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */,
 				E68DFA3022FC58320050F69E /* PutIniqueActionTests.swift in Sources */,
 				E6474AAD2265D4DC009C4FDC /* Observable+ToBlockingFirst.swift in Sources */,
@@ -4494,6 +4525,7 @@
 				E6725648228AE98F004631F1 /* TransferTokensTests.swift in Sources */,
 				E68BD816229EAD9D00FCE4D3 /* ShardSpaceTests.swift in Sources */,
 				E63B207422FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift in Sources */,
+				E60554042302A9B000528510 /* AtomToTransferMapperTests.swift in Sources */,
 				E6E27A492271CE250067D46E /* ResourceIdentifierTests.swift in Sources */,
 				E6E27A352271CE250067D46E /* IncorrectSpinValueTests.swift in Sources */,
 				E6E27A372271CE250067D46E /* TooShortAddressTests.swift in Sources */,

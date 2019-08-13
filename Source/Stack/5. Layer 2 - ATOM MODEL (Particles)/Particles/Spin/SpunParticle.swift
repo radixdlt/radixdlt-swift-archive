@@ -32,7 +32,11 @@ public protocol SpunParticleContainer: ParticleContainer {
     var spin: Spin { get }
 }
 
-public struct SpunParticle<Particle>: SpunParticleContainer, Throwing where Particle: ParticleConvertible {
+public protocol InvertableSpunParticleConvertible {
+    func invertedSpin() -> Self
+}
+
+public struct SpunParticle<Particle>: SpunParticleContainer, InvertableSpunParticleConvertible, Throwing where Particle: ParticleConvertible {
     
     public let spin: Spin
     public let particle: Particle
@@ -58,6 +62,10 @@ public extension SpunParticle {
 
 public extension SpunParticle {
     var someParticle: ParticleConvertible { return particle }
+    
+    func invertedSpin() -> SpunParticle {
+        return SpunParticle(spin: spin.inverted, particle: particle)
+    }
 }
 
 public struct UpParticle<Particle>: SpunParticleContainer, Throwing where Particle: ParticleConvertible {

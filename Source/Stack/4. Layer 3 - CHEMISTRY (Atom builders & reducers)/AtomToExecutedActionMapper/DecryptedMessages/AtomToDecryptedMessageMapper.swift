@@ -30,13 +30,10 @@ public protocol AtomToDecryptedMessageMapper: AtomToSpecificExecutedActionMapper
     Error == DecryptMessageFromAtomMapperError {}
 
 public final class DefaultAtomToDecryptedMessageMapper: AtomToDecryptedMessageMapper {
-    private let jsonDecoder: JSONDecoder
     private let activeAccount: Observable<Account>
     public init(
-        activeAccount: Observable<Account>,
-        jsonDecoder: JSONDecoder = JSONDecoder()
+        activeAccount: Observable<Account>
     ) {
-        self.jsonDecoder = jsonDecoder
         self.activeAccount = activeAccount
     }
 }

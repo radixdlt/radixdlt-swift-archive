@@ -59,7 +59,48 @@ public extension TokenTransferring {
         amount: PositiveAmount,
         attachment: Data? = nil,
         from specifiedSender: AddressConvertible? = nil
-        ) -> ResultOfUserAction {
+    ) -> ResultOfUserAction {
+        
+        let action = actionTransferTokens(
+            identifier: tokenIdentifier,
+            to: recipient,
+            amount: amount,
+            attachment: attachment,
+            from: specifiedSender
+        )
+        
+        return transfer(tokens: action)
+    }
+}
+
+public extension TokenTransferring {
+    func actionTransferTokens(
+        identifier tokenIdentifier: ResourceIdentifier,
+        to recipient: AddressConvertible,
+        amount: PositiveAmount,
+        message: String,
+        messageEncoding: String.Encoding = .default,
+        from specifiedSender: AddressConvertible? = nil
+    ) -> TransferTokenAction {
+        
+        let attachment = message.toData(encodingForced: messageEncoding)
+        
+        return actionTransferTokens(
+            identifier: tokenIdentifier,
+            to: recipient,
+            amount: amount,
+            attachment: attachment,
+            from: specifiedSender
+        )
+    }
+    
+    func actionTransferTokens(
+        identifier tokenIdentifier: ResourceIdentifier,
+        to recipient: AddressConvertible,
+        amount: PositiveAmount,
+        attachment: Data? = nil,
+        from specifiedSender: AddressConvertible? = nil
+    ) -> TransferTokenAction {
         
         let sender = specifiedSender ?? addressOfActiveAccount
         
@@ -71,7 +112,7 @@ public extension TokenTransferring {
             attachment: attachment
         )
         
-        return transfer(tokens: transferAction)
+        return transferAction
     }
 }
 

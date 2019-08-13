@@ -42,8 +42,8 @@ public struct ExecutedTransaction: TransactionConvertible, ArrayConvertible, Cus
 
 public extension ExecutedTransaction {
     
-    init(atom: Atom, actions optionalActions: [UserAction?]) {
-        let actions = optionalActions.compactMap { $0 }
+    init(atom: Atom, actions nonEmptyActions: NonEmptyArray<UserAction>) {
+        let actions = nonEmptyActions.elements
         self.init(
             atomIdentifier: atom.identifier(),
             sentAt: atom.timestamp,

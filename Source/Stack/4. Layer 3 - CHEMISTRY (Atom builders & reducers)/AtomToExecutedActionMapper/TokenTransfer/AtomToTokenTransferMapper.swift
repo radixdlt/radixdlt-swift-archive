@@ -35,83 +35,50 @@ public extension DefaultAtomToTokenTransferMapper {
     
     typealias SpecificExecutedAction = TransferredTokens
     
-    // swiftlint:disable:next function_body_length
     func mapAtomToActions(_ atom: Atom) -> Observable<[TransferredTokens]> {
+        var transferredTokens = [TransferredTokens]()
+        
+        for particleGroup in atom {
+            guard let transfer = transferOfTokens(particleGroup: particleGroup, atomTimestamp: atom.timestamp) else { continue }
+            transferredTokens.append(transfer)
+        }
+        
+        return Observable.just(transferredTokens)
+    }
+}
 
-        guard atom.containsAnyTransferrableTokensParticles(spin: .down) else {
-            return .just([])
-        }
+private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date) -> TransferredTokens? {
+    guard
+        let someTransferrableTokensParticleDown = particleGroup.firstTransferrableTokensParticle(spin: .down),
+        case let rri = someTransferrableTokensParticleDown.tokenDefinitionReference,
         
-        // swiftlint:disable:next function_body_length
-        func transferredTokensFromParticleGroup(_ particleGroup: ParticleGroup) -> [TransferredTokens] {
-            guard let anyConsumed = particleGroup.firstParticle(ofType: TransferrableTokensParticle.self, spin: .down) else {
-                return []
-            }
-            
-            let sender = anyConsumed.address
-            
-            var dictionary = [ResourceIdentifier: [Address: SignedAmount]]()
-            
-            particleGroup
-                .compactMap({ try? SpunParticle<TransferrableTokensParticle>(anySpunParticle: $0) })
-                .forEach { spunParticleTransferrableTokensParticle in
-                    let particle = spunParticleTransferrableTokensParticle.particle
-                    let spin = spunParticleTransferrableTokensParticle.spin
-                    
-                    var mapForRRi = dictionary.valueForKey(key: particle.tokenDefinitionReference) { [Address: SignedAmount]() }
-                    let amountForParticle: SignedAmount = spin * particle.amount
-                    let amountOrZero: SignedAmount = mapForRRi.valueForKey(key: particle.address) { SignedAmount.zero }
-                    let updatedAmount: SignedAmount = amountOrZero + amountForParticle
-                    mapForRRi[particle.address] = updatedAmount
-                    dictionary[particle.tokenDefinitionReference] = mapForRRi
-                }
-            
-            particleGroup.transferrableTokensParticles(spin: .down).forEach {
-                guard $0.address == sender else {
-                    incorrectImplementation("different senders...")
-                }
-            }
-            
-            return dictionary.map {
-                let summary: [Address: SignedAmount] = $0.value
-                
-                let to: Address?
-  
-                switch summary.countedElementsZeroOneTwoAndMany {
-                case .zero: incorrectImplementation("what?")
-                case .one(let single): to = single.key
-                case .two(let first, let secondAndLast):
-                    to = first.value.isPositive ? first.key : secondAndLast.key
-                case .many:
-                    incorrectImplementation("should never happen, a transfer consists of one or two TransferrableTokensParticle in the same ParticleGroup. Two particles is used when 'change' needs to be returned to sender.")
-                }
-          
-                let date = atom.timestamp
-                guard let recipient = to else { incorrectImplementation("should have recipient") }
-                
-                // swiftlint:disable:next force_try force_unwrap
-                let amount = try! PositiveAmount(nonNegative: summary.first!.value.abs)
-                
-                var attachment: Data?
-                if
-                    let attachmentBase64StringValue = particleGroup.metaData[MetaDataKey.attachment],
-                    let attachmentBase64String = try? Base64String(base64String: attachmentBase64StringValue) {
-                    attachment = attachmentBase64String.asData
-                }
-                    
-                return TransferredTokens(
-                    from: sender,
-                    to: recipient,
-                    amount: amount,
-                    tokenResourceIdentifier: $0.key,
-                    date: date,
-                    attachment: attachment
-                )
-            }
-        }
+        // This makes sure that `BurnAction` is not interpreted as `Transfer`
+        !particleGroup.containsAnyUnallocatedTokensParticle(matchingIdentifier: rri, spin: .up),
         
-        let transferredTokensList: [TransferredTokens] = atom.particleGroups.flatMap(transferredTokensFromParticleGroup)
-        
-        return Observable.of(transferredTokensList)
+        case let sender = someTransferrableTokensParticleDown.address,
+        let recipientTransferrableTokensParticle = particleGroup.firstTransferrableTokensParticle(spin: .up, where: { $0.tokenDefinitionReference == rri && $0.address != sender })
+        else {
+            return nil
+    }
+    
+    let recipient = recipientTransferrableTokensParticle.address
+    
+    let spunTransferrableTokensParticles = particleGroup.spunTransferrableTokensParticles(filter: { $0.tokenDefinitionReference == rri && $0.address == sender })
+    
+    let invertedSpunTransferrableTokensParticles = spunTransferrableTokensParticles.invertedSpin()
+    
+    let signedAmount = SignedAmount.fromSpunTransferrableTokens(particles: invertedSpunTransferrableTokensParticles)
+    guard let positiveAmount = try? PositiveAmount(signedAmount: signedAmount) else { return nil }
+    
+    return TransferredTokens(from: sender, to: recipient, amount: positiveAmount, tokenResourceIdentifier: rri, date: atomTimestamp, attachment: particleGroup.attatchmentData)
+}
+
+private extension ParticleGroup {
+    var attatchmentData: Data? {
+        guard
+            let attachmentBase64StringValue = self.metaData[MetaDataKey.attachment],
+            let attachmentBase64String = try? Base64String(base64String: attachmentBase64StringValue)
+            else { return nil }
+        return attachmentBase64String.asData
     }
 }

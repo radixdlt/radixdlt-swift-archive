@@ -25,7 +25,7 @@
 import Foundation
 import RxSwift
 
-public protocol TransactionMaker {
+public protocol TransactionMaker: TransactionToAtomMapper {
     func send(transaction: Transaction, toOriginNode: Node?) -> ResultOfUserAction
 }
 
@@ -99,6 +99,12 @@ public extension DefaultTransactionMaker {
 // MARK: Magical
 public extension DefaultTransactionMaker {
     var magic: Magic { return universeConfig.magic }
+}
+
+public extension DefaultTransactionMaker {
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
+        return try transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
+    }
 }
 
 public extension DefaultTransactionMaker {

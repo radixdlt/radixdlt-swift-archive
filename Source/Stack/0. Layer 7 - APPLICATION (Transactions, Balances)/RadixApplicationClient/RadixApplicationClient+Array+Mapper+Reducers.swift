@@ -31,6 +31,7 @@ public extension Array where Element == AnyAtomToExecutedActionMapper {
         return [
             AnyAtomToExecutedActionMapper(any: DefaultAtomToTokenTransferMapper()),
             AnyAtomToExecutedActionMapper(any: DefaultAtomToDecryptedMessageMapper(activeAccount: activeAccount) ),
+            AnyAtomToExecutedActionMapper(any: DefaultAtomToBurnTokenMapper()),
             AnyAtomToExecutedActionMapper(any: DefaultAtomToUniqueIdMapper())
         ]
     }

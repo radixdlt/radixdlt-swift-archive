@@ -54,10 +54,10 @@ public extension TransferTokensActionToParticleGroupsMapper {
 internal extension TransferrableTokensParticle {
     static func reducing(particles: [TransferrableTokensParticle]) throws -> [TransferrableTokensParticle] {
         guard let firstParticle = particles.first else { return [] }
-        let amount = particles.map { $0.amount.asNonNegative }.reduce(NonNegativeAmount.zero, +)
-        let single = try TransferrableTokensParticle(transferrableTokensParticle: firstParticle, amount: amount)
+        let single = try TransferrableTokensParticle(transferrableTokensParticle: firstParticle, amount: NonNegativeAmount.fromTransferrableTokens(particles: particles))
         return [single]
     }
+
 }
 
 public enum TransferError: ConsumeTokensActionErrorInitializable {

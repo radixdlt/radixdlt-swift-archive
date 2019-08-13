@@ -42,6 +42,11 @@ public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStrin
 }
 
 public extension Transaction {
+    
+    init(_ actions: UserAction...) {
+        self.init(actions: actions)
+    }
+    
     init(makeActions: () -> [UserAction]) {
         self.init(actions: makeActions())
     }
