@@ -69,8 +69,7 @@ public extension DefaultAtomToTransactionMapper {
         return Observable.combineLatest(
             atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
         ) { $0.flatMap { $0 } }
-            .map { try? NonEmptyArray(unvalidated: $0) }
-            .filterNil()
+            .map { optionalActions in return optionalActions.compactMap { $0 } }
             .map { ExecutedTransaction(atom: atom, actions: $0) }
     }
     

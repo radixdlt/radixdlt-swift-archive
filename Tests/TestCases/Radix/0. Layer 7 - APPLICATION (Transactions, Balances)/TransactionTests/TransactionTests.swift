@@ -296,44 +296,23 @@ class TransactionTests: LocalhostNodeTest {
     }
     
     func testTransactionWithNoActions() {
-        let atom = Atom()
+        let someParticle = ResourceIdentifierParticle(
+            resourceIdentifier: ResourceIdentifier(address: alice, name: "WHATEVER")
+        )
+        
+        let atom = Atom(particle: someParticle)
+        
         let atomToTransactionMapper = DefaultAtomToTransactionMapper(identity: aliceIdentity)
         guard let transaction = atomToTransactionMapper.transactionFromAtom(atom).blockingTakeFirst() else { return }
         XCTAssertEqual(transaction.actions.count, 0)
-    }
-    
-    // BONUS
-    func omitted_testBurnTransaction() {
-        let (tokenCreation, fooToken) = application.createToken(defineSupply: .mutable(initial: 35))
-        
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
-        )
-        
-        let transaction = Transaction {[
-            BurnTokensAction(tokenDefinitionReference: fooToken, amount: 5, burner: alice),
-            BurnTokensAction(tokenDefinitionReference: fooToken, amount: 10, burner: alice)
-            ]}
-        
-        let atom = try! application.atomFrom(transaction: transaction, addressOfActiveAccount: alice)
-        let atomToBurnActionMapper = DefaultAtomToBurnTokenMapper()
-        guard let burnActions: [BurnTokensAction] = atomToBurnActionMapper.mapAtomToActions(atom).blockingTakeFirst(1, timeout: 1) else { return }
-        XCTAssertEqual(burnActions.count, 2)
-        let burnActionZero = burnActions[0]
-        XCTAssertEqual(burnActionZero.amount, 5)
-        XCTAssertEqual(burnActionZero.burner, alice)
-        XCTAssertEqual(burnActionZero.tokenDefinitionReference, fooToken)
-        let burnActionOne = burnActions[1]
-        XCTAssertEqual(burnActionOne.amount, 10)
-        XCTAssertEqual(burnActionOne.burner, alice)
-        XCTAssertEqual(burnActionOne.tokenDefinitionReference, fooToken)
+        XCTAssertGreaterThanOrEqual(transaction.sentAt.timeIntervalSinceNow, -0.01) // max 10 ms ago
     }
     
     private let bag = DisposeBag()
-    func omitted_testTransactionWithMintPutUnique() {
+    func testTransactionComplex() {
         let (tokenCreation, fooToken) = application.createToken(defineSupply: .mutable(initial: 35))
         
-        application.observeTransactions(at: alice).subscribe(onNext: {
+        application.observeMyTransactions().subscribe(onNext: {
             print("✅ tx: \($0)")
         }).disposed(by: bag)
         
@@ -374,26 +353,26 @@ class TransactionTests: LocalhostNodeTest {
         )
         
         
-        guard let putUniqueTransactions = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingArrayTakeFirst(3, timeout: 1) else { return }
+        guard let putUniqueTransactions = application.observeMyTransactions(containingActionOfAnyType: [PutUniqueIdAction.self]).blockingArrayTakeFirst(3, timeout: 1) else { return }
         XCTAssertEqual(
             putUniqueTransactions.flatMap { $0.actions(ofType: PutUniqueIdAction.self) }.map { $0.string },
             ["mint", "burn", "unique"]
         )
         
-        guard let burnTxs = application.observeTransactions(at: alice, containingActionOfAnyType: [BurnTokensAction.self]).blockingArrayTakeFirst(1, timeout: 1) else { return }
+        guard let burnTxs = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self]).blockingArrayTakeFirst(1, timeout: 1) else { return }
         XCTAssertEqual(burnTxs.count, 1)
         XCTAssertEqual(burnTxs[0].actions.count, 2)
         
-        guard let burnOrMintTransactions = application.observeTransactions(at: alice, containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self]).blockingArrayTakeFirst(2, timeout: 1) else { return }
+        guard let burnOrMintTransactions = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self]).blockingArrayTakeFirst(2, timeout: 1) else { return }
         
         XCTAssertEqual(burnOrMintTransactions.count, 2)
         
-        guard let uniqueBurnTransactions = application.observeTransactions(at: alice, containingActionsOfAllTypes: [PutUniqueIdAction.self, BurnTokensAction.self]).blockingTakeFirst() else { return }
+        guard let uniqueBurnTransactions = application.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, BurnTokensAction.self]).blockingTakeFirst() else { return }
         
         guard case let uniqueActionInBurnTxs = uniqueBurnTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInBurnTx = uniqueActionInBurnTxs.first else { return XCTFail("Expected UniqueAction") }
         XCTAssertEqual(uniqueActionInBurnTx.string, "burn")
         
-        guard let uniqueMintTransactions = application.observeTransactions(at: alice, containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self]).blockingTakeFirst() else { return }
+        guard let uniqueMintTransactions = application.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self]).blockingTakeFirst() else { return }
         
         guard case let uniqueActionInMintTxs = uniqueMintTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInMintTx = uniqueActionInMintTxs.first else { return XCTFail("Expected UniqueAction") }
         XCTAssertEqual(uniqueActionInMintTx.string, "mint")
