@@ -54,7 +54,7 @@ class TransactionTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: 35)
+            defineSupply: .mutable(initial: 35)
         )
         
         XCTAssertTrue(
@@ -86,7 +86,7 @@ class TransactionTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: 35)
+            defineSupply: .mutable(initial: 35)
         )
         
         application.observeTransactions(at: alice).subscribe(onNext: {
@@ -154,5 +154,4 @@ class TransactionTests: LocalhostNodeTest {
         guard case let uniqueActionInMintTxs = uniqueMintTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInMintTx = uniqueActionInMintTxs.first else { return XCTFail("Expected UniqueAction") }
         XCTAssertEqual(uniqueActionInMintTx.string, "mint")
     }
-
 }

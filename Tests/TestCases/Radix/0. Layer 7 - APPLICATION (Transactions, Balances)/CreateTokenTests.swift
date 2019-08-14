@@ -109,7 +109,7 @@ class CreateTokenTests: LocalhostNodeTest {
 private extension CreateTokenTests {
     func createTokenAction(
         symbol: Symbol = "FOO",
-        supply: CreateTokenAction.InitialSupply = .mutableZeroSupply,
+        supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition = .mutableZeroSupply,
         creator: Address? = nil
     ) -> CreateTokenAction {
         
@@ -120,7 +120,7 @@ private extension CreateTokenTests {
             name: .irrelevant,
             symbol: symbol,
             description: .irrelevant,
-            supply: supply
+            defineSupply: supply
         )
         
     }

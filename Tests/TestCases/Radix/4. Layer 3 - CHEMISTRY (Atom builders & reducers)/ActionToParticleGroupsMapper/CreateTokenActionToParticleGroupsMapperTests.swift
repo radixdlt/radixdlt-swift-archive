@@ -63,13 +63,13 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
 }
 
 private extension CreateTokenActionToParticleGroupsMapperTests {
-    func doTestTokenCreation(initialSupply: CreateTokenAction.InitialSupply) {
+    func doTestTokenCreation(initialSupply: CreateTokenAction.InitialSupply.SupplyTypeDefinition) {
         let createTokenAction = try! CreateTokenAction(
             creator: address,
             name: "Cyon",
             symbol: "CCC",
             description: "Cyon Crypto Coin is the worst shit coin",
-            supply: initialSupply
+            defineSupply: initialSupply
         )
         
         let mapper = DefaultCreateTokenActionToParticleGroupsMapper()
@@ -144,7 +144,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         
         XCTAssertEqual(
             transferrableTokensParticle.amount.abs,
-            createTokenAction.initialSupply.amount
+            createTokenAction.supplyDefinition!.initialSupply.amount
         )
         
         if expectUnallocatedFromLeftOverSupply {

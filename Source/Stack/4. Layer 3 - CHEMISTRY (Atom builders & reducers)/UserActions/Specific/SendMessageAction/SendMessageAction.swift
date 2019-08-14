@@ -50,10 +50,11 @@ public extension SendMessageAction {
 }
 
 // MARK: `Designated` Initializers
-extension SendMessageAction {
-    
-    // Public `designated` initializer, only exposing messages to be encryped (`.plaintext` is an available encryption mode).
-    public init(
+// (cannot be moved to another file since main initializer is `private` (and ought to be))
+
+// Public `designated` initializer, only exposing messages to be encryped (`.plaintext` is an available encryption mode).
+public extension SendMessageAction {
+    init(
         from sender: AddressConvertible,
         to recipient: AddressConvertible,
         payload: Data,
@@ -69,9 +70,11 @@ extension SendMessageAction {
             encryptionMode: .encryptContext(encryptionContext)
         )
     }
+}
 
-    // Internal since used by `AtomToSendMessageActionMapper`
-    internal init(
+// Internal (instead of `private`) since used by `AtomToSendMessageActionMapper`
+internal extension SendMessageAction {
+    init(
         from sender: AddressConvertible,
         to recipient: AddressConvertible,
         payload: Data,
@@ -79,52 +82,5 @@ extension SendMessageAction {
     ) {
         let encryptionMode = EncryptionMode.decryptContext(decryptedContext)
         self.init(from: sender, to: recipient, payload: payload, encryptionMode: encryptionMode)
-    }
-}
-
-// MARK: - Payload Data
-public extension SendMessageAction {
-    
-    static func plainText(
-        from sender: AddressConvertible,
-        to recipient: AddressConvertible,
-        payload: Data
-    ) -> SendMessageAction {
-        
-        return SendMessageAction(
-            from: sender,
-            to: recipient,
-            payload: payload,
-            encryption: .plainText
-        )
-    }
-    
-    static func encryptedDecryptableOnlyByRecipientAndSender(
-        from sender: AddressConvertible,
-        to recipient: AddressConvertible,
-        payload: Data
-    ) -> SendMessageAction {
-        
-        return SendMessageAction(
-            from: sender,
-            to: recipient,
-            payload: payload,
-            encryption: .encryptedDecryptableOnlyByRecipientAndSender
-        )
-    }
-    
-    static func encrypted(
-        from sender: AddressConvertible,
-        to recipient: AddressConvertible,
-        payload: Data,
-        onlyDecryptableBy: [AddressConvertible]
-    ) -> SendMessageAction {
-        
-        return SendMessageAction(
-            from: sender,
-            to: recipient,
-            payload: payload,
-            encryption: .encryption(onlyDecryptableBy: onlyDecryptableBy)
-        )
     }
 }

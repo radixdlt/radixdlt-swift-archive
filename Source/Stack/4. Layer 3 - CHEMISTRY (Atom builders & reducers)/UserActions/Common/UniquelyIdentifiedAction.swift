@@ -24,6 +24,6 @@
 
 import Foundation
 
-public protocol UniquelyIdentifiedAction: UserAction {
+public protocol UniquelyIdentifiedUserAction: UserAction {
     var identifier: ResourceIdentifier { get }
 }

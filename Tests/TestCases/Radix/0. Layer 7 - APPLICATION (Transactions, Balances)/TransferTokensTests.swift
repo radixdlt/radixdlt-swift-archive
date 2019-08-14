@@ -54,7 +54,13 @@ class TransferTokensTests: LocalhostNodeTest {
     func testTransferTokenWithGranularityOf1() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         // WHEN: Alice transfer tokens she owns, to Bob
-        let (tokenCreation, rri) = try! application.createToken(name: "Alice Coin", symbol: "AC", description: "Best coin", supply: .fixed(to: 30))
+        let (tokenCreation, rri) = try! application.createToken(
+            name: "Alice Coin",
+            symbol: "AC",
+            description: "Best coin",
+            defineSupply: .fixed(to: 30)
+        )
+        
         // createTokenAction(address: alice, supply: .fixed(to: 30))
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -201,13 +207,13 @@ class TransferTokensTests: LocalhostNodeTest {
 }
 
 private extension TransferTokensTests {
-    func createTokenAction(address: Address, supply: CreateTokenAction.InitialSupply, granularity: Granularity = .default) -> CreateTokenAction {
+    func createTokenAction(address: Address, supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition, granularity: Granularity = .default) -> CreateTokenAction {
         return try! CreateTokenAction(
             creator: address,
             name: "Alice Coin",
             symbol: "AC",
             description: "Best coin",
-            supply: supply,
+            defineSupply: supply,
             granularity: granularity
         )
     }

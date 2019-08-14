@@ -52,7 +52,7 @@ class MintTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: 30)
+            defineSupply: .mutable(initial: 30)
         )
         
         XCTAssertTrue(
@@ -107,7 +107,7 @@ class MintTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: Supply(subtractingFromMax: 10))
+            defineSupply: .mutable(initial: Supply(subtractingFromMax: 10))
         )
         
         XCTAssertTrue(
@@ -140,7 +140,7 @@ class MintTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "BOB",
             description: "Created By Bob",
-            supply: .mutable(initial: Supply(subtractingFromMax: 10))
+            defineSupply: .mutable(initial: Supply(subtractingFromMax: 10))
         )
         
         XCTAssertTrue(
@@ -170,7 +170,7 @@ class MintTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .fixed(to: 10)
+            defineSupply: .fixed(to: 10)
         )
         
         XCTAssertTrue(
@@ -193,7 +193,7 @@ class MintTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: 30),
+            defineSupply: .mutable(initial: 30),
             granularity: 3
         )
         

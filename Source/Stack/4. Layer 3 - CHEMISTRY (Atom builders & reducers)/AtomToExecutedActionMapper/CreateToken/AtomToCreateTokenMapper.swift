@@ -31,7 +31,7 @@ public extension AtomToCreateTokenMapper {
     func mapAtomToActions(_ atom: Atom) -> Observable<[CreateTokenAction]> {
         var createTokenActions = [CreateTokenAction]()
         for particleGroup in atom {
-            guard let createTokenAction = createTokensActionFrom(particleGroup: particleGroup) else { continue }
+            guard let createTokenAction = createTokensActionFrom(particleGroup: particleGroup, atomIdentifier: atom.identifier()) else { continue }
             createTokenActions.append(createTokenAction)
         }
         
@@ -39,21 +39,25 @@ public extension AtomToCreateTokenMapper {
     }
 }
 
-private func createTokensActionFrom(particleGroup: ParticleGroup) -> CreateTokenAction? {
+private func createTokensActionFrom(particleGroup: ParticleGroup, atomIdentifier: AtomIdentifier) -> CreateTokenAction? {
     guard
         let downedRRITokensParticle = particleGroup.firstRRIParticle(spin: .down),
         case let rri = downedRRITokensParticle.resourceIdentifier,
         let typedTokenDefinition = particleGroup.typedTokenDefinition(matchingIdentifier: rri)
         else { return nil }
     
-    guard let initialSupply = initialSupplyFrom(typedTokenDefinition: typedTokenDefinition, particles: particleGroup.spunParticles) else {
+    guard let derivedSupply = derivedSupplyFrom(typedTokenDefinition: typedTokenDefinition, particles: particleGroup.spunParticles, atomIdentifier: atomIdentifier) else {
         log.warning("Found TypeTokenDefinition: \(typedTokenDefinition), but no initial supply, this is probably incorrectly implemented.")
         return nil
     }
-    return CreateTokenAction(initialSupply: initialSupply, tokenDefinition: typedTokenDefinition.tokenDefinition)
+    return CreateTokenAction(derivedSupply: derivedSupply, tokenDefinition: typedTokenDefinition.tokenDefinition)
 }
 
-private func initialSupplyFrom(typedTokenDefinition: TypedTokenDefinition, particles: [AnySpunParticle]) -> CreateTokenAction.InitialSupply? {
+private func derivedSupplyFrom(
+    typedTokenDefinition: TypedTokenDefinition,
+    particles: [AnySpunParticle],
+    atomIdentifier: AtomIdentifier
+) -> CreateTokenAction.InitialSupply.DerivedFromAtom? {
     let rri = typedTokenDefinition.tokenDefinition.tokenDefinitionReference
     switch typedTokenDefinition {
     case .fixedSupplyTokenDefinitionParticle:
@@ -64,32 +68,28 @@ private func initialSupplyFrom(typedTokenDefinition: TypedTokenDefinition, parti
                 return nil
         }
         
-        return .fixed(to: positiveSupply)
+        return .fixedInitialSupply(positiveSupply)
     case .mutableSupplyTokenDefinitionParticle:
-        guard particles.containsAnyUnallocatedTokensParticle(matchingIdentifier: rri, spin: .up) else {
-            return nil
-        }
-        
-        // TODO: Would like to map to initial supply, but its information is in another ParticleGroup, see `CreateTokenActionToParticleGroupsMapper` for details. Also impossible to disambiguate between CreateTokenAction with mutable initial supply, and with zero supply and then a mint action.
-        return .mutable(initial: nil)
+        guard
+            let unallocatedTokensParticle = particles.firstUnallocatedTokensParticle(matchingIdentifier: rri, spin: .up),
+            // Mutable supply always starts of with Max, from which we can mint.
+            unallocatedTokensParticle.amount == .max
+        else { return nil }
+        return .mutableSupply(initialSupplyInfoToBeFoundInAtomWithId: atomIdentifier)
     }
 }
 
 private extension CreateTokenAction {
-    init(initialSupply: InitialSupply, tokenDefinition: TokenConvertible) {
-        do {
-            try self.init(
-                creator: tokenDefinition.address,
-                name: tokenDefinition.name,
-                symbol: tokenDefinition.symbol,
-                description: tokenDefinition.description,
-                supply: initialSupply,
-                granularity: tokenDefinition.granularity,
-                iconUrl: tokenDefinition.iconUrl
-            )
-        } catch {
-            incorrectImplementation("Should always be able to init `CreateTokenAction` from a `TokenConvertible`, got unexpected error: \(error)")
-        }
+    init(derivedSupply: InitialSupply.DerivedFromAtom, tokenDefinition: TokenConvertible) {
+        self.init(
+            creator: tokenDefinition.address,
+            name: tokenDefinition.name,
+            symbol: tokenDefinition.symbol,
+            description: tokenDefinition.description,
+            derivedSupply: derivedSupply,
+            granularity: tokenDefinition.granularity,
+            iconUrl: tokenDefinition.iconUrl
+        )
     }
 }
 

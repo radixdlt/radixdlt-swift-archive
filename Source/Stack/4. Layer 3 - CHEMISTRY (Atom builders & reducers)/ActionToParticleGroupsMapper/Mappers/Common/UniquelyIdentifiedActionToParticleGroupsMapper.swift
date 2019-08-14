@@ -24,43 +24,43 @@
 
 import Foundation
 
-public protocol UniquelyIdentifiedActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper {}
+public protocol UniquelyIdentifiedUserActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper {}
 
-public extension UniquelyIdentifiedActionToParticleGroupsMapper {
+public extension UniquelyIdentifiedUserActionToParticleGroupsMapper {
     func requiredState(for action: Action) -> [AnyShardedParticleStateId] {
         return AnyShardedParticleStateId.stateForUniqueIdentifier(address: action.user)
     }
 }
 
-public extension UniquelyIdentifiedActionToParticleGroupsMapper where Action: UniquelyIdentifiedAction {
+public extension UniquelyIdentifiedUserActionToParticleGroupsMapper where Action: UniquelyIdentifiedUserAction {
     func validateInput(action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
         guard action.user == addressOfActiveAccount else {
-            throw UniquelyIdentifiedActionError.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: action.user)
+            throw UniquelyIdentifiedUserActionError.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: action.user)
         }
         
         let rri = action.identifier
         
         if upParticles.containsAnyUniqueParticle(matchingIdentifier: rri) {
-            throw UniquelyIdentifiedActionError.rriAlreadyUsedByUniqueId(string: rri.name)
+            throw UniquelyIdentifiedUserActionError.rriAlreadyUsedByUniqueId(string: rri.name)
         }
         
         if upParticles.containsAnyMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
-            throw UniquelyIdentifiedActionError.rriAlreadyUsedByMutableSupplyToken(identifier: rri)
+            throw UniquelyIdentifiedUserActionError.rriAlreadyUsedByMutableSupplyToken(identifier: rri)
         }
         
         if upParticles.containsAnyFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri) {
-            throw UniquelyIdentifiedActionError.rriAlreadyUsedByFixedSupplyToken(identifier: rri)
+            throw UniquelyIdentifiedUserActionError.rriAlreadyUsedByFixedSupplyToken(identifier: rri)
         }
         
         // All is well
     }
 }
 
-public extension UniquelyIdentifiedActionToParticleGroupsMapper where Action: UniquelyIdentifiedAction, Self: Throwing, Error: UniqueActionErrorInitializable {
+public extension UniquelyIdentifiedUserActionToParticleGroupsMapper where Action: UniquelyIdentifiedUserAction, Self: Throwing, Error: UniqueActionErrorInitializable {
     func validateInputMappingUniqueActionError(action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
         do {
             try validateInput(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
-        } catch let uniqueActionError as UniquelyIdentifiedActionError {
+        } catch let uniqueActionError as UniquelyIdentifiedUserActionError {
             throw Error.errorFrom(uniqueActionError: uniqueActionError)
         } catch { throw error }
     }    

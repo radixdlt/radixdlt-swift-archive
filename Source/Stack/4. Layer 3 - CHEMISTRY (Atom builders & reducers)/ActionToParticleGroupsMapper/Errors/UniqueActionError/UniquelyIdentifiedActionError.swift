@@ -24,7 +24,7 @@
 
 import Foundation
 
-public enum UniquelyIdentifiedActionError: Swift.Error, Equatable {
+public enum UniquelyIdentifiedUserActionError: Swift.Error, Equatable {
     case rriAlreadyUsedByUniqueId(string: String)
     case rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier)
     case rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier)

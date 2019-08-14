@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,18 +24,18 @@
 
 import Foundation
 
-public protocol CreateTokenActionToParticleGroupsMapper: UniquelyIdentifiedUserActionToParticleGroupsMapper, Throwing where Action == CreateTokenAction, Error == CreateTokenError {}
-
-public enum CreateTokenError: UniqueActionErrorInitializable {
-    case uniqueActionError(UniquelyIdentifiedUserActionError)
+public extension CreateTokenAction.InitialSupply {
     
-    /// See `CreateTokenAction.InitialSupply.DerivedFromAtom.mutableSupply` for more info
-    case createTokenActionContainsDerivedSupplyWhichIsNotSupported
-}
-
-public extension CreateTokenError {
-    static func errorFrom(uniqueActionError: UniquelyIdentifiedUserActionError) -> CreateTokenError {
-        return .uniqueActionError(uniqueActionError)
+    enum DerivedFromAtom {
+        case fixedInitialSupply(PositiveSupply)
+        
+        /// Mutable Supply without information about any potential initial supply.
+        ///
+        /// Some mapper derived a CreateTokenAction with Mutable Supply from some Atom, but could not derive initial supply
+        /// the reason for this is that we are unable to disambiguate between scenario 1 and scenario 2 below:
+        /// scenario 1: CreateTokenAction of a token with mutable supply type, with an initial supply of `10`
+        /// scenario 2: CreateTokenAction of a token with mutable supply type, without any initial supply (`0`), followed by a MintToken(`10`) action.
+        /// Also the Mint action is in another ParticleGroup making the mapper tedious to implement
+        case mutableSupply(initialSupplyInfoToBeFoundInAtomWithId: AtomIdentifier)
     }
-
 }

@@ -24,39 +24,30 @@
 
 import Foundation
 
-public struct CreateTokenAction: UniquelyIdentifiedAction, Throwing, TokenConvertible {
+public struct CreateTokenAction: UniquelyIdentifiedUserAction, Throwing, TokenConvertible {
 
     public let creator: Address
     public let name: Name
     public let symbol: Symbol
     public let description: Description
     public let granularity: Granularity
-    public let initialSupply: Supply
-    public let tokenSupplyType: SupplyType
     public let iconUrl: URL?
+
+    // Private since it is not used directly. Instead given the context either `supplyDefinition` should be used
+    // for `CreateTokenActionToParticleGroupsMapper`
+    private let initialSupplyContext: InitialSupply
     
     public init(
         creator: Address,
         name: Name,
         symbol: Symbol,
         description: Description,
-        supply initialSupplyType: InitialSupply,
+        defineSupply supplyTypeDefinition: InitialSupply.SupplyTypeDefinition,
         granularity: Granularity = .default,
         iconUrl: URL? = nil
     ) throws {
 
-        switch initialSupplyType {
-        case .fixed(let positiveInitialSupply):
-            self.tokenSupplyType = .fixed
-            self.initialSupply = Supply(positiveSupply: positiveInitialSupply)
-        case .mutable(let nonNegativeInitialSupply):
-            self.tokenSupplyType = .mutable
-            self.initialSupply = nonNegativeInitialSupply ?? .zero
-        }
-        
-        guard initialSupply.isExactMultipleOfGranularity(granularity) else {
-            throw Error.initialSupplyNotMultipleOfGranularity
-        }
+        try supplyTypeDefinition.isExactMultipleOfGranularity(granularity)
         
         self.creator = creator
         self.name = name
@@ -64,9 +55,43 @@ public struct CreateTokenAction: UniquelyIdentifiedAction, Throwing, TokenConver
         self.description = description
         self.granularity = granularity
         self.iconUrl = iconUrl
+        self.initialSupplyContext = .defined(in: supplyTypeDefinition)
     }
 }
 
+// MARK: Internal
+internal extension CreateTokenAction {
+    init(
+        creator: Address,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        derivedSupply: InitialSupply.DerivedFromAtom,
+        granularity: Granularity = .default,
+        iconUrl: URL? = nil
+    ) {
+        self.creator = creator
+        self.name = name
+        self.symbol = symbol
+        self.description = description
+        self.granularity = granularity
+        self.iconUrl = iconUrl
+        self.initialSupplyContext = .derivedFromAtom(derivedSupply)
+    }
+}
+
+internal extension CreateTokenAction {
+    var supplyDefinition: InitialSupply.SupplyTypeDefinition? {
+        switch initialSupplyContext {
+        case .defined(let definition): return definition
+        case .derivedFromAtom: return nil
+        }
+    }
+}
+
+// MARK: Public
+
+// MARK: UserAction
 public extension CreateTokenAction {
     var user: Address { return creator }
     var nameOfAction: UserActionName { return .createToken }
@@ -84,46 +109,20 @@ public extension CreateTokenAction {
     var tokenDefinedBy: Address {
         return creator
     }
-}
-
-// MARK: - TokenSupplyStateConvertible
-public extension CreateTokenAction {
-    var totalSupply: Supply {
-        return initialSupply
+    var tokenSupplyType: SupplyType {
+        switch initialSupplyContext {
+        case .defined(let definition): return definition.tokenSupplyType
+        case .derivedFromAtom(let derived):
+            switch derived {
+            case .fixedInitialSupply: return .fixed
+            case .mutableSupply: return .mutable
+            }
+        }
     }
 }
 
 public extension CreateTokenAction {
     var identifier: ResourceIdentifier {
         return ResourceIdentifier(address: creator, symbol: symbol)
-    }
-}
-
-public extension CreateTokenAction {
-    
-    enum InitialSupply {
-        case fixed(to: PositiveSupply)
-        case mutable(initial: Supply?)
-    }
-}
-
-public extension CreateTokenAction.InitialSupply {
-    
-    static var mutableZeroSupply: CreateTokenAction.InitialSupply {
-        return .mutable(initial: nil)
-    }
-    
-    var isMutable: Bool {
-        switch self {
-        case .fixed: return false
-        case .mutable: return true
-        }
-    }
-    
-    var isFixed: Bool {
-        switch self {
-        case .fixed: return true
-        case .mutable: return false
-        }
     }
 }

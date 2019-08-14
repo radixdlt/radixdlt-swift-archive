@@ -25,6 +25,10 @@
 		E60554172303164700528510 /* EncryptionMode+EncryptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554162303164700528510 /* EncryptionMode+EncryptContext.swift */; };
 		E60554192303167300528510 /* EncryptionMode+DecryptContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554182303167300528510 /* EncryptionMode+DecryptContext.swift */; };
 		E605541C230316A900528510 /* EncryptionMode+EncryptContext+Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605541B230316A900528510 /* EncryptionMode+EncryptContext+Builder.swift */; };
+		E605541E2304170D00528510 /* SendMessageAction+Init+Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605541D2304170D00528510 /* SendMessageAction+Init+Data.swift */; };
+		E60554232304188E00528510 /* CreateTokenAction+InitialSupply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554222304188E00528510 /* CreateTokenAction+InitialSupply.swift */; };
+		E6055425230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6055424230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift */; };
+		E60554272304191A00528510 /* CreateTokenAction.InitialSupply+DerivedFromAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554262304191A00528510 /* CreateTokenAction.InitialSupply+DerivedFromAtom.swift */; };
 		E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */; };
 		E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */; };
 		E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */; };
@@ -638,6 +642,10 @@
 		E60554162303164700528510 /* EncryptionMode+EncryptContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EncryptionMode+EncryptContext.swift"; sourceTree = "<group>"; };
 		E60554182303167300528510 /* EncryptionMode+DecryptContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EncryptionMode+DecryptContext.swift"; sourceTree = "<group>"; };
 		E605541B230316A900528510 /* EncryptionMode+EncryptContext+Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EncryptionMode+EncryptContext+Builder.swift"; sourceTree = "<group>"; };
+		E605541D2304170D00528510 /* SendMessageAction+Init+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SendMessageAction+Init+Data.swift"; sourceTree = "<group>"; };
+		E60554222304188E00528510 /* CreateTokenAction+InitialSupply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateTokenAction+InitialSupply.swift"; sourceTree = "<group>"; };
+		E6055424230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift"; sourceTree = "<group>"; };
+		E60554262304191A00528510 /* CreateTokenAction.InitialSupply+DerivedFromAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateTokenAction.InitialSupply+DerivedFromAtom.swift"; sourceTree = "<group>"; };
 		E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateIdentifiable.swift; sourceTree = "<group>"; };
 		E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateId.swift; sourceTree = "<group>"; };
 		E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShardedParticleStateId.swift; sourceTree = "<group>"; };
@@ -1308,6 +1316,7 @@
 			isa = PBXGroup;
 			children = (
 				E605540E2303153D00528510 /* SendMessageAction+Init+TextMessage.swift */,
+				E605541D2304170D00528510 /* SendMessageAction+Init+Data.swift */,
 			);
 			path = "SendMessageAction+Init";
 			sourceTree = "<group>";
@@ -1338,6 +1347,33 @@
 				E605541B230316A900528510 /* EncryptionMode+EncryptContext+Builder.swift */,
 			);
 			path = "EncryptionMode+EncryptContext";
+			sourceTree = "<group>";
+		};
+		E605541F2304177F00528510 /* CreateTokenAction */ = {
+			isa = PBXGroup;
+			children = (
+				E60554212304186C00528510 /* CreateTokenAction+InitialSupply */,
+				E6055420230417DF00528510 /* CreateTokenAction+Init */,
+				E6D15680227056F800AC3438 /* CreateTokenAction.swift */,
+			);
+			path = CreateTokenAction;
+			sourceTree = "<group>";
+		};
+		E6055420230417DF00528510 /* CreateTokenAction+Init */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "CreateTokenAction+Init";
+			sourceTree = "<group>";
+		};
+		E60554212304186C00528510 /* CreateTokenAction+InitialSupply */ = {
+			isa = PBXGroup;
+			children = (
+				E60554222304188E00528510 /* CreateTokenAction+InitialSupply.swift */,
+				E6055424230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift */,
+				E60554262304191A00528510 /* CreateTokenAction.InitialSupply+DerivedFromAtom.swift */,
+			);
+			path = "CreateTokenAction+InitialSupply";
 			sourceTree = "<group>";
 		};
 		E606F130230151CB004D4D3D /* ShardedParticleStateId */ = {
@@ -2331,7 +2367,7 @@
 				E689DBAA225F8F3200340CF3 /* TransferTokenAction.swift */,
 				E6FCB66122F0C7FE00ECC01B /* BurnTokensAction.swift */,
 				E6FCB65A22F0C76900ECC01B /* MintTokensAction.swift */,
-				E6D15680227056F800AC3438 /* CreateTokenAction.swift */,
+				E605541F2304177F00528510 /* CreateTokenAction */,
 			);
 			path = Specific;
 			sourceTree = "<group>";
@@ -4117,6 +4153,7 @@
 				E6E2799B2271CD1C0067D46E /* ExactLengthSpecifying.swift in Sources */,
 				E6A4ABC6221EDD4A006C5CA8 /* BigUInt_Extension.swift in Sources */,
 				E6166BED2260CD5D003A9442 /* Port.swift in Sources */,
+				E60554232304188E00528510 /* CreateTokenAction+InitialSupply.swift in Sources */,
 				E6A508AE224E713F00128123 /* MutableSupplyTokenDefinitionParticle.swift in Sources */,
 				E6025402225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift in Sources */,
 				E6E2792B2271CD1C0067D46E /* SignableMessage.swift in Sources */,
@@ -4189,6 +4226,7 @@
 				E6E279382271CD1C0067D46E /* PublicKey.swift in Sources */,
 				E689DB83225F655100340CF3 /* RadixApplicationClient.swift in Sources */,
 				E6A508B5224E713F00128123 /* AddressConvertible.swift in Sources */,
+				E6055425230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift in Sources */,
 				E6E279762271CD1C0067D46E /* SignedAmount.swift in Sources */,
 				E626E1E622B3FB530046D2AC /* TokenBalance.swift in Sources */,
 				E689DBAB225F8F3200340CF3 /* TransferTokenAction.swift in Sources */,
@@ -4254,6 +4292,7 @@
 				E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */,
 				E6340C9222FC4E140044BA97 /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6E279502271CD1C0067D46E /* JSONPrefix.swift in Sources */,
+				E60554272304191A00528510 /* CreateTokenAction.InitialSupply+DerivedFromAtom.swift in Sources */,
 				E626E20222B41B750046D2AC /* AnyStatelessActionToParticleGroupsMapper.swift in Sources */,
 				E6FCB66822F2EDD500ECC01B /* AddressOfAccountDeriving.swift in Sources */,
 				E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */,
@@ -4517,6 +4556,7 @@
 				E626E1FE22B41A7B0046D2AC /* AtomToTokenTransferMapper.swift in Sources */,
 				E6E2792D2271CD1C0067D46E /* Signer.swift in Sources */,
 				E6A507E6224E20AB00128123 /* RPCResposeResultConvertible.swift in Sources */,
+				E605541E2304170D00528510 /* SendMessageAction+Init+Data.swift in Sources */,
 				E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */,
 				E62EFDCC2249378300B6DAD6 /* HTTPClient.swift in Sources */,
 				E6E2797A2271CD1C0067D46E /* TokenPermissions.swift in Sources */,

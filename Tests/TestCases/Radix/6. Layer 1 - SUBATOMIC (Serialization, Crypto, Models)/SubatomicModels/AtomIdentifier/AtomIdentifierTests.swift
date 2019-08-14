@@ -118,7 +118,7 @@ class AtomIdentifierTests: XCTestCase {
             name: "Test",
             symbol: "TEST",
             description: "Test description",
-            supply: .fixed(to: 10)
+            defineSupply: .fixed(to: 10)
         )
         
         let createTokenAtom = testAidOfAtomFrom(

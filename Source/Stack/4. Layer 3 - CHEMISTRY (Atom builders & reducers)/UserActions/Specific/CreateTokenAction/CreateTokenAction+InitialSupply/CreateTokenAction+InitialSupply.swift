@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,18 +24,9 @@
 
 import Foundation
 
-public protocol CreateTokenActionToParticleGroupsMapper: UniquelyIdentifiedUserActionToParticleGroupsMapper, Throwing where Action == CreateTokenAction, Error == CreateTokenError {}
-
-public enum CreateTokenError: UniqueActionErrorInitializable {
-    case uniqueActionError(UniquelyIdentifiedUserActionError)
-    
-    /// See `CreateTokenAction.InitialSupply.DerivedFromAtom.mutableSupply` for more info
-    case createTokenActionContainsDerivedSupplyWhichIsNotSupported
-}
-
-public extension CreateTokenError {
-    static func errorFrom(uniqueActionError: UniquelyIdentifiedUserActionError) -> CreateTokenError {
-        return .uniqueActionError(uniqueActionError)
+public extension CreateTokenAction {
+    enum InitialSupply {
+        case defined(in: SupplyTypeDefinition)
+        case derivedFromAtom(DerivedFromAtom)
     }
-
 }

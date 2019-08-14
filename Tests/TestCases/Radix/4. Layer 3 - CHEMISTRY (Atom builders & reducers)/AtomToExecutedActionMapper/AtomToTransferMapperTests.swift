@@ -43,7 +43,7 @@ class AtomToTransferMapperTests: XCTestCase {
             name: "Alice Coin",
             symbol: "AC",
             description: "Alice coin is the best",
-            supply: .fixed(to: 100)
+            defineSupply: .fixed(to: 100)
         )
         
         XCTAssertTrue(tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW))
@@ -78,7 +78,7 @@ class AtomToTransferMapperTests: XCTestCase {
             name: "Alice Coin",
             symbol: "AC",
             description: "Alice coin is the best",
-            supply: .fixed(to: 100)
+            defineSupply: .fixed(to: 100)
         )
         
         XCTAssertTrue(tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW))

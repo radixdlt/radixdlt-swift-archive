@@ -52,7 +52,7 @@ public struct FixedSupplyTokenDefinitionParticle:
         name: Name,
         description: Description,
         address: Address,
-        supply: PositiveAmount,
+        supply: PositiveSupply,
         granularity: Granularity = .default,
         iconUrl: URL? = nil
     ) {
@@ -61,7 +61,7 @@ public struct FixedSupplyTokenDefinitionParticle:
         self.rri = ResourceIdentifier(address: address, symbol: symbol)
         self.granularity = granularity
         self.iconUrl = iconUrl
-        self.supply = supply
+        self.supply = supply.amount
     }
 }
 
@@ -81,12 +81,8 @@ public extension FixedSupplyTokenDefinitionParticle {
 
 // MARK: - From CreateTokenAction
 public extension FixedSupplyTokenDefinitionParticle {
-    init(createTokenAction action: CreateTokenAction) {
-        
-        guard let positiveSupply = action.initialSupply.positiveAmount else {
-            incorrectImplementation("Should not be able to pass a non positive amount to CreateTokenAction for `fixed` supply")
-        }
-        
+    init(createTokenAction action: CreateTokenAction, positiveSupply: PositiveSupply) {
+
         self.init(
             symbol: action.symbol,
             name: action.name,

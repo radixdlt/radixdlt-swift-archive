@@ -24,7 +24,7 @@
 
 import Foundation
 
-public struct PutUniqueIdAction: UserAction, UniquelyIdentifiedAction {
+public struct PutUniqueIdAction: UserAction, UniquelyIdentifiedUserAction {
     public let uniqueMaker: Address
     public let string: String
 }

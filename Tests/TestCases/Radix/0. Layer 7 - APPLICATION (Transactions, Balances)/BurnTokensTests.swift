@@ -57,7 +57,7 @@ class BurnTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: nil)
+            defineSupply: .mutable(initial: nil)
         )
         
         let fooToken = createTokenAction.identifier
@@ -97,7 +97,7 @@ class BurnTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: 35)
+            defineSupply: .mutable(initial: 35)
         )
         
         XCTAssertTrue(
@@ -152,7 +152,7 @@ class BurnTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: 10)
+            defineSupply: .mutable(initial: 10)
         )
         
         XCTAssertTrue(
@@ -182,7 +182,7 @@ class BurnTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "BOB",
             description: "Created By Bob",
-            supply: .mutable(initial: 1000)
+            defineSupply: .mutable(initial: 1000)
         )
         
         XCTAssertTrue(
@@ -213,7 +213,7 @@ class BurnTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: 1000)
+            defineSupply: .mutable(initial: 1000)
         )
         
         XCTAssertTrue(
@@ -235,7 +235,7 @@ class BurnTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .fixed(to: 10)
+            defineSupply: .fixed(to: 10)
         )
         
         XCTAssertTrue(
@@ -258,7 +258,7 @@ class BurnTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: 30),
+            defineSupply: .mutable(initial: 30),
             granularity: 3
         )
         

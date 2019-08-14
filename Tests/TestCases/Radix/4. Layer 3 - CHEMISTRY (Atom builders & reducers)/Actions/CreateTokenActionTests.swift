@@ -61,7 +61,7 @@ class CreateTokenActionTests: XCTestCase {
 private extension CreateTokenActionTests {
     
     func createAction(
-        supply: CreateTokenAction.InitialSupply,
+        supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
         granularity: Granularity = .default
     ) throws -> CreateTokenAction {
         return try CreateTokenAction(
@@ -69,7 +69,7 @@ private extension CreateTokenActionTests {
             name: .irrelevant,
             symbol: .irrelevant,
             description: .irrelevant,
-            supply: supply,
+            defineSupply: supply,
             granularity: granularity
         )
     }

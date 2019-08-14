@@ -40,7 +40,7 @@ class TokenDefinitionsStateReducerTests: XCTestCase {
     }
     
     func testFixedTokenWithNoMint() {
-        let tokenDefinitionParticle = makeFixedSupplyTokenDefinitionParticle(supply: .one)
+        let tokenDefinitionParticle = makeFixedSupplyTokenDefinitionParticle(supply: 1)
         
         let expectedRri = tokenDefinitionParticle.tokenDefinitionReference
         let reducer = TokenDefinitionsReducer()
@@ -114,7 +114,7 @@ private func makeMutableSupplyTokenDefinitionParticle(tokenPermissions: TokenPer
     )
 }
 
-private func makeFixedSupplyTokenDefinitionParticle(supply: PositiveAmount) -> FixedSupplyTokenDefinitionParticle {
+private func makeFixedSupplyTokenDefinitionParticle(supply: PositiveSupply) -> FixedSupplyTokenDefinitionParticle {
     return FixedSupplyTokenDefinitionParticle(
         symbol: "TEST",
         name: "Test",
