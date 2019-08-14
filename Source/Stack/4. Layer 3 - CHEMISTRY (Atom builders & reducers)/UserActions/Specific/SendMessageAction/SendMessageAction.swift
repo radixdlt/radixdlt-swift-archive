@@ -84,3 +84,13 @@ internal extension SendMessageAction {
         self.init(from: sender, to: recipient, payload: payload, encryptionMode: encryptionMode)
     }
 }
+
+// MARK: Payload as Message
+public extension SendMessageAction {
+    func textMessage(decodeAs encoding: String.Encoding = .default) -> String? {
+        switch encryptionMode {
+        case .decryptContext(.cannotDecrypt): return nil
+        default: return String(data: payload, encoding: encoding)
+        }
+    }
+}

@@ -54,12 +54,7 @@ class TransferTokensTests: LocalhostNodeTest {
     func testTransferTokenWithGranularityOf1() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         // WHEN: Alice transfer tokens she owns, to Bob
-        let (tokenCreation, rri) = try! application.createToken(
-            name: "Alice Coin",
-            symbol: "AC",
-            description: "Best coin",
-            defineSupply: .fixed(to: 30)
-        )
+        let (tokenCreation, rri) = application.createToken(symbol: "AC", defineSupply: .fixed(to: 30))
         
         // createTokenAction(address: alice, supply: .fixed(to: 30))
         XCTAssertTrue(
@@ -109,7 +104,7 @@ class TransferTokensTests: LocalhostNodeTest {
         // WHEN: Alice tries to transfer tokens of some type she does not own, to Bob
         let amount: PositiveAmount = 10
         let unknownRRI = ResourceIdentifier(address: alice.address, name: "Unknown")
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: unknownRRI))
+        let transfer = application.transfer(tokens: TransferTokensAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: unknownRRI))
         
         // THEN:  I see that action fails with error `foundNoTokenDefinition`
         transfer.blockingAssertThrows(
@@ -128,7 +123,7 @@ class TransferTokensTests: LocalhostNodeTest {
         )
         let rri = createToken.identifier
         let amount: PositiveAmount = 50
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: rri))
+        let transfer = application.transfer(tokens: TransferTokensAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: rri))
         
         // THEN:  I see that action fails with error `InsufficientFunds`
         transfer.blockingAssertThrows(
@@ -147,7 +142,7 @@ class TransferTokensTests: LocalhostNodeTest {
         )
         let rri = createToken.identifier
         
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: 20, tokenResourceIdentifier: rri))
+        let transfer = application.transfer(tokens: TransferTokensAction(from: alice, to: bob, amount: 20, tokenResourceIdentifier: rri))
         
         // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
@@ -170,7 +165,7 @@ class TransferTokensTests: LocalhostNodeTest {
         let amountToSend: PositiveAmount = 7
         
         let rri = createToken.identifier
-        let transfer = application.transfer(tokens: TransferTokenAction(from: alice, to: bob, amount: amountToSend, tokenResourceIdentifier: rri))
+        let transfer = application.transfer(tokens: TransferTokensAction(from: alice, to: bob, amount: amountToSend, tokenResourceIdentifier: rri))
         
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
         transfer.blockingAssertThrows(
@@ -196,7 +191,7 @@ class TransferTokensTests: LocalhostNodeTest {
         let rri = createToken.identifier
         
         // WHEN: Alice tries to spend Carols coins
-        let transfer = application.transfer(tokens: TransferTokenAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
+        let transfer = application.transfer(tokens: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
         
         // THEN: I see that it fails
         transfer.blockingAssertThrows(

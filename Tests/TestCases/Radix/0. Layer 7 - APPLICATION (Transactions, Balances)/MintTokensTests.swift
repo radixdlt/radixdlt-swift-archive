@@ -48,12 +48,7 @@ class MintTokensTests: LocalhostNodeTest {
     func testMintSuccessful() {
         
         // GIVEN: Radix identity Alice and an application layer action MintToken
-        let (tokenCreation, fooToken) = try! application.createToken(
-            name: "FooToken",
-            symbol: "ALICE",
-            description: "Created By Alice",
-            defineSupply: .mutable(initial: 30)
-        )
+        let (tokenCreation, fooToken) = application.createToken(defineSupply: .mutable(initial: 30))
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -137,9 +132,6 @@ class MintTokensTests: LocalhostNodeTest {
         
         // GIVEN: ... and a previously created FooToken, for which Alice does **NOT** have the appropriate permissions
         let (tokenCreation, fooToken) = try! bobApp.createToken(
-            name: "FooToken",
-            symbol: "BOB",
-            description: "Created By Bob",
             defineSupply: .mutable(initial: Supply(subtractingFromMax: 10))
         )
         
@@ -166,12 +158,7 @@ class MintTokensTests: LocalhostNodeTest {
     
     func testMintFailDueToSupplyBeingFixed() {
         // GIVEN: Radix identity Alice and an application layer action MintToken, and a previously created FooToken, which has FIXED supply
-        let (tokenCreation, fooToken) = try! application.createToken(
-            name: "FooToken",
-            symbol: "ALICE",
-            description: "Created By Alice",
-            defineSupply: .fixed(to: 10)
-        )
+        let (tokenCreation, fooToken) = application.createToken(defineSupply: .fixed(to: 10))
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -189,10 +176,7 @@ class MintTokensTests: LocalhostNodeTest {
     
     func testMintFailDueToIncorrectGranularity() {
         // GIVEN: Radix identity Alice and an application layer action MintToken, and a previously created FooToken, with a granularity of 3
-        let (tokenCreation, fooToken) = try! application.createToken(
-            name: "FooToken",
-            symbol: "ALICE",
-            description: "Created By Alice",
+        let (tokenCreation, fooToken) = application.createToken(
             defineSupply: .mutable(initial: 30),
             granularity: 3
         )

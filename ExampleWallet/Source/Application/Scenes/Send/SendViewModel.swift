@@ -75,11 +75,11 @@ extension SendViewModel: ViewModelType {
 
         let amount = input.amountToSend.map { try? PositiveAmount(string: $0)  }
 
-        let transfer: Driver<TransferTokenAction?> = Driver.combineLatest(recipient, amount, balanceOfXrd) {
+        let transfer: Driver<TransferTokensAction?> = Driver.combineLatest(recipient, amount, balanceOfXrd) {
             guard let recipient = $0, let amount = $1, amount <= $2.amount else {
                 return nil
             }
-            return TransferTokenAction(
+            return TransferTokensAction(
                 from: myAddress,
                 to: recipient, amount: amount,
                 tokenResourceIdentifier: xrdRri

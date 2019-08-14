@@ -163,12 +163,12 @@ public extension RadixApplicationClient {
 
 // MARK: TokenTransferring
 public extension RadixApplicationClient {
-    func transfer(tokens transferTokensAction: TransferTokenAction) -> ResultOfUserAction {
+    func transfer(tokens transferTokensAction: TransferTokensAction) -> ResultOfUserAction {
         return execute(actions: transferTokensAction)
     }
     
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokenAction> {
-        return observeActions(ofType: TransferTokenAction.self, at: address)
+    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokensAction> {
+        return observeActions(ofType: TransferTokensAction.self, at: address)
     }
 }
 

@@ -93,12 +93,7 @@ class BurnTokensTests: LocalhostNodeTest {
     func testBurnSuccessful() {
         
         // GIVEN: Radix identity Alice and an application layer action BurnToken
-        let (tokenCreation, fooToken) = try! application.createToken(
-            name: "FooToken",
-            symbol: "ALICE",
-            description: "Created By Alice",
-            defineSupply: .mutable(initial: 35)
-        )
+        let (tokenCreation, fooToken) = application.createToken(defineSupply: .mutable(initial: 35))
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -148,12 +143,7 @@ class BurnTokensTests: LocalhostNodeTest {
         // GIVEN: Radix identity Alice and an application layer action BurnToken
         
         // GIVEN: ... and a previously created FooToken which has a supply of max - 10 tokens, for which Alice has the appropriate permissions.
-        let (tokenCreation, fooToken) = try! application.createToken(
-            name: "FooToken",
-            symbol: "ALICE",
-            description: "Created By Alice",
-            defineSupply: .mutable(initial: 10)
-        )
+        let (tokenCreation, fooToken) = application.createToken(defineSupply: .mutable(initial: 10))
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -178,12 +168,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let aliceApp = application!
         
         // GIVEN: ... and a previously created FooToken, for which Alice does **NOT** have the appropriate permissions
-        let (tokenCreation, fooToken) = try! bobApp.createToken(
-            name: "FooToken",
-            symbol: "BOB",
-            description: "Created By Bob",
-            defineSupply: .mutable(initial: 1000)
-        )
+        let (tokenCreation, fooToken) = bobApp.createToken(defineSupply: .mutable(initial: 1000))
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -209,12 +194,7 @@ class BurnTokensTests: LocalhostNodeTest {
     func testFailingBurnAliceTriesToBurnCarolsCoins() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
-        let (tokenCreation, fooToken) = try! application.createToken(
-            name: "FooToken",
-            symbol: "ALICE",
-            description: "Created By Alice",
-            defineSupply: .mutable(initial: 1000)
-        )
+        let (tokenCreation, fooToken) = application.createToken(defineSupply: .mutable(initial: 1000))
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -231,12 +211,7 @@ class BurnTokensTests: LocalhostNodeTest {
     
     func testBurnFailDueToSupplyBeingFixed() {
         // GIVEN: Radix identity Alice and an application layer action BurnToken, and a previously created FooToken, which has FIXED supply
-        let (tokenCreation, fooToken) = try! application.createToken(
-            name: "FooToken",
-            symbol: "ALICE",
-            description: "Created By Alice",
-            defineSupply: .fixed(to: 10)
-        )
+        let (tokenCreation, fooToken) = application.createToken(defineSupply: .fixed(to: 10))
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -254,10 +229,7 @@ class BurnTokensTests: LocalhostNodeTest {
     
     func testBurnFailDueToIncorrectGranularity() {
         // GIVEN: Radix identity Alice and an application layer action BurnToken, and a previously created FooToken, with a granularity of 3
-        let (tokenCreation, fooToken) = try! application.createToken(
-            name: "FooToken",
-            symbol: "ALICE",
-            description: "Created By Alice",
+        let (tokenCreation, fooToken) = application.createToken(
             defineSupply: .mutable(initial: 30),
             granularity: 3
         )

@@ -28,8 +28,8 @@ import RxSwift
 /// Type that is can make transactions of different types between Radix accounts
 public protocol TokenTransferring: ActiveAccountOwner {
 
-    func transfer(tokens: TransferTokenAction) -> ResultOfUserAction
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokenAction>
+    func transfer(tokens: TransferTokensAction) -> ResultOfUserAction
+    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokensAction>
 }
 
 public extension TokenTransferring {
@@ -81,7 +81,7 @@ public extension TokenTransferring {
         message: String,
         messageEncoding: String.Encoding = .default,
         from specifiedSender: AddressConvertible? = nil
-    ) -> TransferTokenAction {
+    ) -> TransferTokensAction {
         
         let attachment = message.toData(encodingForced: messageEncoding)
         
@@ -100,11 +100,11 @@ public extension TokenTransferring {
         amount: PositiveAmount,
         attachment: Data? = nil,
         from specifiedSender: AddressConvertible? = nil
-    ) -> TransferTokenAction {
+    ) -> TransferTokensAction {
         
         let sender = specifiedSender ?? addressOfActiveAccount
         
-        let transferAction = TransferTokenAction(
+        let transferAction = TransferTokensAction(
             from: sender,
             to: recipient,
             amount: amount,
@@ -117,7 +117,12 @@ public extension TokenTransferring {
 }
 
 public extension TokenTransferring {
-    func observeMyTokenTransfers() -> Observable<TransferTokenAction> {
+    
+    /// Do not confuse this with `observeMyTransactions`, this returns a stream
+    /// of executed Token Transfers, either by you or someone else, the latter
+    /// returns a stream of `ExecutedTransaction`, which is a container of UserActions
+    /// submitted in a single Atom at some earlier point in time
+    func observeMyTokenTransfers() -> Observable<TransferTokensAction> {
         return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
     }
 }

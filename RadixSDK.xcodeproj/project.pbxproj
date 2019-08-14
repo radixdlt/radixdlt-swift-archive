@@ -29,6 +29,7 @@
 		E60554232304188E00528510 /* CreateTokenAction+InitialSupply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554222304188E00528510 /* CreateTokenAction+InitialSupply.swift */; };
 		E6055425230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6055424230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift */; };
 		E60554272304191A00528510 /* CreateTokenAction.InitialSupply+DerivedFromAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554262304191A00528510 /* CreateTokenAction.InitialSupply+DerivedFromAtom.swift */; };
+		E605542A230431B700528510 /* TransactionTestNewFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6055429230431B700528510 /* TransactionTestNewFormat.swift */; };
 		E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */; };
 		E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */; };
 		E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */; };
@@ -221,7 +222,7 @@
 		E689DBA4225F881700340CF3 /* LivePeersRequesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBA3225F881700340CF3 /* LivePeersRequesting.swift */; };
 		E689DBA6225F882800340CF3 /* UniverseConfigRequesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBA5225F882800340CF3 /* UniverseConfigRequesting.swift */; };
 		E689DBA8225F887300340CF3 /* AtomsByAddressSubscribing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBA7225F887300340CF3 /* AtomsByAddressSubscribing.swift */; };
-		E689DBAB225F8F3200340CF3 /* TransferTokenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBAA225F8F3200340CF3 /* TransferTokenAction.swift */; };
+		E689DBAB225F8F3200340CF3 /* TransferTokensAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBAA225F8F3200340CF3 /* TransferTokensAction.swift */; };
 		E689DBB1225F8FA900340CF3 /* RESTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBB0225F8FA900340CF3 /* RESTClient.swift */; };
 		E689DBB3225F903F00340CF3 /* DefaultRESTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBB2225F903F00340CF3 /* DefaultRESTClient.swift */; };
 		E689DBB6225F954800340CF3 /* NodeNetworkDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DBB5225F954800340CF3 /* NodeNetworkDetails.swift */; };
@@ -646,6 +647,7 @@
 		E60554222304188E00528510 /* CreateTokenAction+InitialSupply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateTokenAction+InitialSupply.swift"; sourceTree = "<group>"; };
 		E6055424230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift"; sourceTree = "<group>"; };
 		E60554262304191A00528510 /* CreateTokenAction.InitialSupply+DerivedFromAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CreateTokenAction.InitialSupply+DerivedFromAtom.swift"; sourceTree = "<group>"; };
+		E6055429230431B700528510 /* TransactionTestNewFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTestNewFormat.swift; sourceTree = "<group>"; };
 		E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateIdentifiable.swift; sourceTree = "<group>"; };
 		E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateId.swift; sourceTree = "<group>"; };
 		E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShardedParticleStateId.swift; sourceTree = "<group>"; };
@@ -830,7 +832,7 @@
 		E689DBA3225F881700340CF3 /* LivePeersRequesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LivePeersRequesting.swift; sourceTree = "<group>"; };
 		E689DBA5225F882800340CF3 /* UniverseConfigRequesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniverseConfigRequesting.swift; sourceTree = "<group>"; };
 		E689DBA7225F887300340CF3 /* AtomsByAddressSubscribing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomsByAddressSubscribing.swift; sourceTree = "<group>"; };
-		E689DBAA225F8F3200340CF3 /* TransferTokenAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferTokenAction.swift; sourceTree = "<group>"; };
+		E689DBAA225F8F3200340CF3 /* TransferTokensAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferTokensAction.swift; sourceTree = "<group>"; };
 		E689DBB0225F8FA900340CF3 /* RESTClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RESTClient.swift; sourceTree = "<group>"; };
 		E689DBB2225F903F00340CF3 /* DefaultRESTClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRESTClient.swift; sourceTree = "<group>"; };
 		E689DBB5225F954800340CF3 /* NodeNetworkDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeNetworkDetails.swift; sourceTree = "<group>"; };
@@ -1374,6 +1376,15 @@
 				E60554262304191A00528510 /* CreateTokenAction.InitialSupply+DerivedFromAtom.swift */,
 			);
 			path = "CreateTokenAction+InitialSupply";
+			sourceTree = "<group>";
+		};
+		E6055428230431A300528510 /* TransactionTests */ = {
+			isa = PBXGroup;
+			children = (
+				E60553FB230197C600528510 /* TransactionTests.swift */,
+				E6055429230431B700528510 /* TransactionTestNewFormat.swift */,
+			);
+			path = TransactionTests;
 			sourceTree = "<group>";
 		};
 		E606F130230151CB004D4D3D /* ShardedParticleStateId */ = {
@@ -2364,7 +2375,7 @@
 			children = (
 				E605540C230314DC00528510 /* SendMessageAction */,
 				E6FCB65D22F0C79A00ECC01B /* PutUniqueIdAction.swift */,
-				E689DBAA225F8F3200340CF3 /* TransferTokenAction.swift */,
+				E689DBAA225F8F3200340CF3 /* TransferTokensAction.swift */,
 				E6FCB66122F0C7FE00ECC01B /* BurnTokensAction.swift */,
 				E6FCB65A22F0C76900ECC01B /* MintTokensAction.swift */,
 				E605541F2304177F00528510 /* CreateTokenAction */,
@@ -3436,7 +3447,7 @@
 				E68DFA2F22FC58320050F69E /* PutIniqueActionTests.swift */,
 				E69D851E22F7555E0039A207 /* BurnTokensTests.swift */,
 				E69E753322A294D800AC631B /* SendMessageTests.swift */,
-				E60553FB230197C600528510 /* TransactionTests.swift */,
+				E6055428230431A300528510 /* TransactionTests */,
 			);
 			path = "0. Layer 7 - APPLICATION (Transactions, Balances)";
 			sourceTree = "<group>";
@@ -4229,7 +4240,7 @@
 				E6055425230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift in Sources */,
 				E6E279762271CD1C0067D46E /* SignedAmount.swift in Sources */,
 				E626E1E622B3FB530046D2AC /* TokenBalance.swift in Sources */,
-				E689DBAB225F8F3200340CF3 /* TransferTokenAction.swift in Sources */,
+				E689DBAB225F8F3200340CF3 /* TransferTokensAction.swift in Sources */,
 				E689DBB3225F903F00340CF3 /* DefaultRESTClient.swift in Sources */,
 				E6A507E1224E17F200128123 /* AtomEvent.swift in Sources */,
 				E6E2798F2271CD1C0067D46E /* StringRepresentable.swift in Sources */,
@@ -4640,6 +4651,7 @@
 				E6E27A3B2271CE250067D46E /* UniverseConfigBetanetJSONDecodingTests.swift in Sources */,
 				E6725648228AE98F004631F1 /* TransferTokensTests.swift in Sources */,
 				E68BD816229EAD9D00FCE4D3 /* ShardSpaceTests.swift in Sources */,
+				E605542A230431B700528510 /* TransactionTestNewFormat.swift in Sources */,
 				E63B207422FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift in Sources */,
 				E60554042302A9B000528510 /* AtomToTransferMapperTests.swift in Sources */,
 				E6E27A492271CE250067D46E /* ResourceIdentifierTests.swift in Sources */,

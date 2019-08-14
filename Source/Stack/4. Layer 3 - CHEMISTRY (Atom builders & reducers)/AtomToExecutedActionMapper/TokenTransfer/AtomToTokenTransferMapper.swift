@@ -25,7 +25,7 @@
 import Foundation
 import RxSwift
 
-public protocol AtomToTokenTransferMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == TransferTokenAction {}
+public protocol AtomToTokenTransferMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == TransferTokensAction {}
 
 public final class DefaultAtomToTokenTransferMapper: AtomToTokenTransferMapper {
     public init() {}
@@ -33,10 +33,10 @@ public final class DefaultAtomToTokenTransferMapper: AtomToTokenTransferMapper {
 
 public extension DefaultAtomToTokenTransferMapper {
     
-    typealias SpecificExecutedAction = TransferTokenAction
+    typealias SpecificExecutedAction = TransferTokensAction
     
-    func mapAtomToActions(_ atom: Atom) -> Observable<[TransferTokenAction]> {
-        var transferredTokens = [TransferTokenAction]()
+    func mapAtomToActions(_ atom: Atom) -> Observable<[TransferTokensAction]> {
+        var transferredTokens = [TransferTokensAction]()
         
         for particleGroup in atom {
             guard let transfer = transferOfTokens(particleGroup: particleGroup, atomTimestamp: atom.timestamp) else { continue }
@@ -47,7 +47,7 @@ public extension DefaultAtomToTokenTransferMapper {
     }
 }
 
-private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date) -> TransferTokenAction? {
+private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date) -> TransferTokensAction? {
     guard
         let someTransferrableTokensParticleDown = particleGroup.firstTransferrableTokensParticle(spin: .down),
         case let rri = someTransferrableTokensParticleDown.tokenDefinitionReference,
@@ -70,7 +70,7 @@ private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date)
     let signedAmount = SignedAmount.fromSpunTransferrableTokens(particles: invertedSpunTransferrableTokensParticles)
     guard let positiveAmount = try? PositiveAmount(signedAmount: signedAmount) else { return nil }
 
-    return TransferTokenAction(
+    return TransferTokensAction(
         from: sender,
         to: recipient,
         amount: positiveAmount,

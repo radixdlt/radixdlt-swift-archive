@@ -49,11 +49,41 @@ public extension TransactionSubscriber {
     func observeActions<Action>(
         ofType actionType: Action.Type,
         at address: Address
-        ) -> Observable<Action> where Action: UserAction {
+    ) -> Observable<Action> where Action: UserAction {
         return observeTransactions(at: address)
             .flatMap { Observable.from($0.actions(ofType: actionType)) }
     }
     
+}
+
+public extension TransactionSubscriber where Self: ActiveAccountOwner {
+    
+    /// Do not confuse this with `observeMyTokenTransfers`, this returns a stream of `ExecutedTransaction`, which is
+    /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
+    /// of executed Token Transfers, either by you or someone else.
+    func observeMyTransactions() -> Observable<ExecutedTransaction> {
+        return observeTransactions(at: addressOfActiveAccount)
+    }
+    
+    /// Do not confuse this with `observeMyTokenTransfers`, this returns a stream of `ExecutedTransaction`, which is
+    /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
+    /// of executed Token Transfers, either by you or someone else.
+    /// Boolean `OR` of `actionTypes`
+    func observeMyTransactions(containingActionOfAnyType actionTypes: [UserAction.Type]) -> Observable<ExecutedTransaction> {
+        return observeTransactions(at: addressOfActiveAccount, containingActionOfAnyType: actionTypes)
+    }
+    
+    /// Do not confuse this with `observeMyTokenTransfers`, this returns a stream of `ExecutedTransaction`, which is
+    /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
+    /// of executed Token Transfers, either by you or someone else.
+    /// Boolean `AND` of `requiredActionTypes`
+    func observeMyTransactions(containingActionsOfAllTypes requiredActionTypes: [UserAction.Type]) -> Observable<ExecutedTransaction> {
+        return observeTransactions(at: addressOfActiveAccount, containingActionsOfAllTypes: requiredActionTypes)
+    }
+    
+    func observeMyActions<Action>(ofType actionType: Action.Type) -> Observable<Action> where Action: UserAction {
+        return observeActions(ofType: actionType, at: addressOfActiveAccount)
+    }
 }
 
 public final class DefaultTransactionSubscriber: TransactionSubscriber {

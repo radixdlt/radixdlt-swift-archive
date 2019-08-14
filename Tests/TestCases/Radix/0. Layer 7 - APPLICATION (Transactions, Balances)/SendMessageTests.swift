@@ -55,7 +55,7 @@ class SendMessageTests: LocalhostNodeTest {
         XCTAssertTrue(result.blockingWasSuccessfull(timeout: .enoughForPOW))
 
         guard let sentMessage = application.observeMyMessages().blockingTakeFirst(timeout: 1) else { return }
-        let decryptedMessage = sentMessage.payload.toString()
+        let decryptedMessage = sentMessage.textMessage()
         XCTAssertEqual(decryptedMessage, message)
         XCTAssertNotEqual(decryptedMessage, "foobar")
     }
@@ -72,8 +72,7 @@ class SendMessageTests: LocalhostNodeTest {
         )
         
         guard let sentMessage = application.observeMyMessages().blockingTakeLast(timeout: 2) else { return }
-        let decryptedMessage = sentMessage.payload.toString()
-        XCTAssertEqual(decryptedMessage, plainTextMessage)
+        XCTAssertEqual(sentMessage.textMessage(), plainTextMessage)
     }
 
     

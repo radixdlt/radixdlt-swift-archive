@@ -24,12 +24,12 @@
 
 import Foundation
 
-public protocol TransferTokensActionToParticleGroupsMapper: ConsumeTokenActionToParticleGroupsMapper, Throwing where Action == TransferTokenAction, Error == TransferError {}
+public protocol TransferTokensActionToParticleGroupsMapper: ConsumeTokenActionToParticleGroupsMapper, Throwing where Action == TransferTokensAction, Error == TransferError {}
 
 // MARK: - TransferTokensActionToParticleGroupsMapper
 public extension TransferTokensActionToParticleGroupsMapper {
     
-    func particleGroups(for transfer: TransferTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
+    func particleGroups(for transfer: TransferTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
         
         try validateInputMappingConsumeTokensActionError(action: transfer, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
         
@@ -71,7 +71,7 @@ public extension TransferError {
 }
 
 private extension FungibleParticleTransitioner where From == TransferrableTokensParticle, To == TransferrableTokensParticle {
-    func transition(transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws -> Transition {
+    func transition(transfer: TransferTokensAction, upParticles: [AnyUpParticle]) throws -> Transition {
         let rri = transfer.tokenResourceIdentifier
         
         let transferrableTokensParticles = upParticles.transferrableTokensParticles { $0.tokenDefinitionReference == rri }
@@ -85,7 +85,7 @@ private extension FungibleParticleTransitioner where From == TransferrableTokens
         return transition
     }
     
-    func particlesFrom(transfer: TransferTokenAction, upParticles: [AnyUpParticle]) throws -> [AnySpunParticle] {
+    func particlesFrom(transfer: TransferTokensAction, upParticles: [AnyUpParticle]) throws -> [AnySpunParticle] {
         let transition = try self.transition(transfer: transfer, upParticles: upParticles)
         return transition.toSpunParticles()
     }
