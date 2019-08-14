@@ -54,7 +54,7 @@ class TransferTokensTests: LocalhostNodeTest {
     func testTransferTokenWithGranularityOf1() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         // WHEN: Alice transfer tokens she owns, to Bob
-        let (tokenCreation, rri) = application.createToken(symbol: "AC", defineSupply: .fixed(to: 30))
+        let (tokenCreation, rri) = application.createToken(symbol: "AC", supply: .fixed(to: 30))
         
         // createTokenAction(address: alice, supply: .fixed(to: 30))
         XCTAssertTrue(
@@ -208,7 +208,7 @@ private extension TransferTokensTests {
             name: "Alice Coin",
             symbol: "AC",
             description: "Best coin",
-            defineSupply: supply,
+            supply: supply,
             granularity: granularity
         )
     }

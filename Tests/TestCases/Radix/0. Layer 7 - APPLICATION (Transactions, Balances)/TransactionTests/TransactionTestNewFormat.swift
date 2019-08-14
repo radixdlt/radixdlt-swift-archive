@@ -82,7 +82,7 @@ private extension TransactionTestNewFormat {
     ) {
         
         XCTAssertTrue(
-            app.createToken(defineSupply: initialSupply)
+            app.createToken(supply: initialSupply)
                 .result
                 .blockingWasSuccessfull(timeout: .enoughForPOW)
         )

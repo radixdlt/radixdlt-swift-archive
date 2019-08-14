@@ -42,7 +42,7 @@ public struct CreateTokenAction: UniquelyIdentifiedUserAction, Throwing, TokenCo
         name: Name,
         symbol: Symbol,
         description: Description,
-        defineSupply supplyTypeDefinition: InitialSupply.SupplyTypeDefinition,
+        supply supplyTypeDefinition: InitialSupply.SupplyTypeDefinition,
         granularity: Granularity = .default,
         iconUrl: URL? = nil
     ) throws {

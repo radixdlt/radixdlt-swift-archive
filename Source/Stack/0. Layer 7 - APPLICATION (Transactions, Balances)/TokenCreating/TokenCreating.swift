@@ -41,7 +41,7 @@ public extension TokenCreating {
         name: Name,
         symbol: Symbol,
         description: Description,
-        defineSupply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
+        supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
         iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
@@ -51,7 +51,7 @@ public extension TokenCreating {
             name: name,
             symbol: symbol,
             description: description,
-            defineSupply: supplyTypeDefinition,
+            supply: supplyTypeDefinition,
             granularity: granularity,
             iconUrl: iconUrl
         )
@@ -74,7 +74,7 @@ public extension TokenCreating {
             name: name,
             symbol: symbol,
             description: description,
-            defineSupply: .fixed(to: supply),
+            supply: .fixed(to: supply),
             iconUrl: iconUrl,
             granularity: granularity
         )
@@ -95,7 +95,7 @@ public extension TokenCreating {
             name: name,
             symbol: symbol,
             description: description,
-            defineSupply: .mutable(initial: initialSupply),
+            supply: .mutable(initial: initialSupply),
             iconUrl: iconUrl,
             granularity: granularity
         )
@@ -108,7 +108,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         name: Name,
         symbol: Symbol,
         description: Description,
-        defineSupply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
+        supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
         iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
@@ -118,7 +118,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             name: name,
             symbol: symbol,
             description: description,
-            defineSupply: supplyTypeDefinition,
+            supply: supplyTypeDefinition,
             iconUrl: iconUrl,
             granularity: granularity
         )

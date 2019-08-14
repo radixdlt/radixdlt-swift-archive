@@ -39,7 +39,7 @@ class AtomToTransferMapperTests: XCTestCase {
         
         let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity(alias: "Alice"))
         
-        let (tokenCreation, aliceCoin) = aliceApp.createToken(defineSupply: .fixed(to: 100))
+        let (tokenCreation, aliceCoin) = aliceApp.createToken(supply: .fixed(to: 100))
         
         XCTAssertTrue(tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW))
         
@@ -69,7 +69,7 @@ class AtomToTransferMapperTests: XCTestCase {
         
         let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity(alias: "Alice"))
         
-        let (tokenCreation, aliceCoin) = aliceApp.createToken(defineSupply: .fixed(to: 100))
+        let (tokenCreation, aliceCoin) = aliceApp.createToken(supply: .fixed(to: 100))
         
         XCTAssertTrue(tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW))
         

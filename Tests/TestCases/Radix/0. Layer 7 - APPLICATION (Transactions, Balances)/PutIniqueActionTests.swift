@@ -140,7 +140,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         // WHEN: Alice sends a `Transaction` containing a MutableSupplyToken and a UniqueId with the same RRI
         let transaction = Transaction {[
-            try! CreateTokenAction(creator: alice, name: .irrelevant, symbol: "FOO", description: .irrelevant, defineSupply: .mutable(initial: nil)),
+            try! CreateTokenAction(creator: alice, name: .irrelevant, symbol: "FOO", description: .irrelevant, supply: .mutable(initial: nil)),
             PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
         ]}
         
@@ -157,7 +157,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         // WHEN: Alice sends a `Transaction` containing a FixedSupplyToken and a UniqueId with the same RRI
         let transaction = Transaction {[
-            try! CreateTokenAction(creator: alice, name: .irrelevant, symbol: "FOO", description: .irrelevant, defineSupply: .fixed(to: 42)),
+            try! CreateTokenAction(creator: alice, name: .irrelevant, symbol: "FOO", description: .irrelevant, supply: .fixed(to: 42)),
             PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
         ]}
         

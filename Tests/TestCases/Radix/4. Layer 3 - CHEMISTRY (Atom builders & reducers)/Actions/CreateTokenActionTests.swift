@@ -69,7 +69,7 @@ private extension CreateTokenActionTests {
             name: .irrelevant,
             symbol: .irrelevant,
             description: .irrelevant,
-            defineSupply: supply,
+            supply: supply,
             granularity: granularity
         )
     }

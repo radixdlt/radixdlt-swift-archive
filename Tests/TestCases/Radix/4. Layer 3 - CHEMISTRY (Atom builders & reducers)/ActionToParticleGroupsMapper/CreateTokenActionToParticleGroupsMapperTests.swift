@@ -69,7 +69,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
             name: "Cyon",
             symbol: "CCC",
             description: "Cyon Crypto Coin is the worst shit coin",
-            defineSupply: initialSupply
+            supply: initialSupply
         )
         
         let mapper = DefaultCreateTokenActionToParticleGroupsMapper()

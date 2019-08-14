@@ -54,7 +54,7 @@ class TransactionTests: LocalhostNodeTest {
         
         // WHEN Alice observes her transactions after creating token without
         XCTAssertTrue(
-            application.createToken(defineSupply: .mutableZeroSupply)
+            application.createToken(supply: .mutableZeroSupply)
                 .result
                 .blockingWasSuccessfull(timeout: .enoughForPOW)
         )
@@ -76,7 +76,7 @@ class TransactionTests: LocalhostNodeTest {
         
         // WHEN Alice observes her transactions after having made one with a single `CreateTokenAction`
         XCTAssertTrue(
-            application.createToken(defineSupply: .mutable(initial: 123))
+            application.createToken(supply: .mutable(initial: 123))
                 .result
                 .blockingWasSuccessfull(timeout: .enoughForPOW)
         )
@@ -109,7 +109,7 @@ class TransactionTests: LocalhostNodeTest {
         print("🙋🏻‍♂️ bob: \(bob!)")
         
         let (tokenCreation, fooToken) =
-            application.createToken(defineSupply: .mutable(initial: 10))
+            application.createToken(supply: .mutable(initial: 10))
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -149,7 +149,7 @@ class TransactionTests: LocalhostNodeTest {
         // GIVEN: and `FooToken` created by Alice
         
         let (tokenCreation, fooToken) =
-            application.createToken(defineSupply: .mutable(initial: 123))
+            application.createToken(supply: .mutable(initial: 123))
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -178,7 +178,7 @@ class TransactionTests: LocalhostNodeTest {
         // GIVEN: and `FooToken` created by Alice
         
         let (tokenCreation, fooToken) =
-            application.createToken(defineSupply: .mutableZeroSupply)
+            application.createToken(supply: .mutableZeroSupply)
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -257,7 +257,7 @@ class TransactionTests: LocalhostNodeTest {
         // GIVEN: and `FooToken` created by Alice
         
         let (tokenCreation, fooToken) =
-            application.createToken(defineSupply: .mutableZeroSupply)
+            application.createToken(supply: .mutableZeroSupply)
         
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
@@ -310,7 +310,7 @@ class TransactionTests: LocalhostNodeTest {
     
     private let bag = DisposeBag()
     func testTransactionComplex() {
-        let (tokenCreation, fooToken) = application.createToken(defineSupply: .mutable(initial: 35))
+        let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 35))
         
         application.observeMyTransactions().subscribe(onNext: {
             print("✅ tx: \($0)")
@@ -398,7 +398,7 @@ extension RadixApplicationClient {
         name: Name = .irrelevant,
         symbol: Symbol = .random,
         description: Description = .irrelevant,
-        defineSupply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
+        supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
         iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
@@ -408,7 +408,7 @@ extension RadixApplicationClient {
             name: name,
             symbol: symbol,
             description: description,
-            defineSupply: supplyTypeDefinition,
+            supply: supplyTypeDefinition,
             granularity: granularity,
             iconUrl: iconUrl
         )
@@ -430,7 +430,7 @@ extension RadixApplicationClient {
             name: name,
             symbol: symbol,
             description: description,
-            defineSupply: .fixed(to: supply),
+            supply: .fixed(to: supply),
             iconUrl: iconUrl,
             granularity: granularity
         )
@@ -450,7 +450,7 @@ extension RadixApplicationClient {
             name: name,
             symbol: symbol,
             description: description,
-            defineSupply: .mutable(initial: initialSupply),
+            supply: .mutable(initial: initialSupply),
             iconUrl: iconUrl,
             granularity: granularity
         )

@@ -120,7 +120,7 @@ private extension CreateTokenTests {
             name: .irrelevant,
             symbol: symbol,
             description: .irrelevant,
-            defineSupply: supply
+            supply: supply
         )
         
     }
