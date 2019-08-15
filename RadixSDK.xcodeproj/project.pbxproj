@@ -38,6 +38,8 @@
 		E60554452305529600528510 /* Identity+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554442305529600528510 /* Identity+Account.swift */; };
 		E6055447230553C700528510 /* Test+Convenience+RadixApplicationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6055446230553C700528510 /* Test+Convenience+RadixApplicationClient.swift */; };
 		E6055449230553E600528510 /* Test+Convenience+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6055448230553E600528510 /* Test+Convenience+Models.swift */; };
+		E605544B23058A6600528510 /* OrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605544A23058A6600528510 /* OrderedSet.swift */; };
+		E605544D23058AA100528510 /* ParticleSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605544C23058AA100528510 /* ParticleSet.swift */; };
 		E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */; };
 		E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */; };
 		E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */; };
@@ -663,6 +665,8 @@
 		E60554442305529600528510 /* Identity+Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Identity+Account.swift"; sourceTree = "<group>"; };
 		E6055446230553C700528510 /* Test+Convenience+RadixApplicationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test+Convenience+RadixApplicationClient.swift"; sourceTree = "<group>"; };
 		E6055448230553E600528510 /* Test+Convenience+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Test+Convenience+Models.swift"; sourceTree = "<group>"; };
+		E605544A23058A6600528510 /* OrderedSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderedSet.swift; sourceTree = "<group>"; };
+		E605544C23058AA100528510 /* ParticleSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleSet.swift; sourceTree = "<group>"; };
 		E606F131230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateIdentifiable.swift; sourceTree = "<group>"; };
 		E606F133230151FB004D4D3D /* ShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShardedParticleStateId.swift; sourceTree = "<group>"; };
 		E606F1352301520A004D4D3D /* AnyShardedParticleStateId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyShardedParticleStateId.swift; sourceTree = "<group>"; };
@@ -2849,6 +2853,8 @@
 				E6CEE70A21F5AE5A00D745EC /* Crypto */,
 				E6474ABC2266140E009C4FDC /* IsConnectedToLocalhost.swift */,
 				E6055446230553C700528510 /* Test+Convenience+RadixApplicationClient.swift */,
+				E605544A23058A6600528510 /* OrderedSet.swift */,
+				E605544C23058AA100528510 /* ParticleSet.swift */,
 			);
 			path = Convenience;
 			sourceTree = "<group>";
@@ -4688,6 +4694,7 @@
 				E6E27A322271CE250067D46E /* QuestionMarkInSymbolTests.swift in Sources */,
 				E6E27A452271CE250067D46E /* AtomTooBigDSONEncodingTests.swift in Sources */,
 				E69E753422A294D800AC631B /* SendMessageTests.swift in Sources */,
+				E605544B23058A6600528510 /* OrderedSet.swift in Sources */,
 				E6CABA1B22D61E4300B6D00C /* TokenDefinitionsStateReducerTests.swift in Sources */,
 				E6DC276622C4CDC80049BB3C /* WebsocketTest.swift in Sources */,
 				E69E754122A97E0400AC631B /* AmountAndGranularityTests.swift in Sources */,
@@ -4762,6 +4769,7 @@
 				E6F548392277022500EE6311 /* GetTokenBalanceTests.swift in Sources */,
 				E6E27A292271CE250067D46E /* TooShortNameTests.swift in Sources */,
 				E69E754922A98A1300AC631B /* CreateTokenActionTests.swift in Sources */,
+				E605544D23058AA100528510 /* ParticleSet.swift in Sources */,
 				E6E27A2B2271CE250067D46E /* TooLongDescriptionTests.swift in Sources */,
 				E69D851822F4818F0039A207 /* MintTokensTests.swift in Sources */,
 				E6E27A3F2271CE250067D46E /* CBOREncodingPrimitivesIntTests.swift in Sources */,
