@@ -107,7 +107,7 @@ extension TimeInterval {
         return 2
     }
     static var enoughForPOW: TimeInterval {
-        return 30
+        return 5
     }
 }
 

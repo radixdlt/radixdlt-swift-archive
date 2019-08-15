@@ -83,10 +83,10 @@ class BurnTokensTests: LocalhostNodeTest {
         let result = application.send(transaction: transaction)
 
         XCTAssertTrue(
-            result.blockingWasSuccessfull(timeout: 30)
+            result.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-        guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: 35) else { return }
+        guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: .enoughForPOW) else { return }
         XCTAssertEqual(tokenState.totalSupply, 91)
     }
     
@@ -102,7 +102,7 @@ class BurnTokensTests: LocalhostNodeTest {
         guard let fooTokenStateAfterCreation = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: 2) else { return }
         XCTAssertEqual(fooTokenStateAfterCreation.totalSupply, 35)
         
-        guard let myBalanceOrNilAfterCreate = application.observeMyBalance(ofToken: fooToken).blockingTakeLast(timeout: 3) else { return }
+        guard let myBalanceOrNilAfterCreate = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
         guard let myBalanceAfterCreate = myBalanceOrNilAfterCreate else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(myBalanceAfterCreate.amount, 35)
         
@@ -115,11 +115,11 @@ class BurnTokensTests: LocalhostNodeTest {
         
         )
         // THEN: AND the supply of FooToken is changed
-        guard let fooTokenStateAfterBurn = application.observeTokenState(identifier: fooToken).blockingTakeLast(timeout: 1) else { return }
+        guard let fooTokenStateAfterBurn = application.observeTokenState(identifier: fooToken).blockingTakeLast() else { return }
         XCTAssertEqual(fooTokenStateAfterBurn.totalSupply, 33)
         
         
-        guard let myBalanceOrNilAfterBurn = application.observeMyBalance(ofToken: fooToken).blockingTakeLast(timeout: 3) else { return }
+        guard let myBalanceOrNilAfterBurn = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
         guard let myBalanceAfterBurn = myBalanceOrNilAfterBurn else { return XCTFail("Expected non nil balance") }
         // THEN: AND that Alice balance is reduced
         XCTAssertEqual(myBalanceAfterBurn.amount, 33)

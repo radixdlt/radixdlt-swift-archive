@@ -104,10 +104,6 @@ class TransactionTests: LocalhostNodeTest {
         // GIVEN identity alice and a RadixApplicationClient
         // GIVEN: and bob
         // GIVEN: and `FooToken` created by Alice
-        
-        print("🙋🏻‍♀️ alice: \(alice!)")
-        print("🙋🏻‍♂️ bob: \(bob!)")
-        
         let (tokenCreation, fooToken) =
             application.createToken(supply: .mutable(initial: 10))
         
@@ -233,7 +229,7 @@ class TransactionTests: LocalhostNodeTest {
         // WHEN Alice observes her transactions after having made one with a single `PutUniqueIdAction`
         XCTAssertTrue(
             application.putUnique(string: "Foobar")
-                .blockingWasSuccessfull()
+                .blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions

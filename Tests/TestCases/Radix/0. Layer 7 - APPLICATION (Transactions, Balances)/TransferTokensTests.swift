@@ -61,10 +61,10 @@ class TransferTokensTests: LocalhostNodeTest {
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-        guard let myTokenDef = application.observeTokenDefinition(identifier: rri).blockingTakeFirst(timeout: 2) else { return }
+        guard let myTokenDef = application.observeTokenDefinition(identifier: rri).blockingTakeFirst() else { return }
         XCTAssertEqual(myTokenDef.symbol, "AC")
         
-        guard let myBalanceOrNilBeforeTx = application.observeMyBalance(ofToken: rri).blockingTakeFirst(timeout: 2) else { return }
+        guard let myBalanceOrNilBeforeTx = application.observeMyBalance(ofToken: rri).blockingTakeFirst() else { return }
         guard let myBalanceBeforeTx = myBalanceOrNilBeforeTx else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(myBalanceBeforeTx.token.tokenDefinitionReference, rri)
         XCTAssertEqual(myBalanceBeforeTx.amount, 30)
@@ -77,22 +77,22 @@ class TransferTokensTests: LocalhostNodeTest {
             transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
 
-        guard let myBalanceOrNilAfterTx = application.observeMyBalance(ofToken: rri).blockingTakeLast(timeout: 3) else { return }
+        guard let myBalanceOrNilAfterTx = application.observeMyBalance(ofToken: rri).blockingTakeLast() else { return }
         guard let myBalanceAfterTx = myBalanceOrNilAfterTx else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(myBalanceAfterTx.amount, 20)
         
-        guard let bobsBalanceOrNilAfterTx = application.observeBalance(ofToken: rri, ownedBy: bob).blockingTakeFirst(timeout: 3) else { return }
+        guard let bobsBalanceOrNilAfterTx = application.observeBalance(ofToken: rri, ownedBy: bob).blockingTakeFirst() else { return }
         guard let bobsBalanceAfterTx = bobsBalanceOrNilAfterTx else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(bobsBalanceAfterTx.amount, 10)
         
-        guard let myTransfer = application.observeMyTokenTransfers().blockingTakeFirst(timeout: 3) else { return }
+        guard let myTransfer = application.observeMyTokenTransfers().blockingTakeFirst() else { return }
         XCTAssertEqual(myTransfer.sender, alice)
         XCTAssertEqual(myTransfer.recipient, bob)
         XCTAssertEqual(myTransfer.amount, 10)
         guard let decodedAttachedMessage = myTransfer.attachedMessage() else { return XCTFail("Expected attachment") }
         XCTAssertEqual(decodedAttachedMessage, attachedMessage)
         
-        guard let bobTransfer = application.observeTokenTransfers(toOrFrom: bob).blockingTakeFirst(timeout: 3) else { return }
+        guard let bobTransfer = application.observeTokenTransfers(toOrFrom: bob).blockingTakeFirst() else { return }
         XCTAssertEqual(bobTransfer.sender, alice)
         XCTAssertEqual(bobTransfer.recipient, bob)
         XCTAssertEqual(bobTransfer.amount, 10)

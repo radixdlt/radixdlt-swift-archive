@@ -57,7 +57,7 @@ class MintTokensTests: LocalhostNodeTest {
         guard let fooTokenStateAfterCreation = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: 2) else { return }
         XCTAssertEqual(fooTokenStateAfterCreation.totalSupply, 30)
         
-        guard let myBalanceOrNilAfterCreate = application.observeMyBalance(ofToken: fooToken).blockingTakeLast(timeout: 3) else { return }
+        guard let myBalanceOrNilAfterCreate = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
         guard let myBalanceAfterCreate = myBalanceOrNilAfterCreate else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(myBalanceAfterCreate.amount, 30)
         
@@ -70,11 +70,11 @@ class MintTokensTests: LocalhostNodeTest {
         )
         
         // THEN: AND the supply of FooToken is updated with 42
-        guard let fooTokenStateAfterMint = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: 2) else { return }
+        guard let fooTokenStateAfterMint = application.observeTokenState(identifier: fooToken).blockingTakeFirst() else { return }
         XCTAssertEqual(fooTokenStateAfterMint.totalSupply, 72)
         
         
-        guard let myBalanceOrNilAfterMint = application.observeMyBalance(ofToken: fooToken).blockingTakeLast(timeout: 3) else { return }
+        guard let myBalanceOrNilAfterMint = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
         guard let myBalanceAfterMint = myBalanceOrNilAfterMint else { return XCTFail("Expected non nil balance") }
         // THEN: AND that these new 42 tokens belong to Alice
         XCTAssertEqual(myBalanceAfterMint.amount, 72)
@@ -140,7 +140,7 @@ class MintTokensTests: LocalhostNodeTest {
         )
         
         aliceApp.pull(address: bob).disposed(by: disposeBag)
-        guard let _ = aliceApp.observeTokenDefinitions(at: bob).blockingTakeFirst(timeout: 5) else { return XCTFail("Alice needs to know about tokens defined by Bob") }
+        guard let _ = aliceApp.observeTokenDefinitions(at: bob).blockingTakeFirst() else { return XCTFail("Alice needs to know about tokens defined by Bob") }
         
         // WHEN: Alice call Mint for FooToken
         let minting = aliceApp.mintTokens(amount: 123, ofType: fooToken)

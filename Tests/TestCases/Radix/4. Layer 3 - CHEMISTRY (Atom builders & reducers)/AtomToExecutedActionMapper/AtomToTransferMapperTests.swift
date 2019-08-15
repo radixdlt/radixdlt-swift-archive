@@ -57,7 +57,7 @@ class AtomToTransferMapperTests: XCTestCase {
         )
 
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
-        guard let transfers = atomToTransferMapper.mapAtomToActions(atom).blockingTakeFirst(timeout: 2) else { return }
+        guard let transfers = atomToTransferMapper.mapAtomToActions(atom).blockingTakeFirst() else { return }
         XCTAssertEqual(transfers.count, 1)
         XCTAssertEqual(transfers[0].amount, 14)
         XCTAssertEqual(transfers[0].attachedMessage(), "Taxi")
@@ -87,7 +87,7 @@ class AtomToTransferMapperTests: XCTestCase {
         )
         
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
-        guard let transfers = atomToTransferMapper.mapAtomToActions(atom).blockingTakeFirst(timeout: 2) else { return }
+        guard let transfers = atomToTransferMapper.mapAtomToActions(atom).blockingTakeFirst() else { return }
         XCTAssertEqual(transfers.count, 1)
         XCTAssertEqual(transfers[0].amount, 100)
         XCTAssertEqual(transfers[0].attachedMessage(), "Taxi")
