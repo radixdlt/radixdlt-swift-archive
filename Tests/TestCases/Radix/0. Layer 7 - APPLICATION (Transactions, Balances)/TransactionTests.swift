@@ -203,7 +203,7 @@ class TransactionTests: LocalhostNodeTest {
         )
         
         // WHEN: and observes her transactions
-        guard let transaction = application.observeMyTransactions().blockingTakeFirst(timeout: 1) else {
+        guard let transaction = application.observeMyTransactions().blockingTakeFirst() else {
             return
         }
         
@@ -229,10 +229,10 @@ class TransactionTests: LocalhostNodeTest {
         )
         
         // WHEN: and observes her transactions
-        guard let transaction = application.observeMyTransactions().blockingTakeFirst(timeout: 1) else {
+        guard let transaction = application.observeMyTransactions().blockingTakeFirst() else {
             return
         }
-        
+
         // THEN she sees a Transaction containing the SendMessageAction
         XCTAssertEqual(transaction.actions.count, 1)
         guard let putUniqueAction = transaction.actions.first as? PutUniqueIdAction else {
@@ -240,7 +240,6 @@ class TransactionTests: LocalhostNodeTest {
         }
         XCTAssertEqual(putUniqueAction.uniqueMaker, alice)
         XCTAssertEqual(putUniqueAction.string, "Foobar")
-        
     }
     
     func testTransactionWithTwoMintTokenAndTwoPutUniqueIdActions() {
@@ -303,11 +302,7 @@ class TransactionTests: LocalhostNodeTest {
     private let bag = DisposeBag()
     func testTransactionComplex() {
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 35))
-        
-        application.observeMyTransactions().subscribe(onNext: {
-            print("✅ tx: \($0)")
-        }).disposed(by: bag)
-        
+                
         XCTAssertTrue(
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
@@ -345,17 +340,17 @@ class TransactionTests: LocalhostNodeTest {
         )
         
         
-        guard let putUniqueTransactions = application.observeMyTransactions(containingActionOfAnyType: [PutUniqueIdAction.self]).blockingArrayTakeFirst(3, timeout: 1) else { return }
+        guard let putUniqueTransactions = application.observeMyTransactions(containingActionOfAnyType: [PutUniqueIdAction.self]).blockingArrayTakeFirst(3) else { return }
         XCTAssertEqual(
             putUniqueTransactions.flatMap { $0.actions(ofType: PutUniqueIdAction.self) }.map { $0.string },
             ["mint", "burn", "unique"]
         )
         
-        guard let burnTxs = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self]).blockingArrayTakeFirst(1, timeout: 1) else { return }
+        guard let burnTxs = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self]).blockingArrayTakeFirst(1) else { return }
         XCTAssertEqual(burnTxs.count, 1)
         XCTAssertEqual(burnTxs[0].actions.count, 2)
         
-        guard let burnOrMintTransactions = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self]).blockingArrayTakeFirst(2, timeout: 1) else { return }
+        guard let burnOrMintTransactions = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self]).blockingArrayTakeFirst(2) else { return }
         
         XCTAssertEqual(burnOrMintTransactions.count, 2)
         
@@ -372,79 +367,3 @@ class TransactionTests: LocalhostNodeTest {
 }
 
 
-extension Symbol {
-    static var random: Symbol {
-        let randomSymbol = String(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(14))
-        return .init(validated: randomSymbol)
-    }
-}
-
-extension RadixApplicationClient {
-    static var localhostAliceSingleNodeApp: RadixApplicationClient {
-        return RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity(alias: "Alice"))
-    }
-}
-
-extension RadixApplicationClient {
-    func createToken(
-        name: Name = .irrelevant,
-        symbol: Symbol = .random,
-        description: Description = .irrelevant,
-        supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
-        iconUrl: URL? = nil,
-        granularity: Granularity = .default
-    ) -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
-        
-        let createTokenAction = try! CreateTokenAction(
-            creator: addressOfActiveAccount,
-            name: name,
-            symbol: symbol,
-            description: description,
-            supply: supplyTypeDefinition,
-            granularity: granularity,
-            iconUrl: iconUrl
-        )
-        
-        return (create(token: createTokenAction), createTokenAction.identifier)
-    }
-    
-    func createFixedSupplyToken(
-        name: Name = .irrelevant,
-        symbol: Symbol = .random,
-        description: Description = .irrelevant,
-        iconUrl: URL? = nil,
-        supply: PositiveSupply = .max,
-        granularity: Granularity = .default
-    ) -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
-        
-        return try! createToken(
-            creator: addressOfActiveAccount,
-            name: name,
-            symbol: symbol,
-            description: description,
-            supply: .fixed(to: supply),
-            iconUrl: iconUrl,
-            granularity: granularity
-        )
-    }
-    
-    func createMultiIssuanceToken(
-        name: Name = .irrelevant,
-        symbol: Symbol = .random,
-        description: Description = .irrelevant,
-        iconUrl: URL? = nil,
-        initialSupply: Supply? = nil,
-        granularity: Granularity = .default
-    ) -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
-        
-        return try! createToken(
-            creator: addressOfActiveAccount,
-            name: name,
-            symbol: symbol,
-            description: description,
-            supply: .mutable(initial: initialSupply),
-            iconUrl: iconUrl,
-            granularity: granularity
-        )
-    }
-}

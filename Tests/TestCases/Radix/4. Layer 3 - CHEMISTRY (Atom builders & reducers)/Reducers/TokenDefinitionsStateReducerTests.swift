@@ -124,7 +124,3 @@ private func makeFixedSupplyTokenDefinitionParticle(supply: PositiveSupply) -> F
         granularity: .default
     )
 }
-
-private extension PositiveAmount {
-    static var irrelevant: PositiveAmount { return 42 }
-}

@@ -46,7 +46,7 @@ class CreateTokenTests: LocalhostNodeTest {
     
     func testFailingCreateTokenInSomeoneElsesName() {
 
-        let tokenCreation = application.create(token: createTokenAction(creator: bob))
+        let (tokenCreation, _) = application.createToken(creator: bob)
         
         tokenCreation.blockingAssertThrows(
             error: CreateTokenError.uniqueActionError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob))
@@ -55,73 +55,52 @@ class CreateTokenTests: LocalhostNodeTest {
     
     func testFailCreatingTokenWithSameRRIAsUniqueId() {
         
-        let createToken = createTokenAction(symbol: "FOO")
-        let rri = createToken.identifier
+        let actionCreateToken =
+            application.actionCreateToken(symbol: "FOO")
+        
+        let rri = actionCreateToken.identifier
         
         let transaction = Transaction {[
             PutUniqueIdAction(uniqueMaker: alice, string: "FOO"),
-            createToken
+            actionCreateToken
         ]}
         
-        let tokenCreation = application.send(transaction: transaction)
-        
-        tokenCreation.blockingAssertThrows(
+        application.send(transaction: transaction).blockingAssertThrows(
             error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByUniqueId(string: rri.name))
         )
     }
     
     func testFailCreatingTokenWithSameRRIAsExistingMutableSupplyToken() {
         
-        let createMutableSupplyTokenAction = createTokenAction()
-        let rri = createMutableSupplyTokenAction.identifier
+        let symbol: Symbol = "FOO"
+        let actionCreateMutableToken = application.actionCreateMultiIssuanceToken(symbol: symbol)
         
         let transaction = Transaction {[
-            createMutableSupplyTokenAction,
-            createTokenAction(),
+            actionCreateMutableToken,
+            application.actionCreateToken(symbol: symbol)
         ]}
         
-        let resultOfUniqueMaking = application.send(transaction: transaction)
-        
-        resultOfUniqueMaking.blockingAssertThrows(
-            error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByMutableSupplyToken(identifier: rri))
+        application.send(transaction: transaction).blockingAssertThrows(
+            error: CreateTokenError.uniqueActionError(
+                .rriAlreadyUsedByMutableSupplyToken(identifier: actionCreateMutableToken.identifier)
+            )
         )
     }
     
     func testFailCreatingTokenWithSameRRIAsExistingFixedSupplyToken() {
-        
-        let createFixedSupplyTokenAction = createTokenAction(supply: .fixed(to: 123))
-        let rri = createFixedSupplyTokenAction.identifier
+        let symbol: Symbol = "FOO"
+        let actionCreateFixedToken = application.actionCreateFixedSupplyToken(symbol: symbol)
         
         let transaction = Transaction {[
-            createFixedSupplyTokenAction,
-            createTokenAction(),
+            actionCreateFixedToken,
+            application.actionCreateToken(symbol: symbol)
         ]}
         
-        let resultOfUniqueMaking = application.send(transaction: transaction)
-        
-        resultOfUniqueMaking.blockingAssertThrows(
-            error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByFixedSupplyToken(identifier: rri))
+        application.send(transaction: transaction).blockingAssertThrows(
+            error: CreateTokenError.uniqueActionError(
+                .rriAlreadyUsedByFixedSupplyToken(identifier: actionCreateFixedToken.identifier)
+            )
         )
     }
     
-}
-
-private extension CreateTokenTests {
-    func createTokenAction(
-        symbol: Symbol = "FOO",
-        supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition = .mutableZeroSupply,
-        creator: Address? = nil
-    ) -> CreateTokenAction {
-        
-        let creatorAddress = creator ?? alice
-
-        return try! CreateTokenAction(
-            creator: creatorAddress,
-            name: .irrelevant,
-            symbol: symbol,
-            description: .irrelevant,
-            supply: supply
-        )
-        
-    }
 }

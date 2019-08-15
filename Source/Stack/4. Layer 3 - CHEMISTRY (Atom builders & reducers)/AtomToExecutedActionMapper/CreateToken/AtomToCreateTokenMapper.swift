@@ -87,8 +87,8 @@ private extension CreateTokenAction {
             symbol: tokenDefinition.symbol,
             description: tokenDefinition.description,
             derivedSupply: derivedSupply,
-            granularity: tokenDefinition.granularity,
-            iconUrl: tokenDefinition.iconUrl
+            iconUrl: tokenDefinition.iconUrl,
+            granularity: tokenDefinition.granularity
         )
     }
 }

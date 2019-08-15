@@ -31,7 +31,10 @@ class CreateTokenActionTests: XCTestCase {
     func testAssertThatInitialSupplyMustMatchGranularity() {
         
         func createGran3(initialSupply: Supply) throws -> CreateTokenAction {
-            return try createAction(supply: .mutable(initial: initialSupply), granularity: 3)
+            return try CreateTokenAction.new(
+                supply: .mutable(initial: initialSupply),
+                granularity: 3
+            )
         }
         
         func assertThrows(initialSupply: Supply) {
@@ -55,67 +58,5 @@ class CreateTokenActionTests: XCTestCase {
         assertThrows(initialSupply: 299)
         assertThrows(initialSupply: 301)
         
-    }
-}
-
-private extension CreateTokenActionTests {
-    
-    func createAction(
-        supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
-        granularity: Granularity = .default
-    ) throws -> CreateTokenAction {
-        return try CreateTokenAction(
-            creator: .irrelevant,
-            name: .irrelevant,
-            symbol: .irrelevant,
-            description: .irrelevant,
-            supply: supply,
-            granularity: granularity
-        )
-    }
-    
-}
-
-// MARK: - IRRELEVANT For this test
-private extension Address {
-    static var irrelevant: Address {
-        return Address(magic: .irrelevant, publicKey: .irrelevant)
-    }
-}
-
-private extension PublicKey {
-    static var irrelevant: PublicKey {
-        return PublicKey(private: PrivateKey())
-    }
-}
-
-
-extension Magic {
-    static var irrelevant: Magic {
-        return 1
-    }
-}
-
-extension String {
-    static var irrelevant: String {
-        return "irrelevant"
-    }
-}
-
-extension Symbol {
-    static var irrelevant: Symbol {
-        return "IRR"
-    }
-}
-
-extension Name {
-    static var irrelevant: Name {
-        return "Irrelevant"
-    }
-}
-
-extension Description {
-    static var irrelevant: Description {
-        return "Irrelevant description"
     }
 }

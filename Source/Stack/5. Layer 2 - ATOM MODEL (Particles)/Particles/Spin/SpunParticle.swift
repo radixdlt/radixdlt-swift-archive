@@ -117,12 +117,12 @@ public struct AnyUpParticle: SpunParticleContainer, Throwing {
         self.someParticle = particle
     }
  
-    public init(anySpunParticle: AnySpunParticle) throws {
-        guard anySpunParticle.spin == .up else {
+    public init(spunParticle: SpunParticleContainer) throws {
+        guard spunParticle.spin == .up else {
             throw Error.particleDidNotHaveSpinUp
         }
     
-        self.init(particle: anySpunParticle.particle)
+        self.init(particle: spunParticle.someParticle)
     }
     
 }
@@ -136,10 +136,6 @@ extension Array: SpunParticlesOwner where Element: SpunParticleContainer {
         return map { AnySpunParticle(spin: $0.spin, particle: $0.someParticle) }
     }
 }
-
-//public protocol SpunParticlesOwner {
-//    var spunParticles: [AnySpunParticle] { get }
-//}
 
 public extension AnyUpParticle {
     enum Error: Swift.Error, Equatable {

@@ -117,13 +117,14 @@ class TransferTokensTests: LocalhostNodeTest {
       
         // WHEN: Alice tries to transfer tokens with a larger amount than her current balance, to Bob
         let initialSupply: PositiveSupply = 30
-        let createToken = createTokenAction(address: alice, supply: .fixed(to: initialSupply))
+        let (tokenCreation, rri) =  application.createFixedSupplyToken(supply: initialSupply)
+
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+           tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
-        let rri = createToken.identifier
+        
         let amount: PositiveAmount = 50
-        let transfer = application.transfer(tokens: TransferTokensAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: rri))
+        let transfer = application.transferTokens(identifier: rri, to: bob, amount: amount)
         
         // THEN:  I see that action fails with error `InsufficientFunds`
         transfer.blockingAssertThrows(
@@ -135,14 +136,13 @@ class TransferTokensTests: LocalhostNodeTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
   
         // WHEN: Alice transfer tokens she owns, having a granularity larger than 1, to Bob
-        let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: 10)
+        let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
         
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
-        let rri = createToken.identifier
         
-        let transfer = application.transfer(tokens: TransferTokensAction(from: alice, to: bob, amount: 20, tokenResourceIdentifier: rri))
+        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 20)
         
         // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
@@ -156,16 +156,15 @@ class TransferTokensTests: LocalhostNodeTest {
         let granularity: Granularity = 5
         
         // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
-        let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: granularity)
+        let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 100, granularity: granularity)
+
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW),
-            "Failed to create token"
+            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
         let amountToSend: PositiveAmount = 7
         
-        let rri = createToken.identifier
-        let transfer = application.transfer(tokens: TransferTokensAction(from: alice, to: bob, amount: amountToSend, tokenResourceIdentifier: rri))
+        let transfer = application.transferTokens(identifier: rri, to: bob, amount: amountToSend)
         
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
         transfer.blockingAssertThrows(
@@ -183,12 +182,11 @@ class TransferTokensTests: LocalhostNodeTest {
     func testFailingTransferAliceTriesToSpendCarolsCoins() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
-        let createToken = createTokenAction(address: alice, supply: .fixed(to: 10000), granularity: 10)
+        let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
         
         XCTAssertTrue(
-            application.create(token: createToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
-        let rri = createToken.identifier
         
         // WHEN: Alice tries to spend Carols coins
         let transfer = application.transfer(tokens: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
@@ -200,18 +198,3 @@ class TransferTokensTests: LocalhostNodeTest {
     }
     
 }
-
-private extension TransferTokensTests {
-    func createTokenAction(address: Address, supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition, granularity: Granularity = .default) -> CreateTokenAction {
-        return try! CreateTokenAction(
-            creator: address,
-            name: "Alice Coin",
-            symbol: "AC",
-            description: "Best coin",
-            supply: supply,
-            granularity: granularity
-        )
-    }
-}
-
-private let magic: Magic = 63799298

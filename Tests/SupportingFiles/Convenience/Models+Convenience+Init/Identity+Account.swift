@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,36 +23,26 @@
 //
 
 import Foundation
+@testable import RadixSDK
 
-/// Type-erased hashable Particle container which hash and equality ignores spin.
-public struct AnyParticle: SpunParticleContainer, Hashable, CustomStringConvertible {
-    
-    private let _getSpunParticle: () -> SpunParticleContainer
-    private let _hashIgnoringSpin: (inout Swift.Hasher) -> Void
-    
-    public init(spunParticle: SpunParticleContainer) {
-        self._getSpunParticle = { spunParticle }
-        self._hashIgnoringSpin = { $0.combine(spunParticle.someParticle.hashEUID) }
+extension AbstractIdentity {
+    convenience init(privateKey: PrivateKey, alias: String? = nil) {
+        self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
     }
     
+    
+    #if DEBUG
+    #else
+    // used for profile tests
+    convenience init(alias: String) {
+        self.init(privateKey: .init(), alias: alias)
+    }
+    #endif
 }
 
-public extension AnyParticle {
-    var someParticle: ParticleConvertible { return _getSpunParticle().someParticle }
-
-    var spin: Spin { return _getSpunParticle().spin }
-    
-    var description: String {
-        return AnySpunParticle(spunParticle: self).description
-    }
-}
-
-public extension AnyParticle {
-    static func == (lhs: AnyParticle, rhs: AnyParticle) -> Bool {
-        return lhs.someParticle.hashEUID == rhs.someParticle.hashEUID
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        self._hashIgnoringSpin(&hasher)
+extension Account {
+    init() {
+        let keyPair = KeyPair()
+        self = .privateKeyPresent(keyPair)
     }
 }

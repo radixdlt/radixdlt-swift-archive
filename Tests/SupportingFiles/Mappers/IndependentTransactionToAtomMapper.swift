@@ -50,7 +50,9 @@ struct IndependentTransactionToAtomMapper: TransactionToAtomMapper {
             let particleGroups = try statefulMapper.particleGroupsForAnAction(action, upParticles: upParticlesFromTx, addressOfActiveAccount: addressOfActiveAccount)
             
             for particleGroup in particleGroups {
-                let upParticlesFromAction = try particleGroup.spunParticles.filter(spin: .up).map(AnyUpParticle.init(anySpunParticle:))
+                
+                let upParticlesFromAction = try particleGroup.spunParticles.filter(spin: .up).map(AnyUpParticle.init(spunParticle:))
+                
                 upParticlesFromTx.append(contentsOf: upParticlesFromAction)
             }
             

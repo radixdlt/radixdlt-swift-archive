@@ -43,8 +43,8 @@ public struct CreateTokenAction: UniquelyIdentifiedUserAction, Throwing, TokenCo
         symbol: Symbol,
         description: Description,
         supply supplyTypeDefinition: InitialSupply.SupplyTypeDefinition,
-        granularity: Granularity = .default,
-        iconUrl: URL? = nil
+        iconUrl: URL? = nil,
+        granularity: Granularity = .default
     ) throws {
 
         try supplyTypeDefinition.isExactMultipleOfGranularity(granularity)
@@ -67,8 +67,8 @@ internal extension CreateTokenAction {
         symbol: Symbol,
         description: Description,
         derivedSupply: InitialSupply.DerivedFromAtom,
-        granularity: Granularity = .default,
-        iconUrl: URL? = nil
+        iconUrl: URL? = nil,
+        granularity: Granularity = .default
     ) {
         self.creator = creator
         self.name = name

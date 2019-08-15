@@ -26,6 +26,10 @@ import Foundation
 
 public extension SpunParticlesOwner {
     
+    func upParticles() -> [AnyUpParticle] {
+        return spunParticles.compactMap { try? AnyUpParticle(spunParticle: $0) }
+    }
+    
     func spunParticlesOfType<P>(
         _ type: P.Type,
         spin: Spin? = nil,

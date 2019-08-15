@@ -135,16 +135,3 @@ class SendMessageTests: LocalhostNodeTest {
         )
     }
 }
-
-extension AbstractIdentity {
-    convenience init(privateKey: PrivateKey, alias: String? = nil) {
-        self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
-    }
-}
-
-extension Account {
-    init() {
-        let keyPair = KeyPair()
-        self = .privateKeyPresent(keyPair)
-    }
-}

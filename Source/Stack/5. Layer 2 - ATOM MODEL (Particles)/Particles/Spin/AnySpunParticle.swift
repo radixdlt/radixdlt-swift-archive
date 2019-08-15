@@ -24,7 +24,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// Small container for a `Particle` and its `Spin`. The reason why we do not want to add the `Spin` as a property on the Particle itself is that it would change the Hash of the particle.
 public struct AnySpunParticle:
@@ -32,8 +32,10 @@ public struct AnySpunParticle:
     RadixModelTypeStaticSpecifying,
     RadixCodable,
     RadixHashable,
-    Codable {
-// swiftlint:enable colon
+    Codable,
+    CustomStringConvertible
+{
+// swiftlint:enable colon opening_brace
 
     public static let serializer = RadixModelType.spunParticle
 
@@ -42,6 +44,20 @@ public struct AnySpunParticle:
     public init(spin: Spin = .down, particle: ParticleConvertible) {
         self.spin = spin
         self.particle = particle
+    }
+    
+    public init(spunParticle: SpunParticleContainer) {
+        self.init(
+            spin: spunParticle.spin,
+            particle: spunParticle.someParticle
+        )
+    }
+}
+
+// MARK: CustomStringConvertible
+public extension AnySpunParticle {
+    var description: String {
+        return "Particle(spin: \(spin), <\(particle)>)"
     }
 }
 

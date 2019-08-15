@@ -85,9 +85,3 @@ class ECIESEncryptionAndDecryptionTests: XCTestCase {
         )
     }
 }
-
-extension Data {
-    static var irrelevant: Data {
-        return .empty
-    }
-}

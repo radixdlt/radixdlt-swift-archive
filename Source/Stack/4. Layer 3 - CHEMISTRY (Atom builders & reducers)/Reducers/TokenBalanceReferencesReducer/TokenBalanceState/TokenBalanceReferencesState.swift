@@ -25,18 +25,32 @@
 import Foundation
 
 public struct TokenBalanceReferencesState: ApplicationState, DictionaryConvertible, Equatable {
+
     public typealias Key = ResourceIdentifier
     public typealias Value = TokenReferenceBalance
+
     public let dictionary: Map
+
     public init(dictionary: Map = [:]) {
         self.dictionary = dictionary
     }
-    
-    public init(reducing balances: [TokenReferenceBalance]) {
+}
+
+// MARK: Convenience Init
+public extension TokenBalanceReferencesState {
+    init(reducing balances: [TokenReferenceBalance]) {
         self.init(dictionary: TokenBalanceReferencesState.reduce(balances))
     }
 }
 
+// MARK: Value retrival
+public extension TokenBalanceReferencesState {
+    func tokenReferenceBalance(of tokenIdentifier: ResourceIdentifier) -> TokenReferenceBalance? {
+        return dictionary[tokenIdentifier]
+    }
+}
+
+// MARK: Merge/Reduce State
 public extension TokenBalanceReferencesState {
 
     func mergingWithTransferrableTokensParticle(_ transferrableTokensParticle: UpParticle<TransferrableTokensParticle>) -> TokenBalanceReferencesState {
