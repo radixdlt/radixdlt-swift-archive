@@ -31,32 +31,3 @@ public protocol StateSubscriber {
         at address: Address
     ) -> Observable<State> where State: ApplicationState
 }
-
-public final class DefaultStateSubsciber: StateSubscriber {
-    
-    private let atomStore: AtomStore
-    private let particlesToStateReducer: ParticlesToStateReducer
-    
-    public init(
-        atomStore: AtomStore,
-        particlesToStateReducer: ParticlesToStateReducer = DefaultParticlesToStateReducer.init()
-    ) {
-        self.atomStore = atomStore
-        self.particlesToStateReducer = particlesToStateReducer
-    }
-}
-
-public extension DefaultStateSubsciber {
-    func observeState<State>(
-        ofType stateType: State.Type,
-        at address: Address
-    ) -> Observable<State> where State: ApplicationState {
-        
-        return atomStore.onSync(address: address)
-            .map { [unowned self] date in
-                let upParticles = self.atomStore.upParticles(at: address, stagedUuid: nil)
-                let reducedState = try self.particlesToStateReducer.reduce(upParticles: upParticles, to: stateType)
-                return reducedState
-        }
-    }
-}

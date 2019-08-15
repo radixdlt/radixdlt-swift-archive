@@ -23,11 +23,6 @@
 //
 
 import Foundation
-import RxSwift
-
-public protocol ParticlesToStateReducer {
-    func reduce<State>(upParticles: [AnyUpParticle], to stateType: State.Type) throws -> State where State: ApplicationState
-}
 
 public final class DefaultParticlesToStateReducer: ParticlesToStateReducer {
     
@@ -53,10 +48,20 @@ private extension DefaultParticlesToStateReducer {
 }
 
 public extension DefaultParticlesToStateReducer {
-
+    
     func reduce<State>(upParticles: [AnyUpParticle], to stateType: State.Type) throws -> State where State: ApplicationState {
         let reducer = particlesToStateReducer(for: stateType)
         return try reducer.reduceFromInitialState(upParticles: upParticles)
     }
+    
+}
 
+// MARK: Default reducers
+public extension Array where Element == AnyParticleReducer {
+    static var `default`: [AnyParticleReducer] {
+        return [
+            AnyParticleReducer(TokenBalanceReferencesReducer()),
+            AnyParticleReducer(TokenDefinitionsReducer())
+        ]
+    }
 }

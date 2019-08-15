@@ -25,26 +25,6 @@
 import Foundation
 import RxSwift
 
-public protocol TransactionMaker: TransactionToAtomMapper {
-    func send(transaction: Transaction, toOriginNode: Node?) -> ResultOfUserAction
-}
-
-public extension TransactionMaker {
-    
-    func send(transaction: Transaction) -> ResultOfUserAction {
-        return send(transaction: transaction, toOriginNode: nil)
-    }
-    
-    func execute(actions: [UserAction], originNode: Node? = nil) -> ResultOfUserAction {
-        let transaction = Transaction { actions }
-        return send(transaction: transaction, toOriginNode: originNode)
-    }
-    
-    func execute(actions: UserAction..., originNode: Node? = nil) -> ResultOfUserAction {
-        return execute(actions: actions, originNode: originNode)
-    }
-}
-
 public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDeriving, Magical {
     
     /// A mapper from a container of `UserAction`s the user wants to perform, to an `Atom` ready to be pushed to the Radix network (some node).
@@ -83,7 +63,7 @@ public extension DefaultTransactionMaker {
     convenience init(
         activeAccount: Observable<Account>,
         universe: RadixUniverse
-    ) {
+        ) {
         
         let transactionToAtomMapper = DefaultTransactionToAtomMapper(atomStore: universe.atomStore)
         
@@ -158,7 +138,7 @@ private extension DefaultTransactionMaker {
         atom atomSingle: Single<SignedAtom>,
         completeOnAtomStoredOnly: Bool,
         originNode: Node?
-    ) -> ResultOfUserAction {
+        ) -> ResultOfUserAction {
         
         let cachedAtom = atomSingle.cache()
         let updates = cachedAtom

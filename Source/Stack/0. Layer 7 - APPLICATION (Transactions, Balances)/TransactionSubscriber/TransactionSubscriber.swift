@@ -24,7 +24,6 @@
 
 import Foundation
 import RxSwift
-import RxSwiftExt
 
 // MARK: TransactionSubscriber
 public protocol TransactionSubscriber: AtomToTransactionMapper {
@@ -83,51 +82,5 @@ public extension TransactionSubscriber where Self: ActiveAccountOwner {
     
     func observeMyActions<Action>(ofType actionType: Action.Type) -> Observable<Action> where Action: UserAction {
         return observeActions(ofType: actionType, at: addressOfActiveAccount)
-    }
-}
-
-public final class DefaultTransactionSubscriber: TransactionSubscriber {
-    
-    private let atomStore: AtomStore
-    private let atomToTransactionMapper: AtomToTransactionMapper
-    
-    public init(
-        atomStore: AtomStore,
-        atomToTransactionMapper: AtomToTransactionMapper
-    ) {
-        self.atomStore = atomStore
-        self.atomToTransactionMapper = atomToTransactionMapper
-    }
-}
-
-public extension DefaultTransactionSubscriber {
-    convenience init(
-        atomStore: AtomStore,
-        activeAccount: Observable<Account>
-    ) {
-        self.init(
-            atomStore: atomStore,
-            atomToTransactionMapper: DefaultAtomToTransactionMapper(activeAccount: activeAccount)
-        )
-    }
-}
-
-public extension DefaultTransactionSubscriber {
-    
-    func observeTransactions(at address: Address) -> Observable<ExecutedTransaction> {
-        return atomStore.atomObservations(of: address)
-            .filterMap { (atomObservation: AtomObservation) -> FilterMap<Atom> in
-                guard case .store(let atom, _, _) = atomObservation else { return .ignore }
-                return .map(atom)
-            }.flatMap { [unowned self] in
-                return self.atomToTransactionMapper.transactionFromAtom($0)
-        }
-    }
-}
-
-// MARK: AtomToTransactionMapper
-public extension DefaultTransactionSubscriber {
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
-        return atomToTransactionMapper.transactionFromAtom(atom)
     }
 }

@@ -24,20 +24,10 @@
 
 import Foundation
 
-public protocol TransactionToAtomMapper {
-    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom
-}
-
-public extension TransactionToAtomMapper where Self: ActiveAccountOwner {
-    func atomFrom(transaction: Transaction) throws -> Atom {
-        return try atomFrom(transaction: transaction, addressOfActiveAccount: self.addressOfActiveAccount)
-    }
-}
-
 public final class DefaultTransactionToAtomMapper: TransactionToAtomMapper {
-
+    
     private let atomStore: AtomStore
-
+    
     /// A list of type-erased mappers from requested/pending `UserAction` to `ParticleGroups`s.
     /// Stateless and Stateful ActionToParticleGroupMapper's merged together as Stateful mappers.
     /// A `Stateless` mapper has no dependency on ledger/application state, e.g. sending a message,
@@ -47,7 +37,7 @@ public final class DefaultTransactionToAtomMapper: TransactionToAtomMapper {
     public init(
         atomStore: AtomStore,
         actionToParticleGroupsMappers: [AnyStatefulActionToParticleGroupsMapper]
-    ) {
+        ) {
         self.atomStore = atomStore
         self.actionMappers = actionToParticleGroupsMappers
     }
@@ -58,7 +48,7 @@ public extension DefaultTransactionToAtomMapper {
         atomStore: AtomStore,
         statelessActionToParticleGroupsMappers: [AnyStatelessActionToParticleGroupsMapper] = .default,
         statefulActionToParticleGroupsMappers: [AnyStatefulActionToParticleGroupsMapper] = .default
-    ) {
+        ) {
         
         let actionToParticleGroupsMappers: [AnyStatefulActionToParticleGroupsMapper] = {
             let statefulFromStateless = statelessActionToParticleGroupsMappers.map {
@@ -122,5 +112,26 @@ private extension DefaultTransactionToAtomMapper {
         try statefulMapper.particleGroupsForAnAction(action, upParticles: particles, addressOfActiveAccount: addressOfActiveAccount).forEach {
             atomStore.stageParticleGroup($0, uuid: uuid)
         }
+    }
+}
+
+// MARK: Default Mappers
+public extension Array where Element == AnyStatefulActionToParticleGroupsMapper {
+    static var `default`: [AnyStatefulActionToParticleGroupsMapper] {
+        return [
+            AnyStatefulActionToParticleGroupsMapper(DefaultMintTokensActionToParticleGroupsMapper()),
+            AnyStatefulActionToParticleGroupsMapper(DefaultBurnTokensActionToParticleGroupsMapper()),
+            AnyStatefulActionToParticleGroupsMapper(DefaultTransferTokensActionToParticleGroupsMapper()),
+            AnyStatefulActionToParticleGroupsMapper(DefaultPutUniqueActionToParticleGroupsMapper()),
+            AnyStatefulActionToParticleGroupsMapper(DefaultCreateTokenActionToParticleGroupsMapper())
+        ]
+    }
+}
+
+public extension Array where Element == AnyStatelessActionToParticleGroupsMapper {
+    static var `default`: [AnyStatelessActionToParticleGroupsMapper] {
+        return [
+            AnyStatelessActionToParticleGroupsMapper(DefaultSendMessageActionToParticleGroupsMapper())
+        ]
     }
 }

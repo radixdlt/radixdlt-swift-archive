@@ -29,24 +29,20 @@ import RxSwift
 class TransactionTests: LocalhostNodeTest {
     
     private var aliceIdentity: AbstractIdentity!
-    private var bobIdentity: AbstractIdentity!
     private var application: RadixApplicationClient!
     private var alice: Address!
     private var bob: Address!
-    private var carolAccount: Account!
-    private var carol: Address!
     
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
         
         aliceIdentity = AbstractIdentity(alias: "Alice")
-        bobIdentity = AbstractIdentity(alias: "Bob")
+        
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+        
         alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobIdentity.activeAccount)
-        carolAccount = Account()
-        carol = application.addressOf(account: carolAccount)
+        bob = application.addressOf(account: .init())
     }
     
     func testTransactionWithSingleCreateTokenActionWithoutInitialSupply() {

@@ -46,31 +46,3 @@ public extension AtomToTransactionMapper {
         }
     }
 }
-
-public final class DefaultAtomToTransactionMapper: AtomToTransactionMapper {
-    
-    /// A list of type-erased mappers from `Atom` to `UserAction`
-    private let atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper]
-    
-    public init(activeAccount: Observable<Account>) {
-        atomToExecutedActionMappers = .atomToActionMappers(activeAccount: activeAccount)
-    }
-}
-
-public extension DefaultAtomToTransactionMapper {
-    convenience init(identity: AbstractIdentity) {
-        self.init(activeAccount: identity.activeAccountObservable)
-    }
-}
-
-public extension DefaultAtomToTransactionMapper {
-
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
-        return Observable.combineLatest(
-            atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
-        ) { $0.flatMap { $0 } }
-            .map { optionalActions in return optionalActions.compactMap { $0 } }
-            .map { ExecutedTransaction(atom: atom, actions: $0) }
-    }
-    
-}
