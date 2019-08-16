@@ -62,8 +62,7 @@ class ProofOfWorkTest: XCTestCase {
         XCTAssertEqual(pow.nonce, 9255)
     }
     
-    // Takes around 7 second per vector
-    func omitted_slowVectors() {
+    func omitted_testSlowVectors() {
         func test(vector: Vector) {
             
             doTest(
@@ -162,31 +161,43 @@ extension PrimitiveSequenceType where Self: ObservableConvertibleType, Trait == 
     }
 }
 
-private typealias Vector = (zeros: ProofOfWork.NumberOfLeadingZeros, magic: Magic, seed: HexString, expectedResultingNonce: Nonce)
+private typealias Vector = (expectedResultingNonce: Nonce, seed: HexString, magic: Magic, zeros: ProofOfWork.NumberOfLeadingZeros)
 private let vectorsForHighNonce: [Vector] = [
     (
-        zeros: 16,
+        expectedResultingNonce: 510190, // takes around 12 s
+        seed: "887a9e87ecbcc8f13ea60dd732a3c115ea9478519ee3faac3be3ed89b4bbc535",
         magic: -1332248574,
+        zeros: 16
+    ),
+    (
+        expectedResultingNonce: 322571,
         seed: "46ad4f54098f18f856a2ff05df25f5af587bd4f6dfc1e3b4cb406ceb25c61552",
-        expectedResultingNonce: 322571
+        magic: -1332248574,
+        zeros: 16
     ),
     (
-        zeros: 16,
+        expectedResultingNonce: 312514,
+        seed: "f0f178d42ffe8fade8b8197782fd1ee72a4068d046d868806da7bfb1d0ffa7c1",
         magic: -1332248574,
+        zeros: 16
+    ),
+    (
+        expectedResultingNonce: 311476,
         seed: "a33a90d0422aa12b68d1de6c53e83ca049ab82b06efeb03cf6731231e82470ef",
-        expectedResultingNonce: 311476
+        magic: -1332248574,
+        zeros: 16
     ),
     (
-        zeros: 16,
-        magic: -1332248574,
+        expectedResultingNonce: 285315,
         seed: "0519269eafbac3accba00cf6f7e93238aae1974a1e5439a58a6f53726a963095",
-        expectedResultingNonce: 285315
+        magic: -1332248574,
+        zeros: 16
     ),
     (
-        zeros: 16,
-        magic: -1332248574,
+        expectedResultingNonce: 270233,
         seed: "34931f7c0522352426d9d95f1c5527fafffce55b13082ae3723dc89f3c3e6276",
-        expectedResultingNonce: 270233
+        magic: -1332248574,
+        zeros: 16
     )
 ]
 
