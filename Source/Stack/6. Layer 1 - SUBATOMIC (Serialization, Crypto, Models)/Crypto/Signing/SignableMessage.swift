@@ -53,7 +53,7 @@ public struct SignableMessage:
 
 public extension SignableMessage {
     init(string: String, encoding: String.Encoding) throws {
-        try self.init(data: string.toData(encodingForced: encoding))
+        try self.init(unhashed: string.toData(encodingForced: encoding))
     }
     
     init(hash: RadixHash) {

@@ -110,10 +110,12 @@ extension ObservableConvertibleType where Element == Never { /* Completable */
 
 extension TimeInterval {
     static var `default`: TimeInterval {
-        return 2
+        return 3
     }
     static var enoughForPOW: TimeInterval {
-        return 15
+        // Some POW results in a nonce higher than 300k, which takes around 8 seconds on 2018 Macbook Pro
+        // see `ProofOfWorkTests` for more info, especially test vectors `vectorsForHighNonce` in said file.
+        return 10
     }
 }
 

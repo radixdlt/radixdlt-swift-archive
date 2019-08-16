@@ -43,7 +43,7 @@ class SendMessageTests: LocalhostNodeTest {
     private lazy var diana = application.addressOf(account: dianaAccount)
     
     private let disposeBag = DisposeBag()
-    
+ 
     func testSendNonEmptyPlainText() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message without encryption
@@ -54,7 +54,7 @@ class SendMessageTests: LocalhostNodeTest {
         // THEN: I see that action completes successfully
         XCTAssertTrue(result.blockingWasSuccessfull(timeout: .enoughForPOW))
 
-        guard let sentMessage = application.observeMyMessages().blockingTakeFirst(timeout: 1) else { return }
+        guard let sentMessage = application.observeMyMessages().blockingTakeFirst() else { return }
         let decryptedMessage = sentMessage.textMessage()
         XCTAssertEqual(decryptedMessage, message)
         XCTAssertNotEqual(decryptedMessage, "foobar")
@@ -71,7 +71,7 @@ class SendMessageTests: LocalhostNodeTest {
             result.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-        guard let sentMessage = application.observeMyMessages().blockingTakeLast(timeout: 2) else { return }
+        guard let sentMessage = application.observeMyMessages().blockingTakeLast() else { return }
         XCTAssertEqual(sentMessage.textMessage(), plainTextMessage)
     }
 
@@ -87,7 +87,7 @@ class SendMessageTests: LocalhostNodeTest {
             result.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-        guard let sentMessage = application.observeMyMessages().blockingTakeLast(timeout: 2) else { return }
+        guard let sentMessage = application.observeMyMessages().blockingTakeLast() else { return }
         XCTAssertTrue(sentMessage.isEncryptedAndCannotDecrypt)
     }
     

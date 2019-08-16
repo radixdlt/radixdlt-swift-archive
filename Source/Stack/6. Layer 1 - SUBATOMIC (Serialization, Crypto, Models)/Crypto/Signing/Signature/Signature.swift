@@ -24,11 +24,12 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
-/// ECDSA Signature consisting of two BigIntegers "R" and "S"
-/// Read more: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
-/// Low value `S` is enforced according to BIP62: https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures
+/// [ECDSA Signature][1] consisting of two BigIntegers `R` and `S`, concatenated together.
+///
+/// [1]: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
+///
 public struct Signature:
     RadixModelTypeStaticSpecifying,
     RadixCodable,
@@ -40,8 +41,10 @@ public struct Signature:
     DERInitializable,
     Codable,
     CustomStringConvertible,
-    Equatable {
-// swiftlint:enable colon
+    Equatable
+{
+    
+// swiftlint:enable colon opening_brace
     
     public static let length = 64
     
@@ -50,8 +53,20 @@ public struct Signature:
     public typealias Part = BigUnsignedInt
     
     public static let rUpperBound = Secp256k1.order - 1
-    /// Ensures "low S"
-    public static let sUpperBound = Secp256k1.order / 2
+    
+    /// Max allow value of `S` part is ther **order** of the curve `secp256k1`
+    ///
+    /// *LOW S* (mentioned in [BIP-62][1] and [BIP-146][2]) can easily be supported by changing `sUpperBound` to
+    ///
+    ///     sUpperBound = Secp256k1.order / 2
+    ///
+    /// But it is not enforced by Radix Core (nor Radix Java Library), so we cannot enforce it,
+    /// otherwise would the Radix Swift library not be able to decode some signatures made by Java client lib.
+    ///
+    /// [1]: https://github.com/bitcoin/bips/blob/master/bip-0062.mediawiki#Low_S_values_in_signatures
+    /// [2]: https://github.com/bitcoin/bips/blob/master/bip-0146.mediawiki#LOW_S
+    ///
+    public static let sUpperBound = Secp256k1.order - 1
     
     public let r: Part
     public let s: Part
@@ -64,14 +79,17 @@ public struct Signature:
     }
     
     public init(r: Part, s: Part) throws {
+        
         guard r <= Signature.rUpperBound else {
             throw Error.rTooBig(expectedAtMost: Signature.rUpperBound, butGot: r)
         }
-        guard r > 0 else {
-            throw Error.rCannotBeZero
-        }
+        
         guard s <= Signature.sUpperBound else {
             throw Error.sTooBig(expectedAtMost: Signature.sUpperBound, butGot: s)
+        }
+        
+        guard r > 0 else {
+            throw Error.rCannotBeZero
         }
         guard s > 0 else {
             throw Error.sCannotBeZero
@@ -127,8 +145,11 @@ public extension Signature {
 
 // MARK: - DataConvertible
 public extension Signature {
+    /// Byte length of 64 is ensured by prepending leading 0 byte's to R and S respectivly before concatenation
     var asData: Data {
-        return r.asData + s.asData
+        let rData = r.toData(minByteCount: 32, concatMode: .prepend)
+        let sData = s.toData(minByteCount: 32, concatMode: .prepend)
+        return rData + sData
     }
 }
 
@@ -153,10 +174,7 @@ public extension Signature {
         let rBase64 = try container.decode(Base64String.self, forKey: .r)
         let sBase64 = try container.decode(Base64String.self, forKey: .s)
         
-         // TODO: When Java library ensures low value S we should call the designated initializer in order to perform validation
-//        try self.init(r: rBase64, s: sBase64)
-        self.r = rBase64.unsignedBigInteger
-        self.s = sBase64.unsignedBigInteger
+        try self.init(r: rBase64, s: sBase64)
     }
 }
 

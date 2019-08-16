@@ -208,6 +208,7 @@
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
 		E67129A322C2289C004F6D0A /* Consumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A222C2289C004F6D0A /* Consumer.swift */; };
 		E67129A522C228AE004F6D0A /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A422C228AE004F6D0A /* Reducer.swift */; };
+		E671AAE12306F494007CC356 /* SignatureLengthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E671AAE02306F494007CC356 /* SignatureLengthTests.swift */; };
 		E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672562D228AB284004631F1 /* MockedNetworkDetailsRequester.swift */; };
 		E6725646228AD438004631F1 /* SpinAmountArthitmeticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6725645228AD438004631F1 /* SpinAmountArthitmeticTests.swift */; };
 		E6725648228AE98F004631F1 /* TransferTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6725647228AE98F004631F1 /* TransferTokensTests.swift */; };
@@ -833,6 +834,7 @@
 		E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStatusChecking.swift; sourceTree = "<group>"; };
 		E67129A222C2289C004F6D0A /* Consumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consumer.swift; sourceTree = "<group>"; };
 		E67129A422C228AE004F6D0A /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
+		E671AAE02306F494007CC356 /* SignatureLengthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureLengthTests.swift; sourceTree = "<group>"; };
 		E672562D228AB284004631F1 /* MockedNetworkDetailsRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedNetworkDetailsRequester.swift; sourceTree = "<group>"; };
 		E6725631228AB284004631F1 /* MockedHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedHTTPClient.swift; sourceTree = "<group>"; };
 		E6725645228AD438004631F1 /* SpinAmountArthitmeticTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinAmountArthitmeticTests.swift; sourceTree = "<group>"; };
@@ -3590,6 +3592,7 @@
 			children = (
 				E6E279BA2271CE250067D46E /* EmptyAtomSignatureTests.swift */,
 				E6E279BB2271CE250067D46E /* AtomSignatureTests.swift */,
+				E671AAE02306F494007CC356 /* SignatureLengthTests.swift */,
 			);
 			path = Signing;
 			sourceTree = "<group>";
@@ -4702,6 +4705,7 @@
 				E6055449230553E600528510 /* Test+Convenience+Models.swift in Sources */,
 				E6E27A1F2271CE250067D46E /* ECIESDecryptMessageTests.swift in Sources */,
 				E6E27A472271CE250067D46E /* DsonEncodingTokenDefinitionParticleTests.swift in Sources */,
+				E671AAE12306F494007CC356 /* SignatureLengthTests.swift in Sources */,
 				E6E27A262271CE250067D46E /* AtomJsonDeserializationTwoParticleGroupsTests.swift in Sources */,
 				E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */,
 				E6E27A212271CE250067D46E /* HmacTest.swift in Sources */,
