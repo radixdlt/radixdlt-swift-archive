@@ -36,6 +36,12 @@ public struct ProofOfWork: CustomStringConvertible, CustomDebugStringConvertible
         self.targetNumberOfLeadingZeros = targetNumberOfLeadingZeros
         self.magic = magic
         self.nonce = nonce
+        
+        func logIfNonceExceedsThreshold(_ threshold: Nonce = 300_000) {
+            guard nonce.value > threshold.value else { return }
+            log.info("POW high nonce, might be useful for tests, NONCE: \(nonce.value), FROM: magic: \(magic), seed: \(seed.hex), #zeros: \(targetNumberOfLeadingZeros)")
+        }
+        logIfNonceExceedsThreshold()
     }
 }
 

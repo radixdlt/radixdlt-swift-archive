@@ -61,6 +61,20 @@ class ProofOfWorkTest: XCTestCase {
         guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 14, timeout: 0.5) else { return XCTFail("timeout") }
         XCTAssertEqual(pow.nonce, 9255)
     }
+    
+    // Takes around 7 second per vector
+    func omitted_slowVectors() {
+        func test(vector: Vector) {
+            
+            doTest(
+                zeros: vector.zeros,
+                expectedNonce: vector.expectedResultingNonce,
+                magic: vector.magic,
+                seed: vector.seed
+            )
+        }
+        vectorsForHighNonce.forEach(test(vector:))
+    }
 }
 
 private extension ProofOfWorkTest {
@@ -74,7 +88,7 @@ private extension ProofOfWorkTest {
         let magicUsed = overridingMagic ?? magic
         let seedUsed = overridingSeed ?? seed
         
-        DefaultProofOfWorkWorker.work(seed: seedUsed.asData, magic: magicUsed, numberOfLeadingZeros: zeros) {
+        DefaultProofOfWorkWorker().doWork(seed: seedUsed.asData, magic: magicUsed, numberOfLeadingZeros: zeros) {
             switch $0 {
             case .failure(let error): XCTFail("Unexpected error: \(error)")
             case .success(let pow): XCTAssertEqual(pow.nonce, expectedNonce)
@@ -147,3 +161,26 @@ extension PrimitiveSequenceType where Self: ObservableConvertibleType, Trait == 
         
     }
 }
+
+private typealias Vector = (zeros: ProofOfWork.NumberOfLeadingZeros, magic: Magic, seed: HexString, expectedResultingNonce: Nonce)
+private let vectorsForHighNonce: [Vector] = [
+    (
+        zeros: 16,
+        magic: -1332248574,
+        seed: "46ad4f54098f18f856a2ff05df25f5af587bd4f6dfc1e3b4cb406ceb25c61552",
+        expectedResultingNonce: 322571
+    ),
+    (
+        zeros: 16,
+        magic: -1332248574,
+        seed: "0519269eafbac3accba00cf6f7e93238aae1974a1e5439a58a6f53726a963095",
+        expectedResultingNonce: 285315
+    ),
+    (
+        zeros: 16,
+        magic: -1332248574,
+        seed: "34931f7c0522352426d9d95f1c5527fafffce55b13082ae3723dc89f3c3e6276",
+        expectedResultingNonce: 270233
+    )
+]
+

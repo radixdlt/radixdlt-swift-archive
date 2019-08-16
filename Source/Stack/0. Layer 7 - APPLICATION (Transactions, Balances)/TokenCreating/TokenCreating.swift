@@ -25,6 +25,9 @@
 import Foundation
 import RxSwift
 
+// swiftlint:disable file_length
+// syntactic sugar mostly
+
 public protocol TokenCreating {
     
     /// Creates a new kind of Token

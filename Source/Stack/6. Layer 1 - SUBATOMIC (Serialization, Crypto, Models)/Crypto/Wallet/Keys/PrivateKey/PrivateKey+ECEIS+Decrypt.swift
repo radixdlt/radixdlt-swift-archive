@@ -39,7 +39,7 @@ public extension Signing {
     }
     
     func decrypt(_ data: DataConvertible) throws -> Data {
-        return try ECIES.decrypt(data: data, using: self)
+        return try ECIES().decrypt(data: data, using: self)
     }
     
     func decryptAndDecode(_ data: DataConvertible, encoding: String.Encoding = .default) throws -> String {

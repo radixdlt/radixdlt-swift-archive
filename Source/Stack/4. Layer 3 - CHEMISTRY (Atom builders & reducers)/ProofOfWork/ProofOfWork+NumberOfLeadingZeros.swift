@@ -25,7 +25,7 @@
 import Foundation
 
 public extension ProofOfWork {
-    struct NumberOfLeadingZeros: ExpressibleByIntegerLiteral {
+    struct NumberOfLeadingZeros: ExpressibleByIntegerLiteral, CustomStringConvertible {
         
         public let numberOfLeadingZeros: Value
         
@@ -48,6 +48,13 @@ public extension ProofOfWork.NumberOfLeadingZeros {
     static let minimumNumberOfLeadingZeros: Value = 1
 
     static let `default`: ProofOfWork.NumberOfLeadingZeros = 16
+}
+
+// MARK: - CustomStringConvertible
+public extension ProofOfWork.NumberOfLeadingZeros {
+    var description: String {
+        return numberOfLeadingZeros.description
+    }
 }
 
 // MARK: - Errors

@@ -28,8 +28,14 @@ import RxSwift
 public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
     private let dispatchQueue = DispatchQueue(label: "Radix.DefaultProofOfWorkWorker", qos: .userInitiated)
     private let defaultNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros
-    public init(defaultNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default) {
+    private let sha256TwiceHasher: Sha256TwiceHashing
+
+    public init(
+        defaultNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
+        sha256TwiceHasher: Sha256TwiceHashing = Sha256TwiceHasher()
+    ) {
         self.defaultNumberOfLeadingZeros = defaultNumberOfLeadingZeros
+        self.sha256TwiceHasher = sha256TwiceHasher
     }
     
     deinit {
@@ -49,14 +55,14 @@ public extension DefaultProofOfWorkWorker {
             var powDone = false
             self.dispatchQueue.async {
                 log.verbose("POW started")
-                DefaultProofOfWorkWorker.work(
+                self.doWork(
                     seed: seed,
                     magic: magic,
                     numberOfLeadingZeros: numberOfLeadingZeros
                 ) { resultOfWork in
                     switch resultOfWork {
                     case .failure(let error):
-//                        observer.onError(error)
+                        log.error("POW failed: \(error), seed: \(seed), magic: \(magic), #0: \(numberOfLeadingZeros)")
                         single(.error(error))
                     case .success(let pow):
                         powDone = true
@@ -75,14 +81,14 @@ public extension DefaultProofOfWorkWorker {
     }
 }
 
-// MARK: - Private
+// MARK: - Internal (for testing, ought to be private)
 internal extension DefaultProofOfWorkWorker {
-    static func work(
+    func doWork(
         seed: Data,
         magic: Magic,
         numberOfLeadingZeros targetNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
         done: ((Result<ProofOfWork, Error>) -> Void)
-        ) {
+    ) {
         guard seed.length == DefaultProofOfWorkWorker.expectedByteCountOfSeed else {
             let error = ProofOfWork.Error.workInputIncorrectLengthOfSeed(expectedByteCountOf: DefaultProofOfWorkWorker.expectedByteCountOfSeed, butGot: seed.length)
             done(.failure(error))
@@ -95,7 +101,7 @@ internal extension DefaultProofOfWorkWorker {
         repeat {
             nonce += 1
             let unhashed = base + nonce.toEightBigEndianBytes()
-            radixHash = RadixHash(unhashedData: unhashed)
+            radixHash = RadixHash(unhashedData: unhashed, hashedBy: sha256TwiceHasher)
         } while radixHash.numberOfLeadingZeroBits < targetNumberOfLeadingZeros.numberOfLeadingZeros
         
         let pow = ProofOfWork(seed: seed, targetNumberOfLeadingZeros: targetNumberOfLeadingZeros, magic: magic, nonce: nonce)

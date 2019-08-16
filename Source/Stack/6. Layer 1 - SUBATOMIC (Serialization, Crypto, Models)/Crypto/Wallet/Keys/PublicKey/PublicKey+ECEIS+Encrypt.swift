@@ -26,7 +26,7 @@ import Foundation
 
 public extension PublicKeyOwner {
     func encrypt(_ data: DataConvertible) throws -> Data {
-        return try ECIES.encrypt(data: data, using: publicKey)
+        return try ECIES().encrypt(data: data, using: publicKey)
     }
     
     func encrypt(text: String, encoding: String.Encoding = .default) throws -> Data {
