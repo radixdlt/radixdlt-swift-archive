@@ -173,6 +173,12 @@ private let vectorsForHighNonce: [Vector] = [
     (
         zeros: 16,
         magic: -1332248574,
+        seed: "a33a90d0422aa12b68d1de6c53e83ca049ab82b06efeb03cf6731231e82470ef",
+        expectedResultingNonce: 311476
+    ),
+    (
+        zeros: 16,
+        magic: -1332248574,
         seed: "0519269eafbac3accba00cf6f7e93238aae1974a1e5439a58a6f53726a963095",
         expectedResultingNonce: 285315
     ),
