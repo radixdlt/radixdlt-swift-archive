@@ -62,8 +62,8 @@ private func derivedSupplyFrom(
     switch typedTokenDefinition {
     case .fixedSupplyTokenDefinitionParticle:
         guard
-            let transfP = particles.firstTransferrableTokensParticle(matchingIdentifier: rri, spin: .up),
-            let positiveSupply = try? PositiveSupply(amount: transfP.amount)
+            let transferrableTokensParticle = particles.firstTransferrableTokensParticle(matchingIdentifier: rri, spin: .up),
+            let positiveSupply = try? PositiveSupply(amount: transferrableTokensParticle.amount)
             else {
                 return nil
         }

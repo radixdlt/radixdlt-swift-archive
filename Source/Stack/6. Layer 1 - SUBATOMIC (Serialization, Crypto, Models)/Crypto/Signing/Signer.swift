@@ -45,7 +45,7 @@ public extension Signer {
         return try sign(hashedData: hashed, privateKey: privateKey)
     }
     
-    static func sign(text: String, encoding: String.Encoding = .utf8, privateKey: PrivateKey) throws -> Signature {
+    static func sign(text: String, encoding: String.Encoding = .default, privateKey: PrivateKey) throws -> Signature {
         let message = try SignableMessage(string: text, encoding: encoding)
         return try sign(message, privateKey: privateKey)
     }

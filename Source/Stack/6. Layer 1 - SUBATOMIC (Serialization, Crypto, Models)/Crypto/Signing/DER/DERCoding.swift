@@ -142,7 +142,7 @@ struct DERDecoder {
                 incorrectImplementation("expected integer")
             }
             let dataPart = $0.data
-            guard dataPart.count >= 31 && dataPart.count <= 33 else {
+            guard dataPart.count >= 30 && dataPart.count <= 33 else {
                 incorrectImplementation("Bad length of part, was: \(dataPart.count)")
             }
             return dataPart

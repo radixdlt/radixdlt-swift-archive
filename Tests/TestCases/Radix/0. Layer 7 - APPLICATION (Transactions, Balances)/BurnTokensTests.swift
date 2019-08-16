@@ -78,7 +78,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let result = application.send(transaction: transaction)
 
         XCTAssertTrue(
-            result.blockingWasSuccessfull(timeout: .enoughForPOW)
+            result.blockingWasSuccessfull(timeout: 40)
         )
         
         guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: .enoughForPOW) else { return }
