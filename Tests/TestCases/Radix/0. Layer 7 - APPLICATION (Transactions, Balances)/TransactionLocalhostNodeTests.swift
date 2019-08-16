@@ -264,7 +264,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
             
         XCTAssertTrue(
             application.send(transaction: newTransaction)
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessfull(timeout: 40)
         )
         
         // WHEN: and observes her transactions

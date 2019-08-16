@@ -28,6 +28,7 @@ import RxSwift
 
 struct NoStore: AtomStore {}
 extension NoStore {
+
     func onSync(address: Address) -> Observable<Date> {
         return .empty()
     }
@@ -36,17 +37,11 @@ extension NoStore {
          return .empty()
     }
 
-    func upParticles(at address: Address, stagedUuid: UUID?) -> [AnyUpParticle] {
+    func upParticles(at address: Address) -> [AnyUpParticle] {
         return []
     }
 
     func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {
-
-    }
-
-    func stageParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID) {}
-
-    func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups? {
-        return nil
+        abstract()
     }
 }

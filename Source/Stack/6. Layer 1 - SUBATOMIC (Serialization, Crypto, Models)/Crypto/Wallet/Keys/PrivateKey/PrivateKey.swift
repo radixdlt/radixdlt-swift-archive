@@ -24,7 +24,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable opening_brace colon
 
 /// Elliptic Curve Private Key
 public struct PrivateKey:

@@ -39,27 +39,17 @@ public protocol AtomStore {
     /// which are then processed by the local store
     func atomObservations(of address: Address) -> Observable<AtomObservation>
     
-    func upParticles(at address: Address, stagedUuid: UUID?) -> [AnyUpParticle]
+    func upParticles(at address: Address) -> [AnyUpParticle]
     
     /// Stores an Atom (wrapped in AtomObservation) under a given destination (Address) and not
     func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode)
-    
-    func stageParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID)
-
-    @discardableResult
-    func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups?
 }
 
 public final class InMemoryAtomStore: AtomStore {
-    public final class ListenerOf<Element> {
-        private var listeners: [Address: ReplaySubject<Element>] = [:]
-        public init() {}
-    }
-    
+
     private var stagedAtoms         = [UUID: Atom]()
     private var atoms               = [Atom: AtomObservation]()
     
-    private var stagedParticleIndex = [UUID: [AnyParticle: Spin]]()
     private var particleIndex       = [AnyParticle: [Spin: Set<Atom>]]()
     
     private var synced              = [Address: Bool]()
@@ -90,6 +80,13 @@ public final class InMemoryAtomStore: AtomStore {
                 self.store(atomObservation: AtomObservation.head(), address: $0, notifyListenerMode: .notifyOnAtomUpdateAndSync)
             }
         }
+    }
+}
+
+public extension InMemoryAtomStore {
+    final class ListenerOf<Element> {
+        private var listeners: [Address: ReplaySubject<Element>] = [:]
+        public init() {}
     }
 }
 
@@ -128,19 +125,16 @@ public extension InMemoryAtomStore {
 
     }
     
-    func upParticles(at address: Address, stagedUuid: UUID?) -> [AnyUpParticle] {
-        var upParticles = particleIndex.filter {
-            
+    func upParticles(at address: Address) -> [AnyUpParticle] {
+        return particleIndex.filter {
             // swiftlint:disable:next force_try
             let shardables = try! $0.key.someParticle.shardables()
-            
             guard shardables?.contains(address) == true else { return false }
+
             var spinParticleIndex = $0.value
             let hasDown = spinParticleIndex.valueForKey(key: .down, ifAbsent: { Set() }).contains(where: { atoms[$0]?.isStore == true })
             if hasDown { return false }
-            if let stagedUuid = stagedUuid, stagedParticleIndex.valueForKey(key: stagedUuid, ifAbsent: { [AnyParticle: Spin]() }).valueFor(key: $0.key) == Spin.down {
-                return false
-            }
+           
             let uppingAtoms = spinParticleIndex.valueForKey(key: .up, ifAbsent: { Set() })
             return uppingAtoms.contains(where: { atom in
                 guard let atomObservation = self.atoms.valueFor(key: atom) else { return false }
@@ -148,42 +142,8 @@ public extension InMemoryAtomStore {
             })
         }
         .map { $0.key }
-        
-        if let stagedUuid = stagedUuid {
-            stagedParticleIndex
-                .valueForKey(key: stagedUuid, ifAbsent: { [AnyParticle: Spin]() })
-                .filter { $0.value == Spin.up }
-                .map { $0.key }
-                .forEach { upParticles.append($0) }
-        }
-        
-        return upParticles
             .asSet.asArray // remove any duplicates
             .upParticles()
-    }
-    
-    func stageParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID) {
-        let stagedAtom: Atom
-        if let atomInStaged = stagedAtoms.valueFor(key: uuid) {
-            let groups: ParticleGroups = atomInStaged.particleGroups + particleGroup
-            stagedAtom = Atom(particleGroups: groups)
-        } else {
-            stagedAtom = Atom(particleGroup)
-        }
-        stagedAtoms[uuid] = stagedAtom
-        
-        for spunParticle in particleGroup.spunParticles {
-            stagedParticleIndex[uuid] = stagedParticleIndex
-                .valueForKey(key: uuid, ifAbsent: { [AnyParticle: Spin]() })
-                .inserting(value: spunParticle.spin, forKey: AnyParticle(spunParticle: spunParticle))
-        }
-    }
-    
-    @discardableResult
-    func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups? {
-        defer { stagedParticleIndex.removeValue(forKey: uuid) }
-        guard let atom = stagedAtoms.removeValue(forKey: uuid) else { return nil }
-        return atom.particleGroups
     }
     
     // swiftlint:disable:next function_body_length cyclomatic_complexity
