@@ -55,7 +55,7 @@ class SendMessageTests: LocalhostNodeTest {
         XCTAssertTrue(result.blockingWasSuccessfull(timeout: .enoughForPOW))
 
         guard let sentMessage = application.observeMyMessages().blockingTakeFirst(timeout: 1) else { return }
-        let decryptedMessage = sentMessage.payload.toString()
+        let decryptedMessage = sentMessage.textMessage()
         XCTAssertEqual(decryptedMessage, message)
         XCTAssertNotEqual(decryptedMessage, "foobar")
     }
@@ -72,8 +72,7 @@ class SendMessageTests: LocalhostNodeTest {
         )
         
         guard let sentMessage = application.observeMyMessages().blockingTakeLast(timeout: 2) else { return }
-        let decryptedMessage = sentMessage.payload.toString()
-        XCTAssertEqual(decryptedMessage, plainTextMessage)
+        XCTAssertEqual(sentMessage.textMessage(), plainTextMessage)
     }
 
     
@@ -89,7 +88,7 @@ class SendMessageTests: LocalhostNodeTest {
         )
         
         guard let sentMessage = application.observeMyMessages().blockingTakeLast(timeout: 2) else { return }
-        XCTAssertTrue(sentMessage.encryptionState.isEncryptedButCannotDecrypt)
+        XCTAssertTrue(sentMessage.isEncryptedAndCannotDecrypt)
     }
     
     func testSendEmptyEncrypted() {
@@ -134,18 +133,5 @@ class SendMessageTests: LocalhostNodeTest {
             // THEN: I see that action completes successfully
             result.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
-    }
-}
-
-extension AbstractIdentity {
-    convenience init(privateKey: PrivateKey, alias: String? = nil) {
-        self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
-    }
-}
-
-extension Account {
-    init() {
-        let keyPair = KeyPair()
-        self = .privateKeyPresent(keyPair)
     }
 }

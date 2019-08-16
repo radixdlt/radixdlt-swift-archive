@@ -24,14 +24,17 @@
 
 import Foundation
 
-public protocol CreateTokenActionToParticleGroupsMapper: UniquelyIdentifiedActionToParticleGroupsMapper, Throwing where Action == CreateTokenAction, Error == CreateTokenError {}
+public protocol CreateTokenActionToParticleGroupsMapper: UniquelyIdentifiedUserActionToParticleGroupsMapper, Throwing where Action == CreateTokenAction, Error == CreateTokenError {}
 
 public enum CreateTokenError: UniqueActionErrorInitializable {
-    case uniqueActionError(UniquelyIdentifiedActionError)
+    case uniqueActionError(UniquelyIdentifiedUserActionError)
+    
+    /// See `CreateTokenAction.InitialSupply.DerivedFromAtom.mutableSupply` for more info
+    case createTokenActionContainsDerivedSupplyWhichIsNotSupported
 }
 
 public extension CreateTokenError {
-    static func errorFrom(uniqueActionError: UniquelyIdentifiedActionError) -> CreateTokenError {
+    static func errorFrom(uniqueActionError: UniquelyIdentifiedUserActionError) -> CreateTokenError {
         return .uniqueActionError(uniqueActionError)
     }
 

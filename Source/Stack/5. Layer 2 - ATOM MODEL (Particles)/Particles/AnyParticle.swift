@@ -24,30 +24,35 @@
 
 import Foundation
 
-public struct AnyParticle: Hashable {
+/// Type-erased hashable Particle container which hash and equality ignores spin.
+public struct AnyParticle: SpunParticleContainer, Hashable, CustomStringConvertible {
     
-    private let _getParticle: () -> ParticleConvertible
-    private let _hashInto: (inout Swift.Hasher) -> Void
+    private let _getSpunParticle: () -> SpunParticleContainer
+    private let _hashIgnoringSpin: (inout Swift.Hasher) -> Void
     
-    public init(someParticle: ParticleConvertible) {
-        self._getParticle = { someParticle }
-        self._hashInto = { $0.combine(someParticle.hashEUID) }
+    public init(spunParticle: SpunParticleContainer) {
+        self._getSpunParticle = { spunParticle }
+        self._hashIgnoringSpin = { $0.combine(spunParticle.someParticle.hashEUID) }
     }
     
 }
 
 public extension AnyParticle {
-    func getParticle() -> ParticleConvertible {
-        return self._getParticle()
+    var someParticle: ParticleConvertible { return _getSpunParticle().someParticle }
+
+    var spin: Spin { return _getSpunParticle().spin }
+    
+    var description: String {
+        return AnySpunParticle(spunParticle: self).description
     }
 }
 
 public extension AnyParticle {
     static func == (lhs: AnyParticle, rhs: AnyParticle) -> Bool {
-        return lhs.getParticle().hashEUID == rhs.getParticle().hashEUID
+        return lhs.someParticle.hashEUID == rhs.someParticle.hashEUID
     }
     
     func hash(into hasher: inout Hasher) {
-        self._hashInto(&hasher)
+        self._hashIgnoringSpin(&hasher)
     }
 }

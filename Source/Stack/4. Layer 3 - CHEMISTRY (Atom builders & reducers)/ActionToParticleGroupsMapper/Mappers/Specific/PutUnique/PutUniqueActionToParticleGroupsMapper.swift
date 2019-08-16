@@ -25,14 +25,14 @@
 import Foundation
 
 // MARK: PutUniqueActionToParticleGroupsMapper
-public protocol PutUniqueActionToParticleGroupsMapper: UniquelyIdentifiedActionToParticleGroupsMapper, Throwing where Action == PutUniqueIdAction, Error == PutUniqueIdError {}
+public protocol PutUniqueActionToParticleGroupsMapper: UniquelyIdentifiedUserActionToParticleGroupsMapper, Throwing where Action == PutUniqueIdAction, Error == PutUniqueIdError {}
 
 public enum PutUniqueIdError: UniqueActionErrorInitializable {
-    case uniqueError(UniquelyIdentifiedActionError)
+    case uniqueError(UniquelyIdentifiedUserActionError)
 }
 
 public extension PutUniqueIdError {
-    static func errorFrom(uniqueActionError: UniquelyIdentifiedActionError) -> PutUniqueIdError {
+    static func errorFrom(uniqueActionError: UniquelyIdentifiedUserActionError) -> PutUniqueIdError {
         return .uniqueError(uniqueActionError)
     }
     

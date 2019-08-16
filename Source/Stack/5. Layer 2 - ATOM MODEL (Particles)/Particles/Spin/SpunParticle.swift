@@ -32,7 +32,11 @@ public protocol SpunParticleContainer: ParticleContainer {
     var spin: Spin { get }
 }
 
-public struct SpunParticle<Particle>: SpunParticleContainer, Throwing where Particle: ParticleConvertible {
+public protocol InvertableSpunParticleConvertible {
+    func invertedSpin() -> Self
+}
+
+public struct SpunParticle<Particle>: SpunParticleContainer, InvertableSpunParticleConvertible, Throwing where Particle: ParticleConvertible {
     
     public let spin: Spin
     public let particle: Particle
@@ -58,6 +62,10 @@ public extension SpunParticle {
 
 public extension SpunParticle {
     var someParticle: ParticleConvertible { return particle }
+    
+    func invertedSpin() -> SpunParticle {
+        return SpunParticle(spin: spin.inverted, particle: particle)
+    }
 }
 
 public struct UpParticle<Particle>: SpunParticleContainer, Throwing where Particle: ParticleConvertible {
@@ -109,12 +117,12 @@ public struct AnyUpParticle: SpunParticleContainer, Throwing {
         self.someParticle = particle
     }
  
-    public init(anySpunParticle: AnySpunParticle) throws {
-        guard anySpunParticle.spin == .up else {
+    public init(spunParticle: SpunParticleContainer) throws {
+        guard spunParticle.spin == .up else {
             throw Error.particleDidNotHaveSpinUp
         }
     
-        self.init(particle: anySpunParticle.particle)
+        self.init(particle: spunParticle.someParticle)
     }
     
 }
@@ -128,10 +136,6 @@ extension Array: SpunParticlesOwner where Element: SpunParticleContainer {
         return map { AnySpunParticle(spin: $0.spin, particle: $0.someParticle) }
     }
 }
-
-//public protocol SpunParticlesOwner {
-//    var spunParticles: [AnySpunParticle] { get }
-//}
 
 public extension AnyUpParticle {
     enum Error: Swift.Error, Equatable {

@@ -120,9 +120,9 @@ public extension FungibleParticleTransitioner {
 public extension FungibleParticleTransitioner {
     
     func transition(unconsumedFungibles: [From], toAmount: NonNegativeAmount) throws -> Transition {
-        let balance: NonNegativeAmount = try unconsumedFungibles
-            .map(amountMapper)
-            .reduce(NonNegativeAmount.zero, +)
+        let balance = NonNegativeAmount.reducing(
+            try unconsumedFungibles.map(amountMapper)
+        )
         
         guard balance >= toAmount else {
             throw Error.notEnoughFungibles(requiredAmount: toAmount, butOnlyGotBalance: balance)

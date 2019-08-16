@@ -38,6 +38,8 @@ public final class RadixApplicationClient:
     MessageSending,
     UniqueMaking,
     TransactionMaker,
+    TransactionToAtomMapper,
+    AtomToTransactionMapper,
     StateSubscriber,
     TransactionSubscriber,
     AddressOfAccountDeriving,
@@ -119,6 +121,20 @@ public extension RadixApplicationClient {
     }
 }
 
+// MARK: TransactionToAtomMapper
+public extension RadixApplicationClient {
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
+        return try transactionMaker.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
+    }
+}
+
+// MARK: AtomToTransactionMapper
+public extension RadixApplicationClient {
+    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
+        return transactionSubscriber.transactionFromAtom(atom)
+    }
+}
+
 // MARK: TokenCreating
 public extension RadixApplicationClient {
     func create(token createTokenAction: CreateTokenAction) -> ResultOfUserAction {
@@ -147,12 +163,12 @@ public extension RadixApplicationClient {
 
 // MARK: TokenTransferring
 public extension RadixApplicationClient {
-    func transfer(tokens transferTokensAction: TransferTokenAction) -> ResultOfUserAction {
+    func transfer(tokens transferTokensAction: TransferTokensAction) -> ResultOfUserAction {
         return execute(actions: transferTokensAction)
     }
     
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferredTokens> {
-        return observeActions(ofType: TransferredTokens.self, at: address)
+    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokensAction> {
+        return observeActions(ofType: TransferTokensAction.self, at: address)
     }
 }
 
@@ -162,8 +178,8 @@ public extension RadixApplicationClient {
         return execute(actions: sendMessageAction)
     }
     
-    func observeMessages(toOrFrom address: Address) -> Observable<SentMessage> {
-        return observeActions(ofType: SentMessage.self, at: address)
+    func observeMessages(toOrFrom address: Address) -> Observable<SendMessageAction> {
+        return observeActions(ofType: SendMessageAction.self, at: address)
     }
 }
 

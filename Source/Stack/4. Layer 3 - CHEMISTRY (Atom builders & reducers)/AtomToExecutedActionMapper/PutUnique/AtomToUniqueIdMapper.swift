@@ -28,14 +28,7 @@ import RxSwift
 // MARK: AtomToUniqueIdMapper
 public protocol AtomToUniqueIdMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == PutUniqueIdAction {}
 
-// MARK: DefaultAtomToUniqueIdMapper
-public final class DefaultAtomToUniqueIdMapper: AtomToUniqueIdMapper {
-    public init() {}
-}
-
-public extension DefaultAtomToUniqueIdMapper {
-    
-    typealias SpecificExecutedAction = PutUniqueIdAction
+public extension AtomToUniqueIdMapper {
     
     func mapAtomToActions(_ atom: Atom) -> Observable<[PutUniqueIdAction]> {
         guard atom.containsAnyUniqueParticle(spin: .up) else { return .just([]) }
@@ -53,8 +46,11 @@ public extension DefaultAtomToUniqueIdMapper {
             )
         }
         
-        guard !uniqueActions.isEmpty else { return .just([]) }
-        print("🐛 uniqueActions: \(uniqueActions)")
-        return Observable.of(uniqueActions)
+        return Observable.just(uniqueActions)
     }
+}
+
+// MARK: DefaultAtomToUniqueIdMapper
+public struct DefaultAtomToUniqueIdMapper: AtomToUniqueIdMapper {
+    public typealias SpecificExecutedAction = PutUniqueIdAction
 }

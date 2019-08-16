@@ -39,6 +39,14 @@ public extension Spin {
         case .down: return "down"
         }
     }
+    
+    var inverted: Spin {
+        switch self {
+        case .neutral: incorrectImplementation("Cannot invert neutral")
+        case .down: return .up
+        case .up: return .down
+        }
+    }
 }
 
 extension Spin: DSONEncodable {

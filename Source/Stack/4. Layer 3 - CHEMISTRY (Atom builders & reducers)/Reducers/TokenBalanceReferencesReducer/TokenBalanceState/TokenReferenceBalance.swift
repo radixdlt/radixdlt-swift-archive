@@ -69,7 +69,7 @@ public extension TokenReferenceBalance {
             throw Error.addressMismatch
         }
         
-        let amount: NonNegativeAmount = tokenConsumables.map({ NonNegativeAmount(positive: $0.amount) }).reduce(NonNegativeAmount.zero) { $0 + $1 }
+        let amount = NonNegativeAmount.fromTransferrableTokens(particles: tokenConsumables)
         
         self.init(
             tokenResourceIdentifier: tokenIdentifier,

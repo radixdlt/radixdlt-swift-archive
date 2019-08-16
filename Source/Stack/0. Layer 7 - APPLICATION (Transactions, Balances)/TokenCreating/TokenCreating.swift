@@ -41,7 +41,7 @@ public extension TokenCreating {
         name: Name,
         symbol: Symbol,
         description: Description,
-        supply initialSupplyType: CreateTokenAction.InitialSupply,
+        supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
         iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
@@ -51,21 +51,22 @@ public extension TokenCreating {
             name: name,
             symbol: symbol,
             description: description,
-            supply: initialSupplyType,
-            granularity: granularity,
-            iconUrl: iconUrl
+            supply: supplyTypeDefinition,
+            iconUrl: iconUrl,
+            granularity: granularity
         )
         
         return (create(token: createTokenAction), createTokenAction.identifier)
     }
     
+    /// Just syntactic sugar for `createToken` with `fixed` supply
     func createFixedSupplyToken(
         creator: AddressConvertible,
         name: Name,
         symbol: Symbol,
         description: Description,
-        iconUrl: URL? = nil,
         supply: PositiveSupply = .max,
+        iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
 
@@ -80,13 +81,14 @@ public extension TokenCreating {
         )
     }
     
+    /// Just syntactic sugar for `createToken` with `mutable` supply
     func createMultiIssuanceToken(
         creator: AddressConvertible,
         name: Name,
         symbol: Symbol,
         description: Description,
-        iconUrl: URL? = nil,
         initialSupply: Supply? = nil,
+        iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
@@ -108,7 +110,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         name: Name,
         symbol: Symbol,
         description: Description,
-        supply initialSupplyType: CreateTokenAction.InitialSupply,
+        supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
         iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
@@ -118,18 +120,19 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             name: name,
             symbol: symbol,
             description: description,
-            supply: initialSupplyType,
+            supply: supplyTypeDefinition,
             iconUrl: iconUrl,
             granularity: granularity
         )
     }
     
+    /// Just syntactic sugar for `createToken` with `fixed` supply
     func createFixedSupplyToken(
         name: Name,
         symbol: Symbol,
         description: Description,
-        iconUrl: URL? = nil,
         supply: PositiveSupply = .max,
+        iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
@@ -138,18 +141,19 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             name: name,
             symbol: symbol,
             description: description,
-            iconUrl: iconUrl,
             supply: supply,
+            iconUrl: iconUrl,
             granularity: granularity
         )
     }
     
+    /// Just syntactic sugar for `createToken` with `mutable` supply
     func createMultiIssuanceToken(
         name: Name,
         symbol: Symbol,
         description: Description,
-        iconUrl: URL? = nil,
         initialSupply: Supply? = nil,
+        iconUrl: URL? = nil,
         granularity: Granularity = .default
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
@@ -158,8 +162,140 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             name: name,
             symbol: symbol,
             description: description,
-            iconUrl: iconUrl,
             initialSupply: initialSupply,
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+}
+
+// MARK: Shorthand init of CreateTokenAction
+public extension TokenCreating {
+    
+    func actionCreateToken(
+        creator: Address,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition = .mutableZeroSupply,
+        granularity: Granularity = .default
+    ) throws -> CreateTokenAction {
+        
+        return try CreateTokenAction(
+            creator: creator,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: supply,
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+    
+    func actionCreateFixedSupplyToken(
+        creator: Address,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        supply: PositiveSupply = .max,
+        granularity: Granularity = .default
+    ) throws -> CreateTokenAction {
+        
+        return try CreateTokenAction(
+            creator: creator,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: .fixed(to: supply),
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+    
+    func actionCreateMultiIssuanceToken(
+        creator: Address,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        initialSupply: Supply? = nil,
+        iconUrl: URL? = nil,
+        granularity: Granularity = .default
+    ) throws -> CreateTokenAction {
+        
+        return try CreateTokenAction(
+            creator: creator,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: .mutable(initial: initialSupply),
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+}
+
+// MARK: Shorthand init of CreateTokenAction using `addressOfActiveAccount`
+public extension TokenCreating where Self: ActiveAccountOwner {
+    
+    func actionCreateToken(
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition = .mutableZeroSupply,
+        granularity: Granularity = .default
+    ) throws -> CreateTokenAction {
+        
+        return try CreateTokenAction(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: supply,
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+    
+    func actionCreateFixedSupplyToken(
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        iconUrl: URL? = nil,
+        supply: PositiveSupply = .max,
+        granularity: Granularity = .default
+    ) throws-> CreateTokenAction {
+        
+        return try CreateTokenAction(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: .fixed(to: supply),
+            iconUrl: iconUrl,
+            granularity: granularity
+        )
+    }
+    
+    func actionCreateMultiIssuanceToken(
+        creator: Address? = nil,
+        name: Name,
+        symbol: Symbol,
+        description: Description,
+        initialSupply: Supply? = nil,
+        iconUrl: URL? = nil,
+        granularity: Granularity = .default
+    ) throws -> CreateTokenAction {
+        
+        return try CreateTokenAction(
+            creator: addressOfActiveAccount,
+            name: name,
+            symbol: symbol,
+            description: description,
+            supply: .mutable(initial: initialSupply),
+            iconUrl: iconUrl,
             granularity: granularity
         )
     }

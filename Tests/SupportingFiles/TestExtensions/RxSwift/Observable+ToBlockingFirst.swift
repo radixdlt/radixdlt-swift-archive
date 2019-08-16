@@ -71,6 +71,7 @@ extension ObservableConvertibleType where Element == Never { /* Completable */
         switch self.toBlocking(timeout: timeout).materialize() {
         case .completed: return true
         case .failed(_, let error):
+            print("⚠️ warning, error: \(error)")
             if let rxError = error as? RxError {
                 if case .timeout = rxError {
                     if failOnTimeout {
@@ -106,7 +107,7 @@ extension TimeInterval {
         return 2
     }
     static var enoughForPOW: TimeInterval {
-        return 15
+        return 30
     }
 }
 

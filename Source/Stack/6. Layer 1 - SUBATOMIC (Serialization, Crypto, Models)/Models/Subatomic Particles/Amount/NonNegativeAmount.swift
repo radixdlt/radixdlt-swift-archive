@@ -38,6 +38,17 @@ public extension NonNegativeAmount {
     init(positive: PositiveAmount) {
         self.init(validated: positive.magnitude)
     }
+    
+    static func fromTransferrableTokens(
+        particles: [TransferrableTokensParticle],
+        amountMapper: (TransferrableTokensParticle) -> NonNegativeAmount = { $0.amount.asNonNegative }
+    ) -> NonNegativeAmount {
+        return reducing(particles.map(amountMapper))
+    }
+    
+    static func reducing(_ amounts: [NonNegativeAmount]) -> NonNegativeAmount {
+        return amounts.reduce(NonNegativeAmount.zero, +)
+    }
 }
 
 // MARK: - Zero

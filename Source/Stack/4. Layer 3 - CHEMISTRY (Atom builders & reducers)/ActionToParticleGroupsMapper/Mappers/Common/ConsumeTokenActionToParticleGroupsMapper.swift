@@ -27,7 +27,7 @@ import Foundation
 public protocol ConsumeTokenActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action: ConsumeTokensAction {
     func validateConsumeTokenAction(
         _ action: Action,
-        consumeTokensContext: ConsumeTokensContext
+        typedTokenDefinition: TypedTokenDefinition
         ) throws
 }
 
@@ -39,8 +39,8 @@ public extension ConsumeTokenActionToParticleGroupsMapper {
     
     func validateConsumeTokenAction(
         _ action: Action,
-        consumeTokensContext: ConsumeTokensContext
-        ) throws {}
+        typedTokenDefinition: TypedTokenDefinition
+    ) throws {}
     
     func validateInput(action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
         guard action.user == addressOfActiveAccount else {
@@ -49,22 +49,13 @@ public extension ConsumeTokenActionToParticleGroupsMapper {
         
         let rri = action.identifierForTokenToConsume
         
-        let maybeMutableSupplyTokenDefinitionParticle = upParticles.firstMutableSupplyTokenDefinitionParticle(matchingIdentifier: rri)
-        let maybeFixedSupplyTokenDefinitionsParticle = upParticles.firstFixedSupplyTokenDefinitionParticle(matchingIdentifier: rri)
-        
-        let tokenDefinition: TokenConvertible
-        switch (maybeMutableSupplyTokenDefinitionParticle, maybeFixedSupplyTokenDefinitionsParticle) {
-        case (.some(let mutableSupplyTokenDefinitionParticle), .none):
-            try validateConsumeTokenAction(action, consumeTokensContext: .mutableSupplyTokenDefinitionParticle(mutableSupplyTokenDefinitionParticle))
-            tokenDefinition = mutableSupplyTokenDefinitionParticle
-        case (.none, .some(let fixedSupplyTokenDefinitionsParticle)):
-            try validateConsumeTokenAction(action, consumeTokensContext: .fixedSupplyTokenDefinitionParticle(fixedSupplyTokenDefinitionsParticle))
-            tokenDefinition = fixedSupplyTokenDefinitionsParticle
-        case (.none, .none):
+        guard let typedTokenDefinition = upParticles.typedTokenDefinition(matchingIdentifier: rri) else {
             throw ConsumeTokensActionError.unknownToken(identifier: rri)
-        case (.some, .some):
-            incorrectImplementation("Not possible to have both a FixedSupplyTokenDefinition and a MutableSuppleTokenDefinition for the same RRI: \(rri)")
         }
+        
+        try validateConsumeTokenAction(action, typedTokenDefinition: typedTokenDefinition)
+
+        let tokenDefinition = typedTokenDefinition.tokenDefinition
         
         guard action.amount.isExactMultipleOfGranularity(tokenDefinition.granularity) else {
             

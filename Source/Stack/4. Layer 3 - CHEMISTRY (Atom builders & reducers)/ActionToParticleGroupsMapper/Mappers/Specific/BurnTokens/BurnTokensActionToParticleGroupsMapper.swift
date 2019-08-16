@@ -76,11 +76,11 @@ public extension DefaultBurnTokensActionToParticleGroupsMapper {
     
     func validateConsumeTokenAction(
         _ action: Action,
-        consumeTokensContext: ConsumeTokensContext
+        typedTokenDefinition: TypedTokenDefinition
     ) throws {
     
         let rri = action.tokenDefinitionReference
-        switch consumeTokensContext {
+        switch typedTokenDefinition {
         case .fixedSupplyTokenDefinitionParticle:
             throw Error.tokenHasFixedSupplyThusItCannotBeBurned(identifier: rri)
         case .mutableSupplyTokenDefinitionParticle(let mutableSupplyTokenDefinitionsParticle):

@@ -38,7 +38,7 @@ protocol TokenCreating {
 }
 
 protocol TokenTransferring {
-    func transfer(tokens: TransferTokenAction) -> ResultOfUserAction
+    func transfer(tokens: TransferTokensAction) -> ResultOfUserAction
 }
 
 protocol AccountBalancing {

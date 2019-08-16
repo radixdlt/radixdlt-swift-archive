@@ -24,6 +24,8 @@
 
 import Foundation
 
+// swiftlint:disable file_length
+
 public extension SpunParticlesOwner {
     func particles() -> [ParticleConvertible] {
         return spunParticles.map { $0.particle }
@@ -185,6 +187,13 @@ public extension SpunParticlesOwner {
         return firstUniqueParticle(spin: spin) { $0.identifier == rri }
     }
     
+    func firstTransferrableTokensParticle(
+        matchingIdentifier rri: ResourceIdentifier,
+        spin: Spin? = nil
+    ) -> TransferrableTokensParticle? {
+        return firstTransferrableTokensParticle(spin: spin) { $0.tokenDefinitionReference == rri }
+    }
+    
     func firstMutableSupplyTokenDefinitionParticle(
         matchingIdentifier rri: ResourceIdentifier,
         spin: Spin? = nil
@@ -199,6 +208,13 @@ public extension SpunParticlesOwner {
         return firstFixedSupplyTokenDefinitionParticle(spin: spin) { $0.tokenDefinitionReference == rri }
     }
     
+    func firstUnallocatedTokensParticle(
+        matchingIdentifier rri: ResourceIdentifier,
+        spin: Spin? = nil
+    ) -> UnallocatedTokensParticle? {
+        return firstUnallocatedTokensParticle(spin: spin) { $0.tokenDefinitionReference == rri }
+    }
+    
     // MARK: Contains
     func containsAnyMessageParticle(
         spin: Spin? = nil,
@@ -207,11 +223,18 @@ public extension SpunParticlesOwner {
         return firstMessageParticle(spin: spin, where: filterCondition) != nil
     }
     
-    func containsAnyTransferrableTokensParticles(
+    func containsAnyTransferrableTokensParticle(
         spin: Spin? = nil,
         where filterCondition: ((TransferrableTokensParticle) throws -> Bool)? = nil
     ) -> Bool {
         return firstTransferrableTokensParticle(spin: spin, where: filterCondition) != nil
+    }
+    
+    func containsAnyUnallocatedTokensParticle(
+        spin: Spin? = nil,
+        where filterCondition: ((UnallocatedTokensParticle) throws -> Bool)? = nil
+    ) -> Bool {
+        return firstUnallocatedTokensParticle(spin: spin, where: filterCondition) != nil
     }
     
     func containsAnyUniqueParticle(
@@ -241,6 +264,20 @@ public extension SpunParticlesOwner {
         spin: Spin? = nil
     ) -> Bool {
         return containsAnyFixedSupplyTokenDefinitionParticle(spin: spin) { $0.tokenDefinitionReference == rri }
+    }
+    
+    func containsAnyTransferrableTokensParticle(
+        matchingIdentifier rri: ResourceIdentifier,
+        spin: Spin? = nil
+        ) -> Bool {
+        return containsAnyTransferrableTokensParticle(spin: spin) { $0.tokenDefinitionReference == rri }
+    }
+    
+    func containsAnyUnallocatedTokensParticle(
+        matchingIdentifier rri: ResourceIdentifier,
+        spin: Spin? = nil
+    ) -> Bool {
+        return containsAnyUnallocatedTokensParticle(spin: spin) { $0.tokenDefinitionReference == rri }
     }
     
     func containsAnyMutableSupplyTokenDefinitionParticle(
@@ -287,6 +324,21 @@ public extension Sequence where Element == AnySpunParticle {
             return [AnySpunParticle](self)
         }
         return filter { $0.spin == spin }
+    }
+}
+
+public extension Array where Element: SpunParticleContainer {
+    func filter(spin: Spin?) -> [Element] {
+        guard let spin = spin else {
+            return self
+        }
+        return filter { $0.spin == spin }
+    }
+}
+
+extension Array: InvertableSpunParticleConvertible where Element: InvertableSpunParticleConvertible {
+    public func invertedSpin() -> [Element] {
+        return map { $0.invertedSpin() }
     }
 }
 

@@ -130,7 +130,7 @@ public extension InMemoryAtomStore {
     
     func upParticles(at address: Address, stagedUuid: UUID?) -> [AnyUpParticle] {
         var upParticles = particleIndex.filter {
-            guard $0.key.getParticle().shardables()?.contains(address) == true else { return false }
+            guard $0.key.someParticle.shardables()?.contains(address) == true else { return false }
             var spinParticleIndex = $0.value
             let hasDown = spinParticleIndex.valueForKey(key: .down, ifAbsent: { Set() }).contains(where: { atoms[$0]?.isStore == true })
             if hasDown { return false }
@@ -155,8 +155,7 @@ public extension InMemoryAtomStore {
         
         return upParticles
             .asSet.asArray // remove any duplicates
-            .map { $0.getParticle() }
-            .map { AnyUpParticle(particle: $0) }
+            .upParticles()
     }
     
     func stageParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID) {
@@ -172,7 +171,7 @@ public extension InMemoryAtomStore {
         for spunParticle in particleGroup.spunParticles {
             stagedParticleIndex[uuid] = stagedParticleIndex
                 .valueForKey(key: uuid, ifAbsent: { [AnyParticle: Spin]() })
-                .inserting(value: spunParticle.spin, forKey: AnyParticle(someParticle: spunParticle.particle))
+                .inserting(value: spunParticle.spin, forKey: AnyParticle(spunParticle: spunParticle))
         }
     }
     
@@ -205,7 +204,7 @@ public extension InMemoryAtomStore {
         if atomObservation.isNonSoftStore {
             spunParticlesInAtomLoop: for spunParticle in atom.spunParticles {
                 guard
-                    let spinParticleIndex = particleIndex.valueFor(key: AnyParticle(someParticle: spunParticle.particle)),
+                    let spinParticleIndex = particleIndex.valueFor(key: AnyParticle(spunParticle: spunParticle)),
                     let atomsInIndex = spinParticleIndex.valueFor(key: spunParticle.spin)
                     else
                 { continue spunParticlesInAtomLoop }
@@ -232,7 +231,7 @@ public extension InMemoryAtomStore {
             includeAtom = atomObservation.isStore
             isSoftToHard = false
             atom.spunParticles.forEach { spunParticle in
-                let key = AnyParticle(someParticle: spunParticle.particle)
+                let key = AnyParticle(spunParticle: spunParticle)
                 let spinParticleIndex = particleIndex.valueForKey(key: key) { [Spin: Set<Atom>]() }
                 particleIndex[key] = spinParticleIndex.merging([spunParticle.spin: [atom].asSet], uniquingKeysWith: { $0.union($1) })
             }
@@ -260,7 +259,7 @@ private extension InMemoryAtomStore {
         let upParticles = atom.spunParticles.filter(spin: .up)
         for upParticle in upParticles {
             guard
-                let particleSpinIndex = particleIndex.valueFor(key: AnyParticle(someParticle: upParticle.particle)),
+                let particleSpinIndex = particleIndex.valueFor(key: AnyParticle(spunParticle: upParticle)),
                 let atomsForDownSpin = particleSpinIndex.valueFor(key: .down)
                 else { continue }
             for atomForDownSpin in atomsForDownSpin {

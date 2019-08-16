@@ -28,8 +28,8 @@ import RxSwift
 /// Type that is can make transactions of different types between Radix accounts
 public protocol TokenTransferring: ActiveAccountOwner {
 
-    func transfer(tokens: TransferTokenAction) -> ResultOfUserAction
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferredTokens>
+    func transfer(tokens: TransferTokensAction) -> ResultOfUserAction
+    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokensAction>
 }
 
 public extension TokenTransferring {
@@ -59,11 +59,52 @@ public extension TokenTransferring {
         amount: PositiveAmount,
         attachment: Data? = nil,
         from specifiedSender: AddressConvertible? = nil
-        ) -> ResultOfUserAction {
+    ) -> ResultOfUserAction {
+        
+        let action = actionTransferTokens(
+            identifier: tokenIdentifier,
+            to: recipient,
+            amount: amount,
+            attachment: attachment,
+            from: specifiedSender
+        )
+        
+        return transfer(tokens: action)
+    }
+}
+
+public extension TokenTransferring {
+    func actionTransferTokens(
+        identifier tokenIdentifier: ResourceIdentifier,
+        to recipient: AddressConvertible,
+        amount: PositiveAmount,
+        message: String,
+        messageEncoding: String.Encoding = .default,
+        from specifiedSender: AddressConvertible? = nil
+    ) -> TransferTokensAction {
+        
+        let attachment = message.toData(encodingForced: messageEncoding)
+        
+        return actionTransferTokens(
+            identifier: tokenIdentifier,
+            to: recipient,
+            amount: amount,
+            attachment: attachment,
+            from: specifiedSender
+        )
+    }
+    
+    func actionTransferTokens(
+        identifier tokenIdentifier: ResourceIdentifier,
+        to recipient: AddressConvertible,
+        amount: PositiveAmount,
+        attachment: Data? = nil,
+        from specifiedSender: AddressConvertible? = nil
+    ) -> TransferTokensAction {
         
         let sender = specifiedSender ?? addressOfActiveAccount
         
-        let transferAction = TransferTokenAction(
+        let transferAction = TransferTokensAction(
             from: sender,
             to: recipient,
             amount: amount,
@@ -71,12 +112,17 @@ public extension TokenTransferring {
             attachment: attachment
         )
         
-        return transfer(tokens: transferAction)
+        return transferAction
     }
 }
 
 public extension TokenTransferring {
-    func observeMyTokenTransfers() -> Observable<TransferredTokens> {
+    
+    /// Do not confuse this with `observeMyTransactions`, this returns a stream
+    /// of executed Token Transfers, either by you or someone else, the latter
+    /// returns a stream of `ExecutedTransaction`, which is a container of UserActions
+    /// submitted in a single Atom at some earlier point in time
+    func observeMyTokenTransfers() -> Observable<TransferTokensAction> {
         return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
     }
 }

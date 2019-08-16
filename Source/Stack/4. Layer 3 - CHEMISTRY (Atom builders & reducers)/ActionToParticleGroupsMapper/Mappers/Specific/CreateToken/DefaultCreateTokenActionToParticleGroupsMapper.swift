@@ -41,7 +41,15 @@ public extension CreateTokenActionToParticleGroupsMapper {
 
 private extension CreateTokenActionToParticleGroupsMapper {
     
+    func initialSupplyDefinitionFrom(action: CreateTokenAction) throws -> CreateTokenAction.InitialSupply.SupplyTypeDefinition {
+        guard let supplyDefinition = action.supplyDefinition else {
+            throw Error.createTokenActionContainsDerivedSupplyWhichIsNotSupported
+        }
+        return supplyDefinition
+    }
+    
     func mutableSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
+        let initialSupplyDefinition = try initialSupplyDefinitionFrom(action: action)
         
         let mutableSupplyToken = try MutableSupplyTokenDefinitionParticle(createTokenAction: action)
         let unallocated = UnallocatedTokensParticle.maxSupplyForNewToken(mutableSupplyTokenDefinitionParticle: mutableSupplyToken)
@@ -53,7 +61,7 @@ private extension CreateTokenActionToParticleGroupsMapper {
             unallocated.withSpin(.up)
         ]
         
-        let initialSupply = action.initialSupply
+        let initialSupply = initialSupplyDefinition.initialSupply
         guard let positiveInitialSupply = initialSupply.positiveAmount else {
             return [tokenCreationGroup]
         }
@@ -85,18 +93,19 @@ private extension CreateTokenActionToParticleGroupsMapper {
     }
     
     func fixedSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
+        let initialSupplyDefinition = try initialSupplyDefinitionFrom(action: action)
         
-        let positiveSupply = try PositiveSupply(supply: action.initialSupply)
+        let positiveSupply = try PositiveSupply(supply: initialSupplyDefinition.initialSupply)
         
-        let fixedSupplyToken = FixedSupplyTokenDefinitionParticle(createTokenAction: action)
+        let fixedSupplyToken = FixedSupplyTokenDefinitionParticle(createTokenAction: action, positiveSupply: positiveSupply)
         let rriParticle = ResourceIdentifierParticle(token: fixedSupplyToken)
      
-        let tokens = try TransferrableTokensParticle(fixedSupplyTokenDefinitionParticle: fixedSupplyToken, positiveSupply: positiveSupply)
+        let transferrableTokensParticle = try TransferrableTokensParticle(fixedSupplyTokenDefinitionParticle: fixedSupplyToken, positiveSupply: positiveSupply)
         
         let tokenCreationGroup: ParticleGroup = [
             rriParticle.withSpin(.down),
             fixedSupplyToken.withSpin(.up),
-            tokens.withSpin(.up)
+            transferrableTokensParticle.withSpin(.up)
         ]
     
         return [

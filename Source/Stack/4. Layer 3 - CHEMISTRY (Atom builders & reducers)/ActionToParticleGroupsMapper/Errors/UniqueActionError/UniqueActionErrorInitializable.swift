@@ -25,5 +25,5 @@
 import Foundation
 
 public protocol UniqueActionErrorInitializable: Swift.Error, Equatable {
-    static func errorFrom(uniqueActionError: UniquelyIdentifiedActionError) -> Self
+    static func errorFrom(uniqueActionError: UniquelyIdentifiedUserActionError) -> Self
 }
