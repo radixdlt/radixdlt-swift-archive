@@ -28,21 +28,36 @@ import CryptoSwift
 // swiftlint:disable all
 
 /// Encrypt and Decrypt data using ECIES (Elliptic Curve Integrated Encryption Scheme) (subset of DHIES): https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme
-public final class ECIES {}
+public final class ECIES {
+    private let crypt: Crypt
+    private let sha512TwiceHasher: Sha512TwiceHashing
+    public init(
+        crypt: Crypt = .init(),
+        sha512TwiceHasher: Sha512TwiceHashing = Sha512TwiceHasher()
+    ) {
+        self.crypt = crypt
+        self.sha512TwiceHasher = sha512TwiceHasher
+    }
+}
+
+// MARK: Constants
+public extension ECIES {
+    
+    var byteCountInitializationVector: Int { return 16 }
+    var byteCountHashH: Int { return 64 }
+    var byteCountMac: Int { return 32 }
+    var byteCountCipherTextLength: Int { return MemoryLayout<UInt32>.size }
+}
+
 public extension ECIES {
     /// Calculates a 32 byte MAC with HMACSHA256
-    static func calculateMAC(salt: DataConvertible, initializationVector iv: DataConvertible, ephemeralPublicKey: PublicKey, cipherText: DataConvertible) throws -> Data {
+    func calculateMAC(salt: DataConvertible, initializationVector iv: DataConvertible, ephemeralPublicKey: PublicKey, cipherText: DataConvertible) throws -> Data {
         let message = iv + ephemeralPublicKey.asData + cipherText
         let macBytes = try HMAC(key: salt.bytes, variant: .sha256).authenticate(message.bytes)
         return macBytes.asData
     }
     
-    static let byteCountInitializationVector = 16
-    static let byteCountHashH = 64
-    static let byteCountMac = 32
-    static let byteCountCipherTextLength = MemoryLayout<UInt32>.size
-    
-    static func encrypt(data dataConvertible: DataConvertible, using publicKeyOwner: PublicKeyOwner) throws -> Data {
+    func encrypt(data dataConvertible: DataConvertible, using publicKeyOwner: PublicKeyOwner) throws -> Data {
         let data = dataConvertible.asData
         // 0. Here follows ECEIS algorithm (steps copied from Radix DLT Java library)
         // 1. The destination is this publicKey
@@ -65,7 +80,7 @@ public extension ECIES {
         let pointM = point * ephermalKeyPair.privateKey
         
         // 5. Use the X component of point M and calculate the SHA512 hash H.
-        let hashH = RadixHash(unhashedData: pointM.x.asData, hashedBy: Sha512TwiceHasher()).asData
+        let hashH = RadixHash(unhashedData: pointM.x.asData, hashedBy: sha512TwiceHasher).asData
         assert(hashH.length == byteCountHashH)
         
         // 6. The first 32 bytes of H are called key_e and the last 32 bytes are called key_m.
@@ -74,7 +89,7 @@ public extension ECIES {
         
         // 7. Pad the input text to a multiple of 16 bytes, in accordance to PKCS7.
         // 8. Encrypt the data with AES-256-CBC, using IV as initialization vector, `keyDataE` as encryption key and the padded input text as payload.
-        let cipherText = try Crypt.encrypt(initializationVector: iv, data: data, keyE: keyDataE)
+        let cipherText = try crypt.encrypt(initializationVector: iv, data: data, keyE: keyDataE)
         
         // 9. Calculate a 32 byte MAC, using keyDataM as salt and `IV + ephemeral.pub + cipherText` as data
         let macData = try calculateMAC(
@@ -115,7 +130,7 @@ public extension ECIES {
         case failedToDecodePublicKeyPoint(error: EllipticCurvePoint.Error)
     }
     
-    static func decrypt(data dataConvertible: DataConvertible, using signing: Signing) throws -> Data {
+    func decrypt(data dataConvertible: DataConvertible, using signing: Signing) throws -> Data {
         var encrypted = dataConvertible.asData
         let privateKey = signing.privateKey
         
@@ -145,7 +160,7 @@ public extension ECIES {
         let pointM = ephemeralPublicKeyPoint * privateKey
         
         // 4. Use the X component of point M and calculate the SHA512 hash H.
-        let hashH = RadixHash(unhashedData: pointM.x.asData, hashedBy: Sha512TwiceHasher()).asData
+        let hashH = RadixHash(unhashedData: pointM.x.asData, hashedBy: sha512TwiceHasher).asData
         assert(hashH.length == byteCountHashH)
         
         // 5. The first 32 bytes of H are called key_e and the last 32 bytes are called key_m.
@@ -172,7 +187,7 @@ public extension ECIES {
         }
         
         // 8. Decrypt the cipher text with AES-256-CBC, using IV as initialization vector, key_e as decryption key and the cipher text as payload. The output is the padded input text.
-        let decrypted = try Crypt.decrypt(initializationVector: iv, data: cipherText, keyE: keyDataE)
+        let decrypted = try crypt.decrypt(initializationVector: iv, data: cipherText, keyE: keyDataE)
         
         return decrypted
     }
@@ -206,26 +221,29 @@ extension Data {
     }
 }
 
-public final class Crypt {
-    
-    public enum Operation {
+public struct Crypt {
+    public init() {}
+}
+
+public extension Crypt {
+    enum Operation {
         case encrypt
         case decrypt
     }
 }
 
 public extension Crypt {
-    static func encrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
+    func encrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
         return try crypt(operation: .encrypt, initializationVector: iv, data: data, keyE: keyE)
     }
     
-    static func decrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
+    func decrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
         return try crypt(operation: .decrypt, initializationVector: iv, data: data, keyE: keyE)
     }
 }
 
 private extension Crypt {
-    static func crypt(operation: Operation, initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
+    func crypt(operation: Operation, initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
         let aes = try AES(key: keyE.bytes, blockMode: CBC(iv: iv.bytes), padding: Padding.pkcs7)
         switch operation {
         case .decrypt: return try aes.decrypt(data.bytes).asData

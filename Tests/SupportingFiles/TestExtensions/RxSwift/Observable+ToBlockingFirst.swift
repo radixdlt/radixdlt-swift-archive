@@ -70,12 +70,18 @@ extension ObservableConvertibleType where Element == Never { /* Completable */
         let description = "\(function) in \(file), at line: \(line)"
         switch self.toBlocking(timeout: timeout).materialize() {
         case .completed: return true
-        case .failed(_, let error):
-            print("⚠️ warning, error: \(error)")
+        case .failed(let elements, let error):
+            print("⚠️ error: \(error)")
             if let rxError = error as? RxError {
                 if case .timeout = rxError {
                     if failOnTimeout {
                         XCTFail("Timeout after \(timeout!)s, \(description)")
+                    }
+                }
+                
+                if case .argumentOutOfRange = rxError {
+                    if failOnErrors {
+                        XCTFail("☢️ RxError.argumentOutOfRange - elements: \(elements), \(description)")
                     }
                 }
             } else {
@@ -107,7 +113,7 @@ extension TimeInterval {
         return 2
     }
     static var enoughForPOW: TimeInterval {
-        return 30
+        return 15
     }
 }
 

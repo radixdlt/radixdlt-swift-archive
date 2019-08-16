@@ -96,11 +96,11 @@ class BurnTokensTests: LocalhostNodeTest {
         /// GIVEN: And a previously created FooToken, for which Alice has the appropriate permissions
         guard let fooTokenStateAfterCreation = application.observeTokenState(identifier: fooToken).blockingTakeFirst() else { return }
         XCTAssertEqual(fooTokenStateAfterCreation.totalSupply, 35)
-        
+
         guard let myBalanceOrNilAfterCreate = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
         guard let myBalanceAfterCreate = myBalanceOrNilAfterCreate else { return XCTFail("Expected non nil balance") }
         XCTAssertEqual(myBalanceAfterCreate.amount, 35)
-        
+
         // WHEN: Alice call Burn for FooToken
         let burning = application.burnTokens(amount: 2, ofType: fooToken)
         
@@ -112,8 +112,8 @@ class BurnTokensTests: LocalhostNodeTest {
         // THEN: AND the supply of FooToken is changed
         guard let fooTokenStateAfterBurn = application.observeTokenState(identifier: fooToken).blockingTakeLast() else { return }
         XCTAssertEqual(fooTokenStateAfterBurn.totalSupply, 33)
-        
-        
+
+
         guard let myBalanceOrNilAfterBurn = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
         guard let myBalanceAfterBurn = myBalanceOrNilAfterBurn else { return XCTFail("Expected non nil balance") }
         // THEN: AND that Alice balance is reduced

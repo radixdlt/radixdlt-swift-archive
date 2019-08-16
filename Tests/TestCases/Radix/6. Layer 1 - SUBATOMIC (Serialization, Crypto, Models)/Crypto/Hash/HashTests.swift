@@ -37,4 +37,16 @@ class HashTests: XCTestCase {
         XCTAssertEqual(singleHash.hex, "374d9dc94c1252acf828cdfb94946cf808cb112aa9760a2e6216c14b4891f934")
         XCTAssertEqual(double.hex, "fd6be8b4b12276857ac1b63594bf38c01327bd6e8ae0eb4b0c6e253563cc8cc7")
     }
+    
+    func testEuidLengthIsAlways16() {
+        let unhashedHex: HexString = "010355c1b10e882ff9bdf8a4252afa21620e927bc9f03697dc0243670fb26e692484"
+        let unhashed = unhashedHex.asData
+        XCTAssertEqual(unhashed.length, 34)
+        
+        let radixHash = RadixHash(unhashedData: unhashed)
+        XCTAssertEqual(radixHash.hex, "00709cc52cabdfb3d0fb95cbca163ad241dcd9791461d3a01f207ed93f9bdd21")
+        let euid = radixHash.toEUID()
+        XCTAssertEqual(euid.asData.length, EUID.byteCount)
+        XCTAssertEqual(euid.hex, "00709cc52cabdfb3d0fb95cbca163ad2")
+    }
 }

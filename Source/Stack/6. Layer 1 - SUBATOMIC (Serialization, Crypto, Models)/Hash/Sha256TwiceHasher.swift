@@ -25,16 +25,16 @@
 import Foundation
 import CryptoSwift
 
-public struct Sha256TwiceHasher: Hashing {
+public struct Sha256TwiceHasher: Sha256TwiceHashing {
     public init() {}
-    public func hash(data: Data) -> Data {
+    public func sha256Twice(of data: Data) -> Data {
         return data.sha256().sha256()
     }
 }
 
-public struct Sha512TwiceHasher: Hashing {
+public struct Sha512TwiceHasher: Sha512TwiceHashing {
     public init() {}
-    public func hash(data: Data) -> Data {
+    public func sha512Twice(of data: Data) -> Data {
         return data.sha512().sha512()
     }
 }

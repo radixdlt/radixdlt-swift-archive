@@ -61,6 +61,19 @@ class ProofOfWorkTest: XCTestCase {
         guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 14, timeout: 0.5) else { return XCTFail("timeout") }
         XCTAssertEqual(pow.nonce, 9255)
     }
+    
+    func omitted_testSlowVectors() {
+        func test(vector: Vector) {
+            
+            doTest(
+                zeros: vector.zeros,
+                expectedNonce: vector.expectedResultingNonce,
+                magic: vector.magic,
+                seed: vector.seed
+            )
+        }
+        vectorsForHighNonce.forEach(test(vector:))
+    }
 }
 
 private extension ProofOfWorkTest {
@@ -74,7 +87,7 @@ private extension ProofOfWorkTest {
         let magicUsed = overridingMagic ?? magic
         let seedUsed = overridingSeed ?? seed
         
-        DefaultProofOfWorkWorker.work(seed: seedUsed.asData, magic: magicUsed, numberOfLeadingZeros: zeros) {
+        DefaultProofOfWorkWorker().doWork(seed: seedUsed.asData, magic: magicUsed, numberOfLeadingZeros: zeros) {
             switch $0 {
             case .failure(let error): XCTFail("Unexpected error: \(error)")
             case .success(let pow): XCTAssertEqual(pow.nonce, expectedNonce)
@@ -147,3 +160,44 @@ extension PrimitiveSequenceType where Self: ObservableConvertibleType, Trait == 
         
     }
 }
+
+private typealias Vector = (expectedResultingNonce: Nonce, seed: HexString, magic: Magic, zeros: ProofOfWork.NumberOfLeadingZeros)
+private let vectorsForHighNonce: [Vector] = [
+    (
+        expectedResultingNonce: 510190, // takes around 12 s
+        seed: "887a9e87ecbcc8f13ea60dd732a3c115ea9478519ee3faac3be3ed89b4bbc535",
+        magic: -1332248574,
+        zeros: 16
+    ),
+    (
+        expectedResultingNonce: 322571,
+        seed: "46ad4f54098f18f856a2ff05df25f5af587bd4f6dfc1e3b4cb406ceb25c61552",
+        magic: -1332248574,
+        zeros: 16
+    ),
+    (
+        expectedResultingNonce: 312514,
+        seed: "f0f178d42ffe8fade8b8197782fd1ee72a4068d046d868806da7bfb1d0ffa7c1",
+        magic: -1332248574,
+        zeros: 16
+    ),
+    (
+        expectedResultingNonce: 311476,
+        seed: "a33a90d0422aa12b68d1de6c53e83ca049ab82b06efeb03cf6731231e82470ef",
+        magic: -1332248574,
+        zeros: 16
+    ),
+    (
+        expectedResultingNonce: 285315,
+        seed: "0519269eafbac3accba00cf6f7e93238aae1974a1e5439a58a6f53726a963095",
+        magic: -1332248574,
+        zeros: 16
+    ),
+    (
+        expectedResultingNonce: 270233,
+        seed: "34931f7c0522352426d9d95f1c5527fafffce55b13082ae3723dc89f3c3e6276",
+        magic: -1332248574,
+        zeros: 16
+    )
+]
+

@@ -342,8 +342,8 @@ class TransactionTests: LocalhostNodeTest {
         
         guard let putUniqueTransactions = application.observeMyTransactions(containingActionOfAnyType: [PutUniqueIdAction.self]).blockingArrayTakeFirst(3) else { return }
         XCTAssertEqual(
-            putUniqueTransactions.flatMap { $0.actions(ofType: PutUniqueIdAction.self) }.map { $0.string },
-            ["mint", "burn", "unique"]
+            putUniqueTransactions.flatMap { $0.actions(ofType: PutUniqueIdAction.self) }.map { $0.string }.sorted(),
+            ["burn", "mint", "unique"]
         )
         
         guard let burnTxs = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self]).blockingArrayTakeFirst(1) else { return }

@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import CryptoSwift
 
 public protocol DataConvertible: LengthMeasurable {
     var asData: Data { get }

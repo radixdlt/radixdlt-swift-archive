@@ -106,7 +106,9 @@ public extension EUID {
 // MARK: - DataConvertible
 public extension EUID {
     var asData: Data {
-        return value.asData
+        let dataFromInt = value.toData(minByteCount: EUID.byteCount, concatMode: .prepend)
+        assert(dataFromInt.length == EUID.byteCount)
+        return dataFromInt
     }
 }
 

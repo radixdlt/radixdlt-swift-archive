@@ -55,7 +55,7 @@ class ECIESHmacCalculationTests: XCTestCase {
         XCTAssertEqual(cipherText.length, 32)
         
         guard let mac = XCTAssertNotThrows(
-            try ECIES.calculateMAC(salt: keyM, initializationVector: iv, ephemeralPublicKey: publicKey, cipherText: cipherTextEncoded)
+            try ECIES().calculateMAC(salt: keyM, initializationVector: iv, ephemeralPublicKey: publicKey, cipherText: cipherTextEncoded)
         ) else { return }
         
         XCTAssertEqual(

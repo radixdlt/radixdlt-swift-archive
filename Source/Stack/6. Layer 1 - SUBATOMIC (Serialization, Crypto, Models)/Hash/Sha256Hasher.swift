@@ -25,9 +25,9 @@
 import Foundation
 import CryptoSwift
 
-public struct Sha256Hasher: Hashing {
+public struct Sha256Hasher: Sha256Hashing {
     public init() {}
-    public func hash(data: Data) -> Data {
+    public func sha256(of data: Data) -> Data {
         return data.sha256()
     }
 }
