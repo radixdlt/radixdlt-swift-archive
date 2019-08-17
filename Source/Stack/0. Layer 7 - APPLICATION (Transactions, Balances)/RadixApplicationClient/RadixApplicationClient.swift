@@ -117,7 +117,7 @@ public extension RadixApplicationClient {
 // MARK: TransactionMaker
 public extension RadixApplicationClient {
     func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
-        return transactionMaker.send(transaction: transaction, toOriginNode: originNode)
+        transactionMaker.send(transaction: transaction, toOriginNode: originNode)
     }
 }
 
@@ -258,32 +258,22 @@ public extension RadixApplicationClient {
 
 // MARK: Magical
 public extension RadixApplicationClient {
-    var magic: Magic {
-        return universeConfig.magic
-    }
+    var magic: Magic { universeConfig.magic }
 }
 
 // MARK: ActiveAccountOwner
 public extension RadixApplicationClient {
-    var addressOfActiveAccount: Address {
-        return activeAccount.addressFromMagic(magic)
-    }
+    var addressOfActiveAccount: Address { activeAccount.addressFromMagic(magic) }
 }
 
 // MARK: Public
 public extension RadixApplicationClient {
     
-    var universeConfig: UniverseConfig {
-        return universe.config
-    }
+    var universeConfig: UniverseConfig { universe.config }
     
-    var nativeTokenDefinition: TokenDefinition {
-        return universe.nativeTokenDefinition
-    }
+    var nativeTokenDefinition: TokenDefinition { universe.nativeTokenDefinition }
  
-    var nativeTokenIdentifier: ResourceIdentifier {
-        return nativeTokenDefinition.tokenDefinitionReference
-    }
+    var nativeTokenIdentifier: ResourceIdentifier { nativeTokenDefinition.tokenDefinitionReference }
     
     @discardableResult
     func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
@@ -301,11 +291,7 @@ public extension RadixApplicationClient {
 
 // MARK: - Private
 private extension RadixApplicationClient {
-    var atomPuller: AtomPuller {
-        return universe.atomPuller
-    }
+    var atomPuller: AtomPuller { universe.atomPuller }
     
-    var activeAccount: Account {
-        return identity.activeAccount
-    }
+    var activeAccount: Account { identity.activeAccount }
 }
