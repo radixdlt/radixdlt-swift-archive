@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,24 +23,18 @@
 //
 
 import Foundation
-import RxSwift
+import CryptoKit
 
-public protocol ProofOfWorkWorker {
-    func work(seed: Data, magic: Magic) -> Single<ProofOfWork>
+// CryptoKit.Digest utils
+public extension CryptoKit.Digest {
+    var asData: Data { Data(Array(makeIterator()) ) }
 }
+extension SHA256.Digest: DataConvertible {}
+extension SHA512.Digest: DataConvertible {}
 
-// MARK: - Convenience
-public extension ProofOfWorkWorker {
-    func work(
-        atom: Atom,
-        magic: Magic
-    ) -> Single<ProofOfWork> {
-        
-        return work(
-            seed: atom.radixHash.asData,
-            magic: magic
-        )
+public struct CryptoKitSha256Hasher: Sha256Hashing {
+    public init() {}
+    public func sha256(of data: Data) -> Data {
+        return SHA256.hash(data: data).asData
     }
-    
 }
-

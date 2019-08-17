@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,24 +23,12 @@
 //
 
 import Foundation
-import RxSwift
+import CryptoSwift
 
-public protocol ProofOfWorkWorker {
-    func work(seed: Data, magic: Magic) -> Single<ProofOfWork>
-}
-
-// MARK: - Convenience
-public extension ProofOfWorkWorker {
-    func work(
-        atom: Atom,
-        magic: Magic
-    ) -> Single<ProofOfWork> {
-        
-        return work(
-            seed: atom.radixHash.asData,
-            magic: magic
-        )
+public struct Sha512TwiceHasher: Sha512TwiceHashing {
+    public init() {}
+    public func sha512Twice(of data: Data) -> Data {
+        return data.sha512().sha512()
     }
-    
 }
 

@@ -27,14 +27,14 @@ import RxSwift
 
 public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
     private let dispatchQueue = DispatchQueue(label: "Radix.DefaultProofOfWorkWorker", qos: .userInitiated)
-    private let defaultNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros
+    private let targetNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros
     private let sha256TwiceHasher: Sha256TwiceHashing
 
     public init(
-        defaultNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
+        targetNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
         sha256TwiceHasher: Sha256TwiceHashing = Sha256TwiceHasher()
     ) {
-        self.defaultNumberOfLeadingZeros = defaultNumberOfLeadingZeros
+        self.targetNumberOfLeadingZeros = targetNumberOfLeadingZeros
         self.sha256TwiceHasher = sha256TwiceHasher
     }
     
@@ -48,8 +48,7 @@ public extension DefaultProofOfWorkWorker {
     
     func work(
         seed: Data,
-        magic: Magic,
-        numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default
+        magic: Magic
     ) -> Single<ProofOfWork> {
         return Single.create { [unowned self] single in
             var powDone = false
@@ -57,12 +56,11 @@ public extension DefaultProofOfWorkWorker {
                 log.verbose("POW started")
                 self.doWork(
                     seed: seed,
-                    magic: magic,
-                    numberOfLeadingZeros: numberOfLeadingZeros
+                    magic: magic
                 ) { resultOfWork in
                     switch resultOfWork {
                     case .failure(let error):
-                        log.error("POW failed: \(error), seed: \(seed), magic: \(magic), #0: \(numberOfLeadingZeros)")
+                        log.error("POW failed: \(error), seed: \(seed), magic: \(magic), #0: \(self.targetNumberOfLeadingZeros)")
                         single(.error(error))
                     case .success(let pow):
                         powDone = true
@@ -86,7 +84,6 @@ internal extension DefaultProofOfWorkWorker {
     func doWork(
         seed: Data,
         magic: Magic,
-        numberOfLeadingZeros targetNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
         done: ((Result<ProofOfWork, Error>) -> Void)
     ) {
         guard seed.length == DefaultProofOfWorkWorker.expectedByteCountOfSeed else {
@@ -112,7 +109,7 @@ internal extension DefaultProofOfWorkWorker {
 extension DefaultProofOfWorkWorker: FeeMapper {}
 public extension DefaultProofOfWorkWorker {
     func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> Single<AtomWithFee> {
-        return work(atom: atom, magic: universeConfig.magic, numberOfLeadingZeros: self.defaultNumberOfLeadingZeros).map {
+        return work(atom: atom, magic: universeConfig.magic).map {
             try AtomWithFee(atomWithoutPow: atom, proofOfWork: $0)
         }
     }
