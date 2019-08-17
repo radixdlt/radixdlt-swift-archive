@@ -26,7 +26,7 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
-class AtomToTransferMapperTests: XCTestCase {
+class AtomToTransferMapperTests: LocalhostNodeTest {
 
     private let disposeBag = DisposeBag()
     

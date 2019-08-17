@@ -44,9 +44,9 @@ public extension TransactionConvertible {
     
     /// Boolean AND of `actionTypes`
     func contains(actionMatchingAll actionTypes: [UserAction.Type]) -> Bool {
-        return actionTypes.reduce(true, { (goodSoFar, requiredActionType) -> Bool in
-            return goodSoFar && self.actions.contains(where: { type(of: $0) == requiredActionType })
-        })
+        return actionTypes.allSatisfy { requiredActionType in
+            self.actions.contains(where: { type(of: $0) == requiredActionType })
+        }
     }
     
     func actions<Action>(ofType actionType: Action.Type) -> [Action] where Action: UserAction {

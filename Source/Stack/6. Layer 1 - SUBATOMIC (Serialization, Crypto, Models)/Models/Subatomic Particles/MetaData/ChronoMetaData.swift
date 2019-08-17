@@ -32,8 +32,7 @@ public struct ChronoMetaData:
     ValueValidating
 {
     // swiftlint:enable colon opening_brace
-    
-    public let dictionary: [Key: Value]
+    public let dictionary: [MetaDataKey: String]
     
     public init(validate unvalidated: Map) throws {
         let validated = try ChronoMetaData.validate(unvalidated)

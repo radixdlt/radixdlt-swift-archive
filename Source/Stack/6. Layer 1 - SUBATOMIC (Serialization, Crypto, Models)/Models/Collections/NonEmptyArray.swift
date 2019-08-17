@@ -24,7 +24,7 @@
 
 import Foundation
 
-// swiftlint:disable opening_brace
+// swiftlint:disable opening_brace colon
 
 public struct NonEmptyArray<ElementInArray>:
     ArrayConvertible,
@@ -32,7 +32,8 @@ public struct NonEmptyArray<ElementInArray>:
     Throwing
 {
     public typealias Element = ElementInArray
-    // swiftlint:enable opening_brace
+
+    // swiftlint:enable opening_brace colon
     
     public let elements: [Element]
 

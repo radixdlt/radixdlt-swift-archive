@@ -24,7 +24,7 @@
 
 import Foundation
 
-// swiftlint:disable opening_brace
+// swiftlint:disable opening_brace colon
 
 public struct NonEmptySet<ElementInSet>:
     ArrayConvertible,
@@ -34,7 +34,7 @@ public struct NonEmptySet<ElementInSet>:
 where
     ElementInSet: Hashable
 {
-    // swiftlint:enable opening_brace
+    // swiftlint:enable opening_brace colon
     
     private let set: Set<ElementInSet>
     
