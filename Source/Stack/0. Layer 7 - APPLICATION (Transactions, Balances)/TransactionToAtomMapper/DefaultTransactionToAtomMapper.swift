@@ -66,63 +66,86 @@ public extension DefaultTransactionToAtomMapper {
 
 public extension DefaultTransactionToAtomMapper {
     func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
-        var spunParticlesFromTx = [AnySpunParticle]()
-        var particleGroupsFromTx = [ParticleGroup]()
         
-        for action in transaction.actions {
-            let particleGroups: ParticleGroups
-                
-            do {
-                particleGroups = try self.particleGroupFromAction(
-                    action,
-                    addressOfActiveAccount: addressOfActiveAccount,
-                    accumulatedSpunParticlesFromStagedActions: spunParticlesFromTx
-                )
-            } catch {
-                throw FailedToStageAction(error: error, userAction: action)
-            }
-            
-            particleGroups.forEach {
-                spunParticlesFromTx.append(contentsOf: $0.spunParticles)
-            }
-            
-            particleGroupsFromTx.append(contentsOf: particleGroups)
+        let temporaryStore = TemporaryLocalAtomStore(
+            actionMappers: actionMappers,
+            addressOfActiveAccount: addressOfActiveAccount
+        ) { [unowned self] in
+            return self.atomStore.upParticles(at: $0)
         }
-        
-        let atom = Atom(particleGroups: ParticleGroups(particleGroupsFromTx))
+
+        let particleGroups = try temporaryStore.particleGroupsFromActions(transaction.actions)
+
+        let atom = Atom(particleGroups: particleGroups)
         try Addresses.allInSameUniverse(atom.addresses().map { $0 })
         return atom
 
     }
 }
 
+// MARK: TemporaryLocalAtomStore
 private extension DefaultTransactionToAtomMapper {
-    
-    func actionMapperFor(action: UserAction) -> AnyStatefulActionToParticleGroupsMapper {
-        guard let mapper = actionMappers.first(where: { $0.matches(someAction: action) }) else {
-            incorrectImplementation("Found no ActionToParticleGroupsMapper for action: \(action), you probably just added a new UserAction but forgot to add its corresponding mapper to the list?")
+    final class TemporaryLocalAtomStore {
+        
+        private var accumulatedSpunParticles = [AnySpunParticle]()
+        private let actionMappers: [AnyStatefulActionToParticleGroupsMapper]
+        private let addressOfActiveAccount: Address
+        private let persistedParticlesAccessor: (Address) -> [SpunParticleContainer]
+        
+        fileprivate init(
+            actionMappers: [AnyStatefulActionToParticleGroupsMapper],
+            addressOfActiveAccount: Address,
+            persistedParticlesAccessor: @escaping (Address) -> [SpunParticleContainer]
+        ) {
+            self.actionMappers = actionMappers
+            self.addressOfActiveAccount = addressOfActiveAccount
+            self.persistedParticlesAccessor = persistedParticlesAccessor
         }
-        return mapper
+    }
+}
+
+extension DefaultTransactionToAtomMapper.TemporaryLocalAtomStore {
+    
+    fileprivate func particleGroupsFromActions(_ userAction: [UserAction]) throws -> ParticleGroups {
+        var particleGroupsList = [ParticleGroup]()
+        
+        for action in userAction {
+            let particleGroups: ParticleGroups
+            
+            do {
+                particleGroups = try particleGroupFromAction(action)
+            } catch {
+                throw FailedToStageAction(error: error, userAction: action)
+            }
+            
+            accumulatedSpunParticles.append(contentsOf: particleGroups.spunParticles)
+            particleGroupsList.append(contentsOf: particleGroups)
+        }
+        
+        return ParticleGroups(particleGroupsList)
     }
     
-    func requiredState(for action: UserAction) -> [AnyShardedParticleStateId] {
-        guard let mapper = actionMappers.first(where: { (mapper) -> Bool in
-            return mapper.matches(someAction: action)
-        }) else { return [] }
-        return mapper.requiredStateForAnAction(action)
-    }
-    
-    func particleGroupFromAction(_ action: UserAction, addressOfActiveAccount: Address, accumulatedSpunParticlesFromStagedActions: [AnySpunParticle]) throws -> ParticleGroups {
+    private func particleGroupFromAction(_ action: UserAction) throws -> ParticleGroups {
         let statefulMapper = actionMapperFor(action: action)
         let requiredState = self.requiredState(for: action)
         
-        let upParticlesFromStore = requiredState.flatMap { requiredStateContext in
-            atomStore.upParticles(at: requiredStateContext.address)
+        let persistedUpParticles = requiredState.flatMap { requiredStateContext in
+            self.persistedParticlesAccessor(requiredStateContext.address)
                 .filter { type(of: $0.someParticle) == requiredStateContext.particleType }
         }
         
+        let upParticles = mergingParticles(persistedUpParticles: persistedUpParticles)
+        
+        return try statefulMapper.particleGroupsForAnAction(
+            action,
+            upParticles: upParticles,
+            addressOfActiveAccount: addressOfActiveAccount
+        )
+    }
+    
+    private func mergingParticles(persistedUpParticles upParticlesFromStore: [SpunParticleContainer]) -> [AnyUpParticle] {
         var upParticlesAsSpunParticles = upParticlesFromStore.map { AnySpunParticle(spunParticle: $0) }
-        for newParticle in accumulatedSpunParticlesFromStagedActions {
+        for newParticle in accumulatedSpunParticles {
             let condition: (AnySpunParticle) -> Bool = {
                 $0.someParticle.hashEUID == newParticle.someParticle.hashEUID
             }
@@ -131,12 +154,21 @@ private extension DefaultTransactionToAtomMapper {
             }
             upParticlesAsSpunParticles.append(newParticle)
         }
-        
-        return try statefulMapper.particleGroupsForAnAction(
-            action,
-            upParticles: upParticlesAsSpunParticles.upParticles(),
-            addressOfActiveAccount: addressOfActiveAccount
-        )
+        return upParticlesAsSpunParticles.upParticles()
+    }
+    
+    private func actionMapperFor(action: UserAction) -> AnyStatefulActionToParticleGroupsMapper {
+        guard let mapper = actionMappers.first(where: { $0.matches(someAction: action) }) else {
+            incorrectImplementation("Found no ActionToParticleGroupsMapper for action: \(action), you probably just added a new UserAction but forgot to add its corresponding mapper to the list?")
+        }
+        return mapper
+    }
+    
+    private func requiredState(for action: UserAction) -> [AnyShardedParticleStateId] {
+        guard let mapper = actionMappers.first(where: { (mapper) -> Bool in
+            return mapper.matches(someAction: action)
+        }) else { return [] }
+        return mapper.requiredStateForAnAction(action)
     }
 }
 
@@ -160,3 +192,4 @@ public extension Array where Element == AnyStatelessActionToParticleGroupsMapper
         ]
     }
 }
+
