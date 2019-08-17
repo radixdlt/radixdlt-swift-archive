@@ -255,12 +255,12 @@ class TransactionTests: LocalhostNodeTest {
         )
         
         //  WHEN: Alice makes a transaction containing 2 MintTokensAction of FooToken and 2 PutUnique and observes her transactions
-        let newTransaction = Transaction {[
-            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
-            MintTokensAction(tokenDefinitionReference: fooToken, amount: 10, minter: alice),
-            PutUniqueIdAction(uniqueMaker: alice, string: "Mint5"),
+        let newTransaction = Transaction { // using Swift 5.1's function builder
+            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice)
+            MintTokensAction(tokenDefinitionReference: fooToken, amount: 10, minter: alice)
+            PutUniqueIdAction(uniqueMaker: alice, string: "Mint5")
             PutUniqueIdAction(uniqueMaker: alice, string: "Mint10")
-        ]}
+        }
             
         XCTAssertTrue(
             application.send(transaction: newTransaction)

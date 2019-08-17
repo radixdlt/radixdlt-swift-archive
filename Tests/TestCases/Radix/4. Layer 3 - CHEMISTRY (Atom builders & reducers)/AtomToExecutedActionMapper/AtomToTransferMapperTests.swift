@@ -46,14 +46,14 @@ class AtomToTransferMapperTests: LocalhostNodeTest {
         let bob = aliceApp.addressOf(account: Account())
         
         let atom = try! aliceApp.atomFrom(transaction:
-            Transaction(
+            Transaction {
                 aliceApp.actionTransferTokens(
                     identifier: aliceCoin,
                     to: bob,
                     amount: 14,
                     message: "Taxi"
                 )
-            )
+            }
         )
 
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
@@ -76,14 +76,14 @@ class AtomToTransferMapperTests: LocalhostNodeTest {
         let bob = aliceApp.addressOf(account: Account())
         
         let atom = try! aliceApp.atomFrom(transaction:
-            Transaction(
+            Transaction {
                 aliceApp.actionTransferTokens(
                     identifier: aliceCoin,
                     to: bob,
                     amount: 100,
                     message: "Taxi"
                 )
-            )
+            }
         )
         
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()

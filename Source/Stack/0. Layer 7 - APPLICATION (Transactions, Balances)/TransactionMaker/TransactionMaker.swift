@@ -36,7 +36,7 @@ public extension TransactionMaker {
     }
     
     func execute(actions: [UserAction], originNode: Node? = nil) -> ResultOfUserAction {
-        let transaction = Transaction { actions }
+        let transaction = Transaction(actions)
         return send(transaction: transaction, toOriginNode: originNode)
     }
     

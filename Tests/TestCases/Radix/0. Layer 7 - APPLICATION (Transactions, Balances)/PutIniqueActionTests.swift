@@ -53,9 +53,9 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
         // WHEN: Alice sends a `Transaction` containing a `UniqueId` with the string `"foobar"`
-        let transaction = Transaction {[
+        let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "foobar")
-        ]}
+        }
         
         XCTAssertTrue(
             application.send(transaction: transaction)
@@ -79,10 +79,10 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
         // WHEN: Alice sends a `Transaction` containing two UniqueId with the string "foo" and "bar” respectively
-        let transaction = Transaction {[
-            PutUniqueIdAction(uniqueMaker: alice, string: "foo"),
+        let transaction = Transaction {
+            PutUniqueIdAction(uniqueMaker: alice, string: "foo")
             PutUniqueIdAction(uniqueMaker: alice, string: "bar")
-        ]}
+        }
         
         XCTAssertTrue(
             application.send(transaction: transaction)
@@ -105,10 +105,10 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
         // WHEN: Alice sends a `Transaction` containing two UniqueId with with the same string
-        let transaction = Transaction {[
-            PutUniqueIdAction(uniqueMaker: alice, string: "foo"),
+        let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "foo")
-        ]}
+            PutUniqueIdAction(uniqueMaker: alice, string: "foo")
+        }
         
         let resultOfUniqueMaking = application.send(transaction: transaction)
         
@@ -139,10 +139,10 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
         // WHEN: Alice sends a `Transaction` containing a MutableSupplyToken and a UniqueId with the same RRI
-        let transaction = Transaction {[
-            try! CreateTokenAction(creator: alice, name: .irrelevant, symbol: "FOO", description: .irrelevant, supply: .mutable(initial: nil)),
+        let transaction = Transaction {
+            application.actionCreateMultiIssuanceToken(symbol: "FOO")
             PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
-        ]}
+        }
         
         let resultOfUniqueMaking = application.send(transaction: transaction)
         
@@ -156,10 +156,10 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
         // WHEN: Alice sends a `Transaction` containing a FixedSupplyToken and a UniqueId with the same RRI
-        let transaction = Transaction {[
-            try! CreateTokenAction(creator: alice, name: .irrelevant, symbol: "FOO", description: .irrelevant, supply: .fixed(to: 42)),
+        let transaction = Transaction {
+            application.actionCreateFixedSupplyToken(symbol: "FOO")
             PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
-        ]}
+        }
         
         let resultOfUniqueMaking = application.send(transaction: transaction)
         
@@ -174,9 +174,9 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         let aliceApp = application!
         
         // WHEN: Alice sends a Transaction containing a UniqueId specifying Bob’s address
-        let transaction = Transaction {[
-            PutUniqueIdAction(uniqueMaker: bob, string: "foo"),
-        ]}
+        let transaction = Transaction {
+            PutUniqueIdAction(uniqueMaker: bob, string: "foo")
+        }
         
         let resultOfUniqueMaking = aliceApp.send(transaction: transaction)
         
