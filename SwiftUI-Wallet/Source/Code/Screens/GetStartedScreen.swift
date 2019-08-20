@@ -27,14 +27,35 @@ import SwiftUI
 
 struct GetStartedScreen: Screen {
     var body: some View {
-        Text("Receive a transaction or restore an account")
+        NavigationView {
+            VStack {
+
+                NavigationLink(destination: ReceiveTransactionScreen()) {
+                    Text("GetStarted.Button.ReceiveTransaction").buttonStyleEmerald()
+                }
+
+                LabelledDivider(Text("GetStarted.Text.Or"))
+
+                NavigationLink(destination: RestoreAccountScreen()) {
+                    Text("GetStarted.Button.RestoreAccount").buttonStyleSaphire()
+                }
+
+            }.padding(20)
+        }
     }
 }
+
 
 #if DEBUG
 struct GetStartedScreen_Previews: PreviewProvider {
     static var previews: some View {
-        GetStartedScreen()
+        Group {
+            GetStartedScreen()
+                .environment(\.locale, Locale(identifier: "en"))
+
+            GetStartedScreen()
+                .environment(\.locale, Locale(identifier: "sv"))
+        }
     }
 }
 #endif

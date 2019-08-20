@@ -22,12 +22,11 @@
 // SOFTWARE.
 //
 
-// https://stackoverflow.com/questions/57573548/swiftui-uppercase-a-localized-string-for-a-view-e-g-text
-"Welcome.Text.Body" = "SEND INSTANT MESSAGES, MONEY & TOKENS"; // "Send instant messages, money & tokens";
-"Welcome.Text.AcceptTerms&Conditions" = "I agree to the Terms and Conditions";
-"Welcome.Text.AcceptPrivacyPolicy" = "I agree to the Privacy Policy";
-"Welcome.Button.Proceed" = "Get started";
+import Foundation
+import SwiftUI
 
-"GetStarted.Button.ReceiveTransaction" = "Receive a trasaction";
-"GetStarted.Button.RestoreAccount" = "Restore an account";
-"GetStarted.Text.Or" = "or";
+struct ReceiveTransactionScreen: Screen {
+    var body: some View {
+        Text("Recieve a transaction")
+    }
+}

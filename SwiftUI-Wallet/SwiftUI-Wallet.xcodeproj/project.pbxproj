@@ -38,7 +38,10 @@
 		4844FC71230C2162003106AB /* Font+Roboto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC70230C2162003106AB /* Font+Roboto.swift */; };
 		4844FC74230C2182003106AB /* Color+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC73230C2182003106AB /* Color+Radix.swift */; };
 		4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC76230C21B0003106AB /* View+Enabled.swift */; };
+		4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC7A230C4618003106AB /* LabelledDivider.swift */; };
 		48571C6C230C19550040896F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48571C6E230C19550040896F /* Localizable.strings */; };
+		48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */; };
+		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
 		48ACA682230AF85C00BF0029 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* UserData.swift */; };
 /* End PBXBuildFile section */
@@ -98,7 +101,11 @@
 		4844FC70230C2162003106AB /* Font+Roboto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Roboto.swift"; sourceTree = "<group>"; };
 		4844FC73230C2182003106AB /* Color+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Radix.swift"; sourceTree = "<group>"; };
 		4844FC76230C21B0003106AB /* View+Enabled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Enabled.swift"; sourceTree = "<group>"; };
+		4844FC7A230C4618003106AB /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
 		48571C6D230C19550040896F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		48AA4B97230C492B0016F57F /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionScreen.swift; sourceTree = "<group>"; };
+		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
 		48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScreen.swift; sourceTree = "<group>"; };
 		48ACA681230AF85C00BF0029 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -160,8 +167,9 @@
 		4809254E230AC4240056DB28 /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				4844FC79230C4601003106AB /* Views */,
 				48ACA680230AF84B00BF0029 /* Models */,
-				48ACA67B230AF3B000BF0029 /* Views */,
+				48ACA67B230AF3B000BF0029 /* Style */,
 				4809257D230AC6750056DB28 /* App */,
 				4809257E230AC6830056DB28 /* Screens */,
 			);
@@ -253,6 +261,8 @@
 			children = (
 				48092550230AC4240056DB28 /* WelcomeScreen.swift */,
 				48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */,
+				48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */,
+				48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -323,7 +333,15 @@
 			path = ViewModifiers;
 			sourceTree = "<group>";
 		};
-		48ACA67B230AF3B000BF0029 /* Views */ = {
+		4844FC79230C4601003106AB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC7A230C4618003106AB /* LabelledDivider.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		48ACA67B230AF3B000BF0029 /* Style */ = {
 			isa = PBXGroup;
 			children = (
 				4844FC75230C2199003106AB /* ViewModifiers */,
@@ -331,7 +349,7 @@
 				4844FC6F230C2152003106AB /* Fonts */,
 				4844FC6B230C20EC003106AB /* Styles */,
 			);
-			path = Views;
+			path = Style;
 			sourceTree = "<group>";
 		};
 		48ACA680230AF84B00BF0029 /* Models */ = {
@@ -428,6 +446,7 @@
 			knownRegions = (
 				en,
 				Base,
+				sv,
 			);
 			mainGroup = 480924FF230AC2A50056DB28;
 			productRefGroup = 48092509230AC2A50056DB28 /* Products */;
@@ -493,14 +512,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */,
 				48ACA682230AF85C00BF0029 /* UserData.swift in Sources */,
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
 				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
 				48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */,
+				48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
+				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
 				4844FC71230C2162003106AB /* Font+Roboto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -549,6 +571,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				48571C6D230C19550040896F /* en */,
+				48AA4B97230C492B0016F57F /* sv */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

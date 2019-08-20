@@ -80,5 +80,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 private func initialScreen() -> some Screen {
-    return WelcomeScreen()
+    return WelcomeScreen().environmentObject(UserData())
 }

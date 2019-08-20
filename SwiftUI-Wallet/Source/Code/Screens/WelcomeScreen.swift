@@ -26,8 +26,7 @@ import SwiftUI
 
 struct WelcomeScreen: Screen {
 
-    @State var hasAgreedToTermsAndConditions = false
-    @State var hasAgreedToPrivacyPolicy = false
+    @EnvironmentObject var userData: UserData
 
     var body: some View {
         NavigationView {
@@ -36,21 +35,21 @@ struct WelcomeScreen: Screen {
 
                 Spacer()
 
-                Text("WelcomeScene.Body.SendMessagesAndTokens")
+                Text("Welcome.Text.Body")
                     .font(.roboto(size: 60))
                     .lineLimit(5)
                     .padding(.leading, -30) // ugly fix for alignment
 
-                Toggle(isOn: $hasAgreedToTermsAndConditions) {
-                    Text("I agree to the Terms and Conditions")
+                Toggle(isOn: $userData.hasAgreedToTermsAndConditions) {
+                    Text("Welcome.Text.AcceptTerms&Conditions")
                 }.toggleStyle(DefaultToggleStyle())
 
-                Toggle(isOn: $hasAgreedToPrivacyPolicy) {
-                    Text("I agree to the Privacy Policy")
+                Toggle(isOn: $userData.hasAgreedToPrivacyPolicy) {
+                    Text("Welcome.Text.AcceptPrivacyPolicy")
                 }.toggleStyle(DefaultToggleStyle())
 
                 NavigationLink(destination: GetStartedScreen(), label: {
-                    Text("Get started")
+                    Text("Welcome.Button.Proceed")
                         .buttonStyleEmerald(enabled: self.canProceed)
 
                 }).enabled(self.canProceed())
@@ -61,14 +60,36 @@ struct WelcomeScreen: Screen {
     }
 
     var canProceed: () -> Bool {
-        return { self.hasAgreedToTermsAndConditions && self.hasAgreedToPrivacyPolicy }
+        return { self.userData.hasAgreedToTermsAndConditions && self.userData.hasAgreedToPrivacyPolicy }
     }
 }
 
 #if DEBUG
 struct WelcomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        WelcomeScreen()
+        Group {
+            WelcomeScreen()
+                .environmentObject(UserData.hasAgreed)
+                .environment(\.locale, Locale(identifier: "en"))
+
+            WelcomeScreen()
+                .environmentObject(UserData())
+                .environment(\.locale, Locale(identifier: "en"))
+
+            WelcomeScreen()
+                .environmentObject(UserData())
+                .environment(\.locale, Locale(identifier: "sv"))
+        }
     }
 }
+
+private extension UserData {
+    static var hasAgreed: UserData {
+        let userData = UserData()
+        userData.hasAgreedToPrivacyPolicy = true
+        userData.hasAgreedToTermsAndConditions = true
+        return userData
+    }
+}
+
 #endif

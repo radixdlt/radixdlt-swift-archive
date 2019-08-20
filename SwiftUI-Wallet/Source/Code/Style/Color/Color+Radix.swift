@@ -14,8 +14,8 @@ extension Color {
 }
 
 extension Color.Radix {
-    /// HEX: ~ 24b57d
-    static var emerald: Color {
-        return Color.init(red: 0.14, green: 0.71, blue: 0.49)
-    }
+
+    static var emerald: Color { .init(red: 0.14, green: 0.71, blue: 0.49) }
+    static var saphire: Color { .init(red: 0.28, green: 0.3, blue: 0.69) }
+
 }
