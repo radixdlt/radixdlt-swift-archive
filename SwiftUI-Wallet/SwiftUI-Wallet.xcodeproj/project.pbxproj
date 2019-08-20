@@ -8,16 +8,39 @@
 
 /* Begin PBXBuildFile section */
 		48092559230AC4240056DB28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4809254F230AC4240056DB28 /* AppDelegate.swift */; };
-		4809255A230AC4240056DB28 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092550230AC4240056DB28 /* ContentView.swift */; };
+		4809255A230AC4240056DB28 /* WelcomeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092550230AC4240056DB28 /* WelcomeScene.swift */; };
 		4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092551230AC4240056DB28 /* SceneDelegate.swift */; };
 		4809255C230AC4240056DB28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48092553230AC4240056DB28 /* Assets.xcassets */; };
 		4809255D230AC4240056DB28 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48092555230AC4240056DB28 /* Preview Assets.xcassets */; };
 		4809255E230AC4240056DB28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48092556230AC4240056DB28 /* LaunchScreen.storyboard */; };
-		4809255F230AC4240056DB28 /* SwiftUI-Wallet-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48092558230AC4240056DB28 /* SwiftUI-Wallet-Info.plist */; };
-		48092563230AC4330056DB28 /* SwiftUI_WalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092561230AC4330056DB28 /* SwiftUI_WalletTests.swift */; };
-		48092564230AC4330056DB28 /* SwiftUI-UnitTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48092562230AC4330056DB28 /* SwiftUI-UnitTests-Info.plist */; };
-		48092568230AC43F0056DB28 /* SwiftUI_WalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092566230AC43F0056DB28 /* SwiftUI_WalletUITests.swift */; };
-		48092569230AC43F0056DB28 /* SwiftUI-UITests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 48092567230AC43F0056DB28 /* SwiftUI-UITests-Info.plist */; };
+		48092575230AC61E0056DB28 /* SwiftUI_WalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092572230AC61E0056DB28 /* SwiftUI_WalletUITests.swift */; };
+		4809257C230AC6300056DB28 /* SwiftUI_WalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4809257A230AC6300056DB28 /* SwiftUI_WalletTests.swift */; };
+		4843CB15230BE30E00AD24D4 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB02230BE30E00AD24D4 /* Roboto-Medium.ttf */; };
+		4843CB16230BE30E00AD24D4 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB03230BE30E00AD24D4 /* Roboto-Light.ttf */; };
+		4843CB17230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB04230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf */; };
+		4843CB18230BE30E00AD24D4 /* RobotoCondensed-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB05230BE30E00AD24D4 /* RobotoCondensed-Light.ttf */; };
+		4843CB19230BE30E00AD24D4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB06230BE30E00AD24D4 /* Roboto-Regular.ttf */; };
+		4843CB1A230BE30E00AD24D4 /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB07230BE30E00AD24D4 /* Roboto-MediumItalic.ttf */; };
+		4843CB1B230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB08230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf */; };
+		4843CB1C230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB09230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf */; };
+		4843CB1D230BE30E00AD24D4 /* Apache License.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0A230BE30E00AD24D4 /* Apache License.txt */; };
+		4843CB1E230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0B230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf */; };
+		4843CB1F230BE30E00AD24D4 /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0C230BE30E00AD24D4 /* Roboto-ThinItalic.ttf */; };
+		4843CB20230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0D230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf */; };
+		4843CB21230BE30E00AD24D4 /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0E230BE30E00AD24D4 /* Roboto-BoldItalic.ttf */; };
+		4843CB22230BE30E00AD24D4 /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0F230BE30E00AD24D4 /* Roboto-LightItalic.ttf */; };
+		4843CB23230BE30E00AD24D4 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB10230BE30E00AD24D4 /* Roboto-Italic.ttf */; };
+		4843CB24230BE30E00AD24D4 /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB11230BE30E00AD24D4 /* Roboto-BlackItalic.ttf */; };
+		4843CB25230BE30E00AD24D4 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB12230BE30E00AD24D4 /* Roboto-Bold.ttf */; };
+		4843CB26230BE30E00AD24D4 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB13230BE30E00AD24D4 /* Roboto-Thin.ttf */; };
+		4843CB27230BE30E00AD24D4 /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB14230BE30E00AD24D4 /* Roboto-Black.ttf */; };
+		4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC6D230C2125003106AB /* ButtonStyles.swift */; };
+		4844FC71230C2162003106AB /* Font+Roboto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC70230C2162003106AB /* Font+Roboto.swift */; };
+		4844FC74230C2182003106AB /* Color+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC73230C2182003106AB /* Color+Radix.swift */; };
+		4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC76230C21B0003106AB /* View+Enabled.swift */; };
+		48571C6C230C19550040896F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48571C6E230C19550040896F /* Localizable.strings */; };
+		48ACA67F230AF79500BF0029 /* GetStartedScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScene.swift */; };
+		48ACA682230AF85C00BF0029 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* UserData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,16 +65,42 @@
 		4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4809254F230AC4240056DB28 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		48092550230AC4240056DB28 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		48092550230AC4240056DB28 /* WelcomeScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeScene.swift; sourceTree = "<group>"; };
 		48092551230AC4240056DB28 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		48092553230AC4240056DB28 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48092555230AC4240056DB28 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		48092557230AC4240056DB28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		48092558230AC4240056DB28 /* SwiftUI-Wallet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-Wallet-Info.plist"; sourceTree = "<group>"; };
-		48092561230AC4330056DB28 /* SwiftUI_WalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUI_WalletTests.swift; sourceTree = "<group>"; };
-		48092562230AC4330056DB28 /* SwiftUI-UnitTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-UnitTests-Info.plist"; sourceTree = "<group>"; };
-		48092566230AC43F0056DB28 /* SwiftUI_WalletUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUI_WalletUITests.swift; sourceTree = "<group>"; };
-		48092567230AC43F0056DB28 /* SwiftUI-UITests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-UITests-Info.plist"; sourceTree = "<group>"; };
+		48092572230AC61E0056DB28 /* SwiftUI_WalletUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUI_WalletUITests.swift; sourceTree = "<group>"; };
+		48092574230AC61E0056DB28 /* SwiftUI-UITests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-UITests-Info.plist"; sourceTree = "<group>"; };
+		48092578230AC6300056DB28 /* SwiftUI-UnitTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-UnitTests-Info.plist"; sourceTree = "<group>"; };
+		4809257A230AC6300056DB28 /* SwiftUI_WalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUI_WalletTests.swift; sourceTree = "<group>"; };
+		4843CB02230BE30E00AD24D4 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		4843CB03230BE30E00AD24D4 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
+		4843CB04230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-Bold.ttf"; sourceTree = "<group>"; };
+		4843CB05230BE30E00AD24D4 /* RobotoCondensed-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-Light.ttf"; sourceTree = "<group>"; };
+		4843CB06230BE30E00AD24D4 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		4843CB07230BE30E00AD24D4 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
+		4843CB08230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-Italic.ttf"; sourceTree = "<group>"; };
+		4843CB09230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
+		4843CB0A230BE30E00AD24D4 /* Apache License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Apache License.txt"; sourceTree = "<group>"; };
+		4843CB0B230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-LightItalic.ttf"; sourceTree = "<group>"; };
+		4843CB0C230BE30E00AD24D4 /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
+		4843CB0D230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
+		4843CB0E230BE30E00AD24D4 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
+		4843CB0F230BE30E00AD24D4 /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
+		4843CB10230BE30E00AD24D4 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Italic.ttf"; sourceTree = "<group>"; };
+		4843CB11230BE30E00AD24D4 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
+		4843CB12230BE30E00AD24D4 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		4843CB13230BE30E00AD24D4 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		4843CB14230BE30E00AD24D4 /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
+		4844FC6D230C2125003106AB /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		4844FC70230C2162003106AB /* Font+Roboto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Roboto.swift"; sourceTree = "<group>"; };
+		4844FC73230C2182003106AB /* Color+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Radix.swift"; sourceTree = "<group>"; };
+		4844FC76230C21B0003106AB /* View+Enabled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Enabled.swift"; sourceTree = "<group>"; };
+		48571C6D230C19550040896F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		48ACA67E230AF79500BF0029 /* GetStartedScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScene.swift; sourceTree = "<group>"; };
+		48ACA681230AF85C00BF0029 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,9 +160,10 @@
 		4809254E230AC4240056DB28 /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				4809254F230AC4240056DB28 /* AppDelegate.swift */,
-				48092550230AC4240056DB28 /* ContentView.swift */,
-				48092551230AC4240056DB28 /* SceneDelegate.swift */,
+				48ACA680230AF84B00BF0029 /* Models */,
+				48ACA67B230AF3B000BF0029 /* Views */,
+				4809257D230AC6750056DB28 /* App */,
+				4809257E230AC6830056DB28 /* Scenes */,
 			);
 			path = Code;
 			sourceTree = "<group>";
@@ -121,10 +171,12 @@
 		48092552230AC4240056DB28 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				4843CB00230BE30E00AD24D4 /* Fonts */,
 				48092553230AC4240056DB28 /* Assets.xcassets */,
 				48092554230AC4240056DB28 /* Preview Content */,
 				48092556230AC4240056DB28 /* LaunchScreen.storyboard */,
 				48092558230AC4240056DB28 /* SwiftUI-Wallet-Info.plist */,
+				48571C6E230C19550040896F /* Localizable.strings */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -140,8 +192,8 @@
 		48092560230AC4330056DB28 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
-				48092561230AC4330056DB28 /* SwiftUI_WalletTests.swift */,
-				48092562230AC4330056DB28 /* SwiftUI-UnitTests-Info.plist */,
+				48092577230AC6300056DB28 /* SupportingFiles */,
+				48092579230AC6300056DB28 /* Tests */,
 			);
 			path = UnitTests;
 			sourceTree = "<group>";
@@ -149,10 +201,145 @@
 		48092565230AC43F0056DB28 /* UITests */ = {
 			isa = PBXGroup;
 			children = (
-				48092566230AC43F0056DB28 /* SwiftUI_WalletUITests.swift */,
-				48092567230AC43F0056DB28 /* SwiftUI-UITests-Info.plist */,
+				48092573230AC61E0056DB28 /* SupportingFiles */,
+				48092571230AC61E0056DB28 /* Tests */,
 			);
 			path = UITests;
+			sourceTree = "<group>";
+		};
+		48092571230AC61E0056DB28 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				48092572230AC61E0056DB28 /* SwiftUI_WalletUITests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		48092573230AC61E0056DB28 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				48092574230AC61E0056DB28 /* SwiftUI-UITests-Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		48092577230AC6300056DB28 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				48092578230AC6300056DB28 /* SwiftUI-UnitTests-Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		48092579230AC6300056DB28 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4809257A230AC6300056DB28 /* SwiftUI_WalletTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		4809257D230AC6750056DB28 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				4809254F230AC4240056DB28 /* AppDelegate.swift */,
+				48092551230AC4240056DB28 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		4809257E230AC6830056DB28 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				48092550230AC4240056DB28 /* WelcomeScene.swift */,
+				48ACA67E230AF79500BF0029 /* GetStartedScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		4843CB00230BE30E00AD24D4 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4843CB01230BE30E00AD24D4 /* Roboto */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		4843CB01230BE30E00AD24D4 /* Roboto */ = {
+			isa = PBXGroup;
+			children = (
+				4843CB02230BE30E00AD24D4 /* Roboto-Medium.ttf */,
+				4843CB03230BE30E00AD24D4 /* Roboto-Light.ttf */,
+				4843CB04230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf */,
+				4843CB05230BE30E00AD24D4 /* RobotoCondensed-Light.ttf */,
+				4843CB06230BE30E00AD24D4 /* Roboto-Regular.ttf */,
+				4843CB07230BE30E00AD24D4 /* Roboto-MediumItalic.ttf */,
+				4843CB08230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf */,
+				4843CB09230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf */,
+				4843CB0A230BE30E00AD24D4 /* Apache License.txt */,
+				4843CB0B230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf */,
+				4843CB0C230BE30E00AD24D4 /* Roboto-ThinItalic.ttf */,
+				4843CB0D230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf */,
+				4843CB0E230BE30E00AD24D4 /* Roboto-BoldItalic.ttf */,
+				4843CB0F230BE30E00AD24D4 /* Roboto-LightItalic.ttf */,
+				4843CB10230BE30E00AD24D4 /* Roboto-Italic.ttf */,
+				4843CB11230BE30E00AD24D4 /* Roboto-BlackItalic.ttf */,
+				4843CB12230BE30E00AD24D4 /* Roboto-Bold.ttf */,
+				4843CB13230BE30E00AD24D4 /* Roboto-Thin.ttf */,
+				4843CB14230BE30E00AD24D4 /* Roboto-Black.ttf */,
+			);
+			path = Roboto;
+			sourceTree = "<group>";
+		};
+		4844FC6B230C20EC003106AB /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC6D230C2125003106AB /* ButtonStyles.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
+		4844FC6F230C2152003106AB /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC70230C2162003106AB /* Font+Roboto.swift */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		4844FC72230C2175003106AB /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC73230C2182003106AB /* Color+Radix.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		4844FC75230C2199003106AB /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC76230C21B0003106AB /* View+Enabled.swift */,
+			);
+			path = ViewModifiers;
+			sourceTree = "<group>";
+		};
+		48ACA67B230AF3B000BF0029 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC75230C2199003106AB /* ViewModifiers */,
+				4844FC72230C2175003106AB /* Color */,
+				4844FC6F230C2152003106AB /* Fonts */,
+				4844FC6B230C20EC003106AB /* Styles */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		48ACA680230AF84B00BF0029 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				48ACA681230AF85C00BF0029 /* UserData.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,10 +446,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4843CB17230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf in Resources */,
+				4843CB23230BE30E00AD24D4 /* Roboto-Italic.ttf in Resources */,
+				48571C6C230C19550040896F /* Localizable.strings in Resources */,
+				4843CB25230BE30E00AD24D4 /* Roboto-Bold.ttf in Resources */,
+				4843CB1D230BE30E00AD24D4 /* Apache License.txt in Resources */,
+				4843CB15230BE30E00AD24D4 /* Roboto-Medium.ttf in Resources */,
+				4843CB27230BE30E00AD24D4 /* Roboto-Black.ttf in Resources */,
+				4843CB20230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf in Resources */,
+				4843CB19230BE30E00AD24D4 /* Roboto-Regular.ttf in Resources */,
+				4843CB1E230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf in Resources */,
 				4809255E230AC4240056DB28 /* LaunchScreen.storyboard in Resources */,
-				4809255F230AC4240056DB28 /* SwiftUI-Wallet-Info.plist in Resources */,
+				4843CB24230BE30E00AD24D4 /* Roboto-BlackItalic.ttf in Resources */,
+				4843CB16230BE30E00AD24D4 /* Roboto-Light.ttf in Resources */,
+				4843CB18230BE30E00AD24D4 /* RobotoCondensed-Light.ttf in Resources */,
 				4809255D230AC4240056DB28 /* Preview Assets.xcassets in Resources */,
+				4843CB21230BE30E00AD24D4 /* Roboto-BoldItalic.ttf in Resources */,
+				4843CB26230BE30E00AD24D4 /* Roboto-Thin.ttf in Resources */,
+				4843CB22230BE30E00AD24D4 /* Roboto-LightItalic.ttf in Resources */,
+				4843CB1C230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf in Resources */,
+				4843CB1F230BE30E00AD24D4 /* Roboto-ThinItalic.ttf in Resources */,
+				4843CB1A230BE30E00AD24D4 /* Roboto-MediumItalic.ttf in Resources */,
 				4809255C230AC4240056DB28 /* Assets.xcassets in Resources */,
+				4843CB1B230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,7 +476,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48092564230AC4330056DB28 /* SwiftUI-UnitTests-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,7 +483,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48092569230AC43F0056DB28 /* SwiftUI-UITests-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,9 +493,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4809255A230AC4240056DB28 /* ContentView.swift in Sources */,
+				48ACA682230AF85C00BF0029 /* UserData.swift in Sources */,
+				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
+				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
+				4809255A230AC4240056DB28 /* WelcomeScene.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
+				48ACA67F230AF79500BF0029 /* GetStartedScene.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
+				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
+				4844FC71230C2162003106AB /* Font+Roboto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +509,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48092563230AC4330056DB28 /* SwiftUI_WalletTests.swift in Sources */,
+				4809257C230AC6300056DB28 /* SwiftUI_WalletTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,7 +517,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48092568230AC43F0056DB28 /* SwiftUI_WalletUITests.swift in Sources */,
+				48092575230AC61E0056DB28 /* SwiftUI_WalletUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,6 +543,14 @@
 				48092557230AC4240056DB28 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		48571C6E230C19550040896F /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				48571C6D230C19550040896F /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -456,16 +674,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_ASSET_PATHS = "Source/SupportingFiles/Preview\\ Content/Preview\\ Assets.xcassets";
+				DEVELOPMENT_TEAM = 7SPGKHD4HZ;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Source/SupportingFiles/SwiftUI-Wallet-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.SwiftUI-Wallet";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.ios.SwiftUI-Wallet";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Radix iOS Dev Wildcard";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -475,16 +696,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_ASSET_PATHS = "Source/SupportingFiles/Preview\\ Content/Preview\\ Assets.xcassets";
+				DEVELOPMENT_TEAM = 7SPGKHD4HZ;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Source/SupportingFiles/SwiftUI-Wallet-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.SwiftUI-Wallet";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.ios.SwiftUI-Wallet";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Radix iOS Dev Wildcard";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
