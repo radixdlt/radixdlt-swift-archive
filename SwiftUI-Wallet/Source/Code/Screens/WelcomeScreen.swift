@@ -24,7 +24,7 @@
 
 import SwiftUI
 
-struct WelcomeScene: View {
+struct WelcomeScreen: Screen {
 
     @State var hasAgreedToTermsAndConditions = false
     @State var hasAgreedToPrivacyPolicy = false
@@ -49,7 +49,7 @@ struct WelcomeScene: View {
                     Text("I agree to the Privacy Policy")
                 }.toggleStyle(DefaultToggleStyle())
 
-                NavigationLink(destination: GetStartedScene(), label: {
+                NavigationLink(destination: GetStartedScreen(), label: {
                     Text("Get started")
                         .buttonStyleEmerald(enabled: self.canProceed)
 
@@ -66,9 +66,9 @@ struct WelcomeScene: View {
 }
 
 #if DEBUG
-struct WelcomeScene_Previews: PreviewProvider {
+struct WelcomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        WelcomeScene()
+        WelcomeScreen()
     }
 }
 #endif

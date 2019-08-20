@@ -25,6 +25,8 @@
 import UIKit
 import SwiftUI
 
+typealias Screen = View
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -39,9 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
 
-            let initialScene = WelcomeScene()
-
-            window.rootViewController = UIHostingController(rootView: initialScene)
+            window.rootViewController = UIHostingController(rootView: initialScreen())
             
             self.window = window
             window.makeKeyAndVisible()
@@ -79,3 +79,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+private func initialScreen() -> some Screen {
+    return WelcomeScreen()
+}

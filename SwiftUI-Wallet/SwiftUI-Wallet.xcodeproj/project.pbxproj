@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		48092559230AC4240056DB28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4809254F230AC4240056DB28 /* AppDelegate.swift */; };
-		4809255A230AC4240056DB28 /* WelcomeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092550230AC4240056DB28 /* WelcomeScene.swift */; };
+		4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092550230AC4240056DB28 /* WelcomeScreen.swift */; };
 		4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092551230AC4240056DB28 /* SceneDelegate.swift */; };
 		4809255C230AC4240056DB28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48092553230AC4240056DB28 /* Assets.xcassets */; };
 		4809255D230AC4240056DB28 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48092555230AC4240056DB28 /* Preview Assets.xcassets */; };
@@ -39,7 +39,7 @@
 		4844FC74230C2182003106AB /* Color+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC73230C2182003106AB /* Color+Radix.swift */; };
 		4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC76230C21B0003106AB /* View+Enabled.swift */; };
 		48571C6C230C19550040896F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48571C6E230C19550040896F /* Localizable.strings */; };
-		48ACA67F230AF79500BF0029 /* GetStartedScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScene.swift */; };
+		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
 		48ACA682230AF85C00BF0029 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* UserData.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,7 +65,7 @@
 		4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4809254F230AC4240056DB28 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		48092550230AC4240056DB28 /* WelcomeScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeScene.swift; sourceTree = "<group>"; };
+		48092550230AC4240056DB28 /* WelcomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
 		48092551230AC4240056DB28 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		48092553230AC4240056DB28 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		48092555230AC4240056DB28 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 		4844FC73230C2182003106AB /* Color+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Radix.swift"; sourceTree = "<group>"; };
 		4844FC76230C21B0003106AB /* View+Enabled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Enabled.swift"; sourceTree = "<group>"; };
 		48571C6D230C19550040896F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		48ACA67E230AF79500BF0029 /* GetStartedScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScene.swift; sourceTree = "<group>"; };
+		48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScreen.swift; sourceTree = "<group>"; };
 		48ACA681230AF85C00BF0029 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -163,7 +163,7 @@
 				48ACA680230AF84B00BF0029 /* Models */,
 				48ACA67B230AF3B000BF0029 /* Views */,
 				4809257D230AC6750056DB28 /* App */,
-				4809257E230AC6830056DB28 /* Scenes */,
+				4809257E230AC6830056DB28 /* Screens */,
 			);
 			path = Code;
 			sourceTree = "<group>";
@@ -248,13 +248,13 @@
 			path = App;
 			sourceTree = "<group>";
 		};
-		4809257E230AC6830056DB28 /* Scenes */ = {
+		4809257E230AC6830056DB28 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				48092550230AC4240056DB28 /* WelcomeScene.swift */,
-				48ACA67E230AF79500BF0029 /* GetStartedScene.swift */,
+				48092550230AC4240056DB28 /* WelcomeScreen.swift */,
+				48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */,
 			);
-			path = Scenes;
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		4843CB00230BE30E00AD24D4 /* Fonts */ = {
@@ -496,9 +496,9 @@
 				48ACA682230AF85C00BF0029 /* UserData.swift in Sources */,
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
 				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
-				4809255A230AC4240056DB28 /* WelcomeScene.swift in Sources */,
+				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
-				48ACA67F230AF79500BF0029 /* GetStartedScene.swift in Sources */,
+				48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
 				4844FC71230C2162003106AB /* Font+Roboto.swift in Sources */,
