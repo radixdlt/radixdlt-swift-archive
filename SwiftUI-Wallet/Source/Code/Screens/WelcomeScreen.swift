@@ -26,7 +26,14 @@ import SwiftUI
 
 struct WelcomeScreen: Screen {
 
-    @EnvironmentObject var userData: UserData
+    @EnvironmentObject
+    private var settingsStore: SettingsStore
+
+    @State
+    private var hasAgreedToTermsAndConditions = false
+
+    @State
+    private var hasAgreedToPrivacyPolicy = false
 
     var body: some View {
         NavigationView {
@@ -40,27 +47,31 @@ struct WelcomeScreen: Screen {
                     .lineLimit(5)
                     .padding(.leading, -30) // ugly fix for alignment
 
-                Toggle(isOn: $userData.hasAgreedToTermsAndConditions) {
+                Toggle(isOn: $hasAgreedToTermsAndConditions) {
                     Text("Welcome.Text.AcceptTerms&Conditions")
-                }.toggleStyle(DefaultToggleStyle())
+                }
 
-                Toggle(isOn: $userData.hasAgreedToPrivacyPolicy) {
+                Toggle(isOn: $hasAgreedToPrivacyPolicy) {
                     Text("Welcome.Text.AcceptPrivacyPolicy")
-                }.toggleStyle(DefaultToggleStyle())
+                }
 
-                NavigationLink(destination: GetStartedScreen(), label: {
+                NavigationLink(destination: GetStartedScreen()) {
                     Text("Welcome.Button.Proceed")
-                        .buttonStyleEmerald(enabled: self.canProceed)
-
-                }).enabled(self.canProceed())
+                        .buttonStyleEmerald(enabled: hasAgreedToTermsAndPolicy)
+                }
+                .enabled(hasAgreedToTermsAndPolicy)
             }
             .padding(32)
         }
         .edgesIgnoringSafeArea(.top)
     }
+}
 
-    var canProceed: () -> Bool {
-        return { self.userData.hasAgreedToTermsAndConditions && self.userData.hasAgreedToPrivacyPolicy }
+private extension WelcomeScreen {
+    var hasAgreedToTermsAndPolicy: Bool {
+        let hasAgreedToBoth = hasAgreedToTermsAndConditions && hasAgreedToPrivacyPolicy
+        settingsStore.hasAgreedToTermsAndPolicy = hasAgreedToBoth
+        return hasAgreedToBoth
     }
 }
 
@@ -69,26 +80,25 @@ struct WelcomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             WelcomeScreen()
-                .environmentObject(UserData.hasAgreed)
+                .environmentObject(SettingsStore.hasAgreedToTermsAndPolicy)
                 .environment(\.locale, Locale(identifier: "en"))
 
             WelcomeScreen()
-                .environmentObject(UserData())
+                .environmentObject(SettingsStore())
                 .environment(\.locale, Locale(identifier: "en"))
 
             WelcomeScreen()
-                .environmentObject(UserData())
+                .environmentObject(SettingsStore())
                 .environment(\.locale, Locale(identifier: "sv"))
         }
     }
 }
 
-private extension UserData {
-    static var hasAgreed: UserData {
-        let userData = UserData()
-        userData.hasAgreedToPrivacyPolicy = true
-        userData.hasAgreedToTermsAndConditions = true
-        return userData
+private extension SettingsStore {
+    static var hasAgreedToTermsAndPolicy: SettingsStore {
+        let settingsStore = SettingsStore()
+        settingsStore.hasAgreedToTermsAndPolicy = true
+        return settingsStore
     }
 }
 

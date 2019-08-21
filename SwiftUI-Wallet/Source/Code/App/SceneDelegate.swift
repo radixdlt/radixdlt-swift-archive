@@ -26,11 +26,13 @@ import UIKit
 import SwiftUI
 
 typealias Screen = View
+typealias AnyScreen = AnyView
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
+    private let appCoordinator = AppCoordinator(settingsStore: .init())
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -41,7 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
 
-            window.rootViewController = UIHostingController(rootView: initialScreen())
+            window.rootViewController = UIHostingController(rootView: appCoordinator.initialScreen())
             
             self.window = window
             window.makeKeyAndVisible()
@@ -77,8 +79,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
 
-}
-
-private func initialScreen() -> some Screen {
-    return WelcomeScreen().environmentObject(UserData())
 }

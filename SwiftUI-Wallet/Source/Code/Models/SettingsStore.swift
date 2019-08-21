@@ -24,30 +24,43 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
-extension View {
+final class SettingsStore: ObservableObject {
 
-    /// Adds a condition that controls whether users can interact with this
-    /// view.
-    ///
-    /// The higher views in a view hierarchy can override the value you set on
-    /// this view. In the following example, the button isn't interactive
-    /// because the outer `enabled(_:)` modifier overrides the inner one:
-    ///
-    ///     HStack {
-    ///         Button(Text("Press")) {}
-    ///         .enabled(true)
-    ///     }
-    ///     .enabled(false)
-    ///
-    /// - Parameter enabled: A Boolean value that determines whether users can
-    ///   interact with this view.
-    /// - Returns: A view that controls whether users can interact with this
-    ///   view.
-    dynamic public func enabled(_ condition: Bool) -> some View {
-        return self.disabled(!condition)
+    private let cancellable: Cancellable
+    private let defaults: UserDefaults
+
+    let objectWillChange = PassthroughSubject<Void, Never>()
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+
+        defaults.register(defaults: [
+            Key.hasAgreedToTermsAndPolicy.rawValue: false,
+        ])
+
+        cancellable = NotificationCenter.default
+            .publisher(for: UserDefaults.didChangeNotification)
+            .map { _ in () }
+            .subscribe(objectWillChange)
     }
-
 }
 
+extension SettingsStore {
+    var hasAgreedToTermsAndPolicy: Bool {
+        set {
+            // Bug? This is needed to prevent infinite recursion....
+            if newValue != hasAgreedToTermsAndPolicy {
+                defaults.set(newValue, forKey: Key.hasAgreedToTermsAndPolicy.rawValue)
+            }
+        }
+        get { defaults.bool(forKey: Key.hasAgreedToTermsAndPolicy.rawValue) }
+    }
+}
 
+private extension SettingsStore {
+    enum Key: String {
+        case hasAgreedToTermsAndPolicy
+    }
+}
