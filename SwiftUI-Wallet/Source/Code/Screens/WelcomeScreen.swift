@@ -26,14 +26,14 @@ import SwiftUI
 
 struct WelcomeScreen: Screen {
 
-    @EnvironmentObject
-    private var settingsStore: SettingsStore
+    @EnvironmentObject private var settingsStore: SettingsStore
 
-    @State
-    private var hasAgreedToTermsAndConditions = false
+    @State private var hasAgreedToTermsAndConditions = false
 
-    @State
-    private var hasAgreedToPrivacyPolicy = false
+    @State private var hasAgreedToPrivacyPolicy = false
+
+    @State private var showTermsWebViewModal = false
+    @State private var showPrivacyWebViewModal = false
 
     var body: some View {
         NavigationView {
@@ -48,11 +48,11 @@ struct WelcomeScreen: Screen {
                     .padding(.leading, -30) // ugly fix for alignment
 
                 Toggle(isOn: $hasAgreedToTermsAndConditions) {
-                    Text("Welcome.Text.AcceptTerms&Conditions")
+                    modalWebView(link: .terms, isPresented: $showTermsWebViewModal)
                 }
 
                 Toggle(isOn: $hasAgreedToPrivacyPolicy) {
-                    Text("Welcome.Text.AcceptPrivacyPolicy")
+                    modalWebView(link: .privacy, isPresented: $showPrivacyWebViewModal)
                 }
 
                 NavigationLink(destination: GetStartedScreen()) {
@@ -67,13 +67,55 @@ struct WelcomeScreen: Screen {
     }
 }
 
+// MARK: Private
 private extension WelcomeScreen {
+
     var hasAgreedToTermsAndPolicy: Bool {
         let hasAgreedToBoth = hasAgreedToTermsAndConditions && hasAgreedToPrivacyPolicy
         settingsStore.hasAgreedToTermsAndPolicy = hasAgreedToBoth
         return hasAgreedToBoth
     }
+
+    func modalWebView(link: Link, isPresented: Binding<Bool>) -> some View {
+
+        Button(
+            action: { isPresented.wrappedValue = true },
+            label: { Text(verbatim: link.hyperTextLocalized) }
+        )
+        .sheet(isPresented: isPresented) { link.screen }
+
+    }
 }
+
+// MARK: - Links
+private extension WelcomeScreen {
+    enum Link {
+        case terms
+        case privacy
+    }
+}
+
+private extension WelcomeScreen.Link {
+    private var hyperTextLocalizedStringKey: LocalizedStringKeyTmp {
+        switch self {
+        case .terms: return "Welcome.Text.AcceptTerms&Conditions"
+        case .privacy: return "Welcome.Text.AcceptPrivacyPolicy"
+        }
+    }
+
+    var hyperTextLocalized: String {
+        return hyperTextLocalizedStringKey.localized()
+    }
+
+    var screen: AnyScreen {
+        switch self {
+        case .terms: return AnyScreen(TermsAndConditionsScreen())
+        case .privacy: return AnyScreen(PrivacyPolicyScreen())
+        }
+    }
+}
+
+// MARK: - Preview
 
 #if DEBUG
 struct WelcomeScreen_Previews: PreviewProvider {
