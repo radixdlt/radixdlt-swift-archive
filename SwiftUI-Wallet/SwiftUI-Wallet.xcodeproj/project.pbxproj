@@ -1,0 +1,940 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		48092559230AC4240056DB28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4809254F230AC4240056DB28 /* AppDelegate.swift */; };
+		4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092550230AC4240056DB28 /* WelcomeScreen.swift */; };
+		4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092551230AC4240056DB28 /* SceneDelegate.swift */; };
+		4809255C230AC4240056DB28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48092553230AC4240056DB28 /* Assets.xcassets */; };
+		4809255D230AC4240056DB28 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48092555230AC4240056DB28 /* Preview Assets.xcassets */; };
+		4809255E230AC4240056DB28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48092556230AC4240056DB28 /* LaunchScreen.storyboard */; };
+		48092575230AC61E0056DB28 /* SwiftUI_WalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092572230AC61E0056DB28 /* SwiftUI_WalletUITests.swift */; };
+		4809257C230AC6300056DB28 /* SwiftUI_WalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4809257A230AC6300056DB28 /* SwiftUI_WalletTests.swift */; };
+		4843CB15230BE30E00AD24D4 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB02230BE30E00AD24D4 /* Roboto-Medium.ttf */; };
+		4843CB16230BE30E00AD24D4 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB03230BE30E00AD24D4 /* Roboto-Light.ttf */; };
+		4843CB17230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB04230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf */; };
+		4843CB18230BE30E00AD24D4 /* RobotoCondensed-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB05230BE30E00AD24D4 /* RobotoCondensed-Light.ttf */; };
+		4843CB19230BE30E00AD24D4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB06230BE30E00AD24D4 /* Roboto-Regular.ttf */; };
+		4843CB1A230BE30E00AD24D4 /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB07230BE30E00AD24D4 /* Roboto-MediumItalic.ttf */; };
+		4843CB1B230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB08230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf */; };
+		4843CB1C230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB09230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf */; };
+		4843CB1D230BE30E00AD24D4 /* Apache License.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0A230BE30E00AD24D4 /* Apache License.txt */; };
+		4843CB1E230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0B230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf */; };
+		4843CB1F230BE30E00AD24D4 /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0C230BE30E00AD24D4 /* Roboto-ThinItalic.ttf */; };
+		4843CB20230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0D230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf */; };
+		4843CB21230BE30E00AD24D4 /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0E230BE30E00AD24D4 /* Roboto-BoldItalic.ttf */; };
+		4843CB22230BE30E00AD24D4 /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB0F230BE30E00AD24D4 /* Roboto-LightItalic.ttf */; };
+		4843CB23230BE30E00AD24D4 /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB10230BE30E00AD24D4 /* Roboto-Italic.ttf */; };
+		4843CB24230BE30E00AD24D4 /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB11230BE30E00AD24D4 /* Roboto-BlackItalic.ttf */; };
+		4843CB25230BE30E00AD24D4 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB12230BE30E00AD24D4 /* Roboto-Bold.ttf */; };
+		4843CB26230BE30E00AD24D4 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB13230BE30E00AD24D4 /* Roboto-Thin.ttf */; };
+		4843CB27230BE30E00AD24D4 /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB14230BE30E00AD24D4 /* Roboto-Black.ttf */; };
+		4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC6D230C2125003106AB /* ButtonStyles.swift */; };
+		4844FC71230C2162003106AB /* Font+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC70230C2162003106AB /* Font+Radix.swift */; };
+		4844FC74230C2182003106AB /* Color+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC73230C2182003106AB /* Color+Radix.swift */; };
+		4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC76230C21B0003106AB /* View+Enabled.swift */; };
+		4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC7A230C4618003106AB /* LabelledDivider.swift */; };
+		48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48458E50230DAAC8007B05A2 /* RadixLogo.swift */; };
+		48458E58230DB339007B05A2 /* Gotham-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E53230DB338007B05A2 /* Gotham-Thin.otf */; };
+		48458E59230DB339007B05A2 /* Gotham-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E54230DB338007B05A2 /* Gotham-Medium.otf */; };
+		48458E5A230DB339007B05A2 /* Gotham-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E55230DB338007B05A2 /* Gotham-Book.otf */; };
+		48458E5B230DB339007B05A2 /* Gotham-Ultra.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E56230DB338007B05A2 /* Gotham-Ultra.otf */; };
+		48458E5C230DB339007B05A2 /* Gotham-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E57230DB338007B05A2 /* Gotham-Light.otf */; };
+		4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4853BFDA230C519B00022D04 /* AppCoordinator.swift */; };
+		48571C6C230C19550040896F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48571C6E230C19550040896F /* Localizable.strings */; };
+		486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86EE230D6A44006A967A /* String_Extensions.swift */; };
+		486D86F1230D6A81006A967A /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F0230D6A81006A967A /* WebView.swift */; };
+		486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */; };
+		486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */; };
+		48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */; };
+		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
+		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
+		48ACA682230AF85C00BF0029 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* SettingsStore.swift */; };
+		48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4809251F230AC2A80056DB28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 48092500230AC2A50056DB28 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 48092507230AC2A50056DB28;
+			remoteInfo = "SwiftUI-Wallet";
+		};
+		4809252A230AC2A80056DB28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 48092500230AC2A50056DB28 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 48092507230AC2A50056DB28;
+			remoteInfo = "SwiftUI-Wallet";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-Wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4809254F230AC4240056DB28 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		48092550230AC4240056DB28 /* WelcomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
+		48092551230AC4240056DB28 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		48092553230AC4240056DB28 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		48092555230AC4240056DB28 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		48092557230AC4240056DB28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		48092558230AC4240056DB28 /* SwiftUI-Wallet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-Wallet-Info.plist"; sourceTree = "<group>"; };
+		48092572230AC61E0056DB28 /* SwiftUI_WalletUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUI_WalletUITests.swift; sourceTree = "<group>"; };
+		48092574230AC61E0056DB28 /* SwiftUI-UITests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-UITests-Info.plist"; sourceTree = "<group>"; };
+		48092578230AC6300056DB28 /* SwiftUI-UnitTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-UnitTests-Info.plist"; sourceTree = "<group>"; };
+		4809257A230AC6300056DB28 /* SwiftUI_WalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUI_WalletTests.swift; sourceTree = "<group>"; };
+		4843CB02230BE30E00AD24D4 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		4843CB03230BE30E00AD24D4 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
+		4843CB04230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-Bold.ttf"; sourceTree = "<group>"; };
+		4843CB05230BE30E00AD24D4 /* RobotoCondensed-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-Light.ttf"; sourceTree = "<group>"; };
+		4843CB06230BE30E00AD24D4 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		4843CB07230BE30E00AD24D4 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
+		4843CB08230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-Italic.ttf"; sourceTree = "<group>"; };
+		4843CB09230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
+		4843CB0A230BE30E00AD24D4 /* Apache License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Apache License.txt"; sourceTree = "<group>"; };
+		4843CB0B230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-LightItalic.ttf"; sourceTree = "<group>"; };
+		4843CB0C230BE30E00AD24D4 /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
+		4843CB0D230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RobotoCondensed-Regular.ttf"; sourceTree = "<group>"; };
+		4843CB0E230BE30E00AD24D4 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-BoldItalic.ttf"; sourceTree = "<group>"; };
+		4843CB0F230BE30E00AD24D4 /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
+		4843CB10230BE30E00AD24D4 /* Roboto-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Italic.ttf"; sourceTree = "<group>"; };
+		4843CB11230BE30E00AD24D4 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
+		4843CB12230BE30E00AD24D4 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		4843CB13230BE30E00AD24D4 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		4843CB14230BE30E00AD24D4 /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
+		4844FC6D230C2125003106AB /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
+		4844FC70230C2162003106AB /* Font+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Radix.swift"; sourceTree = "<group>"; };
+		4844FC73230C2182003106AB /* Color+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Radix.swift"; sourceTree = "<group>"; };
+		4844FC76230C21B0003106AB /* View+Enabled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Enabled.swift"; sourceTree = "<group>"; };
+		4844FC7A230C4618003106AB /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
+		48458E50230DAAC8007B05A2 /* RadixLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixLogo.swift; sourceTree = "<group>"; };
+		48458E53230DB338007B05A2 /* Gotham-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Thin.otf"; sourceTree = "<group>"; };
+		48458E54230DB338007B05A2 /* Gotham-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Medium.otf"; sourceTree = "<group>"; };
+		48458E55230DB338007B05A2 /* Gotham-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Book.otf"; sourceTree = "<group>"; };
+		48458E56230DB338007B05A2 /* Gotham-Ultra.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Ultra.otf"; sourceTree = "<group>"; };
+		48458E57230DB338007B05A2 /* Gotham-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Light.otf"; sourceTree = "<group>"; };
+		4853BFDA230C519B00022D04 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		48571C6D230C19550040896F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		486D86EE230D6A44006A967A /* String_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extensions.swift; sourceTree = "<group>"; };
+		486D86F0230D6A81006A967A /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyScreen.swift; sourceTree = "<group>"; };
+		486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsScreen.swift; sourceTree = "<group>"; };
+		48AA4B97230C492B0016F57F /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionScreen.swift; sourceTree = "<group>"; };
+		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
+		48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScreen.swift; sourceTree = "<group>"; };
+		48ACA681230AF85C00BF0029 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSet_Extension.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		48092505230AC2A50056DB28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4809251B230AC2A80056DB28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48092526230AC2A80056DB28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		480924FF230AC2A50056DB28 = {
+			isa = PBXGroup;
+			children = (
+				48092509230AC2A50056DB28 /* Products */,
+				4809254D230AC4240056DB28 /* Source */,
+				48092565230AC43F0056DB28 /* UITests */,
+				48092560230AC4330056DB28 /* UnitTests */,
+			);
+			sourceTree = "<group>";
+		};
+		48092509230AC2A50056DB28 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */,
+				4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */,
+				48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4809254D230AC4240056DB28 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				4809254E230AC4240056DB28 /* Code */,
+				48092552230AC4240056DB28 /* SupportingFiles */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		4809254E230AC4240056DB28 /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				48E58F23230E83EC00E3CC86 /* Extensions */,
+				4844FC79230C4601003106AB /* Views */,
+				48ACA680230AF84B00BF0029 /* Models */,
+				48ACA67B230AF3B000BF0029 /* Style */,
+				4809257D230AC6750056DB28 /* App */,
+				4809257E230AC6830056DB28 /* Screens */,
+			);
+			path = Code;
+			sourceTree = "<group>";
+		};
+		48092552230AC4240056DB28 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				4843CB00230BE30E00AD24D4 /* Fonts */,
+				48092553230AC4240056DB28 /* Assets.xcassets */,
+				48092554230AC4240056DB28 /* Preview Content */,
+				48092556230AC4240056DB28 /* LaunchScreen.storyboard */,
+				48092558230AC4240056DB28 /* SwiftUI-Wallet-Info.plist */,
+				48571C6E230C19550040896F /* Localizable.strings */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		48092554230AC4240056DB28 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				48092555230AC4240056DB28 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		48092560230AC4330056DB28 /* UnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				48092577230AC6300056DB28 /* SupportingFiles */,
+				48092579230AC6300056DB28 /* Tests */,
+			);
+			path = UnitTests;
+			sourceTree = "<group>";
+		};
+		48092565230AC43F0056DB28 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				48092573230AC61E0056DB28 /* SupportingFiles */,
+				48092571230AC61E0056DB28 /* Tests */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+		48092571230AC61E0056DB28 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				48092572230AC61E0056DB28 /* SwiftUI_WalletUITests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		48092573230AC61E0056DB28 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				48092574230AC61E0056DB28 /* SwiftUI-UITests-Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		48092577230AC6300056DB28 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				48092578230AC6300056DB28 /* SwiftUI-UnitTests-Info.plist */,
+			);
+			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		48092579230AC6300056DB28 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				4809257A230AC6300056DB28 /* SwiftUI_WalletTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		4809257D230AC6750056DB28 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				4809254F230AC4240056DB28 /* AppDelegate.swift */,
+				4853BFDA230C519B00022D04 /* AppCoordinator.swift */,
+				48092551230AC4240056DB28 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		4809257E230AC6830056DB28 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				48092550230AC4240056DB28 /* WelcomeScreen.swift */,
+				486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */,
+				486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */,
+				48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */,
+				48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */,
+				48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		4843CB00230BE30E00AD24D4 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				48458E52230DB338007B05A2 /* Gotham */,
+				4843CB01230BE30E00AD24D4 /* Roboto */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		4843CB01230BE30E00AD24D4 /* Roboto */ = {
+			isa = PBXGroup;
+			children = (
+				4843CB02230BE30E00AD24D4 /* Roboto-Medium.ttf */,
+				4843CB03230BE30E00AD24D4 /* Roboto-Light.ttf */,
+				4843CB04230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf */,
+				4843CB05230BE30E00AD24D4 /* RobotoCondensed-Light.ttf */,
+				4843CB06230BE30E00AD24D4 /* Roboto-Regular.ttf */,
+				4843CB07230BE30E00AD24D4 /* Roboto-MediumItalic.ttf */,
+				4843CB08230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf */,
+				4843CB09230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf */,
+				4843CB0A230BE30E00AD24D4 /* Apache License.txt */,
+				4843CB0B230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf */,
+				4843CB0C230BE30E00AD24D4 /* Roboto-ThinItalic.ttf */,
+				4843CB0D230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf */,
+				4843CB0E230BE30E00AD24D4 /* Roboto-BoldItalic.ttf */,
+				4843CB0F230BE30E00AD24D4 /* Roboto-LightItalic.ttf */,
+				4843CB10230BE30E00AD24D4 /* Roboto-Italic.ttf */,
+				4843CB11230BE30E00AD24D4 /* Roboto-BlackItalic.ttf */,
+				4843CB12230BE30E00AD24D4 /* Roboto-Bold.ttf */,
+				4843CB13230BE30E00AD24D4 /* Roboto-Thin.ttf */,
+				4843CB14230BE30E00AD24D4 /* Roboto-Black.ttf */,
+			);
+			path = Roboto;
+			sourceTree = "<group>";
+		};
+		4844FC6B230C20EC003106AB /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC6D230C2125003106AB /* ButtonStyles.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
+		4844FC6F230C2152003106AB /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC70230C2162003106AB /* Font+Radix.swift */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		4844FC72230C2175003106AB /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC73230C2182003106AB /* Color+Radix.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		4844FC75230C2199003106AB /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC76230C21B0003106AB /* View+Enabled.swift */,
+			);
+			path = ViewModifiers;
+			sourceTree = "<group>";
+		};
+		4844FC79230C4601003106AB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC7A230C4618003106AB /* LabelledDivider.swift */,
+				48458E50230DAAC8007B05A2 /* RadixLogo.swift */,
+				486D86F0230D6A81006A967A /* WebView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		48458E52230DB338007B05A2 /* Gotham */ = {
+			isa = PBXGroup;
+			children = (
+				48458E53230DB338007B05A2 /* Gotham-Thin.otf */,
+				48458E54230DB338007B05A2 /* Gotham-Medium.otf */,
+				48458E55230DB338007B05A2 /* Gotham-Book.otf */,
+				48458E56230DB338007B05A2 /* Gotham-Ultra.otf */,
+				48458E57230DB338007B05A2 /* Gotham-Light.otf */,
+			);
+			path = Gotham;
+			sourceTree = "<group>";
+		};
+		486D86ED230D6A27006A967A /* Foundation+Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				486D86EE230D6A44006A967A /* String_Extensions.swift */,
+			);
+			path = "Foundation+Extensions";
+			sourceTree = "<group>";
+		};
+		48ACA67B230AF3B000BF0029 /* Style */ = {
+			isa = PBXGroup;
+			children = (
+				4844FC75230C2199003106AB /* ViewModifiers */,
+				4844FC72230C2175003106AB /* Color */,
+				4844FC6F230C2152003106AB /* Fonts */,
+				4844FC6B230C20EC003106AB /* Styles */,
+			);
+			path = Style;
+			sourceTree = "<group>";
+		};
+		48ACA680230AF84B00BF0029 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				48ACA681230AF85C00BF0029 /* SettingsStore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		48E58F23230E83EC00E3CC86 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				48E58F24230E83F500E3CC86 /* SwiftUI+Extensions */,
+				486D86ED230D6A27006A967A /* Foundation+Extensions */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		48E58F24230E83F500E3CC86 /* SwiftUI+Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */,
+			);
+			path = "SwiftUI+Extensions";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		48092507230AC2A50056DB28 /* SwiftUI-Wallet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 48092532230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-Wallet" */;
+			buildPhases = (
+				48092504230AC2A50056DB28 /* Sources */,
+				48092505230AC2A50056DB28 /* Frameworks */,
+				48092506230AC2A50056DB28 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SwiftUI-Wallet";
+			productName = "SwiftUI-Wallet";
+			productReference = 48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4809251D230AC2A80056DB28 /* SwiftUI-WalletTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 48092535230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-WalletTests" */;
+			buildPhases = (
+				4809251A230AC2A80056DB28 /* Sources */,
+				4809251B230AC2A80056DB28 /* Frameworks */,
+				4809251C230AC2A80056DB28 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				48092520230AC2A80056DB28 /* PBXTargetDependency */,
+			);
+			name = "SwiftUI-WalletTests";
+			productName = "SwiftUI-WalletTests";
+			productReference = 4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		48092528230AC2A80056DB28 /* SwiftUI-WalletUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 48092538230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-WalletUITests" */;
+			buildPhases = (
+				48092525230AC2A80056DB28 /* Sources */,
+				48092526230AC2A80056DB28 /* Frameworks */,
+				48092527230AC2A80056DB28 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4809252B230AC2A80056DB28 /* PBXTargetDependency */,
+			);
+			name = "SwiftUI-WalletUITests";
+			productName = "SwiftUI-WalletUITests";
+			productReference = 48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		48092500230AC2A50056DB28 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
+				ORGANIZATIONNAME = "Radix DLT";
+				TargetAttributes = {
+					48092507230AC2A50056DB28 = {
+						CreatedOnToolsVersion = 11.0;
+					};
+					4809251D230AC2A80056DB28 = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 48092507230AC2A50056DB28;
+					};
+					48092528230AC2A80056DB28 = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 48092507230AC2A50056DB28;
+					};
+				};
+			};
+			buildConfigurationList = 48092503230AC2A50056DB28 /* Build configuration list for PBXProject "SwiftUI-Wallet" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				sv,
+			);
+			mainGroup = 480924FF230AC2A50056DB28;
+			productRefGroup = 48092509230AC2A50056DB28 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				48092507230AC2A50056DB28 /* SwiftUI-Wallet */,
+				4809251D230AC2A80056DB28 /* SwiftUI-WalletTests */,
+				48092528230AC2A80056DB28 /* SwiftUI-WalletUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		48092506230AC2A50056DB28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4843CB17230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf in Resources */,
+				4843CB23230BE30E00AD24D4 /* Roboto-Italic.ttf in Resources */,
+				48458E5A230DB339007B05A2 /* Gotham-Book.otf in Resources */,
+				48571C6C230C19550040896F /* Localizable.strings in Resources */,
+				4843CB25230BE30E00AD24D4 /* Roboto-Bold.ttf in Resources */,
+				4843CB1D230BE30E00AD24D4 /* Apache License.txt in Resources */,
+				4843CB15230BE30E00AD24D4 /* Roboto-Medium.ttf in Resources */,
+				48458E58230DB339007B05A2 /* Gotham-Thin.otf in Resources */,
+				4843CB27230BE30E00AD24D4 /* Roboto-Black.ttf in Resources */,
+				4843CB20230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf in Resources */,
+				4843CB19230BE30E00AD24D4 /* Roboto-Regular.ttf in Resources */,
+				4843CB1E230BE30E00AD24D4 /* RobotoCondensed-LightItalic.ttf in Resources */,
+				4809255E230AC4240056DB28 /* LaunchScreen.storyboard in Resources */,
+				4843CB24230BE30E00AD24D4 /* Roboto-BlackItalic.ttf in Resources */,
+				4843CB16230BE30E00AD24D4 /* Roboto-Light.ttf in Resources */,
+				4843CB18230BE30E00AD24D4 /* RobotoCondensed-Light.ttf in Resources */,
+				4809255D230AC4240056DB28 /* Preview Assets.xcassets in Resources */,
+				4843CB21230BE30E00AD24D4 /* Roboto-BoldItalic.ttf in Resources */,
+				4843CB26230BE30E00AD24D4 /* Roboto-Thin.ttf in Resources */,
+				4843CB22230BE30E00AD24D4 /* Roboto-LightItalic.ttf in Resources */,
+				48458E59230DB339007B05A2 /* Gotham-Medium.otf in Resources */,
+				4843CB1C230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf in Resources */,
+				4843CB1F230BE30E00AD24D4 /* Roboto-ThinItalic.ttf in Resources */,
+				48458E5B230DB339007B05A2 /* Gotham-Ultra.otf in Resources */,
+				48458E5C230DB339007B05A2 /* Gotham-Light.otf in Resources */,
+				4843CB1A230BE30E00AD24D4 /* Roboto-MediumItalic.ttf in Resources */,
+				4809255C230AC4240056DB28 /* Assets.xcassets in Resources */,
+				4843CB1B230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4809251C230AC2A80056DB28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48092527230AC2A80056DB28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		48092504230AC2A50056DB28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */,
+				4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */,
+				486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */,
+				48ACA682230AF85C00BF0029 /* SettingsStore.swift in Sources */,
+				48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */,
+				48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */,
+				4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */,
+				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
+				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
+				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
+				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
+				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
+				48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */,
+				48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */,
+				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
+				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
+				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
+				486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */,
+				4844FC71230C2162003106AB /* Font+Radix.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4809251A230AC2A80056DB28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4809257C230AC6300056DB28 /* SwiftUI_WalletTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48092525230AC2A80056DB28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48092575230AC61E0056DB28 /* SwiftUI_WalletUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		48092520230AC2A80056DB28 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 48092507230AC2A50056DB28 /* SwiftUI-Wallet */;
+			targetProxy = 4809251F230AC2A80056DB28 /* PBXContainerItemProxy */;
+		};
+		4809252B230AC2A80056DB28 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 48092507230AC2A50056DB28 /* SwiftUI-Wallet */;
+			targetProxy = 4809252A230AC2A80056DB28 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		48092556230AC4240056DB28 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				48092557230AC4240056DB28 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		48571C6E230C19550040896F /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				48571C6D230C19550040896F /* en */,
+				48AA4B97230C492B0016F57F /* sv */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		48092530230AC2A80056DB28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		48092531230AC2A80056DB28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		48092533230AC2A80056DB28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_ASSET_PATHS = "Source/SupportingFiles/Preview\\ Content/Preview\\ Assets.xcassets";
+				DEVELOPMENT_TEAM = 7SPGKHD4HZ;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Source/SupportingFiles/SwiftUI-Wallet-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.ios.SwiftUI-Wallet";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Radix iOS Dev Wildcard";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		48092534230AC2A80056DB28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_ASSET_PATHS = "Source/SupportingFiles/Preview\\ Content/Preview\\ Assets.xcassets";
+				DEVELOPMENT_TEAM = 7SPGKHD4HZ;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Source/SupportingFiles/SwiftUI-Wallet-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.ios.SwiftUI-Wallet";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Radix iOS Dev Wildcard";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		48092536230AC2A80056DB28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "UnitTests/SupportingFiles/SwiftUI-UnitTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.SwiftUI-WalletTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftUI-Wallet.app/SwiftUI-Wallet";
+			};
+			name = Debug;
+		};
+		48092537230AC2A80056DB28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "UnitTests/SupportingFiles/SwiftUI-UnitTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.SwiftUI-WalletTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftUI-Wallet.app/SwiftUI-Wallet";
+			};
+			name = Release;
+		};
+		48092539230AC2A80056DB28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "UITests/SupportingFiles/SwiftUI-UITests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.SwiftUI-WalletUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SwiftUI-Wallet";
+			};
+			name = Debug;
+		};
+		4809253A230AC2A80056DB28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = "UITests/SupportingFiles/SwiftUI-UITests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.SwiftUI-WalletUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SwiftUI-Wallet";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		48092503230AC2A50056DB28 /* Build configuration list for PBXProject "SwiftUI-Wallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48092530230AC2A80056DB28 /* Debug */,
+				48092531230AC2A80056DB28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		48092532230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-Wallet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48092533230AC2A80056DB28 /* Debug */,
+				48092534230AC2A80056DB28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		48092535230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-WalletTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48092536230AC2A80056DB28 /* Debug */,
+				48092537230AC2A80056DB28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		48092538230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-WalletUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48092539230AC2A80056DB28 /* Debug */,
+				4809253A230AC2A80056DB28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 48092500230AC2A50056DB28 /* Project object */;
+}

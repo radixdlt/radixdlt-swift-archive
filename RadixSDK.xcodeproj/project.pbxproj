@@ -604,6 +604,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		48092541230AC2A90056DB28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 48092508230AC2A50056DB28;
+			remoteInfo = "SwiftUI-Wallet";
+		};
+		48092543230AC2A90056DB28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4809251E230AC2A80056DB28;
+			remoteInfo = "SwiftUI-WalletTests";
+		};
+		48092545230AC2A90056DB28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 48092529230AC2A80056DB28;
+			remoteInfo = "SwiftUI-WalletUITests";
+		};
 		E645E73921E7827D00532ACD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E645E72521E7827D00532ACD /* Project object */;
@@ -638,6 +659,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "SwiftUI-Wallet.xcodeproj"; path = "SwiftUI-Wallet/SwiftUI-Wallet.xcodeproj"; sourceTree = "<group>"; };
 		48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitSha256Hasher.swift; sourceTree = "<group>"; };
 		48A33DF623085A9E00626090 /* Sha512TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sha512TwiceHasher.swift; sourceTree = "<group>"; };
 		48A33DF823085ABD00626090 /* CryptoKitSha256TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitSha256TwiceHasher.swift; sourceTree = "<group>"; };
@@ -1268,6 +1290,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4809253C230AC2A80056DB28 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				48092542230AC2A90056DB28 /* SwiftUI-Wallet.app */,
+				48092544230AC2A90056DB28 /* SwiftUI-WalletTests.xctest */,
+				48092546230AC2A90056DB28 /* SwiftUI-WalletUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E6025400225CC3CD004B2F94 /* UniverseConfig */ = {
 			isa = PBXGroup;
 			children = (
@@ -4001,6 +4033,7 @@
 		E6FB03C621EC95E8002CE331 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */,
 				E606FC0E22C9F85B00A7E52E /* RxOptional.framework */,
 				E606FC0F22C9F85B00A7E52E /* RxRelay.framework */,
 				E606FC1022C9F85B00A7E52E /* RxSwiftExt.framework */,
@@ -4177,6 +4210,12 @@
 			mainGroup = E645E72421E7827D00532ACD;
 			productRefGroup = E645E72F21E7827D00532ACD /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4809253C230AC2A80056DB28 /* Products */;
+					ProjectRef = 4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E645E72D21E7827D00532ACD /* RadixSDK iOS */,
@@ -4184,6 +4223,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		48092542230AC2A90056DB28 /* SwiftUI-Wallet.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "SwiftUI-Wallet.app";
+			remoteRef = 48092541230AC2A90056DB28 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		48092544230AC2A90056DB28 /* SwiftUI-WalletTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "SwiftUI-WalletTests.xctest";
+			remoteRef = 48092543230AC2A90056DB28 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		48092546230AC2A90056DB28 /* SwiftUI-WalletUITests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "SwiftUI-WalletUITests.xctest";
+			remoteRef = 48092545230AC2A90056DB28 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E645E72C21E7827D00532ACD /* Resources */ = {
