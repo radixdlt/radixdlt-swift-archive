@@ -109,7 +109,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             //  WHEN: Alice makes a transaction containing a single TransferTokensAction of FooToken
-            try! application.transferTokens(
+            application.transferTokens(
                 identifier: fooToken,
                 to: bob,
                 amount: 5,
@@ -149,7 +149,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             //  WHEN: Alice makes a transaction containing a single BurnTokensAction of FooToken
-            try! application.burnTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            application.burnTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions
@@ -178,7 +178,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             //  WHEN: Alice makes a transaction containing a single MintTokensAction of FooToken
-            try! application.mintTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            application.mintTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions
@@ -198,7 +198,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         
         // WHEN Alice observes her transactions after having made one with a single `SendMessageAction`
         XCTAssertTrue(
-            try! application.sendEncryptedMessage("Hey Bob, this is secret!", to: bob)
+            application.sendEncryptedMessage("Hey Bob, this is secret!", to: bob)
                 .blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
@@ -256,8 +256,8 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         
         //  WHEN: Alice makes a transaction containing 2 MintTokensAction of FooToken and 2 PutUnique and observes her transactions
         let newTransaction = Transaction {[
-            try! MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
-            try! MintTokensAction(tokenDefinitionReference: fooToken, amount: 10, minter: alice),
+            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
+            MintTokensAction(tokenDefinitionReference: fooToken, amount: 10, minter: alice),
             PutUniqueIdAction(uniqueMaker: alice, string: "Mint5"),
             PutUniqueIdAction(uniqueMaker: alice, string: "Mint10")
         ]}
@@ -308,7 +308,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         )
         
         let mintAndUniqueTx = Transaction {[
-            try! MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
+            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
             PutUniqueIdAction(uniqueMaker: alice, string: "mint")
             ]}
         
@@ -319,7 +319,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         )
         
         let burnAndUniqueTx = Transaction {[
-            try! BurnTokensAction.init(tokenDefinitionReference: fooToken, amount: 5, burner: alice),
+            BurnTokensAction.init(tokenDefinitionReference: fooToken, amount: 5, burner: alice),
             PutUniqueIdAction(uniqueMaker: alice, string: "burn")
             ]}
         
