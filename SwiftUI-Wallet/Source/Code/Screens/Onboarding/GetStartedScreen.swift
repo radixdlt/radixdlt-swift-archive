@@ -30,7 +30,7 @@ struct GetStartedScreen: Screen {
         NavigationView {
             VStack {
 
-                NavigationLink(destination: ReceiveTransactionScreen()) {
+                NavigationLink(destination: MainScreen()) {
                     Text("GetStarted.Button.ReceiveTransaction").buttonStyleEmerald()
                 }
 

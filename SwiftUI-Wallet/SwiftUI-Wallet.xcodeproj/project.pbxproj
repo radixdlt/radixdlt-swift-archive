@@ -51,6 +51,7 @@
 		486D86F1230D6A81006A967A /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F0230D6A81006A967A /* WebView.swift */; };
 		486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */; };
 		486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */; };
+		48A9600D230EFDD30074AC26 /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A9600C230EFDD30074AC26 /* MainScreen.swift */; };
 		48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */; };
 		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
@@ -126,6 +127,7 @@
 		486D86F0230D6A81006A967A /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyScreen.swift; sourceTree = "<group>"; };
 		486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsScreen.swift; sourceTree = "<group>"; };
+		48A9600C230EFDD30074AC26 /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
 		48AA4B97230C492B0016F57F /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionScreen.swift; sourceTree = "<group>"; };
 		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
@@ -285,12 +287,8 @@
 		4809257E230AC6830056DB28 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				48092550230AC4240056DB28 /* WelcomeScreen.swift */,
-				486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */,
-				486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */,
-				48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */,
-				48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */,
-				48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */,
+				48A9600B230EF8280074AC26 /* Main */,
+				48A9600A230EF81D0074AC26 /* Onboarding */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -390,6 +388,27 @@
 				486D86EE230D6A44006A967A /* String_Extensions.swift */,
 			);
 			path = "Foundation+Extensions";
+			sourceTree = "<group>";
+		};
+		48A9600A230EF81D0074AC26 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				48092550230AC4240056DB28 /* WelcomeScreen.swift */,
+				486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */,
+				486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */,
+				48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */,
+				48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */,
+				48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		48A9600B230EF8280074AC26 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				48A9600C230EFDD30074AC26 /* MainScreen.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		48ACA67B230AF3B000BF0029 /* Style */ = {
@@ -597,6 +616,7 @@
 				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
+				48A9600D230EFDD30074AC26 /* MainScreen.swift in Sources */,
 				48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */,
 				48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
