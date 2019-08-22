@@ -30,4 +30,12 @@ extension String {
     func localized(withComment comment: String? = nil) -> String {
         return NSLocalizedString(self, comment: comment ?? "")
     }
+
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
 }

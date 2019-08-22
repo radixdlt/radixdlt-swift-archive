@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -35,10 +35,18 @@
 		4843CB26230BE30E00AD24D4 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB13230BE30E00AD24D4 /* Roboto-Thin.ttf */; };
 		4843CB27230BE30E00AD24D4 /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB14230BE30E00AD24D4 /* Roboto-Black.ttf */; };
 		4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC6D230C2125003106AB /* ButtonStyles.swift */; };
-		4844FC71230C2162003106AB /* Font+Roboto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC70230C2162003106AB /* Font+Roboto.swift */; };
+		4844FC71230C2162003106AB /* Font+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC70230C2162003106AB /* Font+Radix.swift */; };
 		4844FC74230C2182003106AB /* Color+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC73230C2182003106AB /* Color+Radix.swift */; };
 		4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC76230C21B0003106AB /* View+Enabled.swift */; };
 		4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4844FC7A230C4618003106AB /* LabelledDivider.swift */; };
+		48458E4D230D87A6007B05A2 /* NSAttributedStringBuilder in Frameworks */ = {isa = PBXBuildFile; productRef = 48458E4C230D87A6007B05A2 /* NSAttributedStringBuilder */; };
+		48458E4F230D8804007B05A2 /* AttributedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48458E4E230D8804007B05A2 /* AttributedText.swift */; };
+		48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48458E50230DAAC8007B05A2 /* RadixLogo.swift */; };
+		48458E58230DB339007B05A2 /* Gotham-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E53230DB338007B05A2 /* Gotham-Thin.otf */; };
+		48458E59230DB339007B05A2 /* Gotham-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E54230DB338007B05A2 /* Gotham-Medium.otf */; };
+		48458E5A230DB339007B05A2 /* Gotham-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E55230DB338007B05A2 /* Gotham-Book.otf */; };
+		48458E5B230DB339007B05A2 /* Gotham-Ultra.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E56230DB338007B05A2 /* Gotham-Ultra.otf */; };
+		48458E5C230DB339007B05A2 /* Gotham-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E57230DB338007B05A2 /* Gotham-Light.otf */; };
 		4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4853BFDA230C519B00022D04 /* AppCoordinator.swift */; };
 		48571C6C230C19550040896F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48571C6E230C19550040896F /* Localizable.strings */; };
 		486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86EE230D6A44006A967A /* String_Extensions.swift */; };
@@ -103,10 +111,16 @@
 		4843CB13230BE30E00AD24D4 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		4843CB14230BE30E00AD24D4 /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
 		4844FC6D230C2125003106AB /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
-		4844FC70230C2162003106AB /* Font+Roboto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Roboto.swift"; sourceTree = "<group>"; };
+		4844FC70230C2162003106AB /* Font+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Radix.swift"; sourceTree = "<group>"; };
 		4844FC73230C2182003106AB /* Color+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Radix.swift"; sourceTree = "<group>"; };
 		4844FC76230C21B0003106AB /* View+Enabled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Enabled.swift"; sourceTree = "<group>"; };
 		4844FC7A230C4618003106AB /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
+		48458E50230DAAC8007B05A2 /* RadixLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixLogo.swift; sourceTree = "<group>"; };
+		48458E53230DB338007B05A2 /* Gotham-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Thin.otf"; sourceTree = "<group>"; };
+		48458E54230DB338007B05A2 /* Gotham-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Medium.otf"; sourceTree = "<group>"; };
+		48458E55230DB338007B05A2 /* Gotham-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Book.otf"; sourceTree = "<group>"; };
+		48458E56230DB338007B05A2 /* Gotham-Ultra.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Ultra.otf"; sourceTree = "<group>"; };
+		48458E57230DB338007B05A2 /* Gotham-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Light.otf"; sourceTree = "<group>"; };
 		4853BFDA230C519B00022D04 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		48571C6D230C19550040896F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		486D86EE230D6A44006A967A /* String_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extensions.swift; sourceTree = "<group>"; };
@@ -284,6 +298,7 @@
 		4843CB00230BE30E00AD24D4 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				48458E52230DB338007B05A2 /* Gotham */,
 				4843CB01230BE30E00AD24D4 /* Roboto */,
 			);
 			path = Fonts;
@@ -326,7 +341,7 @@
 		4844FC6F230C2152003106AB /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				4844FC70230C2162003106AB /* Font+Roboto.swift */,
+				4844FC70230C2162003106AB /* Font+Radix.swift */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -351,9 +366,22 @@
 			isa = PBXGroup;
 			children = (
 				4844FC7A230C4618003106AB /* LabelledDivider.swift */,
+				48458E50230DAAC8007B05A2 /* RadixLogo.swift */,
 				486D86F0230D6A81006A967A /* WebView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		48458E52230DB338007B05A2 /* Gotham */ = {
+			isa = PBXGroup;
+			children = (
+				48458E53230DB338007B05A2 /* Gotham-Thin.otf */,
+				48458E54230DB338007B05A2 /* Gotham-Medium.otf */,
+				48458E55230DB338007B05A2 /* Gotham-Book.otf */,
+				48458E56230DB338007B05A2 /* Gotham-Ultra.otf */,
+				48458E57230DB338007B05A2 /* Gotham-Light.otf */,
+			);
+			path = Gotham;
 			sourceTree = "<group>";
 		};
 		486D86ED230D6A27006A967A /* Foundation+Extensions */ = {
@@ -490,10 +518,12 @@
 			files = (
 				4843CB17230BE30E00AD24D4 /* RobotoCondensed-Bold.ttf in Resources */,
 				4843CB23230BE30E00AD24D4 /* Roboto-Italic.ttf in Resources */,
+				48458E5A230DB339007B05A2 /* Gotham-Book.otf in Resources */,
 				48571C6C230C19550040896F /* Localizable.strings in Resources */,
 				4843CB25230BE30E00AD24D4 /* Roboto-Bold.ttf in Resources */,
 				4843CB1D230BE30E00AD24D4 /* Apache License.txt in Resources */,
 				4843CB15230BE30E00AD24D4 /* Roboto-Medium.ttf in Resources */,
+				48458E58230DB339007B05A2 /* Gotham-Thin.otf in Resources */,
 				4843CB27230BE30E00AD24D4 /* Roboto-Black.ttf in Resources */,
 				4843CB20230BE30E00AD24D4 /* RobotoCondensed-Regular.ttf in Resources */,
 				4843CB19230BE30E00AD24D4 /* Roboto-Regular.ttf in Resources */,
@@ -506,8 +536,11 @@
 				4843CB21230BE30E00AD24D4 /* Roboto-BoldItalic.ttf in Resources */,
 				4843CB26230BE30E00AD24D4 /* Roboto-Thin.ttf in Resources */,
 				4843CB22230BE30E00AD24D4 /* Roboto-LightItalic.ttf in Resources */,
+				48458E59230DB339007B05A2 /* Gotham-Medium.otf in Resources */,
 				4843CB1C230BE30E00AD24D4 /* RobotoCondensed-BoldItalic.ttf in Resources */,
 				4843CB1F230BE30E00AD24D4 /* Roboto-ThinItalic.ttf in Resources */,
+				48458E5B230DB339007B05A2 /* Gotham-Ultra.otf in Resources */,
+				48458E5C230DB339007B05A2 /* Gotham-Light.otf in Resources */,
 				4843CB1A230BE30E00AD24D4 /* Roboto-MediumItalic.ttf in Resources */,
 				4809255C230AC4240056DB28 /* Assets.xcassets in Resources */,
 				4843CB1B230BE30E00AD24D4 /* RobotoCondensed-Italic.ttf in Resources */,
@@ -539,6 +572,7 @@
 				4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */,
 				486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */,
 				48ACA682230AF85C00BF0029 /* SettingsStore.swift in Sources */,
+				48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */,
 				4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */,
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
 				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
@@ -551,7 +585,7 @@
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
 				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
 				486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */,
-				4844FC71230C2162003106AB /* Font+Roboto.swift in Sources */,
+				4844FC71230C2162003106AB /* Font+Radix.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

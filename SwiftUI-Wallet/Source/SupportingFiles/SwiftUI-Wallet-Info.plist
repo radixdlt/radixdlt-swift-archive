@@ -57,6 +57,11 @@
 		<string>Roboto-Italic.ttf</string>
 		<string>Roboto-Light.ttf</string>
 		<string>Roboto-Thin.ttf</string>
+		<string>Gotham-Book.otf</string>
+		<string>Gotham-Medium.otf</string>
+		<string>Gotham-Light.otf</string>
+		<string>Gotham-Ultra.otf</string>
+		<string>Gotham-Thin.otf</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

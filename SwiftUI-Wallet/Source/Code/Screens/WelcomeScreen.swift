@@ -37,13 +37,14 @@ struct WelcomeScreen: Screen {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                Image("Icon/Logo/Radix")
+            VStack(spacing: 30) {
+                RadixLogo.whiteText.frame(height: 50, alignment: .center)
 
                 Spacer()
 
                 Text("Welcome.Text.Body")
                     .font(.roboto(size: 60))
+                    .foregroundColor(Color.Radix.forest)
                     .lineLimit(5)
                     .padding(.leading, -30) // ugly fix for alignment
 
@@ -61,10 +62,21 @@ struct WelcomeScreen: Screen {
                 }
                 .enabled(hasAgreedToTermsAndPolicy)
             }
-            .padding(32)
+            .padding(.allEdgesButTop, 32)
+            .background(
+                Image("Images/Background/Welcome")
+                    .resizable()
+                    .edgesIgnoringSafeArea(.top)
+                    .scaledToFill()
+            )
         }
         .edgesIgnoringSafeArea(.top)
     }
+}
+
+extension Edge.Set {
+    static let allEdgesButBottom: Edge.Set = [.trailing, .leading, .top]
+    static let allEdgesButTop: Edge.Set = [.trailing, .leading, .bottom]
 }
 
 // MARK: Private
@@ -80,7 +92,12 @@ private extension WelcomeScreen {
 
         Button(
             action: { isPresented.wrappedValue = true },
-            label: { Text(verbatim: link.hyperTextLocalized) }
+            label: {
+                Text(verbatim: link.hyperTextLocalized)
+                    .font(.roboto(size: 18))
+                    .underline(color: Color.Radix.forest)
+                    .foregroundColor(Color.white)
+            }
         )
         .sheet(isPresented: isPresented) { link.screen }
 

@@ -29,20 +29,57 @@ public extension Font {
 
     static func roboto(
         size: CGFloat,
-        weight: Font.Weight = .regular
+        weight: Font.Roboto.Weight = .regular
     ) -> Font {
-        let name = "Roboto-\(weight.name)"
+        return Font.Roboto.sized(size, weight: weight)
+    }
+
+    static func gotham(
+         size: CGFloat,
+         weight: Font.Gotham.Weight = .medium
+     ) -> Font {
+         return Font.Gotham.sized(size, weight: weight)
+     }
+}
+
+public extension Font {
+    enum Roboto: FontConvertible {}
+    enum Gotham: FontConvertible {}
+}
+
+public protocol NameOfFontWeight {
+    var name: String { get }
+}
+public extension NameOfFontWeight where Self: RawRepresentable, RawValue == String {
+    var name: String { rawValue.capitalizingFirstLetter() }
+}
+
+public protocol FontConvertible {
+    static var family: String { get }
+    associatedtype Weight: NameOfFontWeight
+    static func sized(_ size: CGFloat, weight: Weight) -> Font
+}
+public extension FontConvertible {
+    static func sized(_ size: CGFloat, weight: Weight) -> Font {
+        let name = "\(Self.family)-\(weight.name)"
         return .custom(name, size: size)
     }
 }
 
-public extension Font.Weight {
-    var name: String {
-        switch self {
-        case .regular: return "Regular"
-        case .bold: return "Bold"
-        case .thin: return "Thin"
-        default: fatalError("Add this weight.")
-        }
+public extension Font.Roboto {
+
+    static let family = "Roboto"
+
+    enum Weight: String, NameOfFontWeight {
+        case regular, bold, thin, medium, italic, light
+    }
+}
+
+public extension Font.Gotham {
+
+    static let family = "Gotham"
+
+    enum Weight: String, NameOfFontWeight {
+        case medium, bold, thin, ultra, book
     }
 }
