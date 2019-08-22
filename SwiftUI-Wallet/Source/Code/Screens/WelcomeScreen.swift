@@ -74,10 +74,6 @@ struct WelcomeScreen: Screen {
     }
 }
 
-extension Edge.Set {
-    static let allEdgesButBottom: Edge.Set = [.trailing, .leading, .top]
-    static let allEdgesButTop: Edge.Set = [.trailing, .leading, .bottom]
-}
 
 // MARK: Private
 private extension WelcomeScreen {
