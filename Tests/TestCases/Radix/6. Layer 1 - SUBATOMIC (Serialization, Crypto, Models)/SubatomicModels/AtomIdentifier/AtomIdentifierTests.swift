@@ -129,7 +129,7 @@ class AtomIdentifierTests: XCTestCase {
         
         let rri = createTokenAction.identifier
         
-        let transferTokens = try! TransferTokensAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
+        let transferTokens = TransferTokensAction(from: alice, to: bob, amount: 10, tokenResourceIdentifier: rri)
         
         let consumables = createTokenAtom.transferrableTokensParticles(spin: .up)
         
