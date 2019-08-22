@@ -56,10 +56,10 @@ public extension Atomic {
         if particles(spin: .down).isEmpty {
             return try shards()
         } else {
-            let shards = spunParticles
+            let shards = try spunParticles
                 .filter(spin: .down)
                 .map { $0.particle }
-                .compactMap { $0.shardables() }
+                .compactMap { try $0.shardables() }
                 .flatMap { $0.elements }
                 .map { $0.shard }
             return try Shards(set: shards.asSet)

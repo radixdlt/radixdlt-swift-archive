@@ -51,7 +51,7 @@ public protocol Identifiable:
 
 // MARK: - Accountable
 public extension Identifiable {
-    var addresses: Addresses {
-        return Addresses(identifier.address)
+    func addresses() throws -> Addresses {
+        return try Addresses(addresses: [identifier.address])
     }
 }

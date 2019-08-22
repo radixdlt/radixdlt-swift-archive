@@ -87,8 +87,8 @@ public extension MutableSupplyTokenDefinitionParticle {
 
 // MARK: - Accountable
 public extension MutableSupplyTokenDefinitionParticle {
-    var addresses: Addresses {
-        return Addresses([tokenDefinedBy])
+    func addresses() throws -> Addresses {
+        return try Addresses(addresses: [tokenDefinedBy])
     }
 }
 

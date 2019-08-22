@@ -59,16 +59,24 @@ class AddressesInSameUniverseTests: XCTestCase {
     }
 
     func testTransactionSendMessageWrongUniverse() {
+        let sendMessageAction = SendMessageAction(from: addressUniverse1, to: addressUniverse2, payload: .empty)
         let transaction = Transaction {[
-            SendMessageAction(from: addressUniverse1, to: addressUniverse2, payload: .empty)
+            sendMessageAction
         ]}
 
         let mapper = DefaultTransactionToAtomMapper(atomStore: NoStore())
-
-        XCTAssertThrowsSpecificError(
-            try mapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressUniverse1),
-            Addresses.Error.differentUniverses(addresses: Set([addressUniverse1, addressUniverse2]))
-        )
+        
+        XCTAssertThrowsError(try mapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressUniverse1), "foo") { anyError in
+            guard
+                let failedToStageError = anyError as? FailedToStageAction,
+                let error = failedToStageError.error as? Addresses.Error
+                else { return XCTFail() }
+            
+            XCTAssertEqual(
+                error,
+                Addresses.Error.differentUniverses(addresses: Set([addressUniverse1, addressUniverse2]))
+            )
+        }
     }
 }
 

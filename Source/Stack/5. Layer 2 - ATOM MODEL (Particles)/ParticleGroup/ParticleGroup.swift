@@ -30,9 +30,9 @@ public protocol SpunParticlesOwner {
 
 public extension SpunParticlesOwner {
     func addresses() throws -> Addresses {
-        let addresses: [Address] = spunParticles
+        let addresses: [Address] = try spunParticles
             .map { $0.particle }
-            .compactMap { $0.shardables() }
+            .compactMap { try $0.shardables() }
             .flatMap { $0.elements }
 
         return try Addresses(addresses: Set(addresses))

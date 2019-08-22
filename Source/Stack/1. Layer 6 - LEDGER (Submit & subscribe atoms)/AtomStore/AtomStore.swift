@@ -130,7 +130,11 @@ public extension InMemoryAtomStore {
     
     func upParticles(at address: Address, stagedUuid: UUID?) -> [AnyUpParticle] {
         var upParticles = particleIndex.filter {
-            guard $0.key.someParticle.shardables()?.contains(address) == true else { return false }
+            
+            // swiftlint:disable:next force_try
+            let shardables = try! $0.key.someParticle.shardables()
+            
+            guard shardables?.contains(address) == true else { return false }
             var spinParticleIndex = $0.value
             let hasDown = spinParticleIndex.valueForKey(key: .down, ifAbsent: { Set() }).contains(where: { atoms[$0]?.isStore == true })
             if hasDown { return false }
