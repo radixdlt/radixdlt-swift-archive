@@ -39,7 +39,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         XCTAssertAllInequal(alice, bob, clara, diana)
         
         let message = "Hey Bob, this is your friend Alice, Clara should also be able to read this."
-        let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(and: [clara], from: alice, to: bob, text: message)
+        let sendMessageAction = try! SendMessageAction.encryptedDecryptableBySenderAndRecipient(and: [clara], from: alice, to: bob, text: message)
         
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
         
@@ -95,7 +95,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         XCTAssertAllInequal(alice, bob, clara)
         
         let message = "Hey Bob, this is your friend Alice, only you and I should be able to read this"
-        let sendMessageAction = SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: alice, to: bob, text: message)
+        let sendMessageAction = try! SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: alice, to: bob, text: message)
         
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
         let atom = try! mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address).wrapInAtom()
@@ -123,7 +123,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
     
     func testMessagesAreEncryptedByDefault() {
 
-        let sendMessageAction = SendMessageAction(text: "Super secret message", from: alice, to: bob)
+        let sendMessageAction = try! SendMessageAction(text: "Super secret message", from: alice, to: bob)
         XCTAssertTrue(sendMessageAction.shouldBeEncrypted)
     }
     
@@ -132,7 +132,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         XCTAssertAllInequal(alice, bob, clara)
         
         let message = "Hey Bob, this is your friend Alice, this message is not encrypted."
-        let sendMessageAction = SendMessageAction.plainText(from: alice, to: bob, text: message)
+        let sendMessageAction = try! SendMessageAction.plainText(from: alice, to: bob, text: message)
         
         XCTAssertFalse(sendMessageAction.shouldBeEncrypted)
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()

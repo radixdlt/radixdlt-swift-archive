@@ -26,7 +26,7 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
-class TransactionTests: LocalhostNodeTest {
+class TransactionLocalhostNodeTests: LocalhostNodeTest {
     
     private var aliceIdentity: AbstractIdentity!
     private var application: RadixApplicationClient!
@@ -109,7 +109,7 @@ class TransactionTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             //  WHEN: Alice makes a transaction containing a single TransferTokensAction of FooToken
-            application.transferTokens(
+            try! application.transferTokens(
                 identifier: fooToken,
                 to: bob,
                 amount: 5,
@@ -149,7 +149,7 @@ class TransactionTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             //  WHEN: Alice makes a transaction containing a single BurnTokensAction of FooToken
-            application.burnTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            try! application.burnTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions
@@ -178,7 +178,7 @@ class TransactionTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             //  WHEN: Alice makes a transaction containing a single MintTokensAction of FooToken
-            application.mintTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            try! application.mintTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions
@@ -198,7 +198,7 @@ class TransactionTests: LocalhostNodeTest {
         
         // WHEN Alice observes her transactions after having made one with a single `SendMessageAction`
         XCTAssertTrue(
-            application.sendEncryptedMessage("Hey Bob, this is secret!", to: bob)
+            try! application.sendEncryptedMessage("Hey Bob, this is secret!", to: bob)
                 .blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
@@ -256,8 +256,8 @@ class TransactionTests: LocalhostNodeTest {
         
         //  WHEN: Alice makes a transaction containing 2 MintTokensAction of FooToken and 2 PutUnique and observes her transactions
         let newTransaction = Transaction {[
-            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
-            MintTokensAction(tokenDefinitionReference: fooToken, amount: 10, minter: alice),
+            try! MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
+            try! MintTokensAction(tokenDefinitionReference: fooToken, amount: 10, minter: alice),
             PutUniqueIdAction(uniqueMaker: alice, string: "Mint5"),
             PutUniqueIdAction(uniqueMaker: alice, string: "Mint10")
         ]}
@@ -308,7 +308,7 @@ class TransactionTests: LocalhostNodeTest {
         )
         
         let mintAndUniqueTx = Transaction {[
-            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
+            try! MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
             PutUniqueIdAction(uniqueMaker: alice, string: "mint")
             ]}
         
@@ -319,7 +319,7 @@ class TransactionTests: LocalhostNodeTest {
         )
         
         let burnAndUniqueTx = Transaction {[
-            BurnTokensAction.init(tokenDefinitionReference: fooToken, amount: 5, burner: alice),
+            try! BurnTokensAction.init(tokenDefinitionReference: fooToken, amount: 5, burner: alice),
             PutUniqueIdAction(uniqueMaker: alice, string: "burn")
             ]}
         

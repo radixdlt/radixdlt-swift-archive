@@ -70,7 +70,7 @@ class TransferTokensTests: LocalhostNodeTest {
         XCTAssertEqual(myBalanceBeforeTx.amount, 30)
         
         let attachedMessage = "For taxi fare"
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 10, message: attachedMessage)
+        let transfer = try! application.transferTokens(identifier: rri, to: bob, amount: 10, message: attachedMessage)
         
         // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
@@ -104,7 +104,7 @@ class TransferTokensTests: LocalhostNodeTest {
         // WHEN: Alice tries to transfer tokens of some type she does not own, to Bob
         let amount: PositiveAmount = 10
         let unknownRRI = ResourceIdentifier(address: alice.address, name: "Unknown")
-        let transfer = application.transfer(tokens: TransferTokensAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: unknownRRI))
+        let transfer = application.transfer(tokens: try! TransferTokensAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: unknownRRI))
         
         // THEN:  I see that action fails with error `foundNoTokenDefinition`
         transfer.blockingAssertThrows(
@@ -124,7 +124,7 @@ class TransferTokensTests: LocalhostNodeTest {
         )
         
         let amount: PositiveAmount = 50
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: amount)
+        let transfer = try! application.transferTokens(identifier: rri, to: bob, amount: amount)
         
         // THEN:  I see that action fails with error `InsufficientFunds`
         transfer.blockingAssertThrows(
@@ -142,7 +142,7 @@ class TransferTokensTests: LocalhostNodeTest {
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 20)
+        let transfer = try! application.transferTokens(identifier: rri, to: bob, amount: 20)
         
         // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
@@ -164,7 +164,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         let amountToSend: PositiveAmount = 7
         
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: amountToSend)
+        let transfer = try! application.transferTokens(identifier: rri, to: bob, amount: amountToSend)
         
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
         transfer.blockingAssertThrows(
@@ -189,7 +189,7 @@ class TransferTokensTests: LocalhostNodeTest {
         )
         
         // WHEN: Alice tries to spend Carols coins
-        let transfer = application.transfer(tokens: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
+        let transfer = application.transfer(tokens: try! TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
         
         // THEN: I see that it fails
         transfer.blockingAssertThrows(

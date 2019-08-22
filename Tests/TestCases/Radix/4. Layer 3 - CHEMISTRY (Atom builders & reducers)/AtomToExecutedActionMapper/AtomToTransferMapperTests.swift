@@ -26,7 +26,7 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
-class AtomToTransferMapperTests: XCTestCase {
+class AtomToTransferMapperTests: LocalhostNodeTest {
 
     private let disposeBag = DisposeBag()
     
@@ -66,15 +66,15 @@ class AtomToTransferMapperTests: XCTestCase {
     }
 
     func testAtomToTransferWithoutReturn() {
-        
+
         let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity(alias: "Alice"))
-        
+
         let (tokenCreation, aliceCoin) = aliceApp.createToken(supply: .fixed(to: 100))
-        
+
         XCTAssertTrue(tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW))
-        
+
         let bob = aliceApp.addressOf(account: Account())
-        
+
         let atom = try! aliceApp.atomFrom(transaction:
             Transaction(
                 aliceApp.actionTransferTokens(
@@ -85,7 +85,7 @@ class AtomToTransferMapperTests: XCTestCase {
                 )
             )
         )
-        
+
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
         guard let transfers = atomToTransferMapper.mapAtomToActions(atom).blockingTakeFirst() else { return }
         XCTAssertEqual(transfers.count, 1)

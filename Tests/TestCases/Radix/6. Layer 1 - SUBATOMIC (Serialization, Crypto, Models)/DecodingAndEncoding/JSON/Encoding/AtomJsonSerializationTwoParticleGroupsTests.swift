@@ -46,7 +46,7 @@ private let atom = Atom(
         )
     ],
     particleGroups: [
-        ParticleGroup(spunParticles: [
+        try! ParticleGroup(spunParticles: [
             AnySpunParticle(
                 spin: .up,
                 particle: try! MutableSupplyTokenDefinitionParticle(

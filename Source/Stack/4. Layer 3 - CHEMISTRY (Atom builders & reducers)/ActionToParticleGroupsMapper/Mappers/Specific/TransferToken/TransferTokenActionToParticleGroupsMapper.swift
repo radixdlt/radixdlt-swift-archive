@@ -41,13 +41,10 @@ public extension TransferTokensActionToParticleGroupsMapper {
         )
         
         let particles = try transitioner.particlesFrom(transfer: transfer, upParticles: upParticles)
-        
-        return [
-            ParticleGroup(
-                spunParticles: particles,
-                metaData: transfer.metaDataFromAttachmentOrEmpty
-            )
-        ]
+
+        let particleGroup = try ParticleGroup(spunParticles: particles, metaData: transfer.metaDataFromAttachmentOrEmpty)
+
+        return [particleGroup]
     }
 }
 

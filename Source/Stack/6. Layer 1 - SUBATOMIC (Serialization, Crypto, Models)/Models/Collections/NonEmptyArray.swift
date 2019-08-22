@@ -24,16 +24,17 @@
 
 import Foundation
 
-// swiftlint:disable opening_brace
+// swiftlint:disable colon opening_brace
 
 public struct NonEmptyArray<ElementInArray>:
     ArrayConvertible,
     ArrayInitializable,
     Throwing
 {
+    // swiftlint:enable colon opening_brace
+
     public typealias Element = ElementInArray
-    // swiftlint:enable opening_brace
-    
+
     public let elements: [Element]
 
     public init(unvalidated: [Element]) throws {

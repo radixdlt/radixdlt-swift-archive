@@ -24,16 +24,49 @@
 
 import Foundation
 
-// swiftlint:disable colon
-/// A collection of Radix addresses
+// swiftlint:disable colon opening_brace
+
+/// A collection of Radix addresses, all belonging to the same universe (having the same magic)
 public struct Addresses:
+    Throwing,
     ArrayDecodable,
-    Equatable {
-// swiftlint:enable colon
+    Equatable
+{
+
+    // swiftlint:enable colon opening_brace
+
     public let addresses: Set<Address>
     
-    public init(addresses: Set<Address> = Set()) {
+    public init(addresses: Set<Address>) throws {
+        try Addresses.allInSameUniverse(addresses.asArray)
         self.addresses = addresses
+    }
+}
+
+// MARK: - Throwing
+public extension Addresses {
+    enum Error: Swift.Error, Equatable {
+        case differentUniverses(addresses: Set<Address>)
+    }
+
+    static func allInSameUniverse(_ addressConvertibles: [AddressConvertible]) throws {
+        let addresses = [Address](addressConvertibles.map { $0.address })
+        let head: Address 
+        let tail: [Address]
+        
+        switch addresses.countedElementsZeroOneTwoAndMany {
+        case .two(let first, let secondAndLast): head = first; tail = [secondAndLast]
+        case .many(let aHead, let aTail): head = aHead; tail = aTail
+        default: return
+        }
+
+        for address in tail {
+            guard address.inTheSameUniverse(as: head) else {
+                throw Error.differentUniverses(addresses: Set(addresses))
+            }
+        }
+
+        // All is well
     }
 }
 
@@ -46,6 +79,10 @@ public extension Addresses {
     }
     
     init(elements: [Element]) {
-        self.init(addresses: elements.asSet)
+        do {
+            try self.init(addresses: elements.asSet)
+        } catch {
+            badLiteralValue(elements, error: error)
+        }
     }
 }

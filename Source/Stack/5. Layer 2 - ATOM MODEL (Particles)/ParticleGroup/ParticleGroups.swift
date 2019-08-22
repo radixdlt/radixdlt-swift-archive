@@ -34,15 +34,17 @@ public struct ParticleGroups:
  // swiftlint:enable colon
     
     public let particleGroups: [ParticleGroup]
-    public init(particleGroups: [ParticleGroup] = []) {
+    public init(particleGroups: [ParticleGroup] = []) throws {
         self.particleGroups = particleGroups
+
+        try self.ensureAllAddressesInTheSameUniverse()
     }
 }
 
 // MARK: - Convenience
 public extension ParticleGroups {
-    init(groups: ParticleGroup...) {
-        self.init(particleGroups: groups)
+    init(groups: ParticleGroup...) throws {
+        try self.init(particleGroups: groups)
     }
 }
 
@@ -53,7 +55,11 @@ public extension ParticleGroups {
         return particleGroups
     }
     init(elements: [Element]) {
-        self.init(particleGroups: elements)
+        do {
+            try self.init(particleGroups: elements)
+        } catch {
+            badLiteralValue(elements, error: error)
+        }
     }
 }
 

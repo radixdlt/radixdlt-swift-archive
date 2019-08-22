@@ -80,7 +80,9 @@ public extension DefaultTransactionToAtomMapper {
         guard let particleGroups = atomStore.clearStagedParticleGroups(for: uuid) else {
             incorrectImplementation("Found no staged ParticleGroups for UUID: \(uuid), but expected to.")
         }
-        return Atom(particleGroups: particleGroups)
+        let atom = Atom(particleGroups: particleGroups)
+        try Addresses.allInSameUniverse(atom.addresses().map { $0 })
+        return atom
     }
 }
 

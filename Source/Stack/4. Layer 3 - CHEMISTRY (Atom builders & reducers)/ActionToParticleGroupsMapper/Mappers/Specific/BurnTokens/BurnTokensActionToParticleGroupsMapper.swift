@@ -69,9 +69,9 @@ public extension DefaultBurnTokensActionToParticleGroupsMapper {
         
         let spunParticles = try transitioner.particlesFrom(burn: action, upParticles: upParticles)
         
-        return [
-            ParticleGroup(spunParticles: spunParticles)
-        ]
+        let particleGroup = try ParticleGroup(spunParticles: spunParticles)
+
+        return [particleGroup]
     }
     
     func validateConsumeTokenAction(
