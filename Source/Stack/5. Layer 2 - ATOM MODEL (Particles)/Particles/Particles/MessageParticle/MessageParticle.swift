@@ -83,8 +83,8 @@ public extension MessageParticle {
 
 // MARK: - Accountable
 public extension MessageParticle {
-    var addresses: Addresses {
-        return Addresses([from, to])
+    func addresses() throws -> Addresses {
+        return try Addresses(addresses: [from, to])
     }
 }
 

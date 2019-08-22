@@ -26,7 +26,7 @@ import Foundation
 
 public struct Secp256k1 {}
 public extension Secp256k1 {
-    // swiftlint:disable force_unwrap identifier_name
+    // swiftlint:disable identifier_name
     static let order = BigUnsignedInt(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141")!
     static let G = EllipticCurvePoint(
         x: BigUnsignedInt(hex: "79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798")!,

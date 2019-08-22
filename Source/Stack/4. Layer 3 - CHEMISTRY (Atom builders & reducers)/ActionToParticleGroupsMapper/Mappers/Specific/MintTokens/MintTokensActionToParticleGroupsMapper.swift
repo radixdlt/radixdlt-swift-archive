@@ -67,10 +67,11 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
         )
         
         let spunParticles = try transitioner.particlesFrom(mint: action, upParticles: upParticles)
-        
-        return [
-            ParticleGroup(spunParticles: spunParticles)
-        ]
+
+        let particleGroup = try ParticleGroup(spunParticles: spunParticles)
+
+        return [particleGroup]
+
     }
     
     func validateInput(action mintAction: MintTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {

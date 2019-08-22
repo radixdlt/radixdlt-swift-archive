@@ -81,8 +81,8 @@ public extension ResourceIdentifierParticle {
 
 // MARK: - Accountable
 public extension ResourceIdentifierParticle {
-    var addresses: Addresses {
-        return [resourceIdentifier.address]
+    func addresses() throws -> Addresses {
+        return try Addresses(addresses: [resourceIdentifier.address])
     }
 }
 

@@ -118,7 +118,7 @@ public extension UnallocatedTokensParticle {
 
 // MARK: - Accountable
 public extension UnallocatedTokensParticle {
-    var addresses: Addresses {
-        return [tokenDefinitionReference.address]
+    func addresses() throws -> Addresses {
+        return try Addresses(addresses: [tokenDefinitionReference.address])
     }
 }

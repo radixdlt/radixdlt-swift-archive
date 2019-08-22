@@ -33,23 +33,24 @@ public protocol DestinationsOwner {
 public protocol ParticleConvertible: RadixHashable, DSONEncodable, Codable, DestinationsOwner {
     var particleType: ParticleType { get }
     
-    func shardables() -> Addresses?
+    func shardables() throws -> Addresses?
 }
 
 public extension DestinationsOwner where Self: Accountable {
     func destinations() -> [PublicKeyHashEUID] {
-        return addresses.elements.map { $0.publicKey.hashEUID }.sorted()
+        // swiftlint:disable:next force_try
+        return try! addresses().elements.map { $0.publicKey.hashEUID }.sorted()
     }
 }
 
 public extension ParticleConvertible {
-    func shardables() -> Addresses? {
+    func shardables() throws -> Addresses? {
 
         guard let accountable = self as? Accountable else {
             return nil
         }
         
-        return accountable.addresses
+        return try accountable.addresses()
     }
 }
 

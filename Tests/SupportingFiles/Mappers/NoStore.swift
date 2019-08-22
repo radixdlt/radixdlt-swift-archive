@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,26 +22,31 @@
 // SOFTWARE.
 //
 
+import Foundation
 @testable import RadixSDK
-import XCTest
+import RxSwift
 
-class AddressEUIDTests: XCTestCase {
-    
-    func testHashIdOfAddress() {
-        // GIVEN
-        // An address
-        let address: Address = "JHB89drvftPj6zVCNjnaijURk8D8AMFw4mVja19aoBGmRXWchnJ"
-        
-        // WHEN
-        // I calculate it's hashEUID ("hid")
-        let hashEUID = address.hashEUID
-        
-        // THEN
-        // It equals the one produces by the Java lib
-        XCTAssertEqual(
-            hashEUID,
-            "8cfef50ea6a767813631490f9a94f73f",
-            "Should equal the value from Java library"
-        )
+struct NoStore: AtomStore {}
+extension NoStore {
+    func onSync(address: Address) -> Observable<Date> {
+        return .empty()
+    }
+
+    func atomObservations(of address: Address) -> Observable<AtomObservation> {
+         return .empty()
+    }
+
+    func upParticles(at address: Address, stagedUuid: UUID?) -> [AnyUpParticle] {
+        return []
+    }
+
+    func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {
+
+    }
+
+    func stageParticleGroup(_ particleGroup: ParticleGroup, uuid: UUID) {}
+
+    func clearStagedParticleGroups(for uuid: UUID) -> ParticleGroups? {
+        return nil
     }
 }

@@ -45,7 +45,6 @@ public extension Signing {
     func decryptAndDecode(_ data: DataConvertible, encoding: String.Encoding = .default) throws -> String {
         let encoded = try decrypt(data)
         
-        // swiftlint:disable force_unwrap
         return String(data: encoded, encoding: encoding)!
     }
 }

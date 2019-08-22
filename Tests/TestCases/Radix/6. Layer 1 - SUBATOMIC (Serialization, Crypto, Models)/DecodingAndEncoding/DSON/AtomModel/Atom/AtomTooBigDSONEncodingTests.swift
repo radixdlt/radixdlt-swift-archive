@@ -31,7 +31,7 @@ class AtomTooBigDSONEncodingTests: XCTestCase {
         // GIVEN
         // An atom with 1000 particles
         let atom = Atom(
-            particleGroups: [ParticleGroup(spunParticles: oneThousandParticles)]
+            particleGroups: [try! ParticleGroup(spunParticles: oneThousandParticles)]
         )
         
         XCTAssertThrowsSpecificError(

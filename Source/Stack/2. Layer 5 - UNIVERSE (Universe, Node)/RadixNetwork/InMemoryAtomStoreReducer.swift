@@ -47,7 +47,7 @@ public extension InMemoryAtomStoreReducer {
             let atomStatusEvent = submitAtomActionStatus.statusEvent
             let atom = submitAtomActionStatus.atom
             if atomStatusEvent == .stored {
-                atom.addresses().forEach { addressInAtom in
+                atom.allAddresses.forEach { addressInAtom in
                     func store(atomObservation: AtomObservation) {
                         atomStore.store(atomObservation: atomObservation, address: addressInAtom, notifyListenerMode: .notifyOnAtomUpdateAndSync)
                     }
@@ -59,4 +59,14 @@ public extension InMemoryAtomStoreReducer {
 
     }
     
+}
+
+extension Atomic {
+    var allAddresses: [Address] {
+        do {
+            return try addresses().elements
+        } catch let addressWrongUniverseError as Addresses.Error {
+            incorrectImplementation("Should not be able to create an atom with addresses not in the same universe: \(addressWrongUniverseError)")
+        } catch { unexpectedlyMissedToCatch(error: error) }
+    }
 }

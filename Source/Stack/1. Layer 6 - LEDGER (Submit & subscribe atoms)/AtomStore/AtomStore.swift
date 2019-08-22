@@ -77,7 +77,7 @@ public final class InMemoryAtomStore: AtomStore {
         
         // Store genesis atoms
         genesisAtoms.forEach { atom in
-            atom.addresses().forEach {
+            atom.allAddresses.forEach {
                 let atomObservation = AtomObservation.stored(atom)
                 self.store(
                     atomObservation: atomObservation,
@@ -86,7 +86,7 @@ public final class InMemoryAtomStore: AtomStore {
                     notifyListenerMode: .notifyOnAtomUpdateAndSync
                 )
             }
-            atom.addresses().forEach {
+            atom.allAddresses.forEach {
                 self.store(atomObservation: AtomObservation.head(), address: $0, notifyListenerMode: .notifyOnAtomUpdateAndSync)
             }
         }
@@ -119,7 +119,7 @@ public extension InMemoryAtomStore {
             atomUpdateListeners.addListener(newListener, of: address)
             // Replay history
             atoms.filter {
-                $0.value.isStore && $0.key.addresses().contains(address)
+                $0.value.isStore && $0.key.allAddresses.contains(address)
             }.compactMap {
                 $0.value
             }.forEach { newListener.onNext($0) }
@@ -130,7 +130,11 @@ public extension InMemoryAtomStore {
     
     func upParticles(at address: Address, stagedUuid: UUID?) -> [AnyUpParticle] {
         var upParticles = particleIndex.filter {
-            guard $0.key.someParticle.shardables()?.contains(address) == true else { return false }
+            
+            // swiftlint:disable:next force_try
+            let shardables = try! $0.key.someParticle.shardables()
+            
+            guard shardables?.contains(address) == true else { return false }
             var spinParticleIndex = $0.value
             let hasDown = spinParticleIndex.valueForKey(key: .down, ifAbsent: { Set() }).contains(where: { atoms[$0]?.isStore == true })
             if hasDown { return false }
@@ -246,7 +250,7 @@ public extension InMemoryAtomStore {
         }
         
         if includeAtom, notifyListenerMode.shouldNotifyOnAtomUpdate {
-            atom.addresses().forEach {
+            atom.allAddresses.forEach {
                 atomUpdateListeners.notifyLister(of: $0, about: atomObservation)
             }
         }

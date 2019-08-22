@@ -28,6 +28,21 @@ public protocol SpunParticlesOwner {
     var spunParticles: [AnySpunParticle] { get }
 }
 
+public extension SpunParticlesOwner {
+    func addresses() throws -> Addresses {
+        let addresses: [Address] = try spunParticles
+            .map { $0.particle }
+            .compactMap { try $0.shardables() }
+            .flatMap { $0.elements }
+
+        return try Addresses(addresses: Set(addresses))
+    }
+
+    func ensureAllAddressesInTheSameUniverse() throws {
+        _ = try addresses()
+    }
+}
+
 public extension ParticleConvertible {
     func withSpin(_ spin: Spin = .up) -> AnySpunParticle {
         return AnySpunParticle(spin: spin, particle: self)
@@ -56,7 +71,10 @@ public struct ParticleGroup:
     public init(
         spunParticles: [AnySpunParticle],
         metaData: MetaData = [:]
-    ) {
+    ) throws {
+
+        try spunParticles.ensureAllAddressesInTheSameUniverse()
+
         self.spunParticles = spunParticles
         self.metaData = metaData
     }
@@ -67,8 +85,8 @@ public extension ParticleGroup {
     init(
         spunParticles: AnySpunParticle...,
         metaData: MetaData = [:]
-        ) {
-        self.init(spunParticles: spunParticles, metaData: metaData)
+    ) throws {
+        try self.init(spunParticles: spunParticles, metaData: metaData)
     }
 }
 
@@ -109,16 +127,20 @@ public extension ParticleGroup {
         return spunParticles
     }
     init(elements: [Element]) {
-        self.init(spunParticles: elements)
+        do {
+            try self.init(spunParticles: elements)
+        } catch {
+            badLiteralValue(elements, error: error)
+        }
     }
 }
 
 // MARK: - Appending Particles
 public extension ParticleGroup {
-    static func += (group: inout ParticleGroup, spunParticle: AnySpunParticle) {
+    static func += (group: inout ParticleGroup, spunParticle: AnySpunParticle) throws {
         var allParticles = group.spunParticles
         allParticles.append(spunParticle)
-        group = ParticleGroup(spunParticles: allParticles, metaData: group.metaData)
+        group = try ParticleGroup(spunParticles: allParticles, metaData: group.metaData)
     }
 }
 

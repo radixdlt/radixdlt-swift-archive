@@ -68,14 +68,14 @@ public extension AnySpunParticle {
 }
 
 public extension Array where Element == AnySpunParticle {
-    func wrapInGroup() -> ParticleGroup {
-        return ParticleGroup(spunParticles: self)
+    func wrapInGroup() throws -> ParticleGroup {
+        return try ParticleGroup(spunParticles: self)
     }
 }
 
 public extension AnySpunParticle {
-    func wrapInGroup() -> ParticleGroup {
-        return ParticleGroup(spunParticles: [self])
+    func wrapInGroup() throws -> ParticleGroup {
+        return try ParticleGroup(spunParticles: [self])
     }
     
     func mapToSpunParticle<P>(with: P.Type) -> SpunParticle<P>? {

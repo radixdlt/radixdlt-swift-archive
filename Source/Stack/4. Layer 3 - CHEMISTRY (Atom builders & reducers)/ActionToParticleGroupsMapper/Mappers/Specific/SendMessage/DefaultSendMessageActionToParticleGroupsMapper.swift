@@ -62,8 +62,10 @@ public extension DefaultSendMessageActionToParticleGroupsMapper {
         )
         
         particles += messageParticle.withSpin(.up)
-        
-        return [ParticleGroup(spunParticles: particles)]
+
+        let particleGroup = try ParticleGroup(spunParticles: particles)
+
+        return [particleGroup]
     }
 }
 
