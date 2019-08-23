@@ -52,6 +52,12 @@
 		486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */; };
 		486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */; };
 		48A9600D230EFDD30074AC26 /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A9600C230EFDD30074AC26 /* MainScreen.swift */; };
+		48A9600F231003E70074AC26 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A9600E231003E70074AC26 /* SettingsScreen.swift */; };
+		48A96011231004050074AC26 /* LearnScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96010231004050074AC26 /* LearnScreen.swift */; };
+		48A96013231004190074AC26 /* AppsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96012231004190074AC26 /* AppsScreen.swift */; };
+		48A96015231004330074AC26 /* SwitchAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96014231004330074AC26 /* SwitchAccountScreen.swift */; };
+		48A96017231004500074AC26 /* ContactsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96016231004500074AC26 /* ContactsScreen.swift */; };
+		48A96019231004690074AC26 /* AssetsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96018231004690074AC26 /* AssetsScreen.swift */; };
 		48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */; };
 		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
@@ -128,6 +134,12 @@
 		486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyScreen.swift; sourceTree = "<group>"; };
 		486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsScreen.swift; sourceTree = "<group>"; };
 		48A9600C230EFDD30074AC26 /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
+		48A9600E231003E70074AC26 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		48A96010231004050074AC26 /* LearnScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnScreen.swift; sourceTree = "<group>"; };
+		48A96012231004190074AC26 /* AppsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsScreen.swift; sourceTree = "<group>"; };
+		48A96014231004330074AC26 /* SwitchAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchAccountScreen.swift; sourceTree = "<group>"; };
+		48A96016231004500074AC26 /* ContactsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsScreen.swift; sourceTree = "<group>"; };
+		48A96018231004690074AC26 /* AssetsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsScreen.swift; sourceTree = "<group>"; };
 		48AA4B97230C492B0016F57F /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionScreen.swift; sourceTree = "<group>"; };
 		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
@@ -407,6 +419,12 @@
 			isa = PBXGroup;
 			children = (
 				48A9600C230EFDD30074AC26 /* MainScreen.swift */,
+				48A9600E231003E70074AC26 /* SettingsScreen.swift */,
+				48A96010231004050074AC26 /* LearnScreen.swift */,
+				48A96014231004330074AC26 /* SwitchAccountScreen.swift */,
+				48A96016231004500074AC26 /* ContactsScreen.swift */,
+				48A96018231004690074AC26 /* AssetsScreen.swift */,
+				48A96012231004190074AC26 /* AppsScreen.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -605,14 +623,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */,
+				48A9600F231003E70074AC26 /* SettingsScreen.swift in Sources */,
 				4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */,
+				48A96015231004330074AC26 /* SwitchAccountScreen.swift in Sources */,
 				486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */,
+				48A96013231004190074AC26 /* AppsScreen.swift in Sources */,
 				48ACA682230AF85C00BF0029 /* SettingsStore.swift in Sources */,
 				48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */,
 				48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */,
 				4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */,
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
 				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
+				48A96019231004690074AC26 /* AssetsScreen.swift in Sources */,
+				48A96011231004050074AC26 /* LearnScreen.swift in Sources */,
 				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
@@ -623,6 +646,7 @@
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
 				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
 				486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */,
+				48A96017231004500074AC26 /* ContactsScreen.swift in Sources */,
 				4844FC71230C2162003106AB /* Font+Radix.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
