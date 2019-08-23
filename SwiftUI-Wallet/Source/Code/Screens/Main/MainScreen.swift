@@ -59,7 +59,7 @@ private extension MainScreen {
             .tabItem {
                 tab.image
                 Text(verbatim: tab.nameLocalized)
-            }
+        }
     }
 }
 
@@ -77,7 +77,12 @@ private extension MainScreen.TabItem {
     }
 
     var image: Image {
-        let name = "\(rawValue + 1).square.fill"
+        let name: String
+        switch self {
+            case .assets: name = "sterlingsign.circle"
+            case .contacts: name = "book.circle"
+            case .settings: name = "gear"
+            }
         return Image(systemName: name)
     }
 }
@@ -97,5 +102,11 @@ struct ContactsScreen: Screen {
 struct SettingsScreen: Screen {
     var body: some View {
         Text("Settings")
+    }
+}
+
+struct SwitchAccountsScreen: Screen {
+    var body: some View {
+        Text("Accounts list overview")
     }
 }

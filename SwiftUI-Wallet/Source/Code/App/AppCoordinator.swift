@@ -37,7 +37,8 @@ final class AppCoordinator {
         if !settingsStore.hasAgreedToTermsAndPolicy {
             return AnyScreen(WelcomeScreen().environmentObject(settingsStore))
         } else {
-            return AnyScreen(GetStartedScreen())
+//            return AnyScreen(GetStartedScreen())
+            return AnyScreen(MainScreen())
         }
 
     }

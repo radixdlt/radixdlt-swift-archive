@@ -32,8 +32,8 @@ struct WelcomeScreen: Screen {
 
     @State private var hasAgreedToPrivacyPolicy = false
 
-    @State private var showTermsWebViewModal = false
-    @State private var showPrivacyWebViewModal = false
+    @State private var isPresentingTermsWebViewModal = false
+    @State private var isPresentingPrivacyWebViewModal = false
 
     var body: some View {
         NavigationView {
@@ -49,11 +49,11 @@ struct WelcomeScreen: Screen {
                     .padding(.leading, -30) // ugly fix for alignment
 
                 Toggle(isOn: $hasAgreedToTermsAndConditions) {
-                    modalWebView(link: .terms, isPresented: $showTermsWebViewModal)
+                    modalWebView(link: .terms, isPresented: $isPresentingTermsWebViewModal)
                 }
 
                 Toggle(isOn: $hasAgreedToPrivacyPolicy) {
-                    modalWebView(link: .privacy, isPresented: $showPrivacyWebViewModal)
+                    modalWebView(link: .privacy, isPresented: $isPresentingPrivacyWebViewModal)
                 }
 
                 NavigationLink(destination: GetStartedScreen()) {
