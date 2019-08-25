@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,37 +23,13 @@
 //
 
 import Foundation
+import SwiftUI
 
-public extension Mnemonic {
-    struct Word: CustomStringConvertible {
-        public let value: String
-        
-        public init(value: String) {
-            precondition(!value.isEmpty)
-            self.value = value
-        }
-    }
-}
+struct BackUpMnemonicScreen: Screen {
 
-public extension Mnemonic.Word {
-    var description: String {
-        // Omitted for security reasons
-        return "<>"
-    }
-}
+    @EnvironmentObject private var keychainStore: KeychainStore
 
-#if DEBUG
-extension Mnemonic.Word: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        return value
-    }
-}
-#endif
-
-
-extension Mnemonic.Word: ExpressibleByStringLiteral {}
-public extension Mnemonic.Word {
-    init(stringLiteral value: String) {
-        self.init(value: value)
+    var body: some View {
+        Text("Foo")
     }
 }

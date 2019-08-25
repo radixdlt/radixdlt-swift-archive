@@ -56,31 +56,41 @@ public extension AbstractIdentity {
         mnemonicGenerator: Mnemonic.Generator = .default,
         backedUpMneumonic: @escaping (Mnemonic) -> MnemonicBackedUpByUser
     ) -> Single<AbstractIdentity> {
-        
+        return newWithoutConfirmationOfBackup(alias: alias, mnemonicGenerator: mnemonicGenerator) {
+            _ = backedUpMneumonic($0)
+        }
+    }
+
+    static func newWithoutConfirmationOfBackup(
+        alias: String? = nil,
+        mnemonicGenerator: Mnemonic.Generator = .default,
+        backedUpMneumonic: @escaping (Mnemonic) -> Void
+    ) -> Single<AbstractIdentity> {
+
         return Single<AbstractIdentity>.create { single in
-            
+
             do {
                 let mnemonic = try mnemonicGenerator.generate()
-                
+
                 // async
-                _ = backedUpMneumonic(mnemonic)
-           
+                backedUpMneumonic(mnemonic)
+
                 // TODO: replace BTC network with Radix one...
                 let wallet = BitcoinKit.HDWallet(seed: mnemonic.seed, network: BitcoinKit.Network.testnetBTC)
-                
+
                 let privateKeyBicoinKit = try wallet.privateKey(index: 0)
-                
+
                 let privateKey = try PrivateKey(data: privateKeyBicoinKit.data)
-                
+
                 let account = Account(privateKey: privateKey)
-                
+
                 let identity = AbstractIdentity(accounts: [account], alias: alias)
-                
+
                 single(.success(identity))
             } catch {
                 single(.error(error))
             }
-            
+
             return Disposables.create()
         }
     }

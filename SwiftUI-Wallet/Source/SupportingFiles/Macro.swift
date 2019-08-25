@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,36 +24,35 @@
 
 import Foundation
 
-public extension Mnemonic {
-    struct Word: CustomStringConvertible {
-        public let value: String
-        
-        public init(value: String) {
-            precondition(!value.isEmpty)
-            self.value = value
-        }
-    }
+var isDebug: Bool {
+    return _isDebugAssertConfiguration()
 }
 
-public extension Mnemonic.Word {
-    var description: String {
-        // Omitted for security reasons
-        return "<>"
-    }
+internal func abstract(_ file: String = #file, _ line: Int = #line) -> Never {
+    let message = "Override this, in file: \(file), line: \(line)"
+    fatalError(message)
 }
 
-#if DEBUG
-extension Mnemonic.Word: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        return value
-    }
+internal func implementMe(_ file: String = #file, _ line: Int = #line) -> Never {
+    let message = "Implement this, in file: \(file), line: \(line)"
+    fatalError(message)
 }
-#endif
 
+internal func incorrectImplementation(
+    _ reason: String? = nil,
+    _ file: String = #file,
+    _ line: Int = #line
+) -> Never {
+    let reasonString = reason != nil ? "`\(reason!)`" : ""
+    let message = "Incorrect implementation: \(reasonString),\nIn file: \(file), line: \(line)"
+    fatalError(message)
+}
 
-extension Mnemonic.Word: ExpressibleByStringLiteral {}
-public extension Mnemonic.Word {
-    init(stringLiteral value: String) {
-        self.init(value: value)
-    }
+internal func incorrectImplementationShouldAlwaysBeAble(
+    to reason: String,
+    _ error: Swift.Error,
+    _ file: String = #file,
+    _ line: Int = #line
+) -> Never {
+    incorrectImplementation("Should always be to: \(reason), error: \(error)")
 }

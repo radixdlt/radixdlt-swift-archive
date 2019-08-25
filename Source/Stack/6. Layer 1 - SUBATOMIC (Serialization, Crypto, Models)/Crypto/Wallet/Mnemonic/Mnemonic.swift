@@ -24,7 +24,7 @@
 
 import Foundation
 
-public struct Mnemonic {
+public struct Mnemonic: CustomStringConvertible {
     
     public static let seperator: String = " "
     
@@ -37,6 +37,20 @@ public struct Mnemonic {
         self.language = language
     }
 }
+
+public extension Mnemonic {
+    var description: String {
+        return "#\(words.count) words omitted for security reasons, language: '\(language)'"
+    }
+}
+
+#if DEBUG
+extension Mnemonic: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "Mnemonic (this is only printable on DEBUG builds): \(words), language: \(language)"
+    }
+}
+#endif
 
 // MARK: - Internal
 internal extension Mnemonic {

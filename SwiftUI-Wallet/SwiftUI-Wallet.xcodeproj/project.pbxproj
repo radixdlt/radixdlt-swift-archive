@@ -3,10 +3,27 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4802E44C231010B5007EC847 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E43E231010B5007EC847 /* RxBlocking.framework */; };
+		4802E44E231010B5007EC847 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E440231010B5007EC847 /* BigInt.framework */; };
+		4802E44F231010B5007EC847 /* RxSwiftExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E441231010B5007EC847 /* RxSwiftExt.framework */; };
+		4802E450231010B5007EC847 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E442231010B5007EC847 /* RxRelay.framework */; };
+		4802E451231010B5007EC847 /* RxOptional.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E443231010B5007EC847 /* RxOptional.framework */; };
+		4802E452231010B5007EC847 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E444231010B5007EC847 /* RxCocoa.framework */; };
+		4802E453231010B5007EC847 /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E445231010B5007EC847 /* SwiftCBOR.framework */; };
+		4802E454231010B5007EC847 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E446231010B5007EC847 /* CryptoSwift.framework */; };
+		4802E455231010B5007EC847 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E447231010B5007EC847 /* Alamofire.framework */; };
+		4802E456231010B5007EC847 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E448231010B5007EC847 /* BitcoinKit.framework */; };
+		4802E457231010B5007EC847 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E449231010B5007EC847 /* Starscream.framework */; };
+		4802E458231010B5007EC847 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E44A231010B5007EC847 /* RxSwift.framework */; };
+		4802E459231010B5007EC847 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E44B231010B5007EC847 /* SwiftyBeaver.framework */; };
+		4802E45C2310199A007EC847 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4802E45B2310199A007EC847 /* KeychainSwift */; };
+		4802E45E231019CE007EC847 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E45D231019CE007EC847 /* KeychainStore.swift */; };
+		4802E46123112E66007EC847 /* BackUpMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */; };
+		4802E46323128B20007EC847 /* Macro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46223128B20007EC847 /* Macro.swift */; };
 		48092559230AC4240056DB28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4809254F230AC4240056DB28 /* AppDelegate.swift */; };
 		4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092550230AC4240056DB28 /* WelcomeScreen.swift */; };
 		4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092551230AC4240056DB28 /* SceneDelegate.swift */; };
@@ -58,6 +75,9 @@
 		48A96015231004330074AC26 /* SwitchAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96014231004330074AC26 /* SwitchAccountScreen.swift */; };
 		48A96017231004500074AC26 /* ContactsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96016231004500074AC26 /* ContactsScreen.swift */; };
 		48A96019231004690074AC26 /* AssetsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96018231004690074AC26 /* AssetsScreen.swift */; };
+		48A9601B231005BF0074AC26 /* IdentityCreationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A9601A231005BF0074AC26 /* IdentityCreationScreen.swift */; };
+		48A9601E231006200074AC26 /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A9601D231006200074AC26 /* RadixSDK.framework */; };
+		48A9601F231006200074AC26 /* RadixSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 48A9601D231006200074AC26 /* RadixSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */; };
 		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
@@ -82,7 +102,38 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		48A96020231006210074AC26 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				48A9601F231006200074AC26 /* RadixSDK.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		4802E43E231010B5007EC847 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = ../Carthage/BuildXcode11/iOS/RxBlocking.framework; sourceTree = "<group>"; };
+		4802E43F231010B5007EC847 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = ../Carthage/BuildXcode11/iOS/RxTest.framework; sourceTree = "<group>"; };
+		4802E440231010B5007EC847 /* BigInt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BigInt.framework; path = ../Carthage/BuildXcode11/iOS/BigInt.framework; sourceTree = "<group>"; };
+		4802E441231010B5007EC847 /* RxSwiftExt.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwiftExt.framework; path = ../Carthage/BuildXcode11/iOS/RxSwiftExt.framework; sourceTree = "<group>"; };
+		4802E442231010B5007EC847 /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = ../Carthage/BuildXcode11/iOS/RxRelay.framework; sourceTree = "<group>"; };
+		4802E443231010B5007EC847 /* RxOptional.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxOptional.framework; path = ../Carthage/BuildXcode11/iOS/RxOptional.framework; sourceTree = "<group>"; };
+		4802E444231010B5007EC847 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = ../Carthage/BuildXcode11/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		4802E445231010B5007EC847 /* SwiftCBOR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftCBOR.framework; path = ../Carthage/BuildXcode11/iOS/SwiftCBOR.framework; sourceTree = "<group>"; };
+		4802E446231010B5007EC847 /* CryptoSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoSwift.framework; path = ../Carthage/BuildXcode11/iOS/CryptoSwift.framework; sourceTree = "<group>"; };
+		4802E447231010B5007EC847 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = ../Carthage/BuildXcode11/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		4802E448231010B5007EC847 /* BitcoinKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BitcoinKit.framework; path = ../Carthage/BuildXcode11/iOS/BitcoinKit.framework; sourceTree = "<group>"; };
+		4802E449231010B5007EC847 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = ../Carthage/BuildXcode11/iOS/Starscream.framework; sourceTree = "<group>"; };
+		4802E44A231010B5007EC847 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = ../Carthage/BuildXcode11/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		4802E44B231010B5007EC847 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = ../Carthage/BuildXcode11/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
+		4802E45D231019CE007EC847 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpMnemonicScreen.swift; sourceTree = "<group>"; };
+		4802E46223128B20007EC847 /* Macro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macro.swift; sourceTree = "<group>"; };
 		48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-Wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,6 +191,8 @@
 		48A96014231004330074AC26 /* SwitchAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchAccountScreen.swift; sourceTree = "<group>"; };
 		48A96016231004500074AC26 /* ContactsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsScreen.swift; sourceTree = "<group>"; };
 		48A96018231004690074AC26 /* AssetsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsScreen.swift; sourceTree = "<group>"; };
+		48A9601A231005BF0074AC26 /* IdentityCreationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCreationScreen.swift; sourceTree = "<group>"; };
+		48A9601D231006200074AC26 /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48AA4B97230C492B0016F57F /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionScreen.swift; sourceTree = "<group>"; };
 		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
@@ -153,6 +206,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48A9601E231006200074AC26 /* RadixSDK.framework in Frameworks */,
+				4802E44C231010B5007EC847 /* RxBlocking.framework in Frameworks */,
+				4802E44E231010B5007EC847 /* BigInt.framework in Frameworks */,
+				4802E44F231010B5007EC847 /* RxSwiftExt.framework in Frameworks */,
+				4802E450231010B5007EC847 /* RxRelay.framework in Frameworks */,
+				4802E451231010B5007EC847 /* RxOptional.framework in Frameworks */,
+				4802E452231010B5007EC847 /* RxCocoa.framework in Frameworks */,
+				4802E453231010B5007EC847 /* SwiftCBOR.framework in Frameworks */,
+				4802E454231010B5007EC847 /* CryptoSwift.framework in Frameworks */,
+				4802E455231010B5007EC847 /* Alamofire.framework in Frameworks */,
+				4802E456231010B5007EC847 /* BitcoinKit.framework in Frameworks */,
+				4802E457231010B5007EC847 /* Starscream.framework in Frameworks */,
+				4802E45C2310199A007EC847 /* KeychainSwift in Frameworks */,
+				4802E458231010B5007EC847 /* RxSwift.framework in Frameworks */,
+				4802E459231010B5007EC847 /* SwiftyBeaver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,6 +248,7 @@
 				4809254D230AC4240056DB28 /* Source */,
 				48092565230AC43F0056DB28 /* UITests */,
 				48092560230AC4330056DB28 /* UnitTests */,
+				48A9601C231006200074AC26 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -223,6 +292,7 @@
 				48092554230AC4240056DB28 /* Preview Content */,
 				48092556230AC4240056DB28 /* LaunchScreen.storyboard */,
 				48092558230AC4240056DB28 /* SwiftUI-Wallet-Info.plist */,
+				4802E46223128B20007EC847 /* Macro.swift */,
 				48571C6E230C19550040896F /* Localizable.strings */,
 			);
 			path = SupportingFiles;
@@ -424,9 +494,33 @@
 				48A96014231004330074AC26 /* SwitchAccountScreen.swift */,
 				48A96016231004500074AC26 /* ContactsScreen.swift */,
 				48A96018231004690074AC26 /* AssetsScreen.swift */,
+				4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */,
+				48A9601A231005BF0074AC26 /* IdentityCreationScreen.swift */,
 				48A96012231004190074AC26 /* AppsScreen.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		48A9601C231006200074AC26 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4802E447231010B5007EC847 /* Alamofire.framework */,
+				4802E440231010B5007EC847 /* BigInt.framework */,
+				4802E448231010B5007EC847 /* BitcoinKit.framework */,
+				4802E446231010B5007EC847 /* CryptoSwift.framework */,
+				4802E43E231010B5007EC847 /* RxBlocking.framework */,
+				4802E444231010B5007EC847 /* RxCocoa.framework */,
+				4802E443231010B5007EC847 /* RxOptional.framework */,
+				4802E442231010B5007EC847 /* RxRelay.framework */,
+				4802E44A231010B5007EC847 /* RxSwift.framework */,
+				4802E441231010B5007EC847 /* RxSwiftExt.framework */,
+				4802E43F231010B5007EC847 /* RxTest.framework */,
+				4802E449231010B5007EC847 /* Starscream.framework */,
+				4802E445231010B5007EC847 /* SwiftCBOR.framework */,
+				4802E44B231010B5007EC847 /* SwiftyBeaver.framework */,
+				48A9601D231006200074AC26 /* RadixSDK.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		48ACA67B230AF3B000BF0029 /* Style */ = {
@@ -444,6 +538,7 @@
 			isa = PBXGroup;
 			children = (
 				48ACA681230AF85C00BF0029 /* SettingsStore.swift */,
+				4802E45D231019CE007EC847 /* KeychainStore.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -475,12 +570,17 @@
 				48092504230AC2A50056DB28 /* Sources */,
 				48092505230AC2A50056DB28 /* Frameworks */,
 				48092506230AC2A50056DB28 /* Resources */,
+				4802E43D23100FD6007EC847 /* Carthage */,
+				48A96020231006210074AC26 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "SwiftUI-Wallet";
+			packageProductDependencies = (
+				4802E45B2310199A007EC847 /* KeychainSwift */,
+			);
 			productName = "SwiftUI-Wallet";
 			productReference = 48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */;
 			productType = "com.apple.product-type.application";
@@ -554,6 +654,9 @@
 				sv,
 			);
 			mainGroup = 480924FF230AC2A50056DB28;
+			packageReferences = (
+				4802E45A2310199A007EC847 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+			);
 			productRefGroup = 48092509230AC2A50056DB28 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -617,14 +720,39 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4802E43D23100FD6007EC847 /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"$(SRCROOT)/input.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = Carthage;
+			outputFileListPaths = (
+				"$(SRCROOT)/output.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		48092504230AC2A50056DB28 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4802E46123112E66007EC847 /* BackUpMnemonicScreen.swift in Sources */,
 				486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */,
 				48A9600F231003E70074AC26 /* SettingsScreen.swift in Sources */,
 				4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */,
+				4802E46323128B20007EC847 /* Macro.swift in Sources */,
 				48A96015231004330074AC26 /* SwitchAccountScreen.swift in Sources */,
 				486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */,
 				48A96013231004190074AC26 /* AppsScreen.swift in Sources */,
@@ -633,6 +761,7 @@
 				48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */,
 				4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */,
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
+				4802E45E231019CE007EC847 /* KeychainStore.swift in Sources */,
 				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
 				48A96019231004690074AC26 /* AssetsScreen.swift in Sources */,
 				48A96011231004050074AC26 /* LearnScreen.swift in Sources */,
@@ -640,6 +769,7 @@
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
 				48A9600D230EFDD30074AC26 /* MainScreen.swift in Sources */,
+				48A9601B231005BF0074AC26 /* IdentityCreationScreen.swift in Sources */,
 				48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */,
 				48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
@@ -826,6 +956,7 @@
 				DEVELOPMENT_ASSET_PATHS = "Source/SupportingFiles/Preview\\ Content/Preview\\ Assets.xcassets";
 				DEVELOPMENT_TEAM = 7SPGKHD4HZ;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS";
 				INFOPLIST_FILE = "Source/SupportingFiles/SwiftUI-Wallet-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -848,6 +979,7 @@
 				DEVELOPMENT_ASSET_PATHS = "Source/SupportingFiles/Preview\\ Content/Preview\\ Assets.xcassets";
 				DEVELOPMENT_TEAM = 7SPGKHD4HZ;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../Carthage/Build/iOS";
 				INFOPLIST_FILE = "Source/SupportingFiles/SwiftUI-Wallet-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -979,6 +1111,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4802E45A2310199A007EC847 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 16.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4802E45B2310199A007EC847 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4802E45A2310199A007EC847 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 48092500230AC2A50056DB28 /* Project object */;
 }

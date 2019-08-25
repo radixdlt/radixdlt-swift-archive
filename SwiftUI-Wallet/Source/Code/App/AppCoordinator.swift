@@ -28,8 +28,10 @@ import SwiftUI
 final class AppCoordinator {
 
     private let settingsStore: SettingsStore
+    private let keychainStore: KeychainStore
 
-    init(settingsStore: SettingsStore) {
+    init(keychainStore: KeychainStore, settingsStore: SettingsStore) {
+        self.keychainStore = keychainStore
         self.settingsStore = settingsStore
     }
 
@@ -37,8 +39,11 @@ final class AppCoordinator {
         if !settingsStore.hasAgreedToTermsAndPolicy {
             return AnyScreen(WelcomeScreen().environmentObject(settingsStore))
         } else {
-//            return AnyScreen(GetStartedScreen())
-            return AnyScreen(MainScreen())
+            //            return AnyScreen(GetStartedScreen())
+            keychainStore.deleteValue(for: .mnemonic)
+            keychainStore.deleteValue(for: .identity)
+
+            return AnyScreen(IdentityCreationScreen().environmentObject(keychainStore))
         }
 
     }
