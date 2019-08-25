@@ -39,11 +39,12 @@ final class AppCoordinator {
         if !settingsStore.hasAgreedToTermsAndPolicy {
             return AnyScreen(WelcomeScreen().environmentObject(settingsStore))
         } else {
-            //            return AnyScreen(GetStartedScreen())
-            keychainStore.deleteValue(for: .mnemonic)
-            keychainStore.deleteValue(for: .identity)
-
-            return AnyScreen(IdentityCreationScreen().environmentObject(keychainStore))
+            return AnyScreen(
+                IdentityCreationScreen()
+                    .environmentObject(
+                        IdentityCreationScreen.ViewModel(keychainStore: keychainStore)
+                    )
+            )
         }
 
     }

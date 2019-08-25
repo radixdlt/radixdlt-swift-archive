@@ -50,7 +50,6 @@ extension Mnemonic.Word: CustomDebugStringConvertible {
 }
 #endif
 
-
 extension Mnemonic.Word: ExpressibleByStringLiteral {}
 public extension Mnemonic.Word {
     init(stringLiteral value: String) {

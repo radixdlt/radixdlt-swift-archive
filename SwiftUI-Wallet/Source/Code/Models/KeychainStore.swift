@@ -37,7 +37,7 @@ final class KeychainStore: ObservableObject  {
     }
 
 //    let didChange = PassthroughSubject<KeychainStore, Never>()
-    let objectWillChange = PassthroughSubject<KeychainStore, Never>()
+    let objectWillChange = PassthroughSubject<Void, Never>()
 }
 
 extension KeychainStore {
@@ -56,11 +56,11 @@ extension KeychainStore {
 
     var mnemonic: Mnemonic? {
         get {
-            load(for: .mnemonic)
+           loadCodable(for: .mnemonic)
         }
         set {
-            if let newIdentity = newValue {
-                save(value: newIdentity, for: .mnemonic)
+            if let newMnemonic = newValue {
+                saveCodable(newMnemonic, for: .mnemonic)
             } else {
                 deleteValue(for: .mnemonic)
             }
@@ -85,18 +85,26 @@ extension KeychainStore {
     func save<Value>(value: Value, for key: Key, access: KeychainSwiftAccessOptions = .accessibleWhenPasscodeSetThisDeviceOnly) {
         keychain.save(value: value, for: key.rawValue, access: access)
 //        didChange.send(self)
-        objectWillChange.send(self)
+        objectWillChange.send()
     }
 
     func deleteValue(for key: Key) {
         keychain.deleteValue(for: key.rawValue)
 //        didChange.send(self)
-        objectWillChange.send(self)
+        objectWillChange.send()
     }
 }
 
 // MARK: - Codable
 extension KeychainStore {
+
+    func loadCodable<C>(
+        for key: Key,
+        jsonDecoder: JSONDecoder = .init()
+    ) -> C? where C: Codable {
+        loadCodable(C.self, for: key, jsonDecoder: jsonDecoder)
+    }
+
     func loadCodable<C>(
         _ modelType: C.Type,
         for key: Key,
@@ -162,6 +170,8 @@ extension KeychainSwift {
             set(bool, forKey: key, withAccess: access)
         } else if let string = value as? String {
             set(string, forKey: key, withAccess: access)
+        } else {
+            fatalError("Unable to save: \(value), for key: \(key)")
         }
     }
 
@@ -181,11 +191,34 @@ extension AbstractIdentity: Codable {
 }
 
 extension Mnemonic: Codable {
+
+    enum CodingKeys: Int, CodingKey {
+        case numberOfWords
+        case language
+        case words
+    }
+
+    private static var separator: String { "," }
     public func encode(to encoder: Encoder) throws {
-        fatalError()
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let wordsAsString = self.words.map { $0.value }.joined(separator: Mnemonic.separator)
+        try container.encode(wordsAsString, forKey: .words)
+        try container.encode(self.language.rawValue, forKey: .language)
+        try container.encode(self.words.count, forKey: .numberOfWords)
     }
 
     public init(from decoder: Decoder) throws {
-        fatalError()
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let wordsAsString = try container.decode(String.self, forKey: .words)
+        let words = wordsAsString.components(separatedBy: Mnemonic.separator).map(Mnemonic.Word.init(value:)) // { Mnemonic.Word($0) }
+        let numberOfWords = try container.decode(Int.self, forKey: .numberOfWords)
+        guard words.count == numberOfWords else {
+            fatalError("incorrect number of words")
+        }
+        let languageRaw = try container.decode(String.self, forKey: .language)
+        guard let language = Language(rawValue: languageRaw) else {
+            fatalError("failed to create language")
+        }
+        self.init(words: words, language: language)
     }
 }

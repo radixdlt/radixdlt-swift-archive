@@ -27,41 +27,49 @@ import RadixSDK
 import Combine
 
 struct IdentityCreationScreen {
-    @ObservedObject private var viewModel = ViewModel()
+    @EnvironmentObject private var viewModel: ViewModel
 }
 
 // MARK: - View
 extension IdentityCreationScreen: Screen {
     var body: some View {
         Group {
-            if viewModel.mnemonic != nil {
-                viewModel.mnemonic.map { mnemonic in
+            if viewModel.keychainStore.mnemonic != nil {
+                viewModel.keychainStore.mnemonic.map { mnemonic in
                     Text("Mnemonic: \(mnemonic.description)")
                 }
             } else {
                 Text("Creating Mnemonic")
             }
         }
-        .onAppear { self.viewModel.generateNewMnemonic() }
+        .onAppear { self.viewModel.generateNewMnemonicWithDelay() }
     }
 }
 
 // MARK: - ViewModel
-private extension IdentityCreationScreen {
+extension IdentityCreationScreen {
     final class ViewModel: ObservableObject {
+
+        fileprivate let keychainStore: KeychainStore
         private let mnemonicGenerator: Mnemonic.Generator
 
-        init(mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf24, language: .english)) {
+
+        init(
+            keychainStore: KeychainStore,
+            mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf24, language: .english)
+        ) {
+            self.keychainStore  = keychainStore
             self.mnemonicGenerator = mnemonicGenerator
+            objectWillChange = keychainStore.objectWillChange
         }
 
-        let objectWillChange = PassthroughSubject<Void, Never>()
+        let objectWillChange: PassthroughSubject<Void, Never>
 
-        var mnemonic: Mnemonic? {
-            willSet {
-                objectWillChange.send()
-            }
-        }
+//        var mnemonic: Mnemonic? {
+//            willSet {
+//                objectWillChange.send()
+//            }
+//        }
 
     }
 }
@@ -71,7 +79,13 @@ extension IdentityCreationScreen.ViewModel {
     // Assume async
     func generateNewMnemonic() {
         do {
-            mnemonic = try mnemonicGenerator.generate()
+            keychainStore.mnemonic = try mnemonicGenerator.generate()
         } catch { incorrectImplementationShouldAlwaysBeAble(to: "Generate mnemonic", error) }
+    }
+
+    func generateNewMnemonicWithDelay() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+            self.generateNewMnemonic()
+        }
     }
 }
