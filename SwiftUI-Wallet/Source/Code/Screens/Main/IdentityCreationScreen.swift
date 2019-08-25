@@ -26,7 +26,14 @@ import SwiftUI
 import RadixSDK
 import Combine
 
-struct IdentityCreationScreen {
+// MARK: - ViewModel
+protocol IdentityCreationViewModel {
+    func generateNewMnemonic()
+    var mnemonic: Mnemonic? { get }
+}
+
+// MARK: - IdentityCreationScreen
+struct IdentityCreationScreen<ViewModel> where ViewModel: IdentityCreationViewModel & ObservableObject {
     @EnvironmentObject private var viewModel: ViewModel
 }
 
@@ -34,58 +41,50 @@ struct IdentityCreationScreen {
 extension IdentityCreationScreen: Screen {
     var body: some View {
         Group {
-            if viewModel.keychainStore.mnemonic != nil {
-                viewModel.keychainStore.mnemonic.map { mnemonic in
+            if viewModel.mnemonic != nil {
+                viewModel.mnemonic.map { mnemonic in
                     Text("Mnemonic: \(mnemonic.description)")
                 }
             } else {
                 Text("Creating Mnemonic")
             }
         }
-        .onAppear { self.viewModel.generateNewMnemonicWithDelay() }
+        .onAppear { self.viewModel.generateNewMnemonic() }
     }
 }
 
-// MARK: - ViewModel
-extension IdentityCreationScreen {
-    final class ViewModel: ObservableObject {
+// MARK: - ViewModel Default
+final class DefaultIdentityCreationViewModel: IdentityCreationViewModel & ObservableObject {
 
-        fileprivate let keychainStore: KeychainStore
-        private let mnemonicGenerator: Mnemonic.Generator
+    let objectWillChange: PassthroughSubject<Void, Never>
+    fileprivate let keychainStore: KeychainStore
+    private let mnemonicGenerator: Mnemonic.Generator
 
+    init(
+        keychainStore: KeychainStore,
+        mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf24, language: .english)
+    ) {
+        self.keychainStore  = keychainStore
+        self.mnemonicGenerator = mnemonicGenerator
+        objectWillChange = keychainStore.objectWillChange
+    }
+}
 
-        init(
-            keychainStore: KeychainStore,
-            mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf24, language: .english)
-        ) {
-            self.keychainStore  = keychainStore
-            self.mnemonicGenerator = mnemonicGenerator
-            objectWillChange = keychainStore.objectWillChange
+extension DefaultIdentityCreationViewModel {
+
+    var mnemonic: Mnemonic? {
+        get {
+            keychainStore.mnemonic
         }
-
-        let objectWillChange: PassthroughSubject<Void, Never>
-
-//        var mnemonic: Mnemonic? {
-//            willSet {
-//                objectWillChange.send()
-//            }
-//        }
-
+        set {
+            keychainStore.mnemonic = newValue
+        }
     }
-}
-
-extension IdentityCreationScreen.ViewModel {
 
     // Assume async
     func generateNewMnemonic() {
         do {
-            keychainStore.mnemonic = try mnemonicGenerator.generate()
+            mnemonic = try mnemonicGenerator.generate()
         } catch { incorrectImplementationShouldAlwaysBeAble(to: "Generate mnemonic", error) }
-    }
-
-    func generateNewMnemonicWithDelay() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-            self.generateNewMnemonic()
-        }
     }
 }

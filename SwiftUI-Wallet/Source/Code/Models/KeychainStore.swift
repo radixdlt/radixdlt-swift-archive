@@ -36,7 +36,6 @@ final class KeychainStore: ObservableObject  {
         self.keychain = keychain
     }
 
-//    let didChange = PassthroughSubject<KeychainStore, Never>()
     let objectWillChange = PassthroughSubject<Void, Never>()
 }
 
@@ -84,13 +83,11 @@ extension KeychainStore {
     ///
     func save<Value>(value: Value, for key: Key, access: KeychainSwiftAccessOptions = .accessibleWhenPasscodeSetThisDeviceOnly) {
         keychain.save(value: value, for: key.rawValue, access: access)
-//        didChange.send(self)
         objectWillChange.send()
     }
 
     func deleteValue(for key: Key) {
         keychain.deleteValue(for: key.rawValue)
-//        didChange.send(self)
         objectWillChange.send()
     }
 }
@@ -177,48 +174,5 @@ extension KeychainSwift {
 
     func deleteValue(for key: String) {
         delete(key)
-    }
-}
-
-extension AbstractIdentity: Codable {
-    public func encode(to encoder: Encoder) throws {
-        fatalError()
-    }
-
-    public convenience init(from decoder: Decoder) throws {
-        fatalError()
-    }
-}
-
-extension Mnemonic: Codable {
-
-    enum CodingKeys: Int, CodingKey {
-        case numberOfWords
-        case language
-        case words
-    }
-
-    private static var separator: String { "," }
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        let wordsAsString = self.words.map { $0.value }.joined(separator: Mnemonic.separator)
-        try container.encode(wordsAsString, forKey: .words)
-        try container.encode(self.language.rawValue, forKey: .language)
-        try container.encode(self.words.count, forKey: .numberOfWords)
-    }
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let wordsAsString = try container.decode(String.self, forKey: .words)
-        let words = wordsAsString.components(separatedBy: Mnemonic.separator).map(Mnemonic.Word.init(value:)) // { Mnemonic.Word($0) }
-        let numberOfWords = try container.decode(Int.self, forKey: .numberOfWords)
-        guard words.count == numberOfWords else {
-            fatalError("incorrect number of words")
-        }
-        let languageRaw = try container.decode(String.self, forKey: .language)
-        guard let language = Language(rawValue: languageRaw) else {
-            fatalError("failed to create language")
-        }
-        self.init(words: words, language: language)
     }
 }

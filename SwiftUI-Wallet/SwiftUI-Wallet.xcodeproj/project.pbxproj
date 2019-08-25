@@ -24,6 +24,7 @@
 		4802E45E231019CE007EC847 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E45D231019CE007EC847 /* KeychainStore.swift */; };
 		4802E46123112E66007EC847 /* BackUpMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */; };
 		4802E46323128B20007EC847 /* Macro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46223128B20007EC847 /* Macro.swift */; };
+		4802E4672312A986007EC847 /* Mnemonic+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E4662312A986007EC847 /* Mnemonic+Codable.swift */; };
 		48092559230AC4240056DB28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4809254F230AC4240056DB28 /* AppDelegate.swift */; };
 		4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092550230AC4240056DB28 /* WelcomeScreen.swift */; };
 		4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092551230AC4240056DB28 /* SceneDelegate.swift */; };
@@ -134,6 +135,7 @@
 		4802E45D231019CE007EC847 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpMnemonicScreen.swift; sourceTree = "<group>"; };
 		4802E46223128B20007EC847 /* Macro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macro.swift; sourceTree = "<group>"; };
+		4802E4662312A986007EC847 /* Mnemonic+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mnemonic+Codable.swift"; sourceTree = "<group>"; };
 		48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-Wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,6 +243,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4802E4642312A95C007EC847 /* Model+Codables */ = {
+			isa = PBXGroup;
+			children = (
+				4802E4662312A986007EC847 /* Mnemonic+Codable.swift */,
+			);
+			path = "Model+Codables";
+			sourceTree = "<group>";
+		};
+		4802E4652312A96E007EC847 /* RadixSDK */ = {
+			isa = PBXGroup;
+			children = (
+				4802E4642312A95C007EC847 /* Model+Codables */,
+			);
+			path = RadixSDK;
+			sourceTree = "<group>";
+		};
 		480924FF230AC2A50056DB28 = {
 			isa = PBXGroup;
 			children = (
@@ -546,6 +564,7 @@
 		48E58F23230E83EC00E3CC86 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				4802E4652312A96E007EC847 /* RadixSDK */,
 				48E58F24230E83F500E3CC86 /* SwiftUI+Extensions */,
 				486D86ED230D6A27006A967A /* Foundation+Extensions */,
 			);
@@ -775,6 +794,7 @@
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
 				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
+				4802E4672312A986007EC847 /* Mnemonic+Codable.swift in Sources */,
 				486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */,
 				48A96017231004500074AC26 /* ContactsScreen.swift in Sources */,
 				4844FC71230C2162003106AB /* Font+Radix.swift in Sources */,

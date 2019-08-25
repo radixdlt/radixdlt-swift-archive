@@ -24,17 +24,12 @@
 
 import SwiftUI
 
-struct WelcomeScreen: Screen {
+struct WelcomeScreen {
+    @EnvironmentObject private var viewModel: ViewModel
+}
 
-    @EnvironmentObject private var settingsStore: SettingsStore
-
-    @State private var hasAgreedToTermsAndConditions = false
-
-    @State private var hasAgreedToPrivacyPolicy = false
-
-    @State private var isPresentingTermsWebViewModal = false
-    @State private var isPresentingPrivacyWebViewModal = false
-
+// MARK: - View
+extension WelcomeScreen: Screen {
     var body: some View {
         NavigationView {
             VStack(spacing: 30) {
@@ -48,19 +43,19 @@ struct WelcomeScreen: Screen {
                     .lineLimit(5)
                     .padding(.leading, -30) // ugly fix for alignment
 
-                Toggle(isOn: $hasAgreedToTermsAndConditions) {
-                    modalWebView(link: .terms, isPresented: $isPresentingTermsWebViewModal)
+                Toggle(isOn: $viewModel.hasAgreedToTermsAndConditions) {
+                    modalWebView(link: .terms, isPresented: $viewModel.isPresentingTermsWebViewModal)
                 }
 
-                Toggle(isOn: $hasAgreedToPrivacyPolicy) {
-                    modalWebView(link: .privacy, isPresented: $isPresentingPrivacyWebViewModal)
+                Toggle(isOn: $viewModel.hasAgreedToPrivacyPolicy) {
+                    modalWebView(link: .privacy, isPresented: $viewModel.isPresentingPrivacyWebViewModal)
                 }
 
                 NavigationLink(destination: GetStartedScreen()) {
                     Text("Welcome.Button.Proceed")
-                        .buttonStyleEmerald(enabled: hasAgreedToTermsAndPolicy)
+                        .buttonStyleEmerald(enabled: viewModel.hasAgreedToTermsAndPolicy)
                 }
-                .enabled(hasAgreedToTermsAndPolicy)
+                .enabled(viewModel.hasAgreedToTermsAndPolicy)
             }
             .padding(.allEdgesButTop, 32)
             .background(
@@ -74,15 +69,8 @@ struct WelcomeScreen: Screen {
     }
 }
 
-
 // MARK: Private
 private extension WelcomeScreen {
-
-    var hasAgreedToTermsAndPolicy: Bool {
-        let hasAgreedToBoth = hasAgreedToTermsAndConditions && hasAgreedToPrivacyPolicy
-        settingsStore.hasAgreedToTermsAndPolicy = hasAgreedToBoth
-        return hasAgreedToBoth
-    }
 
     func modalWebView(link: Link, isPresented: Binding<Bool>) -> some View {
 
@@ -98,6 +86,34 @@ private extension WelcomeScreen {
         .sheet(isPresented: isPresented) { link.screen }
 
     }
+}
+
+// MARK: - ViewModel
+extension WelcomeScreen {
+    final class ViewModel: ObservableObject {
+
+//        @EnvironmentObject
+        fileprivate let settingsStore: SettingsStore
+
+        init(settingsStore: SettingsStore) {
+            self.settingsStore = settingsStore
+        }
+
+        @Published fileprivate var hasAgreedToTermsAndConditions = false
+
+        @Published fileprivate var hasAgreedToPrivacyPolicy = false
+
+        @Published fileprivate var isPresentingTermsWebViewModal = false
+        @Published fileprivate var isPresentingPrivacyWebViewModal = false
+    }
+}
+
+private extension WelcomeScreen.ViewModel {
+    var hasAgreedToTermsAndPolicy: Bool {
+         let hasAgreedToBoth = hasAgreedToTermsAndConditions && hasAgreedToPrivacyPolicy
+         settingsStore.hasAgreedToTermsAndPolicy = hasAgreedToBoth
+         return hasAgreedToBoth
+     }
 }
 
 // MARK: - Links

@@ -37,12 +37,17 @@ final class AppCoordinator {
 
     func initialScreen() -> some Screen {
         if !settingsStore.hasAgreedToTermsAndPolicy {
-            return AnyScreen(WelcomeScreen().environmentObject(settingsStore))
+            return AnyScreen(
+                WelcomeScreen()
+                    .environmentObject(
+                        WelcomeScreen.ViewModel(settingsStore: settingsStore)
+                    )
+                )
         } else {
             return AnyScreen(
-                IdentityCreationScreen()
+                IdentityCreationScreen<DefaultIdentityCreationViewModel>()
                     .environmentObject(
-                        IdentityCreationScreen.ViewModel(keychainStore: keychainStore)
+                        DefaultIdentityCreationViewModel(keychainStore: keychainStore)
                     )
             )
         }
