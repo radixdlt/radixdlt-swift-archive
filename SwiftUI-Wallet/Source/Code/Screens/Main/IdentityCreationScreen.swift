@@ -26,14 +26,8 @@ import SwiftUI
 import RadixSDK
 import Combine
 
-// MARK: - ViewModel
-protocol IdentityCreationViewModel {
-    func generateNewMnemonic()
-    var mnemonic: Mnemonic? { get }
-}
-
 // MARK: - IdentityCreationScreen
-struct IdentityCreationScreen<ViewModel> where ViewModel: IdentityCreationViewModel & ObservableObject {
+struct IdentityCreationScreen {
     @EnvironmentObject private var viewModel: ViewModel
 }
 
@@ -53,24 +47,26 @@ extension IdentityCreationScreen: Screen {
     }
 }
 
-// MARK: - ViewModel Default
-final class DefaultIdentityCreationViewModel: IdentityCreationViewModel & ObservableObject {
+// MARK: - ViewModel
+extension IdentityCreationScreen {
+    final class ViewModel: ObservableObject {
 
-    let objectWillChange: PassthroughSubject<Void, Never>
-    fileprivate let keychainStore: KeychainStore
-    private let mnemonicGenerator: Mnemonic.Generator
+        let objectWillChange: PassthroughSubject<Void, Never>
+        fileprivate let keychainStore: KeychainStore
+        private let mnemonicGenerator: Mnemonic.Generator
 
-    init(
-        keychainStore: KeychainStore,
-        mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf24, language: .english)
-    ) {
-        self.keychainStore  = keychainStore
-        self.mnemonicGenerator = mnemonicGenerator
-        objectWillChange = keychainStore.objectWillChange
+        init(
+            keychainStore: KeychainStore,
+            mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf24, language: .english)
+        ) {
+            self.keychainStore  = keychainStore
+            self.mnemonicGenerator = mnemonicGenerator
+            objectWillChange = keychainStore.objectWillChange
+        }
     }
 }
 
-extension DefaultIdentityCreationViewModel {
+extension IdentityCreationScreen.ViewModel {
 
     var mnemonic: Mnemonic? {
         get {

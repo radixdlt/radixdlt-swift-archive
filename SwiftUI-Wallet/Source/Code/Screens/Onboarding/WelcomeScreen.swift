@@ -92,7 +92,6 @@ private extension WelcomeScreen {
 extension WelcomeScreen {
     final class ViewModel: ObservableObject {
 
-//        @EnvironmentObject
         fileprivate let settingsStore: SettingsStore
 
         init(settingsStore: SettingsStore) {

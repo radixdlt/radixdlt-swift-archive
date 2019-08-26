@@ -45,9 +45,9 @@ final class AppCoordinator {
                 )
         } else {
             return AnyScreen(
-                IdentityCreationScreen<DefaultIdentityCreationViewModel>()
+                IdentityCreationScreen()
                     .environmentObject(
-                        DefaultIdentityCreationViewModel(keychainStore: keychainStore)
+                        IdentityCreationScreen.ViewModel(keychainStore: keychainStore)
                     )
             )
         }
