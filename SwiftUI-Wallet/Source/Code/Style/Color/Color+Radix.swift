@@ -31,9 +31,24 @@ extension Color {
 
 extension Color.Radix {
 
-    static var emerald: Color { .init(red: 0.14, green: 0.71, blue: 0.49) }
-    static var forest: Color { .init(red: 0.24, green: 0.81, blue: 0.56) }
-    static var saphire: Color { .init(red: 0.28, green: 0.3, blue: 0.69) }
+    static var emerald:     Color { .rgb(036, 180, 126) }
+    static var forest:      Color { .rgb(062, 207, 142) }
+    static var dusk:        Color { .rgb(082, 095, 127) }
+    static var saphire:     Color { .rgb(086, 091, 185) }
+    static var ruby:        Color { .rgb(255, 089, 100) }
 
+}
+
+extension Color {
+    static func rgb(_ red: UInt8, _ green: UInt8, _ blue: UInt8) -> Color {
+        func value(_ raw: UInt8) -> Double {
+            return Double(raw)/Double(255)
+        }
+        return Color(
+            red: value(red),
+            green: value(green),
+            blue: value(blue)
+        )
+    }
 }
 

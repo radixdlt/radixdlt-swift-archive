@@ -65,6 +65,11 @@ extension KeychainStore {
             }
         }
     }
+
+    var isWalletSetup: Bool {
+        return identity != nil || mnemonic != nil
+    }
+
 }
 
 extension KeychainStore {

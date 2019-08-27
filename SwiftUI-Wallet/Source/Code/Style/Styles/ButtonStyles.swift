@@ -53,4 +53,8 @@ extension View {
         ModifiedContent(content: self, modifier: ButtonStyle(color: Color.Radix.saphire, enabled: enabled))
     }
 
+    dynamic func buttonStyleRuby(enabled: Bool = true) -> some View {
+          ModifiedContent(content: self, modifier: ButtonStyle(color: Color.Radix.ruby, enabled: enabled))
+      }
+
 }

@@ -23,18 +23,24 @@
 //
 
 import Foundation
-
 import SwiftUI
+import Combine
 
-struct MainScreen: Screen {
+import RadixSDK
 
-    @State private var isPresentingSwitchAccountModal = false
+struct MainScreen {
+    @EnvironmentObject private var viewModel: ViewModel
+}
+
+// MARK: - View
+extension MainScreen: Screen {
 
     var body: some View {
         TabView {
             tab(.assets) {
                 NavigationView {
                     AssetsScreen()
+                        .environmentObject(AssetsViewModel(keychainStore: viewModel.keychainStore))
                         .navigationBarItems(trailing: switchAccountButton)
                 }
             }
@@ -68,23 +74,39 @@ struct MainScreen: Screen {
         }
         .font(.roboto(size: 20))
         .accentColor(Color.Radix.emerald)
-        .sheet(isPresented: $isPresentingSwitchAccountModal) {
+        .sheet(isPresented: $viewModel.isPresentingSwitchAccountModal) {
             SwitchAccountScreen()
         }
     }
 }
 
 private extension MainScreen {
-
     var switchAccountButton: some View {
-        Button(
-            action: { self.isPresentingSwitchAccountModal = true },
-              label: {
-                    Image("Icon/Button/Profile")
-              }
-          )
+        Button(action: { self.viewModel.isPresentingSwitchAccountModal = true }) {
+            Image("Icon/Button/Profile")
+        }
     }
+}
 
+// MARK: - ViewModel
+typealias MainViewModel = MainScreen.ViewModel
+extension MainScreen {
+    final class ViewModel: ObservableObject {
+
+        @Published fileprivate var isPresentingSwitchAccountModal = false
+
+        fileprivate let keychainStore: SecurePersistence
+
+        init(
+            keychainStore: SecurePersistence
+        ) {
+            self.keychainStore = keychainStore
+        }
+    }
+}
+
+// MARK: - TabItem
+private extension MainScreen {
     enum TabItem: Int {
         case assets
         case contacts

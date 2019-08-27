@@ -25,8 +25,34 @@
 import Foundation
 import SwiftUI
 
-struct AssetsScreen: Screen {
-    var body: some View {
-        Text("Assets list overview")
+import RadixSDK
+
+struct MnemonicWord: Swift.Identifiable {
+    let id: Int
+    let word: String
+    init(id: Int, word: String) {
+        self.id = id
+        self.word = word
     }
 }
+
+extension MnemonicWord {
+    var indexedWord: String {
+        "\(id + 1): \(word)"
+    }
+}
+
+extension MnemonicWord {
+    var description: String {
+        // Omitted for security reasons
+        return "<>"
+    }
+}
+
+#if DEBUG
+extension MnemonicWord: CustomDebugStringConvertible {
+    var debugDescription: String {
+        return word
+    }
+}
+#endif

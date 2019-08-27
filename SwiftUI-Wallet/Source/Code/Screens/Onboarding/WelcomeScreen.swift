@@ -51,7 +51,9 @@ extension WelcomeScreen: Screen {
                     modalWebView(link: .privacy, isPresented: $viewModel.isPresentingPrivacyWebViewModal)
                 }
 
-                NavigationLink(destination: GetStartedScreen()) {
+                NavigationLink(destination:
+                    GetStartedScreen().environmentObject(GetStartedScreen.ViewModel.init(keychainStore: viewModel.forwardingKeychainStore))
+                ) {
                     Text("Welcome.Button.Proceed")
                         .buttonStyleEmerald(enabled: viewModel.hasAgreedToTermsAndPolicy)
                 }
@@ -89,13 +91,16 @@ private extension WelcomeScreen {
 }
 
 // MARK: - ViewModel
+typealias WelcomeViewModel = WelcomeScreen.ViewModel
 extension WelcomeScreen {
     final class ViewModel: ObservableObject {
 
-        fileprivate let settingsStore: SettingsStore
+        fileprivate let settingsStore: Preferences
+        fileprivate let forwardingKeychainStore: SecurePersistence
 
-        init(settingsStore: SettingsStore) {
+        init(settingsStore: Preferences, forwardingKeychainStore: SecurePersistence) {
             self.settingsStore = settingsStore
+            self.forwardingKeychainStore = forwardingKeychainStore
         }
 
         @Published fileprivate var hasAgreedToTermsAndConditions = false
@@ -150,23 +155,23 @@ struct WelcomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             WelcomeScreen()
-                .environmentObject(SettingsStore.hasAgreedToTermsAndPolicy)
+                .environmentObject(Preferences.alreadyAgreedToTermsAndPolicy)
                 .environment(\.locale, Locale(identifier: "en"))
 
             WelcomeScreen()
-                .environmentObject(SettingsStore())
+                .environmentObject(Preferences.default)
                 .environment(\.locale, Locale(identifier: "en"))
 
             WelcomeScreen()
-                .environmentObject(SettingsStore())
+                .environmentObject(Preferences.default)
                 .environment(\.locale, Locale(identifier: "sv"))
         }
     }
 }
 
-private extension SettingsStore {
-    static var hasAgreedToTermsAndPolicy: SettingsStore {
-        let settingsStore = SettingsStore()
+private extension Preferences {
+    static var alreadyAgreedToTermsAndPolicy: Preferences {
+        let settingsStore = Preferences.default
         settingsStore.hasAgreedToTermsAndPolicy = true
         return settingsStore
     }

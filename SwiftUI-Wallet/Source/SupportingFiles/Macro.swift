@@ -56,3 +56,8 @@ internal func incorrectImplementationShouldAlwaysBeAble(
 ) -> Never {
     incorrectImplementation("Should always be to: \(reason), error: \(error)")
 }
+
+func performOnMainThread(after delay: DispatchTimeInterval = .seconds(1), closure: @escaping () -> Void) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: closure)
+}
+

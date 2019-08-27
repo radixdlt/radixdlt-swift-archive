@@ -25,62 +25,59 @@
 import Foundation
 import SwiftUI
 
-struct SettingsScreen {
-    @EnvironmentObject private var viewModel: ViewModel
+import RadixSDK
+
+import KingfisherSwiftUI
+
+struct AssetRowView {
+
+    @ObservedObject private var viewModel: ViewModel
+
+    init(asset: Asset) {
+        self.viewModel = ViewModel(asset: asset)
+    }
 }
 
 // MARK: - View
-extension SettingsScreen: Screen {
+extension AssetRowView: View {
     var body: some View {
-        List {
+        HStack {
 
-            viewModel.appVersion.map { appVersion in
-                Text("App version: \(appVersion)")
-            }
+            KFImage(viewModel.iconUrl)
+                .placeholder {
+                    Image(systemName: "arrow.2.circlepath.circle").font(.largeTitle)
+                }
+                .resizable()
+                .frame(width: 32, height: 32, alignment: .center)
 
-            Button("Delete wallet") {
-                self.viewModel.deleteWallet()
-            }.buttonStyleRuby()
+            Text(viewModel.name).font(.roboto(size: 18, weight: .regular))
 
-            Button("Clear settings") {
-                self.viewModel.clearSettings()
-            }.buttonStyleRuby()
+            Spacer()
+
+            Text(viewModel.balance).font(.roboto(size: 18, weight: .medium))
         }
+        .foregroundColor(Color.Radix.dusk)
+        .padding()
     }
 }
 
 // MARK: - ViewModel
-typealias SettingsViewModel = SettingsScreen.ViewModel
-
-extension SettingsScreen {
+extension AssetRowView {
     final class ViewModel: ObservableObject {
+        private let asset: Asset
 
-        private let settingsStore: Preferences
-        private let keychainStore: SecurePersistence
-
-        init(settingsStore: Preferences, keychainStore: SecurePersistence) {
-            self.settingsStore = settingsStore
-            self.keychainStore = keychainStore
+        init(asset: Asset) {
+            self.asset = asset
         }
     }
 }
 
-extension SettingsScreen.ViewModel {
+extension AssetRowView.ViewModel {
+    private var token: TokenDefinition { asset.tokenBalance.token }
 
-    func deleteWallet() {
-        keychainStore.deleteAll()
-    }
+    var name: String { token.name.stringValue }
 
-    func clearSettings() {
-        settingsStore.deleteAll()
-    }
+    var balance: String { "\(asset.tokenBalance.amount.stringValue) \(token.symbol.stringValue)" }
 
-    var appVersion: String? {
-        guard
-             let info = Bundle.main.infoDictionary,
-             let version = info["CFBundleShortVersionString"] as? String,
-             let build = info["CFBundleVersion"] as? String
-            else { return nil }
-         return "\(version) (\(build))"
-    }
+    var iconUrl: URL { token.iconUrl ?? URL("127.0.0.1") }
 }

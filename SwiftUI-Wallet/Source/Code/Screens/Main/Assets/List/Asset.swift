@@ -23,13 +23,15 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct BackUpMnemonicScreen: Screen {
+import RadixSDK
 
-    @EnvironmentObject private var keychainStore: KeychainStore
+struct Asset {
+    let tokenBalance: TokenBalance
+}
 
-    var body: some View {
-        Text("Foo")
+extension Asset: Swift.Identifiable {
+    var id: ResourceIdentifier {
+        return tokenBalance.token.tokenDefinitionReference
     }
 }

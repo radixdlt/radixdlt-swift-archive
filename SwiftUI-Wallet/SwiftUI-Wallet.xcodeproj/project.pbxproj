@@ -76,13 +76,21 @@
 		48A96015231004330074AC26 /* SwitchAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96014231004330074AC26 /* SwitchAccountScreen.swift */; };
 		48A96017231004500074AC26 /* ContactsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96016231004500074AC26 /* ContactsScreen.swift */; };
 		48A96019231004690074AC26 /* AssetsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96018231004690074AC26 /* AssetsScreen.swift */; };
-		48A9601B231005BF0074AC26 /* IdentityCreationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A9601A231005BF0074AC26 /* IdentityCreationScreen.swift */; };
 		48A9601E231006200074AC26 /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A9601D231006200074AC26 /* RadixSDK.framework */; };
 		48A9601F231006200074AC26 /* RadixSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 48A9601D231006200074AC26 /* RadixSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */; };
 		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
 		48ACA682230AF85C00BF0029 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* SettingsStore.swift */; };
+		48BE08172314188A008435F5 /* BackUpMnemonicWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */; };
+		48BE082523151C28008435F5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082423151C28008435F5 /* Kingfisher */; };
+		48BE082723151C28008435F5 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082623151C28008435F5 /* KingfisherSwiftUI */; };
+		48BE082E23151F70008435F5 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE082D23151F70008435F5 /* Asset.swift */; };
+		48BE083023151F8A008435F5 /* AssetRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE082F23151F8A008435F5 /* AssetRowView.swift */; };
+		48BE08322315211F008435F5 /* MockedTokenBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE08312315211F008435F5 /* MockedTokenBalance.swift */; };
+		48BE0835231526D6008435F5 /* MnemonicWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE0834231526D6008435F5 /* MnemonicWord.swift */; };
+		48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */; };
+		48BE083A23152A53008435F5 /* QGrid in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE083923152A53008435F5 /* QGrid */; };
 		48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -193,13 +201,18 @@
 		48A96014231004330074AC26 /* SwitchAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchAccountScreen.swift; sourceTree = "<group>"; };
 		48A96016231004500074AC26 /* ContactsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsScreen.swift; sourceTree = "<group>"; };
 		48A96018231004690074AC26 /* AssetsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsScreen.swift; sourceTree = "<group>"; };
-		48A9601A231005BF0074AC26 /* IdentityCreationScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCreationScreen.swift; sourceTree = "<group>"; };
 		48A9601D231006200074AC26 /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48AA4B97230C492B0016F57F /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionScreen.swift; sourceTree = "<group>"; };
 		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
 		48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScreen.swift; sourceTree = "<group>"; };
 		48ACA681230AF85C00BF0029 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpMnemonicWarningView.swift; sourceTree = "<group>"; };
+		48BE082D23151F70008435F5 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		48BE082F23151F8A008435F5 /* AssetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRowView.swift; sourceTree = "<group>"; };
+		48BE08312315211F008435F5 /* MockedTokenBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedTokenBalance.swift; sourceTree = "<group>"; };
+		48BE0834231526D6008435F5 /* MnemonicWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemonicWord.swift; sourceTree = "<group>"; };
+		48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmMnemonicScreen.swift; sourceTree = "<group>"; };
 		48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSet_Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -208,6 +221,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48BE082723151C28008435F5 /* KingfisherSwiftUI in Frameworks */,
 				48A9601E231006200074AC26 /* RadixSDK.framework in Frameworks */,
 				4802E44C231010B5007EC847 /* RxBlocking.framework in Frameworks */,
 				4802E44E231010B5007EC847 /* BigInt.framework in Frameworks */,
@@ -219,8 +233,10 @@
 				4802E454231010B5007EC847 /* CryptoSwift.framework in Frameworks */,
 				4802E455231010B5007EC847 /* Alamofire.framework in Frameworks */,
 				4802E456231010B5007EC847 /* BitcoinKit.framework in Frameworks */,
+				48BE083A23152A53008435F5 /* QGrid in Frameworks */,
 				4802E457231010B5007EC847 /* Starscream.framework in Frameworks */,
 				4802E45C2310199A007EC847 /* KeychainSwift in Frameworks */,
+				48BE082523151C28008435F5 /* Kingfisher in Frameworks */,
 				4802E458231010B5007EC847 /* RxSwift.framework in Frameworks */,
 				4802E459231010B5007EC847 /* SwiftyBeaver.framework in Frameworks */,
 			);
@@ -294,7 +310,7 @@
 			children = (
 				48E58F23230E83EC00E3CC86 /* Extensions */,
 				4844FC79230C4601003106AB /* Views */,
-				48ACA680230AF84B00BF0029 /* Models */,
+				48BE082823151F1C008435F5 /* DataStore */,
 				48ACA67B230AF3B000BF0029 /* Style */,
 				4809257D230AC6750056DB28 /* App */,
 				4809257E230AC6830056DB28 /* Screens */,
@@ -463,6 +479,7 @@
 		4844FC79230C4601003106AB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				48BE081523141874008435F5 /* Notiifications */,
 				4844FC7A230C4618003106AB /* LabelledDivider.swift */,
 				48458E50230DAAC8007B05A2 /* RadixLogo.swift */,
 				486D86F0230D6A81006A967A /* WebView.swift */,
@@ -506,14 +523,13 @@
 		48A9600B230EF8280074AC26 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				48BE082B23151F4D008435F5 /* Assets */,
 				48A9600C230EFDD30074AC26 /* MainScreen.swift */,
 				48A9600E231003E70074AC26 /* SettingsScreen.swift */,
 				48A96010231004050074AC26 /* LearnScreen.swift */,
 				48A96014231004330074AC26 /* SwitchAccountScreen.swift */,
+				48BE083323152620008435F5 /* BackUpMnemonic */,
 				48A96016231004500074AC26 /* ContactsScreen.swift */,
-				48A96018231004690074AC26 /* AssetsScreen.swift */,
-				4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */,
-				48A9601A231005BF0074AC26 /* IdentityCreationScreen.swift */,
 				48A96012231004190074AC26 /* AppsScreen.swift */,
 			);
 			path = Main;
@@ -552,13 +568,50 @@
 			path = Style;
 			sourceTree = "<group>";
 		};
-		48ACA680230AF84B00BF0029 /* Models */ = {
+		48BE081523141874008435F5 /* Notiifications */ = {
 			isa = PBXGroup;
 			children = (
-				48ACA681230AF85C00BF0029 /* SettingsStore.swift */,
-				4802E45D231019CE007EC847 /* KeychainStore.swift */,
+				48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */,
 			);
-			path = Models;
+			path = Notiifications;
+			sourceTree = "<group>";
+		};
+		48BE082823151F1C008435F5 /* DataStore */ = {
+			isa = PBXGroup;
+			children = (
+				4802E45D231019CE007EC847 /* KeychainStore.swift */,
+				48ACA681230AF85C00BF0029 /* SettingsStore.swift */,
+			);
+			path = DataStore;
+			sourceTree = "<group>";
+		};
+		48BE082B23151F4D008435F5 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				48BE082C23151F55008435F5 /* List */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		48BE082C23151F55008435F5 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				48A96018231004690074AC26 /* AssetsScreen.swift */,
+				48BE082D23151F70008435F5 /* Asset.swift */,
+				48BE08312315211F008435F5 /* MockedTokenBalance.swift */,
+				48BE082F23151F8A008435F5 /* AssetRowView.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
+		48BE083323152620008435F5 /* BackUpMnemonic */ = {
+			isa = PBXGroup;
+			children = (
+				4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */,
+				48BE0834231526D6008435F5 /* MnemonicWord.swift */,
+				48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */,
+			);
+			path = BackUpMnemonic;
 			sourceTree = "<group>";
 		};
 		48E58F23230E83EC00E3CC86 /* Extensions */ = {
@@ -599,6 +652,9 @@
 			name = "SwiftUI-Wallet";
 			packageProductDependencies = (
 				4802E45B2310199A007EC847 /* KeychainSwift */,
+				48BE082423151C28008435F5 /* Kingfisher */,
+				48BE082623151C28008435F5 /* KingfisherSwiftUI */,
+				48BE083923152A53008435F5 /* QGrid */,
 			);
 			productName = "SwiftUI-Wallet";
 			productReference = 48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */;
@@ -675,6 +731,8 @@
 			mainGroup = 480924FF230AC2A50056DB28;
 			packageReferences = (
 				4802E45A2310199A007EC847 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				48BE082323151C28008435F5 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				48BE083823152A52008435F5 /* XCRemoteSwiftPackageReference "QGrid" */,
 			);
 			productRefGroup = 48092509230AC2A50056DB28 /* Products */;
 			projectDirPath = "";
@@ -773,6 +831,7 @@
 				4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */,
 				4802E46323128B20007EC847 /* Macro.swift in Sources */,
 				48A96015231004330074AC26 /* SwitchAccountScreen.swift in Sources */,
+				48BE082E23151F70008435F5 /* Asset.swift in Sources */,
 				486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */,
 				48A96013231004190074AC26 /* AppsScreen.swift in Sources */,
 				48ACA682230AF85C00BF0029 /* SettingsStore.swift in Sources */,
@@ -780,21 +839,25 @@
 				48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */,
 				4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */,
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
+				48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */,
 				4802E45E231019CE007EC847 /* KeychainStore.swift in Sources */,
 				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
 				48A96019231004690074AC26 /* AssetsScreen.swift in Sources */,
+				48BE08322315211F008435F5 /* MockedTokenBalance.swift in Sources */,
 				48A96011231004050074AC26 /* LearnScreen.swift in Sources */,
 				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
 				48A9600D230EFDD30074AC26 /* MainScreen.swift in Sources */,
-				48A9601B231005BF0074AC26 /* IdentityCreationScreen.swift in Sources */,
+				48BE0835231526D6008435F5 /* MnemonicWord.swift in Sources */,
 				48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */,
 				48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
 				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
 				4802E4672312A986007EC847 /* Mnemonic+Codable.swift in Sources */,
+				48BE083023151F8A008435F5 /* AssetRowView.swift in Sources */,
+				48BE08172314188A008435F5 /* BackUpMnemonicWarningView.swift in Sources */,
 				486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */,
 				48A96017231004500074AC26 /* ContactsScreen.swift in Sources */,
 				4844FC71230C2162003106AB /* Font+Radix.swift in Sources */,
@@ -1141,6 +1204,22 @@
 				minimumVersion = 16.0.1;
 			};
 		};
+		48BE082323151C28008435F5 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				branch = xcode11;
+				kind = branch;
+			};
+		};
+		48BE083823152A52008435F5 /* XCRemoteSwiftPackageReference "QGrid" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Q-Mobile/QGrid";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1148,6 +1227,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4802E45A2310199A007EC847 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		48BE082423151C28008435F5 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 48BE082323151C28008435F5 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		48BE082623151C28008435F5 /* KingfisherSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 48BE082323151C28008435F5 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = KingfisherSwiftUI;
+		};
+		48BE083923152A53008435F5 /* QGrid */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 48BE083823152A52008435F5 /* XCRemoteSwiftPackageReference "QGrid" */;
+			productName = QGrid;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

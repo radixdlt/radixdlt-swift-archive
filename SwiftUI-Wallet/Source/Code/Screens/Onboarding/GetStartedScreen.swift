@@ -24,14 +24,27 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
-struct GetStartedScreen: Screen {
+import RadixSDK
+
+struct GetStartedScreen {
+    @EnvironmentObject private var viewModel: ViewModel
+}
+
+// MARK: - View
+extension GetStartedScreen: Screen {
     var body: some View {
-        NavigationView {
+//        NavigationView {
             VStack {
 
-                NavigationLink(destination: MainScreen()) {
-                    Text("GetStarted.Button.ReceiveTransaction").buttonStyleEmerald()
+                NavigationLink(destination:
+                    MainScreen().environmentObject(MainScreen.ViewModel(keychainStore: viewModel.keychainStore))
+                , isActive: $viewModel.showMainScreen) {
+                    Button("GetStarted.Button.ReceiveTransaction") {
+                        self.viewModel.generateNewMnemonicAndProceedToMainScreen()
+                    }
+                        .buttonStyleEmerald()
                 }
 
                 LabelledDivider(Text("GetStarted.Text.Or"))
@@ -41,7 +54,46 @@ struct GetStartedScreen: Screen {
                 }
 
             }.padding(20)
+//        }
+    }
+}
+
+// MARK: - ViewModel
+typealias GetStartedViewModel = GetStartedScreen.ViewModel
+extension GetStartedScreen {
+    final class ViewModel: ObservableObject {
+
+        let objectWillChange: PassthroughSubject<Void, Never>
+        fileprivate let keychainStore: SecurePersistence
+        private let mnemonicGenerator: Mnemonic.Generator
+
+        @Published fileprivate var showMainScreen = false
+
+        init(
+            keychainStore: SecurePersistence,
+            mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf12, language: .english)
+        ) {
+            self.keychainStore  = keychainStore
+            self.mnemonicGenerator = mnemonicGenerator
+            objectWillChange = keychainStore.objectWillChange
         }
+    }
+
+}
+
+extension GetStartedScreen.ViewModel {
+    func generateNewMnemonicAndProceedToMainScreen() {
+        generateNewMnemonic()
+        showMainScreen = true
+    }
+}
+
+private extension GetStartedScreen.ViewModel {
+
+    func generateNewMnemonic() {
+        do {
+            keychainStore.mnemonic = try mnemonicGenerator.generate()
+        } catch { incorrectImplementationShouldAlwaysBeAble(to: "Generate mnemonic", error) }
     }
 }
 
