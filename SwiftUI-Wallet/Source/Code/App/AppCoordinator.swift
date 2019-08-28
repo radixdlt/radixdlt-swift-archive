@@ -30,11 +30,11 @@ final class AppCoordinator {
     private let preferences: Preferences
     private let keychainStore: SecurePersistence
 
-    private let navigationHandler: (AnyScreen) -> Void
+    private let navigationHandler: (AnyScreen, TransitionAnimation) -> Void
 
     init(
         dependencies: (keychainStore: SecurePersistence, preferences: Preferences),
-        navigator navigationHandler: @escaping (AnyScreen) -> Void
+        navigator navigationHandler: @escaping (AnyScreen, TransitionAnimation) -> Void
     ) {
         self.preferences = dependencies.preferences
         self.keychainStore = dependencies.keychainStore
@@ -57,9 +57,9 @@ private extension AppCoordinator {
         case welcome, getStarted, main
     }
 
-    func navigate(to destination: Destination) {
+    func navigate(to destination: Destination, transitionAnimation: TransitionAnimation = .flipFromLeft) {
         let screen = screenForDestination(destination)
-        navigationHandler(screen)
+        navigationHandler(screen, transitionAnimation)
     }
 
     func screenForDestination(_ destination: Destination) -> AnyScreen {
@@ -112,7 +112,7 @@ private extension AppCoordinator {
             MainViewModel(
                 preferences: preferences,
                 securePersistence: keychainStore,
-                walletDeleted: { [unowned self] in self.navigate(to: .getStarted)  }
+                walletDeleted: { [unowned self] in self.navigate(to: .getStarted, transitionAnimation: .flipFromRight)  }
             )
         )
     }

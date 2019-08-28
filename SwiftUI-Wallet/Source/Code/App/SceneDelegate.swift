@@ -36,11 +36,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window?.rootViewController = rootViewController
 
-        let navigationHandler: (AnyScreen) -> Void = { [unowned rootViewController, window] (newRootScreen: AnyScreen) in
+        let navigationHandler: (AnyScreen, TransitionAnimation) -> Void = { [unowned rootViewController, window] (newRootScreen: AnyScreen, transitionAnimation: TransitionAnimation) in
             UIView.transition(
                 with: window!,
-                duration: 0.3,
-                options: .transitionFlipFromLeft,
+                duration: 0.5,
+                options: transitionAnimation.asUIKitTransitionAnimation,
                 animations: { rootViewController.rootView = newRootScreen },
                 completion: nil
             )
@@ -62,5 +62,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         self.window = .fromScene(scene)
         appCoordinator.start()
+    }
+}
+
+enum TransitionAnimation {
+    case flipFromLeft
+    case flipFromRight
+}
+
+private extension TransitionAnimation {
+    var asUIKitTransitionAnimation: UIView.AnimationOptions {
+        switch self {
+        case .flipFromLeft: return UIView.AnimationOptions.transitionFlipFromLeft
+        case .flipFromRight: return UIView.AnimationOptions.transitionFlipFromRight
+        }
     }
 }
