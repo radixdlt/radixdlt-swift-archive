@@ -22,7 +22,6 @@
 // SOFTWARE.
 //
 
-import Foundation
 import SwiftUI
 
 struct PrivacyPolicyScreen: WebViewScreen {

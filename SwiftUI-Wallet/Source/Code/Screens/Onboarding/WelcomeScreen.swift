@@ -51,13 +51,12 @@ extension WelcomeScreen: Screen {
                     modalWebView(link: .privacy, isPresented: $viewModel.isPresentingPrivacyWebViewModal)
                 }
 
-                NavigationLink(destination:
-                    GetStartedScreen().environmentObject(GetStartedScreen.ViewModel.init(keychainStore: viewModel.forwardingKeychainStore))
-                ) {
-                    Text("Welcome.Button.Proceed")
-                        .buttonStyleEmerald(enabled: viewModel.hasAgreedToTermsAndPolicy)
+
+                Button("Welcome.Button.Proceed") {
+                    self.viewModel.proceedToWalletCreation()
                 }
-                .enabled(viewModel.hasAgreedToTermsAndPolicy)
+                .buttonStyleEmerald(enabled: viewModel.hasAgreedToTermsAndPolicy)
+
             }
             .padding(.allEdgesButTop, 32)
             .background(
@@ -91,16 +90,25 @@ private extension WelcomeScreen {
 }
 
 // MARK: - ViewModel
+import Combine
+
 typealias WelcomeViewModel = WelcomeScreen.ViewModel
 extension WelcomeScreen {
     final class ViewModel: ObservableObject {
 
+        private var cancellable: Cancellable?
         fileprivate let settingsStore: Preferences
-        fileprivate let forwardingKeychainStore: SecurePersistence
-
-        init(settingsStore: Preferences, forwardingKeychainStore: SecurePersistence) {
+        private let termsAccepted: () -> Void
+        init(settingsStore: Preferences, termsHaveBeenAccepted: @escaping () -> Void) {
             self.settingsStore = settingsStore
-            self.forwardingKeychainStore = forwardingKeychainStore
+            self.termsAccepted = termsHaveBeenAccepted
+
+            cancellable = Publishers.CombineLatest(
+                $hasAgreedToTermsAndConditions,
+                $hasAgreedToPrivacyPolicy
+            ).map { $0.0 && $0.1 }.sink {
+                settingsStore.hasAgreedToTermsAndPolicy = $0
+            }
         }
 
         @Published fileprivate var hasAgreedToTermsAndConditions = false
@@ -112,12 +120,14 @@ extension WelcomeScreen {
     }
 }
 
-private extension WelcomeScreen.ViewModel {
-    var hasAgreedToTermsAndPolicy: Bool {
-         let hasAgreedToBoth = hasAgreedToTermsAndConditions && hasAgreedToPrivacyPolicy
-         settingsStore.hasAgreedToTermsAndPolicy = hasAgreedToBoth
-         return hasAgreedToBoth
-     }
+extension WelcomeViewModel {
+    func proceedToWalletCreation() {
+        termsAccepted()
+    }
+}
+
+private extension WelcomeViewModel {
+    var hasAgreedToTermsAndPolicy: Bool { settingsStore.hasAgreedToTermsAndPolicy }
 }
 
 // MARK: - Links

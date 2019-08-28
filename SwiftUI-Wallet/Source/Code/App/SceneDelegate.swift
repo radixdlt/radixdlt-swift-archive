@@ -25,6 +25,8 @@
 import UIKit
 import SwiftUI
 
+import KeychainSwift
+
 typealias Screen = View
 typealias AnyScreen = AnyView
 
@@ -32,21 +34,40 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    private let appCoordinator = AppCoordinator(keychainStore: .init(), settingsStore: .init())
+//    private let appCoordinator = AppCoordinator(keychainStore: KeyValueStore(KeychainSwift()), preferences: .default)
+
+    fileprivate lazy var appCoordinator: AppCoordinator = {
+        let rootViewController = UIHostingController(rootView: AnyScreen(EmptyView()))
+
+        window?.rootViewController = rootViewController
+
+        return AppCoordinator(
+            dependencies: (
+                keychainStore: KeyValueStore(KeychainSwift()),
+                preferences: .default
+            )
+        ) { [unowned rootViewController] (newRootScreen: AnyScreen) in
+            rootViewController.rootView = newRootScreen
+        }
+    }()
+
 
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
+        self.window = .fromScene(scene)
+        appCoordinator.start()
+    }
+}
 
+
+extension UIWindow {
+    static func fromScene(_ scene: UIScene) -> UIWindow {
         guard let windowScene = scene as? UIWindowScene else { fatalError("Unable to start app") }
-
         let window = UIWindow(windowScene: windowScene)
-
-        window.rootViewController = UIHostingController(rootView: appCoordinator.initialScreen())
-
-        self.window = window
         window.makeKeyAndVisible()
+        return window
     }
 }

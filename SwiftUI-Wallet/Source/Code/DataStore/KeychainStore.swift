@@ -28,156 +28,67 @@ import Combine
 import KeychainSwift
 import RadixSDK
 
-final class KeychainStore: ObservableObject  {
-    private let keychain: KeychainSwift
 
-    // TODO change to protocol
-    init(keychain: KeychainSwift = .init()) {
-        self.keychain = keychain
+
+extension Preferences {
+    static var `default`: Preferences {
+        return KeyValueStore(UserDefaults.standard)
     }
 
-    let objectWillChange = PassthroughSubject<Void, Never>()
+    var hasAgreedToTermsAndPolicy: Bool {
+           get {
+                    return isTrue(.hasAgreedToTermsAndPolicy)
+                }
+        set {
+//            // Bug? This is needed to prevent infinite recursion....
+//            if newValue != hasAgreedToTermsAndPolicy {
+//                defaults.set(newValue, forKey: Key.hasAgreedToTermsAndPolicy.rawValue)
+//            }
+            save(value: newValue, forKey: .hasAgreedToTermsAndPolicy)
+        }
+
+    }
 }
 
-extension KeychainStore {
-    var identity: AbstractIdentity? {
-        get {
-            load(for: .identity)
-        }
-        set {
-            if let newIdentity = newValue {
-                save(value: newIdentity, for: .identity)
-            } else {
-                deleteValue(for: .identity)
-            }
-        }
-    }
+
+extension SecurePersistence {
 
     var mnemonic: Mnemonic? {
         get {
-           loadCodable(for: .mnemonic)
+           loadCodable(forKey: .mnemonic)
         }
         set {
-            if let newMnemonic = newValue {
-                saveCodable(newMnemonic, for: .mnemonic)
-            } else {
-                deleteValue(for: .mnemonic)
-            }
+            saveValueOrDeleteIfNil(value: newValue, forKey: .mnemonic)
+        }
+    }
+
+    var seedFromMnemonic: Data? {
+        get {
+            loadValue(forKey: .seedFromMnemonic)
+        }
+        set {
+            saveValueOrDeleteIfNil(value: newValue, forKey: .seedFromMnemonic)
         }
     }
 
     var isWalletSetup: Bool {
-        return identity != nil || mnemonic != nil
+        return seedFromMnemonic != nil || mnemonic != nil
     }
 
 }
 
-extension KeychainStore {
-    func load<Value>(for key: Key) -> Value? {
-        guard let anyValue = keychain.loadValue(for: key.rawValue), let value = anyValue as? Value else {
-            return nil
+extension KeyValueStoring {
+    func saveValueOrDeleteIfNil<Value>(value: Value?, forKey key: Key, options: SaveOptions = .default) {
+        guard let newValue = value else {
+            return deleteValue(forKey: key)
         }
-        return value
+        self.save(value: newValue, forKey: key, options: options)
     }
 
-    /// Saves items in Keychain using access option `kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly`
-    /// Do not that means that if the user unsets the iOS passcode for their iOS device, then all data
-    /// will be lost, read more in [Apple Docs][1]
-    ///
-    /// [1]: https://developer.apple.com/documentation/security/ksecattraccessiblewhenpasscodesetthisdeviceonly
-    ///
-    func save<Value>(value: Value, for key: Key, access: KeychainSwiftAccessOptions = .accessibleWhenPasscodeSetThisDeviceOnly) {
-        keychain.save(value: value, for: key.rawValue, access: access)
-        objectWillChange.send()
-    }
-
-    func deleteValue(for key: Key) {
-        keychain.deleteValue(for: key.rawValue)
-        objectWillChange.send()
-    }
-}
-
-// MARK: - Codable
-extension KeychainStore {
-
-    func loadCodable<C>(
-        for key: Key,
-        jsonDecoder: JSONDecoder = .init()
-    ) -> C? where C: Codable {
-        loadCodable(C.self, for: key, jsonDecoder: jsonDecoder)
-    }
-
-    func loadCodable<C>(
-        _ modelType: C.Type,
-        for key: Key,
-        jsonDecoder: JSONDecoder = .init()
-    ) -> C? where C: Codable {
-
-        guard
-            let json: Data = load(for: key),
-            let model = try? jsonDecoder.decode(C.self, from: json)
-            else { return nil }
-        return model
-    }
-
-    func saveCodable<C>(
-        _ model: C,
-        for key: Key,
-        access: KeychainSwiftAccessOptions = .accessibleWhenPasscodeSetThisDeviceOnly,
-        jsonEncoder: JSONEncoder = .init()
-    ) where C: Codable {
-        do {
-            let json = try jsonEncoder.encode(model)
-            save(value: json, for: key, access: access)
-        } catch {
-            // TODO change to print
-            fatalError("Failed to save codable, error: \(error)")
+    func saveValueOrDeleteIfNil<Value>(value: Value?, forKey key: Key, options: SaveOptions = .default) where Value: Codable {
+        guard let newValue = value else {
+            return deleteValue(forKey: key)
         }
-    }
-}
-
-// MARK: - Key
-extension KeychainStore {
-    enum Key: String {
-        case identity, mnemonic
-    }
-}
-
-// MARK: 3rd Party `KeychainSwift` extension
-extension KeychainSwift {
-    typealias Key = KeychainStore.Key
-
-    func loadValue(for key: String) -> Any? {
-        if let data = getData(key) {
-            return data
-        } else if let bool = getBool(key) {
-            return bool
-        } else if let string = get(key) {
-            return string
-        } else {
-            return nil
-        }
-    }
-
-    /// Saves items in Keychain using access option `kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly`
-    /// Do not that means that if the user unsets the iOS passcode for their iOS device, then all data
-    /// will be lost, read more in [Apple Docs][1]
-    ///
-    /// [1]: https://developer.apple.com/documentation/security/ksecattraccessiblewhenpasscodesetthisdeviceonly
-    ///
-    func save(value: Any, for key: String, access: KeychainSwiftAccessOptions) {
-        if let data = value as? Data {
-            set(data, forKey: key, withAccess: access)
-        } else if let bool = value as? Bool {
-            set(bool, forKey: key, withAccess: access)
-        } else if let string = value as? String {
-            set(string, forKey: key, withAccess: access)
-        } else {
-            fatalError("Unable to save: \(value), for key: \(key)")
-        }
-    }
-
-    func deleteValue(for key: String) {
-        delete(key)
+        self.saveCodable(newValue, forKey: key, options: options)
     }
 }

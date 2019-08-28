@@ -43,7 +43,7 @@ extension SettingsScreen: Screen {
             }.buttonStyleRuby()
 
             Button("Clear settings") {
-                self.viewModel.clearSettings()
+                self.viewModel.clearPreferences()
             }.buttonStyleRuby()
         }
     }
@@ -55,12 +55,18 @@ typealias SettingsViewModel = SettingsScreen.ViewModel
 extension SettingsScreen {
     final class ViewModel: ObservableObject {
 
-        private let settingsStore: Preferences
-        private let keychainStore: SecurePersistence
+        private let preferences: Preferences
+        private let securePersistence: SecurePersistence
+        private let walletDeleted: () -> Void
 
-        init(settingsStore: Preferences, keychainStore: SecurePersistence) {
-            self.settingsStore = settingsStore
-            self.keychainStore = keychainStore
+        init(
+            preferences: Preferences,
+            securePersistence: SecurePersistence,
+            walletDeleted: @escaping () -> Void
+        ) {
+            self.preferences = preferences
+            self.securePersistence = securePersistence
+            self.walletDeleted = walletDeleted
         }
     }
 }
@@ -68,11 +74,12 @@ extension SettingsScreen {
 extension SettingsScreen.ViewModel {
 
     func deleteWallet() {
-        keychainStore.deleteAll()
+        securePersistence.deleteAll()
+        walletDeleted()
     }
 
-    func clearSettings() {
-        settingsStore.deleteAll()
+    func clearPreferences() {
+        preferences.deleteAll()
     }
 
     var appVersion: String? {

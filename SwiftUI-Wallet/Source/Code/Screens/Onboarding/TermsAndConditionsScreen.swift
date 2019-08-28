@@ -22,7 +22,7 @@
 // SOFTWARE.
 //
 
-import Foundation
+import SwiftUI
 
 struct TermsAndConditionsScreen: WebViewScreen {
     static let url = URL(string: "https://docs.radixdlt.com/kb/")!

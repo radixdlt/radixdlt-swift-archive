@@ -40,7 +40,7 @@ extension MainScreen: Screen {
             tab(.assets) {
                 NavigationView {
                     AssetsScreen()
-                        .environmentObject(AssetsViewModel(keychainStore: viewModel.keychainStore))
+                        .environmentObject(AssetsViewModel(keychainStore: viewModel.securePersistence))
                         .navigationBarItems(trailing: switchAccountButton)
                 }
             }
@@ -69,6 +69,7 @@ extension MainScreen: Screen {
             tab(.settings) {
                 NavigationView {
                     SettingsScreen()
+                        .environmentObject(viewModel.settingsViewModel())
                 }
             }
         }
@@ -95,13 +96,29 @@ extension MainScreen {
 
         @Published fileprivate var isPresentingSwitchAccountModal = false
 
-        fileprivate let keychainStore: SecurePersistence
+        fileprivate let preferences: Preferences
+        fileprivate let securePersistence: SecurePersistence
+        private let walletDeleted: () -> Void
 
         init(
-            keychainStore: SecurePersistence
+            preferences: Preferences,
+            securePersistence: SecurePersistence,
+            walletDeleted: @escaping () -> Void
         ) {
-            self.keychainStore = keychainStore
+            self.preferences = preferences
+            self.securePersistence = securePersistence
+            self.walletDeleted = walletDeleted
         }
+    }
+}
+
+private extension MainScreen.ViewModel {
+    func settingsViewModel() -> SettingsViewModel {
+        .init(
+            preferences: preferences,
+            securePersistence: securePersistence,
+            walletDeleted: walletDeleted
+        )
     }
 }
 

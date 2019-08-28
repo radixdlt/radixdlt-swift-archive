@@ -27,31 +27,93 @@ import SwiftUI
 
 final class AppCoordinator {
 
-    private let settingsStore: SettingsStore
-    private let keychainStore: KeychainStore
+    private let preferences: Preferences
+    private let keychainStore: SecurePersistence
 
-    init(keychainStore: KeychainStore, settingsStore: SettingsStore) {
-        self.keychainStore = keychainStore
-        self.settingsStore = settingsStore
+    private let navigationHandler: (AnyScreen) -> Void
+
+    init(
+        dependencies: (keychainStore: SecurePersistence, preferences: Preferences),
+        navigator navigationHandler: @escaping (AnyScreen) -> Void
+    ) {
+        self.preferences = dependencies.preferences
+        self.keychainStore = dependencies.keychainStore
+        self.navigationHandler = navigationHandler
+    }
+}
+
+// MARK: Internal
+internal extension AppCoordinator {
+    func start() {
+        navigate(to: initialDestination)
+    }
+}
+
+// MARK: - Private
+
+// MARK: Destination
+private extension AppCoordinator {
+    enum Destination {
+        case welcome, getStarted, main
     }
 
-    func initialScreen() -> some Screen {
-        if !settingsStore.hasAgreedToTermsAndPolicy {
-            return AnyScreen(
-                WelcomeScreen()
-                    .environmentObject(
-                        WelcomeScreen.ViewModel(settingsStore: settingsStore)
-                    )
-                )
-        } else {
-            return AnyScreen(
-                IdentityCreationScreen()
-                    .environmentObject(
-                        IdentityCreationScreen.ViewModel(keychainStore: keychainStore)
-                    )
-            )
+    func navigate(to destination: Destination) {
+        let screen = screenForDestination(destination)
+        navigationHandler(screen)
+    }
+
+    func screenForDestination(_ destination: Destination) -> AnyScreen {
+        switch destination {
+        case .welcome: return AnyScreen(welcome)
+        case .getStarted: return AnyScreen(getStarted)
+        case .main: return AnyScreen(main)
+        }
+    }
+
+    var initialDestination: Destination {
+
+        guard preferences.hasAgreedToTermsAndPolicy else {
+            return .welcome
         }
 
+        guard keychainStore.isWalletSetup else {
+            return .getStarted
+        }
+
+        return .main
+    }
+}
+
+// MARK: - Screens
+private extension AppCoordinator {
+    var welcome: some Screen {
+        WelcomeScreen()
+            .environmentObject(
+                WelcomeViewModel(
+                    settingsStore: preferences,
+                    termsHaveBeenAccepted: { [unowned self] in self.navigate(to: .getStarted) }
+                )
+            )
     }
 
+    var getStarted: some Screen {
+        GetStartedScreen()
+            .environmentObject(
+                GetStartedViewModel(
+                    preferences: preferences,
+                    keychainStore: keychainStore,
+                    walletCreated: { [unowned self] in self.navigate(to: .main) }
+                )
+        )
+    }
+
+    var main: some Screen {
+        MainScreen().environmentObject(
+            MainViewModel(
+                preferences: preferences,
+                securePersistence: keychainStore,
+                walletDeleted: { [unowned self] in self.navigate(to: .getStarted)  }
+            )
+        )
+    }
 }

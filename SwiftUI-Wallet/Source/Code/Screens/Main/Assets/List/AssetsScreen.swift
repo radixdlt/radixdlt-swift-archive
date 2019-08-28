@@ -84,12 +84,7 @@ private extension AssetsScreen.ViewModel {
         }
     }
 
-    var needsToBackupMnemonic: Bool {
-        // We only store the much sensitive `mnemonic` if it has not been backup by user. Otherwise we just store the derived (Radix)AbstractIdentity.
-        let needsToBackupMnemonic = keychainStore.mnemonic != nil
-        print("needsToBackupMnemonic: \(needsToBackupMnemonic)")
-        return needsToBackupMnemonic
-    }
+    var needsToBackupMnemonic: Bool { keychainStore.mnemonic != nil }
 
     func makeBackUpScreen() -> AnyScreen {
         AnyScreen(

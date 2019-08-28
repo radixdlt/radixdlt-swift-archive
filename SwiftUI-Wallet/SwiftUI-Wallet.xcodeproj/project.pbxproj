@@ -20,7 +20,6 @@
 		4802E457231010B5007EC847 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E449231010B5007EC847 /* Starscream.framework */; };
 		4802E458231010B5007EC847 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E44A231010B5007EC847 /* RxSwift.framework */; };
 		4802E459231010B5007EC847 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E44B231010B5007EC847 /* SwiftyBeaver.framework */; };
-		4802E45C2310199A007EC847 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4802E45B2310199A007EC847 /* KeychainSwift */; };
 		4802E45E231019CE007EC847 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E45D231019CE007EC847 /* KeychainStore.swift */; };
 		4802E46123112E66007EC847 /* BackUpMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */; };
 		4802E46323128B20007EC847 /* Macro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46223128B20007EC847 /* Macro.swift */; };
@@ -69,6 +68,7 @@
 		486D86F1230D6A81006A967A /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F0230D6A81006A967A /* WebView.swift */; };
 		486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */; };
 		486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */; };
+		48A767E72316ACB3004949D7 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 48A767E62316ACB3004949D7 /* KeychainSwift */; };
 		48A9600D230EFDD30074AC26 /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A9600C230EFDD30074AC26 /* MainScreen.swift */; };
 		48A9600F231003E70074AC26 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A9600E231003E70074AC26 /* SettingsScreen.swift */; };
 		48A96011231004050074AC26 /* LearnScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A96010231004050074AC26 /* LearnScreen.swift */; };
@@ -221,6 +221,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48A767E72316ACB3004949D7 /* KeychainSwift in Frameworks */,
 				48BE082723151C28008435F5 /* KingfisherSwiftUI in Frameworks */,
 				48A9601E231006200074AC26 /* RadixSDK.framework in Frameworks */,
 				4802E44C231010B5007EC847 /* RxBlocking.framework in Frameworks */,
@@ -235,7 +236,6 @@
 				4802E456231010B5007EC847 /* BitcoinKit.framework in Frameworks */,
 				48BE083A23152A53008435F5 /* QGrid in Frameworks */,
 				4802E457231010B5007EC847 /* Starscream.framework in Frameworks */,
-				4802E45C2310199A007EC847 /* KeychainSwift in Frameworks */,
 				48BE082523151C28008435F5 /* Kingfisher in Frameworks */,
 				4802E458231010B5007EC847 /* RxSwift.framework in Frameworks */,
 				4802E459231010B5007EC847 /* SwiftyBeaver.framework in Frameworks */,
@@ -651,10 +651,10 @@
 			);
 			name = "SwiftUI-Wallet";
 			packageProductDependencies = (
-				4802E45B2310199A007EC847 /* KeychainSwift */,
 				48BE082423151C28008435F5 /* Kingfisher */,
 				48BE082623151C28008435F5 /* KingfisherSwiftUI */,
 				48BE083923152A53008435F5 /* QGrid */,
+				48A767E62316ACB3004949D7 /* KeychainSwift */,
 			);
 			productName = "SwiftUI-Wallet";
 			productReference = 48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */;
@@ -730,9 +730,9 @@
 			);
 			mainGroup = 480924FF230AC2A50056DB28;
 			packageReferences = (
-				4802E45A2310199A007EC847 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				48BE082323151C28008435F5 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				48BE083823152A52008435F5 /* XCRemoteSwiftPackageReference "QGrid" */,
+				48A767E52316ACB3004949D7 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 			);
 			productRefGroup = 48092509230AC2A50056DB28 /* Products */;
 			projectDirPath = "";
@@ -1196,7 +1196,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		4802E45A2310199A007EC847 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+		48A767E52316ACB3004949D7 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
 			requirement = {
@@ -1223,9 +1223,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4802E45B2310199A007EC847 /* KeychainSwift */ = {
+		48A767E62316ACB3004949D7 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4802E45A2310199A007EC847 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			package = 48A767E52316ACB3004949D7 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
 		};
 		48BE082423151C28008435F5 /* Kingfisher */ = {

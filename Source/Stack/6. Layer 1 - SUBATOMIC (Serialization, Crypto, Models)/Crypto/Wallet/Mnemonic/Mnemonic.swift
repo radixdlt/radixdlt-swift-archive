@@ -61,7 +61,7 @@ internal extension Mnemonic {
 
 // MARK: - To BitcoinKit
 import BitcoinKit
-internal extension Mnemonic {
+public extension Mnemonic {
     var seed: Data {
         return BitcoinKit.Mnemonic.seed(mnemonic: words.map { $0.value })
     }

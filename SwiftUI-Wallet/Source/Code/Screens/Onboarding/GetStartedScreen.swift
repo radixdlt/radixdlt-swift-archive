@@ -35,17 +35,13 @@ struct GetStartedScreen {
 // MARK: - View
 extension GetStartedScreen: Screen {
     var body: some View {
-//        NavigationView {
+        NavigationView {
             VStack {
 
-                NavigationLink(destination:
-                    MainScreen().environmentObject(MainScreen.ViewModel(keychainStore: viewModel.keychainStore))
-                , isActive: $viewModel.showMainScreen) {
-                    Button("GetStarted.Button.ReceiveTransaction") {
-                        self.viewModel.generateNewMnemonicAndProceedToMainScreen()
-                    }
-                        .buttonStyleEmerald()
+                Button("GetStarted.Button.ReceiveTransaction") {
+                    self.viewModel.generateNewMnemonicAndProceedToMainScreen()
                 }
+                .buttonStyleEmerald()
 
                 LabelledDivider(Text("GetStarted.Text.Or"))
 
@@ -54,7 +50,7 @@ extension GetStartedScreen: Screen {
                 }
 
             }.padding(20)
-//        }
+        }
     }
 }
 
@@ -64,18 +60,23 @@ extension GetStartedScreen {
     final class ViewModel: ObservableObject {
 
         let objectWillChange: PassthroughSubject<Void, Never>
+        fileprivate let preferences: Preferences
         fileprivate let keychainStore: SecurePersistence
         private let mnemonicGenerator: Mnemonic.Generator
 
-        @Published fileprivate var showMainScreen = false
+        private let walletCreated: () -> Void
 
         init(
+            preferences: Preferences,
             keychainStore: SecurePersistence,
-            mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf12, language: .english)
+            mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf12, language: .english),
+            walletCreated: @escaping () -> Void
         ) {
+            self.preferences = preferences
             self.keychainStore  = keychainStore
             self.mnemonicGenerator = mnemonicGenerator
-            objectWillChange = keychainStore.objectWillChange
+            self.objectWillChange = keychainStore.objectWillChange
+            self.walletCreated = walletCreated
         }
     }
 
@@ -83,19 +84,15 @@ extension GetStartedScreen {
 
 extension GetStartedScreen.ViewModel {
     func generateNewMnemonicAndProceedToMainScreen() {
-        generateNewMnemonic()
-        showMainScreen = true
-    }
-}
-
-private extension GetStartedScreen.ViewModel {
-
-    func generateNewMnemonic() {
         do {
-            keychainStore.mnemonic = try mnemonicGenerator.generate()
+            let newMnemonic = try mnemonicGenerator.generate()
+            keychainStore.mnemonic = newMnemonic
+            keychainStore.seedFromMnemonic = newMnemonic.seed
+            walletCreated()
         } catch { incorrectImplementationShouldAlwaysBeAble(to: "Generate mnemonic", error) }
     }
 }
+
 
 
 #if DEBUG
