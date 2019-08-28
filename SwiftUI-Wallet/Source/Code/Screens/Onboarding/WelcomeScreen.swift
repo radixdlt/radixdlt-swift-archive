@@ -23,6 +23,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct WelcomeScreen {
     @EnvironmentObject private var viewModel: ViewModel
@@ -34,45 +35,59 @@ extension WelcomeScreen: Screen {
         NavigationView {
             VStack(spacing: 30) {
                 RadixLogo.whiteText.frame(height: 50, alignment: .center)
-
                 Spacer()
-
-                Text("Welcome.Text.Body")
-                    .font(.roboto(size: 60))
-                    .foregroundColor(Color.Radix.forest)
-                    .lineLimit(5)
-                    .padding(.leading, -30) // ugly fix for alignment
-
-                Toggle(isOn: $viewModel.hasAgreedToTermsAndConditions) {
-                    modalWebView(link: .terms, isPresented: $viewModel.isPresentingTermsWebViewModal)
-                }
-
-                Toggle(isOn: $viewModel.hasAgreedToPrivacyPolicy) {
-                    modalWebView(link: .privacy, isPresented: $viewModel.isPresentingPrivacyWebViewModal)
-                }
-
-
-                Button("Welcome.Button.Proceed") {
-                    self.viewModel.proceedToWalletCreation()
-                }
-                .buttonStyleEmerald(enabled: viewModel.hasAgreedToTermsAndPolicy)
-
+                welcomeLabel
+                toggleTermsAndConditions
+                togglePrivacyPolicy
+                proceedButton
             }
             .padding(.allEdgesButTop, 32)
-            .background(
-                Image("Images/Background/Welcome")
-                    .resizable()
-                    .edgesIgnoringSafeArea(.top)
-                    .scaledToFill()
-            )
+            .background(backgroundImage)
         }
         .edgesIgnoringSafeArea(.top)
     }
 }
 
-// MARK: Private
+// MARK: Subviews
 private extension WelcomeScreen {
 
+    var welcomeLabel: some View {
+        Text("Welcome.Text.Body")
+            .font(.roboto(size: 60))
+            .foregroundColor(Color.Radix.forest)
+            .lineLimit(5)
+            .padding(.leading, -30) // ugly fix for alignment
+    }
+
+    var backgroundImage: some View {
+        Image("Images/Background/Welcome")
+            .resizable()
+            .edgesIgnoringSafeArea(.top)
+            .scaledToFill()
+    }
+
+    var toggleTermsAndConditions: some View {
+        Toggle(isOn: $viewModel.hasAgreedToTermsAndConditions) {
+            modalWebView(link: .terms, isPresented: $viewModel.isPresentingTermsWebViewModal)
+        }
+    }
+
+    var togglePrivacyPolicy: some View {
+        Toggle(isOn: $viewModel.hasAgreedToPrivacyPolicy) {
+            modalWebView(link: .privacy, isPresented: $viewModel.isPresentingPrivacyWebViewModal)
+        }
+    }
+
+    var proceedButton: some View {
+        Button("Welcome.Button.Proceed") {
+            self.viewModel.proceedToWalletCreation()
+        }
+        .buttonStyleEmerald(enabled: viewModel.hasAgreedToTermsAndPolicy)
+    }
+}
+
+// MARK: View Builder
+private extension WelcomeScreen {
     func modalWebView(link: Link, isPresented: Binding<Bool>) -> some View {
 
         Button(
@@ -90,15 +105,22 @@ private extension WelcomeScreen {
 }
 
 // MARK: - ViewModel
-import Combine
-
 typealias WelcomeViewModel = WelcomeScreen.ViewModel
+
 extension WelcomeScreen {
     final class ViewModel: ObservableObject {
 
         private var cancellable: Cancellable?
-        fileprivate let settingsStore: Preferences
+        private let settingsStore: Preferences
+
+        // Navigation
         private let termsAccepted: () -> Void
+
+        @Published fileprivate var hasAgreedToTermsAndConditions = false
+        @Published fileprivate var hasAgreedToPrivacyPolicy = false
+        @Published fileprivate var isPresentingTermsWebViewModal = false
+        @Published fileprivate var isPresentingPrivacyWebViewModal = false
+
         init(settingsStore: Preferences, termsHaveBeenAccepted: @escaping () -> Void) {
             self.settingsStore = settingsStore
             self.termsAccepted = termsHaveBeenAccepted
@@ -110,13 +132,6 @@ extension WelcomeScreen {
                 settingsStore.hasAgreedToTermsAndPolicy = $0
             }
         }
-
-        @Published fileprivate var hasAgreedToTermsAndConditions = false
-
-        @Published fileprivate var hasAgreedToPrivacyPolicy = false
-
-        @Published fileprivate var isPresentingTermsWebViewModal = false
-        @Published fileprivate var isPresentingPrivacyWebViewModal = false
     }
 }
 
