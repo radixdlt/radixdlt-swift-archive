@@ -64,6 +64,8 @@
 		48458E5C230DB339007B05A2 /* Gotham-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E57230DB338007B05A2 /* Gotham-Light.otf */; };
 		4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4853BFDA230C519B00022D04 /* AppCoordinator.swift */; };
 		48571C6C230C19550040896F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48571C6E230C19550040896F /* Localizable.strings */; };
+		48596A332316BBB0005C1804 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A322316BBB0005C1804 /* View+Extensions.swift */; };
+		48596A362316BBED005C1804 /* UIWindow+FromSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A352316BBED005C1804 /* UIWindow+FromSwiftUI.swift */; };
 		486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86EE230D6A44006A967A /* String_Extensions.swift */; };
 		486D86F1230D6A81006A967A /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F0230D6A81006A967A /* WebView.swift */; };
 		486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */; };
@@ -190,6 +192,8 @@
 		48458E57230DB338007B05A2 /* Gotham-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Light.otf"; sourceTree = "<group>"; };
 		4853BFDA230C519B00022D04 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		48571C6D230C19550040896F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		48596A322316BBB0005C1804 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		48596A352316BBED005C1804 /* UIWindow+FromSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+FromSwiftUI.swift"; sourceTree = "<group>"; };
 		486D86EE230D6A44006A967A /* String_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extensions.swift; sourceTree = "<group>"; };
 		486D86F0230D6A81006A967A /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyScreen.swift; sourceTree = "<group>"; };
@@ -499,6 +503,14 @@
 			path = Gotham;
 			sourceTree = "<group>";
 		};
+		48596A342316BBD3005C1804 /* UIKit+Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				48596A352316BBED005C1804 /* UIWindow+FromSwiftUI.swift */,
+			);
+			path = "UIKit+Extensions";
+			sourceTree = "<group>";
+		};
 		486D86ED230D6A27006A967A /* Foundation+Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -619,6 +631,7 @@
 			children = (
 				4802E4652312A96E007EC847 /* RadixSDK */,
 				48E58F24230E83F500E3CC86 /* SwiftUI+Extensions */,
+				48596A342316BBD3005C1804 /* UIKit+Extensions */,
 				486D86ED230D6A27006A967A /* Foundation+Extensions */,
 			);
 			path = Extensions;
@@ -628,6 +641,7 @@
 			isa = PBXGroup;
 			children = (
 				48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */,
+				48596A322316BBB0005C1804 /* View+Extensions.swift */,
 			);
 			path = "SwiftUI+Extensions";
 			sourceTree = "<group>";
@@ -838,6 +852,7 @@
 				48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */,
 				48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */,
 				4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */,
+				48596A362316BBED005C1804 /* UIWindow+FromSwiftUI.swift in Sources */,
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
 				48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */,
 				4802E45E231019CE007EC847 /* KeychainStore.swift in Sources */,
@@ -854,6 +869,7 @@
 				48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
+				48596A332316BBB0005C1804 /* View+Extensions.swift in Sources */,
 				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
 				4802E4672312A986007EC847 /* Mnemonic+Codable.swift in Sources */,
 				48BE083023151F8A008435F5 /* AssetRowView.swift in Sources */,

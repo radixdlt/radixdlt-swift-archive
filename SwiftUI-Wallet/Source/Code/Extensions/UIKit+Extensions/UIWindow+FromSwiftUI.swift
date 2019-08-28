@@ -25,42 +25,15 @@
 import UIKit
 import SwiftUI
 
-import KeychainSwift
+extension UIWindow {
+    static func fromScene(_ scene: UIScene) -> UIWindow {
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
-    var window: UIWindow?
-
-    fileprivate lazy var appCoordinator: AppCoordinator = {
-        let rootViewController: UIHostingController<AnyView> = .init(rootView: EmptyView().eraseToAny())
-
-        window?.rootViewController = rootViewController
-
-        let navigationHandler: (AnyScreen) -> Void = { [unowned rootViewController, window] (newRootScreen: AnyScreen) in
-            UIView.transition(
-                with: window!,
-                duration: 0.3,
-                options: .transitionFlipFromLeft,
-                animations: { rootViewController.rootView = newRootScreen },
-                completion: nil
-            )
+        guard let windowScene = scene as? UIWindowScene else {
+            incorrectImplementationShouldAlwaysBeAble(to: "Cast 'UIScene' to 'UIWindowScene'")
         }
 
-        return AppCoordinator(
-            dependencies: (
-                keychainStore: KeyValueStore(KeychainSwift()),
-                preferences: .default
-            ),
-            navigator: navigationHandler
-        )
-    }()
-
-    func scene(
-        _ scene: UIScene,
-        willConnectTo session: UISceneSession,
-        options connectionOptions: UIScene.ConnectionOptions
-    ) {
-        self.window = .fromScene(scene)
-        appCoordinator.start()
+        let window = UIWindow(windowScene: windowScene)
+        window.makeKeyAndVisible()
+        return window
     }
 }

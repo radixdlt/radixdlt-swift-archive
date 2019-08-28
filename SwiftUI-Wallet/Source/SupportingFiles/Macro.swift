@@ -50,11 +50,12 @@ internal func incorrectImplementation(
 
 internal func incorrectImplementationShouldAlwaysBeAble(
     to reason: String,
-    _ error: Swift.Error,
+    _ error: Swift.Error? = nil,
     _ file: String = #file,
     _ line: Int = #line
 ) -> Never {
-    incorrectImplementation("Should always be to: \(reason), error: \(error)")
+    let errorString = error != nil ? error.map { ", error: \($0) " } : ""
+    incorrectImplementation("Should always be to: \(reason)\(errorString)")
 }
 
 func performOnMainThread(after delay: DispatchTimeInterval = .seconds(1), closure: @escaping () -> Void) {
