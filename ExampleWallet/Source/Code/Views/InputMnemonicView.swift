@@ -35,9 +35,19 @@ struct InputMnemonicView {
 extension InputMnemonicView: View {
     var body: some View {
         VStack {
+
             // seems like the `title` below isn't displayed??
-            Picker("Displayed?", selection: $viewModel.mnemonicLengthSelectionIndex) {
-                ForEach(viewModel.selectableMnemonicStrenths) { strength in
+            Picker("Language", selection: $viewModel.languageSelectionIndex) {
+                ForEach(viewModel.selectableLangauge) { language in
+                    Text(language.rawValue)
+                }
+            }.pickerStyle(WheelPickerStyle())
+
+            Text("selected language: \(viewModel.selectedLanguage.rawValue)")
+            Text("Mnemonic strength (number of words)")
+
+            Picker("", selection: $viewModel.mnemonicLengthSelectionIndex) {
+                ForEach(viewModel.selectableMnemonicStrengths) { strength in
                     Text(strength.displayableString)
                 }
             }.pickerStyle(SegmentedPickerStyle())
@@ -58,6 +68,7 @@ extension InputMnemonicView {
         fileprivate let allCellViewModels: [InputMnemonicWordCellViewModel]
         fileprivate let mnemonicRestored: (Mnemonic) -> Void
 
+        @Published fileprivate var languageSelectionIndex = 0
         @Published fileprivate var mnemonicLengthSelectionIndex = 0
 
         init(mnemonicRestored: @escaping (Mnemonic) -> Void) {
@@ -69,14 +80,13 @@ extension InputMnemonicView {
 
 private extension InputMnemonicViewModel {
 
+    var selectedMnemonicStrength: Mnemonic.Strength { selectableMnemonicStrengths[mnemonicLengthSelectionIndex] }
 
-    var selectedMnemonicStrength: Mnemonic.Strength {
-        return selectableMnemonicStrenths[mnemonicLengthSelectionIndex]
-    }
+    var selectableLangauge: [Mnemonic.Language] { Mnemonic.Language.allCases }
 
-    var selectableMnemonicStrenths: [Mnemonic.Strength] {
-        Mnemonic.Strength.allCases
-    }
+    var selectedLanguage: Mnemonic.Language { selectableLangauge[languageSelectionIndex] }
+
+    var selectableMnemonicStrengths: [Mnemonic.Strength] { Mnemonic.Strength.allCases }
 
     var cellViewModelsAccordingToSelectedStrength: [InputMnemonicWordCellViewModel] {
         Array(
@@ -84,7 +94,6 @@ private extension InputMnemonicViewModel {
         )
     }
 }
-
 
 // MARK: - InputMnemonicWordCellViewModel
 final class InputMnemonicWordCellViewModel: Swift.Identifiable {
@@ -98,7 +107,7 @@ final class InputMnemonicWordCellViewModel: Swift.Identifiable {
 
 extension Mnemonic.Strength: Swift.Identifiable {
     var displayableString: String {
-        return "#\(wordCount) words"
+        return "#\(wordCount)"
     }
 
     public var id: Int {
@@ -117,5 +126,14 @@ struct InputMnemonicCell {
 extension InputMnemonicCell: View {
     var body: some View {
         TextField("\(cellViewModel.index + 1)", text: $cellViewModel.word)
+    }
+}
+
+extension Mnemonic.Language: Swift.Identifiable {
+    public var id: Int {
+        guard let index = Mnemonic.Language.allCases.enumerated().first(where: { $0.element.rawValue == self.rawValue })?.offset else {
+            incorrectImplementationShouldAlwaysBeAble(to: "Find index of mnemonic language")
+        }
+        return index
     }
 }

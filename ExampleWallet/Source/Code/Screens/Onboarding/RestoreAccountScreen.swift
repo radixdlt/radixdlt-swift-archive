@@ -38,7 +38,7 @@ extension RestoreAccountScreen: Screen {
             Text("Write your mnemonic")
             inputMnemonicView
         }
-        .navigationBarTitle("Restore your Radix acount")
+        .navigationBarTitle("Restore acount")
     }
 }
 
