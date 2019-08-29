@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		48E2A6BD230EB92E00042C16 /* TransactionnOfflineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E2A6BC230EB92E00042C16 /* TransactionnOfflineTests.swift */; };
-		48E2A6BE230EBA3200042C16 /* NoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6340C9122FC4E140044BA97 /* NoStore.swift */; };
+		4867B340231825F10018367E /* Mnemonic+WordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4867B33F231825F10018367E /* Mnemonic+WordList.swift */; };
 		48A33DF523085A8400626090 /* CryptoKitSha256Hasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */; };
 		48A33DF723085A9E00626090 /* Sha512TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF623085A9E00626090 /* Sha512TwiceHasher.swift */; };
 		48A33DF923085ABD00626090 /* CryptoKitSha256TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF823085ABD00626090 /* CryptoKitSha256TwiceHasher.swift */; };
+		48E2A6BD230EB92E00042C16 /* TransactionnOfflineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E2A6BC230EB92E00042C16 /* TransactionnOfflineTests.swift */; };
+		48E2A6BE230EBA3200042C16 /* NoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6340C9122FC4E140044BA97 /* NoStore.swift */; };
 		E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3342242410700A81412 /* UnsignedAtom.swift */; };
 		E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33B22428C7F00A81412 /* SignedAtom.swift */; };
 		E60253FF225CA1C2004B2F94 /* UnallocatedTokensParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */; };
@@ -658,11 +659,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		48E2A6BC230EB92E00042C16 /* TransactionnOfflineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionnOfflineTests.swift; sourceTree = "<group>"; };
 		4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "SwiftUI-Wallet.xcodeproj"; path = "SwiftUI-Wallet/SwiftUI-Wallet.xcodeproj"; sourceTree = "<group>"; };
+		4867B33F231825F10018367E /* Mnemonic+WordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mnemonic+WordList.swift"; sourceTree = "<group>"; };
 		48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitSha256Hasher.swift; sourceTree = "<group>"; };
 		48A33DF623085A9E00626090 /* Sha512TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sha512TwiceHasher.swift; sourceTree = "<group>"; };
 		48A33DF823085ABD00626090 /* CryptoKitSha256TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitSha256TwiceHasher.swift; sourceTree = "<group>"; };
+		48E2A6BC230EB92E00042C16 /* TransactionnOfflineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionnOfflineTests.swift; sourceTree = "<group>"; };
 		E601D3342242410700A81412 /* UnsignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsignedAtom.swift; sourceTree = "<group>"; };
 		E601D33B22428C7F00A81412 /* SignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAtom.swift; sourceTree = "<group>"; };
 		E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnallocatedTokensParticle.swift; sourceTree = "<group>"; };
@@ -3122,6 +3124,7 @@
 				E6E2788F2271CD1C0067D46E /* Mnemonic+Language.swift */,
 				E6E278902271CD1C0067D46E /* Mnemonic+Word.swift */,
 				E6E278912271CD1C0067D46E /* Mnemonic.swift */,
+				4867B33F231825F10018367E /* Mnemonic+WordList.swift */,
 				E6E278922271CD1C0067D46E /* Mnemonic+Error.swift */,
 				E6E278932271CD1C0067D46E /* Mnemonic+Strength.swift */,
 				E6E278942271CD1C0067D46E /* Mnemonic+Generator.swift */,
@@ -4498,6 +4501,7 @@
 				E6E279702271CD1C0067D46E /* TokenConvertible.swift in Sources */,
 				E6E2796B2271CD1C0067D46E /* StringDictionary.swift in Sources */,
 				E6E279622271CD1C0067D46E /* EncodableKeyValue.swift in Sources */,
+				4867B340231825F10018367E /* Mnemonic+WordList.swift in Sources */,
 				E6ED1A4C21F8ACB700654105 /* Int+DataConvertible.swift in Sources */,
 				E6FCB67B22F308A700ECC01B /* DiscoverMoreNodesActionError.swift in Sources */,
 				E6E2797E2271CD1C0067D46E /* EUID.swift in Sources */,

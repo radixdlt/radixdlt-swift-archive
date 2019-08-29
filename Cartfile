@@ -5,7 +5,7 @@ github "RxSwiftCommunity/RxOptional" "4.0.0"
 github "Alamofire/Alamofire" "5.0.0-beta.3"
 github "daltoniam/Starscream" >= 3.0.2
 github "SwiftyBeaver/SwiftyBeaver"
-github "https://github.com/Sajjon/BitcoinKit.git" "1e733824b7a2b1367f8674a9c341a0278ad8b1c8"
+github "https://github.com/Sajjon/BitcoinKit.git" "7de62a30f008c03e8cc51a97cbacd05696c57d65"
 
 github "attaswift/BigInt"
 github "krzyzanowskim/CryptoSwift"

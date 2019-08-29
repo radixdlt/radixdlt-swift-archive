@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,44 +25,45 @@
 import Foundation
 import BitcoinKit
 
-public struct Mnemonic: CustomStringConvertible {
-    
-    public static let seperator: String = " "
-    
-    public let words: [Word]
-    public let language: Language
-    
-    public init(words: [Word], language: Language) {
-        assert(Strength.supports(wordCount: words.count), "Unexpected word length")
-        self.words = words
-        self.language = language
-    }
-}
-
 public extension Mnemonic {
-    var description: String {
-        return "#\(words.count) words omitted for security reasons, language: '\(language)'"
-    }
+    enum WordList {}
 }
 
-#if DEBUG
-extension Mnemonic: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        return "Mnemonic (this is only printable on DEBUG builds): \(words), language: \(language)"
-    }
-}
-#endif
+public extension Mnemonic.WordList {
 
-// MARK: - Internal
-internal extension Mnemonic {
-    init(strings: [String], language: Language) throws {
-        self.init(words: strings.map(Word.init(value:)), language: language)
+    static func forLanguage(_ language: Mnemonic.Language) -> [Mnemonic.Word] {
+        return BitcoinKit.Mnemonic.wordList(for: language.toBitcoinKitLanguage).map(Mnemonic.Word.init(value:))
     }
-}
 
-// MARK: - To BitcoinKit
-public extension Mnemonic {
-    var seed: Data {
-        return BitcoinKit.Mnemonic.seed(mnemonic: words.map { $0.value })
+    static var english: [Mnemonic.Word] {
+        return forLanguage(.english)
+    }
+
+    static var spanish: [Mnemonic.Word] {
+        return forLanguage(.spanish)
+    }
+
+    static var french: [Mnemonic.Word] {
+        return forLanguage(.french)
+    }
+
+    static var italian: [Mnemonic.Word] {
+        return forLanguage(.italian)
+    }
+
+    static var korean: [Mnemonic.Word] {
+        return forLanguage(.korean)
+    }
+
+    static var japanese: [Mnemonic.Word] {
+        return forLanguage(.japanese)
+    }
+
+    static var chineseSimplified: [Mnemonic.Word] {
+        return forLanguage(.chineseSimplified)
+    }
+
+    static var chineseTraditional: [Mnemonic.Word] {
+        return forLanguage(.chineseTraditional)
     }
 }

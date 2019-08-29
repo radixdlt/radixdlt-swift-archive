@@ -27,6 +27,13 @@ import Foundation
 public extension Mnemonic {
     enum Language: String {
         case english
+        case italian
+        case spanish
+        case french
+        case korean
+        case japanese
+        case chineseSimplified
+        case chineseTraditional
     }
 }
 
@@ -39,6 +46,13 @@ internal extension Mnemonic.Language {
     var toBitcoinKitLanguage: BitcoinKit.Mnemonic.Language {
         switch self {
         case .english: return .english
+        case .italian: return .italian
+        case .spanish: return .spanish
+        case .french: return .french
+        case .korean: return .korean
+        case .japanese: return .japanese
+        case .chineseSimplified: return .simplifiedChinese
+        case .chineseTraditional: return .traditionalChinese
         }
     }
 }
