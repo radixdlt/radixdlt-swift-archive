@@ -25,9 +25,7 @@
 import Foundation
 import SwiftUI
 import Combine
-
 import RadixSDK
-
 
 struct ConfirmMnemonicScreen {
     @EnvironmentObject private var viewModel: ViewModel
@@ -37,32 +35,52 @@ struct ConfirmMnemonicScreen {
 extension ConfirmMnemonicScreen: Screen {
     var body: some View {
         VStack {
-            Text("Tap on the words in the correct order").font(.roboto(size: 18))
-
-            MnemonicGridView(cellViewModels: viewModel.selectedWords) { self.viewModel.removeWordFromSelected(word: $0) }
-
-            MnemonicGridView(cellViewModels: viewModel.availableWords) { self.viewModel.addWordToSelected(word: $0) }
-
-            Button("Restart") {
-                self.viewModel.unselectAll()
-            }.buttonStyleSaphire()
-
-//            NavigationLink(destination: BarScreen()) {
-//                Text("Confirm").buttonStyleEmerald(enabled: viewModel.hasOrderedMnemonicWordsCorrectly)
-//            } .enabled(viewModel.hasOrderedMnemonicWordsCorrectly)
-
-            Button("Confirm") { self.viewModel.done() }.buttonStyleEmerald(enabled: viewModel.hasOrderedMnemonicWordsCorrectly)
+            instructionsLabel
+            selectedWordsList
+            availableWordsList
+            restartButton
+            confirmButton
         }
-            .padding([.leading, .trailing], 20)
-            .onAppear { self.viewModel.unselectAll() }
-            .navigationBarTitle("Confirm order")
+        .padding([.leading, .trailing], 20)
+        .onAppear { self.viewModel.unselectAll() }
+        .navigationBarTitle("Confirm order")
+    }
+}
+
+private extension ConfirmMnemonicScreen {
+
+    var instructionsLabel: some View {
+        Text("Tap on the words in the correct order")
+            .font(.roboto(size: 18))
+    }
+
+    var selectedWordsList: some View {
+        MnemonicGridView(cellViewModels: viewModel.selectedWords) {
+            self.viewModel.removeWordFromSelected(word: $0)
+        }
+    }
+
+    var availableWordsList: some View {
+        MnemonicGridView(cellViewModels: viewModel.availableWords) {
+            self.viewModel.addWordToSelected(word: $0)
+        }
+    }
+
+    var restartButton: some View {
+        Button("Restart") {
+            self.viewModel.unselectAll()
+        }.buttonStyleSaphire()
+    }
+
+    var confirmButton: some View {
+        Button("Confirm") {
+            self.viewModel.done()
+        }.buttonStyleEmerald(enabled: viewModel.hasOrderedMnemonicWordsCorrectly)
     }
 }
 
 // MARK: - ViewModel
 typealias ConfirmMnemonicViewModel = ConfirmMnemonicScreen.ViewModel
-
-typealias Done = () -> Void
 
 extension ConfirmMnemonicScreen {
 
@@ -73,18 +91,18 @@ extension ConfirmMnemonicScreen {
         @Published private var mnemonicWordsToConfirm: [MnemonicWordCellViewModel]
 
         private let _hasOrderedMnemonicWordsCorrectly: ([String]) -> Bool
-        private let keychainStore: SecurePersistence
+        private let securePersistence: SecurePersistence
 
         private let dismissClosure: Done
 
-        init(keychainStore: SecurePersistence, dismiss: @escaping Done) {
+        init(securePersistence: SecurePersistence, dismiss: @escaping Done) {
 
-            self.keychainStore = keychainStore
+            self.securePersistence = securePersistence
             self.dismissClosure = dismiss
 
-            guard let mnemonic = keychainStore.mnemonic else {
-                   incorrectImplementation("Should have mnemonic")
-               }
+            guard let mnemonic = securePersistence.mnemonic else {
+                incorrectImplementation("Should have mnemonic")
+            }
 
             let mnemonicWords = mnemonic.words.map { $0.value }
 
@@ -141,7 +159,7 @@ private extension ConfirmMnemonicScreen.ViewModel {
     }
 
     func done() {
-        keychainStore.mnemonic = nil
+        securePersistence.mnemonic = nil
         dismissClosure()
     }
 }

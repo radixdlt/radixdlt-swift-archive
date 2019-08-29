@@ -20,7 +20,6 @@
 		4802E457231010B5007EC847 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E449231010B5007EC847 /* Starscream.framework */; };
 		4802E458231010B5007EC847 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E44A231010B5007EC847 /* RxSwift.framework */; };
 		4802E459231010B5007EC847 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E44B231010B5007EC847 /* SwiftyBeaver.framework */; };
-		4802E45E231019CE007EC847 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E45D231019CE007EC847 /* KeychainStore.swift */; };
 		4802E46123112E66007EC847 /* BackUpMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */; };
 		4802E46323128B20007EC847 /* Macro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46223128B20007EC847 /* Macro.swift */; };
 		4802E4672312A986007EC847 /* Mnemonic+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E4662312A986007EC847 /* Mnemonic+Codable.swift */; };
@@ -66,6 +65,26 @@
 		48571C6C230C19550040896F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48571C6E230C19550040896F /* Localizable.strings */; };
 		48596A332316BBB0005C1804 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A322316BBB0005C1804 /* View+Extensions.swift */; };
 		48596A362316BBED005C1804 /* UIWindow+FromSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A352316BBED005C1804 /* UIWindow+FromSwiftUI.swift */; };
+		48596A392316CFC7005C1804 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A382316CFC7005C1804 /* Preferences.swift */; };
+		48596A3C2316D015005C1804 /* KeyConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A3B2316D015005C1804 /* KeyConvertible.swift */; };
+		48596A3E2316D034005C1804 /* KeyValueStoring+ValueRetrieval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A3D2316D034005C1804 /* KeyValueStoring+ValueRetrieval.swift */; };
+		48596A402316D048005C1804 /* KeyValueStoring+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A3F2316D048005C1804 /* KeyValueStoring+Codable.swift */; };
+		48596A422316D05E005C1804 /* KeyValueStoring+DeleteAll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A412316D05E005C1804 /* KeyValueStoring+DeleteAll.swift */; };
+		48596A442316D06F005C1804 /* KeyValueStoring+AnyKeyValueStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A432316D06F005C1804 /* KeyValueStoring+AnyKeyValueStoring.swift */; };
+		48596A462316D07F005C1804 /* KeyValueStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A452316D07F005C1804 /* KeyValueStoring.swift */; };
+		48596A482316D090005C1804 /* AnyKeyValueStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A472316D090005C1804 /* AnyKeyValueStoring.swift */; };
+		48596A4A2316D0A2005C1804 /* NoSaveOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A492316D0A2005C1804 /* NoSaveOptions.swift */; };
+		48596A4C2316D0C4005C1804 /* SaveOptionConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A4B2316D0C4005C1804 /* SaveOptionConvertible.swift */; };
+		48596A4F2316D0E9005C1804 /* SecurePersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A4E2316D0E9005C1804 /* SecurePersistence.swift */; };
+		48596A512316D0FF005C1804 /* KeychainSwift+KeyValueStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A502316D0FF005C1804 /* KeychainSwift+KeyValueStoring.swift */; };
+		48596A532316D118005C1804 /* Keychain+SaveOptionConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A522316D118005C1804 /* Keychain+SaveOptionConvertible.swift */; };
+		48596A552316D12B005C1804 /* KeychainKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A542316D12B005C1804 /* KeychainKey.swift */; };
+		48596A572316D147005C1804 /* UserDefaults+KeyValueStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A562316D147005C1804 /* UserDefaults+KeyValueStoring.swift */; };
+		48596A592316D159005C1804 /* PreferencesKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A582316D159005C1804 /* PreferencesKey.swift */; };
+		48596A5B2316D197005C1804 /* Preferences+ValueRetrieval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A5A2316D197005C1804 /* Preferences+ValueRetrieval.swift */; };
+		48596A5D2316D1C0005C1804 /* SecurePersistence+ValueRetrieval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A5C2316D1C0005C1804 /* SecurePersistence+ValueRetrieval.swift */; };
+		48596A5F2317E906005C1804 /* QRCodeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A5E2317E906005C1804 /* QRCodeImage.swift */; };
+		48596A612317EA8D005C1804 /* AddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A602317EA8D005C1804 /* AddressView.swift */; };
 		486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86EE230D6A44006A967A /* String_Extensions.swift */; };
 		486D86F1230D6A81006A967A /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F0230D6A81006A967A /* WebView.swift */; };
 		486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */; };
@@ -83,7 +102,7 @@
 		48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */; };
 		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
-		48ACA682230AF85C00BF0029 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* SettingsStore.swift */; };
+		48ACA682230AF85C00BF0029 /* KeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* KeyValueStore.swift */; };
 		48BE08172314188A008435F5 /* BackUpMnemonicWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */; };
 		48BE082523151C28008435F5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082423151C28008435F5 /* Kingfisher */; };
 		48BE082723151C28008435F5 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082623151C28008435F5 /* KingfisherSwiftUI */; };
@@ -142,7 +161,6 @@
 		4802E449231010B5007EC847 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = ../Carthage/BuildXcode11/iOS/Starscream.framework; sourceTree = "<group>"; };
 		4802E44A231010B5007EC847 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = ../Carthage/BuildXcode11/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		4802E44B231010B5007EC847 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = ../Carthage/BuildXcode11/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
-		4802E45D231019CE007EC847 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpMnemonicScreen.swift; sourceTree = "<group>"; };
 		4802E46223128B20007EC847 /* Macro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macro.swift; sourceTree = "<group>"; };
 		4802E4662312A986007EC847 /* Mnemonic+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mnemonic+Codable.swift"; sourceTree = "<group>"; };
@@ -194,6 +212,26 @@
 		48571C6D230C19550040896F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48596A322316BBB0005C1804 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		48596A352316BBED005C1804 /* UIWindow+FromSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+FromSwiftUI.swift"; sourceTree = "<group>"; };
+		48596A382316CFC7005C1804 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		48596A3B2316D015005C1804 /* KeyConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyConvertible.swift; sourceTree = "<group>"; };
+		48596A3D2316D034005C1804 /* KeyValueStoring+ValueRetrieval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyValueStoring+ValueRetrieval.swift"; sourceTree = "<group>"; };
+		48596A3F2316D048005C1804 /* KeyValueStoring+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyValueStoring+Codable.swift"; sourceTree = "<group>"; };
+		48596A412316D05E005C1804 /* KeyValueStoring+DeleteAll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyValueStoring+DeleteAll.swift"; sourceTree = "<group>"; };
+		48596A432316D06F005C1804 /* KeyValueStoring+AnyKeyValueStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyValueStoring+AnyKeyValueStoring.swift"; sourceTree = "<group>"; };
+		48596A452316D07F005C1804 /* KeyValueStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStoring.swift; sourceTree = "<group>"; };
+		48596A472316D090005C1804 /* AnyKeyValueStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyKeyValueStoring.swift; sourceTree = "<group>"; };
+		48596A492316D0A2005C1804 /* NoSaveOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSaveOptions.swift; sourceTree = "<group>"; };
+		48596A4B2316D0C4005C1804 /* SaveOptionConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveOptionConvertible.swift; sourceTree = "<group>"; };
+		48596A4E2316D0E9005C1804 /* SecurePersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurePersistence.swift; sourceTree = "<group>"; };
+		48596A502316D0FF005C1804 /* KeychainSwift+KeyValueStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainSwift+KeyValueStoring.swift"; sourceTree = "<group>"; };
+		48596A522316D118005C1804 /* Keychain+SaveOptionConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Keychain+SaveOptionConvertible.swift"; sourceTree = "<group>"; };
+		48596A542316D12B005C1804 /* KeychainKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKey.swift; sourceTree = "<group>"; };
+		48596A562316D147005C1804 /* UserDefaults+KeyValueStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+KeyValueStoring.swift"; sourceTree = "<group>"; };
+		48596A582316D159005C1804 /* PreferencesKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesKey.swift; sourceTree = "<group>"; };
+		48596A5A2316D197005C1804 /* Preferences+ValueRetrieval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Preferences+ValueRetrieval.swift"; sourceTree = "<group>"; };
+		48596A5C2316D1C0005C1804 /* SecurePersistence+ValueRetrieval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SecurePersistence+ValueRetrieval.swift"; sourceTree = "<group>"; };
+		48596A5E2317E906005C1804 /* QRCodeImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeImage.swift; sourceTree = "<group>"; };
+		48596A602317EA8D005C1804 /* AddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressView.swift; sourceTree = "<group>"; };
 		486D86EE230D6A44006A967A /* String_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Extensions.swift; sourceTree = "<group>"; };
 		486D86F0230D6A81006A967A /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		486D86F2230D6AC2006A967A /* PrivacyPolicyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyScreen.swift; sourceTree = "<group>"; };
@@ -210,7 +248,7 @@
 		48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionScreen.swift; sourceTree = "<group>"; };
 		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
 		48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScreen.swift; sourceTree = "<group>"; };
-		48ACA681230AF85C00BF0029 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		48ACA681230AF85C00BF0029 /* KeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStore.swift; sourceTree = "<group>"; };
 		48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpMnemonicWarningView.swift; sourceTree = "<group>"; };
 		48BE082D23151F70008435F5 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		48BE082F23151F8A008435F5 /* AssetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRowView.swift; sourceTree = "<group>"; };
@@ -485,7 +523,9 @@
 			children = (
 				48BE081523141874008435F5 /* Notiifications */,
 				4844FC7A230C4618003106AB /* LabelledDivider.swift */,
+				48596A602317EA8D005C1804 /* AddressView.swift */,
 				48458E50230DAAC8007B05A2 /* RadixLogo.swift */,
+				48596A5E2317E906005C1804 /* QRCodeImage.swift */,
 				486D86F0230D6A81006A967A /* WebView.swift */,
 			);
 			path = Views;
@@ -509,6 +549,45 @@
 				48596A352316BBED005C1804 /* UIWindow+FromSwiftUI.swift */,
 			);
 			path = "UIKit+Extensions";
+			sourceTree = "<group>";
+		};
+		48596A372316CFB4005C1804 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				48596A492316D0A2005C1804 /* NoSaveOptions.swift */,
+				48596A382316CFC7005C1804 /* Preferences.swift */,
+				48596A5A2316D197005C1804 /* Preferences+ValueRetrieval.swift */,
+				48596A562316D147005C1804 /* UserDefaults+KeyValueStoring.swift */,
+				48596A582316D159005C1804 /* PreferencesKey.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		48596A3A2316D006005C1804 /* KeyValueStoring */ = {
+			isa = PBXGroup;
+			children = (
+				48596A3B2316D015005C1804 /* KeyConvertible.swift */,
+				48596A3D2316D034005C1804 /* KeyValueStoring+ValueRetrieval.swift */,
+				48596A3F2316D048005C1804 /* KeyValueStoring+Codable.swift */,
+				48596A452316D07F005C1804 /* KeyValueStoring.swift */,
+				48596A472316D090005C1804 /* AnyKeyValueStoring.swift */,
+				48596A4B2316D0C4005C1804 /* SaveOptionConvertible.swift */,
+				48596A412316D05E005C1804 /* KeyValueStoring+DeleteAll.swift */,
+				48596A432316D06F005C1804 /* KeyValueStoring+AnyKeyValueStoring.swift */,
+			);
+			path = KeyValueStoring;
+			sourceTree = "<group>";
+		};
+		48596A4D2316D0D5005C1804 /* SecurePersistence */ = {
+			isa = PBXGroup;
+			children = (
+				48596A4E2316D0E9005C1804 /* SecurePersistence.swift */,
+				48596A502316D0FF005C1804 /* KeychainSwift+KeyValueStoring.swift */,
+				48596A522316D118005C1804 /* Keychain+SaveOptionConvertible.swift */,
+				48596A542316D12B005C1804 /* KeychainKey.swift */,
+				48596A5C2316D1C0005C1804 /* SecurePersistence+ValueRetrieval.swift */,
+			);
+			path = SecurePersistence;
 			sourceTree = "<group>";
 		};
 		486D86ED230D6A27006A967A /* Foundation+Extensions */ = {
@@ -591,8 +670,10 @@
 		48BE082823151F1C008435F5 /* DataStore */ = {
 			isa = PBXGroup;
 			children = (
-				4802E45D231019CE007EC847 /* KeychainStore.swift */,
-				48ACA681230AF85C00BF0029 /* SettingsStore.swift */,
+				48596A4D2316D0D5005C1804 /* SecurePersistence */,
+				48596A3A2316D006005C1804 /* KeyValueStoring */,
+				48ACA681230AF85C00BF0029 /* KeyValueStore.swift */,
+				48596A372316CFB4005C1804 /* Preferences */,
 			);
 			path = DataStore;
 			sourceTree = "<group>";
@@ -842,21 +923,30 @@
 				4802E46123112E66007EC847 /* BackUpMnemonicScreen.swift in Sources */,
 				486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */,
 				48A9600F231003E70074AC26 /* SettingsScreen.swift in Sources */,
+				48596A402316D048005C1804 /* KeyValueStoring+Codable.swift in Sources */,
+				48596A512316D0FF005C1804 /* KeychainSwift+KeyValueStoring.swift in Sources */,
 				4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */,
 				4802E46323128B20007EC847 /* Macro.swift in Sources */,
 				48A96015231004330074AC26 /* SwitchAccountScreen.swift in Sources */,
+				48596A612317EA8D005C1804 /* AddressView.swift in Sources */,
 				48BE082E23151F70008435F5 /* Asset.swift in Sources */,
 				486D86F3230D6AC2006A967A /* PrivacyPolicyScreen.swift in Sources */,
 				48A96013231004190074AC26 /* AppsScreen.swift in Sources */,
-				48ACA682230AF85C00BF0029 /* SettingsStore.swift in Sources */,
+				48596A442316D06F005C1804 /* KeyValueStoring+AnyKeyValueStoring.swift in Sources */,
+				48596A4C2316D0C4005C1804 /* SaveOptionConvertible.swift in Sources */,
+				48ACA682230AF85C00BF0029 /* KeyValueStore.swift in Sources */,
 				48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */,
 				48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */,
 				4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */,
 				48596A362316BBED005C1804 /* UIWindow+FromSwiftUI.swift in Sources */,
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
+				48596A4F2316D0E9005C1804 /* SecurePersistence.swift in Sources */,
+				48596A5B2316D197005C1804 /* Preferences+ValueRetrieval.swift in Sources */,
 				48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */,
-				4802E45E231019CE007EC847 /* KeychainStore.swift in Sources */,
+				48596A482316D090005C1804 /* AnyKeyValueStoring.swift in Sources */,
+				48596A572316D147005C1804 /* UserDefaults+KeyValueStoring.swift in Sources */,
 				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
+				48596A462316D07F005C1804 /* KeyValueStoring.swift in Sources */,
 				48A96019231004690074AC26 /* AssetsScreen.swift in Sources */,
 				48BE08322315211F008435F5 /* MockedTokenBalance.swift in Sources */,
 				48A96011231004050074AC26 /* LearnScreen.swift in Sources */,
@@ -868,13 +958,23 @@
 				48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */,
 				48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
+				48596A3E2316D034005C1804 /* KeyValueStoring+ValueRetrieval.swift in Sources */,
+				48596A552316D12B005C1804 /* KeychainKey.swift in Sources */,
+				48596A3C2316D015005C1804 /* KeyConvertible.swift in Sources */,
+				48596A592316D159005C1804 /* PreferencesKey.swift in Sources */,
+				48596A532316D118005C1804 /* Keychain+SaveOptionConvertible.swift in Sources */,
+				48596A4A2316D0A2005C1804 /* NoSaveOptions.swift in Sources */,
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
 				48596A332316BBB0005C1804 /* View+Extensions.swift in Sources */,
 				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
 				4802E4672312A986007EC847 /* Mnemonic+Codable.swift in Sources */,
 				48BE083023151F8A008435F5 /* AssetRowView.swift in Sources */,
 				48BE08172314188A008435F5 /* BackUpMnemonicWarningView.swift in Sources */,
+				48596A392316CFC7005C1804 /* Preferences.swift in Sources */,
+				48596A5D2316D1C0005C1804 /* SecurePersistence+ValueRetrieval.swift in Sources */,
 				486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */,
+				48596A422316D05E005C1804 /* KeyValueStoring+DeleteAll.swift in Sources */,
+				48596A5F2317E906005C1804 /* QRCodeImage.swift in Sources */,
 				48A96017231004500074AC26 /* ContactsScreen.swift in Sources */,
 				4844FC71230C2162003106AB /* Font+Radix.swift in Sources */,
 			);

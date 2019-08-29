@@ -22,51 +22,44 @@
 // SOFTWARE.
 //
 
-import Foundation
 import SwiftUI
 
-// MARK: - BackUpMnemonicWarningView
-struct BackUpMnemonicWarningView: View {
+import RadixSDK
 
-    typealias Dismiss = () -> Void
+struct AddressView {
 
-    private let makeDestination: () -> AnyScreen
-    private let dismiss: Dismiss
+    private let address: Address
 
-    @State private var isPresentingBackUpMnemonicModal = false
+    @State private var isShowingCopiedAddressAlert = false
 
-    init(
-        makeDestination: @escaping () -> AnyScreen,
-        dismiss: @escaping Dismiss
-    ) {
-        self.dismiss = dismiss
-        self.makeDestination = makeDestination
+    init(address: Address) {
+        self.address = address
+    }
+}
+
+extension AddressView: View {
+    var body: some View {
+        Text(addressString)
+            .font(.roboto(size: 18))
+            .lineLimit(nil)
+            .contextMenu {
+                copyAddressButton
+            }
+    }
+}
+
+private extension AddressView {
+    var copyAddressButton: some View {
+        Button("Copy address") {
+            UIPasteboard.general.string = self.addressString
+            self.isShowingCopiedAddressAlert = true
+        }.buttonStyleEmerald()
+            .alert(isPresented: $isShowingCopiedAddressAlert) {
+                Alert(title: Text("Copied"), message: nil, dismissButton: nil)
+        }
     }
 
-    var body: some View {
-        VStack {
-            Text("⚠️ WARNING ⚠️").font(.roboto(size: 24))
-            Text("If you don't back up your wallet, you might permanetly lose all your assets.").font(.roboto(size: 16))
-
-            HStack {
-                Button("Dismiss") {
-                    self.dismiss()
-                }
-                .buttonStyleSaphire()
-
-                Button("Back up") {
-                    self.isPresentingBackUpMnemonicModal = true
-                }
-                .buttonStyleEmerald()
-            }
-        }
-        .background(Color.red)
-        .padding()
-        .sheet(isPresented: $isPresentingBackUpMnemonicModal, onDismiss: {
-            self.isPresentingBackUpMnemonicModal = false
-            self.dismiss()
-        }, content: {
-            self.makeDestination()
-        })
+    var addressString: String {
+        address.stringValue
     }
 }

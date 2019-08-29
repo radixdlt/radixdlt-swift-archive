@@ -48,7 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         return AppCoordinator(
             dependencies: (
-                keychainStore: KeyValueStore(KeychainSwift()),
+                securePersistence: KeyValueStore(KeychainSwift()),
                 preferences: .default
             ),
             navigator: navigationHandler

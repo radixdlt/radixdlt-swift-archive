@@ -61,21 +61,21 @@ extension GetStartedScreen {
 
         let objectWillChange: PassthroughSubject<Void, Never>
         fileprivate let preferences: Preferences
-        fileprivate let keychainStore: SecurePersistence
+        fileprivate let securePersistence: SecurePersistence
         private let mnemonicGenerator: Mnemonic.Generator
 
         private let walletCreated: () -> Void
 
         init(
             preferences: Preferences,
-            keychainStore: SecurePersistence,
+            securePersistence: SecurePersistence,
             mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf12, language: .english),
             walletCreated: @escaping () -> Void
         ) {
             self.preferences = preferences
-            self.keychainStore  = keychainStore
+            self.securePersistence  = securePersistence
             self.mnemonicGenerator = mnemonicGenerator
-            self.objectWillChange = keychainStore.objectWillChange
+            self.objectWillChange = securePersistence.objectWillChange
             self.walletCreated = walletCreated
         }
     }
@@ -86,8 +86,8 @@ extension GetStartedScreen.ViewModel {
     func generateNewMnemonicAndProceedToMainScreen() {
         do {
             let newMnemonic = try mnemonicGenerator.generate()
-            keychainStore.mnemonic = newMnemonic
-            keychainStore.seedFromMnemonic = newMnemonic.seed
+            securePersistence.mnemonic = newMnemonic
+            securePersistence.seedFromMnemonic = newMnemonic.seed
             walletCreated()
         } catch { incorrectImplementationShouldAlwaysBeAble(to: "Generate mnemonic", error) }
     }

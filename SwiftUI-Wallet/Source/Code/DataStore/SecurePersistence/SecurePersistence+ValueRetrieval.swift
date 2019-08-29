@@ -22,43 +22,16 @@
 // SOFTWARE.
 //
 
-import Foundation
-import SwiftUI
-import Combine
-import KeychainSwift
 import RadixSDK
-
-
-
-extension Preferences {
-    static var `default`: Preferences {
-        return KeyValueStore(UserDefaults.standard)
-    }
-
-    var hasAgreedToTermsAndPolicy: Bool {
-           get {
-                    return isTrue(.hasAgreedToTermsAndPolicy)
-                }
-        set {
-//            // Bug? This is needed to prevent infinite recursion....
-//            if newValue != hasAgreedToTermsAndPolicy {
-//                defaults.set(newValue, forKey: Key.hasAgreedToTermsAndPolicy.rawValue)
-//            }
-            save(value: newValue, forKey: .hasAgreedToTermsAndPolicy)
-        }
-
-    }
-}
-
 
 extension SecurePersistence {
 
     var mnemonic: Mnemonic? {
         get {
-           loadCodable(forKey: .mnemonic)
+            loadCodable(forKey: .mnemonic)
         }
         set {
-            saveValueOrDeleteIfNil(value: newValue, forKey: .mnemonic)
+            update(value: newValue, forKey: .mnemonic)
         }
     }
 
@@ -67,7 +40,7 @@ extension SecurePersistence {
             loadValue(forKey: .seedFromMnemonic)
         }
         set {
-            saveValueOrDeleteIfNil(value: newValue, forKey: .seedFromMnemonic)
+            update(value: newValue, forKey: .seedFromMnemonic)
         }
     }
 
@@ -75,20 +48,4 @@ extension SecurePersistence {
         return seedFromMnemonic != nil || mnemonic != nil
     }
 
-}
-
-extension KeyValueStoring {
-    func saveValueOrDeleteIfNil<Value>(value: Value?, forKey key: Key, options: SaveOptions = .default) {
-        guard let newValue = value else {
-            return deleteValue(forKey: key)
-        }
-        self.save(value: newValue, forKey: key, options: options)
-    }
-
-    func saveValueOrDeleteIfNil<Value>(value: Value?, forKey key: Key, options: SaveOptions = .default) where Value: Codable {
-        guard let newValue = value else {
-            return deleteValue(forKey: key)
-        }
-        self.saveCodable(newValue, forKey: key, options: options)
-    }
 }

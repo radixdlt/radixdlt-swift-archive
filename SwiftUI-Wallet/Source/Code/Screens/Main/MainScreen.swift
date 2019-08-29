@@ -39,8 +39,8 @@ extension MainScreen: Screen {
         TabView {
             tab(.assets) {
                 NavigationView {
-                    AssetsScreen()
-                        .environmentObject(AssetsViewModel(keychainStore: viewModel.securePersistence))
+                    viewModel
+                        .assetsScreen
                         .navigationBarItems(trailing: switchAccountButton)
                 }
             }
@@ -68,8 +68,7 @@ extension MainScreen: Screen {
 
             tab(.settings) {
                 NavigationView {
-                    SettingsScreen()
-                        .environmentObject(viewModel.settingsViewModel())
+                    viewModel.settingsScreen
                 }
             }
         }
@@ -94,17 +93,22 @@ typealias MainViewModel = MainScreen.ViewModel
 extension MainScreen {
     final class ViewModel: ObservableObject {
 
-        @Published fileprivate var isPresentingSwitchAccountModal = false
-
-        fileprivate let preferences: Preferences
-        fileprivate let securePersistence: SecurePersistence
+        // MARK: Injected Properties
+        private let radixApplicationClient: RadixApplicationClient
+        private let preferences: Preferences
+        private let securePersistence: SecurePersistence
         private let walletDeleted: () -> Void
 
+        // MARK: Stateful Properties
+        @Published fileprivate var isPresentingSwitchAccountModal = false
+
         init(
+            radixApplicationClient: RadixApplicationClient,
             preferences: Preferences,
             securePersistence: SecurePersistence,
             walletDeleted: @escaping () -> Void
         ) {
+            self.radixApplicationClient = radixApplicationClient
             self.preferences = preferences
             self.securePersistence = securePersistence
             self.walletDeleted = walletDeleted
@@ -112,13 +116,32 @@ extension MainScreen {
     }
 }
 
-private extension MainScreen.ViewModel {
-    func settingsViewModel() -> SettingsViewModel {
+// MARK: Create ViewModels
+private extension MainViewModel {
+    var settingsViewModel: SettingsViewModel {
         .init(
             preferences: preferences,
             securePersistence: securePersistence,
             walletDeleted: walletDeleted
         )
+    }
+
+    var assetsViewModel: AssetsViewModel {
+        .init(
+            radixApplicationClient: radixApplicationClient,
+            securePersistence: securePersistence
+        )
+    }
+}
+
+// MARK: Create Destination Screens
+private extension MainViewModel {
+    var settingsScreen: some View {
+        SettingsScreen().environmentObject(settingsViewModel)
+    }
+
+    var assetsScreen: some View {
+        AssetsScreen().environmentObject(assetsViewModel)
     }
 }
 

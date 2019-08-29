@@ -111,7 +111,7 @@ extension WelcomeScreen {
     final class ViewModel: ObservableObject {
 
         private var cancellable: Cancellable?
-        private let settingsStore: Preferences
+        private let preferences: Preferences
 
         // Navigation
         private let termsAccepted: () -> Void
@@ -121,15 +121,15 @@ extension WelcomeScreen {
         @Published fileprivate var isPresentingTermsWebViewModal = false
         @Published fileprivate var isPresentingPrivacyWebViewModal = false
 
-        init(settingsStore: Preferences, termsHaveBeenAccepted: @escaping () -> Void) {
-            self.settingsStore = settingsStore
+        init(preferences: Preferences, termsHaveBeenAccepted: @escaping () -> Void) {
+            self.preferences = preferences
             self.termsAccepted = termsHaveBeenAccepted
 
             cancellable = Publishers.CombineLatest(
                 $hasAgreedToTermsAndConditions,
                 $hasAgreedToPrivacyPolicy
             ).map { $0.0 && $0.1 }.sink {
-                settingsStore.hasAgreedToTermsAndPolicy = $0
+                preferences.hasAgreedToTermsAndPolicy = $0
             }
         }
     }
@@ -142,7 +142,7 @@ extension WelcomeViewModel {
 }
 
 private extension WelcomeViewModel {
-    var hasAgreedToTermsAndPolicy: Bool { settingsStore.hasAgreedToTermsAndPolicy }
+    var hasAgreedToTermsAndPolicy: Bool { preferences.hasAgreedToTermsAndPolicy }
 }
 
 // MARK: - Links
@@ -196,9 +196,9 @@ struct WelcomeScreen_Previews: PreviewProvider {
 
 private extension Preferences {
     static var alreadyAgreedToTermsAndPolicy: Preferences {
-        let settingsStore = Preferences.default
-        settingsStore.hasAgreedToTermsAndPolicy = true
-        return settingsStore
+        let preferences = Preferences.default
+        preferences.hasAgreedToTermsAndPolicy = true
+        return preferences
     }
 }
 

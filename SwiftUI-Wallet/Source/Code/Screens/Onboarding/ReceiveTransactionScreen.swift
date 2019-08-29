@@ -22,11 +22,96 @@
 // SOFTWARE.
 //
 
-import Foundation
 import SwiftUI
+import Combine
 
-struct ReceiveTransactionScreen: Screen {
+import RadixSDK
+
+import RxSwift
+
+struct ReceiveTransactionScreen {
+    @EnvironmentObject private var viewModel: ViewModel
+    @State private var isShowingCopiedAddressAlert = false
+}
+
+// MARK: - View
+extension ReceiveTransactionScreen: Screen {
     var body: some View {
-        Text("Recieve a transaction")
+        VStack {
+            Text("Your address").font(.roboto(size: 30))
+            qrCodeImage
+            myAddressView
+            copyMyAddressButton
+        }
+        .padding()
+        .navigationBarTitle("Receive payment")
     }
 }
+
+private extension ReceiveTransactionScreen {
+
+    var myAddressView: some View {
+        AddressView(address: viewModel.myAddress)
+    }
+
+    var qrCodeImage: some View {
+        QRCodeImage(string: viewModel.myAddressBase58String).frame(width: 300, height: 300, alignment: .center)
+    }
+
+    var copyMyAddressButton: some View {
+        Button("Copy my address") {
+            self.viewModel.copyMyAddressToPasteBoard()
+            self.isShowingCopiedAddressAlert = true
+        }.buttonStyleEmerald()
+            .alert(isPresented: $isShowingCopiedAddressAlert) {
+                Alert(title: Text("Copied"), message: nil, dismissButton: nil)
+        }
+    }
+}
+
+// MARK: - ViewModel
+typealias ReceiveTransactionViewModel = ReceiveTransactionScreen.ViewModel
+
+extension ReceiveTransactionScreen {
+    final class ViewModel: ObservableObject {
+
+        // MARK: Injected Properties
+        private let radixApplicationClient: RadixApplicationClient
+        private let securePersistance: SecurePersistence
+
+        // MARK: Stateful Properties
+        @Published private var myActiveAddress: Address
+
+        // MARK: Other properites
+        private let rxDisposeBag = RxSwift.DisposeBag()
+
+        init(
+            radixApplicationClient: RadixApplicationClient,
+            securePersistance: SecurePersistence
+        ) {
+            self.radixApplicationClient = radixApplicationClient
+            self.securePersistance = securePersistance
+
+            self.myActiveAddress = radixApplicationClient.addressOfActiveAccount
+
+            // Subscribe to change of address (when changing active account)
+            radixApplicationClient.observeAddressOfActiveAccount()
+                .subscribe(onNext: { [unowned self] newAddress in
+                    self.myActiveAddress = newAddress
+                })
+                .disposed(by: rxDisposeBag)
+        }
+    }
+}
+
+extension ReceiveTransactionViewModel {
+    var myAddress: Address { myActiveAddress }
+    var myAddressBase58String: String {
+        myAddress.base58String.stringValue
+    }
+
+    func copyMyAddressToPasteBoard() {
+        UIPasteboard.general.string = myAddressBase58String
+    }
+}
+

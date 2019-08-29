@@ -36,18 +36,43 @@ struct AssetsScreen {
 extension AssetsScreen: Screen {
     var body: some View {
         VStack {
-            if viewModel.needsToBackupMnemonic {
-                BackUpMnemonicWarningView(
-                    makeDestination: viewModel.makeBackUpScreen
-                )  { self.viewModel.isShowingBackUpMnemonicWarningToast = false }
-                    .frame(height: viewModel.isShowingBackUpMnemonicWarningToast ? 200 : 0, alignment: .top)
-                    .animation(Animation.spring())
-            } else { EmptyView() }
+            backUpMnemonicWarningNotification
+            assetsList
+            sendOrReceiveTransactionButtons
+        }.onAppear {
+            self.presentBackUpMnemonicWarningIfNeeded()
+        }
+    }
+}
 
-            List(viewModel.assets) {
-                AssetRowView(asset: $0)
-            }.listStyle(GroupedListStyle())
-        }.onAppear { self.presentBackUpMnemonicWarningIfNeeded() }
+private extension AssetsScreen {
+    var backUpMnemonicWarningNotification: AnyView {
+        if viewModel.needsToBackupMnemonic {
+            return BackUpMnemonicWarningView(makeDestination: viewModel.makeBackUpScreen) {
+                self.viewModel.isShowingBackUpMnemonicWarningToast = false
+            }
+            .frame(height: viewModel.isShowingBackUpMnemonicWarningToast ? 200 : 0, alignment: .top)
+            .animation(Animation.spring())
+            .eraseToAny()
+        } else { return EmptyView().eraseToAny() }
+    }
+
+    var assetsList: some View {
+        List(viewModel.assets) {
+             AssetRowView(asset: $0)
+         }.listStyle(GroupedListStyle())
+    }
+
+    var sendOrReceiveTransactionButtons: some View {
+        HStack {
+            NavigationLink(destination: viewModel.makeReceiveScreen()) {
+                Text("Receive").buttonStyleSaphire()
+            }
+
+            NavigationLink(destination: viewModel.makeSendScreen()) {
+                Text("Send").buttonStyleEmerald()
+            }
+        }.padding()
     }
 }
 
@@ -62,21 +87,27 @@ private extension AssetsScreen {
 
 // MARK: - ViewModel
 typealias AssetsViewModel = AssetsScreen.ViewModel
+
 extension AssetsScreen {
     final class ViewModel: ObservableObject {
+
+        // MARK: Injected Properties
+        private let radixApplicationClient: RadixApplicationClient
+        private let securePersistence: SecurePersistence
+
         @Published fileprivate var isShowingBackUpMnemonicWarningToast = false
 
-        fileprivate let keychainStore: SecurePersistence
-
-         init(
-             keychainStore: SecurePersistence
-         ) {
-             self.keychainStore = keychainStore
-         }
+        init(
+            radixApplicationClient: RadixApplicationClient,
+            securePersistence: SecurePersistence
+        ) {
+            self.radixApplicationClient = radixApplicationClient
+            self.securePersistence = securePersistence
+        }
     }
 }
 
-private extension AssetsScreen.ViewModel {
+private extension AssetsViewModel {
 
     var assets: [Asset] {
         return mockTokenBalances().map {
@@ -84,16 +115,40 @@ private extension AssetsScreen.ViewModel {
         }
     }
 
-    var needsToBackupMnemonic: Bool { keychainStore.mnemonic != nil }
+    var needsToBackupMnemonic: Bool { securePersistence.mnemonic != nil }
 
     func makeBackUpScreen() -> AnyScreen {
-        AnyScreen(
-            BackUpMnemonicScreen()
-                .environmentObject(
-                    BackUpMnemonicViewModel(keychainStore: keychainStore) {
-                        self.isShowingBackUpMnemonicWarningToast = false
-                    }
-            )
+        BackUpMnemonicScreen()
+            .environmentObject(
+                BackUpMnemonicViewModel(securePersistence: securePersistence) {
+                    self.isShowingBackUpMnemonicWarningToast = false
+                }
+        ).eraseToAny()
+    }
+
+    func makeSendScreen() -> AnyScreen {
+        SendScreen()
+        .eraseToAny()
+    }
+
+    func makeReceiveScreen() -> AnyScreen {
+        ReceiveTransactionScreen()
+        .environmentObject(makeReceiveTransactionViewModel())
+            .eraseToAny()
+    }
+
+    func makeReceiveTransactionViewModel() -> ReceiveTransactionViewModel {
+        return ReceiveTransactionViewModel(
+            radixApplicationClient: radixApplicationClient,
+            securePersistance: securePersistence
         )
+    }
+
+}
+
+struct SendScreen {}
+extension SendScreen: Screen {
+    var body: some View {
+        Text("Send screen")
     }
 }

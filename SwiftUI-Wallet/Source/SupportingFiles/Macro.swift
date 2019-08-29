@@ -54,7 +54,7 @@ internal func incorrectImplementationShouldAlwaysBeAble(
     _ file: String = #file,
     _ line: Int = #line
 ) -> Never {
-    let errorString = error != nil ? error.map { ", error: \($0) " } : ""
+    let errorString = error.map { ", error: \($0) " } ?? ""
     incorrectImplementation("Should always be to: \(reason)\(errorString)")
 }
 
@@ -62,3 +62,4 @@ func performOnMainThread(after delay: DispatchTimeInterval = .seconds(1), closur
     DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: closure)
 }
 
+typealias Done = () -> Void

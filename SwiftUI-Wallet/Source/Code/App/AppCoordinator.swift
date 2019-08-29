@@ -28,16 +28,16 @@ import SwiftUI
 final class AppCoordinator {
 
     private let preferences: Preferences
-    private let keychainStore: SecurePersistence
+    private let securePersistence: SecurePersistence
 
     private let navigationHandler: (AnyScreen, TransitionAnimation) -> Void
 
     init(
-        dependencies: (keychainStore: SecurePersistence, preferences: Preferences),
+        dependencies: (securePersistence: SecurePersistence, preferences: Preferences),
         navigator navigationHandler: @escaping (AnyScreen, TransitionAnimation) -> Void
     ) {
         self.preferences = dependencies.preferences
-        self.keychainStore = dependencies.keychainStore
+        self.securePersistence = dependencies.securePersistence
         self.navigationHandler = navigationHandler
     }
 }
@@ -76,7 +76,7 @@ private extension AppCoordinator {
             return .welcome
         }
 
-        guard keychainStore.isWalletSetup else {
+        guard securePersistence.isWalletSetup else {
             return .getStarted
         }
 
@@ -85,12 +85,13 @@ private extension AppCoordinator {
 }
 
 // MARK: - Screens
+import RadixSDK
 private extension AppCoordinator {
     var welcome: some Screen {
         WelcomeScreen()
             .environmentObject(
                 WelcomeViewModel(
-                    settingsStore: preferences,
+                    preferences: preferences,
                     termsHaveBeenAccepted: { [unowned self] in self.navigate(to: .getStarted) }
                 )
             )
@@ -101,17 +102,27 @@ private extension AppCoordinator {
             .environmentObject(
                 GetStartedViewModel(
                     preferences: preferences,
-                    keychainStore: keychainStore,
+                    securePersistence: securePersistence,
                     walletCreated: { [unowned self] in self.navigate(to: .main) }
                 )
         )
     }
 
     var main: some Screen {
-        MainScreen().environmentObject(
+        guard let seedFromMnemonic = securePersistence.seedFromMnemonic else {
+            incorrectImplementation("Should have seed saved")
+        }
+        let alias = preferences.identityAlias ?? "Unnamed"
+        guard let identity = try? AbstractIdentity(seedFromMnemonic: seedFromMnemonic, alias: alias) else {
+            incorrectImplementationShouldAlwaysBeAble(to: "Create Radix Application Client")
+        }
+        let radixApplicationClient = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: identity)
+
+        return MainScreen().environmentObject(
             MainViewModel(
+                radixApplicationClient: radixApplicationClient,
                 preferences: preferences,
-                securePersistence: keychainStore,
+                securePersistence: securePersistence,
                 walletDeleted: { [unowned self] in self.navigate(to: .getStarted, transitionAnimation: .flipFromRight)  }
             )
         )

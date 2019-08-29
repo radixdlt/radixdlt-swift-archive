@@ -53,11 +53,11 @@ extension BackUpMnemonicScreen: Screen {
 typealias BackUpMnemonicViewModel = BackUpMnemonicScreen.ViewModel
 extension BackUpMnemonicScreen {
     final class ViewModel: ObservableObject {
-        fileprivate let keychainStore: SecurePersistence
+        fileprivate let securePersistence: SecurePersistence
         private let dismissClosure: Done
-        init(keychainStore: SecurePersistence, dismiss: @escaping Done) {
+        init(securePersistence: SecurePersistence, dismiss: @escaping Done) {
 
-            self.keychainStore = keychainStore
+            self.securePersistence = securePersistence
             self.dismissClosure = dismiss
         }
     }
@@ -65,7 +65,7 @@ extension BackUpMnemonicScreen {
 
 private extension BackUpMnemonicScreen.ViewModel {
     var mnemonic: Mnemonic {
-        guard let mnemonic = keychainStore.mnemonic else {
+        guard let mnemonic = securePersistence.mnemonic else {
             incorrectImplementation("Should have mnemonic")
         }
         return mnemonic
@@ -82,7 +82,7 @@ private extension BackUpMnemonicScreen.ViewModel {
             ConfirmMnemonicScreen()
                 .environmentObject(
                     ConfirmMnemonicViewModel(
-                        keychainStore: keychainStore,
+                        securePersistence: securePersistence,
                         dismiss: dismissClosure
                     )
             )
