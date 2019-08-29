@@ -86,6 +86,13 @@ public struct Address:
     }
 }
 
+// MARK: - Public
+public extension Address {
+    func inTheSameUniverse(as other: Address) -> Bool {
+        return asData[0] == other.asData[0]
+    }
+}
+
 // MARK: - Sharded
 public extension Address {
     var shard: Shard {

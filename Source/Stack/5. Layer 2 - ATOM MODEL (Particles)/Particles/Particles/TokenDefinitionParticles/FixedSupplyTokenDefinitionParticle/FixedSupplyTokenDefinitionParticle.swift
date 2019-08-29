@@ -74,8 +74,8 @@ public extension FixedSupplyTokenDefinitionParticle {
 
 // MARK: - Accountable
 public extension FixedSupplyTokenDefinitionParticle {
-    var addresses: Addresses {
-        return Addresses([tokenDefinedBy])
+    func addresses() throws -> Addresses {
+        return try Addresses(addresses: [tokenDefinedBy])
     }
 }
 

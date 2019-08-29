@@ -130,7 +130,11 @@ public extension ExpressibleBySubatomicParts where Self: Atomic {
 // MARK: - ArrayInitializable
 public extension ExpressibleBySubatomicParts {
     init(elements particleGroups: [Element]) {
-        self.init(particleGroups: ParticleGroups(particleGroups: particleGroups))
+        do {
+            try self.init(particleGroups: ParticleGroups(particleGroups: particleGroups))
+        } catch {
+            badLiteralValue(particleGroups, error: error)
+        }
     }
 }
 
@@ -140,14 +144,15 @@ public extension ExpressibleBySubatomicParts {
         metaData: ChronoMetaData = .timeNow,
         signatures: Signatures = [:],
         particleGroups: ParticleGroups = []
-        ) {
+    ) {
         self.init(metaData: metaData, signatures: signatures, particleGroups: particleGroups)
     }
     
     init(particle: ParticleConvertible, spin: Spin = .up) {
         self.init(
             particleGroups: [
-                ParticleGroup(
+                // swiftlint:disable:next force_try
+                try! ParticleGroup(
                     spunParticles: [
                         AnySpunParticle(spin: spin, particle: particle)
                     ]

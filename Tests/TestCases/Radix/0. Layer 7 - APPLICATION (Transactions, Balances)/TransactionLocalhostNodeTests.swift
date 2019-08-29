@@ -26,7 +26,7 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
-class TransactionTests: LocalhostNodeTest {
+class TransactionLocalhostNodeTests: LocalhostNodeTest {
     
     private var aliceIdentity: AbstractIdentity!
     private var application: RadixApplicationClient!

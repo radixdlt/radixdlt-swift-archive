@@ -35,12 +35,12 @@ class AtomJsonDeserializationChangeJson: XCTestCase {
     
     lazy var jsonData = self.jsonString().toData()
     
-    func replaceValueInParticle(forKey key: MutableSupplyTokenDefinitionParticle.CodingKeys, with replacement: Any) -> String {
-      return replaceValueInParticle(forKey: key.stringValue, with: replacement)
+    func replaceValueInParticle(for key: MutableSupplyTokenDefinitionParticle.CodingKeys, with replacement: Any) -> String {
+      return replaceValueInParticle(for: key.stringValue, with: replacement)
     }
         
-    func replaceValueInTokenParticle(forKey key: UnallocatedTokensParticle.CodingKeys, with replacement: Any) -> String {
-        return replaceValueInParticle(forKey: key.stringValue, with: replacement)
+    func replaceValueInTokenParticle(for key: UnallocatedTokensParticle.CodingKeys, with replacement: Any) -> String {
+        return replaceValueInParticle(for: key.stringValue, with: replacement)
     }
     
     func replaceSpinForSpunParticle(spin: Int) -> String {
@@ -55,7 +55,7 @@ class AtomJsonDeserializationChangeJson: XCTestCase {
 // MARK: - Private
 private extension AtomJsonDeserializationChangeJson {
     
-    func replaceValueInParticle(forKey key: String, with replacement: Any) -> String {
+    func replaceValueInParticle(for key: String, with replacement: Any) -> String {
         return replaceValueInParticle { particle in
             var particle = particle
             particle[key.stringValue] = replacement

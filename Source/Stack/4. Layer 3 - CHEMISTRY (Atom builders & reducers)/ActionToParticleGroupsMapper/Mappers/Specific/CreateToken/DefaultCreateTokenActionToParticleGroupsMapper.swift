@@ -82,14 +82,14 @@ private extension CreateTokenActionToParticleGroupsMapper {
                 positiveSupply: positiveLeftOverSupply
             )
             
-            mintGroup += unallocatedFromLeftOverSupply.withSpin(.up)
+            try mintGroup += unallocatedFromLeftOverSupply.withSpin(.up)
             
         }
         
-        return [
+        return try ParticleGroups(particleGroups: [
             tokenCreationGroup,
             mintGroup
-        ]
+        ])
     }
     
     func fixedSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {

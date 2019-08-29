@@ -52,7 +52,7 @@ public extension TokenDefinitionReferencing {
 
 // MARK: - Accountable
 public extension TokenDefinitionReferencing {
-    var addresses: Addresses {
-        return Addresses(address)
+    func addresses() throws -> Addresses {
+        return try Addresses(addresses: [address])
     }
 }

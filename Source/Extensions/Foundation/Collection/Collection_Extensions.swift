@@ -28,28 +28,24 @@ internal enum ZeroOneTwoAndMany<Element> {
     case zero
     case one(single: Element)
     case two(first: Element, secondAndLast: Element)
-    case many(first: Element, second: Element, last: Element)
+    case many(head: Element, tail: [Element])
 }
 
 internal extension Collection {
     
     var countedElementsZeroOneTwoAndMany: ZeroOneTwoAndMany<Element> {
-        if isEmpty {
-            return .zero
-        } else {
-            let firstElement = first!
-            if count == 1 {
-                return .one(single: firstElement)
-            } else {
-                let second = self.dropFirst().first!
-                if count == 2 {
-                    return .two(first: firstElement, secondAndLast: second)
-                } else {
-                    let last = self.suffix(1).first!
-                    return .many(first: firstElement, second: second, last: last)
-                }
-            }
-            
+        guard !isEmpty else { return .zero }
+
+        let firstElement = first!
+
+        guard count > 1 else { return .one(single: firstElement) }
+
+        let tail = [Element](self.dropFirst())
+
+        guard count > 2 else {
+            return .two(first: firstElement, secondAndLast: tail.first!)
         }
+
+        return .many(head: firstElement, tail: tail)
     }
 }

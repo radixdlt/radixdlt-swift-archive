@@ -25,5 +25,5 @@
 import Foundation
 
 public protocol Accountable {
-    var addresses: Addresses { get }
+    func addresses() throws -> Addresses
 }

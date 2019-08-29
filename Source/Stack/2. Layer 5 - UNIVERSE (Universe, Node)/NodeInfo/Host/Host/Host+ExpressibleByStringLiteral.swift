@@ -94,6 +94,7 @@ extension String {
     func removingScheme() -> (String, String?) {
         var copy = self
         func remove(scheme: String) -> String? {
+            
             let components = copy.components(separatedBy: "\(scheme)://")
             if components.count == 2 {
                 copy = components[1]

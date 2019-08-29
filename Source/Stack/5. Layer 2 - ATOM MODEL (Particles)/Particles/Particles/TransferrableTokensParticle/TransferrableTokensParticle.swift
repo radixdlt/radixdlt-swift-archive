@@ -174,7 +174,7 @@ public extension TransferrableTokensParticle {
 
 // MARK: Accountable
 public extension TransferrableTokensParticle {
-    var addresses: Addresses {
-        return [address]
+    func addresses() throws -> Addresses {
+        return try Addresses(addresses: [address])
     }
 }

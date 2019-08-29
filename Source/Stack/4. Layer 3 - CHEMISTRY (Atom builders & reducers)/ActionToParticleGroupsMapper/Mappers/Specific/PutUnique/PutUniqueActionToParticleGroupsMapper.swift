@@ -55,7 +55,9 @@ public extension DefaultPutUniqueActionToParticleGroupsMapper {
             rriParticle.withSpin(.down),
             uniqueParticle.withSpin(.up)
         ]
-        
-        return [spunParticles.wrapInGroup()]
+
+        let particleGroup = try spunParticles.wrapInGroup()
+
+        return [particleGroup]
     }
 }
