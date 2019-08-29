@@ -25,12 +25,16 @@
 import Foundation
 import SwiftUI
 
+import RxSwift
+
 final class AppCoordinator {
 
     private let preferences: Preferences
     private let securePersistence: SecurePersistence
 
     private let navigationHandler: (AnyScreen, TransitionAnimation) -> Void
+
+    private let rxDisposeBag = RxSwift.DisposeBag()
 
     init(
         dependencies: (securePersistence: SecurePersistence, preferences: Preferences),
@@ -118,12 +122,16 @@ private extension AppCoordinator {
         }
         let radixApplicationClient = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: identity)
 
+        radixApplicationClient.pull().disposed(by: rxDisposeBag)
+
         return MainScreen().environmentObject(
             MainViewModel(
                 radixApplicationClient: radixApplicationClient,
                 preferences: preferences,
                 securePersistence: securePersistence,
-                walletDeleted: { [unowned self] in self.navigate(to: .getStarted, transitionAnimation: .flipFromRight)  }
+                walletDeleted: { [unowned self] in
+                    self.navigate(to: .getStarted, transitionAnimation: .flipFromRight)
+                }
             )
         )
     }

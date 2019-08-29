@@ -22,8 +22,12 @@
 // SOFTWARE.
 //
 
-import Foundation
 import SwiftUI
+import Combine
+
+import RadixSDK
+
+import RxSwift
 
 struct SettingsScreen {
     @EnvironmentObject private var viewModel: ViewModel
@@ -36,6 +40,10 @@ extension SettingsScreen: Screen {
 
             viewModel.appVersion.map { appVersion in
                 Text("App version: \(appVersion)")
+            }
+
+            NavigationLink(destination: viewModel.makeConnectedToNodesScreen()) {
+                Text("Connected nodes")
             }
 
             Button("Delete wallet") {
@@ -55,15 +63,25 @@ typealias SettingsViewModel = SettingsScreen.ViewModel
 extension SettingsScreen {
     final class ViewModel: ObservableObject {
 
+        // MARK: - Injected properties
+        private let radixApplicationClient: RadixApplicationClient
         private let preferences: Preferences
         private let securePersistence: SecurePersistence
         private let walletDeleted: () -> Void
 
+        // MARK: Stateful Properties
+        @Published private var connectToNode: Node?
+
+        // MARK: Other properites
+        private let rxDisposeBag = RxSwift.DisposeBag()
+
         init(
+            radixApplicationClient: RadixApplicationClient,
             preferences: Preferences,
             securePersistence: SecurePersistence,
             walletDeleted: @escaping () -> Void
         ) {
+            self.radixApplicationClient = radixApplicationClient
             self.preferences = preferences
             self.securePersistence = securePersistence
             self.walletDeleted = walletDeleted
@@ -90,4 +108,17 @@ extension SettingsScreen.ViewModel {
             else { return nil }
          return "\(version) (\(build))"
     }
+
+    func makeConnectedToNodesViewModel() -> ConnectedToNodesViewModel {
+        .init(
+            radixApplicationClient: radixApplicationClient
+        )
+    }
+
+    func makeConnectedToNodesScreen() -> AnyScreen {
+        ConnectedToNodesScreen()
+            .environmentObject(makeConnectedToNodesViewModel())
+            .eraseToAny()
+    }
 }
+

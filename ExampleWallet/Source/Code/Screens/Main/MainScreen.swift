@@ -120,6 +120,7 @@ extension MainScreen {
 private extension MainViewModel {
     var settingsViewModel: SettingsViewModel {
         .init(
+            radixApplicationClient: radixApplicationClient,
             preferences: preferences,
             securePersistence: securePersistence,
             walletDeleted: walletDeleted

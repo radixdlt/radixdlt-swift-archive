@@ -294,6 +294,9 @@ public extension RadixApplicationClient {
     func pull() -> Disposable {
         return pull(address: addressOfActiveAccount)
     }
+
+    var observeConnectedToNodes: Observable<[Node]> { universe.connectedToNodes }
+
 }
 
 // MARK: - Private

@@ -113,6 +113,7 @@
 		48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */; };
 		48BE083A23152A53008435F5 /* QGrid in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE083923152A53008435F5 /* QGrid */; };
 		48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */; };
+		48FC13212317FA520094A85E /* ConnectedToNodesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13202317FA520094A85E /* ConnectedToNodesScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -256,6 +257,7 @@
 		48BE0834231526D6008435F5 /* MnemonicWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemonicWord.swift; sourceTree = "<group>"; };
 		48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmMnemonicScreen.swift; sourceTree = "<group>"; };
 		48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSet_Extension.swift; sourceTree = "<group>"; };
+		48FC13202317FA520094A85E /* ConnectedToNodesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedToNodesScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -616,7 +618,7 @@
 			children = (
 				48BE082B23151F4D008435F5 /* Assets */,
 				48A9600C230EFDD30074AC26 /* MainScreen.swift */,
-				48A9600E231003E70074AC26 /* SettingsScreen.swift */,
+				48FC131F2317FA370094A85E /* Settings */,
 				48A96010231004050074AC26 /* LearnScreen.swift */,
 				48A96014231004330074AC26 /* SwitchAccountScreen.swift */,
 				48BE083323152620008435F5 /* BackUpMnemonic */,
@@ -725,6 +727,15 @@
 				48596A322316BBB0005C1804 /* View+Extensions.swift */,
 			);
 			path = "SwiftUI+Extensions";
+			sourceTree = "<group>";
+		};
+		48FC131F2317FA370094A85E /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				48A9600E231003E70074AC26 /* SettingsScreen.swift */,
+				48FC13202317FA520094A85E /* ConnectedToNodesScreen.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -950,6 +961,7 @@
 				48A96019231004690074AC26 /* AssetsScreen.swift in Sources */,
 				48BE08322315211F008435F5 /* MockedTokenBalance.swift in Sources */,
 				48A96011231004050074AC26 /* LearnScreen.swift in Sources */,
+				48FC13212317FA520094A85E /* ConnectedToNodesScreen.swift in Sources */,
 				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,

@@ -28,15 +28,27 @@ import RxSwift
 public protocol RadixNetworkController {
     func dispatch(nodeAction: NodeAction)
     func getActions() -> Observable<NodeAction>
+    var networkState: Observable<RadixNetworkState> { get }
+}
+
+public extension RadixNetworkController {
+    var connectedToNodes: Observable<[Node]> {
+        return networkState.map {
+            $0.nodes.map { $0.value }.filter { $0.websocketStatus == .ready }.map { $0.node }
+        }
+    }
 }
 
 public final class DefaultRadixNetworkController: RadixNetworkController {
     
+    // MARK: Public Properties
+    public let networkState: Observable<RadixNetworkState>
+
+    // MARK: Private Properites
     private let networkStateSubject: BehaviorSubject<RadixNetworkState>
     private let nodeActionSubject: PublishSubject<NodeAction>
     private let reducedNodeActions: Observable<NodeAction>
-    
-    private let networkState: Observable<RadixNetworkState>
+
     private let disposeBag = DisposeBag()
 
     private let _retainingVariableEpics: [RadixNetworkEpic]
