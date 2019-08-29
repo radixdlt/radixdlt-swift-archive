@@ -179,13 +179,13 @@ struct MnemonicGridView {
 extension MnemonicGridView: View {
     var body: some View {
         QGrid(cellViewModels, columns: 3, vSpacing: 8, hSpacing: 8, vPadding: 8, hPadding: 8) { selectedCellViewModel in
-            MnemonicGridCell(word: selectedCellViewModel) { self.selection(selectedCellViewModel) }
+            MnemonicCell(word: selectedCellViewModel) { self.selection(selectedCellViewModel) }
         }
     }
 }
 
-// MARK: MnemonicGridCell
-struct MnemonicGridCell {
+// MARK: MnemonicCell
+struct MnemonicCell {
     let word: MnemonicWordCellViewModel
     let selection: () -> Void
 
@@ -195,7 +195,7 @@ struct MnemonicGridCell {
     }
 }
 
-extension MnemonicGridCell: View {
+extension MnemonicCell: View {
     var body: some View {
         Button(displayedText, action: selection)
     }

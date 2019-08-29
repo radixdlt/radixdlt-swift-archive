@@ -45,7 +45,7 @@ extension GetStartedScreen: Screen {
 
                 LabelledDivider(Text("GetStarted.Text.Or"))
 
-                NavigationLink(destination: RestoreAccountScreen()) {
+                NavigationLink(destination: viewModel.makeRestoreAccountScreen()) {
                     Text("GetStarted.Button.RestoreAccount").buttonStyleSaphire()
                 }
 
@@ -64,13 +64,13 @@ extension GetStartedScreen {
         fileprivate let securePersistence: SecurePersistence
         private let mnemonicGenerator: Mnemonic.Generator
 
-        private let walletCreated: () -> Void
+        private let walletCreated: Done
 
         init(
             preferences: Preferences,
             securePersistence: SecurePersistence,
             mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf12, language: .english),
-            walletCreated: @escaping () -> Void
+            walletCreated: @escaping Done
         ) {
             self.preferences = preferences
             self.securePersistence  = securePersistence
@@ -82,7 +82,7 @@ extension GetStartedScreen {
 
 }
 
-extension GetStartedScreen.ViewModel {
+private extension GetStartedScreen.ViewModel {
     func generateNewMnemonicAndProceedToMainScreen() {
         do {
             let newMnemonic = try mnemonicGenerator.generate()
@@ -90,6 +90,19 @@ extension GetStartedScreen.ViewModel {
             securePersistence.seedFromMnemonic = newMnemonic.seed
             walletCreated()
         } catch { incorrectImplementationShouldAlwaysBeAble(to: "Generate mnemonic", error) }
+    }
+
+    func makeRestoreAccountViewModel() -> RestoreAccountViewModel {
+        .init(
+            securePersistence: securePersistence,
+            mnemonicRestored: walletCreated
+        )
+    }
+
+    func makeRestoreAccountScreen() -> AnyScreen {
+        RestoreAccountScreen()
+            .environmentObject(makeRestoreAccountViewModel())
+            .eraseToAny()
     }
 }
 

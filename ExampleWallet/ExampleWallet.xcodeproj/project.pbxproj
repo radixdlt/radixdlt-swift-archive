@@ -114,6 +114,7 @@
 		48BE083A23152A53008435F5 /* QGrid in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE083923152A53008435F5 /* QGrid */; };
 		48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */; };
 		48FC13212317FA520094A85E /* ConnectedToNodesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13202317FA520094A85E /* ConnectedToNodesScreen.swift */; };
+		48FC13232317FF000094A85E /* InputMnemonicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13222317FF000094A85E /* InputMnemonicView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -258,6 +259,7 @@
 		48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmMnemonicScreen.swift; sourceTree = "<group>"; };
 		48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSet_Extension.swift; sourceTree = "<group>"; };
 		48FC13202317FA520094A85E /* ConnectedToNodesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedToNodesScreen.swift; sourceTree = "<group>"; };
+		48FC13222317FF000094A85E /* InputMnemonicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMnemonicView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -528,6 +530,7 @@
 				48596A602317EA8D005C1804 /* AddressView.swift */,
 				48458E50230DAAC8007B05A2 /* RadixLogo.swift */,
 				48596A5E2317E906005C1804 /* QRCodeImage.swift */,
+				48FC13222317FF000094A85E /* InputMnemonicView.swift */,
 				486D86F0230D6A81006A967A /* WebView.swift */,
 			);
 			path = Views;
@@ -935,6 +938,7 @@
 				486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */,
 				48A9600F231003E70074AC26 /* SettingsScreen.swift in Sources */,
 				48596A402316D048005C1804 /* KeyValueStoring+Codable.swift in Sources */,
+				48FC13232317FF000094A85E /* InputMnemonicView.swift in Sources */,
 				48596A512316D0FF005C1804 /* KeychainSwift+KeyValueStoring.swift in Sources */,
 				4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */,
 				4802E46323128B20007EC847 /* Macro.swift in Sources */,

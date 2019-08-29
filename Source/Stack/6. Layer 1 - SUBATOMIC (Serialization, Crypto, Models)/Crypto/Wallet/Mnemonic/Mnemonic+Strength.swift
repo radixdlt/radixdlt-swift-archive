@@ -32,7 +32,7 @@ public extension Mnemonic {
         case wordCountOf21 = 21
         case wordCountOf24 = 24
         
-        var wordCount: Int {
+        public var wordCount: Int {
             return rawValue
         }
     }
