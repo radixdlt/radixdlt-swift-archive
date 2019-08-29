@@ -164,9 +164,9 @@
 		4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpMnemonicScreen.swift; sourceTree = "<group>"; };
 		4802E46223128B20007EC847 /* Macro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macro.swift; sourceTree = "<group>"; };
 		4802E4662312A986007EC847 /* Mnemonic+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mnemonic+Codable.swift"; sourceTree = "<group>"; };
-		48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftUI-Wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-WalletUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		48092508230AC2A50056DB28 /* ExampleWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4809251E230AC2A80056DB28 /* ExampleWallet-Unit-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ExampleWallet-Unit-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		48092529230AC2A80056DB28 /* ExampleWallet-UI-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ExampleWallet-UI-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4809254F230AC4240056DB28 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		48092550230AC4240056DB28 /* WelcomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeScreen.swift; sourceTree = "<group>"; };
 		48092551230AC4240056DB28 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -331,9 +331,9 @@
 		48092509230AC2A50056DB28 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */,
-				4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */,
-				48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */,
+				48092508230AC2A50056DB28 /* ExampleWallet.app */,
+				4809251E230AC2A80056DB28 /* ExampleWallet-Unit-Tests.xctest */,
+				48092529230AC2A80056DB28 /* ExampleWallet-UI-Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -730,9 +730,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		48092507230AC2A50056DB28 /* SwiftUI-Wallet */ = {
+		48092507230AC2A50056DB28 /* ExampleWallet */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 48092532230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-Wallet" */;
+			buildConfigurationList = 48092532230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "ExampleWallet" */;
 			buildPhases = (
 				48092504230AC2A50056DB28 /* Sources */,
 				48092505230AC2A50056DB28 /* Frameworks */,
@@ -744,7 +744,7 @@
 			);
 			dependencies = (
 			);
-			name = "SwiftUI-Wallet";
+			name = ExampleWallet;
 			packageProductDependencies = (
 				48BE082423151C28008435F5 /* Kingfisher */,
 				48BE082623151C28008435F5 /* KingfisherSwiftUI */,
@@ -752,12 +752,12 @@
 				48A767E62316ACB3004949D7 /* KeychainSwift */,
 			);
 			productName = "SwiftUI-Wallet";
-			productReference = 48092508230AC2A50056DB28 /* SwiftUI-Wallet.app */;
+			productReference = 48092508230AC2A50056DB28 /* ExampleWallet.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4809251D230AC2A80056DB28 /* SwiftUI-WalletTests */ = {
+		4809251D230AC2A80056DB28 /* ExampleWallet-Unit-Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 48092535230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-WalletTests" */;
+			buildConfigurationList = 48092535230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "ExampleWallet-Unit-Tests" */;
 			buildPhases = (
 				4809251A230AC2A80056DB28 /* Sources */,
 				4809251B230AC2A80056DB28 /* Frameworks */,
@@ -768,14 +768,14 @@
 			dependencies = (
 				48092520230AC2A80056DB28 /* PBXTargetDependency */,
 			);
-			name = "SwiftUI-WalletTests";
+			name = "ExampleWallet-Unit-Tests";
 			productName = "SwiftUI-WalletTests";
-			productReference = 4809251E230AC2A80056DB28 /* SwiftUI-WalletTests.xctest */;
+			productReference = 4809251E230AC2A80056DB28 /* ExampleWallet-Unit-Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		48092528230AC2A80056DB28 /* SwiftUI-WalletUITests */ = {
+		48092528230AC2A80056DB28 /* ExampleWallet-UI-Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 48092538230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-WalletUITests" */;
+			buildConfigurationList = 48092538230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "ExampleWallet-UI-Tests" */;
 			buildPhases = (
 				48092525230AC2A80056DB28 /* Sources */,
 				48092526230AC2A80056DB28 /* Frameworks */,
@@ -786,9 +786,9 @@
 			dependencies = (
 				4809252B230AC2A80056DB28 /* PBXTargetDependency */,
 			);
-			name = "SwiftUI-WalletUITests";
+			name = "ExampleWallet-UI-Tests";
 			productName = "SwiftUI-WalletUITests";
-			productReference = 48092529230AC2A80056DB28 /* SwiftUI-WalletUITests.xctest */;
+			productReference = 48092529230AC2A80056DB28 /* ExampleWallet-UI-Tests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -814,7 +814,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 48092503230AC2A50056DB28 /* Build configuration list for PBXProject "SwiftUI-Wallet" */;
+			buildConfigurationList = 48092503230AC2A50056DB28 /* Build configuration list for PBXProject "ExampleWallet" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -833,9 +833,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				48092507230AC2A50056DB28 /* SwiftUI-Wallet */,
-				4809251D230AC2A80056DB28 /* SwiftUI-WalletTests */,
-				48092528230AC2A80056DB28 /* SwiftUI-WalletUITests */,
+				48092507230AC2A50056DB28 /* ExampleWallet */,
+				4809251D230AC2A80056DB28 /* ExampleWallet-Unit-Tests */,
+				48092528230AC2A80056DB28 /* ExampleWallet-UI-Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -1001,12 +1001,12 @@
 /* Begin PBXTargetDependency section */
 		48092520230AC2A80056DB28 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 48092507230AC2A50056DB28 /* SwiftUI-Wallet */;
+			target = 48092507230AC2A50056DB28 /* ExampleWallet */;
 			targetProxy = 4809251F230AC2A80056DB28 /* PBXContainerItemProxy */;
 		};
 		4809252B230AC2A80056DB28 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 48092507230AC2A50056DB28 /* SwiftUI-Wallet */;
+			target = 48092507230AC2A50056DB28 /* ExampleWallet */;
 			targetProxy = 4809252A230AC2A80056DB28 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1273,7 +1273,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		48092503230AC2A50056DB28 /* Build configuration list for PBXProject "SwiftUI-Wallet" */ = {
+		48092503230AC2A50056DB28 /* Build configuration list for PBXProject "ExampleWallet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				48092530230AC2A80056DB28 /* Debug */,
@@ -1282,7 +1282,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		48092532230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-Wallet" */ = {
+		48092532230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "ExampleWallet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				48092533230AC2A80056DB28 /* Debug */,
@@ -1291,7 +1291,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		48092535230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-WalletTests" */ = {
+		48092535230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "ExampleWallet-Unit-Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				48092536230AC2A80056DB28 /* Debug */,
@@ -1300,7 +1300,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		48092538230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "SwiftUI-WalletUITests" */ = {
+		48092538230AC2A80056DB28 /* Build configuration list for PBXNativeTarget "ExampleWallet-UI-Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				48092539230AC2A80056DB28 /* Debug */,

@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:SwiftUI-Wallet/SwiftUI-Wallet.xcodeproj">
+      location = "group:ExampleWallet/ExampleWallet.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:RadixSDK.xcodeproj">
