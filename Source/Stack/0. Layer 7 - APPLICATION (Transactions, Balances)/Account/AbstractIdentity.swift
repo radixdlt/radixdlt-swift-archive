@@ -51,16 +51,21 @@ public final class AbstractIdentity: CustomStringConvertible {
 }
 
 public extension AbstractIdentity {
+
+    convenience init(seedFromMnemonic hdWalletSeed: Data, alias: String? = nil) throws {
+          let wallet = BitcoinKit.HDWallet(seed: hdWalletSeed, network: BitcoinKit.Network.testnetBTC)
+
+          let privateKeyBicoinKit = try wallet.privateKey(index: 0)
+
+          let privateKey = try PrivateKey(data: privateKeyBicoinKit.data)
+
+          let account = Account(privateKey: privateKey)
+
+          self.init(accounts: [account], alias: alias)
+      }
+
     convenience init(mnemonic: Mnemonic, alias: String? = nil) throws {
-        let wallet = BitcoinKit.HDWallet(seed: mnemonic.seed, network: BitcoinKit.Network.testnetBTC)
-
-        let privateKeyBicoinKit = try wallet.privateKey(index: 0)
-
-        let privateKey = try PrivateKey(data: privateKeyBicoinKit.data)
-
-        let account = Account(privateKey: privateKey)
-
-        self.init(accounts: [account], alias: alias)
+        try self.init(seedFromMnemonic: mnemonic.seed, alias: alias)
     }
 }
 
