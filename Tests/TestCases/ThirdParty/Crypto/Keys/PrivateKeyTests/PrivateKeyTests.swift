@@ -59,7 +59,12 @@ class PrivateKeyTests: XCTestCase {
         let words = try! BitcoinKit.Mnemonic.generate(strength: Mnemonic.Strength.default, language: Mnemonic.Language.english)
         XCTAssertEqual(words.count, 12)
     }
-    
+
+    func testMnemonicGeneratorThat12WordsResultsIn12Words() {
+        let mnemonic = try! Mnemonic.Generator(strength: .wordCountOf12).generate()
+        XCTAssertEqual(mnemonic.words.count, 12)
+    }
+
     func testBitcoinKitPerformanceOfSignAndVerify() {
         let magic: Magic = 2
         let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords)

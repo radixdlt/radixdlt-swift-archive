@@ -27,19 +27,104 @@ import SwiftUI
 
 final class AppCoordinator {
 
-    private let settingsStore: SettingsStore
+    private let preferences: Preferences
+    private let securePersistence: SecurePersistence
 
-    init(settingsStore: SettingsStore) {
-        self.settingsStore = settingsStore
+    private let navigationHandler: (AnyScreen, TransitionAnimation) -> Void
+
+    init(
+        dependencies: (securePersistence: SecurePersistence, preferences: Preferences),
+        navigator navigationHandler: @escaping (AnyScreen, TransitionAnimation) -> Void
+    ) {
+        self.preferences = dependencies.preferences
+        self.securePersistence = dependencies.securePersistence
+        self.navigationHandler = navigationHandler
+    }
+}
+
+// MARK: Internal
+internal extension AppCoordinator {
+    func start() {
+        navigate(to: initialDestination)
+    }
+}
+
+// MARK: - Private
+
+// MARK: Destination
+private extension AppCoordinator {
+    enum Destination {
+        case welcome, getStarted, main
     }
 
-    func initialScreen() -> some Screen {
-        if !settingsStore.hasAgreedToTermsAndPolicy {
-            return AnyScreen(WelcomeScreen().environmentObject(settingsStore))
-        } else {
-            return AnyScreen(GetStartedScreen())
+    func navigate(to destination: Destination, transitionAnimation: TransitionAnimation = .flipFromLeft) {
+        let screen = screenForDestination(destination)
+        navigationHandler(screen, transitionAnimation)
+    }
+
+    func screenForDestination(_ destination: Destination) -> AnyScreen {
+        switch destination {
+        case .welcome: return AnyScreen(welcome)
+        case .getStarted: return AnyScreen(getStarted)
+        case .main: return AnyScreen(main)
+        }
+    }
+
+    var initialDestination: Destination {
+
+        guard preferences.hasAgreedToTermsAndPolicy else {
+            return .welcome
         }
 
+        guard securePersistence.isWalletSetup else {
+            return .getStarted
+        }
+
+        return .main
+    }
+}
+
+// MARK: - Screens
+import RadixSDK
+private extension AppCoordinator {
+    var welcome: some Screen {
+        WelcomeScreen()
+            .environmentObject(
+                WelcomeViewModel(
+                    preferences: preferences,
+                    termsHaveBeenAccepted: { [unowned self] in self.navigate(to: .getStarted) }
+                )
+            )
     }
 
+    var getStarted: some Screen {
+        GetStartedScreen()
+            .environmentObject(
+                GetStartedViewModel(
+                    preferences: preferences,
+                    securePersistence: securePersistence,
+                    walletCreated: { [unowned self] in self.navigate(to: .main) }
+                )
+        )
+    }
+
+    var main: some Screen {
+        guard let seedFromMnemonic = securePersistence.seedFromMnemonic else {
+            incorrectImplementation("Should have seed saved")
+        }
+        let alias = preferences.identityAlias ?? "Unnamed"
+        guard let identity = try? AbstractIdentity(seedFromMnemonic: seedFromMnemonic, alias: alias) else {
+            incorrectImplementationShouldAlwaysBeAble(to: "Create Radix Application Client")
+        }
+        let radixApplicationClient = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: identity)
+
+        return MainScreen().environmentObject(
+            MainViewModel(
+                radixApplicationClient: radixApplicationClient,
+                preferences: preferences,
+                securePersistence: securePersistence,
+                walletDeleted: { [unowned self] in self.navigate(to: .getStarted, transitionAnimation: .flipFromRight)  }
+            )
+        )
+    }
 }

@@ -24,7 +24,7 @@
 
 import Foundation
 
-public struct Mnemonic {
+public struct Mnemonic: CustomStringConvertible {
     
     public static let seperator: String = " "
     
@@ -38,6 +38,20 @@ public struct Mnemonic {
     }
 }
 
+public extension Mnemonic {
+    var description: String {
+        return "#\(words.count) words omitted for security reasons, language: '\(language)'"
+    }
+}
+
+#if DEBUG
+extension Mnemonic: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "Mnemonic (this is only printable on DEBUG builds): \(words), language: \(language)"
+    }
+}
+#endif
+
 // MARK: - Internal
 internal extension Mnemonic {
     init(strings: [String], language: Language) throws {
@@ -47,7 +61,7 @@ internal extension Mnemonic {
 
 // MARK: - To BitcoinKit
 import BitcoinKit
-internal extension Mnemonic {
+public extension Mnemonic {
     var seed: Data {
         return BitcoinKit.Mnemonic.seed(mnemonic: words.map { $0.value })
     }

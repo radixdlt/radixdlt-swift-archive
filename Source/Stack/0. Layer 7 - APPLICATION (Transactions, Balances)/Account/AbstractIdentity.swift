@@ -51,36 +51,71 @@ public final class AbstractIdentity: CustomStringConvertible {
 }
 
 public extension AbstractIdentity {
+
+    convenience init(seedFromMnemonic hdWalletSeed: Data, alias: String? = nil) throws {
+          let wallet = BitcoinKit.HDWallet(seed: hdWalletSeed, network: BitcoinKit.Network.testnetBTC)
+
+          let privateKeyBicoinKit = try wallet.privateKey(index: 0)
+
+          let privateKey = try PrivateKey(data: privateKeyBicoinKit.data)
+
+          let account = Account(privateKey: privateKey)
+
+          self.init(accounts: [account], alias: alias)
+      }
+
+    convenience init(mnemonic: Mnemonic, alias: String? = nil) throws {
+        try self.init(seedFromMnemonic: mnemonic.seed, alias: alias)
+    }
+}
+
+public extension AbstractIdentity {
     static func new(
         alias: String? = nil,
         mnemonicGenerator: Mnemonic.Generator = .default,
         backedUpMneumonic: @escaping (Mnemonic) -> MnemonicBackedUpByUser
     ) -> Single<AbstractIdentity> {
-        
-        return Single<AbstractIdentity>.create { single in
-            
+        return newWithoutConfirmationOfBackup(alias: alias, mnemonicGenerator: mnemonicGenerator) {
+            _ = backedUpMneumonic($0)
+        }
+    }
+
+    static func newWithoutConfirmationOfBackup(
+        alias: String? = nil,
+        mnemonicGenerator: Mnemonic.Generator = .default,
+        backedUpMneumonic: @escaping (Mnemonic) -> Void
+    ) -> Single<AbstractIdentity> {
+
+        return Single<Mnemonic>.create { single in
             do {
                 let mnemonic = try mnemonicGenerator.generate()
-                
                 // async
-                _ = backedUpMneumonic(mnemonic)
-           
-                // TODO: replace BTC network with Radix one...
-                let wallet = BitcoinKit.HDWallet(seed: mnemonic.seed, network: BitcoinKit.Network.testnetBTC)
-                
-                let privateKeyBicoinKit = try wallet.privateKey(index: 0)
-                
-                let privateKey = try PrivateKey(data: privateKeyBicoinKit.data)
-                
-                let account = Account(privateKey: privateKey)
-                
-                let identity = AbstractIdentity(accounts: [account], alias: alias)
-                
+                backedUpMneumonic(mnemonic)
+                single(.success(mnemonic))
+            } catch {
+                single(.error(error))
+            }
+            return Disposables.create()
+        }.flatMap {
+            self.newWithoutConfirmationOfBackup(alias: alias, mnemonic: $0)
+        }
+
+    }
+
+    static func newWithoutConfirmationOfBackup(
+        alias: String? = nil,
+        mnemonic: Mnemonic
+    ) -> Single<AbstractIdentity> {
+
+        return Single<AbstractIdentity>.create { single in
+
+            do {
+                let identity = try AbstractIdentity(mnemonic: mnemonic, alias: alias)
                 single(.success(identity))
             } catch {
                 single(.error(error))
             }
-            
+
             return Disposables.create()
         }
     }

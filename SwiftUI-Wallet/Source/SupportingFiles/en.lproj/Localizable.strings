@@ -31,3 +31,9 @@
 "GetStarted.Button.ReceiveTransaction" = "Receive a trasaction";
 "GetStarted.Button.RestoreAccount" = "Restore an account";
 "GetStarted.Text.Or" = "or";
+
+"Main.Tab.Name.Assets" = "Assets";
+"Main.Tab.Name.Contacts" = "Contacts";
+"Main.Tab.Name.Apps" = "Apps";
+"Main.Tab.Name.Learn" = "Learn";
+"Main.Tab.Name.Settings" = "Settings";

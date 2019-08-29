@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "KeychainSwift",
+        "repositoryURL": "https://github.com/evgenyneu/keychain-swift",
+        "state": {
+          "branch": null,
+          "revision": "55e0e5348c4b56877441ba9df9d68c6b732dc468",
+          "version": "16.0.1"
+        }
+      },
+      {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "state": {
+          "branch": "xcode11",
+          "revision": "58d878f85ad223a469ce1474e1c73e29a4012577",
+          "version": null
+        }
+      },
+      {
+        "package": "QGrid",
+        "repositoryURL": "https://github.com/Q-Mobile/QGrid",
+        "state": {
+          "branch": null,
+          "revision": "ab5a0428d2b192df92af5eba4ecb48f574c3612d",
+          "version": "0.1.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

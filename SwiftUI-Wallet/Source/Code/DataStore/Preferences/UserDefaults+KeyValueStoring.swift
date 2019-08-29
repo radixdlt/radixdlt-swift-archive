@@ -23,8 +23,24 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct PrivacyPolicyScreen: WebViewScreen {
-    static let url = URL(string: "https://www.radixdlt.com/privacy-policy/")!
+extension UserDefaults: KeyValueStoring {
+    typealias Key = PreferencesKey
+    typealias SaveOptions = NoSaveOptions
+
+
+    func deleteValue(forKey key: String) {
+        removeObject(forKey: key)
+    }
+
+    func save(value: Any, forKey key: String, saveOptions: AnySaveOptionsConvertible) {
+        let _ = saveOptions
+        self.setValue(value, forKey: key)
+    }
+
+    func loadValue(forKey key: String) -> Any? {
+        return value(forKey: key)
+    }
 }
+
+

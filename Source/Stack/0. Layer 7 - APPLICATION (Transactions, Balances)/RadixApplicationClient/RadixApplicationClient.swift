@@ -264,6 +264,13 @@ public extension RadixApplicationClient {
 // MARK: ActiveAccountOwner
 public extension RadixApplicationClient {
     var addressOfActiveAccount: Address { activeAccount.addressFromMagic(magic) }
+
+    func observeAddressOfActiveAccount() -> Observable<Address> {
+        let magic = self.magic
+        return identity.activeAccountObservable.map { newActiveAccount in
+            return newActiveAccount.addressFromMagic(magic)
+        }
+    }
 }
 
 // MARK: Public

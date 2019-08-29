@@ -24,6 +24,12 @@
 
 import Foundation
 
-struct TermsAndConditionsScreen: WebViewScreen {
-    static let url = URL(string: "https://docs.radixdlt.com/kb/")!
+/// Abstraction of UserDefaults
+typealias Preferences = KeyValueStore<PreferencesKey, NoSaveOptions>
+
+extension Preferences {
+    static var `default`: Preferences {
+        return KeyValueStore(UserDefaults.standard)
+    }
+    
 }
