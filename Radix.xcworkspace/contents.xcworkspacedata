@@ -5,9 +5,6 @@
       location = "group:SwiftUI-Wallet/SwiftUI-Wallet.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:ExampleWallet/ExampleWallet.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:RadixSDK.xcodeproj">
    </FileRef>
 </Workspace>
