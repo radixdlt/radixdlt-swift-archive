@@ -96,7 +96,7 @@ private extension AppCoordinator {
             .environmentObject(
                 WelcomeViewModel(
                     preferences: preferences,
-                    termsHaveBeenAccepted: { [unowned self] in self.navigate(to: .getStarted) }
+                    termsHaveBeenAccepted: { [unowned self] in self.start() }
                 )
             )
     }
