@@ -41,7 +41,6 @@ extension ReceiveTransactionScreen: Screen {
             Text("Your address").font(.roboto(size: 30))
             qrCodeImage
             myAddressView
-            copyMyAddressButton
         }
         .padding()
         .navigationBarTitle("Receive payment")
@@ -56,16 +55,6 @@ private extension ReceiveTransactionScreen {
 
     var qrCodeImage: some View {
         QRCodeImage(string: viewModel.myAddressBase58String).frame(width: 300, height: 300, alignment: .center)
-    }
-
-    var copyMyAddressButton: some View {
-        Button("Copy my address") {
-            self.viewModel.copyMyAddressToPasteBoard()
-            self.isShowingCopiedAddressAlert = true
-        }.buttonStyleEmerald()
-            .alert(isPresented: $isShowingCopiedAddressAlert) {
-                Alert(title: Text("Copied"), message: nil, dismissButton: nil)
-        }
     }
 }
 
@@ -108,10 +97,6 @@ extension ReceiveTransactionViewModel {
     var myAddress: Address { myActiveAddress }
     var myAddressBase58String: String {
         myAddress.base58String.stringValue
-    }
-
-    func copyMyAddressToPasteBoard() {
-        UIPasteboard.general.string = myAddressBase58String
     }
 }
 
