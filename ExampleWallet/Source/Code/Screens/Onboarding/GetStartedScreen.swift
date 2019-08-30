@@ -29,23 +29,29 @@ import Combine
 import RadixSDK
 
 struct GetStartedScreen {
-    @EnvironmentObject private var viewModel: ViewModel
+
+//    @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject private var appModel: AppModel
+
+    // TODO allow for selection of language
+    private let mnemonicGenerator: Mnemonic.Generator = .default
+
 }
 
 // MARK: - View
-extension GetStartedScreen: Screen {
+extension GetStartedScreen: View {
     var body: some View {
         NavigationView {
             VStack {
 
                 Button("GetStarted.Button.ReceiveTransaction") {
-                    self.viewModel.generateNewMnemonicAndProceedToMainScreen()
+                    self.generateNewMnemonicAndProceedToMainScreen()
                 }
                 .buttonStyleEmerald()
 
                 LabelledDivider(Text("GetStarted.Text.Or"))
 
-                NavigationLink(destination: viewModel.makeRestoreAccountScreen()) {
+                NavigationLink(destination: RestoreAccountScreen()) {
                     Text("GetStarted.Button.RestoreAccount").buttonStyleSaphire()
                 }
 
@@ -54,59 +60,14 @@ extension GetStartedScreen: Screen {
     }
 }
 
-// MARK: - ViewModel
-typealias GetStartedViewModel = GetStartedScreen.ViewModel
-extension GetStartedScreen {
-    final class ViewModel: ObservableObject {
-
-        let objectWillChange: PassthroughSubject<Void, Never>
-        fileprivate let preferences: Preferences
-        fileprivate let securePersistence: SecurePersistence
-        private let mnemonicGenerator: Mnemonic.Generator
-
-        private let walletCreated: Done
-
-        init(
-            preferences: Preferences,
-            securePersistence: SecurePersistence,
-            mnemonicGenerator: Mnemonic.Generator = .init(strength: .wordCountOf12, language: .english),
-            walletCreated: @escaping Done
-        ) {
-            self.preferences = preferences
-            self.securePersistence  = securePersistence
-            self.mnemonicGenerator = mnemonicGenerator
-            self.objectWillChange = securePersistence.objectWillChange
-            self.walletCreated = walletCreated
-        }
-    }
-
-}
-
-private extension GetStartedScreen.ViewModel {
+private extension GetStartedScreen {
     func generateNewMnemonicAndProceedToMainScreen() {
         do {
             let newMnemonic = try mnemonicGenerator.generate()
-            securePersistence.mnemonic = newMnemonic
-            securePersistence.seedFromMnemonic = newMnemonic.seed
-            walletCreated()
+            appModel.generatedNewMnemonic(newMnemonic)
         } catch { incorrectImplementationShouldAlwaysBeAble(to: "Generate mnemonic", error) }
     }
-
-    func makeRestoreAccountViewModel() -> RestoreAccountViewModel {
-        .init(
-            securePersistence: securePersistence,
-            mnemonicRestored: walletCreated
-        )
-    }
-
-    func makeRestoreAccountScreen() -> AnyScreen {
-        RestoreAccountScreen()
-            .environmentObject(makeRestoreAccountViewModel())
-            .eraseToAny()
-    }
 }
-
-
 
 #if DEBUG
 struct GetStartedScreen_Previews: PreviewProvider {

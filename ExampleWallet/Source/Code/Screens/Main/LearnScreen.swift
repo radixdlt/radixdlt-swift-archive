@@ -25,7 +25,7 @@
 import Foundation
 import SwiftUI
 
-struct LearnScreen: Screen {
+struct LearnScreen: View {
     var body: some View {
         Text("Learn")
     }

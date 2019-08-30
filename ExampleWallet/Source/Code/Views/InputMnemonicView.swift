@@ -28,7 +28,12 @@ import RadixSDK
 import QGrid
 
 struct InputMnemonicView {
-    @EnvironmentObject private var viewModel: ViewModel
+    @EnvironmentObject private var appModel: AppModel
+    @ObservedObject private var viewModel = ViewModel()
+
+    init() {
+//        viewModel.subscribeToState(appModel: userData)
+    }
 }
 
 // MARK: - View
@@ -66,14 +71,16 @@ typealias InputMnemonicViewModel = InputMnemonicView.ViewModel
 extension InputMnemonicView {
     final class ViewModel: ObservableObject {
         fileprivate let allCellViewModels: [InputMnemonicWordCellViewModel]
-        fileprivate let mnemonicRestored: (Mnemonic) -> Void
+//        fileprivate let mnemonicRestored: (Mnemonic) -> Void
 
         @Published fileprivate var languageSelectionIndex = 0
         @Published fileprivate var mnemonicLengthSelectionIndex = 0
 
-        init(mnemonicRestored: @escaping (Mnemonic) -> Void) {
-            self.mnemonicRestored = mnemonicRestored
+        init() {
+//            self.mnemonicRestored = mnemonicRestored
             self.allCellViewModels = (0..<Mnemonic.Strength.max.wordCount).map { InputMnemonicWordCellViewModel(index: $0) }
+
+            fatalError("Check for mnemonic restored...! trigger navigation")
         }
     }
 }

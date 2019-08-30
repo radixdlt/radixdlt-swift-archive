@@ -22,51 +22,48 @@
 // SOFTWARE.
 //
 
-import Foundation
 import SwiftUI
 
-// MARK: - BackUpMnemonicWarningView
-struct BackUpMnemonicWarningView: View {
+struct BackUpMnemonicWarningView {
 
-    typealias Dismiss = () -> Void
-
-    private let makeDestination: () -> AnyScreen
-    private let dismiss: Dismiss
+    @Environment(\.presentationMode) var presentationMode
 
     @State private var isPresentingBackUpMnemonicModal = false
+}
 
-    init(
-        makeDestination: @escaping () -> AnyScreen,
-        dismiss: @escaping Dismiss
-    ) {
-        self.dismiss = dismiss
-        self.makeDestination = makeDestination
-    }
-
+// MARK: - View
+extension BackUpMnemonicWarningView: View {
     var body: some View {
         VStack {
             Text("⚠️ WARNING ⚠️").font(.roboto(size: 24))
             Text("If you don't back up your wallet, you might permanetly lose all your assets.").font(.roboto(size: 16))
 
             HStack {
-                Button("Dismiss") {
-                    self.dismiss()
-                }
-                .buttonStyleSaphire()
+                Button("Dismiss") { self.dismiss() }.buttonStyleSaphire()
 
-                Button("Back up") {
-                    self.isPresentingBackUpMnemonicModal = true
-                }
-                .buttonStyleEmerald()
+                Button("Back up") { self.modallyPresentBackUpFlow() }.buttonStyleEmerald()
             }
         }
         .background(Color.red)
         .padding()
-        .sheet(isPresented: $isPresentingBackUpMnemonicModal, onDismiss: {
-            self.isPresentingBackUpMnemonicModal = false
-            self.dismiss()
-        }, content: {
-            self.makeDestination()
-        })
+        .sheet(
+            isPresented: $isPresentingBackUpMnemonicModal,
+            onDismiss: { self.dismissBackUpFlow() },
+            content: { BackUpMnemonicScreen() }
+        )
+    }
+}
+
+private extension BackUpMnemonicWarningView {
+    func dismiss() {
+        presentationMode.wrappedValue.dismiss()
+    }
+
+    func modallyPresentBackUpFlow() {
+        isPresentingBackUpMnemonicModal = true
+    }
+
+    func dismissBackUpFlow() {
+        isPresentingBackUpMnemonicModal = false
     }
 }

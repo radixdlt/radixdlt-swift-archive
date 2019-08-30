@@ -61,7 +61,7 @@
 		48458E5A230DB339007B05A2 /* Gotham-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E55230DB338007B05A2 /* Gotham-Book.otf */; };
 		48458E5B230DB339007B05A2 /* Gotham-Ultra.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E56230DB338007B05A2 /* Gotham-Ultra.otf */; };
 		48458E5C230DB339007B05A2 /* Gotham-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E57230DB338007B05A2 /* Gotham-Light.otf */; };
-		4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4853BFDA230C519B00022D04 /* AppCoordinator.swift */; };
+		4853BFDB230C519B00022D04 /* RootScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4853BFDA230C519B00022D04 /* RootScreen.swift */; };
 		48571C6C230C19550040896F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48571C6E230C19550040896F /* Localizable.strings */; };
 		48596A332316BBB0005C1804 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A322316BBB0005C1804 /* View+Extensions.swift */; };
 		48596A362316BBED005C1804 /* UIWindow+FromSwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A352316BBED005C1804 /* UIWindow+FromSwiftUI.swift */; };
@@ -103,6 +103,7 @@
 		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
 		48ACA682230AF85C00BF0029 /* KeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* KeyValueStore.swift */; };
+		48B2A7AF231973C700B4096C /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B2A7AE231973C700B4096C /* AppModel.swift */; };
 		48BE08172314188A008435F5 /* BackUpMnemonicWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */; };
 		48BE082523151C28008435F5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082423151C28008435F5 /* Kingfisher */; };
 		48BE082723151C28008435F5 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082623151C28008435F5 /* KingfisherSwiftUI */; };
@@ -210,7 +211,7 @@
 		48458E55230DB338007B05A2 /* Gotham-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Book.otf"; sourceTree = "<group>"; };
 		48458E56230DB338007B05A2 /* Gotham-Ultra.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Ultra.otf"; sourceTree = "<group>"; };
 		48458E57230DB338007B05A2 /* Gotham-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Light.otf"; sourceTree = "<group>"; };
-		4853BFDA230C519B00022D04 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		4853BFDA230C519B00022D04 /* RootScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreen.swift; sourceTree = "<group>"; };
 		48571C6D230C19550040896F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48596A322316BBB0005C1804 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		48596A352316BBED005C1804 /* UIWindow+FromSwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+FromSwiftUI.swift"; sourceTree = "<group>"; };
@@ -251,6 +252,7 @@
 		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
 		48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScreen.swift; sourceTree = "<group>"; };
 		48ACA681230AF85C00BF0029 /* KeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStore.swift; sourceTree = "<group>"; };
+		48B2A7AE231973C700B4096C /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpMnemonicWarningView.swift; sourceTree = "<group>"; };
 		48BE082D23151F70008435F5 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		48BE082F23151F8A008435F5 /* AssetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRowView.swift; sourceTree = "<group>"; };
@@ -439,8 +441,9 @@
 		4809257D230AC6750056DB28 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				48B2A7AD231973AE00B4096C /* AppModel */,
 				4809254F230AC4240056DB28 /* AppDelegate.swift */,
-				4853BFDA230C519B00022D04 /* AppCoordinator.swift */,
+				4853BFDA230C519B00022D04 /* RootScreen.swift */,
 				48092551230AC4240056DB28 /* SceneDelegate.swift */,
 			);
 			path = App;
@@ -662,6 +665,14 @@
 				4844FC6B230C20EC003106AB /* Styles */,
 			);
 			path = Style;
+			sourceTree = "<group>";
+		};
+		48B2A7AD231973AE00B4096C /* AppModel */ = {
+			isa = PBXGroup;
+			children = (
+				48B2A7AE231973C700B4096C /* AppModel.swift */,
+			);
+			path = AppModel;
 			sourceTree = "<group>";
 		};
 		48BE081523141874008435F5 /* Notiifications */ = {
@@ -952,7 +963,7 @@
 				48ACA682230AF85C00BF0029 /* KeyValueStore.swift in Sources */,
 				48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */,
 				48458E51230DAAC8007B05A2 /* RadixLogo.swift in Sources */,
-				4853BFDB230C519B00022D04 /* AppCoordinator.swift in Sources */,
+				4853BFDB230C519B00022D04 /* RootScreen.swift in Sources */,
 				48596A362316BBED005C1804 /* UIWindow+FromSwiftUI.swift in Sources */,
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
 				48596A4F2316D0E9005C1804 /* SecurePersistence.swift in Sources */,
@@ -977,6 +988,7 @@
 				48596A3E2316D034005C1804 /* KeyValueStoring+ValueRetrieval.swift in Sources */,
 				48596A552316D12B005C1804 /* KeychainKey.swift in Sources */,
 				48596A3C2316D015005C1804 /* KeyConvertible.swift in Sources */,
+				48B2A7AF231973C700B4096C /* AppModel.swift in Sources */,
 				48596A592316D159005C1804 /* PreferencesKey.swift in Sources */,
 				48596A532316D118005C1804 /* Keychain+SaveOptionConvertible.swift in Sources */,
 				48596A4A2316D0A2005C1804 /* NoSaveOptions.swift in Sources */,

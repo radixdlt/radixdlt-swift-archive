@@ -23,15 +23,14 @@
 //
 
 import Foundation
+import SwiftUI
+import Combine
 
 extension Preferences {
+
     var hasAgreedToTermsAndPolicy: Bool {
-        get {
-            return isTrue(.hasAgreedToTermsAndPolicy)
-        }
-        set {
-            save(value: newValue, forKey: .hasAgreedToTermsAndPolicy)
-        }
+        get { isTrue(.hasAgreedToTermsAndPolicy) }
+        set { save(value: newValue, forKey: .hasAgreedToTermsAndPolicy) }
     }
 
     var identityAlias: String? {

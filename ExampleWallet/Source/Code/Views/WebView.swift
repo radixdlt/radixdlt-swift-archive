@@ -44,7 +44,7 @@ struct WebView: UIViewRepresentable {
 
 }
 
-protocol WebViewScreen: Screen {
+protocol WebViewScreen: View {
     static var url: URL { get }
 }
 

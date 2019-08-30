@@ -31,50 +31,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    fileprivate lazy var appCoordinator: AppCoordinator = {
-        let rootViewController: UIHostingController<AnyView> = .init(rootView: EmptyView().eraseToAny())
-
-        window?.rootViewController = rootViewController
-
-        let navigationHandler: (AnyScreen, TransitionAnimation) -> Void = { [unowned rootViewController, window] (newRootScreen: AnyScreen, transitionAnimation: TransitionAnimation) in
-            UIView.transition(
-                with: window!,
-                duration: 0.5,
-                options: transitionAnimation.asUIKitTransitionAnimation,
-                animations: { rootViewController.rootView = newRootScreen },
-                completion: nil
-            )
-        }
-
-        return AppCoordinator(
-            dependencies: (
-                securePersistence: KeyValueStore(KeychainSwift()),
-                preferences: .default
-            ),
-            navigator: navigationHandler
-        )
-    }()
-
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         self.window = .fromScene(scene)
-        appCoordinator.start()
-    }
-}
-
-enum TransitionAnimation {
-    case flipFromLeft
-    case flipFromRight
-}
-
-private extension TransitionAnimation {
-    var asUIKitTransitionAnimation: UIView.AnimationOptions {
-        switch self {
-        case .flipFromLeft: return UIView.AnimationOptions.transitionFlipFromLeft
-        case .flipFromRight: return UIView.AnimationOptions.transitionFlipFromRight
-        }
+        window?.rootViewController = UIHostingController(rootView:
+            RootScreen().environmentObject(AppModel())
+        )
     }
 }

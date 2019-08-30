@@ -32,7 +32,7 @@ struct ConfirmMnemonicScreen {
 }
 
 // MARK: - View
-extension ConfirmMnemonicScreen: Screen {
+extension ConfirmMnemonicScreen: View {
     var body: some View {
         VStack {
             instructionsLabel

@@ -25,7 +25,7 @@
 import Foundation
 import SwiftUI
 
-struct SwitchAccountScreen: Screen {
+struct SwitchAccountScreen: View {
     var body: some View {
         Text("Accounts list overview")
     }

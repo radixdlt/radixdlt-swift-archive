@@ -30,47 +30,38 @@ import RadixSDK
 import RxSwift
 
 struct ConnectedToNodesScreen {
-    @EnvironmentObject private var viewModel: ViewModel
+
+    // MARK: - Injected properties
+    @EnvironmentObject private var appModel: AppModel
+
+    // MARK: Stateful Properties
+    @State private var connectToNodes = [Node]()
+
+    // MARK: Other properites
+    private let rxDisposeBag = RxSwift.DisposeBag()
+
+    init() {
+
+//        // Subscribe to change of address (when changing active account)
+//        appModel.radixApplicationClient.observeConnectedToNodes
+//            .subscribe(onNext: {
+//                self.connectToNodes = $0
+//            })
+//            .disposed(by: rxDisposeBag)
+
+        print("ConnectedToNodesScreen: fix me, subscribe to nodes")
+    }
 }
 
 // MARK: - View
-extension ConnectedToNodesScreen: Screen {
+extension ConnectedToNodesScreen: View {
     var body: some View {
-        List(viewModel.connectToNodes) { node in
+        List(connectToNodes) { node in
             Text(node.description)
         }
     }
 }
 
-// MARK: - ViewModel
-typealias ConnectedToNodesViewModel = ConnectedToNodesScreen.ViewModel
-
-extension ConnectedToNodesScreen {
-    final class ViewModel: ObservableObject {
-
-        // MARK: - Injected properties
-        private let radixApplicationClient: RadixApplicationClient
-
-        // MARK: Stateful Properties
-        @Published fileprivate var connectToNodes = [Node]()
-
-        // MARK: Other properites
-        private let rxDisposeBag = RxSwift.DisposeBag()
-
-        init(
-            radixApplicationClient: RadixApplicationClient
-        ) {
-            self.radixApplicationClient = radixApplicationClient
-
-            // Subscribe to change of address (when changing active account)
-            radixApplicationClient.observeConnectedToNodes
-                .subscribe(onNext: { [unowned self] connectToNodes in
-                    self.connectToNodes = connectToNodes
-                })
-                .disposed(by: rxDisposeBag)
-        }
-    }
-}
 
 extension Node: CustomStringConvertible {
     public var description: String {

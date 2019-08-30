@@ -35,7 +35,7 @@ struct ReceiveTransactionScreen {
 }
 
 // MARK: - View
-extension ReceiveTransactionScreen: Screen {
+extension ReceiveTransactionScreen: View {
     var body: some View {
         VStack {
             Text("Your address").font(.roboto(size: 30))

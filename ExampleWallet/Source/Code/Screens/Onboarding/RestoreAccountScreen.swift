@@ -28,50 +28,13 @@ import SwiftUI
 import RadixSDK
 
 struct RestoreAccountScreen {
-    @EnvironmentObject private var viewModel: ViewModel
+//    @EnvironmentObject private var appModel: AppModel
 }
 
 // MARK: - View
-extension RestoreAccountScreen: Screen {
+extension RestoreAccountScreen: View {
     var body: some View {
-        VStack {
-            Text("Write your mnemonic")
-            inputMnemonicView
-        }
-        .navigationBarTitle("Restore acount")
-    }
-}
-
-private extension RestoreAccountScreen {
-    var inputMnemonicView: some View {
-        viewModel.makeInputMnemonicView()
-    }
-}
-
-// MARK: - ViewModel
-typealias RestoreAccountViewModel = RestoreAccountScreen.ViewModel
-
-extension RestoreAccountScreen {
-    final class ViewModel: ObservableObject {
-        private let securePersistence: SecurePersistence
-
-        fileprivate let mnemonicRestored: Done
-
-        init(securePersistence: SecurePersistence, mnemonicRestored: @escaping Done) {
-            self.securePersistence = securePersistence
-            self.mnemonicRestored = mnemonicRestored
-        }
-
-    }
-}
-
-extension RestoreAccountViewModel {
-    func makeInputMnemonicView() -> some View {
-        InputMnemonicView().environmentObject(
-            InputMnemonicViewModel { [unowned self] restoredMnemonic in
-                self.securePersistence.seedFromMnemonic = restoredMnemonic.seed
-                self.mnemonicRestored()
-            }
-        )
+        InputMnemonicView()
+            .navigationBarTitle("Restore acount")
     }
 }

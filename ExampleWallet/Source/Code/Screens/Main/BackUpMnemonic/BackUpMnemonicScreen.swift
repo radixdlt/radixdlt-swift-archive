@@ -29,19 +29,19 @@ import Combine
 import RadixSDK
 
 struct BackUpMnemonicScreen {
-    @EnvironmentObject private var viewModel: ViewModel
+    @EnvironmentObject private var appModel: AppModel
 }
 
 // MARK: - View
-extension BackUpMnemonicScreen: Screen {
+extension BackUpMnemonicScreen: View {
     var body: some View {
         NavigationView {
             VStack {
-                List(viewModel.words) { word in
+                List(words) { word in
                     Text(word.indexedWord)
                 }.listStyle(GroupedListStyle())
 
-                NavigationLink(destination: viewModel.makeDestination()) {
+                NavigationLink(destination: ConfirmMnemonicScreen()) {
                     Text("Confirm").buttonStyleEmerald()
                 }
             }.navigationBarTitle("Back up mnemonic")
@@ -49,23 +49,9 @@ extension BackUpMnemonicScreen: Screen {
     }
 }
 
-// MARK: - ViewModel
-typealias BackUpMnemonicViewModel = BackUpMnemonicScreen.ViewModel
-extension BackUpMnemonicScreen {
-    final class ViewModel: ObservableObject {
-        fileprivate let securePersistence: SecurePersistence
-        private let dismissClosure: Done
-        init(securePersistence: SecurePersistence, dismiss: @escaping Done) {
-
-            self.securePersistence = securePersistence
-            self.dismissClosure = dismiss
-        }
-    }
-}
-
-private extension BackUpMnemonicScreen.ViewModel {
+private extension BackUpMnemonicScreen {
     var mnemonic: Mnemonic {
-        guard let mnemonic = securePersistence.mnemonic else {
+        guard let mnemonic = appModel.securePersistence.mnemonic else {
             incorrectImplementation("Should have mnemonic")
         }
         return mnemonic
@@ -77,15 +63,4 @@ private extension BackUpMnemonicScreen.ViewModel {
         }
     }
 
-    func makeDestination() -> AnyScreen {
-        AnyScreen(
-            ConfirmMnemonicScreen()
-                .environmentObject(
-                    ConfirmMnemonicViewModel(
-                        securePersistence: securePersistence,
-                        dismiss: dismissClosure
-                    )
-            )
-        )
-    }
 }
