@@ -26,7 +26,7 @@ import SwiftUI
 import Combine
 
 struct WelcomeScreen {
-    @EnvironmentObject private var appModel: AppModel
+    @EnvironmentObject private var appState: AppState
 
     @State private var isPresentingTermsWebViewModal = false
     @State private var isPresentingPrivacyWebViewModal = false
@@ -111,7 +111,7 @@ private extension WelcomeScreen {
 private extension WelcomeScreen {
 
     func proceedToWalletCreation() {
-        appModel.hasAcceptedTermsAndPrivacyPolicy()
+        appState.update().userDid.acceptTermsOfUse()
     }
 }
 

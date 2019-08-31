@@ -37,8 +37,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         self.window = .fromScene(scene)
+
+
+        let preferences = Preferences.default
+        let securePersistence = SecurePersistence.new(nameSpace: "RadixWallet")
+        let appState = AppState(preferences: preferences, securePersistence: securePersistence)
+
         window?.rootViewController = UIHostingController(rootView:
-            RootScreen().environmentObject(AppModel())
+            RootScreen()
+                .environmentObject(preferences)
+                .environmentObject(securePersistence)
+                .environmentObject(appState)
         )
     }
 }

@@ -22,27 +22,22 @@
 // SOFTWARE.
 //
 
-import SwiftUI
+import Foundation
+import RadixSDK
 
-// MARK: - ROOT SCREEN
-struct RootScreen {
-    @EnvironmentObject private var appState: AppState
+public final class Radix: ObservableObject {
+
+    private let client: RadixApplicationClient
+
+    init(client: RadixApplicationClient) {
+        self.client = client
+    }
+
 }
 
-extension RootScreen: View {
-    var body: some View {
-        Group<AnyView> {
-            if appState.rootContent == .welcome {
-                return WelcomeScreen().eraseToAny()
-            } else if appState.rootContent == .getStarted {
-                return GetStartedScreen().eraseToAny()
-            } else {
-                return MainScreen()
-                    .environmentObject(
-                        appState.update().appShould.connectToRadix()
-                    )
-                    .eraseToAny()
-            }
-        }
+// MARK: - Public
+public extension Radix {
+    var myActiveAddress: Address {
+        return client.addressOfActiveAccount
     }
 }

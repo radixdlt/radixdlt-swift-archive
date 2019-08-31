@@ -32,7 +32,7 @@ import RxSwift
 struct ConnectedToNodesScreen {
 
     // MARK: - Injected properties
-    @EnvironmentObject private var appModel: AppModel
+    @EnvironmentObject private var radix: Radix
 
     // MARK: Stateful Properties
     @State private var connectToNodes = [Node]()

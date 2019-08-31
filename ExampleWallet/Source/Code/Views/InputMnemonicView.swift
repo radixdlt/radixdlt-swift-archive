@@ -28,12 +28,7 @@ import RadixSDK
 import QGrid
 
 struct InputMnemonicView {
-    @EnvironmentObject private var appModel: AppModel
     @ObservedObject private var viewModel = ViewModel()
-
-    init() {
-//        viewModel.subscribeToState(appModel: userData)
-    }
 }
 
 // MARK: - View

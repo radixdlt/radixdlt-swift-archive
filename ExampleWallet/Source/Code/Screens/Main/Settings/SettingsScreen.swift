@@ -26,11 +26,7 @@ import SwiftUI
 import Combine
 
 struct SettingsScreen {
-
-//    @Environment(\.presentationMode) var presentation
-
-    // MARK: - Injected properties
-    @EnvironmentObject private var appModel: AppModel
+    @EnvironmentObject private var appState: AppState
 }
 
 // MARK: - View
@@ -46,11 +42,11 @@ extension SettingsScreen: View {
             }
 
             Button("Delete wallet") {
-                self.appModel.deleteWallet()
+                self.deleteWallet()
             }.buttonStyleRuby()
 
             Button("Clear settings") {
-                self.appModel.clearPreferences()
+                self.clearPreferences()
             }.buttonStyleRuby()
         }
     }
@@ -58,16 +54,13 @@ extension SettingsScreen: View {
 
 extension SettingsScreen {
 
-//    func deleteWallet() {
-//        appModel.securePersistence.deleteAll()
-//        appModel.isWalletSetup = false
-////        presentation.wrappedValue.dismiss()
-//    }
-//
-//    func clearPreferences() {
-//        appModel.preferences.deleteAll()
-//        appModel.hasAcceptedTermsAndConditions_and_privacyPolicy = false
-//    }
+    func deleteWallet() {
+        appState.update().userDid.deleteWallet()
+    }
+
+    func clearPreferences() {
+        appState.update().userDid.deletePreferences()
+    }
 
     var appVersion: String? {
         guard

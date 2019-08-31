@@ -30,12 +30,10 @@ import RadixSDK
 
 struct GetStartedScreen {
 
-//    @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject private var appModel: AppModel
+    @EnvironmentObject private var appState: AppState
 
-    // TODO allow for selection of language
-    private let mnemonicGenerator: Mnemonic.Generator = .default
-
+    // TODO allow for selection of language and strength
+    private let mnemonicGenerator = Mnemonic.Generator(strength: .wordCountOf12, language: .english)
 }
 
 // MARK: - View
@@ -62,10 +60,8 @@ extension GetStartedScreen: View {
 
 private extension GetStartedScreen {
     func generateNewMnemonicAndProceedToMainScreen() {
-        do {
-            let newMnemonic = try mnemonicGenerator.generate()
-            appModel.generatedNewMnemonic(newMnemonic)
-        } catch { incorrectImplementationShouldAlwaysBeAble(to: "Generate mnemonic", error) }
+        let newMnemonic = mnemonicGenerator.newMnemonic()
+        appState.update().userDid.generate(mnemonic: newMnemonic)
     }
 }
 
@@ -82,3 +78,11 @@ struct GetStartedScreen_Previews: PreviewProvider {
     }
 }
 #endif
+
+private extension Mnemonic.Generator {
+    func newMnemonic() -> Mnemonic {
+        do {
+            return try generate()
+        } catch { incorrectImplementationShouldAlwaysBeAble(to: "Generate mnemonic", error) }
+    }
+}

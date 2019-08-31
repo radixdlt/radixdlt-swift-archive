@@ -28,9 +28,9 @@ import Combine
 
 extension Preferences {
 
-    var hasAgreedToTermsAndPolicy: Bool {
-        get { isTrue(.hasAgreedToTermsAndPolicy) }
-        set { save(value: newValue, forKey: .hasAgreedToTermsAndPolicy) }
+    var hasAgreedToTermsOfUse: Bool {
+        get { isTrue(.hasAgreedToTermsOfUse) }
+        set { save(value: newValue, forKey: .hasAgreedToTermsOfUse) }
     }
 
     var identityAlias: String? {

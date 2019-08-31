@@ -29,7 +29,7 @@ import Combine
 import RadixSDK
 
 struct BackUpMnemonicScreen {
-    @EnvironmentObject private var appModel: AppModel
+    @EnvironmentObject private var securePersistence: SecurePersistence
 }
 
 // MARK: - View
@@ -51,7 +51,7 @@ extension BackUpMnemonicScreen: View {
 
 private extension BackUpMnemonicScreen {
     var mnemonic: Mnemonic {
-        guard let mnemonic = appModel.securePersistence.mnemonic else {
+        guard let mnemonic = securePersistence.mnemonic else {
             incorrectImplementation("Should have mnemonic")
         }
         return mnemonic

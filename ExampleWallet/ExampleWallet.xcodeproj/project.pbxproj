@@ -103,7 +103,12 @@
 		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
 		48ACA682230AF85C00BF0029 /* KeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* KeyValueStore.swift */; };
-		48B2A7AF231973C700B4096C /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B2A7AE231973C700B4096C /* AppModel.swift */; };
+		48B561EB231ABEFB001B8E74 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561EA231ABEFB001B8E74 /* AppState.swift */; };
+		48B561ED231AE176001B8E74 /* RootContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561EC231AE176001B8E74 /* RootContent.swift */; };
+		48B561F0231AE1A1001B8E74 /* AppState+Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561EF231AE1A1001B8E74 /* AppState+Update.swift */; };
+		48B561F2231AE33B001B8E74 /* AppState+Update+UserDid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561F1231AE33B001B8E74 /* AppState+Update+UserDid.swift */; };
+		48B561F6231AE6FB001B8E74 /* AppState+Update+AppShould.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561F5231AE6FB001B8E74 /* AppState+Update+AppShould.swift */; };
+		48B561F8231AE72D001B8E74 /* Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561F7231AE72D001B8E74 /* Radix.swift */; };
 		48BE08172314188A008435F5 /* BackUpMnemonicWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */; };
 		48BE082523151C28008435F5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082423151C28008435F5 /* Kingfisher */; };
 		48BE082723151C28008435F5 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082623151C28008435F5 /* KingfisherSwiftUI */; };
@@ -252,7 +257,12 @@
 		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
 		48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScreen.swift; sourceTree = "<group>"; };
 		48ACA681230AF85C00BF0029 /* KeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStore.swift; sourceTree = "<group>"; };
-		48B2A7AE231973C700B4096C /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		48B561EA231ABEFB001B8E74 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		48B561EC231AE176001B8E74 /* RootContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootContent.swift; sourceTree = "<group>"; };
+		48B561EF231AE1A1001B8E74 /* AppState+Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Update.swift"; sourceTree = "<group>"; };
+		48B561F1231AE33B001B8E74 /* AppState+Update+UserDid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Update+UserDid.swift"; sourceTree = "<group>"; };
+		48B561F5231AE6FB001B8E74 /* AppState+Update+AppShould.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Update+AppShould.swift"; sourceTree = "<group>"; };
+		48B561F7231AE72D001B8E74 /* Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Radix.swift; sourceTree = "<group>"; };
 		48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpMnemonicWarningView.swift; sourceTree = "<group>"; };
 		48BE082D23151F70008435F5 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		48BE082F23151F8A008435F5 /* AssetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRowView.swift; sourceTree = "<group>"; };
@@ -441,10 +451,11 @@
 		4809257D230AC6750056DB28 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				48B2A7AD231973AE00B4096C /* AppModel */,
+				48B2A7AD231973AE00B4096C /* AppState */,
 				4809254F230AC4240056DB28 /* AppDelegate.swift */,
 				4853BFDA230C519B00022D04 /* RootScreen.swift */,
 				48092551230AC4240056DB28 /* SceneDelegate.swift */,
+				48B561F7231AE72D001B8E74 /* Radix.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -622,14 +633,14 @@
 		48A9600B230EF8280074AC26 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				48BE082B23151F4D008435F5 /* Assets */,
-				48A9600C230EFDD30074AC26 /* MainScreen.swift */,
-				48FC131F2317FA370094A85E /* Settings */,
-				48A96010231004050074AC26 /* LearnScreen.swift */,
-				48A96014231004330074AC26 /* SwitchAccountScreen.swift */,
-				48BE083323152620008435F5 /* BackUpMnemonic */,
-				48A96016231004500074AC26 /* ContactsScreen.swift */,
 				48A96012231004190074AC26 /* AppsScreen.swift */,
+				48A96016231004500074AC26 /* ContactsScreen.swift */,
+				48A96010231004050074AC26 /* LearnScreen.swift */,
+				48A9600C230EFDD30074AC26 /* MainScreen.swift */,
+				48A96014231004330074AC26 /* SwitchAccountScreen.swift */,
+				48BE082B23151F4D008435F5 /* Assets */,
+				48BE083323152620008435F5 /* BackUpMnemonic */,
+				48FC131F2317FA370094A85E /* Settings */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -667,12 +678,24 @@
 			path = Style;
 			sourceTree = "<group>";
 		};
-		48B2A7AD231973AE00B4096C /* AppModel */ = {
+		48B2A7AD231973AE00B4096C /* AppState */ = {
 			isa = PBXGroup;
 			children = (
-				48B2A7AE231973C700B4096C /* AppModel.swift */,
+				48B561EA231ABEFB001B8E74 /* AppState.swift */,
+				48B561EE231AE190001B8E74 /* AppState+Update */,
+				48B561EC231AE176001B8E74 /* RootContent.swift */,
 			);
-			path = AppModel;
+			path = AppState;
+			sourceTree = "<group>";
+		};
+		48B561EE231AE190001B8E74 /* AppState+Update */ = {
+			isa = PBXGroup;
+			children = (
+				48B561EF231AE1A1001B8E74 /* AppState+Update.swift */,
+				48B561F1231AE33B001B8E74 /* AppState+Update+UserDid.swift */,
+				48B561F5231AE6FB001B8E74 /* AppState+Update+AppShould.swift */,
+			);
+			path = "AppState+Update";
 			sourceTree = "<group>";
 		};
 		48BE081523141874008435F5 /* Notiifications */ = {
@@ -952,6 +975,7 @@
 				48FC13232317FF000094A85E /* InputMnemonicView.swift in Sources */,
 				48596A512316D0FF005C1804 /* KeychainSwift+KeyValueStoring.swift in Sources */,
 				4844FC7B230C4618003106AB /* LabelledDivider.swift in Sources */,
+				48B561F2231AE33B001B8E74 /* AppState+Update+UserDid.swift in Sources */,
 				4802E46323128B20007EC847 /* Macro.swift in Sources */,
 				48A96015231004330074AC26 /* SwitchAccountScreen.swift in Sources */,
 				48596A612317EA8D005C1804 /* AddressView.swift in Sources */,
@@ -971,6 +995,9 @@
 				48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */,
 				48596A482316D090005C1804 /* AnyKeyValueStoring.swift in Sources */,
 				48596A572316D147005C1804 /* UserDefaults+KeyValueStoring.swift in Sources */,
+				48B561F0231AE1A1001B8E74 /* AppState+Update.swift in Sources */,
+				48B561EB231ABEFB001B8E74 /* AppState.swift in Sources */,
+				48B561F8231AE72D001B8E74 /* Radix.swift in Sources */,
 				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
 				48596A462316D07F005C1804 /* KeyValueStoring.swift in Sources */,
 				48A96019231004690074AC26 /* AssetsScreen.swift in Sources */,
@@ -979,6 +1006,7 @@
 				48FC13212317FA520094A85E /* ConnectedToNodesScreen.swift in Sources */,
 				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
+				48B561F6231AE6FB001B8E74 /* AppState+Update+AppShould.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
 				48A9600D230EFDD30074AC26 /* MainScreen.swift in Sources */,
 				48BE0835231526D6008435F5 /* MnemonicWord.swift in Sources */,
@@ -988,8 +1016,8 @@
 				48596A3E2316D034005C1804 /* KeyValueStoring+ValueRetrieval.swift in Sources */,
 				48596A552316D12B005C1804 /* KeychainKey.swift in Sources */,
 				48596A3C2316D015005C1804 /* KeyConvertible.swift in Sources */,
-				48B2A7AF231973C700B4096C /* AppModel.swift in Sources */,
 				48596A592316D159005C1804 /* PreferencesKey.swift in Sources */,
+				48B561ED231AE176001B8E74 /* RootContent.swift in Sources */,
 				48596A532316D118005C1804 /* Keychain+SaveOptionConvertible.swift in Sources */,
 				48596A4A2316D0A2005C1804 /* NoSaveOptions.swift in Sources */,
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,

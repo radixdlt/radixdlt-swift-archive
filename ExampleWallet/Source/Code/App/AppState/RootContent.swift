@@ -22,27 +22,12 @@
 // SOFTWARE.
 //
 
-import SwiftUI
+import Foundation
 
-// MARK: - ROOT SCREEN
-struct RootScreen {
-    @EnvironmentObject private var appState: AppState
-}
+// MARK: - RootContent
+public enum RootContent: Int, Equatable, Swift.Identifiable {
+    case main
 
-extension RootScreen: View {
-    var body: some View {
-        Group<AnyView> {
-            if appState.rootContent == .welcome {
-                return WelcomeScreen().eraseToAny()
-            } else if appState.rootContent == .getStarted {
-                return GetStartedScreen().eraseToAny()
-            } else {
-                return MainScreen()
-                    .environmentObject(
-                        appState.update().appShould.connectToRadix()
-                    )
-                    .eraseToAny()
-            }
-        }
-    }
+    // Onboarding
+    case welcome, getStarted
 }

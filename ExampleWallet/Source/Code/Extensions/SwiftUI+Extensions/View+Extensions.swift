@@ -29,3 +29,7 @@ extension View {
         return AnyView(self)
     }
 }
+
+public extension Swift.Identifiable where Self: RawRepresentable, ID == RawValue {
+    var id: ID { rawValue }
+}

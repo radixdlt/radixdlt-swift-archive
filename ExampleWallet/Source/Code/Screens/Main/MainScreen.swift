@@ -29,6 +29,7 @@ import Combine
 import RadixSDK
 
 struct MainScreen {
+    @EnvironmentObject private var securePersistence: SecurePersistence
     // MARK: Stateful Properties
     @State private var isPresentingSwitchAccountModal = false
 }
@@ -40,7 +41,7 @@ extension MainScreen: View {
         TabView {
             tab(.assets) {
                 NavigationView {
-                    AssetsScreen()
+                    AssetsScreen().environmentObject(securePersistence)
                         .navigationBarItems(trailing: switchAccountButton)
                 }
             }

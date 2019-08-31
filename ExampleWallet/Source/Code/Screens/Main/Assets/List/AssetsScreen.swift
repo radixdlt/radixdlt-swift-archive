@@ -29,7 +29,8 @@ import Combine
 import RadixSDK
 
 struct AssetsScreen {
-    @EnvironmentObject private var appModel: AppModel
+
+    @EnvironmentObject private var appState: AppState
 
     // MARK: - Stateful Properties
     @State private var isShowingBackUpMnemonicWarningToast = false
@@ -42,7 +43,8 @@ extension AssetsScreen: View {
             backUpMnemonicWarningNotification
             assetsList
             sendOrReceiveTransactionButtons
-        }.onAppear {
+        }
+        .onAppear {
             self.presentBackUpMnemonicWarningIfNeeded()
         }
     }
@@ -51,7 +53,7 @@ extension AssetsScreen: View {
 private extension AssetsScreen {
     var backUpMnemonicWarningNotification: some View {
         Group {
-            if appModel.needsToBackupMnemonic {
+            if appState.needsToBackupMnemonic {
                 BackUpMnemonicWarningView()
                     .frame(height: isShowingBackUpMnemonicWarningToast ? 200 : 0, alignment: .top)
                     .animation(Animation.spring())
@@ -83,7 +85,7 @@ private extension AssetsScreen {
 
 private extension AssetsScreen {
     func presentBackUpMnemonicWarningIfNeeded(delay: DispatchTimeInterval = .seconds(1)) {
-        guard appModel.needsToBackupMnemonic else { return }
+        guard appState.needsToBackupMnemonic else { return }
         performOnMainThread(after: delay) {
             self.isShowingBackUpMnemonicWarningToast = true
         }

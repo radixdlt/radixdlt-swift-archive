@@ -22,27 +22,30 @@
 // SOFTWARE.
 //
 
-import SwiftUI
+import Foundation
 
-// MARK: - ROOT SCREEN
-struct RootScreen {
-    @EnvironmentObject private var appState: AppState
-}
+// MARK: AppState.Update
+public extension AppState {
+    final class Update {
 
-extension RootScreen: View {
-    var body: some View {
-        Group<AnyView> {
-            if appState.rootContent == .welcome {
-                return WelcomeScreen().eraseToAny()
-            } else if appState.rootContent == .getStarted {
-                return GetStartedScreen().eraseToAny()
-            } else {
-                return MainScreen()
-                    .environmentObject(
-                        appState.update().appShould.connectToRadix()
-                    )
-                    .eraseToAny()
-            }
+        public let userDid: UserDid
+        public let appShould: AppShould
+
+        init(
+            preferences: Preferences,
+            securePersistence: SecurePersistence,
+            triggerNavigation: @escaping () -> Void
+        ) {
+            self.userDid = UserDid(
+                preferences: preferences,
+                securePersistence: securePersistence,
+                triggerNavigation: triggerNavigation
+            )
+
+            self.appShould = AppShould(
+                preferences: preferences,
+                securePersistence: securePersistence
+            )
         }
     }
 }

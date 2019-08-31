@@ -22,14 +22,9 @@
 // SOFTWARE.
 //
 
-import Foundation
 import SwiftUI
 
-import RadixSDK
-
-struct RestoreAccountScreen {
-//    @EnvironmentObject private var appModel: AppModel
-}
+struct RestoreAccountScreen {}
 
 // MARK: - View
 extension RestoreAccountScreen: View {

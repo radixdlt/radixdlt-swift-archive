@@ -25,9 +25,6 @@
 import SwiftUI
 
 struct BackUpMnemonicWarningView {
-
-    @Environment(\.presentationMode) var presentationMode
-
     @State private var isPresentingBackUpMnemonicModal = false
 }
 
@@ -56,7 +53,8 @@ extension BackUpMnemonicWarningView: View {
 
 private extension BackUpMnemonicWarningView {
     func dismiss() {
-        presentationMode.wrappedValue.dismiss()
+//        presentationMode.wrappedValue.dismiss()
+        print("dissmiss the backup warning view")
     }
 
     func modallyPresentBackUpFlow() {
