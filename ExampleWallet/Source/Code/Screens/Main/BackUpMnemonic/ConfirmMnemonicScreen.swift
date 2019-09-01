@@ -26,6 +26,7 @@ import Foundation
 import SwiftUI
 import Combine
 import RadixSDK
+import QGrid
 
 struct ConfirmMnemonicScreen {
     @EnvironmentObject private var appState: AppState
@@ -65,18 +66,14 @@ private extension ConfirmMnemonicScreen {
     }
 
     var selectedWordsList: some View {
-        List(viewModel.selectedWords) { word in
-            Button("\(word.word) (\(word.id + 1))") {
-                self.viewModel.removeFromSelected(word: word)
-            }
+        Grid(viewModel.selectedWords) { word in
+            self.viewModel.removeFromSelected(word: word)
         }
     }
 
     var availableWordsList: some View {
-        List(viewModel.availableWords) { word in
-            Button("\(word.word) (\(word.id + 1))") {
-                self.viewModel.addToSelected(word: word)
-            }
+        Grid(viewModel.availableWords) { word in
+            self.viewModel.addToSelected(word: word)
         }
     }
 
@@ -116,11 +113,10 @@ private extension ConfirmMnemonicScreen.ViewModel {
             MnemonicWord(id: $0.offset, word: $0.element)
         }
 
-        shuffledOrderOfWords = correctOrderOfWords
+        shuffledOrderOfWords = correctOrderOfWords.shuffled()
+
         #if DEBUG
-        // do not shuffle for debug builds
-        #else
-        .shuffled()
+        shuffledOrderOfWords = correctOrderOfWords
         #endif
 
         unselectAll()
@@ -146,5 +142,17 @@ private extension ConfirmMnemonicScreen.ViewModel {
 
     var hasOrderedMnemonicWordsCorrectly: Bool {
         selectedWords == correctOrderOfWords
+    }
+}
+
+// MARK: Grid
+private typealias Grid = QGrid
+private extension QGrid where Data.Element == MnemonicWord, Content == Button<Text> {
+    init(_ data: Data, onSelection: @escaping (Data.Element) -> Void) {
+        self.init(data, columns: 3, columnsInLandscape: 5, vSpacing: 4, hSpacing: 4, vPadding: 4, hPadding: 4) { wordAtRow in
+            Button("\(wordAtRow.word) (\(wordAtRow.id + 1))") {
+                onSelection(wordAtRow)
+            }
+        }
     }
 }
