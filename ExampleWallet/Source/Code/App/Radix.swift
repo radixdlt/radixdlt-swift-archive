@@ -23,24 +23,63 @@
 //
 
 import Foundation
+import Combine
 import RadixSDK
+import RxSwift
 
 public final class Radix: ObservableObject {
 
     private let client: RadixApplicationClient
 
+    private let myActiveAddressSubject: CurrentValueSubject<Address, Never>
+
+    public let objectWillChange = PassthroughSubject<Void, Never>()
+    private var cancellables = Set<AnyCancellable>()
+
     init(client: RadixApplicationClient) {
         self.client = client
+        self.myActiveAddressSubject = CurrentValueSubject<Address, Never>(client.addressOfActiveAccount)
+
+        subscribeSubjectsToChangesInRadixClient()
+
+        forwardSubjectsToSelf()
     }
 
+}
+
+// MARK: - Private
+private extension Radix {
+
+    func subscribeSubjectsToChangesInRadixClient() {
+
+        // Subscribe to change of active account (address)
+        client.observeAddressOfActiveAccount()
+            .publisherAssertNoFailure
+            .subscribe(myActiveAddressSubject)
+            .store(in: &cancellables)
+
+    }
+
+    func forwardSubjectsToSelf() {
+        myActiveAddressSubject.eraseMapToVoid()
+            .subscribe(objectWillChange)
+            .store(in: &cancellables)
+
+    }
 }
 
 // MARK: - Public
 public extension Radix {
+
+    var myAddressPublisher: AnyPublisher<Address, Never> {
+        myActiveAddressSubject.eraseToAnyPublisher()
+    }
+
     var myActiveAddress: Address {
-        return client.addressOfActiveAccount
+        myActiveAddressSubject.value
     }
 }
+
 
 // MARL: - State
 public extension Radix {
