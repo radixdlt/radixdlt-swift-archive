@@ -27,22 +27,24 @@ import Combine
 import RadixSDK
 import RxSwift
 
+public typealias Client = RadixApplicationClient
+
 public final class Radix: ObservableObject {
 
-    private let client: RadixApplicationClient
-
-    private let myActiveAddressSubject: CurrentValueSubject<Address, Never>
+    private let client: Client
 
     public let objectWillChange = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
 
-    init(client: RadixApplicationClient) {
+    public var myActiveAddress: Address
+
+    init(client: Client) {
         self.client = client
-        self.myActiveAddressSubject = CurrentValueSubject<Address, Never>(client.addressOfActiveAccount)
+        self.myActiveAddress = client.addressOfActiveAccount
 
-        subscribeSubjectsToChangesInRadixClient()
-
-        forwardSubjectsToSelf()
+        forward(function: Client.observeAddressOfActiveAccount) { [unowned self] myNewActiveAddress in
+            self.myActiveAddress = myNewActiveAddress
+        }
     }
 
 }
@@ -50,33 +52,50 @@ public final class Radix: ObservableObject {
 // MARK: - Private
 private extension Radix {
 
-    func subscribeSubjectsToChangesInRadixClient() {
+    func forward<O, NextElement>(
+        function: (Client) -> () -> O,
+        notify: Bool = true,
+        onNext: @escaping (NextElement) -> Void
+    ) where O: ObservableConvertibleType, O.Element == NextElement {
 
-        // Subscribe to change of active account (address)
-        client.observeAddressOfActiveAccount()
+        forward(
+            observable: function(client)(),
+            notify: notify,
+            onNext: onNext
+        )
+
+    }
+
+    func forward<O, NextElement>(
+         from keyPath: KeyPath<Client, O>,
+         notify: Bool = true,
+         onNext: @escaping (NextElement) -> Void
+     ) where O: ObservableConvertibleType, O.Element == NextElement {
+
+        forward(
+            observable: client[keyPath: keyPath],
+            notify: notify,
+            onNext: onNext
+        )
+
+     }
+
+    func forward<O, NextElement>(
+        observable: O,
+        notify: Bool = true,
+        onNext: @escaping (NextElement) -> Void
+    ) where O: ObservableConvertibleType, O.Element == NextElement {
+
+        observable
             .publisherAssertNoFailure
-            .subscribe(myActiveAddressSubject)
-            .store(in: &cancellables)
+            .sink { [unowned self] (nextElement: NextElement) in
+                onNext(nextElement)
+                if notify {
+                    self.objectWillChange.send()
+                }
+        }
+        .store(in: &cancellables)
 
-    }
-
-    func forwardSubjectsToSelf() {
-        myActiveAddressSubject.eraseMapToVoid()
-            .subscribe(objectWillChange)
-            .store(in: &cancellables)
-
-    }
-}
-
-// MARK: - Public
-public extension Radix {
-
-    var myAddressPublisher: AnyPublisher<Address, Never> {
-        myActiveAddressSubject.eraseToAnyPublisher()
-    }
-
-    var myActiveAddress: Address {
-        myActiveAddressSubject.value
     }
 }
 
