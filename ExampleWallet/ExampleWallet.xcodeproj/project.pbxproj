@@ -109,7 +109,7 @@
 		48B561F2231AE33B001B8E74 /* AppState+Update+UserDid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561F1231AE33B001B8E74 /* AppState+Update+UserDid.swift */; };
 		48B561F6231AE6FB001B8E74 /* AppState+Update+AppShould.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561F5231AE6FB001B8E74 /* AppState+Update+AppShould.swift */; };
 		48B561F8231AE72D001B8E74 /* Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561F7231AE72D001B8E74 /* Radix.swift */; };
-		48BE08172314188A008435F5 /* BackUpMnemonicWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */; };
+		48B561FC231BFC0A001B8E74 /* SendScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561FB231BFC0A001B8E74 /* SendScreen.swift */; };
 		48BE082523151C28008435F5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082423151C28008435F5 /* Kingfisher */; };
 		48BE082723151C28008435F5 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE082623151C28008435F5 /* KingfisherSwiftUI */; };
 		48BE082E23151F70008435F5 /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE082D23151F70008435F5 /* Asset.swift */; };
@@ -119,7 +119,6 @@
 		48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */; };
 		48BE083A23152A53008435F5 /* QGrid in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE083923152A53008435F5 /* QGrid */; };
 		48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */; };
-		48FC13212317FA520094A85E /* ConnectedToNodesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13202317FA520094A85E /* ConnectedToNodesScreen.swift */; };
 		48FC13232317FF000094A85E /* InputMnemonicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13222317FF000094A85E /* InputMnemonicView.swift */; };
 /* End PBXBuildFile section */
 
@@ -263,14 +262,13 @@
 		48B561F1231AE33B001B8E74 /* AppState+Update+UserDid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Update+UserDid.swift"; sourceTree = "<group>"; };
 		48B561F5231AE6FB001B8E74 /* AppState+Update+AppShould.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Update+AppShould.swift"; sourceTree = "<group>"; };
 		48B561F7231AE72D001B8E74 /* Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Radix.swift; sourceTree = "<group>"; };
-		48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackUpMnemonicWarningView.swift; sourceTree = "<group>"; };
+		48B561FB231BFC0A001B8E74 /* SendScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendScreen.swift; sourceTree = "<group>"; };
 		48BE082D23151F70008435F5 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		48BE082F23151F8A008435F5 /* AssetRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetRowView.swift; sourceTree = "<group>"; };
 		48BE08312315211F008435F5 /* MockedTokenBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedTokenBalance.swift; sourceTree = "<group>"; };
 		48BE0834231526D6008435F5 /* MnemonicWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemonicWord.swift; sourceTree = "<group>"; };
 		48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmMnemonicScreen.swift; sourceTree = "<group>"; };
 		48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSet_Extension.swift; sourceTree = "<group>"; };
-		48FC13202317FA520094A85E /* ConnectedToNodesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedToNodesScreen.swift; sourceTree = "<group>"; };
 		48FC13222317FF000094A85E /* InputMnemonicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMnemonicView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -539,7 +537,6 @@
 		4844FC79230C4601003106AB /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				48BE081523141874008435F5 /* Notiifications */,
 				4844FC7A230C4618003106AB /* LabelledDivider.swift */,
 				48596A602317EA8D005C1804 /* AddressView.swift */,
 				48458E50230DAAC8007B05A2 /* RadixLogo.swift */,
@@ -698,14 +695,6 @@
 			path = "AppState+Update";
 			sourceTree = "<group>";
 		};
-		48BE081523141874008435F5 /* Notiifications */ = {
-			isa = PBXGroup;
-			children = (
-				48BE08162314188A008435F5 /* BackUpMnemonicWarningView.swift */,
-			);
-			path = Notiifications;
-			sourceTree = "<group>";
-		};
 		48BE082823151F1C008435F5 /* DataStore */ = {
 			isa = PBXGroup;
 			children = (
@@ -721,6 +710,7 @@
 			isa = PBXGroup;
 			children = (
 				48BE082C23151F55008435F5 /* List */,
+				48B561FB231BFC0A001B8E74 /* SendScreen.swift */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -770,7 +760,6 @@
 			isa = PBXGroup;
 			children = (
 				48A9600E231003E70074AC26 /* SettingsScreen.swift */,
-				48FC13202317FA520094A85E /* ConnectedToNodesScreen.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1003,7 +992,6 @@
 				48A96019231004690074AC26 /* AssetsScreen.swift in Sources */,
 				48BE08322315211F008435F5 /* MockedTokenBalance.swift in Sources */,
 				48A96011231004050074AC26 /* LearnScreen.swift in Sources */,
-				48FC13212317FA520094A85E /* ConnectedToNodesScreen.swift in Sources */,
 				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48B561F6231AE6FB001B8E74 /* AppState+Update+AppShould.swift in Sources */,
@@ -1013,6 +1001,7 @@
 				48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */,
 				48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
+				48B561FC231BFC0A001B8E74 /* SendScreen.swift in Sources */,
 				48596A3E2316D034005C1804 /* KeyValueStoring+ValueRetrieval.swift in Sources */,
 				48596A552316D12B005C1804 /* KeychainKey.swift in Sources */,
 				48596A3C2316D015005C1804 /* KeyConvertible.swift in Sources */,
@@ -1025,7 +1014,6 @@
 				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
 				4802E4672312A986007EC847 /* Mnemonic+Codable.swift in Sources */,
 				48BE083023151F8A008435F5 /* AssetRowView.swift in Sources */,
-				48BE08172314188A008435F5 /* BackUpMnemonicWarningView.swift in Sources */,
 				48596A392316CFC7005C1804 /* Preferences.swift in Sources */,
 				48596A5D2316D1C0005C1804 /* SecurePersistence+ValueRetrieval.swift in Sources */,
 				486D86F5230D6ADB006A967A /* TermsAndConditionsScreen.swift in Sources */,

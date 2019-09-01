@@ -30,19 +30,29 @@ import RadixSDK
 
 struct AssetsScreen {
 
+    @EnvironmentObject private var securePersistence: SecurePersistence
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var radix: Radix
 
     // MARK: - Stateful Properties
-    @State private var isShowingBackUpMnemonicWarningToast = false
+    @State private var isShowingBackUpMnemonicWarningSheet = false
 }
 
 // MARK: - View
 extension AssetsScreen: View {
     var body: some View {
         VStack {
-            backUpMnemonicWarningNotification
             assetsList
             sendOrReceiveTransactionButtons
+        }
+        .sheet(
+            isPresented: $isShowingBackUpMnemonicWarningSheet,
+            onDismiss: {
+                self.isShowingBackUpMnemonicWarningSheet = false
+        }
+        ) {
+            BackUpMnemonicScreen(mnemonicToBackUp: self.securePersistence.mnemonic!, isPresentingBackUpFlow: self.$isShowingBackUpMnemonicWarningSheet)
+                .environmentObject(self.appState)
         }
         .onAppear {
             self.presentBackUpMnemonicWarningIfNeeded()
@@ -51,18 +61,6 @@ extension AssetsScreen: View {
 }
 
 private extension AssetsScreen {
-    var backUpMnemonicWarningNotification: some View {
-        Group {
-            if appState.needsToBackupMnemonic {
-                BackUpMnemonicWarningView()
-                    .frame(height: isShowingBackUpMnemonicWarningToast ? 200 : 0, alignment: .top)
-                    .animation(Animation.spring())
-            } else {
-                EmptyView()
-            }
-
-        }
-    }
 
     var assetsList: some View {
         List(assets) {
@@ -85,25 +83,23 @@ private extension AssetsScreen {
 
 private extension AssetsScreen {
     func presentBackUpMnemonicWarningIfNeeded(delay: DispatchTimeInterval = .seconds(1)) {
-        guard appState.needsToBackupMnemonic else { return }
+        guard needsToBackupMnemonic else { return }
         performOnMainThread(after: delay) {
-            self.isShowingBackUpMnemonicWarningToast = true
+            self.isShowingBackUpMnemonicWarningSheet = true
         }
     }
-}
 
-private extension AssetsScreen {
+    var needsToBackupMnemonic: Bool {
+        guard
+            securePersistence.mnemonic != nil,
+            radix.hasEverReceivedAnyTransactionToAnyAccount
+        else { return false }
+        return true
+    }
 
     var assets: [Asset] {
         return mockTokenBalances().map {
             Asset(tokenBalance: $0)
         }
-    }
-}
-
-struct SendScreen {}
-extension SendScreen: View {
-    var body: some View {
-        Text("Send screen")
     }
 }

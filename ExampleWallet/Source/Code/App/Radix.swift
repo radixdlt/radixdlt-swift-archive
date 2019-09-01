@@ -41,3 +41,10 @@ public extension Radix {
         return client.addressOfActiveAccount
     }
 }
+
+// MARL: - State
+public extension Radix {
+    var hasEverReceivedAnyTransactionToAnyAccount: Bool {
+        return true
+    }
+}

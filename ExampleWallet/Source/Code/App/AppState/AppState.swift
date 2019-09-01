@@ -88,10 +88,3 @@ public extension AppState {
     func update() -> Update { _update }
 }
 
-
-// MARK: Read State
-public extension AppState {
-    var needsToBackupMnemonic: Bool {
-        securePersistence.mnemonic != nil
-    }
-}

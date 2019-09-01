@@ -27,6 +27,7 @@ import SwiftUI
 // MARK: - ROOT SCREEN
 struct RootScreen {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var securePersistence: SecurePersistence
 }
 
 extension RootScreen: View {
@@ -41,6 +42,7 @@ extension RootScreen: View {
                     .environmentObject(
                         appState.update().appShould.connectToRadix()
                     )
+                    .environmentObject(securePersistence)
                     .eraseToAny()
             }
         }

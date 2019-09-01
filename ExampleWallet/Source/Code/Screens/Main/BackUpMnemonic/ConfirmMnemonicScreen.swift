@@ -28,7 +28,13 @@ import Combine
 import RadixSDK
 
 struct ConfirmMnemonicScreen {
+    @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var viewModel: ViewModel
+
+    private let isPresentingBackUpFlow: Binding<Bool>
+    init(isPresentingBackUpFlow: Binding<Bool>) {
+        self.isPresentingBackUpFlow = isPresentingBackUpFlow
+    }
 }
 
 // MARK: - View
@@ -74,7 +80,8 @@ private extension ConfirmMnemonicScreen {
 
     var confirmButton: some View {
         Button("Confirm") {
-            self.viewModel.done()
+            self.appState.update().userDid.confirmBackUpOfMnemonic()
+            self.isPresentingBackUpFlow.wrappedValue = false
         }.buttonStyleEmerald(enabled: viewModel.hasOrderedMnemonicWordsCorrectly)
     }
 }
@@ -91,20 +98,9 @@ extension ConfirmMnemonicScreen {
         @Published private var mnemonicWordsToConfirm: [MnemonicWordCellViewModel]
 
         private let _hasOrderedMnemonicWordsCorrectly: ([String]) -> Bool
-        private let securePersistence: SecurePersistence
+        init(mnemonicToBackUp: Mnemonic) {
 
-        private let dismissClosure: Done
-
-        init(securePersistence: SecurePersistence, dismiss: @escaping Done) {
-
-            self.securePersistence = securePersistence
-            self.dismissClosure = dismiss
-
-            guard let mnemonic = securePersistence.mnemonic else {
-                incorrectImplementation("Should have mnemonic")
-            }
-
-            let mnemonicWords = mnemonic.words.map { $0.value }
+            let mnemonicWords = mnemonicToBackUp.words.map { $0.value }
 
             self.mnemonicWordsToConfirm = mnemonicWords.enumerated().map {
                 MnemonicWordCellViewModel(word: $0.element, correctPosition: $0.offset)
@@ -156,11 +152,6 @@ private extension ConfirmMnemonicScreen.ViewModel {
     func unselectAll() {
         selectedWords.forEach { $0.selectedIndex = nil }
         objectWillChange.send()
-    }
-
-    func done() {
-        securePersistence.mnemonic = nil
-        dismissClosure()
     }
 }
 

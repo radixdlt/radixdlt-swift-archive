@@ -71,6 +71,6 @@ public extension AppState.Update.UserDid {
 
     func confirmBackUpOfMnemonic() {
         // Only store the seed of the mnemonic, not the mnemonic itself, after user has confirm she knows the mnemonic (and securely stored it somewhere).
-        securePersistence.mnemonic = nil
+        securePersistence.deleteValue(forKey: .mnemonic, notifyChange: false)
     }
 }

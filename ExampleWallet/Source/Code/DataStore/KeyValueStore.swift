@@ -53,28 +53,43 @@ final class KeyValueStore<Key, SaveOptions>: ObservableObject, KeyValueStoring w
     }
 }
 
-// MARK: - AnyKeyValueStoring Conformance
 extension KeyValueStore {
+
+
+    func save<Value>(value: Value, forKey key: Key, options: SaveOptions = .default, notifyChange: Bool = true) {
+        save(value: value, forKey: key.key, saveOptions: options)
+
+        if notifyChange {
+            notifyChangeOfValue(forKey: key)
+        }
+    }
+
     func save(value: Any, forKey key: String, saveOptions: AnySaveOptionsConvertible) {
         _save(value, key, saveOptions)
-        notifyChangeOfValue(forKey: key, newValue: value)
+    }
+
+    func loadValue<Value>(forKey key: Key) -> Value? {
+        loadValue(forKey: key.key) as? Value
     }
 
     func loadValue(forKey key: String) -> Any? {
-        return _load(key)
+        _load(key)
+     }
+
+    func deleteValue(forKey key: Key, notifyChange: Bool = true) {
+        deleteValue(forKey: key.key)
+        if notifyChange {
+            notifyChangeOfValue(forKey: key)
+        }
     }
 
     func deleteValue(forKey key: String) {
         _delete(key)
-        notifyChangeOfValue(forKey: key, newValue: nil)
     }
 }
 
 private extension KeyValueStore {
-    func notifyChangeOfValue(forKey rawKey: String, newValue _: Any?) {
-        guard let key = Key(rawValue: rawKey) else {
-            incorrectImplementation("Expected to be be able to create key with value: \(rawKey)")
-        }
+    func notifyChangeOfValue(forKey key: Key) {
         objectWillChange.send(key)
     }
 }

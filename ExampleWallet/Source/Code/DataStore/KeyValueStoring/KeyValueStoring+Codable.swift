@@ -50,11 +50,12 @@ extension KeyValueStoring {
          _ model: C,
          forKey key: Key,
          options: SaveOptions = .default,
-         jsonEncoder: JSONEncoder = .init()
+         jsonEncoder: JSONEncoder = .init(),
+         notifyChange: Bool = false
      ) where C: Codable {
          do {
              let json = try jsonEncoder.encode(model)
-            save(value: json, forKey: key, options: options)
+            save(value: json, forKey: key, options: options, notifyChange: notifyChange)
          } catch {
              // TODO change to print
              fatalError("Failed to save codable, error: \(error)")

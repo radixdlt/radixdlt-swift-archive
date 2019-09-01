@@ -29,7 +29,14 @@ import Combine
 import RadixSDK
 
 struct BackUpMnemonicScreen {
-    @EnvironmentObject private var securePersistence: SecurePersistence
+
+    private let mnemonicToBackUp: Mnemonic
+    private let isPresentingBackUpFlow: Binding<Bool>
+
+    init(mnemonicToBackUp: Mnemonic, isPresentingBackUpFlow: Binding<Bool>) {
+        self.mnemonicToBackUp = mnemonicToBackUp
+        self.isPresentingBackUpFlow = isPresentingBackUpFlow
+    }
 }
 
 // MARK: - View
@@ -41,7 +48,10 @@ extension BackUpMnemonicScreen: View {
                     Text(word.indexedWord)
                 }.listStyle(GroupedListStyle())
 
-                NavigationLink(destination: ConfirmMnemonicScreen()) {
+                NavigationLink(destination:
+                    ConfirmMnemonicScreen(isPresentingBackUpFlow: self.isPresentingBackUpFlow)
+                        .environmentObject(ConfirmMnemonicScreen.ViewModel(mnemonicToBackUp: mnemonicToBackUp))
+                ) {
                     Text("Confirm").buttonStyleEmerald()
                 }
             }.navigationBarTitle("Back up mnemonic")
@@ -50,15 +60,9 @@ extension BackUpMnemonicScreen: View {
 }
 
 private extension BackUpMnemonicScreen {
-    var mnemonic: Mnemonic {
-        guard let mnemonic = securePersistence.mnemonic else {
-            incorrectImplementation("Should have mnemonic")
-        }
-        return mnemonic
-    }
 
     var words: [MnemonicWord] {
-        return mnemonic.words.map { $0.value }.enumerated().map {
+        return mnemonicToBackUp.words.map { $0.value }.enumerated().map {
             MnemonicWord(id: $0.offset, word: $0.element)
         }
     }

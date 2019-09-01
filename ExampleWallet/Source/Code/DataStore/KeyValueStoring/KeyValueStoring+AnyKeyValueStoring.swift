@@ -32,11 +32,11 @@ extension KeyValueStoring {
         return typed
     }
 
-    func deleteValue(forKey key: Key) {
+    func deleteValue(forKey key: Key, notifyChange: Bool = true) {
         deleteValue(forKey: key.key)
     }
 
-    func save<Value>(value: Value, forKey key: Key, options: SaveOptions = .default) {
+    func save<Value>(value: Value, forKey key: Key, options: SaveOptions = .default, notifyChange: Bool = true) {
         save(value: value, forKey: key.key, saveOptions: options)
     }
 }

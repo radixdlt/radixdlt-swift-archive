@@ -37,10 +37,6 @@ extension SettingsScreen: View {
                 Text("App version: \(appVersion)")
             }
 
-            NavigationLink(destination: ConnectedToNodesScreen()) {
-                Text("Connected nodes")
-            }
-
             Button("Delete wallet") {
                 self.deleteWallet()
             }.buttonStyleRuby()
