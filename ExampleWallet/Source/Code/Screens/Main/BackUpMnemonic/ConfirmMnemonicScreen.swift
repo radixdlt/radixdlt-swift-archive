@@ -29,11 +29,13 @@ import RadixSDK
 
 struct ConfirmMnemonicScreen {
     @EnvironmentObject private var appState: AppState
-    @EnvironmentObject private var viewModel: ViewModel
+    @ObservedObject private var viewModel = ViewModel()
 
     private let isPresentingBackUpFlow: Binding<Bool>
-    init(isPresentingBackUpFlow: Binding<Bool>) {
+
+    init(mnemonicToBackUp: Mnemonic, isPresentingBackUpFlow: Binding<Bool>) {
         self.isPresentingBackUpFlow = isPresentingBackUpFlow
+        viewModel.setMnemonic(mnemonicToBackUp)
     }
 }
 
@@ -43,6 +45,7 @@ extension ConfirmMnemonicScreen: View {
         VStack {
             instructionsLabel
             selectedWordsList
+            LabelledDivider(Text("available"))
             availableWordsList
             restartButton
             confirmButton
@@ -53,6 +56,7 @@ extension ConfirmMnemonicScreen: View {
     }
 }
 
+// MARK: Components
 private extension ConfirmMnemonicScreen {
 
     var instructionsLabel: some View {
@@ -61,14 +65,18 @@ private extension ConfirmMnemonicScreen {
     }
 
     var selectedWordsList: some View {
-        MnemonicGridView(cellViewModels: viewModel.selectedWords) {
-            self.viewModel.removeWordFromSelected(word: $0)
+        List(viewModel.selectedWords) { word in
+            Button("\(word.word) (\(word.id + 1))") {
+                self.viewModel.removeFromSelected(word: word)
+            }
         }
     }
 
     var availableWordsList: some View {
-        MnemonicGridView(cellViewModels: viewModel.availableWords) {
-            self.viewModel.addWordToSelected(word: $0)
+        List(viewModel.availableWords) { word in
+            Button("\(word.word) (\(word.id + 1))") {
+                self.viewModel.addToSelected(word: word)
+            }
         }
     }
 
@@ -82,166 +90,61 @@ private extension ConfirmMnemonicScreen {
         Button("Confirm") {
             self.appState.update().userDid.confirmBackUpOfMnemonic()
             self.isPresentingBackUpFlow.wrappedValue = false
-        }.buttonStyleEmerald(enabled: viewModel.hasOrderedMnemonicWordsCorrectly)
+        }.buttonStyleEmerald(enabled: self.viewModel.hasOrderedMnemonicWordsCorrectly)
     }
 }
 
 // MARK: - ViewModel
-typealias ConfirmMnemonicViewModel = ConfirmMnemonicScreen.ViewModel
-
-extension ConfirmMnemonicScreen {
-
+private extension ConfirmMnemonicScreen {
     final class ViewModel: ObservableObject {
-
         let objectWillChange = PassthroughSubject<Void, Never>()
+        fileprivate var selectedWords = [MnemonicWord]()
+        fileprivate var availableWords = [MnemonicWord]()
 
-        @Published private var mnemonicWordsToConfirm: [MnemonicWordCellViewModel]
-
-        private let _hasOrderedMnemonicWordsCorrectly: ([String]) -> Bool
-        init(mnemonicToBackUp: Mnemonic) {
-
-            let mnemonicWords = mnemonicToBackUp.words.map { $0.value }
-
-            self.mnemonicWordsToConfirm = mnemonicWords.enumerated().map {
-                MnemonicWordCellViewModel(word: $0.element, correctPosition: $0.offset)
-            }
-            #if DEBUG
-            // do not shuffle for debug builds
-            #else
-            .shuffled()
-            #endif
-
-            _hasOrderedMnemonicWordsCorrectly = { $0 == mnemonicWords }
-        }
+        private var correctOrderOfWords = [MnemonicWord]()
+        private var shuffledOrderOfWords = [MnemonicWord]()
     }
 }
 
 private extension ConfirmMnemonicScreen.ViewModel {
-    var hasOrderedMnemonicWordsCorrectly: Bool {
-        return _hasOrderedMnemonicWordsCorrectly(selectedWords.map { $0.word })
+
+    func setMnemonic(_ mnemonicToBackUp: Mnemonic) {
+
+        let mnemonicWords = mnemonicToBackUp.words.map { $0.value }
+
+        self.correctOrderOfWords = mnemonicWords.enumerated().map {
+            MnemonicWord(id: $0.offset, word: $0.element)
+        }
+
+        shuffledOrderOfWords = correctOrderOfWords
+        #if DEBUG
+        // do not shuffle for debug builds
+        #else
+        .shuffled()
+        #endif
+
+        unselectAll()
     }
 
-    var selectedWords: [MnemonicWordCellViewModel] {
-        return mnemonicWordsToConfirm
-            .filter { $0.selectedIndex != nil }
-            // we have already filtered out elements having a `selectedIndex`, so force unwrap ok!
-            .map { (viewModel: $0, index: $0.selectedIndex!) }
-            .sorted(by: \.index)
-            .map { $0.viewModel }
-
-    }
-
-    var availableWords: [MnemonicWordCellViewModel] { mnemonicWordsToConfirm.filter { $0.selectedIndex == nil } }
-
-    func addWordToSelected(word selectedWord: MnemonicWordCellViewModel) {
-        selectedWord.selectedIndex = selectedWords.count
+    func addToSelected(word: MnemonicWord) {
+        availableWords.removeAll(where: { $0.id == word.id })
+        selectedWords.append(word)
         objectWillChange.send()
     }
 
-    func removeWordFromSelected(word selectedWord: MnemonicWordCellViewModel) {
-
-        let indexOfWordToDeselect = selectedWord.selectedIndex!
-        for wordToUpdate in selectedWords where wordToUpdate.selectedIndex! >= indexOfWordToDeselect {
-            wordToUpdate.selectedIndex = wordToUpdate.selectedIndex! - 1
-        }
-        selectedWord.selectedIndex = nil
-
+    func removeFromSelected(word: MnemonicWord) {
+        selectedWords.removeAll(where: { $0.id == word.id })
+        availableWords.append(word)
         objectWillChange.send()
     }
 
     func unselectAll() {
-        selectedWords.forEach { $0.selectedIndex = nil }
+        selectedWords = []
+        availableWords = shuffledOrderOfWords
         objectWillChange.send()
     }
-}
 
-// MARK: - MnemonicGridView
-import QGrid
-struct MnemonicGridView {
-    let cellViewModels: [MnemonicWordCellViewModel]
-    let selection: (MnemonicWordCellViewModel) -> Void
-
-    init(cellViewModels: [MnemonicWordCellViewModel], selection: @escaping (MnemonicWordCellViewModel) -> Void) {
-        self.cellViewModels = cellViewModels
-        self.selection = selection
+    var hasOrderedMnemonicWordsCorrectly: Bool {
+        selectedWords == correctOrderOfWords
     }
 }
-
-extension MnemonicGridView: View {
-    var body: some View {
-        QGrid(cellViewModels, columns: 3, vSpacing: 8, hSpacing: 8, vPadding: 8, hPadding: 8) { selectedCellViewModel in
-            MnemonicCell(word: selectedCellViewModel) { self.selection(selectedCellViewModel) }
-        }
-    }
-}
-
-// MARK: MnemonicCell
-struct MnemonicCell {
-    let word: MnemonicWordCellViewModel
-    let selection: () -> Void
-
-    init(word: MnemonicWordCellViewModel, selection: @escaping () -> Void) {
-        self.word = word
-        self.selection = selection
-    }
-}
-
-extension MnemonicCell: View {
-    var body: some View {
-        Button(displayedText, action: selection)
-    }
-
-    private var displayedText: String {
-
-
-        var string: String = [
-            String?.none,
-            word.word
-        ].compactMap { $0 }.joined(separator: ". ")
-
-
-        #if DEBUG
-        string = "\(string) [\(word.correctPosition + 1)]"
-        #endif
-
-        return string
-    }
-}
-
-// MARK: - MnemonicWordCellViewModel
-final class MnemonicWordCellViewModel: CustomStringConvertible {
-    let correctPosition: Int
-    let word: String
-
-    var selectedIndex: Int?
-
-    init(word: String, correctPosition: Int) {
-        self.word = word
-        self.correctPosition = correctPosition
-    }
-}
-
-extension MnemonicWordCellViewModel: Swift.Identifiable {
-    var id: Int { selectedIndex ?? correctPosition }
-}
-
-extension MnemonicWordCellViewModel {
-    var description: String {
-        // Omitted for security reasons
-        return "<>"
-    }
-}
-
-#if DEBUG
-extension MnemonicWordCellViewModel: CustomDebugStringConvertible {
-    var debugDescription: String {
-        var selectedString = ""
-        if let selectedIndex = selectedIndex {
-            selectedString = ", 📍: \(selectedIndex)"
-        }
-        return """
-            \(word)<✅: \(correctPosition)\(selectedString)>
-        """
-    }
-}
-#endif

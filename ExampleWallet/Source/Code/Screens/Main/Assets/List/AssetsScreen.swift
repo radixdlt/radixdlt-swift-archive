@@ -64,8 +64,8 @@ private extension AssetsScreen {
 
     var assetsList: some View {
         List(assets) {
-             AssetRowView(asset: $0)
-         }.listStyle(GroupedListStyle())
+            AssetRowView(asset: $0)
+        }.listStyle(GroupedListStyle())
     }
 
     var sendOrReceiveTransactionButtons: some View {

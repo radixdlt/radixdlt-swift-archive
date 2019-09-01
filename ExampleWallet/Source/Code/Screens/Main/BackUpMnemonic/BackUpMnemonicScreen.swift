@@ -49,8 +49,7 @@ extension BackUpMnemonicScreen: View {
                 }.listStyle(GroupedListStyle())
 
                 NavigationLink(destination:
-                    ConfirmMnemonicScreen(isPresentingBackUpFlow: self.isPresentingBackUpFlow)
-                        .environmentObject(ConfirmMnemonicScreen.ViewModel(mnemonicToBackUp: mnemonicToBackUp))
+                    ConfirmMnemonicScreen(mnemonicToBackUp: mnemonicToBackUp, isPresentingBackUpFlow: self.isPresentingBackUpFlow)
                 ) {
                     Text("Confirm").buttonStyleEmerald()
                 }
