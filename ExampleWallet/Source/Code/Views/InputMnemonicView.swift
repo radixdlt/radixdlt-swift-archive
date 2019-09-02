@@ -29,84 +29,93 @@ import QGrid
 
 struct InputMnemonicView {
     @ObservedObject private var viewModel = ViewModel()
+
+    init(language: Mnemonic.Language, strength: Mnemonic.Strength) {
+        viewModel.language = language
+        viewModel.strength = strength
+    }
 }
 
 // MARK: - View
 extension InputMnemonicView: View {
     var body: some View {
         VStack {
-
-            // seems like the `title` below isn't displayed??
-            Picker("Language", selection: $viewModel.languageSelectionIndex) {
-                ForEach(viewModel.selectableLangauge) { language in
-                    Text(language.rawValue)
-                }
-            }.pickerStyle(WheelPickerStyle())
-
-            Text("selected language: \(viewModel.selectedLanguage.rawValue)")
-            Text("Mnemonic strength (number of words)")
-
-            Picker("", selection: $viewModel.mnemonicLengthSelectionIndex) {
-                ForEach(viewModel.selectableMnemonicStrengths) { strength in
-                    Text(strength.displayableString)
-                }
-            }.pickerStyle(SegmentedPickerStyle())
-
-            QGrid(viewModel.cellViewModelsAccordingToSelectedStrength, columns: 2, vSpacing: 4, hSpacing: 4, vPadding: 4, hPadding: 4) { selectedCellViewModel in
-                     InputMnemonicCell(cellViewModel: selectedCellViewModel)
+            List(viewModel.inputWords) { inputMnemonicWord in
+                InputMnemonicCell(input: inputMnemonicWord)
             }
-            .frame(width: nil, height: 500, alignment: .center)
+
+            Button("Print words") {
+                self.viewModel.debug()
+            }
         }
     }
 }
 
 // MARK: - ViewModel
-typealias InputMnemonicViewModel = InputMnemonicView.ViewModel
-
 extension InputMnemonicView {
     final class ViewModel: ObservableObject {
-        fileprivate let allCellViewModels: [InputMnemonicWordCellViewModel]
-//        fileprivate let mnemonicRestored: (Mnemonic) -> Void
 
-        @Published fileprivate var languageSelectionIndex = 0
-        @Published fileprivate var mnemonicLengthSelectionIndex = 0
+        fileprivate var inputWords = [MnemonicInput]()
 
-        init() {
-//            self.mnemonicRestored = mnemonicRestored
-            self.allCellViewModels = (0..<Mnemonic.Strength.max.wordCount).map { InputMnemonicWordCellViewModel(index: $0) }
+        fileprivate var language: Mnemonic.Language = .english
+        fileprivate var strength: Mnemonic.Strength = .wordCountOf12 {
+            didSet {
+                inputWords = (0..<strength.wordCount).map { MnemonicInput(id: $0) }
+            }
+        }
 
-            fatalError("Check for mnemonic restored...! trigger navigation")
+        func debug() {
+            print(inputWords)
+        }
+
+    }
+}
+
+// MARK: - MnemonicInput (CellViewModel)
+final class MnemonicInput: ObservableObject, Swift.Identifiable {
+
+    @Published var word: String = ""
+    let id: Int
+    init(id: Int) {
+        self.id = id
+    }
+}
+
+extension MnemonicInput: CustomDebugStringConvertible {
+    var debugDescription: String {
+        var debugString = ""
+        #if DEBUG
+        debugString = word
+        #endif
+        return debugString
+    }
+}
+
+struct InputMnemonicCell {
+    @State var input: MnemonicInput
+}
+
+extension InputMnemonicCell: View {
+    var body: some View {
+        VStack {
+            TextField("\(input.id + 1)", text: $input.word)
+            HintView(input: input)
         }
     }
 }
 
-private extension InputMnemonicViewModel {
+import Combine
+struct HintView: View {
 
-    var selectedMnemonicStrength: Mnemonic.Strength { selectableMnemonicStrengths[mnemonicLengthSelectionIndex] }
+    @ObservedObject var input: MnemonicInput
 
-    var selectableLangauge: [Mnemonic.Language] { Mnemonic.Language.allCases }
-
-    var selectedLanguage: Mnemonic.Language { selectableLangauge[languageSelectionIndex] }
-
-    var selectableMnemonicStrengths: [Mnemonic.Strength] { Mnemonic.Strength.allCases }
-
-    var cellViewModelsAccordingToSelectedStrength: [InputMnemonicWordCellViewModel] {
-        Array(
-            allCellViewModels.prefix(selectedMnemonicStrength.wordCount)
-        )
-    }
+    var body: some View {
+        Text("current: \(input.word)")
+     }
 }
 
-// MARK: - InputMnemonicWordCellViewModel
-final class InputMnemonicWordCellViewModel: Swift.Identifiable {
-    var index: Int
-    var word: String = ""
-    init(index: Int) {
-        self.index = index
-    }
-    var id: Int { index }
-}
 
+// MARK: - Identifiable
 extension Mnemonic.Strength: Swift.Identifiable {
     var displayableString: String {
         return "#\(wordCount)"
@@ -120,15 +129,6 @@ extension Mnemonic.Strength: Swift.Identifiable {
     }
 
     static var max: Mnemonic.Strength { Mnemonic.Strength.allCases.last! }
-}
-
-struct InputMnemonicCell {
-    @State var cellViewModel: InputMnemonicWordCellViewModel
-}
-extension InputMnemonicCell: View {
-    var body: some View {
-        TextField("\(cellViewModel.index + 1)", text: $cellViewModel.word)
-    }
 }
 
 extension Mnemonic.Language: Swift.Identifiable {

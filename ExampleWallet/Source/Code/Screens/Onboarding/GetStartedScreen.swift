@@ -49,7 +49,7 @@ extension GetStartedScreen: View {
 
                 LabelledDivider(Text("GetStarted.Text.Or"))
 
-                NavigationLink(destination: RestoreAccountScreen()) {
+                NavigationLink(destination: RestoreAccountChooseLanguageScreen()) {
                     Text("GetStarted.Button.RestoreAccount").buttonStyleSaphire()
                 }
 

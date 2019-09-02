@@ -100,7 +100,7 @@
 		48A9601E231006200074AC26 /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A9601D231006200074AC26 /* RadixSDK.framework */; };
 		48A9601F231006200074AC26 /* RadixSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 48A9601D231006200074AC26 /* RadixSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */; };
-		48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */; };
+		48AA4B9B230C50CF0016F57F /* RestoreAccountChooseLanguageScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountChooseLanguageScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
 		48ACA682230AF85C00BF0029 /* KeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* KeyValueStore.swift */; };
 		48AF8725231C209400EF3D1F /* RxSwift.Observable_as_Combine.Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF8724231C209400EF3D1F /* RxSwift.Observable_as_Combine.Publisher.swift */; };
@@ -256,7 +256,7 @@
 		48A9601D231006200074AC26 /* RadixSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RadixSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		48AA4B97230C492B0016F57F /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveTransactionScreen.swift; sourceTree = "<group>"; };
-		48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountScreen.swift; sourceTree = "<group>"; };
+		48AA4B9A230C50CF0016F57F /* RestoreAccountChooseLanguageScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountChooseLanguageScreen.swift; sourceTree = "<group>"; };
 		48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScreen.swift; sourceTree = "<group>"; };
 		48ACA681230AF85C00BF0029 /* KeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStore.swift; sourceTree = "<group>"; };
 		48AF8724231C209400EF3D1F /* RxSwift.Observable_as_Combine.Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxSwift.Observable_as_Combine.Publisher.swift; sourceTree = "<group>"; };
@@ -473,6 +473,14 @@
 			path = Screens;
 			sourceTree = "<group>";
 		};
+		48155AB7231D01B70058C9B9 /* RestoreAccount */ = {
+			isa = PBXGroup;
+			children = (
+				48AA4B9A230C50CF0016F57F /* RestoreAccountChooseLanguageScreen.swift */,
+			);
+			path = RestoreAccount;
+			sourceTree = "<group>";
+		};
 		4843CB00230BE30E00AD24D4 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -628,7 +636,7 @@
 				486D86F4230D6ADB006A967A /* TermsAndConditionsScreen.swift */,
 				48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */,
 				48AA4B98230C50B20016F57F /* ReceiveTransactionScreen.swift */,
-				48AA4B9A230C50CF0016F57F /* RestoreAccountScreen.swift */,
+				48155AB7231D01B70058C9B9 /* RestoreAccount */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -1031,7 +1039,7 @@
 				48596A4A2316D0A2005C1804 /* NoSaveOptions.swift in Sources */,
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
 				48596A332316BBB0005C1804 /* View+Extensions.swift in Sources */,
-				48AA4B9B230C50CF0016F57F /* RestoreAccountScreen.swift in Sources */,
+				48AA4B9B230C50CF0016F57F /* RestoreAccountChooseLanguageScreen.swift in Sources */,
 				4802E4672312A986007EC847 /* Mnemonic+Codable.swift in Sources */,
 				48BE083023151F8A008435F5 /* AssetRowView.swift in Sources */,
 				48596A392316CFC7005C1804 /* Preferences.swift in Sources */,
