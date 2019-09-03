@@ -61,6 +61,11 @@
 		48458E5A230DB339007B05A2 /* Gotham-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E55230DB338007B05A2 /* Gotham-Book.otf */; };
 		48458E5B230DB339007B05A2 /* Gotham-Ultra.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E56230DB338007B05A2 /* Gotham-Ultra.otf */; };
 		48458E5C230DB339007B05A2 /* Gotham-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48458E57230DB338007B05A2 /* Gotham-Light.otf */; };
+		484DACAC231D897900CD4E5D /* MnemonicWordListMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484DACAB231D897900CD4E5D /* MnemonicWordListMatcher.swift */; };
+		484DACAE231D898F00CD4E5D /* InputMnemonicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484DACAD231D898F00CD4E5D /* InputMnemonicCell.swift */; };
+		484DACB0231D89AD00CD4E5D /* MnemonicInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484DACAF231D89AD00CD4E5D /* MnemonicInput.swift */; };
+		484DACB2231D89D900CD4E5D /* Mnemonic+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484DACB1231D89D900CD4E5D /* Mnemonic+Identifiable.swift */; };
+		484DACB4231D89F100CD4E5D /* MnemonicHintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484DACB3231D89F100CD4E5D /* MnemonicHintView.swift */; };
 		4853BFDB230C519B00022D04 /* RootScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4853BFDA230C519B00022D04 /* RootScreen.swift */; };
 		48571C6C230C19550040896F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48571C6E230C19550040896F /* Localizable.strings */; };
 		48596A332316BBB0005C1804 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48596A322316BBB0005C1804 /* View+Extensions.swift */; };
@@ -218,6 +223,11 @@
 		48458E55230DB338007B05A2 /* Gotham-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Book.otf"; sourceTree = "<group>"; };
 		48458E56230DB338007B05A2 /* Gotham-Ultra.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Ultra.otf"; sourceTree = "<group>"; };
 		48458E57230DB338007B05A2 /* Gotham-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Light.otf"; sourceTree = "<group>"; };
+		484DACAB231D897900CD4E5D /* MnemonicWordListMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemonicWordListMatcher.swift; sourceTree = "<group>"; };
+		484DACAD231D898F00CD4E5D /* InputMnemonicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMnemonicCell.swift; sourceTree = "<group>"; };
+		484DACAF231D89AD00CD4E5D /* MnemonicInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemonicInput.swift; sourceTree = "<group>"; };
+		484DACB1231D89D900CD4E5D /* Mnemonic+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mnemonic+Identifiable.swift"; sourceTree = "<group>"; };
+		484DACB3231D89F100CD4E5D /* MnemonicHintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemonicHintView.swift; sourceTree = "<group>"; };
 		4853BFDA230C519B00022D04 /* RootScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreen.swift; sourceTree = "<group>"; };
 		48571C6D230C19550040896F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48596A322316BBB0005C1804 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
@@ -555,7 +565,7 @@
 				48596A602317EA8D005C1804 /* AddressView.swift */,
 				48458E50230DAAC8007B05A2 /* RadixLogo.swift */,
 				48596A5E2317E906005C1804 /* QRCodeImage.swift */,
-				48FC13222317FF000094A85E /* InputMnemonicView.swift */,
+				484DACAA231D896700CD4E5D /* InputMnemonicView */,
 				486D86F0230D6A81006A967A /* WebView.swift */,
 			);
 			path = Views;
@@ -571,6 +581,19 @@
 				48458E57230DB338007B05A2 /* Gotham-Light.otf */,
 			);
 			path = Gotham;
+			sourceTree = "<group>";
+		};
+		484DACAA231D896700CD4E5D /* InputMnemonicView */ = {
+			isa = PBXGroup;
+			children = (
+				48FC13222317FF000094A85E /* InputMnemonicView.swift */,
+				484DACAB231D897900CD4E5D /* MnemonicWordListMatcher.swift */,
+				484DACAD231D898F00CD4E5D /* InputMnemonicCell.swift */,
+				484DACAF231D89AD00CD4E5D /* MnemonicInput.swift */,
+				484DACB1231D89D900CD4E5D /* Mnemonic+Identifiable.swift */,
+				484DACB3231D89F100CD4E5D /* MnemonicHintView.swift */,
+			);
+			path = InputMnemonicView;
 			sourceTree = "<group>";
 		};
 		48596A342316BBD3005C1804 /* UIKit+Extensions */ = {
@@ -1008,13 +1031,16 @@
 				48596A5B2316D197005C1804 /* Preferences+ValueRetrieval.swift in Sources */,
 				48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */,
 				48596A482316D090005C1804 /* AnyKeyValueStoring.swift in Sources */,
+				484DACAC231D897900CD4E5D /* MnemonicWordListMatcher.swift in Sources */,
 				48596A572316D147005C1804 /* UserDefaults+KeyValueStoring.swift in Sources */,
 				48B561F0231AE1A1001B8E74 /* AppState+Update.swift in Sources */,
+				484DACB2231D89D900CD4E5D /* Mnemonic+Identifiable.swift in Sources */,
 				48B561EB231ABEFB001B8E74 /* AppState.swift in Sources */,
 				48B561F8231AE72D001B8E74 /* Radix.swift in Sources */,
 				4844FC6E230C2125003106AB /* ButtonStyles.swift in Sources */,
 				48596A462316D07F005C1804 /* KeyValueStoring.swift in Sources */,
 				48A96019231004690074AC26 /* AssetsScreen.swift in Sources */,
+				484DACB0231D89AD00CD4E5D /* MnemonicInput.swift in Sources */,
 				48BE08322315211F008435F5 /* MockedTokenBalance.swift in Sources */,
 				48A96011231004050074AC26 /* LearnScreen.swift in Sources */,
 				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
@@ -1034,6 +1060,7 @@
 				48596A552316D12B005C1804 /* KeychainKey.swift in Sources */,
 				48596A3C2316D015005C1804 /* KeyConvertible.swift in Sources */,
 				48596A592316D159005C1804 /* PreferencesKey.swift in Sources */,
+				484DACB4231D89F100CD4E5D /* MnemonicHintView.swift in Sources */,
 				48B561ED231AE176001B8E74 /* RootContent.swift in Sources */,
 				48596A532316D118005C1804 /* Keychain+SaveOptionConvertible.swift in Sources */,
 				48596A4A2316D0A2005C1804 /* NoSaveOptions.swift in Sources */,
@@ -1049,6 +1076,7 @@
 				48596A5F2317E906005C1804 /* QRCodeImage.swift in Sources */,
 				48A96017231004500074AC26 /* ContactsScreen.swift in Sources */,
 				4844FC71230C2162003106AB /* Font+Radix.swift in Sources */,
+				484DACAE231D898F00CD4E5D /* InputMnemonicCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

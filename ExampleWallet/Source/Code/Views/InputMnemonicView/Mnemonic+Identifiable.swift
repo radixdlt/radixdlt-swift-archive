@@ -22,97 +22,9 @@
 // SOFTWARE.
 //
 
+import Foundation
 import SwiftUI
 import RadixSDK
-
-import QGrid
-
-struct InputMnemonicView {
-    @ObservedObject private var viewModel = ViewModel()
-
-    init(language: Mnemonic.Language, strength: Mnemonic.Strength) {
-        viewModel.language = language
-        viewModel.strength = strength
-    }
-}
-
-// MARK: - View
-extension InputMnemonicView: View {
-    var body: some View {
-        VStack {
-            List(viewModel.inputWords) { inputMnemonicWord in
-                InputMnemonicCell(input: inputMnemonicWord)
-            }
-
-            Button("Print words") {
-                self.viewModel.debug()
-            }
-        }
-    }
-}
-
-// MARK: - ViewModel
-extension InputMnemonicView {
-    final class ViewModel: ObservableObject {
-
-        fileprivate var inputWords = [MnemonicInput]()
-
-        fileprivate var language: Mnemonic.Language = .english
-        fileprivate var strength: Mnemonic.Strength = .wordCountOf12 {
-            didSet {
-                inputWords = (0..<strength.wordCount).map { MnemonicInput(id: $0) }
-            }
-        }
-
-        func debug() {
-            print(inputWords)
-        }
-
-    }
-}
-
-// MARK: - MnemonicInput (CellViewModel)
-final class MnemonicInput: ObservableObject, Swift.Identifiable {
-
-    @Published var word: String = ""
-    let id: Int
-    init(id: Int) {
-        self.id = id
-    }
-}
-
-extension MnemonicInput: CustomDebugStringConvertible {
-    var debugDescription: String {
-        var debugString = ""
-        #if DEBUG
-        debugString = word
-        #endif
-        return debugString
-    }
-}
-
-struct InputMnemonicCell {
-    @State var input: MnemonicInput
-}
-
-extension InputMnemonicCell: View {
-    var body: some View {
-        VStack {
-            TextField("\(input.id + 1)", text: $input.word)
-            HintView(input: input)
-        }
-    }
-}
-
-import Combine
-struct HintView: View {
-
-    @ObservedObject var input: MnemonicInput
-
-    var body: some View {
-        Text("current: \(input.word)")
-     }
-}
 
 
 // MARK: - Identifiable
@@ -139,3 +51,4 @@ extension Mnemonic.Language: Swift.Identifiable {
         return index
     }
 }
+

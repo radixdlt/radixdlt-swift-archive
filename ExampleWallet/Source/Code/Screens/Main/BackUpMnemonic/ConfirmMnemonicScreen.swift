@@ -72,7 +72,7 @@ private extension ConfirmMnemonicScreen {
     }
 
     var availableWordsList: some View {
-        Grid(viewModel.availableWords) { word in
+        Grid.init(viewModel.availableWords) { word in
             self.viewModel.addToSelected(word: word)
         }
     }
@@ -146,10 +146,10 @@ private extension ConfirmMnemonicScreen.ViewModel {
 }
 
 // MARK: Grid
-private typealias Grid = QGrid
-private extension QGrid where Data.Element == MnemonicWord, Content == Button<Text> {
-    init(_ data: Data, onSelection: @escaping (Data.Element) -> Void) {
-        self.init(data, columns: 3, columnsInLandscape: 5, vSpacing: 4, hSpacing: 4, vPadding: 4, hPadding: 4) { wordAtRow in
+typealias Grid = QGrid
+extension QGrid where Data.Element == MnemonicWord, Content == Button<Text> {
+    init(_ data: Data, columns: Int = 3, onSelection: @escaping (Data.Element) -> Void) {
+        self.init(data, columns: columns, columnsInLandscape: 5, vSpacing: 4, hSpacing: 4, vPadding: 4, hPadding: 4) { wordAtRow in
             Button("\(wordAtRow.word) (\(wordAtRow.id + 1))") {
                 onSelection(wordAtRow)
             }
