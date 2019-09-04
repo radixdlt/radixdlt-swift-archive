@@ -27,12 +27,7 @@ import RadixSDK
 import Combine
 
 struct RestoreAccountInputMnemonicScreen {
-
-    @ObservedObject private var viewModel: ViewModel
-
-    init(language: Mnemonic.Language, strength: Mnemonic.Strength) {
-        viewModel = ViewModel(language: language, strength: strength)
-    }
+    @EnvironmentObject private var viewModel: ViewModel
 }
 
 // MARK: - View
@@ -43,10 +38,20 @@ extension RestoreAccountInputMnemonicScreen: View {
                 InputMnemonicCell(mnemonicInput: inputMnemonicWord)
             }
 
-            Button("Confirm") {
+            Button("Restore") {
                 self.viewModel.confirmMnemonic()
             }.enabled(viewModel.canConfirm)
         }
+        .alert(isPresented: $viewModel.showNonChecksummedAlert) { self.alert }
+    }
+
+    var alert: Alert {
+        Alert(
+            title: Text("Mnemonic not checksummed"),
+            message: Text("Would you like to restore an account using it anyway?"),
+            primaryButton: .cancel(Text("No"), action: { self.viewModel.discardNonChecksummedMnemonic() }),
+            secondaryButton: .default(Text("Use non checksummed mnemonic"), action: { self.viewModel.confirmNonChecksummedMnemonic() })
+        )
     }
 }
 
@@ -65,12 +70,16 @@ extension RestoreAccountInputMnemonicScreen {
 
         private var cancellables = Set<AnyCancellable>()
 
-        @Published var isMnemonicChecksummed: Bool = false
-        @Published var mnemonic: Mnemonic? = nil
+        var needConfirmationOfNonChecksummedMnemonic: NeedConfirmationOfNonChecksummedMnemonic?
 
         let objectWillChange = PassthroughSubject<Void, Never>()
 
-        init(language: Mnemonic.Language, strength: Mnemonic.Strength) {
+        private unowned let appState: AppState
+
+        @Published var showNonChecksummedAlert = false
+
+        init(language: Mnemonic.Language, strength: Mnemonic.Strength, appState: AppState) {
+            self.appState = appState
             let mnemonicWordListMatcher = MnemonicWordListMatcher(language: language)
             self.wordCount = strength.wordCount
             let inputWords = (0..<strength.wordCount).map { MnemonicInput(id: $0, wordMatcher: mnemonicWordListMatcher) }
@@ -111,20 +120,25 @@ extension RestoreAccountInputMnemonicScreen {
             inputWords[10].wordSubject.send("special")
 //            inputWords[11].wordSubject.send("develop")
 
-            // will create an address ending with: "laZBk"
+            // will create an address: "JGdYaT8VUbafwXEBSoxfitXmHvg2Xq1BhvNVi3Cxd8mNp4LazBk"
             #endif
         }
 
         func confirmMnemonic() {
             guard let words = self.words else { return }
             let (mnemonic, isChecksummed) = createMnemonic(words: words)
-            print("isChecksummed: \(isChecksummed)")
-            self.isMnemonicChecksummed = isChecksummed
-            self.mnemonic = mnemonic
+
+            if isChecksummed {
+                restoreAccount(mnemonic: mnemonic)
+            } else {
+                needConfirmationOfNonChecksummedMnemonic = NeedConfirmationOfNonChecksummedMnemonic(mnemonic)
+                showNonChecksummedAlert = true
+                objectWillChange.send()
+            }
         }
 
+
         var canConfirm: Bool {
-            print("canConfirm: \(words != nil)")
             return words != nil
         }
 
@@ -132,9 +146,32 @@ extension RestoreAccountInputMnemonicScreen {
             _createMnemonic(words)
         }
 
+        func confirmNonChecksummedMnemonic() {
+            defer { showNonChecksummedAlert = false }
+            guard let needConfirmationOfNonChecksummedMnemonic = needConfirmationOfNonChecksummedMnemonic else { return }
+            restoreAccount(mnemonic: needConfirmationOfNonChecksummedMnemonic.nonChecksummedMnemonic)
+        }
+
+        private func restoreAccount(mnemonic: Mnemonic) {
+            appState.update().userDid.restoreSeedFromMnemonic(seed: mnemonic.seed)
+        }
+
+        func discardNonChecksummedMnemonic() {
+            self.needConfirmationOfNonChecksummedMnemonic = nil
+            showNonChecksummedAlert = false
+            objectWillChange.send()
+        }
+
         private var words: [Mnemonic.Word]? {
             return _words()
         }
 
+    }
+}
+
+struct NeedConfirmationOfNonChecksummedMnemonic {
+    let nonChecksummedMnemonic: Mnemonic
+    init(_ nonChecksummedMnemonic: Mnemonic) {
+        self.nonChecksummedMnemonic = nonChecksummedMnemonic
     }
 }

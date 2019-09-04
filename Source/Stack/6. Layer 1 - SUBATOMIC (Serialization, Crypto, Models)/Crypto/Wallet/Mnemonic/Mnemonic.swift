@@ -32,7 +32,6 @@ public struct Mnemonic: CustomStringConvertible {
     public let words: [Word]
     public let language: Language
 
-
     /// Pass a trivial closure: `{ _, _ in }` to `validateChecksum` if you would like to opt-out of checksum validation.
     public init(
         words: [Word],
@@ -88,15 +87,6 @@ internal extension Mnemonic {
 // MARK: - To BitcoinKit
 public extension Mnemonic {
     var seed: Data {
-        do {
-            return try BitcoinKit.Mnemonic.seed(mnemonic: words.map { $0.value })
-        } catch let validationError as BitcoinKit.MnemonicError.MnemonicValidationError {
-            switch validationError {
-            case .checksumMismatch: fatalError("Checksum mismatch")
-            default: fatalError("validation error: \(validationError)")
-            }
-        } catch {
-            fatalError("Unexpected error: \(error)")
-        }
+        BitcoinKit.Mnemonic.seed(mnemonic: words.map { $0.value }) { _ in /* no checksum validation, should be handled by UI */ }
     }
 }

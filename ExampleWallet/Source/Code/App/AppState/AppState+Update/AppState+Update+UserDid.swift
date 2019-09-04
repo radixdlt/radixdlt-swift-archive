@@ -60,6 +60,11 @@ public extension AppState.Update.UserDid {
         triggerNavigation()
     }
 
+    func restoreSeedFromMnemonic(seed seedFromMnemonic: Data) {
+        securePersistence.seedFromMnemonic = seedFromMnemonic
+        triggerNavigation()
+    }
+
     func deleteWallet() {
         securePersistence.deleteAll()
         triggerNavigation()

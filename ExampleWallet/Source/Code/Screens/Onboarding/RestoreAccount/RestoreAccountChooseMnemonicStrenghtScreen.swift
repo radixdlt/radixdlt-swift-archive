@@ -26,7 +26,11 @@ import SwiftUI
 import RadixSDK
 
 struct RestoreAccountChooseMnemonicStrenghtScreen {
+
+    @EnvironmentObject private var appState: AppState
+
     private let language: Mnemonic.Language
+
     init(language: Mnemonic.Language) {
         self.language = language
     }
@@ -37,10 +41,23 @@ extension RestoreAccountChooseMnemonicStrenghtScreen: View {
         VStack {
             Text("Strength of mnemonic")
             List(Mnemonic.Strength.allCases) { strength in
-                NavigationLink(destination: RestoreAccountInputMnemonicScreen(language: self.language, strength: strength)) {
+                NavigationLink(destination: self.inputMnemonicScreen(strength: strength)) {
                     Text("Word count of #\(strength.wordCount)")
                 }
             }
         }
+    }
+}
+
+private extension RestoreAccountChooseMnemonicStrenghtScreen {
+    func inputMnemonicScreen(strength mnemonicStrength: Mnemonic.Strength) -> some View {
+        RestoreAccountInputMnemonicScreen()
+            .environmentObject(
+                RestoreAccountInputMnemonicScreen.ViewModel(
+                    language: language,
+                    strength: mnemonicStrength,
+                    appState: appState
+                )
+        )
     }
 }

@@ -26,7 +26,7 @@ import SwiftUI
 import RadixSDK
 
 struct RestoreAccountChooseLanguageScreen {
-    @State private var languageSelectionIndex = Mnemonic.Language.indexOfEnglish
+    @EnvironmentObject private var appState: AppState
 }
 
 // MARK: - VIEW
@@ -36,7 +36,7 @@ extension RestoreAccountChooseLanguageScreen: View {
             VStack {
                 Text("Language of mnemonic")
                 List(Mnemonic.Language.allCases) { language in
-                    NavigationLink(destination: RestoreAccountChooseMnemonicStrenghtScreen(language: language)) {
+                    NavigationLink(destination: self.chooseMnemonicStrenghtScreen(language: language)) {
                         Text("\(language.rawValue)")
                     }
                 }
@@ -46,14 +46,9 @@ extension RestoreAccountChooseLanguageScreen: View {
     }
 }
 
-// MARK: Mnemonic.Language
-private extension Mnemonic.Language {
-    static var indexOfEnglish: Int {
-        guard let indexOfEnglish = Mnemonic.Language.allCases.firstIndex(of: .english) else {
-            incorrectImplementation("'English' should be present in `Mnemonic.Language.allCases`")
-        }
-        return indexOfEnglish
+private extension RestoreAccountChooseLanguageScreen {
+    func chooseMnemonicStrenghtScreen(language mnemonicLanguage: Mnemonic.Language) -> some View {
+        RestoreAccountChooseMnemonicStrenghtScreen(language: mnemonicLanguage)
+            .environmentObject(appState)
     }
 }
-
-

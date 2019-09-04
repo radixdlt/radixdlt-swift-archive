@@ -49,7 +49,7 @@ extension GetStartedScreen: View {
 
                 LabelledDivider(Text("GetStarted.Text.Or"))
 
-                NavigationLink(destination: RestoreAccountChooseLanguageScreen()) {
+                NavigationLink(destination: self.restoreAccountFlow) {
                     Text("GetStarted.Button.RestoreAccount").buttonStyleSaphire()
                 }
 
@@ -62,6 +62,11 @@ private extension GetStartedScreen {
     func generateNewMnemonicAndProceedToMainScreen() {
         let newMnemonic = mnemonicGenerator.newMnemonic()
         appState.update().userDid.generate(mnemonic: newMnemonic)
+    }
+
+    var restoreAccountFlow: some View {
+        RestoreAccountChooseLanguageScreen()
+            .environmentObject(appState)
     }
 }
 
