@@ -25,9 +25,18 @@
 import Foundation
 
 public extension Mnemonic {
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case generatingRandomBytes
-        case unexpectedWordCount
+        case validation(Validation)
+    }
+}
+
+public extension Mnemonic.Error {
+    enum Validation: Swift.Error, Equatable {
+        case badWordCount(expectedAnyOf: [Int], butGot: Int)
+        case wordNotInList(String, language: Mnemonic.Language)
+        case unableToDeriveLanguageFrom(words: [String])
+        case checksumMismatch
     }
 }
 
@@ -37,6 +46,20 @@ internal extension Mnemonic.Error {
     init(fromBitcoinKitError bitcoinKitMnemonicError: BitcoinKit.MnemonicError) {
         switch bitcoinKitMnemonicError {
         case .randomBytesError: self = .generatingRandomBytes
+        case .invalid(let bitcoinKitInvalidMnemonicError):
+            switch bitcoinKitInvalidMnemonicError {
+            case .badWordCount(let expected, let butGot):
+                self = .validation(.badWordCount(expectedAnyOf: expected, butGot: butGot))
+
+            case .checksumMismatch:
+                self = .validation(.checksumMismatch)
+
+            case .unableToDeriveLanguageFrom(let words):
+                self = .validation(.unableToDeriveLanguageFrom(words: words))
+
+            case .wordNotInList(let word, let bitcoinKitLanguage):
+                self = .validation(.wordNotInList(word, language: Mnemonic.Language(bitcoinKitLanguage: bitcoinKitLanguage)))
+            }
         }
     }
 }

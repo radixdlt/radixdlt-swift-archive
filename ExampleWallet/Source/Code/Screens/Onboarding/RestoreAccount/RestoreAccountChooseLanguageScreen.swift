@@ -26,7 +26,6 @@ import SwiftUI
 import RadixSDK
 
 struct RestoreAccountChooseLanguageScreen {
-//    @ObservedObject private var viewModel = ViewModel()
     @State private var languageSelectionIndex = Mnemonic.Language.indexOfEnglish
 }
 
@@ -47,11 +46,7 @@ extension RestoreAccountChooseLanguageScreen: View {
     }
 }
 
-//private extension RestoreAccountChooseLanguageScreen {
-//    var selectableLanguages: [Mnemonic.Language] {  }
-//
-//}
-
+// MARK: Mnemonic.Language
 private extension Mnemonic.Language {
     static var indexOfEnglish: Int {
         guard let indexOfEnglish = Mnemonic.Language.allCases.firstIndex(of: .english) else {
@@ -61,37 +56,4 @@ private extension Mnemonic.Language {
     }
 }
 
-//// MARK: - VIEW MODEL
-//extension RestoreAccountScreen {
-//    final class ViewModel: ObservableObject {
-//        @Published fileprivate var languageSelectionIndex = 0
-//    }
-//}
 
-
-struct RestoreAccountChooseMnemonicStrenghtScreen {
-    private let language: Mnemonic.Language
-    init(language: Mnemonic.Language) {
-        self.language = language
-    }
-}
-
-extension RestoreAccountChooseMnemonicStrenghtScreen: View {
-    var body: some View {
-        VStack {
-            Text("Strength of mnemonic")
-            List(Mnemonic.Strength.allCases) { strength in
-                NavigationLink(destination: InputMnemonicView(language: self.language, strength: strength)) {
-                    Text("Word count of #\(strength.wordCount)")
-                }
-            }
-        }
-    }
-}
-
-//private extension RestoreAccountChooseMnemonicStrenghtScreen {
-//    var selectableStrengths: [Mnemonic.Language] { Mnemonic.Language.allCases }
-//
-//    var selectedLanguage: Mnemonic.Language { selectableLangauge[languageSelectionIndex] }
-//
-//}

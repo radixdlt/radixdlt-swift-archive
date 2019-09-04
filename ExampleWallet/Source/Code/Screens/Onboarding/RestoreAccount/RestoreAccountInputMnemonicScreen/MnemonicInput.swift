@@ -31,10 +31,17 @@ final class MnemonicInput: ObservableObject, Swift.Identifiable {
 
     let mnemonicWordListMatcher: MnemonicWordListMatcher
     let wordSubject = CurrentValueSubject<String, Never>("")
+
+    let objectWillChange = PassthroughSubject<Void, Never>()
+
+    private var cancellable: Cancellable?
+
     let id: Int
     init(id: Int, wordMatcher: MnemonicWordListMatcher) {
         self.id = id
         self.mnemonicWordListMatcher = wordMatcher
+
+        cancellable = wordSubject.removeDuplicates().eraseMapToVoid().subscribe(objectWillChange)
     }
 }
 

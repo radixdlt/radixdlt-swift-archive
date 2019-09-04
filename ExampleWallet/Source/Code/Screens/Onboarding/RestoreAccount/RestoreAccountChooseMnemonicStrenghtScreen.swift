@@ -25,50 +25,22 @@
 import SwiftUI
 import RadixSDK
 
-
-struct InputMnemonicView {
-    @ObservedObject private var viewModel: ViewModel
-
-    init(language: Mnemonic.Language, strength: Mnemonic.Strength) {
-        viewModel = ViewModel(language: language, strength: strength)
+struct RestoreAccountChooseMnemonicStrenghtScreen {
+    private let language: Mnemonic.Language
+    init(language: Mnemonic.Language) {
+        self.language = language
     }
 }
 
-// MARK: - View
-extension InputMnemonicView: View {
+extension RestoreAccountChooseMnemonicStrenghtScreen: View {
     var body: some View {
         VStack {
-            List(viewModel.inputWords) { inputMnemonicWord in
-                InputMnemonicCell(mnemonicInput: inputMnemonicWord)
+            Text("Strength of mnemonic")
+            List(Mnemonic.Strength.allCases) { strength in
+                NavigationLink(destination: RestoreAccountInputMnemonicScreen(language: self.language, strength: strength)) {
+                    Text("Word count of #\(strength.wordCount)")
+                }
             }
-
-            Button("Print words") {
-                self.viewModel.debug()
-            }
         }
-    }
-}
-
-// MARK: - VIEWMODEL
-extension InputMnemonicView {
-    final class ViewModel: ObservableObject {
-
-        fileprivate let inputWords: [MnemonicInput]
-
-        fileprivate let mnemonicWordListMatcher: MnemonicWordListMatcher
-
-        fileprivate let wordCount: Int
-
-        init(language: Mnemonic.Language, strength: Mnemonic.Strength) {
-            let mnemonicWordListMatcher = MnemonicWordListMatcher(language: language)
-            self.wordCount = strength.wordCount
-            self.inputWords = (0..<strength.wordCount).map { MnemonicInput(id: $0, wordMatcher: mnemonicWordListMatcher) }
-            self.mnemonicWordListMatcher = mnemonicWordListMatcher
-        }
-
-        func debug() {
-            print(inputWords)
-        }
-
     }
 }
