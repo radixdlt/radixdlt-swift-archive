@@ -22,51 +22,42 @@
 // SOFTWARE.
 //
 
-import Foundation
 import SwiftUI
+import RadixSDK
 
-// MARK: - BackUpMnemonicWarningView
-struct BackUpMnemonicWarningView: View {
+struct RestoreAccountChooseMnemonicStrenghtScreen {
 
-    typealias Dismiss = () -> Void
+    @EnvironmentObject private var appState: AppState
 
-    private let makeDestination: () -> AnyScreen
-    private let dismiss: Dismiss
+    private let language: Mnemonic.Language
 
-    @State private var isPresentingBackUpMnemonicModal = false
-
-    init(
-        makeDestination: @escaping () -> AnyScreen,
-        dismiss: @escaping Dismiss
-    ) {
-        self.dismiss = dismiss
-        self.makeDestination = makeDestination
+    init(language: Mnemonic.Language) {
+        self.language = language
     }
+}
 
+extension RestoreAccountChooseMnemonicStrenghtScreen: View {
     var body: some View {
         VStack {
-            Text("⚠️ WARNING ⚠️").font(.roboto(size: 24))
-            Text("If you don't back up your wallet, you might permanetly lose all your assets.").font(.roboto(size: 16))
-
-            HStack {
-                Button("Dismiss") {
-                    self.dismiss()
+            Text("Strength of mnemonic")
+            List(Mnemonic.Strength.allCases) { strength in
+                NavigationLink(destination: self.inputMnemonicScreen(strength: strength)) {
+                    Text("Word count of #\(strength.wordCount)")
                 }
-                .buttonStyleSaphire()
-
-                Button("Back up") {
-                    self.isPresentingBackUpMnemonicModal = true
-                }
-                .buttonStyleEmerald()
             }
         }
-        .background(Color.red)
-        .padding()
-        .sheet(isPresented: $isPresentingBackUpMnemonicModal, onDismiss: {
-            self.isPresentingBackUpMnemonicModal = false
-            self.dismiss()
-        }, content: {
-            self.makeDestination()
-        })
+    }
+}
+
+private extension RestoreAccountChooseMnemonicStrenghtScreen {
+    func inputMnemonicScreen(strength mnemonicStrength: Mnemonic.Strength) -> some View {
+        RestoreAccountInputMnemonicScreen()
+            .environmentObject(
+                RestoreAccountInputMnemonicScreen.ViewModel(
+                    language: language,
+                    strength: mnemonicStrength,
+                    appState: appState
+                )
+        )
     }
 }

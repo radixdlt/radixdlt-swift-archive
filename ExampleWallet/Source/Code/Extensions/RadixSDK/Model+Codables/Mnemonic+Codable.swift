@@ -53,6 +53,6 @@ extension Mnemonic: Codable {
         guard let language = Language(rawValue: languageRaw) else {
             fatalError("failed to create language")
         }
-        self.init(words: words, language: language)
+        try self.init(words: words, language: language)
     }
 }

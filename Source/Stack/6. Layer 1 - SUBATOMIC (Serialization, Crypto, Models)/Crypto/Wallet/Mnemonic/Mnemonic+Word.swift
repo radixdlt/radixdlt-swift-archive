@@ -25,7 +25,7 @@
 import Foundation
 
 public extension Mnemonic {
-    struct Word: CustomStringConvertible {
+    struct Word: CustomStringConvertible, Hashable {
         public let value: String
         
         public init(value: String) {

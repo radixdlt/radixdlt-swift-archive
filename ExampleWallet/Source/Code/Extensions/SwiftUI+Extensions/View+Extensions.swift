@@ -24,11 +24,12 @@
 
 import SwiftUI
 
-typealias Screen = View
-typealias AnyScreen = AnyView
-
 extension View {
     func eraseToAny() -> AnyView {
         return AnyView(self)
     }
+}
+
+public extension Swift.Identifiable where Self: RawRepresentable, ID == RawValue {
+    var id: ID { rawValue }
 }

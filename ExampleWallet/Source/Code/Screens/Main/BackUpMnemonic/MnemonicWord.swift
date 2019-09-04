@@ -27,12 +27,18 @@ import SwiftUI
 
 import RadixSDK
 
-struct MnemonicWord: Swift.Identifiable {
+struct MnemonicWord: Swift.Identifiable, Equatable {
     let id: Int
     let word: String
     init(id: Int, word: String) {
         self.id = id
         self.word = word
+    }
+}
+
+extension MnemonicWord {
+    static func == (lhs: MnemonicWord, rhs: MnemonicWord) -> Bool {
+        return lhs.word == rhs.word
     }
 }
 

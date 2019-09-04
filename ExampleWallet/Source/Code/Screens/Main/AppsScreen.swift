@@ -25,7 +25,7 @@
 import Foundation
 import SwiftUI
 
-struct AppsScreen: Screen {
+struct AppsScreen: View {
     var body: some View {
         Text("Apps")
     }

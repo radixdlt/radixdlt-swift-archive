@@ -24,9 +24,31 @@
 
 import Foundation
 import SwiftUI
+import RadixSDK
 
-struct SwitchAccountScreen: View {
-    var body: some View {
-        Text("Accounts list overview")
+
+// MARK: - Identifiable
+extension Mnemonic.Strength: Swift.Identifiable {
+    var displayableString: String {
+        return "#\(wordCount)"
+    }
+
+    public var id: Int {
+        guard let index = Mnemonic.Strength.allCases.enumerated().first(where: { $0.element.wordCount == self.wordCount })?.offset else {
+            incorrectImplementationShouldAlwaysBeAble(to: "Find index of mnemonic strength")
+        }
+        return index
+    }
+
+    static var max: Mnemonic.Strength { Mnemonic.Strength.allCases.last! }
+}
+
+extension Mnemonic.Language: Swift.Identifiable {
+    public var id: Int {
+        guard let index = Mnemonic.Language.allCases.enumerated().first(where: { $0.element.rawValue == self.rawValue })?.offset else {
+            incorrectImplementationShouldAlwaysBeAble(to: "Find index of mnemonic language")
+        }
+        return index
     }
 }
+

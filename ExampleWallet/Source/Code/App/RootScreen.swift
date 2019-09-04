@@ -22,11 +22,29 @@
 // SOFTWARE.
 //
 
-import Foundation
 import SwiftUI
 
-struct SwitchAccountScreen: View {
+// MARK: - ROOT SCREEN
+struct RootScreen {
+    @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var securePersistence: SecurePersistence
+}
+
+extension RootScreen: View {
     var body: some View {
-        Text("Accounts list overview")
+        Group<AnyView> {
+            if appState.rootContent == .welcome {
+                return WelcomeScreen().eraseToAny()
+            } else if appState.rootContent == .getStarted {
+                return GetStartedScreen().eraseToAny()
+            } else {
+                return MainScreen()
+                    .environmentObject(
+                        appState.update().appShould.connectToRadix()
+                    )
+                    .environmentObject(securePersistence)
+                    .eraseToAny()
+            }
+        }
     }
 }

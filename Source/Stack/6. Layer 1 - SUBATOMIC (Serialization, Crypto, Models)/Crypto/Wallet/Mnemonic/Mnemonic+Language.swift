@@ -55,4 +55,17 @@ internal extension Mnemonic.Language {
         case .chineseTraditional: return .traditionalChinese
         }
     }
+
+    init(bitcoinKitLanguage: BitcoinKit.Mnemonic.Language) {
+        switch bitcoinKitLanguage {
+        case .english: self = .english
+        case .italian: self = .italian
+        case .spanish: self = .spanish
+        case .french: self = .french
+        case .korean: self = .korean
+        case .japanese: self = .japanese
+        case .simplifiedChinese: self = .chineseSimplified
+        case .traditionalChinese: self = .chineseTraditional
+        }
+    }
 }

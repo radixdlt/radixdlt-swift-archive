@@ -28,24 +28,41 @@ import Foundation
 protocol KeyValueStoring: AnyKeyValueStoring {
     associatedtype Key: KeyConvertible
     associatedtype SaveOptions: SaveOptionConvertible
-    func save<Value>(value: Value, forKey key: Key, options: SaveOptions)
+    func save<Value>(value: Value, forKey key: Key, options: SaveOptions, notifyChange: Bool)
     func loadValue<Value>(forKey key: Key) -> Value?
-    func deleteValue(forKey key: Key)
+    func deleteValue(forKey key: Key, notifyChange: Bool)
 }
 
 // MARK: Save or Delete
 extension KeyValueStoring {
-    func update<Value>(value: Value?, forKey key: Key, options: SaveOptions = .default) {
-        guard let newValue = value else {
-            return deleteValue(forKey: key)
+
+    func update<Value>(
+        value: Value?,
+        forKey key: Key,
+        options: SaveOptions = .default,
+        notifyChange: Bool = true
+    ) {
+
+        if let newValue = value {
+            save(value: newValue, forKey: key, options: options, notifyChange: notifyChange)
+        } else {
+            deleteValue(forKey: key, notifyChange: notifyChange)
         }
-        self.save(value: newValue, forKey: key, options: options)
+
     }
 
-    func update<Value>(value: Value?, forKey key: Key, options: SaveOptions = .default) where Value: Codable {
-        guard let newValue = value else {
-            return deleteValue(forKey: key)
+    func update<Value>(
+        value: Value?,
+        forKey key: Key,
+        options: SaveOptions = .default,
+        notifyChange: Bool = true
+    ) where Value: Codable {
+
+        if let newValue = value {
+            saveCodable(newValue, forKey: key, options: options, notifyChange: notifyChange)
+        } else {
+            deleteValue(forKey: key, notifyChange: notifyChange)
         }
-        self.saveCodable(newValue, forKey: key, options: options)
+        
     }
 }

@@ -25,7 +25,7 @@
 import Foundation
 import SwiftUI
 
-struct ContactsScreen: Screen {
+struct ContactsScreen: View {
     var body: some View {
         Text("Contacts list overview")
     }

@@ -24,9 +24,34 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
-struct SwitchAccountScreen: View {
-    var body: some View {
-        Text("Accounts list overview")
+// MARK: - MnemonicInput (CellViewModel)
+final class MnemonicInput: ObservableObject, Swift.Identifiable {
+
+    let mnemonicWordListMatcher: MnemonicWordListMatcher
+    let wordSubject = CurrentValueSubject<String, Never>("")
+
+    let objectWillChange = PassthroughSubject<Void, Never>()
+
+    private var cancellable: Cancellable?
+
+    let id: Int
+    init(id: Int, wordMatcher: MnemonicWordListMatcher) {
+        self.id = id
+        self.mnemonicWordListMatcher = wordMatcher
+
+        cancellable = wordSubject.removeDuplicates().eraseMapToVoid().subscribe(objectWillChange)
     }
 }
+
+extension MnemonicInput: CustomDebugStringConvertible {
+    var debugDescription: String {
+        var debugString = ""
+        #if DEBUG
+        debugString = wordSubject.value
+        #endif
+        return debugString
+    }
+}
+

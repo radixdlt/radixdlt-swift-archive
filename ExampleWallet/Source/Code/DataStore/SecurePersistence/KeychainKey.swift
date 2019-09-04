@@ -25,7 +25,7 @@
 import Foundation
 
 /// Key to senstive values being store in Keychain, e.g. the cryptograpically sensitive keystore file, containing an encryption of your wallets private key.
-enum KeychainKey: String, KeyConvertible, CaseIterable, ExpressibleByStringLiteral {
+enum KeychainKey: String, KeyConvertible, CaseIterable, ExpressibleByStringLiteral, Equatable {
     case mnemonic
     case seedFromMnemonic
     case pincodeProtectingAppThatHasNothingToDoWithCryptography

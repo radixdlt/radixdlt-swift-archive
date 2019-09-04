@@ -23,10 +23,11 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct SwitchAccountScreen: View {
-    var body: some View {
-        Text("Accounts list overview")
-    }
+// MARK: - RootContent
+public enum RootContent: Int, Equatable, Swift.Identifiable {
+    case main
+
+    // Onboarding
+    case welcome, getStarted
 }

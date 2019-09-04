@@ -28,10 +28,10 @@ import Combine
 import KeychainSwift
 
 /// A type-erasing key-value store that wraps some type confirming to `KeyValueStoring`
-final class KeyValueStore<Key, SaveOptions>: ObservableObject, KeyValueStoring where Key: KeyConvertible & ExpressibleByStringLiteral, Key.StringLiteralType == String, SaveOptions: SaveOptionConvertible {
+final class KeyValueStore<Key, SaveOptions>: ObservableObject, KeyValueStoring where Key: KeyConvertible & ExpressibleByStringLiteral & Equatable, Key.StringLiteralType == String, SaveOptions: SaveOptionConvertible {
 
-    private let cancellable: Cancellable?
-    let objectWillChange = PassthroughSubject<Void, Never>()
+    private var cancellable: Cancellable?
+    let objectWillChange = PassthroughSubject<Key, Never>()
 
     private let _save: (Any, String, AnySaveOptionsConvertible) -> Void
     private let _load: (String) -> Any?
@@ -42,30 +42,75 @@ final class KeyValueStore<Key, SaveOptions>: ObservableObject, KeyValueStoring w
         _load = { concrete.loadValue(forKey: $0) }
         _delete = { concrete.deleteValue(forKey: $0) }
 
-        if concrete is UserDefaults {
-
-            cancellable = NotificationCenter.default
-                .publisher(for: UserDefaults.didChangeNotification)
-                .map { _ in () }
-                .subscribe(objectWillChange)
-
-        } else { cancellable = nil }
+//        if concrete is UserDefaults {
+//
+//            cancellable = NotificationCenter.default
+//                .publisher(for: UserDefaults.didChangeNotification)
+//                .map { _ in () }
+//                .subscribe(objectWillChange)
+//
+//        } else { cancellable = nil }
     }
 }
 
-// MARK: - AnyKeyValueStoring Conformance
 extension KeyValueStore {
+
+
+    func save<Value>(value: Value, forKey key: Key, options: SaveOptions = .default, notifyChange: Bool = true) {
+        save(value: value, forKey: key.key, saveOptions: options)
+
+        if notifyChange {
+            notifyChangeOfValue(forKey: key)
+        }
+    }
+
     func save(value: Any, forKey key: String, saveOptions: AnySaveOptionsConvertible) {
         _save(value, key, saveOptions)
-        objectWillChange.send()
+    }
+
+    func loadValue<Value>(forKey key: Key) -> Value? {
+        loadValue(forKey: key.key) as? Value
     }
 
     func loadValue(forKey key: String) -> Any? {
-        return _load(key)
+        _load(key)
+     }
+
+    func deleteValue(forKey key: Key, notifyChange: Bool = true) {
+        deleteValue(forKey: key.key)
+        if notifyChange {
+            notifyChangeOfValue(forKey: key)
+        }
     }
 
     func deleteValue(forKey key: String) {
         _delete(key)
-        objectWillChange.send()
+    }
+}
+
+private extension KeyValueStore {
+    func notifyChangeOfValue(forKey key: Key) {
+        objectWillChange.send(key)
+    }
+}
+
+extension KeyValueStore {
+    func subscribeToChangesOfValue<Value>(forKey key: Key) -> AnyPublisher<Value?, Never> {
+        return objectWillChange.filter { $0 == key }.map {
+            self.loadValue(forKey: $0)
+        }.eraseToAnyPublisher()
+    }
+
+    /// Parameter `defaultBooleanValue` is not a flag, it is a value to default to.
+    func subscribeToChangesOfBool(forKey key: Key, defaultBooleanValue: Bool = false) -> AnyPublisher<Bool, Never> {
+        subscribeToChangesOfValue(forKey: key).map { (value: Bool?) -> Bool in
+            return value ?? defaultBooleanValue
+        }.eraseToAnyPublisher()
+    }
+}
+
+extension Publisher {
+    func eraseMapToVoid() -> AnyPublisher<Void, Failure> {
+        self.map { _ in () }.eraseToAnyPublisher()
     }
 }

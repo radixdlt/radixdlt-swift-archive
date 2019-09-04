@@ -30,12 +30,11 @@ import RadixSDK
 import RxSwift
 
 struct ReceiveTransactionScreen {
-    @EnvironmentObject private var viewModel: ViewModel
-    @State private var isShowingCopiedAddressAlert = false
+    @EnvironmentObject private var radix: Radix
 }
 
 // MARK: - View
-extension ReceiveTransactionScreen: Screen {
+extension ReceiveTransactionScreen: View {
     var body: some View {
         VStack {
             Text("Your address").font(.roboto(size: 30))
@@ -50,53 +49,12 @@ extension ReceiveTransactionScreen: Screen {
 private extension ReceiveTransactionScreen {
 
     var myAddressView: some View {
-        AddressView(address: viewModel.myAddress)
+        AddressView(address: radix.myActiveAddress)
     }
 
     var qrCodeImage: some View {
-        QRCodeImage(string: viewModel.myAddressBase58String).frame(width: 300, height: 300, alignment: .center)
+        QRCodeImage(string: radix.myActiveAddress.base58String.stringValue).frame(width: 300, height: 300, alignment: .center)
     }
 }
 
-// MARK: - ViewModel
-typealias ReceiveTransactionViewModel = ReceiveTransactionScreen.ViewModel
-
-extension ReceiveTransactionScreen {
-    final class ViewModel: ObservableObject {
-
-        // MARK: Injected Properties
-        private let radixApplicationClient: RadixApplicationClient
-        private let securePersistance: SecurePersistence
-
-        // MARK: Stateful Properties
-        @Published private var myActiveAddress: Address
-
-        // MARK: Other properites
-        private let rxDisposeBag = RxSwift.DisposeBag()
-
-        init(
-            radixApplicationClient: RadixApplicationClient,
-            securePersistance: SecurePersistence
-        ) {
-            self.radixApplicationClient = radixApplicationClient
-            self.securePersistance = securePersistance
-
-            self.myActiveAddress = radixApplicationClient.addressOfActiveAccount
-
-            // Subscribe to change of address (when changing active account)
-            radixApplicationClient.observeAddressOfActiveAccount()
-                .subscribe(onNext: { [unowned self] newAddress in
-                    self.myActiveAddress = newAddress
-                })
-                .disposed(by: rxDisposeBag)
-        }
-    }
-}
-
-extension ReceiveTransactionViewModel {
-    var myAddress: Address { myActiveAddress }
-    var myAddressBase58String: String {
-        myAddress.base58String.stringValue
-    }
-}
 

@@ -26,3 +26,7 @@ import KeychainSwift
 
 /// Abstraction of Keychain
 typealias SecurePersistence = KeyValueStore<KeychainKey, KeychainSwiftAccessOptions>
+
+extension SecurePersistence {
+    static func new(nameSpace: String) -> SecurePersistence { KeyValueStore(KeychainSwift(keyPrefix: nameSpace)) }
+}

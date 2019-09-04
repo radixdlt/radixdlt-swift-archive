@@ -25,79 +25,37 @@
 import SwiftUI
 import Combine
 
-import RadixSDK
-
-import RxSwift
-
 struct SettingsScreen {
-    @EnvironmentObject private var viewModel: ViewModel
+    @EnvironmentObject private var appState: AppState
 }
 
 // MARK: - View
-extension SettingsScreen: Screen {
+extension SettingsScreen: View {
     var body: some View {
         List {
-
-            viewModel.appVersion.map { appVersion in
+            appVersion.map { appVersion in
                 Text("App version: \(appVersion)")
             }
 
-            NavigationLink(destination: viewModel.makeConnectedToNodesScreen()) {
-                Text("Connected nodes")
-            }
-
             Button("Delete wallet") {
-                self.viewModel.deleteWallet()
+                self.deleteWallet()
             }.buttonStyleRuby()
 
             Button("Clear settings") {
-                self.viewModel.clearPreferences()
+                self.clearPreferences()
             }.buttonStyleRuby()
         }
     }
 }
 
-// MARK: - ViewModel
-typealias SettingsViewModel = SettingsScreen.ViewModel
-
 extension SettingsScreen {
-    final class ViewModel: ObservableObject {
-
-        // MARK: - Injected properties
-        private let radixApplicationClient: RadixApplicationClient
-        private let preferences: Preferences
-        private let securePersistence: SecurePersistence
-        private let walletDeleted: () -> Void
-
-        // MARK: Stateful Properties
-        @Published private var connectToNode: Node?
-
-        // MARK: Other properites
-        private let rxDisposeBag = RxSwift.DisposeBag()
-
-        init(
-            radixApplicationClient: RadixApplicationClient,
-            preferences: Preferences,
-            securePersistence: SecurePersistence,
-            walletDeleted: @escaping () -> Void
-        ) {
-            self.radixApplicationClient = radixApplicationClient
-            self.preferences = preferences
-            self.securePersistence = securePersistence
-            self.walletDeleted = walletDeleted
-        }
-    }
-}
-
-extension SettingsScreen.ViewModel {
 
     func deleteWallet() {
-        securePersistence.deleteAll()
-        walletDeleted()
+        appState.update().userDid.deleteWallet()
     }
 
     func clearPreferences() {
-        preferences.deleteAll()
+        appState.update().userDid.deletePreferences()
     }
 
     var appVersion: String? {
@@ -107,18 +65,6 @@ extension SettingsScreen.ViewModel {
              let build = info["CFBundleVersion"] as? String
             else { return nil }
          return "\(version) (\(build))"
-    }
-
-    func makeConnectedToNodesViewModel() -> ConnectedToNodesViewModel {
-        .init(
-            radixApplicationClient: radixApplicationClient
-        )
-    }
-
-    func makeConnectedToNodesScreen() -> AnyScreen {
-        ConnectedToNodesScreen()
-            .environmentObject(makeConnectedToNodesViewModel())
-            .eraseToAny()
     }
 }
 

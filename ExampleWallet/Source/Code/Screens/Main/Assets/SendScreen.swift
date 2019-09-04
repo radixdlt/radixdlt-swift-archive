@@ -25,8 +25,10 @@
 import Foundation
 import SwiftUI
 
-struct SwitchAccountScreen: View {
+struct SendScreen {}
+
+extension SendScreen: View {
     var body: some View {
-        Text("Accounts list overview")
+        Text("Send screen")
     }
 }

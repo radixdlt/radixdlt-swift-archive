@@ -29,19 +29,28 @@ import Combine
 import RadixSDK
 
 struct BackUpMnemonicScreen {
-    @EnvironmentObject private var viewModel: ViewModel
+
+    private let mnemonicToBackUp: Mnemonic
+    private let isPresentingBackUpFlow: Binding<Bool>
+
+    init(mnemonicToBackUp: Mnemonic, isPresentingBackUpFlow: Binding<Bool>) {
+        self.mnemonicToBackUp = mnemonicToBackUp
+        self.isPresentingBackUpFlow = isPresentingBackUpFlow
+    }
 }
 
 // MARK: - View
-extension BackUpMnemonicScreen: Screen {
+extension BackUpMnemonicScreen: View {
     var body: some View {
         NavigationView {
             VStack {
-                List(viewModel.words) { word in
+                List(words) { word in
                     Text(word.indexedWord)
                 }.listStyle(GroupedListStyle())
 
-                NavigationLink(destination: viewModel.makeDestination()) {
+                NavigationLink(destination:
+                    ConfirmMnemonicScreen(mnemonicToBackUp: mnemonicToBackUp, isPresentingBackUpFlow: self.isPresentingBackUpFlow)
+                ) {
                     Text("Confirm").buttonStyleEmerald()
                 }
             }.navigationBarTitle("Back up mnemonic")
@@ -49,43 +58,12 @@ extension BackUpMnemonicScreen: Screen {
     }
 }
 
-// MARK: - ViewModel
-typealias BackUpMnemonicViewModel = BackUpMnemonicScreen.ViewModel
-extension BackUpMnemonicScreen {
-    final class ViewModel: ObservableObject {
-        fileprivate let securePersistence: SecurePersistence
-        private let dismissClosure: Done
-        init(securePersistence: SecurePersistence, dismiss: @escaping Done) {
-
-            self.securePersistence = securePersistence
-            self.dismissClosure = dismiss
-        }
-    }
-}
-
-private extension BackUpMnemonicScreen.ViewModel {
-    var mnemonic: Mnemonic {
-        guard let mnemonic = securePersistence.mnemonic else {
-            incorrectImplementation("Should have mnemonic")
-        }
-        return mnemonic
-    }
+private extension BackUpMnemonicScreen {
 
     var words: [MnemonicWord] {
-        return mnemonic.words.map { $0.value }.enumerated().map {
+        return mnemonicToBackUp.words.map { $0.value }.enumerated().map {
             MnemonicWord(id: $0.offset, word: $0.element)
         }
     }
 
-    func makeDestination() -> AnyScreen {
-        AnyScreen(
-            ConfirmMnemonicScreen()
-                .environmentObject(
-                    ConfirmMnemonicViewModel(
-                        securePersistence: securePersistence,
-                        dismiss: dismissClosure
-                    )
-            )
-        )
-    }
 }

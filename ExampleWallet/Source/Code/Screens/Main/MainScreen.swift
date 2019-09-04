@@ -29,18 +29,19 @@ import Combine
 import RadixSDK
 
 struct MainScreen {
-    @EnvironmentObject private var viewModel: ViewModel
+    @EnvironmentObject private var securePersistence: SecurePersistence
+    // MARK: Stateful Properties
+    @State private var isPresentingSwitchAccountModal = false
 }
 
 // MARK: - View
-extension MainScreen: Screen {
+extension MainScreen: View {
 
     var body: some View {
         TabView {
             tab(.assets) {
                 NavigationView {
-                    viewModel
-                        .assetsScreen
+                    AssetsScreen().environmentObject(securePersistence)
                         .navigationBarItems(trailing: switchAccountButton)
                 }
             }
@@ -68,83 +69,29 @@ extension MainScreen: Screen {
 
             tab(.settings) {
                 NavigationView {
-                    viewModel.settingsScreen
+                    SettingsScreen()
                 }
             }
         }
         .font(.roboto(size: 20))
         .accentColor(Color.Radix.emerald)
-        .sheet(isPresented: $viewModel.isPresentingSwitchAccountModal) {
+        .sheet(isPresented: $isPresentingSwitchAccountModal) {
             SwitchAccountScreen()
         }
     }
 }
 
+
 private extension MainScreen {
     var switchAccountButton: some View {
-        Button(action: { self.viewModel.isPresentingSwitchAccountModal = true }) {
+        Button(action: { self.isPresentingSwitchAccountModal = true }) {
             Image("Icon/Button/Profile")
         }
     }
 }
 
-// MARK: - ViewModel
-typealias MainViewModel = MainScreen.ViewModel
-extension MainScreen {
-    final class ViewModel: ObservableObject {
+// MARK: - DATA -
 
-        // MARK: Injected Properties
-        private let radixApplicationClient: RadixApplicationClient
-        private let preferences: Preferences
-        private let securePersistence: SecurePersistence
-        private let walletDeleted: () -> Void
-
-        // MARK: Stateful Properties
-        @Published fileprivate var isPresentingSwitchAccountModal = false
-
-        init(
-            radixApplicationClient: RadixApplicationClient,
-            preferences: Preferences,
-            securePersistence: SecurePersistence,
-            walletDeleted: @escaping () -> Void
-        ) {
-            self.radixApplicationClient = radixApplicationClient
-            self.preferences = preferences
-            self.securePersistence = securePersistence
-            self.walletDeleted = walletDeleted
-        }
-    }
-}
-
-// MARK: Create ViewModels
-private extension MainViewModel {
-    var settingsViewModel: SettingsViewModel {
-        .init(
-            radixApplicationClient: radixApplicationClient,
-            preferences: preferences,
-            securePersistence: securePersistence,
-            walletDeleted: walletDeleted
-        )
-    }
-
-    var assetsViewModel: AssetsViewModel {
-        .init(
-            radixApplicationClient: radixApplicationClient,
-            securePersistence: securePersistence
-        )
-    }
-}
-
-// MARK: Create Destination Screens
-private extension MainViewModel {
-    var settingsScreen: some View {
-        SettingsScreen().environmentObject(settingsViewModel)
-    }
-
-    var assetsScreen: some View {
-        AssetsScreen().environmentObject(assetsViewModel)
-    }
-}
 
 // MARK: - TabItem
 private extension MainScreen {

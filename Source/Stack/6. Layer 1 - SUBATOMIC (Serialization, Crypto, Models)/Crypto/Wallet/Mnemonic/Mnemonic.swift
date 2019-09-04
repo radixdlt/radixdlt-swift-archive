@@ -31,11 +31,35 @@ public struct Mnemonic: CustomStringConvertible {
     
     public let words: [Word]
     public let language: Language
-    
-    public init(words: [Word], language: Language) {
-        assert(Strength.supports(wordCount: words.count), "Unexpected word length")
+
+    /// Pass a trivial closure: `{ _, _ in }` to `validateChecksum` if you would like to opt-out of checksum validation.
+    public init(
+        words: [Word],
+        language: Language,
+        validateChecksum: (([Word], Language) throws -> Void) = { try Mnemonic.validateChecksummed(words: $0, language: $1) }
+    ) rethrows {
+        try validateChecksum(words, language)
+
         self.words = words
         self.language = language
+    }
+
+    @discardableResult public static func validateChecksummed(words: [Word], language: Language) throws -> Bool {
+        do {
+            return try BitcoinKit.Mnemonic.validateChecksumOf(mnemonic: words.map { $0.value }, language: language.toBitcoinKitLanguage)
+        } catch let bitcoinKitError as BitcoinKit.MnemonicError {
+            let error = Mnemonic.Error(fromBitcoinKitError: bitcoinKitError)
+            throw error
+        } catch { fatalError("unexpected error: \(error)") }
+    }
+
+    @discardableResult public static func validateChecksummedDerivingLanguage(words: [Word]) throws -> Bool {
+        do {
+            return try BitcoinKit.Mnemonic.validateChecksumDerivingLanguageOf(mnemonic: words.map { $0.value })
+        } catch let bitcoinKitError as BitcoinKit.MnemonicError {
+            let error = Mnemonic.Error(fromBitcoinKitError: bitcoinKitError)
+            throw error
+        } catch { fatalError("unexpected error: \(error)") }
     }
 }
 
@@ -56,13 +80,13 @@ extension Mnemonic: CustomDebugStringConvertible {
 // MARK: - Internal
 internal extension Mnemonic {
     init(strings: [String], language: Language) throws {
-        self.init(words: strings.map(Word.init(value:)), language: language)
+        try self.init(words: strings.map(Word.init(value:)), language: language)
     }
 }
 
 // MARK: - To BitcoinKit
 public extension Mnemonic {
     var seed: Data {
-        return BitcoinKit.Mnemonic.seed(mnemonic: words.map { $0.value })
+        BitcoinKit.Mnemonic.seed(mnemonic: words.map { $0.value }) { _ in /* no checksum validation, should be handled by UI */ }
     }
 }

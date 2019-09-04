@@ -26,20 +26,31 @@ import SwiftUI
 import Combine
 
 struct WelcomeScreen {
-    @EnvironmentObject private var viewModel: ViewModel
+    @EnvironmentObject private var appState: AppState
+
+    @State private var isPresentingTermsWebViewModal = false
+    @State private var isPresentingPrivacyWebViewModal = false
+
+    @State private var hasAgreedToTermsAndConditions = false
+    @State private var hasAgreedToPrivacyPolicy = false
 }
 
 // MARK: - View
-extension WelcomeScreen: Screen {
+extension WelcomeScreen: View {
     var body: some View {
-        NavigationView {
+
+        return NavigationView {
             VStack(spacing: 30) {
                 RadixLogo.whiteText.frame(height: 50, alignment: .center)
                 Spacer()
                 welcomeLabel
                 toggleTermsAndConditions
                 togglePrivacyPolicy
-                proceedButton
+
+                Button("Welcome.Button.Proceed") {
+                    self.proceedToWalletCreation()
+                }
+                .buttonStyleEmerald(enabled: hasAgreedToTermsAndConditions && hasAgreedToPrivacyPolicy)
             }
             .padding(.allEdgesButTop, 32)
             .background(backgroundImage)
@@ -67,22 +78,15 @@ private extension WelcomeScreen {
     }
 
     var toggleTermsAndConditions: some View {
-        Toggle(isOn: $viewModel.hasAgreedToTermsAndConditions) {
-            modalWebView(link: .terms, isPresented: $viewModel.isPresentingTermsWebViewModal)
+        Toggle(isOn: $hasAgreedToTermsAndConditions) {
+            modalWebView(link: .terms, isPresented: $isPresentingTermsWebViewModal)
         }
     }
 
     var togglePrivacyPolicy: some View {
-        Toggle(isOn: $viewModel.hasAgreedToPrivacyPolicy) {
-            modalWebView(link: .privacy, isPresented: $viewModel.isPresentingPrivacyWebViewModal)
+        Toggle(isOn: $hasAgreedToPrivacyPolicy) {
+            modalWebView(link: .privacy, isPresented: $isPresentingPrivacyWebViewModal)
         }
-    }
-
-    var proceedButton: some View {
-        Button("Welcome.Button.Proceed") {
-            self.viewModel.proceedToWalletCreation()
-        }
-        .buttonStyleEmerald(enabled: viewModel.hasAgreedToTermsAndPolicy)
     }
 }
 
@@ -97,52 +101,18 @@ private extension WelcomeScreen {
                     .font(.roboto(size: 18))
                     .underline(color: Color.Radix.forest)
                     .foregroundColor(Color.white)
-            }
-        )
-        .sheet(isPresented: isPresented) { link.screen }
-
-    }
-}
-
-// MARK: - ViewModel
-typealias WelcomeViewModel = WelcomeScreen.ViewModel
-
-extension WelcomeScreen {
-    final class ViewModel: ObservableObject {
-
-        private var cancellable: Cancellable?
-        private let preferences: Preferences
-
-        // Navigation
-        private let termsAccepted: () -> Void
-
-        @Published fileprivate var hasAgreedToTermsAndConditions = false
-        @Published fileprivate var hasAgreedToPrivacyPolicy = false
-        @Published fileprivate var isPresentingTermsWebViewModal = false
-        @Published fileprivate var isPresentingPrivacyWebViewModal = false
-
-        init(preferences: Preferences, termsHaveBeenAccepted: @escaping () -> Void) {
-            self.preferences = preferences
-            self.termsAccepted = termsHaveBeenAccepted
-
-            cancellable = Publishers.CombineLatest(
-                $hasAgreedToTermsAndConditions,
-                $hasAgreedToPrivacyPolicy
-            ).map { $0.0 && $0.1 }.sink {
-                preferences.hasAgreedToTermsAndPolicy = $0
-            }
         }
+        )
+            .sheet(isPresented: isPresented) { link.screen }
+
     }
 }
 
-extension WelcomeViewModel {
+private extension WelcomeScreen {
+
     func proceedToWalletCreation() {
-        termsAccepted()
+        appState.update().userDid.acceptTermsOfUse()
     }
-}
-
-private extension WelcomeViewModel {
-    var hasAgreedToTermsAndPolicy: Bool { preferences.hasAgreedToTermsAndPolicy }
 }
 
 // MARK: - Links
@@ -165,41 +135,42 @@ private extension WelcomeScreen.Link {
         return hyperTextLocalizedStringKey.localized()
     }
 
-    var screen: AnyScreen {
+    var screen: AnyView {
         switch self {
-        case .terms: return AnyScreen(TermsAndConditionsScreen())
-        case .privacy: return AnyScreen(PrivacyPolicyScreen())
+        case .terms: return AnyView(TermsAndConditionsScreen())
+        case .privacy: return AnyView(PrivacyPolicyScreen())
         }
     }
 }
 
 // MARK: - Preview
 
-#if DEBUG
-struct WelcomeScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            WelcomeScreen()
-                .environmentObject(Preferences.alreadyAgreedToTermsAndPolicy)
-                .environment(\.locale, Locale(identifier: "en"))
-
-            WelcomeScreen()
-                .environmentObject(Preferences.default)
-                .environment(\.locale, Locale(identifier: "en"))
-
-            WelcomeScreen()
-                .environmentObject(Preferences.default)
-                .environment(\.locale, Locale(identifier: "sv"))
-        }
-    }
-}
-
-private extension Preferences {
-    static var alreadyAgreedToTermsAndPolicy: Preferences {
-        let preferences = Preferences.default
-        preferences.hasAgreedToTermsAndPolicy = true
-        return preferences
-    }
-}
-
-#endif
+//#if DEBUG
+//struct WelcomeScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Group {
+//            WelcomeScreen()
+//                .environmentObject(Preferences.alreadyAgreedToTermsAndPolicy)
+//                .environment(\.locale, Locale(identifier: "en"))
+//
+//            WelcomeScreen()
+//                .environmentObject(Preferences.default)
+//                .environment(\.locale, Locale(identifier: "en"))
+//
+//            WelcomeScreen()
+//                .environmentObject(Preferences.default)
+//                .environment(\.locale, Locale(identifier: "sv"))
+//        }
+//    }
+//}
+//
+//private extension Preferences {
+//    static var alreadyAgreedToTermsAndPolicy: Preferences {
+//        let preferences = Preferences.default
+//        preferences.hasAgreedToTermsAndConditions = true
+//        preferences.hasAgreedToPrivacyPolicy = true
+//        return preferences
+//    }
+//}
+//
+//#endif

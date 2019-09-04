@@ -23,10 +23,29 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct SwitchAccountScreen: View {
-    var body: some View {
-        Text("Accounts list overview")
+// MARK: AppState.Update
+public extension AppState {
+    final class Update {
+
+        public let userDid: UserDid
+        public let appShould: AppShould
+
+        init(
+            preferences: Preferences,
+            securePersistence: SecurePersistence,
+            triggerNavigation: @escaping () -> Void
+        ) {
+            self.userDid = UserDid(
+                preferences: preferences,
+                securePersistence: securePersistence,
+                triggerNavigation: triggerNavigation
+            )
+
+            self.appShould = AppShould(
+                preferences: preferences,
+                securePersistence: securePersistence
+            )
+        }
     }
 }
