@@ -127,6 +127,7 @@
 		48BE0835231526D6008435F5 /* MnemonicWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE0834231526D6008435F5 /* MnemonicWord.swift */; };
 		48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */; };
 		48BE083A23152A53008435F5 /* QGrid in Frameworks */ = {isa = PBXBuildFile; productRef = 48BE083923152A53008435F5 /* QGrid */; };
+		48E1A5F7232170F1009A34C6 /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E1A5F6232170F1009A34C6 /* Wallet.swift */; };
 		48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */; };
 		48FC13232317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13222317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift */; };
 /* End PBXBuildFile section */
@@ -286,6 +287,7 @@
 		48BE08312315211F008435F5 /* MockedTokenBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedTokenBalance.swift; sourceTree = "<group>"; };
 		48BE0834231526D6008435F5 /* MnemonicWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemonicWord.swift; sourceTree = "<group>"; };
 		48BE083623152702008435F5 /* ConfirmMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmMnemonicScreen.swift; sourceTree = "<group>"; };
+		48E1A5F6232170F1009A34C6 /* Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallet.swift; sourceTree = "<group>"; };
 		48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSet_Extension.swift; sourceTree = "<group>"; };
 		48FC13222317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountInputMnemonicScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -382,6 +384,7 @@
 		4809254E230AC4240056DB28 /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				48E1A5F5232170E2009A34C6 /* Wallet */,
 				48E58F23230E83EC00E3CC86 /* Extensions */,
 				4844FC79230C4601003106AB /* Views */,
 				48BE082823151F1C008435F5 /* DataStore */,
@@ -786,6 +789,14 @@
 			path = BackUpMnemonic;
 			sourceTree = "<group>";
 		};
+		48E1A5F5232170E2009A34C6 /* Wallet */ = {
+			isa = PBXGroup;
+			children = (
+				48E1A5F6232170F1009A34C6 /* Wallet.swift */,
+			);
+			path = Wallet;
+			sourceTree = "<group>";
+		};
 		48E58F23230E83EC00E3CC86 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1066,6 +1077,7 @@
 				484DACB4231D89F100CD4E5D /* MnemonicHintView.swift in Sources */,
 				48B561ED231AE176001B8E74 /* RootContent.swift in Sources */,
 				48596A532316D118005C1804 /* Keychain+SaveOptionConvertible.swift in Sources */,
+				48E1A5F7232170F1009A34C6 /* Wallet.swift in Sources */,
 				48596A4A2316D0A2005C1804 /* NoSaveOptions.swift in Sources */,
 				4844FC74230C2182003106AB /* Color+Radix.swift in Sources */,
 				48596A332316BBB0005C1804 /* View+Extensions.swift in Sources */,

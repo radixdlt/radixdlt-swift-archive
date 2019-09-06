@@ -29,6 +29,8 @@ import Combine
 import RadixSDK
 
 struct MainScreen {
+
+    @EnvironmentObject private var radix: Radix
     @EnvironmentObject private var securePersistence: SecurePersistence
     // MARK: Stateful Properties
     @State private var isPresentingSwitchAccountModal = false
@@ -77,6 +79,7 @@ extension MainScreen: View {
         .accentColor(Color.Radix.emerald)
         .sheet(isPresented: $isPresentingSwitchAccountModal) {
             SwitchAccountScreen()
+                .environmentObject(self.radix)
         }
     }
 }

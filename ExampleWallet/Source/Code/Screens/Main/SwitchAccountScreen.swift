@@ -24,9 +24,37 @@
 
 import Foundation
 import SwiftUI
+import RadixSDK
 
-struct SwitchAccountScreen: View {
+struct SwitchAccountScreen {
+    @EnvironmentObject private var radix: Radix
+}
+
+extension SwitchAccountScreen: View {
     var body: some View {
-        Text("Accounts list overview")
+        NavigationView {
+            VStack {
+                List(radix.accounts) { account in
+                    Button("\(account.index + 1): \(account.name)") {
+                        self.switchAccount(to: account)
+                    }
+                }
+
+                Button("Add new account") {
+                    self.addNewAccount()
+                }
+            }.navigationBarTitle("Select account")
+        }
+    }
+}
+
+private extension SwitchAccountScreen {
+
+    func addNewAccount() {
+        radix.addNewAccount()
+    }
+
+    func switchAccount(to account: Account) {
+        print("Switch account to: \(account)")
     }
 }

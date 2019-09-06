@@ -25,6 +25,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import RadixSDK
 
 extension Preferences {
 
@@ -33,13 +34,14 @@ extension Preferences {
         set { save(value: newValue, forKey: .hasAgreedToTermsOfUse) }
     }
 
-    var identityAlias: String? {
+    var highestKnownHDAccountIndex: HDSubAccountAtIndex.Index {
         get {
-            return loadValue(forKey: .identityAlias)
+            loadValue(forKey: .highestKnownHDAccountIndex) ?? 0
         }
         set {
-            update(value: newValue, forKey: .identityAlias)
+            save(value: newValue, forKey: .highestKnownHDAccountIndex)
         }
     }
+
 }
 

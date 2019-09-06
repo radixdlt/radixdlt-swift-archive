@@ -44,30 +44,37 @@ public extension AppState.Update {
 // MARK: - PUBLIC
 public extension AppState.Update.AppShould {
     func connectToRadix() -> Radix {
-        Radix(client: initializeRadixApplicationClient())
-    }
-}
+        if let radix = Radix.shared {
+            return radix
+        }
 
-// MARK: - PRIVATE
-
-private extension AppState.Update.AppShould {
-    func initializeRadixApplicationClient() -> RadixApplicationClient {
         guard let seedFromMnemonic = securePersistence.seedFromMnemonic else {
             incorrectImplementation("Should have seed saved")
         }
 
-        let alias = preferences.identityAlias ?? "Unnamed"
+        let hdWallet = HDWallet(
+            seedFromMnemonic: seedFromMnemonic,
+            highestKnownAccountIndex: preferences.highestKnownHDAccountIndex
+        )
 
-        guard
-            let identity = try? AbstractIdentity(seedFromMnemonic: seedFromMnemonic, alias: alias)
-        else {
-            incorrectImplementationShouldAlwaysBeAble(to: "Create Radix Application Client")
-        }
+        let identity = AbstractIdentity(hdWallet: hdWallet)
 
-        return RadixApplicationClient(
-            bootstrapConfig: UniverseBootstrap.localhostSingleNode,
+        let radixUniverseBootstrap: BootstrapConfig = UniverseBootstrap.localhostSingleNode
+
+        let client = RadixApplicationClient(
+            bootstrapConfig: radixUniverseBootstrap,
             identity: identity
         )
+
+        let magic = radixUniverseBootstrap.config.magic
+
+        let wallet = Wallet(
+            hdWallet: hdWallet,
+            preferences: preferences
+        ) { Address(magic: magic, publicKey: $0) }
+
+        let radix = Radix(client: client, wallet: wallet)
+        Radix.shared = radix
+        return radix
     }
 }
-

@@ -30,21 +30,34 @@ import RxSwift
 public typealias Client = RadixApplicationClient
 
 public final class Radix: ObservableObject {
+    public static var shared: Radix?
 
+    // MARK: Retained here only
     private let client: Client
+    private let wallet: Wallet
 
+    // MARK: Non Retained
+//    private unowned let securePersistence: SecurePersistence
+
+    // MARK: ObservableObject
     public let objectWillChange = PassthroughSubject<Void, Never>()
-    private var cancellables = Set<AnyCancellable>()
 
+    // MARK: Mutable
     public var myActiveAddress: Address
 
-    init(client: Client) {
+    // MARK: Private
+    private var cancellables = Set<AnyCancellable>()
+
+    init(client: Client, wallet: Wallet) {
         self.client = client
+        self.wallet = wallet
         self.myActiveAddress = client.addressOfActiveAccount
 
         forward(function: Client.observeAddressOfActiveAccount) { [unowned self] myNewActiveAddress in
             self.myActiveAddress = myNewActiveAddress
         }
+
+        wallet.objectWillChange.subscribe(objectWillChange).store(in: &cancellables)
     }
 
 }
@@ -97,12 +110,30 @@ private extension Radix {
         .store(in: &cancellables)
 
     }
+
+    var identity: AbstractIdentity {
+        client.identity
+    }
 }
 
+// MARK: - Public
+public extension Radix {
+    var accounts: [Account] { wallet.accounts }
+
+    func switchAccount(to account: Account) {
+        client.change
+    }
+
+    func addNewAccount() {
+        let newAccount = wallet.addNewAccount()
+        client.identity.addAccount(newAccount)
+    }
+}
 
 // MARL: - State
 public extension Radix {
     var hasEverReceivedAnyTransactionToAnyAccount: Bool {
+        // TODO read transactions
         return true
     }
 }
