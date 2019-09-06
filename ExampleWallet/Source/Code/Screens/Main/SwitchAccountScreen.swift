@@ -36,11 +36,10 @@ extension SwitchAccountScreen: View {
         NavigationView {
             VStack {
                 List(radix.accounts) { account in
-                    Button("\(account.index + 1): \(account.name)") {
+                    AccountCell(account: account, isSelected: self.isSelected(account)) {
                         self.switchAccount(to: account)
                     }
                 }
-
                 Button("Add new account") {
                     self.addNewAccount()
                 }
@@ -56,6 +55,26 @@ private extension SwitchAccountScreen {
     }
 
     func switchAccount(to account: Account) {
-        print("Switch account to: \(account)")
+        radix.switchAccount(to: account)
+    }
+
+    func isSelected(_ account: Account) -> Bool {
+        radix.activeAccount == account
+    }
+}
+
+struct AccountCell {
+    private let account: Account
+    private let action: () -> Void
+    private let isSelected: Bool
+    init(account: Account, isSelected: Bool, action: @escaping () -> Void) {
+        self.account = account
+        self.action = action
+        self.isSelected = isSelected
+    }
+}
+extension AccountCell: View {
+    var body: some View {
+        Button("\(account.name)\(isSelected.ifTrue { " ✅" })", action: action)
     }
 }

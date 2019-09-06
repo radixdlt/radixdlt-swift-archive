@@ -43,13 +43,8 @@ public final class AbstractIdentity: CustomStringConvertible {
 
 public extension AbstractIdentity {
     /// HDWallet is NOT retained, this is just for convenience, you need to retain it yourself
-    convenience init(hdWallet: HDWallet, highestKnownAccountIndex: Int = 0) {
-        let accounts: [Account] = (0...highestKnownAccountIndex)
-            .map { HDSubAccountAtIndex.Index($0) }
-            .map { hdWallet.account(at: $0) }
-            .map { Account.privateKeyPresent($0.keyPair) }
-
-        self.init(accounts: NonEmptyArray.init(elements: accounts))
+    convenience init(hdWallet: HDWallet) {
+        self.init(accounts: NonEmptyArray(elements: hdWallet.accounts))
     }
 }
 

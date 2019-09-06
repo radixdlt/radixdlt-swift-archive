@@ -87,7 +87,9 @@ private extension ConfirmMnemonicScreen {
         Button("Confirm") {
             self.appState.update().userDid.confirmBackUpOfMnemonic()
             self.isPresentingBackUpFlow.wrappedValue = false
-        }.buttonStyleEmerald(enabled: self.viewModel.hasOrderedMnemonicWordsCorrectly)
+        }
+        .buttonStyleEmerald(enabled: self.viewModel.hasOrderedMnemonicWordsCorrectly)
+        .enabled(self.viewModel.hasOrderedMnemonicWordsCorrectly)
     }
 }
 

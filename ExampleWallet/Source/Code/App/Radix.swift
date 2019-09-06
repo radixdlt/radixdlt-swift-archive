@@ -57,7 +57,6 @@ public final class Radix: ObservableObject {
         self.wallet = wallet
 
         self.activeAccount = wallet.accountFromSimpleAccount(client.snapshotActiveAccount)
-
         forward(function: Client.observeActiveAccount) { [unowned self] myNewActive in
             self.activeAccount = wallet.accountFromSimpleAccount(myNewActive)
         }
@@ -125,9 +124,9 @@ private extension Radix {
 public extension Radix {
     var accounts: [Account] { wallet.accounts }
 
-//    func switchAccount(to selectedAccount: Account) {
-//        client.changeAccount(to: selectedAccount.toSimpleAccount())
-//    }
+    func switchAccount(to selectedAccount: Account) {
+        client.changeAccount(to: selectedAccount.toSimpleAccount())
+    }
 
     func addNewAccount() {
         let newAccount = wallet.addNewAccount()
