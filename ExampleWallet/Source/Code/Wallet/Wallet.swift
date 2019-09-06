@@ -64,6 +64,13 @@ public extension Wallet {
         let newAccount = accountFromHDAccount(hdWallet.addNewAccount())
         return newAccount
     }
+
+    func accountFromSimpleAccount(_ simpleAccount: SimpleAccount) -> Account {
+        guard let account = accounts.first(where: { $0.publicKey == simpleAccount.publicKey }) else {
+            incorrectImplementation("Discrepancu between account lists, did not find simple account: \(simpleAccount)")
+        }
+        return account
+    }
 }
 
 private extension Wallet {
@@ -83,7 +90,7 @@ private extension Wallet {
     }
 }
 
-public struct Account: Swift.Identifiable {
+public struct Account: Swift.Identifiable, Hashable {
     public let name: String
     public let address: Address
     private let account: HDSubAccountAtIndex
@@ -91,6 +98,19 @@ public struct Account: Swift.Identifiable {
         self.account = accountAtIndex
         self.address = address
         self.name = name ?? address.short
+    }
+}
+
+public extension Account {
+    static func == (lhs: Account, rhs: Account) -> Bool {
+        // ignore index but NOT address (trying to prevent user from accidently using a wrong recipient address)
+        return lhs.account == rhs.account && lhs.address == rhs.address
+    }
+
+    func hash(into hasher: inout Hasher) {
+        // ignore index
+        hasher.combine(account)
+        hasher.combine(address)
     }
 }
 
@@ -106,3 +126,9 @@ public extension Account {
     var id: Index { index }
 }
 
+public typealias SimpleAccount = RadixSDK.Account
+public extension Account {
+    func toSimpleAccount() -> SimpleAccount {
+        return SimpleAccount.privateKeyPresent(account.keyPair)
+    }
+}

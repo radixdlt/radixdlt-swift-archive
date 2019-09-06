@@ -80,6 +80,7 @@ extension MainScreen: View {
         .sheet(isPresented: $isPresentingSwitchAccountModal) {
             SwitchAccountScreen()
                 .environmentObject(self.radix)
+//                .environmentObject(SwitchAccountScreen.ViewModel(radix: self.radix))
         }
     }
 }

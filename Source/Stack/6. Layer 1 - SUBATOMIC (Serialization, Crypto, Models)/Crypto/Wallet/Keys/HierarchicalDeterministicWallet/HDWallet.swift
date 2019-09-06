@@ -26,13 +26,25 @@ import Foundation
 import BitcoinKit
 
 /// Hierarchical Deterministic ("HD") Account derived from some HD Root Key
-public final class HDSubAccountAtIndex {
+public final class HDSubAccountAtIndex: Hashable {
     public typealias Index = UInt32
     public let index: Index
     public let keyPair: KeyPair
     public init(index: UInt32, keyPair: KeyPair) {
         self.index = index
         self.keyPair = keyPair
+    }
+}
+
+public extension HDSubAccountAtIndex {
+    static func == (lhs: HDSubAccountAtIndex, rhs: HDSubAccountAtIndex) -> Bool {
+        // ignore index
+        return lhs.keyPair == rhs.keyPair
+    }
+
+    func hash(into hasher: inout Hasher) {
+        // ignore index
+        hasher.combine(keyPair)
     }
 }
 

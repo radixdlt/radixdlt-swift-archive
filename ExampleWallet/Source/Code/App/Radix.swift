@@ -43,7 +43,11 @@ public final class Radix: ObservableObject {
     public let objectWillChange = PassthroughSubject<Void, Never>()
 
     // MARK: Mutable
-    public var myActiveAddress: Address
+    public private(set) var activeAccount: Account
+
+    var myActiveAddress: Address {
+        activeAccount.address
+    }
 
     // MARK: Private
     private var cancellables = Set<AnyCancellable>()
@@ -51,10 +55,11 @@ public final class Radix: ObservableObject {
     init(client: Client, wallet: Wallet) {
         self.client = client
         self.wallet = wallet
-        self.myActiveAddress = client.addressOfActiveAccount
 
-        forward(function: Client.observeAddressOfActiveAccount) { [unowned self] myNewActiveAddress in
-            self.myActiveAddress = myNewActiveAddress
+        self.activeAccount = wallet.accountFromSimpleAccount(client.snapshotActiveAccount)
+
+        forward(function: Client.observeActiveAccount) { [unowned self] myNewActive in
+            self.activeAccount = wallet.accountFromSimpleAccount(myNewActive)
         }
 
         wallet.objectWillChange.subscribe(objectWillChange).store(in: &cancellables)
@@ -120,13 +125,13 @@ private extension Radix {
 public extension Radix {
     var accounts: [Account] { wallet.accounts }
 
-    func switchAccount(to account: Account) {
-        client.change
-    }
+//    func switchAccount(to selectedAccount: Account) {
+//        client.changeAccount(to: selectedAccount.toSimpleAccount())
+//    }
 
     func addNewAccount() {
         let newAccount = wallet.addNewAccount()
-        client.identity.addAccount(newAccount)
+        client.addAccount(newAccount.toSimpleAccount())
     }
 }
 

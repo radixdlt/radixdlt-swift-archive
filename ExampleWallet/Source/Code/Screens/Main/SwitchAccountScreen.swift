@@ -26,6 +26,7 @@ import Foundation
 import SwiftUI
 import RadixSDK
 
+
 struct SwitchAccountScreen {
     @EnvironmentObject private var radix: Radix
 }

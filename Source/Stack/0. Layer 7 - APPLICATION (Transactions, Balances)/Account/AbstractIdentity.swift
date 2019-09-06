@@ -30,11 +30,6 @@ public final class AbstractIdentity: CustomStringConvertible {
     public typealias AccountSelector = (NonEmptyArray<Account>) -> Account
     
     public private(set) var accounts: NonEmptyArray<Account>
-//    public private(set) var activeAccount: Account {
-//        didSet {
-//            accountSubject.onNext(activeAccount)
-//        }
-//    }
     private let accountSubject: BehaviorSubject<Account>
     
     public init(
@@ -73,6 +68,13 @@ public extension AbstractIdentity {
         let newActiveAccount = selector(accounts)
         accountSubject.onNext(newActiveAccount)
         return newActiveAccount
+    }
+
+    func changeAccount(to selectedAccount: Account) {
+        guard accounts.contains(selectedAccount) else {
+            incorrectImplementation("AbstractIdentity does not contain account: \(selectedAccount)")
+        }
+        accountSubject.onNext(selectedAccount)
     }
     
     var activeAccountObservable: Observable<Account> {
