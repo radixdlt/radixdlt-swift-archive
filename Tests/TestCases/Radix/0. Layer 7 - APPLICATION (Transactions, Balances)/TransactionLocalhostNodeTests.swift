@@ -307,10 +307,10 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-        let mintAndUniqueTx = Transaction {[
-            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice),
+        let mintAndUniqueTx = Transaction {
+            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice)
             PutUniqueIdAction(uniqueMaker: alice, string: "mint")
-            ]}
+        }
         
         XCTAssertTrue(
             application.send(transaction: mintAndUniqueTx)
@@ -318,10 +318,10 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
                 .blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-        let burnAndUniqueTx = Transaction {[
-            BurnTokensAction.init(tokenDefinitionReference: fooToken, amount: 5, burner: alice),
+        let burnAndUniqueTx = Transaction {
+            BurnTokensAction(tokenDefinitionReference: fooToken, amount: 5, burner: alice)
             PutUniqueIdAction(uniqueMaker: alice, string: "burn")
-            ]}
+        }
         
         XCTAssertTrue(
             application.send(transaction: burnAndUniqueTx)
@@ -329,9 +329,9 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
                 .blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-        let onlyUniqueTx = Transaction {[
+        let onlyUniqueTx = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "unique")
-            ]}
+        }
         
         XCTAssertTrue(
             application.send(transaction: onlyUniqueTx)

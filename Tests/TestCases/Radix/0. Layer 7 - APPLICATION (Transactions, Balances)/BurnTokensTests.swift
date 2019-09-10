@@ -65,15 +65,15 @@ class BurnTokensTests: LocalhostNodeTest {
             return MintTokensAction(tokenDefinitionReference: fooToken, amount: amount, minter: alice)
         }
     
-        let transaction = Transaction {[
-            createTokenAction,
-            mint(amount: 100),   // 100
-            burn(amount: 3),     // 97
-            mint(amount: 5),     // 102
-            burn(amount: 7),    // 95
-            mint(amount: 13),    // 108
-            burn(amount: 17),    // 91
-        ]}
+        let transaction = Transaction {
+            createTokenAction
+            mint(amount: 100)   // 100
+            burn(amount: 3)     // 97
+            mint(amount: 5)     // 102
+            burn(amount: 7)     // 95
+            mint(amount: 13)    // 108
+            burn(amount: 17)    // 91
+        }
         
         let result = application.send(transaction: transaction)
 
