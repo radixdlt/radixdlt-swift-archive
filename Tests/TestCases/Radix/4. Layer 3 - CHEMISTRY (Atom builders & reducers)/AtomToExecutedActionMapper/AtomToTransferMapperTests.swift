@@ -37,7 +37,7 @@ class AtomToTransferMapperTests: LocalhostNodeTest {
     
     func testAtomToTransferWithReturn() {
         
-        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity(alias: "Alice"))
+        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity())
         
         let (tokenCreation, aliceCoin) = aliceApp.createToken(supply: .fixed(to: 100))
         
@@ -67,7 +67,7 @@ class AtomToTransferMapperTests: LocalhostNodeTest {
 
     func testAtomToTransferWithoutReturn() {
 
-        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity(alias: "Alice"))
+        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity())
 
         let (tokenCreation, aliceCoin) = aliceApp.createToken(supply: .fixed(to: 100))
 

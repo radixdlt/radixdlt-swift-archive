@@ -41,7 +41,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         super.setUp()
         continueAfterFailure = false
         
-        aliceIdentity = AbstractIdentity(alias: "Alice")
+        aliceIdentity = AbstractIdentity()
         bobAccount = Account()
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount

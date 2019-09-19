@@ -26,18 +26,11 @@ import Foundation
 @testable import RadixSDK
 
 extension AbstractIdentity {
-    convenience init(privateKey: PrivateKey, alias: String? = nil) {
-        self.init(accounts: [Account(privateKey: privateKey)], alias: alias)
+    convenience init(privateKey: PrivateKey? = nil) {
+        let key = privateKey ?? PrivateKey.init()
+        self.init(accounts: [Account(privateKey: key)])
     }
-    
-    
-    #if DEBUG
-    #else
-    // used for profile tests
-    convenience init(alias: String) {
-        self.init(privateKey: .init(), alias: alias)
-    }
-    #endif
+
 }
 
 extension Account {

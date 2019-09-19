@@ -40,11 +40,11 @@ class BurnTokensTests: LocalhostNodeTest {
         super.setUp()
         continueAfterFailure = false
         
-        aliceIdentity = AbstractIdentity(alias: "Alice")
-        bobIdentity = AbstractIdentity(alias: "Bob")
+        aliceIdentity = AbstractIdentity()
+        bobIdentity = AbstractIdentity()
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobIdentity.activeAccount)
+        bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
         carolAccount = Account()
         carol = application.addressOf(account: carolAccount)
     }

@@ -29,7 +29,7 @@ import RxTest
 
 class CreateTokenTests: LocalhostNodeTest {
 
-    private let aliceIdentity = AbstractIdentity(alias: "Alice")
+    private let aliceIdentity = AbstractIdentity()
     private let bobAccount = Account()
     private let claraAccount = Account()
     private let dianaAccount = Account()
@@ -63,7 +63,7 @@ class CreateTokenTests: LocalhostNodeTest {
         let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
             actionCreateToken
-        ]
+        }
         
         application.send(transaction: transaction).blockingAssertThrows(
             error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByUniqueId(string: rri.name))
@@ -92,7 +92,7 @@ class CreateTokenTests: LocalhostNodeTest {
         let actionCreateFixedToken = application.actionCreateFixedSupplyToken(symbol: symbol)
         
         let transaction = Transaction {
-            actionCreateFixedToken,
+            actionCreateFixedToken
             application.actionCreateToken(symbol: symbol)
         }
         

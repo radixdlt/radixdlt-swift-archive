@@ -42,7 +42,7 @@ class TransferTokensTests: LocalhostNodeTest {
         super.setUp()
         continueAfterFailure = false
         
-        aliceIdentity = AbstractIdentity(alias: "Alice")
+        aliceIdentity = AbstractIdentity()
         bobAccount = Account()
         carolAccount = Account()
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)

@@ -37,7 +37,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         super.setUp()
         continueAfterFailure = false
         
-        aliceIdentity = AbstractIdentity(alias: "Alice")
+        aliceIdentity = AbstractIdentity()
         
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         
