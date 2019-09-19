@@ -60,9 +60,10 @@ class AddressesInSameUniverseTests: XCTestCase {
 
     func testTransactionSendMessageWrongUniverse() {
         let sendMessageAction = SendMessageAction(from: addressUniverse1, to: addressUniverse2, payload: .empty)
-        let transaction = Transaction {[
+
+        let transaction = Transaction {
             sendMessageAction
-        ]}
+        }
 
         let mapper = DefaultTransactionToAtomMapper(atomStore: NoStore())
         

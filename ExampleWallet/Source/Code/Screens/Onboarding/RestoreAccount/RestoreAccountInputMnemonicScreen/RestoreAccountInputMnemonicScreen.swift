@@ -40,7 +40,9 @@ extension RestoreAccountInputMnemonicScreen: View {
 
             Button("Restore") {
                 self.viewModel.confirmMnemonic()
-            }.enabled(viewModel.canConfirm)
+            }
+            .buttonStyleEmerald(enabled: viewModel.canConfirm)
+            .enabled(viewModel.canConfirm)
         }
         .alert(isPresented: $viewModel.showNonChecksummedAlert) { self.alert }
     }

@@ -30,21 +30,38 @@ import RxSwift
 public typealias Client = RadixApplicationClient
 
 public final class Radix: ObservableObject {
+    public static var shared: Radix?
 
+    // MARK: Retained here only
     private let client: Client
+    private let wallet: Wallet
 
+    // MARK: Non Retained
+//    private unowned let securePersistence: SecurePersistence
+
+    // MARK: ObservableObject
     public let objectWillChange = PassthroughSubject<Void, Never>()
+
+    // MARK: Mutable
+    public private(set) var activeAccount: Account
+
+    var myActiveAddress: Address {
+        activeAccount.address
+    }
+
+    // MARK: Private
     private var cancellables = Set<AnyCancellable>()
 
-    public var myActiveAddress: Address
-
-    init(client: Client) {
+    init(client: Client, wallet: Wallet) {
         self.client = client
-        self.myActiveAddress = client.addressOfActiveAccount
+        self.wallet = wallet
 
-        forward(function: Client.observeAddressOfActiveAccount) { [unowned self] myNewActiveAddress in
-            self.myActiveAddress = myNewActiveAddress
+        self.activeAccount = wallet.accountFromSimpleAccount(client.snapshotActiveAccount)
+        forward(function: Client.observeActiveAccount) { [unowned self] myNewActive in
+            self.activeAccount = wallet.accountFromSimpleAccount(myNewActive)
         }
+
+        wallet.objectWillChange.subscribe(objectWillChange).store(in: &cancellables)
     }
 
 }
@@ -97,12 +114,30 @@ private extension Radix {
         .store(in: &cancellables)
 
     }
+
+    var identity: AbstractIdentity {
+        client.identity
+    }
 }
 
+// MARK: - Public
+public extension Radix {
+    var accounts: [Account] { wallet.accounts }
+
+    func switchAccount(to selectedAccount: Account) {
+        client.changeAccount(to: selectedAccount.toSimpleAccount())
+    }
+
+    func addNewAccount() {
+        let newAccount = wallet.addNewAccount()
+        client.addAccount(newAccount.toSimpleAccount())
+    }
+}
 
 // MARL: - State
 public extension Radix {
     var hasEverReceivedAnyTransactionToAnyAccount: Bool {
+        // TODO read transactions
         return true
     }
 }

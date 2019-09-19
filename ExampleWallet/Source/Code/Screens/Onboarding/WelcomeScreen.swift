@@ -50,7 +50,8 @@ extension WelcomeScreen: View {
                 Button("Welcome.Button.Proceed") {
                     self.proceedToWalletCreation()
                 }
-                .buttonStyleEmerald(enabled: hasAgreedToTermsAndConditions && hasAgreedToPrivacyPolicy)
+                .enabled(canProceed) // state
+                .buttonStyleEmerald(enabled: canProceed) // coloring
             }
             .padding(.allEdgesButTop, 32)
             .background(backgroundImage)
@@ -112,6 +113,10 @@ private extension WelcomeScreen {
 
     func proceedToWalletCreation() {
         appState.update().userDid.acceptTermsOfUse()
+    }
+
+    var canProceed: Bool {
+        hasAgreedToTermsAndConditions && hasAgreedToPrivacyPolicy
     }
 }
 

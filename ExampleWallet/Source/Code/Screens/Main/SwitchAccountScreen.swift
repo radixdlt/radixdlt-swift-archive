@@ -24,9 +24,57 @@
 
 import Foundation
 import SwiftUI
+import RadixSDK
 
-struct SwitchAccountScreen: View {
+
+struct SwitchAccountScreen {
+    @EnvironmentObject private var radix: Radix
+}
+
+extension SwitchAccountScreen: View {
     var body: some View {
-        Text("Accounts list overview")
+        NavigationView {
+            VStack {
+                List(radix.accounts) { account in
+                    AccountCell(account: account, isSelected: self.isSelected(account)) {
+                        self.switchAccount(to: account)
+                    }
+                }
+                Button("Add new account") {
+                    self.addNewAccount()
+                }
+            }.navigationBarTitle("Select account")
+        }
+    }
+}
+
+private extension SwitchAccountScreen {
+
+    func addNewAccount() {
+        radix.addNewAccount()
+    }
+
+    func switchAccount(to account: Account) {
+        radix.switchAccount(to: account)
+    }
+
+    func isSelected(_ account: Account) -> Bool {
+        radix.activeAccount == account
+    }
+}
+
+struct AccountCell {
+    private let account: Account
+    private let action: () -> Void
+    private let isSelected: Bool
+    init(account: Account, isSelected: Bool, action: @escaping () -> Void) {
+        self.account = account
+        self.action = action
+        self.isSelected = isSelected
+    }
+}
+extension AccountCell: View {
+    var body: some View {
+        Button("\(account.name)\(isSelected.ifTrue { " ✅" })", action: action)
     }
 }

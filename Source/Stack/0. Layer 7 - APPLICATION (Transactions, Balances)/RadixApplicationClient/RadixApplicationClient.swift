@@ -263,13 +263,17 @@ public extension RadixApplicationClient {
 
 // MARK: ActiveAccountOwner
 public extension RadixApplicationClient {
-    var addressOfActiveAccount: Address { activeAccount.addressFromMagic(magic) }
+    var addressOfActiveAccount: Address { snapshotActiveAccount.addressFromMagic(magic) }
 
     func observeAddressOfActiveAccount() -> Observable<Address> {
         let magic = self.magic
         return identity.activeAccountObservable.map { newActiveAccount in
             return newActiveAccount.addressFromMagic(magic)
         }
+    }
+
+    func observeActiveAccount() -> Observable<Account> {
+        identity.activeAccountObservable
     }
 }
 
@@ -286,6 +290,14 @@ public extension RadixApplicationClient {
     func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
         return identity.selectAccount(accountSelector)
     }
+
+    func changeAccount(to selectedAccount: Account) {
+        identity.changeAccount(to: selectedAccount)
+    }
+
+    func addAccount(_ newAccount: Account) {
+        identity.addAccount(newAccount)
+    }
     
     func pull(address: Address) -> Disposable {
         return atomPuller.pull(address: address).subscribe()
@@ -297,11 +309,12 @@ public extension RadixApplicationClient {
 
     var observeConnectedToNodes: Observable<[Node]> { universe.connectedToNodes }
 
+    var snapshotActiveAccount: Account {
+        identity.snapshotActiveAccount
+    }
 }
 
 // MARK: - Private
 private extension RadixApplicationClient {
     var atomPuller: AtomPuller { universe.atomPuller }
-    
-    var activeAccount: Account { identity.activeAccount }
 }
