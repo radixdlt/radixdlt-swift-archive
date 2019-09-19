@@ -129,11 +129,7 @@ public extension EUID {
 
 // MARK: - Public
 public extension EUID {
-    
-    func toHexString() -> HexString {
-        return value.toHexString()
-    }
-    
+        
     /// Converting the Int128 value of this EUID to a `Shard`, being the 64 most significant bits, converted to bigEndian.
     var shard: Shard {
         let halfByteCount = EUID.byteCount / 2

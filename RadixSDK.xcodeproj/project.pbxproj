@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480484172333BCEC0085225F /* IndependentTransactionToAtomMapper.swift */; };
 		4867B340231825F10018367E /* Mnemonic+WordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4867B33F231825F10018367E /* Mnemonic+WordList.swift */; };
 		48A33DF523085A8400626090 /* CryptoKitSha256Hasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */; };
 		48A33DF723085A9E00626090 /* Sha512TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF623085A9E00626090 /* Sha512TwiceHasher.swift */; };
@@ -660,6 +661,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		480484172333BCEC0085225F /* IndependentTransactionToAtomMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndependentTransactionToAtomMapper.swift; sourceTree = "<group>"; };
 		4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "SwiftUI-Wallet.xcodeproj"; path = "SwiftUI-Wallet/SwiftUI-Wallet.xcodeproj"; sourceTree = "<group>"; };
 		4867B33F231825F10018367E /* Mnemonic+WordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mnemonic+WordList.swift"; sourceTree = "<group>"; };
 		48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitSha256Hasher.swift; sourceTree = "<group>"; };
@@ -1841,6 +1843,7 @@
 			isa = PBXGroup;
 			children = (
 				E6340C9122FC4E140044BA97 /* NoStore.swift */,
+				480484172333BCEC0085225F /* IndependentTransactionToAtomMapper.swift */,
 			);
 			path = Mappers;
 			sourceTree = "<group>";
@@ -4863,6 +4866,7 @@
 				E605544D23058AA100528510 /* ParticleSet.swift in Sources */,
 				E6E27A2B2271CE250067D46E /* TooLongDescriptionTests.swift in Sources */,
 				E69D851822F4818F0039A207 /* MintTokensTests.swift in Sources */,
+				480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6E27A3F2271CE250067D46E /* CBOREncodingPrimitivesIntTests.swift in Sources */,
 				E621BE8622983DCD00E97542 /* AtomIdentifierTests.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
