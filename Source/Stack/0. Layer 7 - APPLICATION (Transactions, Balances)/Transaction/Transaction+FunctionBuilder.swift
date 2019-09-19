@@ -24,44 +24,54 @@
 
 import Foundation
 
-public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStringConvertible {
-    
-    public let uuid: UUID
-    public let sentAt: Date
-    public let actions: [UserAction]
-    
-    fileprivate init(
-        uuid: UUID = .init(),
-        sentAt: Date = .init(),
-        userActions actions: [UserAction]
+// MARK: - Void builder
+public extension Transaction {
+    @_functionBuilder
+    struct VoidBuilder {
+        static func buildBlock(_ userAction: UserAction) -> UserAction {
+            return userAction
+        }
+
+        static func buildBlock(_ userActions: UserAction...) -> [UserAction] {
+            return userActions
+        }
+    }
+}
+
+// MARK: - Transaction From VoidBuilder
+public extension Transaction {
+    init(@Transaction.VoidBuilder makeActions: () -> [UserAction]) {
+        self.init(actions: makeActions())
+    }
+
+    init(@Transaction.VoidBuilder makeAction: () -> UserAction) {
+        self.init(actions: [makeAction()])
+    }
+}
+
+// MARK: - TokenContextBuilder
+public extension Transaction {
+    @_functionBuilder
+    struct TokenContextBuilder {
+
+        static func buildBlock(_ userActionMaking: UserActionMaking...) -> [UserActionMaking] {
+            return userActionMaking
+        }
+    }
+}
+
+// MARK: Transaction From TokenContextBuilder
+public extension Transaction {
+    init(
+        _ tokenContext: TokenContext,
+        
+        @Transaction.TokenContextBuilder
+        makeListOfUserActionMaking: () -> [UserActionMaking]
     ) {
-        self.uuid = uuid
-        self.sentAt = sentAt
-        self.actions = actions
+
+        let userActions: [UserAction] = makeListOfUserActionMaking().map { $0.makeSomeUserAction(tokenContext: tokenContext) }
+
+        self.init(actions: userActions)
     }
 }
 
-public extension Transaction {
-    init(actions: [UserAction]) {
-        self.init(userActions: actions)
-    }
-
-    init(_ actions: UserAction...) {
-        self.init(actions: actions)
-    }
-}
-
-// MARK: ArrayConvertible
-public extension Transaction {
-    typealias Element = UserAction
-    var elements: [Element] { return actions }
-}
-
-public extension Transaction {
-    var description: String {
-        let actionsString = actions.map { $0.nameOfAction.rawValue }.joined(separator: ", ")
-        return """
-        Transaction(actions: \(actionsString))
-        """
-    }
-}

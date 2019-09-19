@@ -65,7 +65,7 @@ class AddressesInSameUniverseTests: XCTestCase {
             sendMessageAction
         }
 
-        let mapper = DefaultTransactionToAtomMapper(atomStore: NoStore())
+        let mapper = DefaultTransactionToAtomMapper(atomStore: HardCodedAtomStore())
         
         XCTAssertThrowsError(try mapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressUniverse1), "foo") { anyError in
             guard

@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,25 +24,7 @@
 
 import Foundation
 
-public struct BurnTokensAction: ConsumeTokensAction {
-    public let tokenDefinitionReference: ResourceIdentifier
-    public let amount: PositiveAmount
-    public let burner: Address
-
-    public init(
-        tokenDefinitionReference: ResourceIdentifier,
-        amount: PositiveAmount,
-        burner: Address
-    ) {
-        self.tokenDefinitionReference = tokenDefinitionReference
-        self.amount = amount
-        self.burner = burner
-    }
-}
-
-public extension BurnTokensAction {
-    
-    var user: Address { return burner }
-    var nameOfAction: UserActionName { return .burnTokens }
-    var identifierForTokenToConsume: ResourceIdentifier { return tokenDefinitionReference }
+public struct TokenContext {
+    let rri: ResourceIdentifier
+    let actor: Address
 }
