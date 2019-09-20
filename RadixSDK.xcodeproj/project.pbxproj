@@ -210,12 +210,14 @@
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
 		E6533FE422BA63950068B07D /* Starscream.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E6533FE522BA65530068B07D /* localnet.json in Resources */ = {isa = PBXBuildFile; fileRef = E637565922BA2C6A00C4F9A2 /* localnet.json */; };
 		E654778922BFB3B700D968BD /* BootstrapConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E654778822BFB3B700D968BD /* BootstrapConfig.swift */; };
 		E654778B22BFB3C500D968BD /* UniverseBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E654778A22BFB3C500D968BD /* UniverseBootstrap.swift */; };
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E65C149922AECB6A006FA121 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65C149822AECB6A006FA121 /* NumberOfLeadingZeroBitsInDataTests.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
+		E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */; };
+		E6638CE823351C70004C9846 /* URLFormatterFailingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279A72271CE250067D46E /* URLFormatterFailingTests.swift */; };
+		E6638CE923351C77004C9846 /* URLFormatterSuccessfulTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279A82271CE250067D46E /* URLFormatterSuccessfulTests.swift */; };
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
 		E67129A322C2289C004F6D0A /* Consumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A222C2289C004F6D0A /* Consumer.swift */; };
 		E67129A522C228AE004F6D0A /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A422C228AE004F6D0A /* Reducer.swift */; };
@@ -376,7 +378,6 @@
 		E6D4B36922400F41004FC83A /* SetAlgebra+Intersecting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B36822400F41004FC83A /* SetAlgebra+Intersecting.swift */; };
 		E6DC275F22C3FDFB0049BB3C /* TokenDefinitionsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DC275E22C3FDFB0049BB3C /* TokenDefinitionsState.swift */; };
 		E6DC276522C4C7650049BB3C /* TokenReferenceBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DC276422C4C7650049BB3C /* TokenReferenceBalance.swift */; };
-		E6DC276622C4CDC80049BB3C /* WebsocketTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279B52271CE250067D46E /* WebsocketTest.swift */; };
 		E6E279212271CD1C0067D46E /* ECIES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278762271CD1C0067D46E /* ECIES.swift */; };
 		E6E279222271CD1C0067D46E /* SecureGenerateBytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278782271CD1C0067D46E /* SecureGenerateBytes.swift */; };
 		E6E279232271CD1C0067D46E /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278792271CD1C0067D46E /* Status.swift */; };
@@ -543,7 +544,6 @@
 		E6E27A432271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279F02271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift */; };
 		E6E27A442271CE250067D46E /* TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279F12271CE250067D46E /* TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift */; };
 		E6E27A452271CE250067D46E /* AtomTooBigDSONEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279F42271CE250067D46E /* AtomTooBigDSONEncodingTests.swift */; };
-		E6E27A462271CE250067D46E /* SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279F52271CE250067D46E /* SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift */; };
 		E6E27A472271CE250067D46E /* DsonEncodingTokenDefinitionParticleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279F72271CE250067D46E /* DsonEncodingTokenDefinitionParticleTests.swift */; };
 		E6E27A482271CE250067D46E /* BigUnsignedIntHexConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279FA2271CE250067D46E /* BigUnsignedIntHexConversionTests.swift */; };
 		E6E27A492271CE250067D46E /* ResourceIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279FC2271CE250067D46E /* ResourceIdentifierTests.swift */; };
@@ -792,7 +792,6 @@
 		E626E21122B4F7EF0046D2AC /* StatefulActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E6296C8A2292EF6000753FD5 /* AnyDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
 		E6296C8C229455CB00753FD5 /* StringAnyDictionary+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringAnyDictionary+Decodable.swift"; sourceTree = "<group>"; };
-		E6296C952296F2FB00753FD5 /* SubscriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionTests.swift; sourceTree = "<group>"; };
 		E62C030B220491CD001F27DE /* Sequence_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence_Extension.swift; sourceTree = "<group>"; };
 		E62EFDB82248F9B600B6DAD6 /* betanet.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = betanet.json; sourceTree = "<group>"; };
 		E62EFDBD22490BA900B6DAD6 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
@@ -873,6 +872,7 @@
 		E6550EE4224BB02900160267 /* Int+DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataInitializable.swift"; sourceTree = "<group>"; };
 		E65C149822AECB6A006FA121 /* NumberOfLeadingZeroBitsInDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberOfLeadingZeroBitsInDataTests.swift; sourceTree = "<group>"; };
 		E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+AsArray.swift"; sourceTree = "<group>"; };
+		E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalhostNodeTest.swift; sourceTree = "<group>"; };
 		E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStatusChecking.swift; sourceTree = "<group>"; };
 		E67129A222C2289C004F6D0A /* Consumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consumer.swift; sourceTree = "<group>"; };
 		E67129A422C228AE004F6D0A /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
@@ -1152,15 +1152,8 @@
 		E6E2791A2271CD1C0067D46E /* ValidValueInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidValueInitializable.swift; sourceTree = "<group>"; };
 		E6E2791B2271CD1C0067D46E /* StringInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringInitializable.swift; sourceTree = "<group>"; };
 		E6E279202271CD1C0067D46E /* Throwing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Throwing.swift; sourceTree = "<group>"; };
-		E6E279A52271CE250067D46E /* NodeDiscoveryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeDiscoveryTests.swift; sourceTree = "<group>"; };
 		E6E279A72271CE250067D46E /* URLFormatterFailingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLFormatterFailingTests.swift; sourceTree = "<group>"; };
 		E6E279A82271CE250067D46E /* URLFormatterSuccessfulTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLFormatterSuccessfulTests.swift; sourceTree = "<group>"; };
-		E6E279B12271CE250067D46E /* GetLivePeersOverWebSocketsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetLivePeersOverWebSocketsTest.swift; sourceTree = "<group>"; };
-		E6E279B22271CE250067D46E /* GetUniverseOverWebSocketsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetUniverseOverWebSocketsTest.swift; sourceTree = "<group>"; };
-		E6E279B32271CE250067D46E /* GetBalanceOverWebSocketsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetBalanceOverWebSocketsTest.swift; sourceTree = "<group>"; };
-		E6E279B42271CE250067D46E /* SubmitAtomOverWebSocketsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitAtomOverWebSocketsTest.swift; sourceTree = "<group>"; };
-		E6E279B52271CE250067D46E /* WebsocketTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsocketTest.swift; sourceTree = "<group>"; };
-		E6E279B62271CE250067D46E /* GetAtomsOverWebSocketsTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetAtomsOverWebSocketsTest.swift; sourceTree = "<group>"; };
 		E6E279BA2271CE250067D46E /* EmptyAtomSignatureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyAtomSignatureTests.swift; sourceTree = "<group>"; };
 		E6E279BD2271CE250067D46E /* ECIESDecryptMessageFromJavaLibraryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIESDecryptMessageFromJavaLibraryTests.swift; sourceTree = "<group>"; };
 		E6E279BE2271CE250067D46E /* ECIESDecryptMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIESDecryptMessageTests.swift; sourceTree = "<group>"; };
@@ -1200,7 +1193,6 @@
 		E6E279F02271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomWithTrivialMetaDataDsonEncodingTests.swift; sourceTree = "<group>"; };
 		E6E279F12271CE250067D46E /* TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift; sourceTree = "<group>"; };
 		E6E279F42271CE250067D46E /* AtomTooBigDSONEncodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomTooBigDSONEncodingTests.swift; sourceTree = "<group>"; };
-		E6E279F52271CE250067D46E /* SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift; sourceTree = "<group>"; };
 		E6E279F72271CE250067D46E /* DsonEncodingTokenDefinitionParticleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DsonEncodingTokenDefinitionParticleTests.swift; sourceTree = "<group>"; };
 		E6E279FA2271CE250067D46E /* BigUnsignedIntHexConversionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BigUnsignedIntHexConversionTests.swift; sourceTree = "<group>"; };
 		E6E279FC2271CE250067D46E /* ResourceIdentifierTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceIdentifierTests.swift; sourceTree = "<group>"; };
@@ -1711,6 +1703,7 @@
 				E6CEE70921F5AE5300D745EC /* Convenience */,
 				E6D325AA21EE377500851F4E /* TestExtensions */,
 				E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */,
+				E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -1718,7 +1711,7 @@
 		E620AB5521E7874300B36EC2 /* TestCases */ = {
 			isa = PBXGroup;
 			children = (
-				E6E279A22271CE250067D46E /* Radix */,
+				E65CA9D423351AE6003435FD /* Radix */,
 				E631DAAB21F24D570063F632 /* ThirdParty */,
 			);
 			path = TestCases;
@@ -2088,6 +2081,38 @@
 				E689DBBC225F9B6700340CF3 /* URLFormatter.swift */,
 			);
 			path = Node;
+			sourceTree = "<group>";
+		};
+		E65CA9D423351AE6003435FD /* Radix */ = {
+			isa = PBXGroup;
+			children = (
+				E65CA9D523351AF0003435FD /* Online */,
+				E6E279A22271CE250067D46E /* Offine */,
+			);
+			path = Radix;
+			sourceTree = "<group>";
+		};
+		E65CA9D523351AF0003435FD /* Online */ = {
+			isa = PBXGroup;
+			children = (
+				E65CA9D623351B13003435FD /* 0. Layer 7 - APPLICATION */,
+			);
+			path = Online;
+			sourceTree = "<group>";
+		};
+		E65CA9D623351B13003435FD /* 0. Layer 7 - APPLICATION */ = {
+			isa = PBXGroup;
+			children = (
+				E6725647228AE98F004631F1 /* TransferTokensTests.swift */,
+				E68DFA2F22FC58320050F69E /* PutIniqueActionTests.swift */,
+				E69E753322A294D800AC631B /* SendMessageTests.swift */,
+				E60553FB230197C600528510 /* TransactionLocalhostNodeTests.swift */,
+				E69D851E22F7555E0039A207 /* BurnTokensTests.swift */,
+				E69D851722F4818F0039A207 /* MintTokensTests.swift */,
+				E63B207522FDB45E00D6FF79 /* CreateTokenTests.swift */,
+				E6F548382277022500EE6311 /* GetTokenBalanceTests.swift */,
+			);
+			path = "0. Layer 7 - APPLICATION";
 			sourceTree = "<group>";
 		};
 		E672562A228AB284004631F1 /* Radix */ = {
@@ -3542,18 +3567,17 @@
 			path = Protocools;
 			sourceTree = "<group>";
 		};
-		E6E279A22271CE250067D46E /* Radix */ = {
+		E6E279A22271CE250067D46E /* Offine */ = {
 			isa = PBXGroup;
 			children = (
 				E6E279AA2271CE250067D46E /* 0. Layer 7 - APPLICATION (Transactions, Balances) */,
 				E6E27A092271CE250067D46E /* 1. Layer 6 - LEDGER (Submit & subscribe atoms) */,
 				E6E279A32271CE250067D46E /* 2. Layer 5 - UNIVERSE (Universe, Node) */,
-				E6E279AD2271CE250067D46E /* 3. Layer 4 - NETWORKING (Rpc, Http, WS) */,
 				E6E27A0D2271CE250067D46E /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */,
 				E6E27A0B2271CE250067D46E /* 5. Layer 2 - ATOM MODEL (Particles) */,
 				E6E279B72271CE250067D46E /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */,
 			);
-			path = Radix;
+			path = Offine;
 			sourceTree = "<group>";
 		};
 		E6E279A32271CE250067D46E /* 2. Layer 5 - UNIVERSE (Universe, Node) */ = {
@@ -3569,7 +3593,6 @@
 		E6E279A42271CE250067D46E /* NodeDiscovery */ = {
 			isa = PBXGroup;
 			children = (
-				E6E279A52271CE250067D46E /* NodeDiscoveryTests.swift */,
 			);
 			path = NodeDiscovery;
 			sourceTree = "<group>";
@@ -3594,45 +3617,8 @@
 			isa = PBXGroup;
 			children = (
 				E61EB99A22D75B2E007826D3 /* OfflineTests */,
-				E6F548382277022500EE6311 /* GetTokenBalanceTests.swift */,
-				E6725647228AE98F004631F1 /* TransferTokensTests.swift */,
-				E63B207522FDB45E00D6FF79 /* CreateTokenTests.swift */,
-				E69D851722F4818F0039A207 /* MintTokensTests.swift */,
-				E68DFA2F22FC58320050F69E /* PutIniqueActionTests.swift */,
-				E69D851E22F7555E0039A207 /* BurnTokensTests.swift */,
-				E60553FB230197C600528510 /* TransactionLocalhostNodeTests.swift */,
-				E69E753322A294D800AC631B /* SendMessageTests.swift */,
 			);
 			path = "0. Layer 7 - APPLICATION (Transactions, Balances)";
-			sourceTree = "<group>";
-		};
-		E6E279AD2271CE250067D46E /* 3. Layer 4 - NETWORKING (Rpc, Http, WS) */ = {
-			isa = PBXGroup;
-			children = (
-				E6E279AF2271CE250067D46E /* 0. Sublayer B - TRANSPORT (RPC, REST) */,
-			);
-			path = "3. Layer 4 - NETWORKING (Rpc, Http, WS)";
-			sourceTree = "<group>";
-		};
-		E6E279AF2271CE250067D46E /* 0. Sublayer B - TRANSPORT (RPC, REST) */ = {
-			isa = PBXGroup;
-			children = (
-				E6E279B02271CE250067D46E /* RPC */,
-			);
-			path = "0. Sublayer B - TRANSPORT (RPC, REST)";
-			sourceTree = "<group>";
-		};
-		E6E279B02271CE250067D46E /* RPC */ = {
-			isa = PBXGroup;
-			children = (
-				E6E279B12271CE250067D46E /* GetLivePeersOverWebSocketsTest.swift */,
-				E6E279B22271CE250067D46E /* GetUniverseOverWebSocketsTest.swift */,
-				E6E279B32271CE250067D46E /* GetBalanceOverWebSocketsTest.swift */,
-				E6E279B42271CE250067D46E /* SubmitAtomOverWebSocketsTest.swift */,
-				E6E279B52271CE250067D46E /* WebsocketTest.swift */,
-				E6E279B62271CE250067D46E /* GetAtomsOverWebSocketsTest.swift */,
-			);
-			path = RPC;
 			sourceTree = "<group>";
 		};
 		E6E279B72271CE250067D46E /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */ = {
@@ -3833,7 +3819,6 @@
 			isa = PBXGroup;
 			children = (
 				E6E279F42271CE250067D46E /* AtomTooBigDSONEncodingTests.swift */,
-				E6E279F52271CE250067D46E /* SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift */,
 				E62F352D2272051100B6779A /* TrivialAtomToDsonTests.swift */,
 			);
 			path = Atom;
@@ -3926,7 +3911,6 @@
 		E6E27A092271CE250067D46E /* 1. Layer 6 - LEDGER (Submit & subscribe atoms) */ = {
 			isa = PBXGroup;
 			children = (
-				E6296C952296F2FB00753FD5 /* SubscriptionTests.swift */,
 			);
 			path = "1. Layer 6 - LEDGER (Submit & subscribe atoms)";
 			sourceTree = "<group>";
@@ -4289,7 +4273,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E62EFDBA2248F9B600B6DAD6 /* betanet.json in Resources */,
-				E6533FE522BA65530068B07D /* localnet.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4804,7 +4787,6 @@
 				E69E753422A294D800AC631B /* SendMessageTests.swift in Sources */,
 				E605544B23058A6600528510 /* OrderedSet.swift in Sources */,
 				E6CABA1B22D61E4300B6D00C /* TokenDefinitionsStateReducerTests.swift in Sources */,
-				E6DC276622C4CDC80049BB3C /* WebsocketTest.swift in Sources */,
 				E69E754122A97E0400AC631B /* AmountAndGranularityTests.swift in Sources */,
 				E6E27A342271CE250067D46E /* GranularityNegativeTests.swift in Sources */,
 				E6055449230553E600528510 /* Test+Convenience+Models.swift in Sources */,
@@ -4823,7 +4805,6 @@
 				E63B207622FDB45E00D6FF79 /* CreateTokenTests.swift in Sources */,
 				E6E27A522271CE250067D46E /* TokenBalanceReducerTests.swift in Sources */,
 				E6E27A402271CE250067D46E /* CBOREncodingPrimitivesStringTests.swift in Sources */,
-				E6E27A462271CE250067D46E /* SigningAtomWithPowResultsInDifferentDsonAsWithoutPowTests.swift in Sources */,
 				E69E754422A9891200AC631B /* DecimalStringTests.swift in Sources */,
 				E6E27A222271CE250067D46E /* HashTests.swift in Sources */,
 				E61EB99C22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */,
@@ -4856,10 +4837,12 @@
 				E6E27A312271CE250067D46E /* TooLongAddressTests.swift in Sources */,
 				E6E27A242271CE250067D46E /* AtomJsonSerializationTrivialTests.swift in Sources */,
 				E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */,
+				E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */,
 				48E2A6BD230EB92E00042C16 /* AddressesInSameUniverseTests.swift in Sources */,
 				E6E27A432271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift in Sources */,
 				E6E27A4A2271CE250067D46E /* GranularityTests.swift in Sources */,
 				E6E27A382271CE250067D46E /* AtomJsonDeserializationUnallocatedTokenBadValuesTests.swift in Sources */,
+				E6638CE823351C70004C9846 /* URLFormatterFailingTests.swift in Sources */,
 				E6E27A232271CE250067D46E /* AtomJsonSerializationTwoParticleGroupsTests.swift in Sources */,
 				E6E27A4B2271CE250067D46E /* SignedAmountTests.swift in Sources */,
 				E6E27A2E2271CE250067D46E /* AddressInvalidChecksumTests.swift in Sources */,
@@ -4873,6 +4856,7 @@
 				E6E27A1E2271CE250067D46E /* ECIESDecryptMessageFromJavaLibraryTests.swift in Sources */,
 				E6E27A3C2271CE250067D46E /* DSONEncodingExampleMapTests.swift in Sources */,
 				E68BD823229EDA2000FCE4D3 /* SendMessageActionToParticleGroupsMapperTests.swift in Sources */,
+				E6638CE923351C77004C9846 /* URLFormatterSuccessfulTests.swift in Sources */,
 				E6E27A332271CE250067D46E /* NonBase58AddressTests.swift in Sources */,
 				E6F5484E227735AF00EE6311 /* CompareAnyAmountWithAnyAmountTests.swift.swift in Sources */,
 				E6E27A1C2271CE250067D46E /* EmptyAtomSignatureTests.swift in Sources */,

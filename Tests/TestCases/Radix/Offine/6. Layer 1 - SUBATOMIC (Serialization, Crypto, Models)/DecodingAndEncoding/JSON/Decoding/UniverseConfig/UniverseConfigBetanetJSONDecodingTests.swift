@@ -28,44 +28,60 @@ import XCTest
 class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
     
 //    private var betanet: UniverseConfig?
-//    private var localnet: UniverseConfig?
+    private var localnet: UniverseConfig?
     
     /*  Run Before Each Test */
     override func setUp() {
         super.setUp()
         
 //        betanet = configWithName("betanet")
-//        localnet = configWithName("localnet")
+        localnet = configWithName("localnet")
     }
     
-//    func testUniverses() {
-//        func doTest(config: UniverseConfig?, expectedUniverseConfigHashId: HashEUID) {
-//            guard let config = config else {
-//                return XCTFail("Config was nil")
-//            }
-//            // Waiting on bug fix for Jackson: https://github.com/cbor/cbor.github.io/issues/49
-//            // The Java lib produces incorrect hashEUID for any data containing a Message particle
-//            // which serializer `"radix.particles.message"` gets incorrectly CBOR encoded.
-//
-//            guard let hashIdFromApi = config.hashIdFromApi else { return XCTFail("should have hashId") }
-//
-//            XCTAssertAllEqual(
-//                config.hashEUID,
-//                hashIdFromApi,
-//                expectedUniverseConfigHashId
-//            )
-//
-//
-//            guard let rriParticle = config.genesis.particles().compactMap({ $0 as? ResourceIdentifierParticle }).first else {
-//                return XCTFail("No RRI particle")
-//            }
-//            XCTAssertEqual(rriParticle.resourceIdentifier.name, "XRD")
-//
-//        }
-//
-//        doTest(config: betanet, expectedUniverseConfigHashId: "e5e1315128b3f81fcee080b3b404a77c")
-//        doTest(config: localnet, expectedUniverseConfigHashId: "21b265b596d4434b269a02018ecc7aec")
+    func testLocalnetConfigHashIdMatchesBundled() {
+        let config: UniverseConfig = .localnet
+        XCTAssertEqual(
+            config.hashIdFromApi,
+            config.hashEUID
+        )
+    }
+    
+//    func testBetanetConfigHashIdMatchesBundled() {
+//        let config: UniverseConfig = .betanet
+//        XCTAssertEqual(
+//            config.hashIdFromApi,
+//            config.hashEUID
+//        )
 //    }
+//
+    func testUniverses() {
+        func doTest(config: UniverseConfig?, expectedUniverseConfigHashId: HashEUID) {
+            guard let config = config else {
+                return XCTFail("Config was nil")
+            }
+            // Waiting on bug fix for Jackson: https://github.com/cbor/cbor.github.io/issues/49
+            // The Java lib produces incorrect hashEUID for any data containing a Message particle
+            // which serializer `"radix.particles.message"` gets incorrectly CBOR encoded.
+
+            guard let hashIdFromApi = config.hashIdFromApi else { return XCTFail("should have hashId") }
+
+            XCTAssertAllEqual(
+                config.hashEUID,
+                hashIdFromApi,
+                expectedUniverseConfigHashId
+            )
+
+
+            guard let rriParticle = config.genesis.particles().compactMap({ $0 as? ResourceIdentifierParticle }).first else {
+                return XCTFail("No RRI particle")
+            }
+            XCTAssertEqual(rriParticle.resourceIdentifier.name, "XRD")
+
+        }
+
+//        doTest(config: betanet, expectedUniverseConfigHashId: "e5e1315128b3f81fcee080b3b404a77c")
+        doTest(config: localnet, expectedUniverseConfigHashId: "b7c1e2d7af699ec5c215e05431c41403")
+    }
     
     func testAtomAid() {
         guard let atom = decodeOrFail(jsonString: json, to: Atom.self) else { return }
@@ -79,63 +95,79 @@ class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
         XCTAssertEqual(atom.identifier(), "126fd230a7cab9d9766f1065d498c4ac80ad2b754af1889fb1cd0a4eb6d1cea5")
     }
  
-//    func testMessageParticle() {
-//        doTest(expectedHashId: "e84075aae7629f002f69bd2fc02d19f1", particleType: MessageParticle.self) {
-//            """
-//            {
-//                "bytes": ":byt:UmFkaXguLi4ganVzdCBpbWFnaW5lIQ==",
-//                "destinations": [
-//                    ":uid:56abab3870585f04d015d55adf600bc7"
-//                ],
-//                "serializer": "radix.particles.message",
-//                "from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-//                "to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-//                "version": 100,
-//                "nonce": 1011792898924806
-//            }
-//            """
-//        }
-//    }
-//
-//    func testRriParticle() {
-//        doTest(expectedHashId: "ce31e1c05ff5b8f09cdd7ea23b9ba0c1", particleType: ResourceIdentifierParticle.self) {
-//            """
-//            {
-//                "destinations": [
-//                    ":uid:56abab3870585f04d015d55adf600bc7"
-//                ],
-//                "rri": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
-//                "serializer": "radix.particles.rri",
-//                "version": 100,
-//                "nonce": 0
-//            }
-//            """
-//        }
-//    }
-//
-//    func testTokenDefinitionParticle() {
-//        doTest(expectedHashId: "eca1b185226c606815f534ced6b2c704", particleType: MutableSupplyTokenDefinitionParticle.self) {
-//            """
-//            {
-//                "symbol": ":str:XRD",
-//                "address": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-//                "granularity": ":u20:1",
-//                "permissions": {
-//                    "burn": ":str:none",
-//                    "mint": ":str:token_owner_only"
-//                },
-//                "destinations": [
-//                    ":uid:56abab3870585f04d015d55adf600bc7"
-//                ],
-//                "name": ":str:Rads",
-//                "serializer": "radix.particles.token_definition",
-//                "description": ":str:Radix Native Tokens",
-//                "iconUrl": ":str:https://assets.radixdlt.com/icons/icon-xrd-32x32.png",
-//                "version": 100
-//            }
-//            """
-//        }
-//    }
+    func testMessageParticle() {
+        doTest(expectedHashId: "d976d16a3058930eb72d8c8f4115e343", particleType: MessageParticle.self) {
+            """
+            {
+                "bytes": ":byt:UmFkaXguLi4ganVzdCBpbWFnaW5lIQ==",
+                "destinations": [
+                    ":uid:56abab3870585f04d015d55adf600bc7"
+                ],
+                "serializer": "radix.particles.message",
+                "from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                "to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                "version": 100,
+                "nonce": 982125088533081
+            }
+            """
+        }
+    }
+
+    func testRriParticle() {
+        doTest(expectedHashId: "ce31e1c05ff5b8f09cdd7ea23b9ba0c1", particleType: ResourceIdentifierParticle.self) {
+            """
+            {
+                "destinations": [
+                    ":uid:56abab3870585f04d015d55adf600bc7"
+                ],
+                "rri": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
+                "serializer": "radix.particles.rri",
+                "version": 100,
+                "nonce": 0
+            }
+            """
+        }
+    }
+
+    func testTokenDefinitionParticle() {
+        doTest(expectedHashId: "9ba72f1e2867aaf9c6e63cd553396ea2", particleType: FixedSupplyTokenDefinitionParticle.self) {
+            """
+            {
+                "granularity": ":u20:1",
+                "destinations": [
+                    ":uid:56abab3870585f04d015d55adf600bc7"
+                ],
+                "rri": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
+                "name": ":str:Rads",
+                "serializer": "radix.particles.fixed_supply_token_definition",
+                "description": ":str:Radix Native Tokens",
+                "iconUrl": ":str:https://assets.radixdlt.com/icons/icon-xrd-32x32.png",
+                "version": 100,
+                "supply": ":u20:1000000000000000000000000000"
+            }
+            """
+        }
+    }
+    
+    func testTransferrableTokensParticle() {
+        doTest(expectedHashId: "9ff7ae92fe061ee065ddbf6ef04ea966", particleType: TransferrableTokensParticle.self) {
+             """
+             {
+                 "amount": ":u20:1000000000000000000000000000",
+                 "address": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                 "granularity": ":u20:1",
+                 "destinations": [
+                     ":uid:56abab3870585f04d015d55adf600bc7"
+                 ],
+                 "serializer": "radix.particles.transferrable_tokens",
+                 "version": 100,
+                 "nonce": 982125088539821,
+                 "tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
+                 "planck": 25853760
+             }
+             """
+         }
+    }
 
     
     private func doTest<P>(expectedHashId: ParticleHashId, particleType: P.Type, from json: () -> String) where P: ParticleConvertible & RadixModelTypeStaticSpecifying {
