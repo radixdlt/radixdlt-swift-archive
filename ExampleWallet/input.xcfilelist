@@ -1,5 +1,3 @@
-$(SRCROOT)/Carthage/Build/iOS/TinyConstraints.framework
-
 $(SRCROOT)/../Carthage/Build/iOS/Alamofire.framework
 $(SRCROOT)/../Carthage/Build/iOS/BigInt.framework
 $(SRCROOT)/../Carthage/Build/iOS/BitcoinKit.framework

@@ -25,7 +25,7 @@
 import Foundation
 
 public extension Mnemonic {
-    struct Word {
+    struct Word: CustomStringConvertible, Hashable {
         public let value: String
         
         public init(value: String) {
@@ -34,6 +34,21 @@ public extension Mnemonic {
         }
     }
 }
+
+public extension Mnemonic.Word {
+    var description: String {
+        // Omitted for security reasons
+        return "<>"
+    }
+}
+
+#if DEBUG
+extension Mnemonic.Word: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return value
+    }
+}
+#endif
 
 extension Mnemonic.Word: ExpressibleByStringLiteral {}
 public extension Mnemonic.Word {

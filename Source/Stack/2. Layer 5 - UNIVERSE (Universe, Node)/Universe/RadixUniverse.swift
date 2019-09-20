@@ -34,6 +34,10 @@ public protocol RadixUniverse {
     var nativeTokenDefinition: TokenDefinition { get }
 }
 
+public extension RadixUniverse {
+    var connectedToNodes: Observable<[Node]> { networkController.connectedToNodes }
+}
+
 // MARK: - RadixUniverse
 public final class DefaultRadixUniverse: RadixUniverse {
     

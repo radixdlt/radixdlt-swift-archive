@@ -80,7 +80,7 @@ public extension ResourceIdentifier {
 // MARK: - CustomStringConvertible
 public extension ResourceIdentifier {
     var description: String {
-        return "$/\(address.short)/\(name)$"
+        return "⁄\(address.short)⁄\(name)"
     }
 }
 

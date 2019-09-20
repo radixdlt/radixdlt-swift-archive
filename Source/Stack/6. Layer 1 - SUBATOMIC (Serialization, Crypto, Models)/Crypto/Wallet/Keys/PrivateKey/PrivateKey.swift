@@ -24,7 +24,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable opening_brace colon
 
 /// Elliptic Curve Private Key
 public struct PrivateKey:
@@ -32,8 +32,8 @@ public struct PrivateKey:
     DataConvertible,
     StringInitializable,
     Signing,
-    Equatable,
-    CustomDebugStringConvertible {
+    Equatable
+{
     // swiftlint:enable colon
     public typealias Scalar = BigUnsignedInt
     public let scalar: Scalar
@@ -110,12 +110,19 @@ public extension PrivateKey {
     }
 }
 
-// MARK: - CustomDebugStringConvertible
 public extension PrivateKey {
-    var debugDescription: String {
-        return asData.hex
+    var description: String {
+        return "<omitted for security reasons>"
     }
 }
+
+#if DEBUG
+extension PrivateKey: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        asData.hex
+    }
+}
+#endif
 
 // MARK: - BitcoinKit
 import BitcoinKit

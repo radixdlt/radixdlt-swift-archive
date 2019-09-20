@@ -57,8 +57,15 @@ class ProofOfWorkTest: XCTestCase {
     }
     
     func test14LeadingZeroRx() {
-        let powWorker = DefaultProofOfWorkWorker()
-        guard let pow = doPow(worker: powWorker, seed: seed.asData, magic: magic, numberOfLeadingZeros: 14, timeout: 0.5) else { return XCTFail("timeout") }
+        let powWorker = DefaultProofOfWorkWorker(targetNumberOfLeadingZeros: 14)
+
+        guard let pow = doPow(
+            worker: powWorker,
+            seed: seed.asData,
+            magic: magic,
+            timeout: 0.5
+        ) else { return XCTFail("timeout") }
+
         XCTAssertEqual(pow.nonce, 9255)
     }
     
@@ -69,7 +76,8 @@ class ProofOfWorkTest: XCTestCase {
                 zeros: vector.zeros,
                 expectedNonce: vector.expectedResultingNonce,
                 magic: vector.magic,
-                seed: vector.seed
+                seed: vector.seed,
+                sha256TwiceHasher: Sha256TwiceHasher()
             )
         }
         vectorsForHighNonce.forEach(test(vector:))
@@ -81,13 +89,19 @@ private extension ProofOfWorkTest {
         zeros: ProofOfWork.NumberOfLeadingZeros,
         expectedNonce: Nonce,
         magic overridingMagic: Magic? = nil,
-        seed overridingSeed: HexString? = nil
+        seed overridingSeed: HexString? = nil,
+        sha256TwiceHasher: Sha256TwiceHashing = Sha256TwiceHasher()
     ) {
     
         let magicUsed = overridingMagic ?? magic
         let seedUsed = overridingSeed ?? seed
-        
-        DefaultProofOfWorkWorker().doWork(seed: seedUsed.asData, magic: magicUsed, numberOfLeadingZeros: zeros) {
+
+        let worker = DefaultProofOfWorkWorker(
+            targetNumberOfLeadingZeros: zeros,
+            sha256TwiceHasher: sha256TwiceHasher
+        )
+
+        worker.doWork(seed: seedUsed.asData, magic: magicUsed) {
             switch $0 {
             case .failure(let error): XCTFail("Unexpected error: \(error)")
             case .success(let pow): XCTAssertEqual(pow.nonce, expectedNonce)
@@ -102,7 +116,6 @@ extension XCTestCase {
         worker: DefaultProofOfWorkWorker,
         atom: Atom,
         magic: Magic,
-        numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
         timeout: TimeInterval? = .enoughForPOW,
         _ function: String = #function, _ file: String = #file, _ line: Int = #line
         ) -> ProofOfWork? {
@@ -110,7 +123,6 @@ extension XCTestCase {
             worker: worker,
             seed: atom.radixHash.asData,
             magic: magic,
-            numberOfLeadingZeros: numberOfLeadingZeros,
             timeout: timeout, function, file, line
         )
     }
@@ -119,15 +131,13 @@ extension XCTestCase {
         worker: DefaultProofOfWorkWorker,
         seed: Data,
         magic: Magic,
-        numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
         timeout: TimeInterval? = nil,
         _ function: String = #function, _ file: String = #file, _ line: Int = #line
         ) -> ProofOfWork? {
         
         return worker.work(
             seed: seed,
-            magic: magic,
-            numberOfLeadingZeros: numberOfLeadingZeros
+            magic: magic
         ).blockingSingle(timeout: timeout, function: function, file: file, line: line)
     }
 }

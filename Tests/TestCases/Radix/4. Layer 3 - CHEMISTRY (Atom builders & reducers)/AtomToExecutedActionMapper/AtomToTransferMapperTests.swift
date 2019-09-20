@@ -37,7 +37,7 @@ class AtomToTransferMapperTests: LocalhostNodeTest {
     
     func testAtomToTransferWithReturn() {
         
-        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity(alias: "Alice"))
+        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity())
         
         let (tokenCreation, aliceCoin) = aliceApp.createToken(supply: .fixed(to: 100))
         
@@ -46,14 +46,14 @@ class AtomToTransferMapperTests: LocalhostNodeTest {
         let bob = aliceApp.addressOf(account: Account())
         
         let atom = try! aliceApp.atomFrom(transaction:
-            Transaction(
+            Transaction {
                 aliceApp.actionTransferTokens(
                     identifier: aliceCoin,
                     to: bob,
                     amount: 14,
                     message: "Taxi"
                 )
-            )
+            }
         )
 
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
@@ -67,7 +67,7 @@ class AtomToTransferMapperTests: LocalhostNodeTest {
 
     func testAtomToTransferWithoutReturn() {
 
-        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity(alias: "Alice"))
+        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity())
 
         let (tokenCreation, aliceCoin) = aliceApp.createToken(supply: .fixed(to: 100))
 
@@ -76,14 +76,14 @@ class AtomToTransferMapperTests: LocalhostNodeTest {
         let bob = aliceApp.addressOf(account: Account())
 
         let atom = try! aliceApp.atomFrom(transaction:
-            Transaction(
+            Transaction {
                 aliceApp.actionTransferTokens(
                     identifier: aliceCoin,
                     to: bob,
                     amount: 100,
                     message: "Taxi"
                 )
-            )
+            }
         )
 
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()

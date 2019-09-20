@@ -35,7 +35,7 @@ public struct NonEmptyArray<ElementInArray>:
 
     public typealias Element = ElementInArray
 
-    public let elements: [Element]
+    public private(set) var elements: [Element]
 
     public init(unvalidated: [Element]) throws {
         if unvalidated.isEmpty {
@@ -70,5 +70,9 @@ public extension NonEmptyArray {
             incorrectImplementation("A non empty array should indeed contain at least one element")
         }
         return first
+    }
+
+    mutating func append(_ element: Element) {
+        elements.append(element)
     }
 }

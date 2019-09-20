@@ -28,6 +28,16 @@ public struct BurnTokensAction: ConsumeTokensAction {
     public let tokenDefinitionReference: ResourceIdentifier
     public let amount: PositiveAmount
     public let burner: Address
+
+    public init(
+        tokenDefinitionReference: ResourceIdentifier,
+        amount: PositiveAmount,
+        burner: Address
+    ) {
+        self.tokenDefinitionReference = tokenDefinitionReference
+        self.amount = amount
+        self.burner = burner
+    }
 }
 
 public extension BurnTokensAction {

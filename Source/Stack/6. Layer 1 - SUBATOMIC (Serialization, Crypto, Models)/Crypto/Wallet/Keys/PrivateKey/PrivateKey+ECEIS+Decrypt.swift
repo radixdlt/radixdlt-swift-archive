@@ -45,6 +45,6 @@ public extension Signing {
     func decryptAndDecode(_ data: DataConvertible, encoding: String.Encoding = .default) throws -> String {
         let encoded = try decrypt(data)
         
-        return String(data: encoded, encoding: encoding)!
+        return String(data: encoded, encodingForced: encoding)
     }
 }

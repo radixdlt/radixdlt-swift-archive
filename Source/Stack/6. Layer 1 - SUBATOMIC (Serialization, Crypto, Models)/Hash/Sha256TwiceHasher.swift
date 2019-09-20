@@ -31,10 +31,3 @@ public struct Sha256TwiceHasher: Sha256TwiceHashing {
         return data.sha256().sha256()
     }
 }
-
-public struct Sha512TwiceHasher: Sha512TwiceHashing {
-    public init() {}
-    public func sha512Twice(of data: Data) -> Data {
-        return data.sha512().sha512()
-    }
-}

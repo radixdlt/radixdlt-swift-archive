@@ -29,92 +29,55 @@ import BitcoinKit
 public final class AbstractIdentity: CustomStringConvertible {
     public typealias AccountSelector = (NonEmptyArray<Account>) -> Account
     
-    public var alias: String?
     public private(set) var accounts: NonEmptyArray<Account>
-    public private(set) var activeAccount: Account {
-        didSet {
-            accountSubject.onNext(activeAccount)
-        }
-    }
     private let accountSubject: BehaviorSubject<Account>
     
     public init(
         accounts: NonEmptyArray<Account>,
-        alias: String? = nil,
         selectInitialActiveAccount: AccountSelector = { $0.first }
     ) {
         self.accounts = accounts
-        self.alias = alias
-        self.activeAccount = selectInitialActiveAccount(accounts)
-        self.accountSubject = BehaviorSubject(value: activeAccount)
+        self.accountSubject = BehaviorSubject(value: selectInitialActiveAccount(accounts))
     }
 }
 
 public extension AbstractIdentity {
-    static func new(
-        alias: String? = nil,
-        mnemonicGenerator: Mnemonic.Generator = .default,
-        backedUpMneumonic: @escaping (Mnemonic) -> MnemonicBackedUpByUser
-    ) -> Single<AbstractIdentity> {
-        
-        return Single<AbstractIdentity>.create { single in
-            
-            do {
-                let mnemonic = try mnemonicGenerator.generate()
-                
-                // async
-                _ = backedUpMneumonic(mnemonic)
-           
-                // TODO: replace BTC network with Radix one...
-                let wallet = BitcoinKit.HDWallet(seed: mnemonic.seed, network: BitcoinKit.Network.testnetBTC)
-                
-                let privateKeyBicoinKit = try wallet.privateKey(index: 0)
-                
-                let privateKey = try PrivateKey(data: privateKeyBicoinKit.data)
-                
-                let account = Account(privateKey: privateKey)
-                
-                let identity = AbstractIdentity(accounts: [account], alias: alias)
-                
-                single(.success(identity))
-            } catch {
-                single(.error(error))
-            }
-            
-            return Disposables.create()
+    /// HDWallet is NOT retained, this is just for convenience, you need to retain it yourself
+    convenience init(hdWallet: HDWallet) {
+        self.init(accounts: NonEmptyArray(elements: hdWallet.accounts))
+    }
+}
+
+public extension AbstractIdentity {
+
+    var snapshotActiveAccount: Account {
+        do {
+            return try accountSubject.value()
+        } catch {
+            incorrectImplementation("Should always have an acctive account")
         }
     }
-}
-
-internal extension AbstractIdentity {
-    
-    #if DEBUG
-    static func newSkippingBackup(alias: String? = nil) -> Single<AbstractIdentity> {
-        return new(alias: alias, backedUpMneumonic: { MnemonicBackedUpByUser(mnemonic: $0) })
-    }
-    
-    convenience init(alias: String? = nil) {
-        let identitySingle = AbstractIdentity.newSkippingBackup(alias: alias).toBlocking(timeout: 1)
-        do {
-            guard let identity = try identitySingle.first() else {
-                incorrectImplementation("Should always be able to create identity")
-            }
-            self.init(accounts: identity.accounts, alias: alias)
-        } catch { unexpectedlyMissedToCatch(error: error) }
-    }
-    #endif
-}
-
-public extension AbstractIdentity {
     
     @discardableResult
     func selectAccount(_ selector: AccountSelector) -> Account {
-        self.activeAccount = selector(accounts)
-        return activeAccount
+        let newActiveAccount = selector(accounts)
+        accountSubject.onNext(newActiveAccount)
+        return newActiveAccount
+    }
+
+    func changeAccount(to selectedAccount: Account) {
+        guard accounts.contains(selectedAccount) else {
+            incorrectImplementation("AbstractIdentity does not contain account: \(selectedAccount)")
+        }
+        accountSubject.onNext(selectedAccount)
     }
     
     var activeAccountObservable: Observable<Account> {
         return accountSubject.asObservable()
+    }
+
+    func addAccount(_ newAccount: Account) {
+        accounts.append(newAccount)
     }
 }
 
@@ -122,7 +85,7 @@ public extension AbstractIdentity {
 public extension AbstractIdentity {
     var description: String {
         return """
-        Accounts: #\(accounts.count)\(alias.ifPresent { ",\nalias: \($0)" })
+        Accounts: #\(accounts.count)
         """
     }
 }

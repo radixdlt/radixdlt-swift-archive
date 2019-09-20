@@ -26,21 +26,19 @@ import Foundation
 import RxSwift
 
 public protocol ProofOfWorkWorker {
-    func work(seed: Data, magic: Magic, numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros) -> Single<ProofOfWork>
+    func work(seed: Data, magic: Magic) -> Single<ProofOfWork>
 }
 
 // MARK: - Convenience
 public extension ProofOfWorkWorker {
     func work(
         atom: Atom,
-        magic: Magic,
-        numberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default
-        ) -> Single<ProofOfWork> {
+        magic: Magic
+    ) -> Single<ProofOfWork> {
         
         return work(
             seed: atom.radixHash.asData,
-            magic: magic,
-            numberOfLeadingZeros: numberOfLeadingZeros
+            magic: magic
         )
     }
     

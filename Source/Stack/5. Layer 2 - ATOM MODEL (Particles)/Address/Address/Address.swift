@@ -169,14 +169,14 @@ public extension Address {
     }
     
     var description: String {
-        return "<\(short)>"
+        return short
     }
     
     var short: String {
         return [
-            stringValue.prefix(4),
-            "...",
-            stringValue.suffix(4)
+            stringValue.prefix(2),
+            "…",
+            stringValue.suffix(2)
         ].joined()
     }
 }

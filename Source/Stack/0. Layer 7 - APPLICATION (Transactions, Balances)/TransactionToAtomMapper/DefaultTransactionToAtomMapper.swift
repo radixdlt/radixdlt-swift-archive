@@ -66,54 +66,109 @@ public extension DefaultTransactionToAtomMapper {
 
 public extension DefaultTransactionToAtomMapper {
     func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
-        let uuid = transaction.uuid
         
-        for action in transaction.actions {
-            do {
-                try stage(action: action, uuid: uuid, addressOfActiveAccount: addressOfActiveAccount)
-            } catch {
-                atomStore.clearStagedParticleGroups(for: uuid)
-                throw FailedToStageAction(error: error, userAction: action)
-            }
+        let temporaryStore = TemporaryLocalAtomStore(
+            actionMappers: actionMappers,
+            addressOfActiveAccount: addressOfActiveAccount
+        ) { [unowned self] in
+            return self.atomStore.upParticles(at: $0)
         }
-        
-        guard let particleGroups = atomStore.clearStagedParticleGroups(for: uuid) else {
-            incorrectImplementation("Found no staged ParticleGroups for UUID: \(uuid), but expected to.")
-        }
+
+        let particleGroups = try temporaryStore.particleGroupsFromActions(transaction.actions)
+
         let atom = Atom(particleGroups: particleGroups)
         try Addresses.allInSameUniverse(atom.addresses().map { $0 })
         return atom
+
     }
 }
 
+// MARK: TemporaryLocalAtomStore
 private extension DefaultTransactionToAtomMapper {
+    final class TemporaryLocalAtomStore {
+        
+        private var accumulatedSpunParticles = [AnySpunParticle]()
+        private let actionMappers: [AnyStatefulActionToParticleGroupsMapper]
+        private let addressOfActiveAccount: Address
+        private let persistedParticlesAccessor: (Address) -> [SpunParticleContainer]
+        
+        fileprivate init(
+            actionMappers: [AnyStatefulActionToParticleGroupsMapper],
+            addressOfActiveAccount: Address,
+            persistedParticlesAccessor: @escaping (Address) -> [SpunParticleContainer]
+        ) {
+            self.actionMappers = actionMappers
+            self.addressOfActiveAccount = addressOfActiveAccount
+            self.persistedParticlesAccessor = persistedParticlesAccessor
+        }
+    }
+}
+
+extension DefaultTransactionToAtomMapper.TemporaryLocalAtomStore {
     
-    func actionMapperFor(action: UserAction) -> AnyStatefulActionToParticleGroupsMapper {
+    fileprivate func particleGroupsFromActions(_ userAction: [UserAction]) throws -> ParticleGroups {
+        var particleGroupsList = [ParticleGroup]()
+        
+        for action in userAction {
+            let particleGroups: ParticleGroups
+            
+            do {
+                particleGroups = try particleGroupFromAction(action)
+            } catch {
+                throw FailedToStageAction(error: error, userAction: action)
+            }
+            
+            accumulatedSpunParticles.append(contentsOf: particleGroups.spunParticles)
+            particleGroupsList.append(contentsOf: particleGroups)
+        }
+        
+        return ParticleGroups(particleGroupsList)
+    }
+    
+    private func particleGroupFromAction(_ action: UserAction) throws -> ParticleGroups {
+        let statefulMapper = actionMapperFor(action: action)
+        let requiredState = self.requiredState(for: action)
+        
+        let persistedUpParticles = requiredState.flatMap { requiredStateContext in
+            self.persistedParticlesAccessor(requiredStateContext.address)
+                .filter { type(of: $0.someParticle) == requiredStateContext.particleType }
+        }
+        
+        let upParticles = mergingParticles(persistedUpParticles: persistedUpParticles)
+        
+        return try statefulMapper.particleGroupsForAnAction(
+            action,
+            upParticles: upParticles,
+            addressOfActiveAccount: addressOfActiveAccount
+        )
+    }
+    
+    private func mergingParticles(persistedUpParticles upParticlesFromStore: [SpunParticleContainer]) -> [AnyUpParticle] {
+        var upParticlesAsSpunParticles = upParticlesFromStore.map { AnySpunParticle(spunParticle: $0) }
+        for newParticle in accumulatedSpunParticles {
+            let condition: (AnySpunParticle) -> Bool = {
+                $0.someParticle.hashEUID == newParticle.someParticle.hashEUID
+            }
+            if upParticlesAsSpunParticles.contains(where: condition) {
+                upParticlesAsSpunParticles.removeAll(where: condition)
+            }
+            upParticlesAsSpunParticles.append(newParticle)
+        }
+        return upParticlesAsSpunParticles.upParticles()
+    }
+    
+    private func actionMapperFor(action: UserAction) -> AnyStatefulActionToParticleGroupsMapper {
         guard let mapper = actionMappers.first(where: { $0.matches(someAction: action) }) else {
             incorrectImplementation("Found no ActionToParticleGroupsMapper for action: \(action), you probably just added a new UserAction but forgot to add its corresponding mapper to the list?")
         }
         return mapper
     }
     
-    func requiredState(for action: UserAction) -> [AnyShardedParticleStateId] {
+    private func requiredState(for action: UserAction) -> [AnyShardedParticleStateId] {
         guard let mapper = actionMappers.first(where: { (mapper) -> Bool in
             return mapper.matches(someAction: action)
         }) else { return [] }
         return mapper.requiredStateForAnAction(action)
-    }
-    
-    func stage(action: UserAction, uuid: UUID, addressOfActiveAccount: Address) throws {
-        let statefulMapper = actionMapperFor(action: action)
-        let requiredState = self.requiredState(for: action)
-        
-        let particles = requiredState.flatMap { requiredStateContext in
-            atomStore.upParticles(at: requiredStateContext.address, stagedUuid: uuid)
-                .filter { type(of: $0.someParticle) == requiredStateContext.particleType }
-        }
-        
-        try statefulMapper.particleGroupsForAnAction(action, upParticles: particles, addressOfActiveAccount: addressOfActiveAccount).forEach {
-            atomStore.stageParticleGroup($0, uuid: uuid)
-        }
     }
 }
 
@@ -137,3 +192,4 @@ public extension Array where Element == AnyStatelessActionToParticleGroupsMapper
         ]
     }
 }
+

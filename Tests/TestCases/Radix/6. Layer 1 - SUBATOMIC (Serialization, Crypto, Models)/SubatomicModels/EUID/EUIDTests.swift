@@ -77,6 +77,12 @@ class EUIDTests: XCTestCase {
         )
     }
     
+    func testThatEuidLenghtIs16Bytes() {
+        let euid: EUID = "00000000000000000000000000000011"
+        XCTAssertEqual(euid.asData.bytes.count, 16)
+        XCTAssertEqual(euid.toHexString().asData.bytes.count, 16)
+    }
+    
     func testShard() {
         func doTest(_ vector: ShardTestVector) {
             let euid = try! EUID(hexString: vector.euid)

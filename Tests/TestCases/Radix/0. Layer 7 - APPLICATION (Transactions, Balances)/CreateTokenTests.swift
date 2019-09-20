@@ -29,7 +29,7 @@ import RxTest
 
 class CreateTokenTests: LocalhostNodeTest {
 
-    private let aliceIdentity = AbstractIdentity(alias: "Alice")
+    private let aliceIdentity = AbstractIdentity()
     private let bobAccount = Account()
     private let claraAccount = Account()
     private let dianaAccount = Account()
@@ -60,10 +60,10 @@ class CreateTokenTests: LocalhostNodeTest {
         
         let rri = actionCreateToken.identifier
         
-        let transaction = Transaction {[
-            PutUniqueIdAction(uniqueMaker: alice, string: "FOO"),
+        let transaction = Transaction {
+            PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
             actionCreateToken
-        ]}
+        }
         
         application.send(transaction: transaction).blockingAssertThrows(
             error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByUniqueId(string: rri.name))
@@ -75,10 +75,10 @@ class CreateTokenTests: LocalhostNodeTest {
         let symbol: Symbol = "FOO"
         let actionCreateMutableToken = application.actionCreateMultiIssuanceToken(symbol: symbol)
         
-        let transaction = Transaction {[
-            actionCreateMutableToken,
+        let transaction = Transaction {
+            actionCreateMutableToken
             application.actionCreateToken(symbol: symbol)
-        ]}
+        }
         
         application.send(transaction: transaction).blockingAssertThrows(
             error: CreateTokenError.uniqueActionError(
@@ -91,10 +91,10 @@ class CreateTokenTests: LocalhostNodeTest {
         let symbol: Symbol = "FOO"
         let actionCreateFixedToken = application.actionCreateFixedSupplyToken(symbol: symbol)
         
-        let transaction = Transaction {[
-            actionCreateFixedToken,
+        let transaction = Transaction {
+            actionCreateFixedToken
             application.actionCreateToken(symbol: symbol)
-        ]}
+        }
         
         application.send(transaction: transaction).blockingAssertThrows(
             error: CreateTokenError.uniqueActionError(

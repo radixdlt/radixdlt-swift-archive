@@ -7,8 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		48E2A6BD230EB92E00042C16 /* TransactionnOfflineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E2A6BC230EB92E00042C16 /* TransactionnOfflineTests.swift */; };
-		48E2A6BE230EBA3200042C16 /* NoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6340C9122FC4E140044BA97 /* NoStore.swift */; };
+		480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480484172333BCEC0085225F /* IndependentTransactionToAtomMapper.swift */; };
+		4867B340231825F10018367E /* Mnemonic+WordList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4867B33F231825F10018367E /* Mnemonic+WordList.swift */; };
+		486924262333A2500009F9DB /* Transaction+FunctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486924252333A2500009F9DB /* Transaction+FunctionBuilder.swift */; };
+		486924282333A27D0009F9DB /* TokenContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486924272333A27D0009F9DB /* TokenContext.swift */; };
+		4869242A2333A2A80009F9DB /* UserActionMaking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486924292333A2A80009F9DB /* UserActionMaking.swift */; };
+		4869242C2333A5660009F9DB /* BurnMintTransactionOfflineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4869242B2333A5660009F9DB /* BurnMintTransactionOfflineTests.swift */; };
+		48A33DF523085A8400626090 /* CryptoKitSha256Hasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */; };
+		48A33DF723085A9E00626090 /* Sha512TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF623085A9E00626090 /* Sha512TwiceHasher.swift */; };
+		48A33DF923085ABD00626090 /* CryptoKitSha256TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF823085ABD00626090 /* CryptoKitSha256TwiceHasher.swift */; };
+		48E1A5F4232130F8009A34C6 /* HDWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E1A5F3232130F8009A34C6 /* HDWallet.swift */; };
+		48E2A6BD230EB92E00042C16 /* AddressesInSameUniverseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E2A6BC230EB92E00042C16 /* AddressesInSameUniverseTests.swift */; };
+		48E2A6BE230EBA3200042C16 /* HardCodedAtomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6340C9122FC4E140044BA97 /* HardCodedAtomStore.swift */; };
 		E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3342242410700A81412 /* UnsignedAtom.swift */; };
 		E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33B22428C7F00A81412 /* SignedAtom.swift */; };
 		E60253FF225CA1C2004B2F94 /* UnallocatedTokensParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */; };
@@ -600,6 +610,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		48092541230AC2A90056DB28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 48092508230AC2A50056DB28;
+			remoteInfo = "SwiftUI-Wallet";
+		};
+		48092543230AC2A90056DB28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4809251E230AC2A80056DB28;
+			remoteInfo = "SwiftUI-WalletTests";
+		};
+		48092545230AC2A90056DB28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 48092529230AC2A80056DB28;
+			remoteInfo = "SwiftUI-WalletUITests";
+		};
 		E645E73921E7827D00532ACD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E645E72521E7827D00532ACD /* Project object */;
@@ -634,7 +665,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		48E2A6BC230EB92E00042C16 /* TransactionnOfflineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionnOfflineTests.swift; sourceTree = "<group>"; };
+		480484172333BCEC0085225F /* IndependentTransactionToAtomMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndependentTransactionToAtomMapper.swift; sourceTree = "<group>"; };
+		4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "SwiftUI-Wallet.xcodeproj"; path = "SwiftUI-Wallet/SwiftUI-Wallet.xcodeproj"; sourceTree = "<group>"; };
+		4867B33F231825F10018367E /* Mnemonic+WordList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mnemonic+WordList.swift"; sourceTree = "<group>"; };
+		486924252333A2500009F9DB /* Transaction+FunctionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transaction+FunctionBuilder.swift"; sourceTree = "<group>"; };
+		486924272333A27D0009F9DB /* TokenContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenContext.swift; sourceTree = "<group>"; };
+		486924292333A2A80009F9DB /* UserActionMaking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionMaking.swift; sourceTree = "<group>"; };
+		4869242B2333A5660009F9DB /* BurnMintTransactionOfflineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BurnMintTransactionOfflineTests.swift; sourceTree = "<group>"; };
+		48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitSha256Hasher.swift; sourceTree = "<group>"; };
+		48A33DF623085A9E00626090 /* Sha512TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sha512TwiceHasher.swift; sourceTree = "<group>"; };
+		48A33DF823085ABD00626090 /* CryptoKitSha256TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitSha256TwiceHasher.swift; sourceTree = "<group>"; };
+		48E1A5F3232130F8009A34C6 /* HDWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HDWallet.swift; sourceTree = "<group>"; };
+		48E2A6BC230EB92E00042C16 /* AddressesInSameUniverseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressesInSameUniverseTests.swift; sourceTree = "<group>"; };
 		E601D3342242410700A81412 /* UnsignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsignedAtom.swift; sourceTree = "<group>"; };
 		E601D33B22428C7F00A81412 /* SignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAtom.swift; sourceTree = "<group>"; };
 		E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnallocatedTokensParticle.swift; sourceTree = "<group>"; };
@@ -776,7 +818,7 @@
 		E6340C8822FC2CE00044BA97 /* ParticlesToStateReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlesToStateReducer.swift; sourceTree = "<group>"; };
 		E6340C8A22FC2CF70044BA97 /* TransactionToAtomMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionToAtomMapper.swift; sourceTree = "<group>"; };
 		E6340C8C22FC2D090044BA97 /* TransactionMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionMaker.swift; sourceTree = "<group>"; };
-		E6340C9122FC4E140044BA97 /* NoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoStore.swift; sourceTree = "<group>"; };
+		E6340C9122FC4E140044BA97 /* HardCodedAtomStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardCodedAtomStore.swift; sourceTree = "<group>"; };
 		E6340C9322FC4F1A0044BA97 /* StateSubscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateSubscriber.swift; sourceTree = "<group>"; };
 		E6340C9522FC4F890044BA97 /* TransactionSubscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSubscriber.swift; sourceTree = "<group>"; };
 		E637564422B7CE1400C4F9A2 /* RadixNetworkState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixNetworkState.swift; sourceTree = "<group>"; };
@@ -1260,6 +1302,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4809253C230AC2A80056DB28 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				48092542230AC2A90056DB28 /* SwiftUI-Wallet.app */,
+				48092544230AC2A90056DB28 /* SwiftUI-WalletTests.xctest */,
+				48092546230AC2A90056DB28 /* SwiftUI-WalletUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		48E1A5F223213094009A34C6 /* HierarchicalDeterministicWallet */ = {
+			isa = PBXGroup;
+			children = (
+				48E1A5F3232130F8009A34C6 /* HDWallet.swift */,
+			);
+			path = HierarchicalDeterministicWallet;
+			sourceTree = "<group>";
+		};
 		E6025400225CC3CD004B2F94 /* UniverseConfig */ = {
 			isa = PBXGroup;
 			children = (
@@ -1428,6 +1488,9 @@
 			isa = PBXGroup;
 			children = (
 				E6340C8422FAEB5F0044BA97 /* Transaction.swift */,
+				486924252333A2500009F9DB /* Transaction+FunctionBuilder.swift */,
+				486924292333A2A80009F9DB /* UserActionMaking.swift */,
+				486924272333A27D0009F9DB /* TokenContext.swift */,
 				E68DFA3122FC64140050F69E /* ExecutedTransaction.swift */,
 				E68DFA3322FC64290050F69E /* TransactionConvertible.swift */,
 			);
@@ -1585,7 +1648,8 @@
 			isa = PBXGroup;
 			children = (
 				E61EB99B22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */,
-				48E2A6BC230EB92E00042C16 /* TransactionnOfflineTests.swift */,
+				4869242B2333A5660009F9DB /* BurnMintTransactionOfflineTests.swift */,
+				48E2A6BC230EB92E00042C16 /* AddressesInSameUniverseTests.swift */,
 			);
 			path = OfflineTests;
 			sourceTree = "<group>";
@@ -1790,7 +1854,8 @@
 		E6340C9022FC4E0B0044BA97 /* Mappers */ = {
 			isa = PBXGroup;
 			children = (
-				E6340C9122FC4E140044BA97 /* NoStore.swift */,
+				E6340C9122FC4E140044BA97 /* HardCodedAtomStore.swift */,
+				480484172333BCEC0085225F /* IndependentTransactionToAtomMapper.swift */,
 			);
 			path = Mappers;
 			sourceTree = "<group>";
@@ -3084,6 +3149,7 @@
 				E6E2788F2271CD1C0067D46E /* Mnemonic+Language.swift */,
 				E6E278902271CD1C0067D46E /* Mnemonic+Word.swift */,
 				E6E278912271CD1C0067D46E /* Mnemonic.swift */,
+				4867B33F231825F10018367E /* Mnemonic+WordList.swift */,
 				E6E278922271CD1C0067D46E /* Mnemonic+Error.swift */,
 				E6E278932271CD1C0067D46E /* Mnemonic+Strength.swift */,
 				E6E278942271CD1C0067D46E /* Mnemonic+Generator.swift */,
@@ -3094,6 +3160,7 @@
 		E6E278952271CD1C0067D46E /* Keys */ = {
 			isa = PBXGroup;
 			children = (
+				48E1A5F223213094009A34C6 /* HierarchicalDeterministicWallet */,
 				E6E278962271CD1C0067D46E /* PublicKey */,
 				E6E278992271CD1C0067D46E /* KeyPair */,
 				E6E2789B2271CD1C0067D46E /* PrivateKey */,
@@ -3149,7 +3216,10 @@
 			isa = PBXGroup;
 			children = (
 				E6E278A32271CD1C0067D46E /* Sha256Hasher.swift */,
+				48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */,
+				48A33DF823085ABD00626090 /* CryptoKitSha256TwiceHasher.swift */,
 				E6E278A42271CD1C0067D46E /* Sha256TwiceHasher.swift */,
+				48A33DF623085A9E00626090 /* Sha512TwiceHasher.swift */,
 				E6E278A52271CD1C0067D46E /* RadixHash.swift */,
 				E6E278A62271CD1C0067D46E /* Hashing.swift */,
 				E6E278A72271CD1C0067D46E /* RadixHashable.swift */,
@@ -3989,6 +4059,7 @@
 		E6FB03C621EC95E8002CE331 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */,
 				E606FC0E22C9F85B00A7E52E /* RxOptional.framework */,
 				E606FC0F22C9F85B00A7E52E /* RxRelay.framework */,
 				E606FC1022C9F85B00A7E52E /* RxSwiftExt.framework */,
@@ -4165,6 +4236,12 @@
 			mainGroup = E645E72421E7827D00532ACD;
 			productRefGroup = E645E72F21E7827D00532ACD /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4809253C230AC2A80056DB28 /* Products */;
+					ProjectRef = 4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E645E72D21E7827D00532ACD /* RadixSDK iOS */,
@@ -4172,6 +4249,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		48092542230AC2A90056DB28 /* SwiftUI-Wallet.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "SwiftUI-Wallet.app";
+			remoteRef = 48092541230AC2A90056DB28 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		48092544230AC2A90056DB28 /* SwiftUI-WalletTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "SwiftUI-WalletTests.xctest";
+			remoteRef = 48092543230AC2A90056DB28 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		48092546230AC2A90056DB28 /* SwiftUI-WalletUITests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "SwiftUI-WalletUITests.xctest";
+			remoteRef = 48092545230AC2A90056DB28 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E645E72C21E7827D00532ACD /* Resources */ = {
@@ -4295,6 +4396,7 @@
 				E68BD81F229ECCF400FCE4D3 /* DefaultSendMessageActionToParticleGroupsMapper.swift in Sources */,
 				E6A7479522CB9F7000DACEA0 /* GetNodeInfoActionResult.swift in Sources */,
 				E6E2793A2271CD1C0067D46E /* KeyPair.swift in Sources */,
+				486924282333A27D0009F9DB /* TokenContext.swift in Sources */,
 				E6CABA0F22D4C35500B6D00C /* ResponseOnFireAndForgetRequest.swift in Sources */,
 				E6FCB67222F3078E00ECC01B /* SubmitAtomActionRecived.swift in Sources */,
 				E6FCB67922F3082400ECC01B /* AtomStatusNotStored.swift in Sources */,
@@ -4325,6 +4427,7 @@
 				E6F548562277458000EE6311 /* Amount+AmountAndSign.swift in Sources */,
 				E626E1F222B3FFF60046D2AC /* BaseAtomToExecutedActionsMapper.swift in Sources */,
 				E6CABA0922D4BC6300B6D00C /* SigningError.swift in Sources */,
+				4869242A2333A2A80009F9DB /* UserActionMaking.swift in Sources */,
 				E6474AE422663E2F009C4FDC /* RPCMethod.swift in Sources */,
 				E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */,
 				E626E1E222B3FA2A0046D2AC /* Account.swift in Sources */,
@@ -4377,6 +4480,7 @@
 				E6474AF9226794D5009C4FDC /* ExpressibleBySubatomicParts.swift in Sources */,
 				E60554142303160600528510 /* EncryptionMode.swift in Sources */,
 				E6E2799A2271CD1C0067D46E /* MaxLengthSpecifying.swift in Sources */,
+				48A33DF523085A8400626090 /* CryptoKitSha256Hasher.swift in Sources */,
 				E606FC4F22CB5E4200A7E52E /* WebSocketEventsEpic.swift in Sources */,
 				E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */,
 				E6E279502271CD1C0067D46E /* JSONPrefix.swift in Sources */,
@@ -4397,8 +4501,10 @@
 				E6E279952271CD1C0067D46E /* MinLengthSpecifying.swift in Sources */,
 				E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */,
 				E6E2796A2271CD1C0067D46E /* DictionaryDecodable.swift in Sources */,
+				48E1A5F4232130F8009A34C6 /* HDWallet.swift in Sources */,
 				E6F5484522771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift in Sources */,
 				E6A747A222CCF09100DACEA0 /* WebSocketEvent.swift in Sources */,
+				486924262333A2500009F9DB /* Transaction+FunctionBuilder.swift in Sources */,
 				E6ABA76F22C3594C00536DC7 /* RadixNetwork.swift in Sources */,
 				E68BD82722A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift in Sources */,
 				E6E2796D2271CD1C0067D46E /* ArrayConvertible.swift in Sources */,
@@ -4411,6 +4517,7 @@
 				E6E279872271CD1C0067D46E /* Planck.swift in Sources */,
 				E69E755522AA33A400AC631B /* DefaultProofOfWorkWorker.swift in Sources */,
 				E6E2793C2271CD1C0067D46E /* PrivateKey+ECEIS+Decrypt.swift in Sources */,
+				48A33DF723085A9E00626090 /* Sha512TwiceHasher.swift in Sources */,
 				E6E279812271CD1C0067D46E /* TokenDefinitionReferencing.swift in Sources */,
 				E62EFDDC224A42C300B6DAD6 /* Dictionary_Extensions.swift in Sources */,
 				E6CB4B3F22C633E300B7382A /* AtomStatusObservationCancelling.swift in Sources */,
@@ -4424,6 +4531,7 @@
 				E6E279702271CD1C0067D46E /* TokenConvertible.swift in Sources */,
 				E6E2796B2271CD1C0067D46E /* StringDictionary.swift in Sources */,
 				E6E279622271CD1C0067D46E /* EncodableKeyValue.swift in Sources */,
+				4867B340231825F10018367E /* Mnemonic+WordList.swift in Sources */,
 				E6ED1A4C21F8ACB700654105 /* Int+DataConvertible.swift in Sources */,
 				E6FCB67B22F308A700ECC01B /* DiscoverMoreNodesActionError.swift in Sources */,
 				E6E2797E2271CD1C0067D46E /* EUID.swift in Sources */,
@@ -4648,6 +4756,7 @@
 				E6A507E6224E20AB00128123 /* RPCResposeResultConvertible.swift in Sources */,
 				E605541E2304170D00528510 /* SendMessageAction+Init+Data.swift in Sources */,
 				E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */,
+				48A33DF923085ABD00626090 /* CryptoKitSha256TwiceHasher.swift in Sources */,
 				E62EFDCC2249378300B6DAD6 /* HTTPClient.swift in Sources */,
 				E6E2797A2271CD1C0067D46E /* TokenPermissions.swift in Sources */,
 				E6E279722271CD1C0067D46E /* ResourceIdentifier.swift in Sources */,
@@ -4706,7 +4815,7 @@
 				E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */,
 				E6E27A212271CE250067D46E /* HmacTest.swift in Sources */,
 				E6F5485A22788BF400EE6311 /* CreateTokenActionToParticleGroupsMapperTests.swift in Sources */,
-				48E2A6BE230EBA3200042C16 /* NoStore.swift in Sources */,
+				48E2A6BE230EBA3200042C16 /* HardCodedAtomStore.swift in Sources */,
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
 				E62F35302273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
@@ -4719,6 +4828,7 @@
 				E6E27A222271CE250067D46E /* HashTests.swift in Sources */,
 				E61EB99C22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */,
 				E6055447230553C700528510 /* Test+Convenience+RadixApplicationClient.swift in Sources */,
+				4869242C2333A5660009F9DB /* BurnMintTransactionOfflineTests.swift in Sources */,
 				E68BD818229EB22000FCE4D3 /* ShardRangeTests.swift in Sources */,
 				E6E27A502271CE250067D46E /* Base58Tests.swift in Sources */,
 				E6E27A3E2271CE250067D46E /* DSONEncodingIntArrayTests.swift in Sources */,
@@ -4746,7 +4856,7 @@
 				E6E27A312271CE250067D46E /* TooLongAddressTests.swift in Sources */,
 				E6E27A242271CE250067D46E /* AtomJsonSerializationTrivialTests.swift in Sources */,
 				E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */,
-				48E2A6BD230EB92E00042C16 /* TransactionnOfflineTests.swift in Sources */,
+				48E2A6BD230EB92E00042C16 /* AddressesInSameUniverseTests.swift in Sources */,
 				E6E27A432271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift in Sources */,
 				E6E27A4A2271CE250067D46E /* GranularityTests.swift in Sources */,
 				E6E27A382271CE250067D46E /* AtomJsonDeserializationUnallocatedTokenBadValuesTests.swift in Sources */,
@@ -4772,6 +4882,7 @@
 				E605544D23058AA100528510 /* ParticleSet.swift in Sources */,
 				E6E27A2B2271CE250067D46E /* TooLongDescriptionTests.swift in Sources */,
 				E69D851822F4818F0039A207 /* MintTokensTests.swift in Sources */,
+				480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6E27A3F2271CE250067D46E /* CBOREncodingPrimitivesIntTests.swift in Sources */,
 				E621BE8622983DCD00E97542 /* AtomIdentifierTests.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
@@ -4845,13 +4956,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -4903,12 +5015,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -4932,9 +5044,9 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				GCC_OPTIMIZATION_LEVEL = 1;
 				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4972,6 +5084,7 @@
 				);
 				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5002,6 +5115,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -59,7 +59,7 @@ Here are some example usages. The code below is an excerpt of an existing the un
 #### Create Token
 
 ```swift
-let aliceIdentity = AbstractIdentity(alias: "Alice")
+let aliceIdentity = AbstractIdentity()
 
 let application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
 

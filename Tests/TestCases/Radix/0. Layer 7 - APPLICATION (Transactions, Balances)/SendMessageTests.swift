@@ -30,7 +30,7 @@ import RxBlocking
 
 class SendMessageTests: LocalhostNodeTest {
     
-    private let aliceIdentity = AbstractIdentity(alias: "Alice")
+    private let aliceIdentity = AbstractIdentity()
     private let bobAccount = Account()
     private let claraAccount = Account()
     private let dianaAccount = Account()

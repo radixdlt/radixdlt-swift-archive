@@ -178,3 +178,9 @@ public extension TransferrableTokensParticle {
         return try Addresses(addresses: [address])
     }
 }
+
+public extension TransferrableTokensParticle {
+    var debugPayloadDescription: String {
+        return "\(amount), \(tokenDefinitionReference)"
+    }
+}

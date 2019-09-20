@@ -38,11 +38,11 @@ class MintTokensTests: LocalhostNodeTest {
         super.setUp()
         continueAfterFailure = false
         
-        aliceIdentity = AbstractIdentity(alias: "Alice")
-        bobIdentity = AbstractIdentity(alias: "Bob")
+        aliceIdentity = AbstractIdentity()
+        bobIdentity = AbstractIdentity()
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobIdentity.activeAccount)
+        bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
     }
     
     func testMintSuccessful() {
@@ -139,7 +139,7 @@ class MintTokensTests: LocalhostNodeTest {
             tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
         )
         
-      aliceApp.pull(address: bob).disposed(by: disposeBag)
+        aliceApp.pull(address: bob).disposed(by: disposeBag)
         guard let _ = aliceApp.observeTokenDefinitions(at: bob).blockingTakeFirst(timeout: 3) else { return XCTFail("Alice needs to know about tokens defined by Bob") }
         
         // WHEN: Alice call Mint for FooToken

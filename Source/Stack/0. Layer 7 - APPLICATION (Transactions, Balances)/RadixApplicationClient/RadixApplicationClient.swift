@@ -117,7 +117,7 @@ public extension RadixApplicationClient {
 // MARK: TransactionMaker
 public extension RadixApplicationClient {
     func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
-        return transactionMaker.send(transaction: transaction, toOriginNode: originNode)
+        transactionMaker.send(transaction: transaction, toOriginNode: originNode)
     }
 }
 
@@ -258,36 +258,45 @@ public extension RadixApplicationClient {
 
 // MARK: Magical
 public extension RadixApplicationClient {
-    var magic: Magic {
-        return universeConfig.magic
-    }
+    var magic: Magic { universeConfig.magic }
 }
 
 // MARK: ActiveAccountOwner
 public extension RadixApplicationClient {
-    var addressOfActiveAccount: Address {
-        return activeAccount.addressFromMagic(magic)
+    var addressOfActiveAccount: Address { snapshotActiveAccount.addressFromMagic(magic) }
+
+    func observeAddressOfActiveAccount() -> Observable<Address> {
+        let magic = self.magic
+        return identity.activeAccountObservable.map { newActiveAccount in
+            return newActiveAccount.addressFromMagic(magic)
+        }
+    }
+
+    func observeActiveAccount() -> Observable<Account> {
+        identity.activeAccountObservable
     }
 }
 
 // MARK: Public
 public extension RadixApplicationClient {
     
-    var universeConfig: UniverseConfig {
-        return universe.config
-    }
+    var universeConfig: UniverseConfig { universe.config }
     
-    var nativeTokenDefinition: TokenDefinition {
-        return universe.nativeTokenDefinition
-    }
+    var nativeTokenDefinition: TokenDefinition { universe.nativeTokenDefinition }
  
-    var nativeTokenIdentifier: ResourceIdentifier {
-        return nativeTokenDefinition.tokenDefinitionReference
-    }
+    var nativeTokenIdentifier: ResourceIdentifier { nativeTokenDefinition.tokenDefinitionReference }
     
     @discardableResult
     func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
         return identity.selectAccount(accountSelector)
+    }
+
+    func changeAccount(to selectedAccount: Account) {
+        identity.changeAccount(to: selectedAccount)
+    }
+
+    func addAccount(_ newAccount: Account) {
+        identity.addAccount(newAccount)
     }
     
     func pull(address: Address) -> Disposable {
@@ -297,15 +306,15 @@ public extension RadixApplicationClient {
     func pull() -> Disposable {
         return pull(address: addressOfActiveAccount)
     }
+
+    var observeConnectedToNodes: Observable<[Node]> { universe.connectedToNodes }
+
+    var snapshotActiveAccount: Account {
+        identity.snapshotActiveAccount
+    }
 }
 
 // MARK: - Private
 private extension RadixApplicationClient {
-    var atomPuller: AtomPuller {
-        return universe.atomPuller
-    }
-    
-    var activeAccount: Account {
-        return identity.activeAccount
-    }
+    var atomPuller: AtomPuller { universe.atomPuller }
 }

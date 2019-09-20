@@ -30,10 +30,10 @@ public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStrin
     public let sentAt: Date
     public let actions: [UserAction]
     
-    private init(
+    fileprivate init(
         uuid: UUID = .init(),
         sentAt: Date = .init(),
-        actions: [UserAction]
+        userActions actions: [UserAction]
     ) {
         self.uuid = uuid
         self.sentAt = sentAt
@@ -42,13 +42,12 @@ public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStrin
 }
 
 public extension Transaction {
-    
+    init(actions: [UserAction]) {
+        self.init(userActions: actions)
+    }
+
     init(_ actions: UserAction...) {
         self.init(actions: actions)
-    }
-    
-    init(makeActions: () -> [UserAction]) {
-        self.init(actions: makeActions())
     }
 }
 

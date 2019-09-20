@@ -40,11 +40,11 @@ class BurnTokensTests: LocalhostNodeTest {
         super.setUp()
         continueAfterFailure = false
         
-        aliceIdentity = AbstractIdentity(alias: "Alice")
-        bobIdentity = AbstractIdentity(alias: "Bob")
+        aliceIdentity = AbstractIdentity()
+        bobIdentity = AbstractIdentity()
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobIdentity.activeAccount)
+        bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
         carolAccount = Account()
         carol = application.addressOf(account: carolAccount)
     }
@@ -53,34 +53,31 @@ class BurnTokensTests: LocalhostNodeTest {
 
     
     func testBurnMintBurnMintBurnMint() {
-        
+
         let createTokenAction = application.actionCreateMultiIssuanceToken()
         let fooToken = createTokenAction.identifier
-        
-        func burn(amount: PositiveAmount) -> UserAction {
-            return BurnTokensAction(tokenDefinitionReference: fooToken, amount: amount, burner: alice)
+
+        XCTAssertTrue(
+            application.create(token: createTokenAction).blockingWasSuccessfull()
+        )
+
+        let tokenContext = TokenContext(rri: fooToken, actor: alice)
+
+        let transaction = Transaction(tokenContext) {
+            Mint(amount: 100)   // 100
+            Burn(amount: 3)     // 97
+            Mint(amount: 5)     // 102
+            Burn(amount: 7)     // 95
+            Mint(amount: 13)    // 108
+            Burn(amount: 17)    // 91
         }
-        
-        func mint(amount: PositiveAmount) -> UserAction {
-            return MintTokensAction(tokenDefinitionReference: fooToken, amount: amount, minter: alice)
-        }
-    
-        let transaction = Transaction {[
-            createTokenAction,
-            mint(amount: 100),   // 100
-            burn(amount: 3),     // 97
-            mint(amount: 5),     // 102
-            burn(amount: 7),    // 95
-            mint(amount: 13),    // 108
-            burn(amount: 17),    // 91
-        ]}
-        
+
         let result = application.send(transaction: transaction)
 
         XCTAssertTrue(
             result.blockingWasSuccessfull(timeout: 40)
         )
-        
+
         guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: .enoughForPOW) else { return }
         XCTAssertEqual(tokenState.totalSupply, 91)
     }
