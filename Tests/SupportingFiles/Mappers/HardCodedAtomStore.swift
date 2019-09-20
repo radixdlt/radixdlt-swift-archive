@@ -26,8 +26,14 @@ import Foundation
 @testable import RadixSDK
 import RxSwift
 
-struct NoStore: AtomStore {}
-extension NoStore {
+struct HardCodedAtomStore: AtomStore {
+    private let upParticles: [AnyUpParticle]
+    init(upParticles particles: [SpunParticleContainer] = []) {
+        self.upParticles = particles.compactMap { try? AnyUpParticle(spunParticle: $0) }
+    }
+}
+
+extension HardCodedAtomStore {
 
     func onSync(address: Address) -> Observable<Date> {
         return .empty()
@@ -38,7 +44,7 @@ extension NoStore {
     }
 
     func upParticles(at address: Address) -> [AnyUpParticle] {
-        return []
+        return upParticles
     }
 
     func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {

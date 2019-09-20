@@ -129,3 +129,9 @@ public extension MutableSupplyTokenDefinitionParticle {
         return .mutable
     }
 }
+
+public extension MutableSupplyTokenDefinitionParticle {
+    var debugPayloadDescription: String {
+        return String(describing: rri)
+    }
+}

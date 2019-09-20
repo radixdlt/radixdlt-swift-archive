@@ -24,12 +24,25 @@
 
 import Foundation
 
-public protocol ParticleContainer {
+public protocol ParticleContainer: CustomDebugStringConvertible {
     var someParticle: ParticleConvertible { get }
+}
+
+public extension ParticleContainer {
+    var debugDescription: String {
+        someParticle.debugDescription
+    }
 }
 
 public protocol SpunParticleContainer: ParticleContainer {
     var spin: Spin { get }
+}
+
+public extension SpunParticleContainer {
+    var debugDescription: String {
+        let spinString = spin == .down ? "🔻" : ""
+        return "\(spinString)\(someParticle.debugDescription)"
+    }
 }
 
 public protocol InvertableSpunParticleConvertible {

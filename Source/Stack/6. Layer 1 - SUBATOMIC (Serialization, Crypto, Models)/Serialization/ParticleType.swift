@@ -66,3 +66,29 @@ internal extension ParticleType {
         }
     }
 }
+
+internal extension ParticleType {
+    var debugEmoji: String {
+        switch self {
+        case .fixedSupplyTokenDefinition: return "🔒"
+        case .mutableSupplyTokenDefinition: return "🔓"
+        case .message: return "💌"
+        case .resourceIdentifier: return "🆔"
+        case .unallocated: return "👽"
+        case .transferrable: return "💸"
+        case .unique: return "🦄"
+        }
+    }
+
+    var debugName: String {
+        switch self {
+        case .fixedSupplyTokenDefinition: return "FixedToken"
+        case .mutableSupplyTokenDefinition: return "MutableToken"
+        case .message: return "Message"
+        case .resourceIdentifier: return "RRI"
+        case .unallocated: return "Unalloc"
+        case .transferrable: return "Transf"
+        case .unique: return "Unique"
+        }
+    }
+}

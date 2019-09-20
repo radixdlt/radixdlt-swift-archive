@@ -30,10 +30,20 @@ public protocol DestinationsOwner {
 }
 
 /// An abstract type bundling together particles
-public protocol ParticleConvertible: RadixHashable, DSONEncodable, Codable, DestinationsOwner {
+public protocol ParticleConvertible: RadixHashable, DSONEncodable, CustomDebugStringConvertible, Codable, DestinationsOwner {
     var particleType: ParticleType { get }
+
+    var debugPayloadDescription: String { get }
     
     func shardables() throws -> Addresses?
+}
+
+public extension ParticleConvertible {
+    var debugPayloadDescription: String { "❓" }
+
+    var debugDescription: String {
+        return "\(particleType.debugEmoji)\(particleType.debugName)(\(debugPayloadDescription))"
+    }
 }
 
 public extension DestinationsOwner where Self: Accountable {

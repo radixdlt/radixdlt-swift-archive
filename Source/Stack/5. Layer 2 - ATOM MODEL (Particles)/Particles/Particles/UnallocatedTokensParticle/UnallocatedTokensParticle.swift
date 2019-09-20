@@ -122,3 +122,9 @@ public extension UnallocatedTokensParticle {
         return try Addresses(addresses: [tokenDefinitionReference.address])
     }
 }
+
+public extension UnallocatedTokensParticle {
+    var debugPayloadDescription: String {
+        return "\(amount), \(tokenDefinitionReference)"
+    }
+}

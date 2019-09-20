@@ -57,6 +57,10 @@ public extension Transaction {
         static func buildBlock(_ userActionMaking: UserActionMaking...) -> [UserActionMaking] {
             return userActionMaking
         }
+
+        static func buildBlock(_ userActionMakingSingle: UserActionMaking) -> [UserActionMaking] {
+            return [userActionMakingSingle]
+        }
     }
 }
 
@@ -68,10 +72,25 @@ public extension Transaction {
         @Transaction.TokenContextBuilder
         makeListOfUserActionMaking: () -> [UserActionMaking]
     ) {
+        self.init(tokenContext: tokenContext, shorts: makeListOfUserActionMaking())
+    }
 
-        let userActions: [UserAction] = makeListOfUserActionMaking().map { $0.makeSomeUserAction(tokenContext: tokenContext) }
+    init(
+        _ tokenContext: TokenContext,
 
-        self.init(actions: userActions)
+        @Transaction.TokenContextBuilder
+        makeUserActionMaking: () -> UserActionMaking
+    ) {
+        self.init(tokenContext: tokenContext, shorts: [makeUserActionMaking()])
     }
 }
 
+private extension Transaction {
+    init(
+        tokenContext: TokenContext,
+        shorts: [UserActionMaking]
+    ) {
+        let userActions: [UserAction] = shorts.map { $0.makeSomeUserAction(tokenContext: tokenContext) }
+        self.init(actions: userActions)
+    }
+}

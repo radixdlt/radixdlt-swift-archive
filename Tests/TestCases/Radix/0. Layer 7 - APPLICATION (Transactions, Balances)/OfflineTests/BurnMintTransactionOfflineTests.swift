@@ -30,46 +30,17 @@ class BurnMintTransactionOfflineTests: XCTestCase {
 
     func testBurnMintMultipleTimes() {
         let alice = Address.irrelevant
-
-        let createTokenAction = try! CreateTokenAction(
-            creator: alice,
-            name: .irrelevant,
-            symbol: .irrelevant,
-            description: .irrelevant,
-            supply: .mutableZeroSupply
-        )
-
-        let rri = createTokenAction.identifier
-
-        let createTokenActionToParticleGroupsMapper = DefaultCreateTokenActionToParticleGroupsMapper()
-
-        let createTokenParticleGroups = try! createTokenActionToParticleGroupsMapper.particleGroups(
-            for: createTokenAction,
-            upParticles: [],
-            addressOfActiveAccount: alice
-        )
-
-        let atomStore = HardCodedAtomStore(upParticles: createTokenParticleGroups.upParticles())
+        let rri = ResourceIdentifier(address: alice, name: .irrelevant)
 
         let transaction = Transaction(TokenContext(rri: rri, actor: alice)) {
-            Mint(amount: 100)   // 100
-            Burn(amount: 3)     // 97
-            Mint(amount: 5)     // 102
-            Burn(amount: 7)     // 95
-            Mint(amount: 13)    // 108
-            Burn(amount: 17)    // 91
+            Mint(amount: 2)
+            Burn(amount: 1)
+            Mint(amount: 3)
+            Burn(amount: 2)
         }
 
-        let transactionToAtomMapper = DefaultTransactionToAtomMapper(atomStore: atomStore)
-
-        let atom = try! transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: alice)
-
-        let upParticles = atom.upParticles()
-
-        let tokenStateReducer = TokenDefinitionsReducer()
-
-        let tokenState = try! tokenStateReducer.reduceFromInitialState(upParticles: upParticles)
-        XCTAssertEqual(tokenState.tokenState(identifier: rri)!.totalSupply, 91)
+        XCTAssertEqual(transaction.actions(ofType: MintTokensAction.self).count, 2)
+        XCTAssertEqual(transaction.actions(ofType: BurnTokensAction.self).count, 2)
     }
 
 }
