@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,26 +23,31 @@
 //
 
 import Foundation
+@testable import RadixSDK
+import RxSwift
 
-public struct BurnTokensAction: ConsumeTokensAction {
-    public let tokenDefinitionReference: ResourceIdentifier
-    public let amount: PositiveAmount
-    public let burner: Address
-
-    public init(
-        tokenDefinitionReference: ResourceIdentifier,
-        amount: PositiveAmount,
-        burner: Address
-    ) {
-        self.tokenDefinitionReference = tokenDefinitionReference
-        self.amount = amount
-        self.burner = burner
+struct HardCodedAtomStore: AtomStore {
+    private let upParticles: [AnyUpParticle]
+    init(upParticles particles: [SpunParticleContainer] = []) {
+        self.upParticles = particles.compactMap { try? AnyUpParticle(spunParticle: $0) }
     }
 }
 
-public extension BurnTokensAction {
-    
-    var user: Address { return burner }
-    var nameOfAction: UserActionName { return .burnTokens }
-    var identifierForTokenToConsume: ResourceIdentifier { return tokenDefinitionReference }
+extension HardCodedAtomStore {
+
+    func onSync(address: Address) -> Observable<Date> {
+        return .empty()
+    }
+
+    func atomObservations(of address: Address) -> Observable<AtomObservation> {
+         return .empty()
+    }
+
+    func upParticles(at address: Address) -> [AnyUpParticle] {
+        return upParticles
+    }
+
+    func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {
+        abstract()
+    }
 }

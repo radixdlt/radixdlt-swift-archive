@@ -23,6 +23,7 @@
 //
 
 import Foundation
+import BigInt
 
 // swiftlint:disable colon opening_brace
 
@@ -116,7 +117,17 @@ public extension Supply {
 // MARK: - CustomStringConvertible
 public extension Supply {
     var description: String {
-        return amount.description
+        if amount == .zero { return "0" }
+        if amount == Self.maxAmountValue { return "UInt256.max" }
+
+        let diffAgainstMax = (SignedAmount(amount: Self.maxAmountValue) - SignedAmount(amount: amount)).abs
+
+        if diffAgainstMax.magnitude < 10000 {
+            return "UInt256.max - \(diffAgainstMax.magnitude)"
+        } else {
+            return "\(amount)"
+        }
+
     }
 }
 

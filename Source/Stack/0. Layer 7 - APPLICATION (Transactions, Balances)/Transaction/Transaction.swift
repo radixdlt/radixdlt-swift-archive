@@ -33,7 +33,7 @@ public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStrin
     fileprivate init(
         uuid: UUID = .init(),
         sentAt: Date = .init(),
-        actions: [UserAction]
+        userActions actions: [UserAction]
     ) {
         self.uuid = uuid
         self.sentAt = sentAt
@@ -42,34 +42,12 @@ public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStrin
 }
 
 public extension Transaction {
-    @_functionBuilder
-    struct Builder {
-        static func buildBlock(_ userAction: UserAction) -> UserAction {
-            return userAction
-        }
-
-        static func buildBlock(_ userActions: UserAction...) -> [UserAction] {
-            return userActions
-        }
-    }
-}
-
-public extension Transaction {
-
-    init(@Transaction.Builder makeActions: () -> [UserAction]) {
-        self.init(actions: makeActions())
+    init(actions: [UserAction]) {
+        self.init(userActions: actions)
     }
 
-    init(@Transaction.Builder makeAction: () -> UserAction) {
-        self.init([makeAction()])
-    }
-
-    init(actions: UserAction...) {
+    init(_ actions: UserAction...) {
         self.init(actions: actions)
-    }
-
-    init(_ actions: [UserAction]) {
-          self.init(actions: actions)
     }
 }
 

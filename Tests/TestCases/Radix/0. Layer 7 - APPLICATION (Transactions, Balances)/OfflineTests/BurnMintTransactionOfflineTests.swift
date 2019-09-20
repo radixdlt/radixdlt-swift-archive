@@ -22,26 +22,25 @@
 // SOFTWARE.
 //
 
-import Foundation
+import XCTest
 @testable import RadixSDK
-import RxSwift
 
-struct NoStore: AtomStore {}
-extension NoStore {
+class BurnMintTransactionOfflineTests: XCTestCase {
 
-    func onSync(address: Address) -> Observable<Date> {
-        return .empty()
+
+    func testBurnMintMultipleTimes() {
+        let alice = Address.irrelevant
+        let rri = ResourceIdentifier(address: alice, name: .irrelevant)
+
+        let transaction = Transaction(TokenContext(rri: rri, actor: alice)) {
+            Mint(amount: 2)
+            Burn(amount: 1)
+            Mint(amount: 3)
+            Burn(amount: 2)
+        }
+
+        XCTAssertEqual(transaction.actions(ofType: MintTokensAction.self).count, 2)
+        XCTAssertEqual(transaction.actions(ofType: BurnTokensAction.self).count, 2)
     }
 
-    func atomObservations(of address: Address) -> Observable<AtomObservation> {
-         return .empty()
-    }
-
-    func upParticles(at address: Address) -> [AnyUpParticle] {
-        return []
-    }
-
-    func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {
-        abstract()
-    }
 }
