@@ -2,7 +2,9 @@
 
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**radixdlt-swift** is a Swift Client library for interacting with a [Radix](https://www.radixdlt.com) Distributed Ledger, written in ***Swift 5***.
+**radixdlt-swift** is a Swift Client library for interacting with a [Radix](https://www.radixdlt.com) Distributed Ledger, written in ***Swift 5.1***.
+
+### ❗️ Xcode 11 is required, since Swift 5.1 syntax and features are used.
 
 ## Table of contents
 
@@ -126,7 +128,7 @@ application.sendEncryptedMessage(
 
 ## Getting started
 
-### 0. Install Xcode 10.2
+### 0. Install Xcode 11
 
 Install it from the [App Store](https://itunes.apple.com/gb/app/xcode/id497799835?mt=12).
 
