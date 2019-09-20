@@ -52,3 +52,16 @@ public extension Atom {
     typealias Element = ParticleGroup
     var elements: [Element] { return particleGroups.elements }
 }
+
+extension Atom: AnyEncodableKeyValuesProcessing {
+    
+    // Remove "serializer" from hash calculation to match RadixCore `ImmutableAtom` type.
+    public var postProcess: Process {
+        return { proccessed, output in
+            guard output.contains(.hash) else { return proccessed }
+            var mutable = proccessed
+            mutable.removeAll(where: { $0.key == Atom.CodingKeys.serializer.rawValue })
+            return mutable
+        }
+    }
+}

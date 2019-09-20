@@ -505,7 +505,6 @@
 		E6E2799D2271CD1C0067D46E /* ValidValueInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E2791A2271CD1C0067D46E /* ValidValueInitializable.swift */; };
 		E6E2799E2271CD1C0067D46E /* StringInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E2791B2271CD1C0067D46E /* StringInitializable.swift */; };
 		E6E279A12271CD1C0067D46E /* Throwing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279202271CD1C0067D46E /* Throwing.swift */; };
-		E6E27A1C2271CE250067D46E /* EmptyAtomSignatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279BA2271CE250067D46E /* EmptyAtomSignatureTests.swift */; };
 		E6E27A1E2271CE250067D46E /* ECIESDecryptMessageFromJavaLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279BD2271CE250067D46E /* ECIESDecryptMessageFromJavaLibraryTests.swift */; };
 		E6E27A1F2271CE250067D46E /* ECIESDecryptMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279BE2271CE250067D46E /* ECIESDecryptMessageTests.swift */; };
 		E6E27A202271CE250067D46E /* ECIESEncryptionAndDecryptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279BF2271CE250067D46E /* ECIESEncryptionAndDecryptionTests.swift */; };
@@ -541,7 +540,6 @@
 		E6E27A402271CE250067D46E /* CBOREncodingPrimitivesStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279EC2271CE250067D46E /* CBOREncodingPrimitivesStringTests.swift */; };
 		E6E27A412271CE250067D46E /* CBOREncodingPrimitivesBoolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279ED2271CE250067D46E /* CBOREncodingPrimitivesBoolTests.swift */; };
 		E6E27A422271CE250067D46E /* TokenPermissionEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279EF2271CE250067D46E /* TokenPermissionEncodingTests.swift */; };
-		E6E27A432271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279F02271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift */; };
 		E6E27A442271CE250067D46E /* TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279F12271CE250067D46E /* TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift */; };
 		E6E27A452271CE250067D46E /* AtomTooBigDSONEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279F42271CE250067D46E /* AtomTooBigDSONEncodingTests.swift */; };
 		E6E27A472271CE250067D46E /* DsonEncodingTokenDefinitionParticleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279F72271CE250067D46E /* DsonEncodingTokenDefinitionParticleTests.swift */; };
@@ -1154,7 +1152,6 @@
 		E6E279202271CD1C0067D46E /* Throwing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Throwing.swift; sourceTree = "<group>"; };
 		E6E279A72271CE250067D46E /* URLFormatterFailingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLFormatterFailingTests.swift; sourceTree = "<group>"; };
 		E6E279A82271CE250067D46E /* URLFormatterSuccessfulTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLFormatterSuccessfulTests.swift; sourceTree = "<group>"; };
-		E6E279BA2271CE250067D46E /* EmptyAtomSignatureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyAtomSignatureTests.swift; sourceTree = "<group>"; };
 		E6E279BD2271CE250067D46E /* ECIESDecryptMessageFromJavaLibraryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIESDecryptMessageFromJavaLibraryTests.swift; sourceTree = "<group>"; };
 		E6E279BE2271CE250067D46E /* ECIESDecryptMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIESDecryptMessageTests.swift; sourceTree = "<group>"; };
 		E6E279BF2271CE250067D46E /* ECIESEncryptionAndDecryptionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIESEncryptionAndDecryptionTests.swift; sourceTree = "<group>"; };
@@ -1190,7 +1187,6 @@
 		E6E279EC2271CE250067D46E /* CBOREncodingPrimitivesStringTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBOREncodingPrimitivesStringTests.swift; sourceTree = "<group>"; };
 		E6E279ED2271CE250067D46E /* CBOREncodingPrimitivesBoolTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBOREncodingPrimitivesBoolTests.swift; sourceTree = "<group>"; };
 		E6E279EF2271CE250067D46E /* TokenPermissionEncodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenPermissionEncodingTests.swift; sourceTree = "<group>"; };
-		E6E279F02271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomWithTrivialMetaDataDsonEncodingTests.swift; sourceTree = "<group>"; };
 		E6E279F12271CE250067D46E /* TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift; sourceTree = "<group>"; };
 		E6E279F42271CE250067D46E /* AtomTooBigDSONEncodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomTooBigDSONEncodingTests.swift; sourceTree = "<group>"; };
 		E6E279F72271CE250067D46E /* DsonEncodingTokenDefinitionParticleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DsonEncodingTokenDefinitionParticleTests.swift; sourceTree = "<group>"; };
@@ -3645,7 +3641,6 @@
 		E6E279B92271CE250067D46E /* Signing */ = {
 			isa = PBXGroup;
 			children = (
-				E6E279BA2271CE250067D46E /* EmptyAtomSignatureTests.swift */,
 				E671AAE02306F494007CC356 /* SignatureLengthTests.swift */,
 			);
 			path = Signing;
@@ -3800,7 +3795,6 @@
 			isa = PBXGroup;
 			children = (
 				E6E279EF2271CE250067D46E /* TokenPermissionEncodingTests.swift */,
-				E6E279F02271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift */,
 				E6E279F12271CE250067D46E /* TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift */,
 			);
 			path = JsonAndDsonEncoding;
@@ -4839,7 +4833,6 @@
 				E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */,
 				E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */,
 				48E2A6BD230EB92E00042C16 /* AddressesInSameUniverseTests.swift in Sources */,
-				E6E27A432271CE250067D46E /* AtomWithTrivialMetaDataDsonEncodingTests.swift in Sources */,
 				E6E27A4A2271CE250067D46E /* GranularityTests.swift in Sources */,
 				E6E27A382271CE250067D46E /* AtomJsonDeserializationUnallocatedTokenBadValuesTests.swift in Sources */,
 				E6638CE823351C70004C9846 /* URLFormatterFailingTests.swift in Sources */,
@@ -4859,7 +4852,6 @@
 				E6638CE923351C77004C9846 /* URLFormatterSuccessfulTests.swift in Sources */,
 				E6E27A332271CE250067D46E /* NonBase58AddressTests.swift in Sources */,
 				E6F5484E227735AF00EE6311 /* CompareAnyAmountWithAnyAmountTests.swift.swift in Sources */,
-				E6E27A1C2271CE250067D46E /* EmptyAtomSignatureTests.swift in Sources */,
 				E6F548392277022500EE6311 /* GetTokenBalanceTests.swift in Sources */,
 				E6E27A292271CE250067D46E /* TooShortNameTests.swift in Sources */,
 				E69E754922A98A1300AC631B /* CreateTokenActionTests.swift in Sources */,
