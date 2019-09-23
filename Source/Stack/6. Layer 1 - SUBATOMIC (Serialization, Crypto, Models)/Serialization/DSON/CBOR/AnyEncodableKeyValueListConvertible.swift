@@ -50,11 +50,11 @@ public extension AnyEncodableKeyValueListConvertible {
     ///
     func toDSON(output: DSONOutput = .default) throws -> DSON {
         var keyValues = try anyEncodableKeyValues(output: output)
-        
+    
         if let processor = self as? AnyEncodableKeyValuesProcessing {
             keyValues = try processor.process(keyValues: keyValues, output: output)
         }
-        
+
         return [
             CBOR.encodeMapStreamStart(),
             keyValues.flatMap { $0.cborEncoded() },

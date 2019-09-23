@@ -26,18 +26,6 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-extension DefaultHTTPClient {
-    static var localhost: DefaultHTTPClient {
-        return DefaultHTTPClient(baseURL: URLFormatter.localhost)
-    }
-}
-
-extension DefaultRESTClient {
-    static var localhost: DefaultRESTClient {
-        return DefaultRESTClient(formattedUrl: FormattedURL.localhost)
-    }
-}
-
 class URLFormatterTests: XCTestCase {
 
     func testCorrectHttpsUrl() {
@@ -54,15 +42,15 @@ class URLFormatterTests: XCTestCase {
         }
     }
 
-    func testHttpClientFromLocalhost() {
-        let client: DefaultHTTPClient = .localhost
-        XCTAssertEqual(client.baseUrl.absoluteString, "http://localhost:8080/api")
-    }
-
-    func testRestClientFromLocalhost() {
-        let client: DefaultRESTClient = .localhost
-        XCTAssertEqual((client.httpClient as! DefaultHTTPClient).baseUrl.absoluteString, "http://localhost:8080/api")
-    }
+//    func testHttpClientFromLocalhost() {
+//        let client: DefaultHTTPClient = .localhost
+//        XCTAssertEqual(client.baseUrl.absoluteString, "http://localhost:8080/api")
+//    }
+//
+//    func testRestClientFromLocalhost() {
+//        let client: DefaultRESTClient = .localhost
+//        XCTAssertEqual((client.httpClient as! DefaultHTTPClient).baseUrl.absoluteString, "http://localhost:8080/api")
+//    }
 
     func testLocalhost() {
         let host: String = .localhost

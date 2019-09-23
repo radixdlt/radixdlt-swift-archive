@@ -84,3 +84,10 @@ extension RadixHash: ExpressibleByStringLiteral {
         }
     }
 }
+
+public struct SkipHashing: Hashing {
+    public init() {}
+    public func hash(data: Data) -> Data {
+        return data
+    }
+}

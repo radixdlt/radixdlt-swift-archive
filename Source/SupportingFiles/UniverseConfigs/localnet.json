@@ -1,115 +1,165 @@
 {
     "magic": -1332248574,
+    "hid": ":uid:71b120ee41cd3d7d93be8b2267244595",
     "creator": ":byt:A3hanCWf3pmR5E+i+wtWWfKleBrDOQduLb/vcFKOSt9o",
-    "signature.r": ":byt:cF0F+w2vx0iIxyYkIV/D3nuhiPjLYdoT5aO9V5c6WKw=",
-    "signature.s": ":byt:M2Xf8iQ0zitJrUwXMLMOq66K11+Fc3ToqeM+ly3Lmhk=",
+    "signature.r": ":byt:TEJx1oRGXF8XZoICf66iQ0kypFTdj5ygeBpOadZVSdM=",
+    "signature.s": ":byt:UHxU8kRi7DeEBnv8oX/Zu4fVarGwTOSGM+RmgZ0D7YE=",
     "serializer": "radix.universe",
     "description": ":str:The Radix development Universe",
     "type": 2,
     "version": 100,
     "planck": 60000,
-    "genesis": [{
-        "metaData": {"timestamp": ":str:1551225600000"},
-        "serializer": "radix.atom",
-        "version": 100,
-        "particleGroups": [
-            {
-                "serializer": "radix.particle_group",
-                "particles": [{
-                    "spin": 1,
-                    "serializer": "radix.spun_particle",
-                    "particle": {
-                        "bytes": ":byt:UmFkaXguLi4ganVzdCBpbWFnaW5lIQ==",
-                        "destinations": [":uid:56abab3870585f04d015d55adf600bc7"],
-                        "serializer": "radix.particles.message",
-                        "from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-                        "to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-                        "version": 100,
-                        "nonce": 1813729801760986
-                    },
-                    "version": 100
-                }],
-                "version": 100
+    "genesis": [
+        {
+            "metaData": {
+                "timestamp": ":str:1551225600000"
             },
-            {
-                "serializer": "radix.particle_group",
-                "particles": [
-                    {
-                        "spin": -1,
-                        "serializer": "radix.spun_particle",
-                        "particle": {
-                            "destinations": [":uid:56abab3870585f04d015d55adf600bc7"],
-                            "rri": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
-                            "serializer": "radix.particles.rri",
-                            "version": 100,
-                            "nonce": 0
+            "shards": [
+                6245273567170682628
+            ],
+            "hid": ":uid:aee65e30cc0fe4bb5857fb472d2032be",
+            "serializer": "radix.atom",
+            "version": 100,
+            "particleGroups": [
+                {
+                    "serializer": "radix.particle_group",
+                    "particles": [
+                        {
+                            "spin": 1,
+                            "serializer": "radix.spun_particle",
+                            "particle": {
+                                "hid": ":uid:d976d16a3058930eb72d8c8f4115e343",
+                                "bytes": ":byt:UmFkaXguLi4ganVzdCBpbWFnaW5lIQ==",
+                                "destinations": [
+                                    ":uid:56abab3870585f04d015d55adf600bc7"
+                                ],
+                                "serializer": "radix.particles.message",
+                                "from": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                                "to": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                                "version": 100,
+                                "nonce": 982125088533081
+                            },
+                            "version": 100
+                        }
+                    ],
+                    "version": 100
+                },
+                {
+                    "serializer": "radix.particle_group",
+                    "particles": [
+                        {
+                            "spin": -1,
+                            "serializer": "radix.spun_particle",
+                            "particle": {
+                                "hid": ":uid:ce31e1c05ff5b8f09cdd7ea23b9ba0c1",
+                                "destinations": [
+                                    ":uid:56abab3870585f04d015d55adf600bc7"
+                                ],
+                                "rri": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
+                                "serializer": "radix.particles.rri",
+                                "version": 100,
+                                "nonce": 0
+                            },
+                            "version": 100
                         },
+                        {
+                            "spin": 1,
+                            "serializer": "radix.spun_particle",
+                            "particle": {
+                                "hid": ":uid:9ba72f1e2867aaf9c6e63cd553396ea2",
+                                "granularity": ":u20:1",
+                                "destinations": [
+                                    ":uid:56abab3870585f04d015d55adf600bc7"
+                                ],
+                                "rri": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
+                                "name": ":str:Rads",
+                                "serializer": "radix.particles.fixed_supply_token_definition",
+                                "description": ":str:Radix Native Tokens",
+                                "iconUrl": ":str:https://assets.radixdlt.com/icons/icon-xrd-32x32.png",
+                                "version": 100,
+                                "supply": ":u20:1000000000000000000000000000"
+                            },
+                            "version": 100
+                        },
+                        {
+                            "spin": 1,
+                            "serializer": "radix.spun_particle",
+                            "particle": {
+                                "amount": ":u20:1000000000000000000000000000",
+                                "hid": ":uid:9ff7ae92fe061ee065ddbf6ef04ea966",
+                                "address": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
+                                "granularity": ":u20:1",
+                                "destinations": [
+                                    ":uid:56abab3870585f04d015d55adf600bc7"
+                                ],
+                                "serializer": "radix.particles.transferrable_tokens",
+                                "version": 100,
+                                "nonce": 982125088539821,
+                                "tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
+                                "planck": 25853760
+                            },
+                            "version": 100
+                        }
+                    ],
+                    "version": 100
+                }
+            ],
+            "signatures": {
+                "56abab3870585f04d015d55adf600bc7": {
+                    "r": ":byt:pVigNA0gLFag1OOCj2ytgebZTVFnOhKH7mXAOX5b7RE=",
+                    "s": ":byt:MHhyojiLwi/CuCILAr//DSx+eQwhK0aiJyji5uhsZrU=",
+                    "serializer": "crypto.ecdsa_signature",
+                    "version": 100
+                }
+            },
+            "temporalProof": {
+                "hid": ":uid:c722c06595ee868f563f8d5d612923d5",
+                "vertices": [
+                    {
+                        "owner": ":byt:A7mRn1O2okTw8CowCRHchkTjXdWb/CZcE8EqO9ibx11f",
+                        "rclock": 1551225600000,
+                        "hid": ":uid:6cccd3c58a1e3a3db96b83ccbcebf33d",
+                        "previous": ":uid:00000000000000000000000000000000",
+                        "signature": {
+                            "r": ":byt:cdUzUPYoVaGGfij44IEHrKMmZWgZOJxzQVKvjMVQd4I=",
+                            "s": ":byt:PhI90S5N6+i+md/mKvXdCTILcX8GycXedy01cSl/0ns=",
+                            "serializer": "crypto.ecdsa_signature",
+                            "version": 100
+                        },
+                        "timestamps": {
+                            "default": 1551225600000
+                        },
+                        "serializer": "tempo.temporal_vertex",
+                        "commitment": ":hsh:0000000000000000000000000000000000000000000000000000000000000000",
+                        "clock": 1,
                         "version": 100
                     },
                     {
-                        "spin": 1,
-                        "serializer": "radix.spun_particle",
-                        "particle": {
-                            "granularity": ":u20:1",
-                            "destinations": [":uid:56abab3870585f04d015d55adf600bc7"],
-                            "rri": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
-                            "name": ":str:Rads",
-                            "serializer": "radix.particles.fixed_supply_token_definition",
-                            "description": ":str:Radix Native Tokens",
-                            "iconUrl": ":str:https://assets.radixdlt.com/icons/icon-xrd-32x32.png",
-                            "version": 100,
-                            "supply": ":u20:1000000000000000000000000000"
+                        "owner": ":byt:Apb0DXqJbxgs2sJ4M6k4/KqQjQInmI5lrKBUlOXJ/obc",
+                        "rclock": 1568989628730,
+                        "hid": ":uid:2dd1ca32202a97658b13f451a7715242",
+                        "previous": ":uid:6cccd3c58a1e3a3db96b83ccbcebf33d",
+                        "signature": {
+                            "r": ":byt:eAx86t9uh6xVvlQfX7CqX7LXsk4MTu/inQA5Y6yJw9k=",
+                            "s": ":byt:OfA9ynjTmOXFRAKXzk2kjLgqUkD/fRQz1nrooIFibFs=",
+                            "serializer": "crypto.ecdsa_signature",
+                            "version": 100
                         },
-                        "version": 100
-                    },
-                    {
-                        "spin": 1,
-                        "serializer": "radix.spun_particle",
-                        "particle": {
-                            "amount": ":u20:1000000000000000000000000000",
-                            "address": ":adr:JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor",
-                            "granularity": ":u20:1",
-                            "destinations": [":uid:56abab3870585f04d015d55adf600bc7"],
-                            "serializer": "radix.particles.transferrable_tokens",
-                            "version": 100,
-                            "nonce": 1813729801767025,
-                            "tokenDefinitionReference": ":rri:/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD",
-                            "planck": 25853760
+                        "timestamps": {
+                            "default": 1568989628730
                         },
+                        "serializer": "tempo.temporal_vertex",
+                        "commitment": ":hsh:0000000000000000000000000000000000000000000000000000000000000000",
+                        "clock": 1,
                         "version": 100
                     }
                 ],
-                "version": 100
+                "serializer": "tempo.temporal_proof",
+                "version": 100,
+                "aid": ":aid:aee65e30cc0fe4bb5857fb472d2032be1c7c9ad0e04bfe1256abab3870585f04"
             }
-        ],
-        "signatures": {"56abab3870585f04d015d55adf600bc7": {
-            "r": ":byt:vzGdi2Nx98AXTDDlx4/bMGljdQd3XZusfhDJYJeE64A=",
-            "s": ":byt:a8hj65MgeUoCyMR7Drg0P3QxpPr2ofI/CRE3ynRTe4o=",
-            "serializer": "crypto.ecdsa_signature",
-            "version": 100
-        }},
-        "temporalProof": {
-            "vertices": [{
-                "owner": ":byt:A7mRn1O2okTw8CowCRHchkTjXdWb/CZcE8EqO9ibx11f",
-                "rclock": 1551225600000,
-                "previous": ":uid:00000000000000000000000000000000",
-                "signature": {
-                    "r": ":byt:1O/PV0Az+VnTBM02CW5TDlQF9bypvWzvA+MHQOJyS1s=",
-                    "s": ":byt:WTtnymhC+OVH3PcESDX5qjyymONxLhr4Qsr6hyq8+5o=",
-                    "serializer": "crypto.ecdsa_signature",
-                    "version": 100
-                },
-                "timestamps": {"default": 1551225600000},
-                "serializer": "tempo.temporal_vertex",
-                "commitment": ":hsh:0000000000000000000000000000000000000000000000000000000000000000",
-                "clock": 1,
-                "version": 100
-            }],
-            "serializer": "tempo.temporal_proof",
-            "version": 100,
-            "aid": ":aid:e69747b049cc591c851622519cd257c1c4d86142f1a03cca56abab3870585f04"
         }
-    }],
+    ],
     "port": 30000,
     "name": ":str:Radix Devnet",
     "timestamp": 1551225600000

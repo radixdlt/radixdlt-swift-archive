@@ -52,7 +52,7 @@ class BurnTokensTests: LocalhostNodeTest {
     private let disposeBag = DisposeBag()
 
     
-    func testBurnMintBurnMintBurnMint() {
+    func testMintBurnMintBurn() {
 
         let createTokenAction = application.actionCreateMultiIssuanceToken()
         let fooToken = createTokenAction.identifier
@@ -68,8 +68,6 @@ class BurnTokensTests: LocalhostNodeTest {
             Burn(amount: 3)     // 97
             Mint(amount: 5)     // 102
             Burn(amount: 7)     // 95
-            Mint(amount: 13)    // 108
-            Burn(amount: 17)    // 91
         }
 
         let result = application.send(transaction: transaction)
@@ -79,7 +77,7 @@ class BurnTokensTests: LocalhostNodeTest {
         )
 
         guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: .enoughForPOW) else { return }
-        XCTAssertEqual(tokenState.totalSupply, 91)
+        XCTAssertEqual(tokenState.totalSupply, 95)
     }
     
     func testBurnSuccessful() {
