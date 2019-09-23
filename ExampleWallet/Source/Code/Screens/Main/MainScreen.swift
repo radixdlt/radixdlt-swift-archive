@@ -72,6 +72,7 @@ extension MainScreen: View {
             tab(.settings) {
                 NavigationView {
                     SettingsScreen()
+                        .environmentObject(self.radix)
                 }
             }
         }

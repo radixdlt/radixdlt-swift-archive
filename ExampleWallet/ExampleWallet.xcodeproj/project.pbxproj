@@ -130,6 +130,7 @@
 		48E1A5F7232170F1009A34C6 /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E1A5F6232170F1009A34C6 /* Wallet.swift */; };
 		48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */; };
 		48FC13232317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13222317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift */; };
+		E690CF7C23391E8F00099C48 /* CreateTokenScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E690CF7B23391E8F00099C48 /* CreateTokenScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -290,6 +291,7 @@
 		48E1A5F6232170F1009A34C6 /* Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallet.swift; sourceTree = "<group>"; };
 		48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSet_Extension.swift; sourceTree = "<group>"; };
 		48FC13222317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountInputMnemonicScreen.swift; sourceTree = "<group>"; };
+		E690CF7B23391E8F00099C48 /* CreateTokenScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTokenScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -822,6 +824,7 @@
 			isa = PBXGroup;
 			children = (
 				48A9600E231003E70074AC26 /* SettingsScreen.swift */,
+				E690CF7B23391E8F00099C48 /* CreateTokenScreen.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1043,6 +1046,7 @@
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
 				48596A4F2316D0E9005C1804 /* SecurePersistence.swift in Sources */,
 				48596A5B2316D197005C1804 /* Preferences+ValueRetrieval.swift in Sources */,
+				E690CF7C23391E8F00099C48 /* CreateTokenScreen.swift in Sources */,
 				48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */,
 				48596A482316D090005C1804 /* AnyKeyValueStoring.swift in Sources */,
 				484DACAC231D897900CD4E5D /* MnemonicWordListMatcher.swift in Sources */,
