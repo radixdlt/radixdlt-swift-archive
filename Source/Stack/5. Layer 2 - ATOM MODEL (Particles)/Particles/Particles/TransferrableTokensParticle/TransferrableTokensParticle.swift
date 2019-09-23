@@ -181,6 +181,6 @@ public extension TransferrableTokensParticle {
 
 public extension TransferrableTokensParticle {
     var debugPayloadDescription: String {
-        return "\(amount), \(tokenDefinitionReference)"
+        return "\(amount)"
     }
 }

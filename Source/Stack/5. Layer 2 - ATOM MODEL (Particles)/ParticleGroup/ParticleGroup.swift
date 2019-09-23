@@ -59,6 +59,7 @@ public struct ParticleGroup:
     ArrayConvertible,
     ArrayInitializable,
     RadixModelTypeStaticSpecifying,
+    CustomDebugStringConvertible,
     Codable
 {
     // swiftlint:enable colon opening_brace
@@ -120,12 +121,31 @@ public extension ParticleGroup {
     }
 }
 
+// MARK: - CustomDebugStringConvertible
+public extension ParticleGroup {
+    var debugDescription: String {
+        let particlesDebugDescription = spunParticles.map { $0.debugDescription }.joined(separator: ",\n")
+        let particlesString = "[\n\(particlesDebugDescription)\n]"
+        
+        if metaData.isEmpty { return particlesString }
+        return """
+            ParticleGroup(
+                metaData: \(metaData),
+                particles: \(particlesString)
+            )
+        """
+    }
+}
+
 // MARK: - ArrayDecodable
 public extension ParticleGroup {
+    
     typealias Element = AnySpunParticle
+    
     var elements: [Element] {
         return spunParticles
     }
+    
     init(elements: [Element]) {
         do {
             try self.init(spunParticles: elements)

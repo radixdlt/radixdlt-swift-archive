@@ -117,3 +117,11 @@ public extension FixedSupplyTokenDefinitionParticle {
         return .fixed
     }
 }
+
+public extension FixedSupplyTokenDefinitionParticle {
+    var debugPayloadDescription: String {
+        return """
+        fixed(\(supply)), \(self.tokenDefinitionReference)"
+        """
+    }
+}

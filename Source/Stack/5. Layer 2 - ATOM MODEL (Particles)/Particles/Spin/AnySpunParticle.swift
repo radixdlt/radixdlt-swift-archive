@@ -32,8 +32,7 @@ public struct AnySpunParticle:
     RadixModelTypeStaticSpecifying,
     RadixCodable,
     RadixHashable,
-    Codable,
-    CustomStringConvertible
+    Codable
 {
 // swiftlint:enable colon opening_brace
 
@@ -51,13 +50,6 @@ public struct AnySpunParticle:
             spin: spunParticle.spin,
             particle: spunParticle.someParticle
         )
-    }
-}
-
-// MARK: CustomStringConvertible
-public extension AnySpunParticle {
-    var description: String {
-        return "Particle(spin: \(spin), <\(particle)>)"
     }
 }
 

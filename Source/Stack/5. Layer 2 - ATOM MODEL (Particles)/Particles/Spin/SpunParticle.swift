@@ -40,8 +40,9 @@ public protocol SpunParticleContainer: ParticleContainer {
 
 public extension SpunParticleContainer {
     var debugDescription: String {
-        let spinString = spin == .down ? "🔻" : ""
-        return "\(spinString)\(someParticle.debugDescription)"
+        let spinString = spin == .down ? "🔻" : "🦎"
+        let particleHashId = String(someParticle.hashEUID.hex.suffix(4))
+        return "\(spinString)\(someParticle.debugDescription) <\(particleHashId)>"
     }
 }
 

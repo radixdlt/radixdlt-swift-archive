@@ -25,7 +25,7 @@
 import Foundation
 
 /// Type-erased hashable Particle container which hash and equality ignores spin.
-public struct AnyParticle: SpunParticleContainer, Hashable, CustomStringConvertible {
+public struct AnyParticle: SpunParticleContainer, Hashable, CustomDebugStringConvertible {
     
     private let _getSpunParticle: () -> SpunParticleContainer
     private let _hashIgnoringSpin: (inout Swift.Hasher) -> Void
@@ -42,8 +42,8 @@ public extension AnyParticle {
 
     var spin: Spin { return _getSpunParticle().spin }
     
-    var description: String {
-        return AnySpunParticle(spunParticle: self).description
+    var debugDescription: String {
+        return AnySpunParticle(spunParticle: self).debugDescription
     }
 }
 

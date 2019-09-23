@@ -80,6 +80,38 @@ class BurnTokensTests: LocalhostNodeTest {
         XCTAssertEqual(tokenState.totalSupply, 95)
     }
     
+    // TODO when https://radixdlt.atlassian.net/browse/BS-196 is fixed, this test should pass, Radix Core beta2 broke the expected ordering of particles.
+    func testMintBurnMintBurnMint() {
+        
+        let createTokenAction = application.actionCreateMultiIssuanceToken()
+        let fooToken = createTokenAction.identifier
+        
+        XCTAssertTrue(
+            application.create(token: createTokenAction).blockingWasSuccessfull()
+        )
+        
+        let tokenContext = TokenContext(rri: fooToken, actor: alice)
+        
+        let transaction = Transaction(tokenContext) {
+            Mint(amount: 100)   // 100
+            Burn(amount: 3)     // 97
+            Mint(amount: 5)     // 102
+            Burn(amount: 7)     // 95
+            Mint(amount: 13)    // 108
+            Burn(amount: 17)    // 91
+        }
+        let atom = try! application.atomFrom(transaction: transaction)
+        print(atom.debugDescription)
+        let result = application.send(transaction: transaction)
+        
+        XCTAssertTrue(
+            result.blockingWasSuccessfull(timeout: 40)
+        )
+        
+        guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: .enoughForPOW) else { return }
+        XCTAssertEqual(tokenState.totalSupply, 91)
+    }
+    
     func testBurnSuccessful() {
         
         // GIVEN: Radix identity Alice and an application layer action BurnToken

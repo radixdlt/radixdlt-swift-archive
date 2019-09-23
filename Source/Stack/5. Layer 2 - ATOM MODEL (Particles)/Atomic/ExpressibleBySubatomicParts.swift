@@ -33,7 +33,6 @@ public protocol ExpressibleBySubatomicParts:
     RadixCodable,
     SignableConvertible,
     CustomStringConvertible,
-    CustomDebugStringConvertible,
     Codable,
     Hashable
 where

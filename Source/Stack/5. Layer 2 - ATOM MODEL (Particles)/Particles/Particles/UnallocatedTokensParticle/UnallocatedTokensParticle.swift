@@ -125,6 +125,6 @@ public extension UnallocatedTokensParticle {
 
 public extension UnallocatedTokensParticle {
     var debugPayloadDescription: String {
-        return "\(amount), \(tokenDefinitionReference)"
+        return "\(amount)"
     }
 }
