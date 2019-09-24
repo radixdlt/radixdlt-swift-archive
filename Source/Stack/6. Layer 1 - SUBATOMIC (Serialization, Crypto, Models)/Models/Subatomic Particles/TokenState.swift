@@ -44,6 +44,7 @@ public struct TokenState:
     public let description: Description
     public let granularity: Granularity
     public let iconUrl: URL?
+    public let tokenPermissions: TokenPermissions?
     
     private init(
         totalSupply: Supply,
@@ -53,7 +54,8 @@ public struct TokenState:
         tokenDefinedBy: Address,
         description: Description,
         granularity: Granularity,
-        iconUrl: URL?
+        iconUrl: URL?,
+        tokenPermissions: TokenPermissions?
     ) {
         self.totalSupply = totalSupply
         self.tokenSupplyType = tokenSupplyType
@@ -64,6 +66,7 @@ public struct TokenState:
         self.description = description
         self.granularity = granularity
         self.iconUrl = iconUrl
+        self.tokenPermissions = tokenPermissions
     }
 }
 
@@ -83,7 +86,8 @@ internal extension TokenState {
             tokenDefinedBy: tokenDefinition.tokenDefinedBy,
             description: tokenDefinition.description,
             granularity: tokenDefinition.granularity,
-            iconUrl: tokenDefinition.iconUrl
+            iconUrl: tokenDefinition.iconUrl,
+            tokenPermissions: tokenDefinition.tokenPermissions
         )
     }
 }

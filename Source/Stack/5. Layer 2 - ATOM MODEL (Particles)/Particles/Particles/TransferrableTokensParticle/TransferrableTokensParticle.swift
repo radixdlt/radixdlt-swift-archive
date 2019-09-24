@@ -80,25 +80,6 @@ public extension TransferrableTokensParticle {
     }
 }
 
-// MARK: Check permissions
-public extension MutableSupplyTokenDefinitionParticle {
-    func canBeMinted(by minter: Address) -> Bool {
-        switch permissions.mintPermission {
-        case .none: return false
-        case .all: return true
-        case .tokenOwnerOnly: return self.address == minter
-        }
-    }
-    
-    func canBeBurned(by burner: Address) -> Bool {
-        switch permissions.burnPermission {
-        case .none: return false
-        case .all: return true
-        case .tokenOwnerOnly: return self.address == burner
-        }
-    }
-}
-
 // MARK: Decodable
 public extension TransferrableTokensParticle {
     

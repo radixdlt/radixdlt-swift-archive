@@ -93,7 +93,8 @@ extension CreateTokenAction {
         description: Description = .irrelevant,
         supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition = .mutableZeroSupply,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions = .mutableSupplyToken
     ) throws -> CreateTokenAction {
     
         return try self.init(
@@ -103,7 +104,8 @@ extension CreateTokenAction {
             description: description,
             supply: supplyTypeDefinition,
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            permissions: tokenPermissions
         )
     }
 }

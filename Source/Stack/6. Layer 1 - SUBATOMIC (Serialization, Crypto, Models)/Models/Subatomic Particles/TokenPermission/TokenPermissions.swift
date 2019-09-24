@@ -74,6 +74,27 @@ public extension TokenPermissions {
     }
 }
 
+// MARK: Check permissions
+internal extension TokenPermissions {
+    func canBeMinted(isOwnerOfToken: @escaping () -> Bool) -> Bool {
+        check(mintPermission, isOwnerOfToken: isOwnerOfToken)
+    }
+    
+    func canBeBurned(isOwnerOfToken: @escaping () -> Bool) -> Bool {
+        check(burnPermission, isOwnerOfToken: isOwnerOfToken)
+    }
+}
+
+private extension TokenPermissions {
+    func check(_ permission: TokenPermission, isOwnerOfToken: () -> Bool) -> Bool {
+          switch permission {
+          case .none: return false
+          case .all: return true
+          case .tokenOwnerOnly: return isOwnerOfToken()
+          }
+      }
+}
+
 private extension TokenPermissions {
     func valueOfRequiredPermission(_ key: TokenTransition) -> TokenPermission {
         guard let permission = dictionary[key] else {
@@ -106,3 +127,4 @@ public extension TokenPermissions {
     
     static var mutableSupplyToken: TokenPermissions = .tokenOwnerOnly
 }
+

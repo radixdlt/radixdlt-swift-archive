@@ -32,6 +32,7 @@ public protocol TokenConvertible: TokenDefinitionReferencing {
     var description: Description { get }
     var iconUrl: URL? { get }
     var tokenSupplyType: SupplyType { get }
+    var tokenPermissions: TokenPermissions? { get }
 }
 
 // MARK: - Hashable Preparation
@@ -45,5 +46,22 @@ public extension TokenConvertible {
 public extension TokenConvertible {
     var tokenDefinitionReference: ResourceIdentifier {
         return ResourceIdentifier(address: tokenDefinedBy, symbol: symbol)
+    }
+}
+
+// MARK: - Check Permissions
+public extension TokenConvertible {
+    func canBeMinted(by minter: Address) -> Bool {
+        guard let permissions = tokenPermissions else {
+            return false
+        }
+        return permissions.canBeMinted { self.address == minter }
+    }
+    
+    func canBeBurned(by burner: Address) -> Bool {
+        guard let permissions = tokenPermissions else {
+            return false
+        }
+        return permissions.canBeBurned { self.address == burner }
     }
 }
