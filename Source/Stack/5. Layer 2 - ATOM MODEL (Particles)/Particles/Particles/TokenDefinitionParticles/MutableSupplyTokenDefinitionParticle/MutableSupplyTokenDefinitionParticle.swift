@@ -54,9 +54,10 @@ public struct MutableSupplyTokenDefinitionParticle:
         description: Description,
         address: Address,
         granularity: Granularity = .default,
-        permissions: TokenPermissions = .mutableSupplyToken,
+        permissions overridingPermissions: TokenPermissions?,
         iconUrl: URL? = nil
     ) throws {
+        let permissions = overridingPermissions ?? TokenPermissions.mutableSupplyToken
         let mintPermission = permissions.mintPermission
         guard mintPermission == .all || mintPermission == .tokenOwnerOnly else {
             throw Error.someoneMustHavePermissionToMintToken(incorrectMintPermissionPassed: mintPermission)
@@ -102,6 +103,7 @@ public extension MutableSupplyTokenDefinitionParticle {
             description: action.description,
             address: action.creator,
             granularity: action.granularity,
+            permissions: action.tokenPermissions,
             iconUrl: action.iconUrl
         )
     }
@@ -127,6 +129,10 @@ public extension MutableSupplyTokenDefinitionParticle {
     
     var tokenSupplyType: SupplyType {
         return .mutable
+    }
+    
+    var tokenPermissions: TokenPermissions? {
+        return permissions
     }
 }
 

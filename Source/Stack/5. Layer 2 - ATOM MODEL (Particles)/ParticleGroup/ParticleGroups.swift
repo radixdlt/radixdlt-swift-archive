@@ -24,13 +24,15 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable opening_brace colon
 
 /// Collection of ParticleGroups
 public struct ParticleGroups:
     ArrayCodable,
     SpunParticlesOwner,
-    DSONArrayConvertible {
+    DSONArrayConvertible,
+    CustomDebugStringConvertible
+{
  // swiftlint:enable colon
     
     public let particleGroups: [ParticleGroup]
@@ -74,5 +76,17 @@ public extension ParticleGroups {
     
     var spunParticles: [AnySpunParticle] {
         return particleGroups.flatMap { $0.spunParticles }
+    }
+}
+
+public extension ParticleGroups {
+    var debugDescription: String {
+        let particleGroupsString = particleGroups.enumerated().map {
+            """
+            \nParticleGroup @ \($0.offset):
+            \($0.element.debugDescription)
+            """
+        }.joined(separator: ",\n")
+        return "[\n\(particleGroupsString)\n]"
     }
 }

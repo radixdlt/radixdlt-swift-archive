@@ -53,6 +53,8 @@ class SendMessageTests: LocalhostNodeTest {
         
         // THEN: I see that action completes successfully
         XCTAssertTrue(result.blockingWasSuccessfull(timeout: .enoughForPOW))
+        
+        print(try! result.atom().debugDescription)
 
         guard let sentMessage = application.observeMyMessages().blockingTakeFirst() else { return }
         let decryptedMessage = sentMessage.textMessage()

@@ -95,7 +95,7 @@ extension BigUnsignedInt: StringInitializable {
     
     public init(string: String) throws {
         guard let fromString = BigUnsignedInt(string, radix: 10) else {
-            throw InvalidStringError.invalidCharacters(expectedCharacters: CharacterSet.decimalDigits, butGot: string)
+            throw invalidCharacterError(string, allowed: .decimalDigits)
         }
         self = fromString
     }
@@ -108,12 +108,20 @@ extension BigUnsignedInt: StringRepresentable {
     }
 }
 
+private func invalidCharacterError(_ invalidCharacter: String, allowed: CharacterSet) -> InvalidStringError {
+    InvalidStringError.invalidCharacters(
+        expectedCharacterSet: allowed,
+        expectedCharacters: allowed.asString,
+        butGot: invalidCharacter
+    )
+}
+
 // MARK: - BigSignedInt + StringInitializable
 extension BigSignedInt: StringInitializable {
     
     public init(string: String) throws {
         guard let fromString = BigSignedInt(string, radix: 10) else {
-            throw InvalidStringError.invalidCharacters(expectedCharacters: CharacterSet.decimalDigits, butGot: string)
+            throw invalidCharacterError(string, allowed: .decimalDigits)
         }
         self = fromString
     }

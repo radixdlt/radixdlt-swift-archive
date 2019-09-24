@@ -27,29 +27,60 @@ import Combine
 
 struct SettingsScreen {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var radix: Radix
+
+    #if DEBUG
+    @State private var isPresentingCreateTokenModal = false
+    #endif
+    
 }
 
 // MARK: - View
 extension SettingsScreen: View {
     var body: some View {
-        List {
-            appVersion.map { appVersion in
-                Text("App version: \(appVersion)")
+        Form {
+            #if DEBUG
+            Section(header: centeredText("🔨 Developer")) {
+                Button("💰 Create token") {
+                    self.isPresentingCreateTokenModal = true
+                }
             }
-
-            Button("Delete wallet") {
-                self.deleteWallet()
-            }.buttonStyleRuby()
-
-            Button("Clear settings") {
-                self.clearPreferences()
-            }.buttonStyleRuby()
+            #endif
+            
+            Section(
+                // https://youtu.be/d3D7Y_ycSms
+                header: centeredText("⚠️ Danger zone ⚠️"),
+                footer: appVersion.map {
+                    centeredText("App version: \($0)")
+                }
+            ) {
+                Button("Delete wallet") {
+                    self.deleteWallet()
+                }.buttonStyleRuby()
+                
+                Button("Clear settings") {
+                    self.clearPreferences()
+                }.buttonStyleRuby()
+            }
+        }
+        .sheet(isPresented: $isPresentingCreateTokenModal) {
+            CreateTokenScreen().environmentObject(CreateTokenScreen.ViewModel(radix: self.radix))
         }
     }
 }
 
-extension SettingsScreen {
+private extension SettingsScreen {
+    func centeredText(_ text: String) -> some View {
+        HStack(alignment: .center) {
+            Spacer()
+            Text(text)
+            Spacer()
+        }
+    }
+}
 
+private extension SettingsScreen {
+    
     func deleteWallet() {
         appState.update().userDid.deleteWallet()
     }
@@ -67,4 +98,3 @@ extension SettingsScreen {
          return "\(version) (\(build))"
     }
 }
-

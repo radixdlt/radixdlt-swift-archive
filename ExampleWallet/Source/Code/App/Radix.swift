@@ -44,6 +44,8 @@ public final class Radix: ObservableObject {
 
     // MARK: Mutable
     public private(set) var activeAccount: Account
+    
+    @Published internal private(set) var assets = [Asset]()
 
     var myActiveAddress: Address {
         activeAccount.address
@@ -51,7 +53,13 @@ public final class Radix: ObservableObject {
 
     // MARK: Private
     private var cancellables = Set<AnyCancellable>()
+    
+    #if DEBUG
+    lazy var debug = Debug(client: client)
+    #endif
 
+    private let rxDisposeBag = DisposeBag()
+    
     init(client: Client, wallet: Wallet) {
         self.client = client
         self.wallet = wallet
@@ -61,10 +69,38 @@ public final class Radix: ObservableObject {
             self.activeAccount = wallet.accountFromSimpleAccount(myNewActive)
         }
 
+        forward(function: Client.observeMyBalances) { [unowned self] myTokenBalances in
+            print("💰 my token balances updated: \(myTokenBalances)")
+            self.assets = myTokenBalances.balancePerToken.map {
+                Asset(tokenBalance: $0.value)
+            }
+        }
+        
         wallet.objectWillChange.subscribe(objectWillChange).store(in: &cancellables)
+        
+        client.pull(address: myActiveAddress).disposed(by: rxDisposeBag)
+        
+        client.observeMyTokenDefinitions().subscribe(onNext: { print("✅ my token: \($0)") }).disposed(by: rxDisposeBag)
     }
 
 }
+
+#if DEBUG
+extension Radix {
+    final class Debug {
+        private unowned let client: Client
+        init(client: Client) {
+            self.client = client
+        }
+    }
+}
+
+extension Radix.Debug {
+    func createToken(_ action: CreateTokenAction) -> AnyPublisher<Never, Swift.Error> {
+        client.create(token: action).toCompletable().asPublisher()
+    }
+}
+#endif
 
 // MARK: - Private
 private extension Radix {
@@ -108,7 +144,9 @@ private extension Radix {
             .sink { [unowned self] (nextElement: NextElement) in
                 onNext(nextElement)
                 if notify {
-                    self.objectWillChange.send()
+                    DispatchQueue.main.async {
+                        self.objectWillChange.send()
+                    }
                 }
         }
         .store(in: &cancellables)
@@ -120,10 +158,10 @@ private extension Radix {
     }
 }
 
-// MARK: - Public
-public extension Radix {
+// MARK: - Internal
+extension Radix {
     var accounts: [Account] { wallet.accounts }
-
+    
     func switchAccount(to selectedAccount: Account) {
         client.changeAccount(to: selectedAccount.toSimpleAccount())
     }
@@ -131,11 +169,12 @@ public extension Radix {
     func addNewAccount() {
         let newAccount = wallet.addNewAccount()
         client.addAccount(newAccount.toSimpleAccount())
+        client.pull(address: newAccount.address).disposed(by: rxDisposeBag)
     }
 }
 
 // MARL: - State
-public extension Radix {
+internal extension Radix {
     var hasEverReceivedAnyTransactionToAnyAccount: Bool {
         // TODO read transactions
         return true

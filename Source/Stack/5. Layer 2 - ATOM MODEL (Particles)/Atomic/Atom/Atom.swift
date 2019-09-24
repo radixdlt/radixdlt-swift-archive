@@ -65,3 +65,9 @@ extension Atom: AnyEncodableKeyValuesProcessing {
         }
     }
 }
+
+extension Atom: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        particleGroups.debugDescription
+    }
+}

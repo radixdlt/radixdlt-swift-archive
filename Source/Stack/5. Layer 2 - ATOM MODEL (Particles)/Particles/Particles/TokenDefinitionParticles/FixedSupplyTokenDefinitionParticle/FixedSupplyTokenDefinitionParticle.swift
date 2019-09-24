@@ -116,4 +116,14 @@ public extension FixedSupplyTokenDefinitionParticle {
     var tokenSupplyType: SupplyType {
         return .fixed
     }
+    
+    var tokenPermissions: TokenPermissions? { nil }
+}
+
+public extension FixedSupplyTokenDefinitionParticle {
+    var debugPayloadDescription: String {
+        return """
+        fixed(\(supply)), \(self.tokenDefinitionReference)"
+        """
+    }
 }

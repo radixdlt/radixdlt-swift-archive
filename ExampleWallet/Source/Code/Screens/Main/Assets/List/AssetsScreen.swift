@@ -63,8 +63,23 @@ extension AssetsScreen: View {
 private extension AssetsScreen {
 
     var assetsList: some View {
-        List(assets) {
-            AssetRowView(asset: $0)
+        List(radix.assets) { asset in
+            AssetRowView(asset: asset)
+                .contextMenu {
+                    #if DEBUG
+                    if self.hasUserPermission(toMint: asset) {
+                        Button("🖨 Mint token") { self.mintAsset(asset) }
+                    }
+                    
+                    if self.hasUserPermission(toBurn: asset) {
+                        Button("🔥 Burn token") { self.burnAsset(asset) }
+                    }
+                    #endif
+                        
+                    Button("💸 Transfer token") {
+                        self.transferAsset(asset)
+                    }
+                }
         }.listStyle(GroupedListStyle())
     }
 
@@ -79,7 +94,32 @@ private extension AssetsScreen {
             }
         }.padding()
     }
+    
+    func transferAsset(_ asset: Asset) {
+        print("💸 Transfer: \(asset)")
+    }
 }
+
+#if DEBUG
+private extension AssetsScreen {
+    
+    func hasUserPermission(toMint asset: Asset) -> Bool {
+        return asset.tokenBalance.token.canBeMinted(by: radix.myActiveAddress)
+    }
+    
+    func hasUserPermission(toBurn asset: Asset) -> Bool {
+        return asset.tokenBalance.token.canBeBurned(by: radix.myActiveAddress)
+    }
+    
+    func mintAsset(_ asset: Asset) {
+        print("🖨 Mint \(asset)")
+    }
+    
+    func burnAsset(_ asset: Asset) {
+         print("🔥 Burn \(asset)")
+     }
+}
+#endif
 
 private extension AssetsScreen {
     func presentBackUpMnemonicWarningIfNeeded(delay: DispatchTimeInterval = .seconds(1)) {
@@ -97,9 +137,15 @@ private extension AssetsScreen {
         return true
     }
 
-    var assets: [Asset] {
-        return mockTokenBalances().map {
-            Asset(tokenBalance: $0)
-        }
+    
+}
+
+extension Asset {
+    enum Action {
+        case transfer
+        #if DEBUG
+        case burn
+        case mint
+        #endif
     }
 }

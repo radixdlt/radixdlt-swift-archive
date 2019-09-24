@@ -73,6 +73,24 @@ public extension ResultOfUserAction {
     }
 }
 
+public extension ResultOfUserAction {
+    /// Blocking get of  signed atom.
+    func atom(timeout: TimeInterval = 1) throws -> Atom {
+        switch self {
+
+        case .failedToStageAction(let stageActionError):
+            throw stageActionError
+
+        case .pendingSending(let cachedAtom, _, _):
+            
+            return try cachedAtom.toBlocking(timeout: timeout)
+                .single()
+                .wrappedAtom
+                .wrappedAtom
+        }
+    }
+}
+
 public struct FailedToStageAction: Swift.Error {
     let error: Swift.Error
     let userAction: UserAction

@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,48 +23,12 @@
 //
 
 import Foundation
+import RadixSDK
 
-// swiftlint:disable colon opening_brace
-
-/// The description of a specific Radix Token (e.g. "XRD"). Constrained to a specific length.
-/// For the formal definition of these constraints read [RIP - Tokens][1].
-///
-/// - seeAlso:
-/// `MutableSupplyTokenDefinitionParticle`
-///
-/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
-///
-public struct Description:
-    PrefixedJsonCodable,
-    CBORStringConvertible,
-    MinLengthSpecifying,
-    MaxLengthSpecifying,
-    Throwing,
-    Hashable
-{
-// swiftlint:enable colon opening_brace
-    
-    public static let minLength = 8
-    public static let maxLength = 200
-    
-    public let value: String
-    
-    public init(validated unvalidated: String) {
-        do {
-            self.value = try Description.validate(unvalidated)
-        } catch {
-            fatalError("Passed unvalid string, error: \(error)")
-        }
+extension UniverseConfig {
+    var faucetAddress: Address {
+        let nativeToken = try! nativeTokenDefinition()
+        return nativeToken.address
     }
 }
 
-// MARK: - CustomStringConvertible
-public extension Description {
-    var description: String {
-        return value.description
-    }
-}
-
-public extension Description {
-    typealias Error = InvalidStringError
-}

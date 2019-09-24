@@ -36,7 +36,11 @@ class GranularityNegativeTests: AtomJsonDeserializationChangeJson {
             // I try decoding the bad json string into an Atom
             try decode(Atom.self, jsonString: badJson),
             // THEN
-            InvalidStringError.invalidCharacters(expectedCharacters: CharacterSet.decimalDigits, butGot: "-"),
+            InvalidStringError.invalidCharacters(
+                expectedCharacterSet: CharacterSet.decimalDigits,
+                expectedCharacters: CharacterSet.decimalDigits.asString,
+                butGot: "-"
+            ),
             "Decoding should fail to deserialize JSON with negative granulariy"
         )
     }

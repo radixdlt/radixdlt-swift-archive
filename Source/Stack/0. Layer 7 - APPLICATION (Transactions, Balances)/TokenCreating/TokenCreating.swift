@@ -46,7 +46,8 @@ public extension TokenCreating {
         description: Description,
         supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
         let createTokenAction = try CreateTokenAction(
@@ -56,7 +57,8 @@ public extension TokenCreating {
             description: description,
             supply: supplyTypeDefinition,
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            permissions: tokenPermissions
         )
         
         return (create(token: createTokenAction), createTokenAction.identifier)
@@ -70,7 +72,8 @@ public extension TokenCreating {
         description: Description,
         supply: PositiveSupply = .max,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
 
         return try createToken(
@@ -80,7 +83,8 @@ public extension TokenCreating {
             description: description,
             supply: .fixed(to: supply),
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            tokenPermissions: tokenPermissions
         )
     }
     
@@ -92,7 +96,8 @@ public extension TokenCreating {
         description: Description,
         initialSupply: Supply? = nil,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
         return try createToken(
@@ -102,7 +107,8 @@ public extension TokenCreating {
             description: description,
             supply: .mutable(initial: initialSupply),
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            tokenPermissions: tokenPermissions
         )
     }
 }
@@ -115,7 +121,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         description: Description,
         supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
         return try createToken(
@@ -125,7 +132,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             description: description,
             supply: supplyTypeDefinition,
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            tokenPermissions: tokenPermissions
         )
     }
     
@@ -136,7 +144,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         description: Description,
         supply: PositiveSupply = .max,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
         return try createFixedSupplyToken(
@@ -146,7 +155,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             description: description,
             supply: supply,
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            tokenPermissions: tokenPermissions
         )
     }
     
@@ -157,7 +167,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         description: Description,
         initialSupply: Supply? = nil,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
         
         return try createMultiIssuanceToken(
@@ -167,7 +178,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             description: description,
             initialSupply: initialSupply,
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            tokenPermissions: tokenPermissions
         )
     }
 }
@@ -182,7 +194,8 @@ public extension TokenCreating {
         description: Description,
         iconUrl: URL? = nil,
         supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition = .mutableZeroSupply,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> CreateTokenAction {
         
         return try CreateTokenAction(
@@ -192,7 +205,8 @@ public extension TokenCreating {
             description: description,
             supply: supply,
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            permissions: tokenPermissions
         )
     }
     
@@ -213,7 +227,8 @@ public extension TokenCreating {
             description: description,
             supply: .fixed(to: supply),
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            permissions: nil
         )
     }
     
@@ -224,7 +239,8 @@ public extension TokenCreating {
         description: Description,
         initialSupply: Supply? = nil,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> CreateTokenAction {
         
         return try CreateTokenAction(
@@ -234,7 +250,8 @@ public extension TokenCreating {
             description: description,
             supply: .mutable(initial: initialSupply),
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            permissions: tokenPermissions
         )
     }
 }
@@ -248,7 +265,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         description: Description,
         iconUrl: URL? = nil,
         supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition = .mutableZeroSupply,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> CreateTokenAction {
         
         return try CreateTokenAction(
@@ -258,7 +276,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             description: description,
             supply: supply,
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            permissions: tokenPermissions
         )
     }
     
@@ -278,7 +297,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             description: description,
             supply: .fixed(to: supply),
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            permissions: nil
         )
     }
     
@@ -289,7 +309,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         description: Description,
         initialSupply: Supply? = nil,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        tokenPermissions: TokenPermissions? = .mutableSupplyToken
     ) throws -> CreateTokenAction {
         
         return try CreateTokenAction(
@@ -299,7 +320,8 @@ public extension TokenCreating where Self: ActiveAccountOwner {
             description: description,
             supply: .mutable(initial: initialSupply),
             iconUrl: iconUrl,
-            granularity: granularity
+            granularity: granularity,
+            permissions: tokenPermissions
         )
     }
 }

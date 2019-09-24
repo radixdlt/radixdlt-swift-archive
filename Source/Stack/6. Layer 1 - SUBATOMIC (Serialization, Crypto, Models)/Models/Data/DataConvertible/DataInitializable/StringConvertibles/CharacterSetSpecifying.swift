@@ -50,7 +50,11 @@ public extension CharacterSetSpecifying {
     
     static func validateCharacters(in string: String) throws {
         if let disallowed = disallowedCharacters(in: string) {
-            throw InvalidStringError.invalidCharacters(expectedCharacters: allowedCharacters, butGot: disallowed)
+            throw InvalidStringError.invalidCharacters(
+                expectedCharacterSet: allowedCharacters,
+                expectedCharacters: allowedCharacters.asString,
+                butGot: disallowed
+            )
         }
     }
 }

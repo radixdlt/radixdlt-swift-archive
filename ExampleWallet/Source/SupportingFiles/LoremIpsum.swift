@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,47 +24,22 @@
 
 import Foundation
 
-// swiftlint:disable colon opening_brace
+enum LoremIpsum {
+    case partial(prefix: Int)
+    case full(paragraphs: Int)
+    static var full: LoremIpsum { .full(paragraphs: 1) }
+    static var firstFiveWords: LoremIpsum { .partial(prefix: 26) }
+}
 
-/// The description of a specific Radix Token (e.g. "XRD"). Constrained to a specific length.
-/// For the formal definition of these constraints read [RIP - Tokens][1].
-///
-/// - seeAlso:
-/// `MutableSupplyTokenDefinitionParticle`
-///
-/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
-///
-public struct Description:
-    PrefixedJsonCodable,
-    CBORStringConvertible,
-    MinLengthSpecifying,
-    MaxLengthSpecifying,
-    Throwing,
-    Hashable
-{
-// swiftlint:enable colon opening_brace
-    
-    public static let minLength = 8
-    public static let maxLength = 200
-    
-    public let value: String
-    
-    public init(validated unvalidated: String) {
-        do {
-            self.value = try Description.validate(unvalidated)
-        } catch {
-            fatalError("Passed unvalid string, error: \(error)")
-        }
+func loremIpsum(_ mode: LoremIpsum) -> String {
+    switch mode {
+    case .partial(let prefix):
+        return String(loremIpsumParagraph.prefix(prefix))
+    case .full(let numberOfParagraphs):
+        return String(repeating: loremIpsumParagraph + " ", count: numberOfParagraphs)
     }
 }
 
-// MARK: - CustomStringConvertible
-public extension Description {
-    var description: String {
-        return value.description
-    }
-}
-
-public extension Description {
-    typealias Error = InvalidStringError
-}
+private let loremIpsumParagraph = """
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+"""

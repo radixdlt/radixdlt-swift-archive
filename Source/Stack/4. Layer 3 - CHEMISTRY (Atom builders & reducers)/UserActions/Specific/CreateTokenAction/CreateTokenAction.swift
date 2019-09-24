@@ -32,7 +32,8 @@ public struct CreateTokenAction: UniquelyIdentifiedUserAction, Throwing, TokenCo
     public let description: Description
     public let granularity: Granularity
     public let iconUrl: URL?
-
+    public let tokenPermissions: TokenPermissions?
+    
     // Private since it is not used directly. Instead given the context either `supplyDefinition` should be used
     // for `CreateTokenActionToParticleGroupsMapper`
     private let initialSupplyContext: InitialSupply
@@ -44,7 +45,8 @@ public struct CreateTokenAction: UniquelyIdentifiedUserAction, Throwing, TokenCo
         description: Description,
         supply supplyTypeDefinition: InitialSupply.SupplyTypeDefinition,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        permissions: TokenPermissions? = .mutableSupplyToken
     ) throws {
 
         try supplyTypeDefinition.isExactMultipleOfGranularity(granularity)
@@ -56,6 +58,7 @@ public struct CreateTokenAction: UniquelyIdentifiedUserAction, Throwing, TokenCo
         self.granularity = granularity
         self.iconUrl = iconUrl
         self.initialSupplyContext = .defined(in: supplyTypeDefinition)
+        self.tokenPermissions = permissions
     }
 }
 
@@ -68,7 +71,8 @@ internal extension CreateTokenAction {
         description: Description,
         derivedSupply: InitialSupply.DerivedFromAtom,
         iconUrl: URL? = nil,
-        granularity: Granularity = .default
+        granularity: Granularity = .default,
+        permissions: TokenPermissions? = .mutableSupplyToken
     ) {
         self.creator = creator
         self.name = name
@@ -77,6 +81,7 @@ internal extension CreateTokenAction {
         self.granularity = granularity
         self.iconUrl = iconUrl
         self.initialSupplyContext = .derivedFromAtom(derivedSupply)
+        self.tokenPermissions = permissions
     }
 }
 

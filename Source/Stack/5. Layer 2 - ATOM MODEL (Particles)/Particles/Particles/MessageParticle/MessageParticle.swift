@@ -137,3 +137,9 @@ public extension MessageParticle {
         return String(data: payload)
     }
 }
+
+public extension MessageParticle {
+    var debugPayloadDescription: String {
+        return "'\(textMessage)' [\(from) ➡️ \(to)]"
+    }
+}
