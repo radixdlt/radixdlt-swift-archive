@@ -40,6 +40,7 @@ public struct Symbol:
     CharacterSetSpecifying,
     MinLengthSpecifying,
     MaxLengthSpecifying,
+    Throwing,
     Hashable
 {
 // swiftlint:enable colon opening_brace
@@ -64,4 +65,8 @@ public extension Symbol {
     var description: String {
         return value.description
     }
+}
+
+public extension Symbol {
+    typealias Error = InvalidStringError
 }

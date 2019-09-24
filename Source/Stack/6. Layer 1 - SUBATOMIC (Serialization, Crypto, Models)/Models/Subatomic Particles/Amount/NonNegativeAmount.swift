@@ -25,7 +25,7 @@
 import Foundation
 
 /// A non negative integer representing some amount, e.g. amount of tokens to transfer.
-public struct NonNegativeAmount: NonNegativeAmountConvertible {
+public struct NonNegativeAmount: NonNegativeAmountConvertible, Throwing {
     public typealias Magnitude = BigUnsignedInt
     public let magnitude: Magnitude
     
@@ -56,4 +56,9 @@ public extension NonNegativeAmount {
     static var zero: NonNegativeAmount {
         return NonNegativeAmount(validated: 0)
     }
+}
+
+// MARK: - Throwing
+public extension NonNegativeAmount {
+    typealias Error = NonNegativeAmountError
 }

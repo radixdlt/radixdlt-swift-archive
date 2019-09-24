@@ -80,5 +80,5 @@ extension AssetRowView.ViewModel {
 
     var balance: String { "\(asset.tokenBalance.amount.stringValue) \(token.symbol.stringValue)" }
 
-    var iconUrl: URL { token.iconUrl ?? URL("127.0.0.1") }
+    var iconUrl: URL? { token.iconUrl }
 }

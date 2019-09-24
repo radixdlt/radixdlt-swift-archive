@@ -63,7 +63,7 @@ extension AssetsScreen: View {
 private extension AssetsScreen {
 
     var assetsList: some View {
-        List(assets) { asset in
+        List(radix.assets) { asset in
             AssetRowView(asset: asset)
                 .contextMenu {
                     #if DEBUG
@@ -137,11 +137,6 @@ private extension AssetsScreen {
         return true
     }
 
-    var assets: [Asset] {
-        return mockTokenBalances().map {
-            Asset(tokenBalance: $0)
-        }
-    }
 }
 
 extension Asset {

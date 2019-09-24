@@ -62,4 +62,14 @@ func performOnMainThread(after delay: DispatchTimeInterval = .seconds(1), closur
     DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: closure)
 }
 
+internal func unexpectedlyMissedToCatch(
+    error: Swift.Error,
+    _ file: String = #file,
+    _ line: Int = #line
+) -> Never {
+    incorrectImplementation("Missed error: `\(error)`, of type: `\(type(of: error))`",
+        file, line
+    )
+}
+
 typealias Done = () -> Void

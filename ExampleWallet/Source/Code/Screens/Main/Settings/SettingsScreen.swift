@@ -64,7 +64,7 @@ extension SettingsScreen: View {
             }
         }
         .sheet(isPresented: $isPresentingCreateTokenModal) {
-            CreateTokenScreen().environmentObject(self.radix)
+            CreateTokenScreen().environmentObject(CreateTokenScreen.ViewModel(radix: self.radix))
         }
     }
 }

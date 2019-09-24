@@ -36,7 +36,11 @@ class NonBase58AddressTests: AtomJsonDeserializationChangeJson {
             // I try decoding the bad json string into an Atom
             try decode(Atom.self, jsonString: badJson),
             // THEN
-            InvalidStringError.invalidCharacters(expectedCharacters: Base58String.allowedCharacters, butGot: "?"),
+            InvalidStringError.invalidCharacters(
+                expectedCharacterSet: Base58String.allowedCharacters,
+                expectedCharacters: Base58String.allowedCharacters.asString,
+                butGot: "?"
+            ),
             "Decoding should fail to deserialize JSON with address containing '?'"
         )
     }
