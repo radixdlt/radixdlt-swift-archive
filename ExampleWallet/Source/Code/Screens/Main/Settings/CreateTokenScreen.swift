@@ -127,6 +127,10 @@ private extension CreateTokenScreen {
                     }
                 }.pickerStyle(SegmentedPickerStyle())
                 
+                if self.viewModel.input.supplyType == .mutable {
+                    tokenPermissionsView
+                }
+                
                 TextField(self.viewModel.supplyHint, text: $viewModel.input.supply)
             }
         }
@@ -146,6 +150,18 @@ private extension CreateTokenScreen {
             title: Text("Error"),
             message: Text(viewModel.createTokenError!.description)
         )
+    }
+    
+    var tokenPermissionsView: some View {
+        VStack {
+            Toggle(isOn: $viewModel.input.anyoneHasPermissionToBurn) {
+                Text("Anyone can burn")
+            }
+            
+            Toggle(isOn: $viewModel.input.anyoneHasPermissionToMint) {
+                Text("Anyone can mint")
+            }
+        }
     }
 }
 
@@ -184,6 +200,8 @@ extension CreateTokenScreen.ViewModel {
         @Published fileprivate var supplyType: SupplyType = .mutable
         @Published fileprivate var supply: String = ""
         
+        @Published fileprivate var anyoneHasPermissionToBurn = false
+        @Published fileprivate var anyoneHasPermissionToMint = false
     }
 }
 
@@ -316,8 +334,23 @@ private extension CreateTokenScreen.ViewModel {
             description: try description(),
             supply: try makeSupply(amount: input.supply, type: input.supplyType),
             iconUrl: iconUrl,
-            granularity: try granularity()
+            granularity: try granularity(),
+            permissions: tokenPermissions
         )
+    }
+    
+    var tokenPermissions: TokenPermissions? {
+        switch input.supplyType {
+        case .fixed: return nil
+        case .mutable:
+            let mintPermissions: TokenPermission = input.anyoneHasPermissionToMint ? .all : .tokenOwnerOnly
+            let burnPermissions: TokenPermission = input.anyoneHasPermissionToBurn ? .all : .tokenOwnerOnly
+            return [
+                .mint: mintPermissions,
+                .burn: burnPermissions
+                
+            ]
+        }
     }
     
     func name() throws -> Name {
