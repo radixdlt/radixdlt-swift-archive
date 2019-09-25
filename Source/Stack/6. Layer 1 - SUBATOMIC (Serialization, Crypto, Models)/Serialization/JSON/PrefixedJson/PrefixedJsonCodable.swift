@@ -24,4 +24,4 @@
 
 import Foundation
 
-public typealias PrefixedJsonCodable = PrefixedJsonDecodable & PrefixedJsonEncodable
+public typealias PrefixedJSONCodable = PrefixedJSONDecodable & PrefixedJSONEncodable

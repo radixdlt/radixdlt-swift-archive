@@ -28,7 +28,7 @@ import Foundation
 
 /// Open enum
 public struct MetaDataKey:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     StringInitializable,
     StringRepresentable,
     Hashable,

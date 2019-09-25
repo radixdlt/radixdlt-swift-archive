@@ -28,7 +28,7 @@ import XCTest
 @testable import RadixSDK
 
 extension ResultOfUserAction {
-    func blockingWasSuccessfull(
+    func blockingWasSuccessful(
         timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnErrors: Bool = true,
@@ -37,7 +37,7 @@ extension ResultOfUserAction {
         line: Int = #line
         ) -> Bool {
         
-        return self.toCompletable().blockingWasSuccessfull(
+        return self.toCompletable().blockingWasSuccessful(
             timeout: timeout,
             failOnTimeout: failOnTimeout,
             failOnErrors: failOnErrors,

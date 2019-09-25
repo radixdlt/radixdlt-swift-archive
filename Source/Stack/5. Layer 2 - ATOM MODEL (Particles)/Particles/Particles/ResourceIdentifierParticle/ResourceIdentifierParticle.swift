@@ -55,7 +55,7 @@ public extension ResourceIdentifierParticle {
     }
 }
 
-// MARK: - Deodable
+// MARK: - Decodable
 public extension ResourceIdentifierParticle {
     enum CodingKeys: String, CodingKey {
         case serializer, version, destinations

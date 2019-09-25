@@ -43,7 +43,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         aliceIdentity = AbstractIdentity()
         bobAccount = Account()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobAccount)
     }
@@ -60,7 +60,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         XCTAssertTrue(
             application.send(transaction: transaction)
                 // THEN: the Transaction is successfully sent
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
 
         guard let executedTransaction: ExecutedTransaction = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingTakeFirst(timeout: 1) else { return }
@@ -87,7 +87,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         XCTAssertTrue(
             application.send(transaction: transaction)
                 // THEN: the Transaction is successfully sent
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         guard let executedTransaction: ExecutedTransaction = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingTakeFirst(timeout: 1) else { return }
@@ -126,7 +126,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         XCTAssertTrue(
            application.putUniqueId(putUniqueAction)
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown

@@ -58,7 +58,6 @@ public extension DefaultBurnTokensActionToParticleGroupsMapper {
    
     func particleGroups(for action: BurnTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
         try validateInputMappingConsumeTokensActionError(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
-        
         let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, UnallocatedTokensParticle>(
             transitioner: UnallocatedTokensParticle.init(transferrableTokensParticle:amount:),
             transitionedCombiner: { $0 },
@@ -113,7 +112,6 @@ private extension FungibleParticleTransitioner where
         do {
             transition = try self.transition(unconsumedFungibles: transferrableTokensParticles, toAmount: burn.amount.asNonNegative)
         } catch Error.notEnoughFungibles(_, let balance) {
-         
             throw BurnError.insufficientTokens(
                 token: rri,
                 balance: balance,

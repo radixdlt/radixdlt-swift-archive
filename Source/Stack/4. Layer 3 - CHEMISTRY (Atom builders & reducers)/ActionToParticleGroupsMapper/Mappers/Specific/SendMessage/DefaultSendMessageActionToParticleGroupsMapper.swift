@@ -78,8 +78,8 @@ private extension DefaultSendMessageActionToParticleGroupsMapper {
         case .encryptContext(.encrypt(let readers)):
             return readers.map { $0.address.publicKey }
         case .encryptContext(.plainText):
-            incorrectImplementation("Dont call this function if you are not encrypting message")
-        case .decryptContext: incorrectImplementation("Dont use a `SendMessageActionToParticleGroupsMapper` for a derived `SendMessageAction`")
+            incorrectImplementation("Don't call this function if you are not encrypting message")
+        case .decryptContext: incorrectImplementation("Don't use a `SendMessageActionToParticleGroupsMapper` for a derived `SendMessageAction`")
         }
     }
     

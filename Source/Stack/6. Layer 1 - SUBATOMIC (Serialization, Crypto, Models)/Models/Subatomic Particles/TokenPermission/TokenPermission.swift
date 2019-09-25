@@ -34,7 +34,7 @@ import Foundation
 public enum TokenPermission: String,
     StringInitializable,
     StringRepresentable,
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     CustomStringConvertible
 {
 

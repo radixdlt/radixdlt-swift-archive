@@ -28,7 +28,7 @@ import Foundation
 
 /// String representation of a Base64 string which is impossible to instantiatie with invalid values.
 public struct Base64String:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     StringConvertible,
     StringRepresentable,
     CBORDataConvertible,
@@ -47,7 +47,7 @@ public struct Base64String:
         do {
             self.value = try Base64String.validate(unvalidated)
         } catch {
-            fatalError("Passed unvalid string, error: \(error)")
+            badLiteralValue(unvalidated, error: error)
         }
     }
 }
@@ -69,8 +69,8 @@ public extension Base64String {
 // MARK: - DataConvertible
 public extension Base64String {
     var asData: Data {
-        guard let data = Data.init(base64Encoded: value) else {
-            incorrectImplementation("Should always be possible to create data from a validated Base64String")
+        guard let data = Data(base64Encoded: value) else {
+            incorrectImplementationShouldAlwaysBeAble(to: "Create `Data` from a validated `Base64String`")
         }
         return data
     }

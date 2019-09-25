@@ -86,12 +86,12 @@ import Foundation
 /// ```
 /// It is important to note that this message SHOULD have been filtered out by the Websocket code, i.e. the RCP client code
 /// should not have to care about this message.
-internal enum RPCResponse<ResultOrParam>: Decodable, RPCResposeResultConvertible where ResultOrParam: Decodable {
+internal enum RPCResponse<ResultOrParam>: Decodable, RPCResponseResultConvertible where ResultOrParam: Decodable {
     case resultWithRequestId(RPCResponseResultWithRequestId<ResultOrParam>)
     case resultLookingLikeRequest(RPCResponseLookingLikeRequest<ResultOrParam>)
 }
 
-// MARK: - RPCResposeResultConvertible
+// MARK: - RPCResponseResultConvertible
 extension RPCResponse {
     var model: ResultOrParam {
         switch self {

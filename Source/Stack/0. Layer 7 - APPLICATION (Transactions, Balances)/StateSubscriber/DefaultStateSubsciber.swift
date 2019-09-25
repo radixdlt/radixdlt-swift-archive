@@ -25,7 +25,7 @@
 import Foundation
 import RxSwift
 
-public final class DefaultStateSubsciber: StateSubscriber {
+public final class DefaultStateSubscriber: StateSubscriber {
     
     private let atomStore: AtomStore
     private let particlesToStateReducer: ParticlesToStateReducer
@@ -40,7 +40,7 @@ public final class DefaultStateSubsciber: StateSubscriber {
 }
 
 // MARK: StateSubscriber
-public extension DefaultStateSubsciber {
+public extension DefaultStateSubscriber {
     func observeState<State>(
         ofType stateType: State.Type,
         at address: Address

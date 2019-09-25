@@ -25,12 +25,12 @@
 import Foundation
 
 public extension KeyedDecodingContainer {
-    func decode<D>(_ type: D.Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> D where D: Decodable & PrefixedJsonDecodable {
+    func decode<D>(_ type: D.Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> D where D: Decodable & PrefixedJSONDecodable {
         let prefixedString = try decode(PrefixedStringWithValue.self, forKey: key)
         return try D(prefixedString: prefixedString)
     }
     
-    func decodeIfPresent<D>(_ type: D.Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> D? where D: Decodable & PrefixedJsonDecodable {
+    func decodeIfPresent<D>(_ type: D.Type, forKey key: KeyedDecodingContainer<K>.Key) throws -> D? where D: Decodable & PrefixedJSONDecodable {
         guard let prefixedString = try decodeIfPresent(PrefixedStringWithValue.self, forKey: key) else {
             return nil
         }
@@ -39,7 +39,7 @@ public extension KeyedDecodingContainer {
 }
 
 public extension SingleValueDecodingContainer {
-    func decode<D>(_ type: D.Type) throws -> D where D: Decodable & PrefixedJsonDecodable {
+    func decode<D>(_ type: D.Type) throws -> D where D: Decodable & PrefixedJSONDecodable {
         let prefixedString = try decode(PrefixedStringWithValue.self)
         return try D(prefixedString: prefixedString)
     }

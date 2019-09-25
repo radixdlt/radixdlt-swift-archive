@@ -35,7 +35,7 @@ import Foundation
 /// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
 ///
 public struct Description:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     CBORStringConvertible,
     MinLengthSpecifying,
     MaxLengthSpecifying,
@@ -53,7 +53,7 @@ public struct Description:
         do {
             self.value = try Description.validate(unvalidated)
         } catch {
-            fatalError("Passed unvalid string, error: \(error)")
+            badLiteralValue(unvalidated, error: error)
         }
     }
 }

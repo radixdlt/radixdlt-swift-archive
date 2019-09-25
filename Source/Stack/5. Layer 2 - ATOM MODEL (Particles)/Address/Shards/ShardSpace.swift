@@ -91,7 +91,7 @@ public extension ShardSpace {
         do {
             return try ShardRange(lower: -shardChunkRangeSpanHalf, upper: shardChunkRangeSpanHalf - 1)
         } catch {
-            incorrectImplementation("Should always be able to create Shard Chunk Range")
+            incorrectImplementationShouldAlwaysBeAble(to: "Create Shard chunk range", error)
         }
     }()
 }

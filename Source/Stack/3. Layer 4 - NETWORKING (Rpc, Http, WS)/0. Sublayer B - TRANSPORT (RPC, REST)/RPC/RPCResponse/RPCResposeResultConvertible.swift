@@ -32,9 +32,9 @@ public extension PotentiallyRequestIdentifiable {
     var requestIdIfPresent: String? { return nil }
 }
 
-public protocol BaseRPCResposeResult {}
+public protocol BaseRPCResponseResult {}
 
-public protocol RPCResposeResultConvertible: Decodable, BaseRPCResposeResult {
+public protocol RPCResponseResultConvertible: Decodable, BaseRPCResponseResult {
     associatedtype Model: Decodable
     var model: Model { get }
 }

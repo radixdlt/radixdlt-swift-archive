@@ -27,7 +27,7 @@ import RxSwift
 
 /// Important that `MessageSending` conforms to `ActiveAccountOwner` so that we can verify that the address
 /// of a message `sender` is the same as the `addressOfActiveAccount` that signs the message. In order
-/// to prevent incorrect input (which would fail at a later stage anyway) whre Alice claims to be
+/// to prevent incorrect input (which would fail at a later stage anyway) where Alice claims to be
 /// Carol, when sending a message to Bob.
 public protocol MessageSending: ActiveAccountOwner {
     

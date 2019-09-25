@@ -75,7 +75,7 @@ public extension AnySpunParticle {
     }
 }
 
-// MARK: - Deodable
+// MARK: - Decodable
 public extension AnySpunParticle {
     
     enum CodingKeys: String, CodingKey {

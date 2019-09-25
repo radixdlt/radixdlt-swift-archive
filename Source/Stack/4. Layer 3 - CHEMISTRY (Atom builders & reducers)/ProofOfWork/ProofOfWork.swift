@@ -102,7 +102,7 @@ private extension ProofOfWork {
     }
 }
 
-// MARK: - Endianess (Matching Java library ByteStream `putLong`)
+// MARK: - Endianness (Matching Java library ByteStream `putLong`)
 internal extension Nonce {
     func toEightBigEndianBytes() -> [Byte] {
         let nonce8Bytes = CFSwapInt64HostToBig(UInt64(value)).bytes

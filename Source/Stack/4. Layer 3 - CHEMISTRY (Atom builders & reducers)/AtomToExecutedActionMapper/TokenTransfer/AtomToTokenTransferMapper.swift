@@ -75,12 +75,12 @@ private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date)
         to: recipient,
         amount: positiveAmount,
         tokenResourceIdentifier: rri,
-        attachment: particleGroup.attatchmentData
+        attachment: particleGroup.attachmentData
     )
 }
 
 private extension ParticleGroup {
-    var attatchmentData: Data? {
+    var attachmentData: Data? {
         guard
             let attachmentBase64StringValue = self.metaData[MetaDataKey.attachment],
             let attachmentBase64String = try? Base64String(base64String: attachmentBase64StringValue)

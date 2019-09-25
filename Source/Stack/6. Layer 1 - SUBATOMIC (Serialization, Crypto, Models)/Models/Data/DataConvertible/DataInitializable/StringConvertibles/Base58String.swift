@@ -28,7 +28,7 @@ import Foundation
 
 /// String representation of a Base58 string which is impossible to instantiatie with invalid values.
 public struct Base58String:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     StringConvertible,
     StringRepresentable,
     CharacterSetSpecifying,
@@ -43,7 +43,7 @@ public struct Base58String:
         do {
             self.value = try Base58String.validate(unvalidated)
         } catch {
-            fatalError("Passed unvalid string, error: \(error)")
+            badLiteralValue(unvalidated, error: error)
         }
     }
 }

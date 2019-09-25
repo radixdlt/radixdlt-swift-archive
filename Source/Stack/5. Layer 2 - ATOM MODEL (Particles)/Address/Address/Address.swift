@@ -198,7 +198,7 @@ public extension Address {
     
     static func checksummed(_ dataConvertible: DataConvertible) -> Base58String {
         var data = dataConvertible.asData
-        let checksum = RadixHash(unhashedData: data, hashedBy: Sha256TwiceHasher())
+        let checksum = RadixHash(unhashedData: data, hashedBy: SHA256TwiceHasher())
         data += checksum.prefix(Address.checksumByteCount)
         
         return data.toBase58String()

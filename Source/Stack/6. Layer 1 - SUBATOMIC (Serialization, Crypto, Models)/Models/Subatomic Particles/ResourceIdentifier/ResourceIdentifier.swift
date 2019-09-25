@@ -31,7 +31,7 @@ import Foundation
 /// On format: `/:address/:name`, e.g.:
 /// `"/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/XRD"`
 public struct ResourceIdentifier:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     StringRepresentable,
     DSONPrefixedDataConvertible,
     Hashable,
@@ -49,7 +49,7 @@ public struct ResourceIdentifier:
     }
 }
 
-// MARK: - Initializers
+// MARK: - Initialisers
 public extension ResourceIdentifier {
     init(address: Address, symbol: Symbol) {
         self.init(address: address, name: symbol.value)
@@ -65,7 +65,7 @@ public extension ResourceIdentifier {
 
 // MARK: - DSONPrefixedDataConvertible
 public extension ResourceIdentifier {
-    var dborEncodedData: Data {
+    var cborEncodedData: Data {
         return identifier.toData()
     }
 }
@@ -133,7 +133,7 @@ public extension ResourceIdentifier {
     }
 }
 
-// MARK: - PrefixedJsonDecodable
+// MARK: - PrefixedJSONDecodable
 public extension ResourceIdentifier {
     static let jsonPrefix: JSONPrefix = .uri
 }

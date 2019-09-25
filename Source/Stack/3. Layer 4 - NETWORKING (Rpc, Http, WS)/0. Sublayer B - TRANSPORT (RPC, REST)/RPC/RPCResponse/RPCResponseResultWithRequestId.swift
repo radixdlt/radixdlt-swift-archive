@@ -24,7 +24,7 @@
 
 import Foundation
 
-internal struct RPCResponseResultWithRequestId<Result>: Decodable, RPCResposeResultConvertible where Result: Decodable {
+internal struct RPCResponseResultWithRequestId<Result>: Decodable, RPCResponseResultConvertible where Result: Decodable {
     let result: Result
     private let id: String
 }

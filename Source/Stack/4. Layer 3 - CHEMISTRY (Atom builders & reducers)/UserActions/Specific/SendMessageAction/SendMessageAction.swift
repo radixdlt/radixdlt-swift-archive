@@ -52,7 +52,7 @@ public extension SendMessageAction {
 // MARK: `Designated` Initializers
 // (cannot be moved to another file since main initializer is `private` (and ought to be))
 
-// Public `designated` initializer, only exposing messages to be encryped (`.plaintext` is an available encryption mode).
+// Public `designated` initializer, only exposing messages to be encrypted (`.plaintext` is an available encryption mode).
 public extension SendMessageAction {
     init(
         from sender: AddressConvertible,

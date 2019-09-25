@@ -42,7 +42,7 @@ public extension HierarchicalDeterministicWallet {
     }
 }
 
-// MARK: - Convenince Init
+// MARK: - Convenience Init
 public extension HierarchicalDeterministicWallet {
     init(mnemonic: Mnemonic, network: ChainId) {
         let masterSeed = HierarchicalDeterministicMasterSeed(mnemonic: mnemonic)

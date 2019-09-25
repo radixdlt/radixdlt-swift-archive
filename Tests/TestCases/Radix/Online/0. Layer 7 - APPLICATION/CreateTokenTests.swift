@@ -34,7 +34,7 @@ class CreateTokenTests: LocalhostNodeTest {
     private let claraAccount = Account()
     private let dianaAccount = Account()
     
-    private lazy var application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+    private lazy var application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
     
     private lazy var alice = application.addressOfActiveAccount
     private lazy var bob = application.addressOf(account: bobAccount)

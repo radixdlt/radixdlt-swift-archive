@@ -30,10 +30,10 @@ import CryptoSwift
 /// Encrypt and Decrypt data using ECIES (Elliptic Curve Integrated Encryption Scheme) (subset of DHIES): https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme
 public final class ECIES {
     private let crypt: Crypt
-    private let sha512TwiceHasher: Sha512TwiceHashing
+    private let sha512TwiceHasher: SHA512TwiceHashing
     public init(
         crypt: Crypt = .init(),
-        sha512TwiceHasher: Sha512TwiceHashing = Sha512TwiceHasher()
+        sha512TwiceHasher: SHA512TwiceHashing = SHA512TwiceHasher()
     ) {
         self.crypt = crypt
         self.sha512TwiceHasher = sha512TwiceHasher

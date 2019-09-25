@@ -68,7 +68,7 @@ public extension TokenDefinitionsState.Value {
     }
 }
 
-// MARK: - Value Retrival
+// MARK: - Value Retrieval
 public extension TokenDefinitionsState.Value {
     var full: TokenState? {
         guard case .full(let tokenState) = self else { return nil }

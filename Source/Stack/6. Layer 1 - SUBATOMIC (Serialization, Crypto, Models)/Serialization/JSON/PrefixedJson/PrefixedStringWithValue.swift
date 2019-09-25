@@ -73,7 +73,7 @@ public struct PrefixedStringWithValue:
 }
 
 public extension PrefixedStringWithValue {
-    var identifer: String {
+    var identifier: String {
         return [
             jsonPrefix.identifier,
             String(describing: stringValue)
@@ -102,13 +102,13 @@ public extension PrefixedStringWithValue {
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(identifer)
+        try container.encode(identifier)
     }
 }
 
 // MARK: - CustomStringConvertible
 public extension PrefixedStringWithValue {
     var description: String {
-        return identifer
+        return identifier
     }
 }

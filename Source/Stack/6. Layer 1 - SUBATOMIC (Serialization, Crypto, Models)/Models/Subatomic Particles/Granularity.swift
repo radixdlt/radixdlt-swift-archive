@@ -34,7 +34,7 @@ import Foundation
 /// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
 ///
 public struct Granularity:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     CBORDataConvertible,
     StringRepresentable,
     Comparable,
@@ -139,7 +139,7 @@ public extension Granularity {
     }
 }
     
-// MARK: - PrefixedJsonDecodable
+// MARK: - PrefixedJSONDecodable
 public extension Granularity {
     static let jsonPrefix = JSONPrefix.uint256DecimalString
 }

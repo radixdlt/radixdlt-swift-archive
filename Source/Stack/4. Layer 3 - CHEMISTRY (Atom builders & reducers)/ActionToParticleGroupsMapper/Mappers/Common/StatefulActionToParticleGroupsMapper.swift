@@ -27,7 +27,7 @@ import Foundation
 public protocol BaseStatefulActionToParticleGroupsMapper {
     func requiredStateForAnAction(_ userAction: UserAction) -> [AnyShardedParticleStateId]
     
-    // TODO replace`upParticles: [AnyUpParticle]` with `spunPartices: [AnySpunParticle]`, since for many Mappers we would like to look for RRIParticles with spin `.down` to see of an RRI is already in use
+    // TODO replace`upParticles: [AnyUpParticle]` with `spunParticles: [AnySpunParticle]`, since for many Mappers we would like to look for RRIParticles with spin `.down` to see of an RRI is already in use
     func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups
 }
 

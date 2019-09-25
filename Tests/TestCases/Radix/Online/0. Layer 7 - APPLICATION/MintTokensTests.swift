@@ -40,7 +40,7 @@ class MintTokensTests: LocalhostNodeTest {
         
         aliceIdentity = AbstractIdentity()
         bobIdentity = AbstractIdentity()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
     }
@@ -51,7 +51,7 @@ class MintTokensTests: LocalhostNodeTest {
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 30))
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         /// GIVEN: And a previously created FooToken, for which Alice has the appropriate permissions
         guard let fooTokenStateAfterCreation = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: 2) else { return }
@@ -66,7 +66,7 @@ class MintTokensTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             // THEN: the minting succeeds
-            minting.blockingWasSuccessfull(timeout: .enoughForPOW)
+            minting.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // THEN: AND the supply of FooToken is updated with 42
@@ -84,7 +84,7 @@ class MintTokensTests: LocalhostNodeTest {
     func testMintFailsDueUnknownRRI() {
         // GIVEN: Radix identity Alice and an application layer action MintToken
         
-        // WHEN Alice call Mint on RRI for some nonexisting FoobarToken
+        // WHEN Alice call Mint on RRI for some non existing FoobarToken
         let foobarToken: ResourceIdentifier = "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/FoobarToken"
         let minting = application.mintTokens(amount: 123, ofType: foobarToken)
         
@@ -106,13 +106,13 @@ class MintTokensTests: LocalhostNodeTest {
         )
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: Alice call Mint(20) on FooToken
         let minting = application.mintTokens(amount: 20, ofType: fooToken)
         
-        // THEN: an error supplyExcceedsMax is thrown
+        // THEN: an error supplyExceedsMax is thrown
         minting.blockingAssertThrows(
             error: MintError.tokenOverMint(
                 token: fooToken,
@@ -127,7 +127,7 @@ class MintTokensTests: LocalhostNodeTest {
     
     func testMintFailDueToWrongPermissions() {
         // GIVEN: Radix identity Alice and an application layer action MintToken ...
-        let bobApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: bobIdentity)
+        let bobApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: bobIdentity)
         let aliceApp = application!
         
         // GIVEN: ... and a previously created FooToken, for which Alice does **NOT** have the appropriate permissions
@@ -136,7 +136,7 @@ class MintTokensTests: LocalhostNodeTest {
         )
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         aliceApp.pull(address: bob).disposed(by: disposeBag)
@@ -161,7 +161,7 @@ class MintTokensTests: LocalhostNodeTest {
         let (tokenCreation, fooToken) = application.createToken(supply: .fixed(to: 10))
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
 
         // WHEN: Alice call Mint for FooToken
@@ -182,7 +182,7 @@ class MintTokensTests: LocalhostNodeTest {
         )
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: Alice call Mint(2) for FooToken, where 3∤2 (3 does not divide 2)

@@ -24,26 +24,26 @@
 
 import Foundation
 
-public protocol PrefixedJsonEncodable: JSONPrefixSpecifying, Encodable {
+public protocol PrefixedJSONEncodable: JSONPrefixSpecifying, Encodable {
     var prefixedString: PrefixedStringWithValue { get }
 }
 
-public extension PrefixedJsonEncodable {
+public extension PrefixedJSONEncodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(prefixedString.identifer)
+        try container.encode(prefixedString.identifier)
     }
 }
 
-// Ugly hack to resolve "candidate exactly matches" error since RawRepresentable have a default `encode` function, and the compiler is unable to distinguish between the RawRepresentable `encode` and the PrefixedJsonCodable `encode` function.
-extension RawRepresentable where Self: PrefixedJsonEncodable, Self.RawValue == String {
+// Ugly hack to resolve "candidate exactly matches" error since RawRepresentable have a default `encode` function, and the compiler is unable to distinguish between the RawRepresentable `encode` and the PrefixedJSONCodable `encode` function.
+extension RawRepresentable where Self: PrefixedJSONEncodable, Self.RawValue == String {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(prefixedString.identifer)
+        try container.encode(prefixedString.identifier)
     }
 }
 
-public extension PrefixedJsonEncodable where Self: StringRepresentable, Self: PrefixedJsonDecodable {
+public extension PrefixedJSONEncodable where Self: StringRepresentable, Self: PrefixedJSONDecodable {
     var prefixedString: PrefixedStringWithValue {
         return PrefixedStringWithValue(value: stringValue, prefix: Self.jsonPrefix)
     }

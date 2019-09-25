@@ -28,7 +28,7 @@ import Foundation
 
 /// String representation of a Hex string which is impossible to instantiatie with invalid values.
 public struct HexString:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     StringConvertible,
     StringRepresentable,
     CharacterSetSpecifying,
@@ -45,7 +45,7 @@ public struct HexString:
         do {
             self.value = try HexString.validate(unvalidated)
         } catch {
-            fatalError("Passed unvalid string, error: \(error)")
+            badLiteralValue(unvalidated, error: error)
         }
     }
 }

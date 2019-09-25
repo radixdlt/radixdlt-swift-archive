@@ -45,7 +45,7 @@ class TransferTokensTests: LocalhostNodeTest {
         aliceIdentity = AbstractIdentity()
         bobAccount = Account()
         carolAccount = Account()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobAccount)
         carol = application.addressOf(account: carolAccount)
@@ -58,7 +58,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         // createTokenAction(address: alice, supply: .fixed(to: 30))
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         guard let myTokenDef = application.observeTokenDefinition(identifier: rri).blockingTakeFirst() else { return }
@@ -74,7 +74,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
-            transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
+            transfer.blockingWasSuccessful(timeout: .enoughForPOW)
         )
 
         guard let myBalanceOrNilAfterTx = application.observeMyBalance(ofToken: rri).blockingTakeLast() else { return }
@@ -120,7 +120,7 @@ class TransferTokensTests: LocalhostNodeTest {
         let (tokenCreation, rri) =  application.createFixedSupplyToken(supply: initialSupply)
 
         XCTAssertTrue(
-           tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+           tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         let amount: PositiveAmount = 50
@@ -139,14 +139,14 @@ class TransferTokensTests: LocalhostNodeTest {
         let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         let transfer = application.transferTokens(identifier: rri, to: bob, amount: 20)
         
         // THEN: I see that the transfer actions completes successfully
         XCTAssertTrue(
-            transfer.blockingWasSuccessfull(timeout: .enoughForPOW)
+            transfer.blockingWasSuccessful(timeout: .enoughForPOW)
         )
     }
     
@@ -159,7 +159,7 @@ class TransferTokensTests: LocalhostNodeTest {
         let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 100, granularity: granularity)
 
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         let amountToSend: PositiveAmount = 7
@@ -185,7 +185,7 @@ class TransferTokensTests: LocalhostNodeTest {
         let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: Alice tries to spend Carols coins

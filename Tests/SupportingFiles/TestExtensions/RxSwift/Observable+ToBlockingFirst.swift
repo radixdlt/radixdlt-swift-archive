@@ -31,7 +31,7 @@ import RxBlocking
 
 extension Observable where Element == Void {
     
-    func blockingWasSuccessfull(
+    func blockingWasSuccessful(
         _ takeCount: Int = 1,
         timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
@@ -58,7 +58,7 @@ extension Observable where Element == Void {
 
 extension ObservableConvertibleType where Element == Never { /* Completable */
     
-    func blockingWasSuccessfull(
+    func blockingWasSuccessful(
         timeout: TimeInterval? = .default,
         failOnTimeout: Bool = true,
         failOnErrors: Bool = true,

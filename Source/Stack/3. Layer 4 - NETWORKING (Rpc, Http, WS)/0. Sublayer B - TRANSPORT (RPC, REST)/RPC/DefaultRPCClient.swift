@@ -27,7 +27,7 @@ import RxSwift
 
 public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
     
-    /// The channel this JSON RPC client utilizes for messaging
+    /// The channel this JSON RPC client uses for messaging
     public let channel: FullDuplexCommunicationChannel
     
     public init(channel: FullDuplexCommunicationChannel) {

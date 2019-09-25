@@ -27,7 +27,7 @@ import BitcoinKit
 
 public struct Mnemonic: CustomStringConvertible {
     
-    public static let seperator: String = " "
+    public static let separator: String = " "
     
     public let words: [Word]
     public let language: Language

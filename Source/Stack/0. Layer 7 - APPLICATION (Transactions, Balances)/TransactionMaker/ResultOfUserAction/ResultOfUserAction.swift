@@ -117,7 +117,7 @@ public extension ResultOfUserAction {
     }
     
     // Returns a bool marking if the action was successfully completed within the provided time period if any timeout was provided
-    // if no `timeout` was provided, then the bool just marks if the action was successfull or not in general.
+    // if no `timeout` was provided, then the bool just marks if the action was successful or not in general.
     func blockUntilComplete(timeout: TimeInterval? = nil) -> Bool {
         switch toCompletable().toBlocking(timeout: timeout).materialize() {
         case .completed: return true

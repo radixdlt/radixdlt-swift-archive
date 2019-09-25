@@ -125,18 +125,19 @@ public extension FungibleParticleTransitioner {
         )
         
         guard balance >= toAmount else {
+            print("☢️ toAmount:\(toAmount), balance: \(balance)")
             throw Error.notEnoughFungibles(requiredAmount: toAmount, butOnlyGotBalance: balance)
         }
-        var comsumerTotal: NonNegativeAmount = .zero
+        var consumerTotal: NonNegativeAmount = .zero
         
-        let isToAmountCoveredYet = { comsumerTotal >= toAmount }
+        let isToAmountCoveredYet = { consumerTotal >= toAmount }
         
         for unconsumedFungible in unconsumedFungibles where !isToAmountCoveredYet() {
             
             // Should be non negative thanks to `where !isToAmountCoveredYet` check
-            let left: NonNegativeAmount = toAmount - comsumerTotal
+            let left: NonNegativeAmount = toAmount - consumerTotal
             let particleAmount = try amountMapper(unconsumedFungible)
-            comsumerTotal += particleAmount
+            consumerTotal += particleAmount
             
             let amountToTransfer = min(left, particleAmount)
             let amountToKeep = particleAmount - amountToTransfer

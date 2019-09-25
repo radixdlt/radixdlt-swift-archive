@@ -336,7 +336,7 @@ public extension Array where Element: SpunParticleContainer {
     }
 }
 
-extension Array: InvertableSpunParticleConvertible where Element: InvertableSpunParticleConvertible {
+extension Array: InvertibleSpunParticleConvertible where Element: InvertibleSpunParticleConvertible {
     public func invertedSpin() -> [Element] {
         return map { $0.invertedSpin() }
     }

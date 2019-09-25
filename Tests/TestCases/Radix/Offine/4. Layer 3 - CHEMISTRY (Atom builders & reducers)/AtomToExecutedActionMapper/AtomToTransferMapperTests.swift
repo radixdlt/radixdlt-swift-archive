@@ -37,13 +37,13 @@
 //    
 //    func testAtomToTransferWithReturn() {
 //        
-////        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity())
+////        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: AbstractIdentity())
 //        
 //        
 //        
 //        let (tokenCreation, aliceCoin) = aliceApp.createToken(supply: .fixed(to: 100))
 //        
-//        XCTAssertTrue(tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW))
+//        XCTAssertTrue(tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW))
 //        
 //        let bob = aliceApp.addressOf(account: Account())
 //        
@@ -69,11 +69,11 @@
 //
 //    func testAtomToTransferWithoutReturn() {
 //
-////        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity())
+////        let aliceApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: AbstractIdentity())
 //
 //        let (tokenCreation, aliceCoin) = aliceApp.createToken(supply: .fixed(to: 100))
 //
-//        XCTAssertTrue(tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW))
+//        XCTAssertTrue(tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW))
 //
 //        let bob = aliceApp.addressOf(account: Account())
 //

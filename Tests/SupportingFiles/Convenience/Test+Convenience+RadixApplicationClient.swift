@@ -27,7 +27,7 @@ import Foundation
 
 extension RadixApplicationClient {
     static var localhostAliceSingleNodeApp: RadixApplicationClient {
-        return RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: AbstractIdentity())
+        return RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: AbstractIdentity())
     }
     
     func createToken(

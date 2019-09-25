@@ -24,8 +24,8 @@
 
 import Foundation
 
-public protocol PrefixedJsonDecodableByProxy: PrefixedJsonDecodable {
-    associatedtype Proxy: PrefixedJsonDecodable
+public protocol PrefixedJsonDecodableByProxy: PrefixedJSONDecodable {
+    associatedtype Proxy: PrefixedJSONDecodable
     init(proxy: Proxy) throws
 }
 
@@ -39,8 +39,8 @@ public extension PrefixedJsonDecodableByProxy {
     }
 }
 
-public protocol PrefixedJsonEncodableByProxy: PrefixedJsonEncodable {
-    associatedtype Proxy: PrefixedJsonEncodable
+public protocol PrefixedJsonEncodableByProxy: PrefixedJSONEncodable {
+    associatedtype Proxy: PrefixedJSONEncodable
     var proxy: Proxy { get }
 }
 
