@@ -44,7 +44,10 @@ extension MainScreen: View {
             tab(.assets) {
                 NavigationView {
                     AssetsScreen().environmentObject(securePersistence)
-                        .navigationBarItems(trailing: switchAccountButton)
+                    .navigationBarItems(
+                        leading: faucetButtonIfDebug,
+                        trailing: switchAccountButton
+                    )
                 }
             }
 
@@ -81,7 +84,6 @@ extension MainScreen: View {
         .sheet(isPresented: $isPresentingSwitchAccountModal) {
             SwitchAccountScreen()
                 .environmentObject(self.radix)
-//                .environmentObject(SwitchAccountScreen.ViewModel(radix: self.radix))
         }
     }
 }
@@ -91,6 +93,20 @@ private extension MainScreen {
     var switchAccountButton: some View {
         Button(action: { self.isPresentingSwitchAccountModal = true }) {
             Image("Icon/Button/Profile")
+        }
+    }
+    
+    var faucetButtonIfDebug: some View {
+        if isDebug {
+            #if DEBUG
+            return Button(action: { self.radix.debug.requestTokensFromFaucet() }) {
+                Text("🚰")
+            }.eraseToAny()
+            #else
+            fatalError("should not happen")
+            #endif
+        } else {
+            return EmptyView().eraseToAny()
         }
     }
 }

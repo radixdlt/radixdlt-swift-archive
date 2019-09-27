@@ -127,11 +127,17 @@ private extension CreateTokenScreen {
                     }
                 }.pickerStyle(SegmentedPickerStyle())
                 
+                TextField(self.viewModel.supplyHint, text: $viewModel.input.supply)
+                
+                Toggle(isOn: $viewModel.input.convertToSubunits) {
+                    Text("Auto convert to subunits")
+                }
+                
+                Text("Supply: '\(self.viewModel.supplyConvertedIfNeeded)'")
+                
                 if self.viewModel.input.supplyType == .mutable {
                     tokenPermissionsView
                 }
-                
-                TextField(self.viewModel.supplyHint, text: $viewModel.input.supply)
             }
         }
     }
@@ -199,6 +205,8 @@ extension CreateTokenScreen.ViewModel {
         
         @Published fileprivate var supplyType: SupplyType = .mutable
         @Published fileprivate var supply: String = ""
+        
+        @Published fileprivate var convertToSubunits = true
         
         @Published fileprivate var anyoneHasPermissionToBurn = false
         @Published fileprivate var anyoneHasPermissionToMint = false
@@ -288,6 +296,14 @@ extension CreateTokenScreen.ViewModel.Error.InputError {
 internal extension CreateTokenScreen.ViewModel {
     var supplyHint: String { input.supplyType.hint }
     
+    var supplyConvertedIfNeeded: String {
+        guard
+            input.convertToSubunits,
+            let supply = try? NonNegativeAmount(string: input.supply)
+        else { return input.supply }
+        return TokenUnitConversions.unitsToSubunits(supply).stringValue
+    }
+    
     var canCreate: Bool {
         do {
             _ = try makeAction()
@@ -332,7 +348,7 @@ private extension CreateTokenScreen.ViewModel {
             name: try name(),
             symbol: try symbol(),
             description: try description(),
-            supply: try makeSupply(amount: input.supply, type: input.supplyType),
+            supply: try makeSupply(amount: supplyConvertedIfNeeded, type: input.supplyType),
             iconUrl: iconUrl,
             granularity: try granularity(),
             permissions: tokenPermissions

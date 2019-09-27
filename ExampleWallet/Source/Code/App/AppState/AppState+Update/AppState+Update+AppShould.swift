@@ -59,7 +59,7 @@ public extension AppState.Update.AppShould {
 
         let identity = AbstractIdentity(hdWallet: hdWallet)
 
-        let radixUniverseBootstrap: BootstrapConfig = UniverseBootstrap.localhostSingleNode
+        let radixUniverseBootstrap: BootstrapConfig = UniverseBootstrap.localhostTwoNodes
 
         let client = RadixApplicationClient(
             bootstrapConfig: radixUniverseBootstrap,

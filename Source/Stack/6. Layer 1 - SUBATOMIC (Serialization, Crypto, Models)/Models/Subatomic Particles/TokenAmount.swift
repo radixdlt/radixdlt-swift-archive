@@ -24,27 +24,20 @@
 
 import Foundation
 
-import RadixSDK
-
-struct Asset {
-    let token: TokenDefinition
-    let balance: NonNegativeAmount
+public struct TokenAmount {
+    /// The use can never spend negative amounts, nor can she create a token with a negative supply, thus safe to bound to `NonNegativeAmount`
+    public let amount: NonNegativeAmount
     
-    init(tokenBalance: TokenBalance) {
-        self.token = tokenBalance.token
-//        self.balance = TokenUnitConversions.subunitsToUnits(<#T##subunits: NonNegativeAmountConvertible##NonNegativeAmountConvertible#>)
-        self.balance = tokenBalance.amount.convertedFromSubunits()
+    public let denomination: Denomination
+    
+    public init(amount: NonNegativeAmount, denomination: Denomination) {
+        self.amount = amount
+        self.denomination = denomination
     }
 }
 
-extension Asset: Swift.Identifiable {
-    var id: ResourceIdentifier {
-        return token.tokenDefinitionReference
-    }
-}
-
-extension NonNegativeAmountConvertible {
-    func convertedFromSubunits() -> Self {
-        return TokenUnitConversions.subunitsToUnits(self)
-    }
-}
+//public extension TokenAmount {
+//    static func wholeUnit(amount: NonNegativeAmount) -> TokenAmount {
+//        return TokenAmount(amount: amount, denomination: .wholeUnit)
+//    }
+//}

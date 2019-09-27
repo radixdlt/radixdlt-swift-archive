@@ -23,28 +23,17 @@
 //
 
 import Foundation
+@testable import RadixSDK
+import XCTest
 
-import RadixSDK
-
-struct Asset {
-    let token: TokenDefinition
-    let balance: NonNegativeAmount
+class TokenUnitConversionTests: XCTestCase {
     
-    init(tokenBalance: TokenBalance) {
-        self.token = tokenBalance.token
-//        self.balance = TokenUnitConversions.subunitsToUnits(<#T##subunits: NonNegativeAmountConvertible##NonNegativeAmountConvertible#>)
-        self.balance = tokenBalance.amount.convertedFromSubunits()
+    func testFromSubunitsToUnits() {
+        let manyZeros: PositiveAmount = "237000000000000000000"
+        let converted = TokenUnitConversions.subunitsToUnits(manyZeros)
+        XCTAssertEqual(converted.stringValue, "237")
+        let convertedBack = TokenUnitConversions.unitsToSubunits(converted)
+        XCTAssertEqual(convertedBack, convertedBack)
     }
-}
-
-extension Asset: Swift.Identifiable {
-    var id: ResourceIdentifier {
-        return token.tokenDefinitionReference
-    }
-}
-
-extension NonNegativeAmountConvertible {
-    func convertedFromSubunits() -> Self {
-        return TokenUnitConversions.subunitsToUnits(self)
-    }
+    
 }
