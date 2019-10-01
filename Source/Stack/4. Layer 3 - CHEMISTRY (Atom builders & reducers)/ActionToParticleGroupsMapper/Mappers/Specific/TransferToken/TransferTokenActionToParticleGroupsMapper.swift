@@ -77,7 +77,8 @@ private extension FungibleParticleTransitioner where From == TransferrableTokens
         do {
             transition = try self.transition(
                 unconsumedFungibles: transferrableTokensParticles,
-                toAmount: TokenUnitConversions.unitsToSubunits(transfer.amount.asNonNegative))
+                toAmount: transfer.amount.asNonNegative
+            )
         } catch Error.notEnoughFungibles(_, let balance) {
             throw TransferError.insufficientFunds(currentBalance: balance, butTriedToTransfer: transfer.amount)
         }

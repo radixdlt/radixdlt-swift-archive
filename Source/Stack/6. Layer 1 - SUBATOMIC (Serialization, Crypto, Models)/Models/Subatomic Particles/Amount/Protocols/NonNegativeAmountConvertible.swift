@@ -33,6 +33,14 @@ where
     Magnitude == BigUnsignedInt
 {
     func subtracting(_ other: Self) throws -> Self
+    init<NNA>(nonNegative: NNA) where NNA: NonNegativeAmountConvertible
+}
+
+public extension NonNegativeAmountConvertible {
+    
+    init<NNA>(nonNegative: NNA) where NNA: NonNegativeAmountConvertible {
+        self.init(validated: nonNegative.magnitude)
+    }
 }
 
 // swiftlint:enable colon opening_brace

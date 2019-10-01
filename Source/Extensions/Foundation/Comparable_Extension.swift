@@ -23,12 +23,11 @@
 //
 
 import Foundation
-import XCTest
-@testable import RadixSDK
 
-class UnitConversionTests: XCTestCase {
-    func testFoo() {
-        print(Denomination.milli.debugDescription)
-        XCTAssert(true)
+public extension Comparable {
+    static func compare<C>(_ lhs: Self, _ rhs: Self, keyPath: KeyPath<Self, C>, _ comparison: (C, C) -> Bool) -> Bool where C: Comparable {
+        let lhsValue = lhs[keyPath: keyPath]
+        let rhsValue = rhs[keyPath: keyPath]
+        return comparison(lhsValue, rhsValue)
     }
 }

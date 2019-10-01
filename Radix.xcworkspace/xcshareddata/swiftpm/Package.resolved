@@ -12,11 +12,11 @@
       },
       {
         "package": "Kingfisher",
-        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher",
         "state": {
           "branch": null,
-          "revision": "25437551dfccbc9ceeaf9297fd95b480ff1cc5de",
-          "version": null
+          "revision": "ea84ff22e8c6da676354b162476aad0efd013d7d",
+          "version": "5.8.1"
         }
       },
       {

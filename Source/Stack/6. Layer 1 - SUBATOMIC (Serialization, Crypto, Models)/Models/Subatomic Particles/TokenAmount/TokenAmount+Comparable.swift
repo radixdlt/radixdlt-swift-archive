@@ -24,20 +24,17 @@
 
 import Foundation
 
-public struct TokenAmount {
-    /// The use can never spend negative amounts, nor can she create a token with a negative supply, thus safe to bound to `NonNegativeAmount`
-    public let amount: NonNegativeAmount
+// MARK: - Comparable
+public extension TokenAmount {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return compare(lhs, rhs, keyPath: \.amountMeasuredInAtto, ==)
+    }
     
-    public let denomination: Denomination
+    static func < (lhs: Self, rhs: Self) -> Bool {
+        return compare(lhs, rhs, keyPath: \.amountMeasuredInAtto, <)
+    }
     
-    public init(amount: NonNegativeAmount, denomination: Denomination) {
-        self.amount = amount
-        self.denomination = denomination
+    static func > (lhs: Self, rhs: Self) -> Bool {
+        return compare(lhs, rhs, keyPath: \.amountMeasuredInAtto, >)
     }
 }
-
-//public extension TokenAmount {
-//    static func wholeUnit(amount: NonNegativeAmount) -> TokenAmount {
-//        return TokenAmount(amount: amount, denomination: .wholeUnit)
-//    }
-//}
