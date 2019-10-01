@@ -246,6 +246,7 @@
 		E685BBBE22BA5F5800563B1A /* RxSwift.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C721EC95E8002CE331 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E685BBBF22BA5F5800563B1A /* SwiftyBeaver.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E68727FA2342318F00FF4FCE /* Int+SuperscriptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68727F92342318F00FF4FCE /* Int+SuperscriptTests.swift */; };
+		E68727FE2343BC6400FF4FCE /* Locale+DecimalSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68727FD2343BC6400FF4FCE /* Locale+DecimalSeparator.swift */; };
 		E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB76225F227800340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift */; };
 		E689DB7D225F61BF00340CF3 /* DefaultHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB7C225F61BF00340CF3 /* DefaultHTTPClient.swift */; };
 		E689DB83225F655100340CF3 /* RadixApplicationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB82225F655100340CF3 /* RadixApplicationClient.swift */; };
@@ -902,6 +903,7 @@
 		E6725656228B4426004631F1 /* SubscriptionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionError.swift; sourceTree = "<group>"; };
 		E67A715321FBC65800F4B2D0 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		E68727F92342318F00FF4FCE /* Int+SuperscriptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+SuperscriptTests.swift"; sourceTree = "<group>"; };
+		E68727FD2343BC6400FF4FCE /* Locale+DecimalSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Locale+DecimalSeparator.swift"; sourceTree = "<group>"; };
 		E689DB76225F227800340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PrivateKey+ExpressilbleByIntegerLiteral.swift"; sourceTree = "<group>"; };
 		E689DB7C225F61BF00340CF3 /* DefaultHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultHTTPClient.swift; sourceTree = "<group>"; };
 		E689DB82225F655100340CF3 /* RadixApplicationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixApplicationClient.swift; sourceTree = "<group>"; };
@@ -3014,6 +3016,7 @@
 				E6ED1A4A21F8ACA300654105 /* Numbers */,
 				E6CEE72F21F5D4E000D745EC /* CharacterSet.swift */,
 				E6D1318221F7B2050014792D /* Data+Hex.swift */,
+				E68727FD2343BC6400FF4FCE /* Locale+DecimalSeparator.swift */,
 				E62EFDC5224936E000B6DAD6 /* URL_Extensions.swift */,
 				E68BD812229EAC3A00FCE4D3 /* Range+BinaryInteger+Stride.swift */,
 				E627801C2341F529008F2857 /* Comparable_Extension.swift */,
@@ -4655,6 +4658,7 @@
 				E6E279322271CD1C0067D46E /* Mnemonic+Language.swift in Sources */,
 				E689DBA6225F882800340CF3 /* UniverseConfigRequesting.swift in Sources */,
 				E6725655228B441A004631F1 /* RPCErrorCode.swift in Sources */,
+				E68727FE2343BC6400FF4FCE /* Locale+DecimalSeparator.swift in Sources */,
 				E6F5484722771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift in Sources */,
 				E606FC4B22CB5E2200A7E52E /* WebSocketsEpic.swift in Sources */,
 				E6E279672271CD1C0067D46E /* BigInteger+StringConversion.swift in Sources */,

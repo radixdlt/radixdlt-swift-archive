@@ -33,63 +33,11 @@ class TokenUnitConversionTests: XCTestCase {
         continueAfterFailure = true
     }
     
-    func testDecimalInAttoThrows() {
-        XCTAssertThrowsSpecificError(
-            try TokenAmount(decimal: 0.1, denomination: .atto),
-            TokenAmount.Error.decimalToAttoNotRepresentableAsInteger(decimal: 0.1, denomination: .atto)
-        )
-    }
     
-    func testDecimalThrows() throws {
-        let e⁻4: Decimal = 0.0001
-        XCTAssertThrowsSpecificError(
-            try TokenAmount(decimal: e⁻4, denomination: .femto),
-            TokenAmount.Error.decimalToAttoNotRepresentableAsInteger(decimal: e⁻4, denomination: .femto)
-        )
-        XCTAssertEqual(
-            try XCTUnwrap(try? TokenAmount(decimal: e⁻4, denomination: .pico)),
-            try XCTUnwrap(try? TokenAmount(decimal: 100, denomination: .atto))
-        )
-    }
-    
-    func testFo() throws {
-        let dec = try XCTUnwrap(Decimal(string: ".01"))
-        XCTAssertEqual(dec, 0.01)
-    }
-    
-    func testBoo() {
-        let string = "123"
-        let components = string.components(separatedBy: ".")
-        XCTAssertEqual(components.count, 1)
-        XCTAssertEqual(components[0], string)
-    }
-    
-    func testDecimalStringIntegerButWithTrailingDecimalZeros() {
-        func doTest(_ string: String, expectInteger: Bool = true) {
-            let components = string.components(separatedBy: ".")
-            XCTAssertEqual(components.count, 2)
-            guard let decimalFromString = Decimal(string: components[1]) else {
-                return XCTFail("failed to create decimal from string")
-            }
-            let beIntString = expectInteger ? "be" : "_NOT_ be"
-            let isZero = decimalFromString == .zero
-            XCTAssertEqual(isZero, expectInteger, "Expected decimal string: '\(decimalFromString)' to \(beIntString) and integer, but got result: <isInt: \(isZero)>")
-        }
-
-        doTest("1.0")
-        doTest("1.00")
-        doTest("1.000")
-        doTest("1.0000")
-        doTest("1.1", expectInteger: false)
-        doTest("1.01", expectInteger: false)
-    }
-    
-    func testDecimalLotsOfZeros() throws {
-        let lhs = try XCTUnwrap(
-            try? TokenAmount(
-                decimal: 0.000000000000000000000000000000000001,
-                denomination: .exa
-            )
+    func testDecimalLotsOfZeros() {
+        let lhs = try! TokenAmount(
+            string: "0.000000000000000000000000000000000001",
+            denomination: .exa
         )
         
         let rhs = TokenAmount(
@@ -98,6 +46,35 @@ class TokenUnitConversionTests: XCTestCase {
         )
         XCTAssertEqual(lhs, rhs)
     }
+    
+
+    func test1Eminus72baseE54() {
+        let lhs = try! TokenAmount(
+            string: "0.000000000000000000000000000000000000000000000000000000000000000000000001",
+            denomination: .exponent(of: 54, nameIfUnknown: "E54", symbolIfUnknown: "BIG")
+        )
+        
+        let rhs = TokenAmount(
+            positiveAmount: 1,
+            denomination: .atto
+        )
+        XCTAssertEqual(lhs, rhs)
+    }
+    
+    func testDecimalLotsOfZeros60() {
+        let lhs = try! TokenAmount(
+            string: "0.000000000000000000000000000000000000000000000000000000000001",
+            denomination: .exponent(of: 42, nameIfUnknown: "E42", symbolIfUnknown: "BIG")
+        )
+        
+        let rhs = TokenAmount(
+            positiveAmount: 1,
+            denomination: .atto
+        )
+        XCTAssertEqual(lhs, rhs)
+    }
+    
+    
     
     func testBigInAttoEqBigInAtto() {
         let amount: PositiveAmount = "123456789012345678901234567890123456"
@@ -116,19 +93,63 @@ class TokenUnitConversionTests: XCTestCase {
     func testBigInExaEqBigInExa() {
         XCTAssertEqual(
             try! TokenAmount(
-                decimal: 0.123456789012345678901234567890123456,
+                string: "0.123456789012345678901234567890123456",
                 denomination: .exa
             ),
             try! TokenAmount(
-                decimal: 0.123456789012345678901234567890123456,
+                string: "0.123456789012345678901234567890123456",
                 denomination: .exa
             )
         )
     }
-        
+    
+    func testExaToAtto36Decimals() {
+        XCTAssertEqual(
+            try! TokenAmount(
+                string: "0.123456789012345678901234567890123456",
+                denomination: .exa
+            ),
+            TokenAmount(positiveAmount: "123456789012345678901234567890123456", denomination: .atto)
+        )
+    }
+    
+    func testExaToAtto35Decimals() {
+        XCTAssertEqual(
+            try! TokenAmount(
+                string: "1.23456789012345678901234567890123456",
+                denomination: .exa
+            ),
+            TokenAmount(positiveAmount: "1234567890123456789012345678901234560", denomination: .atto)
+        )
+    }
+    
+    
+    func testTooManyDecimalThrows() {
+        let amountString = "0.0123456789012345678901234567890123456"
+        XCTAssertThrowsSpecificError(
+            try TokenAmount(string: amountString, denomination: .exa),
+            TokenAmount.Error.amountFromStringNotRepresentableInDenomination(amountString: amountString, specifiedDenomination: .exa)
+        )
+    }
+    
+    func testThatUsingDecimalStringForAttoResultsInErrorThrown() {
+        XCTAssertThrowsSpecificError(
+            try TokenAmount(string: "0.1", denomination: .atto),
+            TokenAmount.Error.amountFromStringNotRepresentableInDenomination(amountString: "0.1", specifiedDenomination: .atto)
+        )
+    }
+    
+    func testThatUsingDoubleForAttoResultsInErrorThrown() {
+        XCTAssertThrowsSpecificError(
+            // We expect a compilation warning below
+            try TokenAmount(double: 0.1, denomination: .atto),
+            TokenAmount.Error.amountInAttoIsOnlyMeasuredInIntegers(butPassedDouble: 0.1)
+        )
+    }
+    
     func testDecimalLotsOfDigits() throws {
         let lhs = try! TokenAmount(
-            decimal: 0.010203040506070809101112131415161718,
+            string: "0.010203040506070809101112131415161718",
             denomination: .exa
         )
         
@@ -138,15 +159,7 @@ class TokenUnitConversionTests: XCTestCase {
         )
         XCTAssertEqual(lhs, rhs)
     }
-    
-    func testNoThrowFromExa() {
-        XCTAssertNoThrow( try TokenAmount(
-            decimal: 0.123456789012345678901234567890123456,
-            denomination: .exa
-        )
-        )
-    }
-    
+        
     func testDenominatorContent() {
         Denomination.allCases.forEach { print($0.debugDescription) }
         
@@ -167,7 +180,7 @@ class TokenUnitConversionTests: XCTestCase {
         doTest(.deca, expectedExponent: 1, expectedName: "deca")
         
     }
-        
+    
     func testFromWhole() {
         let amount = TokenAmount(positiveAmount: 237, denomination: .whole)
         let amountInAtto = TokenAmount(positiveAmount: "237000000000000000000", denomination: .atto)

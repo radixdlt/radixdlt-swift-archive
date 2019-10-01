@@ -37,36 +37,58 @@ public struct TokenAmount: Comparable, CustomStringConvertible {
 }
 
 public extension TokenAmount {
-    
-    init(decimal: Decimal, denomination from: Denomination) throws {
-        guard decimal > .zero else {
-            throw Error.amountMustBePositive
+    init(string: String, denomination from: Denomination) throws {
+        let numberFormatter: NumberFormatter = .default
+        let decimalSeparator = Locale.decimalSeparatorIndeed
+        
+        func amountInAttoFromNonDecimalString(_ nonDecimalString: String, conversion: (PositiveAmount) -> PositiveAmount = { $0 }) throws -> PositiveAmount {
+            assert(!nonDecimalString.contains(decimalSeparator))
+            guard let bigSignedInt = BigSignedInt(nonDecimalString, radix: 10) else {
+                throw Error.stringNotANumber(string)
+            }
+            guard bigSignedInt > .zero else {
+                throw Error.amountMustBePositive
+            }
+            do {
+                let positiveAmount = try PositiveAmount(validating: bigSignedInt.magnitude)
+                return conversion(positiveAmount)
+            } catch { unexpectedlyMissedToCatch(error: error) }
         }
         
-        if from == .atto, let bigInteger = decimal.bigIntegerWithoutLoosingPrecision {
-            let amount = try PositiveAmount(integer: bigInteger)
-            self.init(positiveAmount: amount, denomination: .atto)
+        if let decimalSeparatorIndex = string.index(of: decimalSeparator) {
+            let numberOfDecimals = string.distance(from: decimalSeparatorIndex, to: string.endIndex) - 1
+            let exponentDelta = abs(Denomination.minAllowedExponent - from.exponent)
+            
+            if exponentDelta < numberOfDecimals {
+                throw Error.amountFromStringNotRepresentableInDenomination(amountString: string, specifiedDenomination: from)
+            } else {
+                var amountMeasuredInAttoDroppedDecimals = try amountInAttoFromNonDecimalString(string.replacingOccurrences(of: decimalSeparator, with: ""))
+                
+                if exponentDelta > numberOfDecimals {
+                    let exponent = exponentDelta - numberOfDecimals
+                    let factor = BigUnsignedInt.init(integerLiteral: 10).power(exponent)
+                    let correctAmount = amountMeasuredInAttoDroppedDecimals.magnitude.multiplied(by: factor)
+                    amountMeasuredInAttoDroppedDecimals = PositiveAmount(validated: correctAmount)
+                }
+                
+                self.amountMeasuredInAtto = amountMeasuredInAttoDroppedDecimals
+            }
         } else {
-            let exponentDelta = abs(Denomination.atto.exponent - from.exponent)
-            let scale = try Decimal.ten(toThePowerOf: exponentDelta)
-            
-            let multipliedRoundedUp = try Decimal.multiply(decimal, scale, roundingMode: .up)
-            let multipliedRoundedDown = try Decimal.multiply(decimal, scale, roundingMode: .down)
-            
-            // Assert no precision was lost
-            guard multipliedRoundedUp == multipliedRoundedDown else {
-                throw Error.decimalToAttoPrecisionLoss(decimal: decimal, denomination: from)
+            self.amountMeasuredInAtto = try amountInAttoFromNonDecimalString(string) {
+                Self.convertToAtto(amount: $0, from: from)
             }
-            
-            let multiplied = [multipliedRoundedDown, multipliedRoundedDown].randomElement()! // which ever, since equal
-            
-            guard let bigInteger = multiplied.bigIntegerWithoutLoosingPrecision else {
-                throw Error.decimalToAttoNotRepresentableAsInteger(decimal: decimal, denomination: from)
-            }
-            print("✅ bigInt: \(bigInteger.toDecimalString())")
-            let amount = try PositiveAmount(integer: bigInteger)
-            self.init(positiveAmount: amount, denomination: .atto)
         }
+    }
+    
+    @available(*, deprecated, message: "_NOT_ deprecated, but a word of caution: `Double` might lose precision after a certain amount of decimals, consider using `init(positiveAmount:denomination)` or `init(string:denomination)` (which this init delegates to anyway) instead")
+    init(double: Double, denomination from: Denomination) throws {
+        guard from.exponent > Denomination.minAllowedExponent else {
+            throw Error.amountInAttoIsOnlyMeasuredInIntegers(butPassedDouble: double)
+        }
+        guard let numberString = NumberFormatter.default.string(from: NSNumber(value: double)) else {
+            incorrectImplementationShouldAlwaysBeAble(to: "Format a number string from double value: \(double)")
+        }
+        try self.init(string: numberString, denomination: from)
     }
 }
 
@@ -74,10 +96,11 @@ public extension TokenAmount {
 extension TokenAmount: Throwing {}
 public extension TokenAmount {
     enum Error: Swift.Error, Equatable {
+        case stringNotANumber(String)
         case amountMustBePositive
+        case amountInAttoIsOnlyMeasuredInIntegers(butPassedDouble: Double)
+        case amountFromStringNotRepresentableInDenomination(amountString: String, specifiedDenomination: Denomination)
         case amountNotRepresentableAsIntegerInDenomination(amount: BigUnsignedInt, fromDenomination: Denomination, toDenomination: Denomination)
-        case decimalToAttoPrecisionLoss(decimal: Decimal, denomination: Denomination)
-        case decimalToAttoNotRepresentableAsInteger(decimal: Decimal, denomination: Denomination)
     }
 }
 
@@ -138,7 +161,7 @@ public extension TokenAmount {
         }
         return (amount: amountMeasuredInAtto, denomination: .atto)
     }
-
+    
 }
 
 private extension TokenAmount {
@@ -158,9 +181,3 @@ private extension TokenAmount {
         }
     }
 }
-
-//public extension TokenAmount {
-//    static func wholeUnit(amount: NonNegativeAmount) -> TokenAmount {
-//        return TokenAmount(amount: amount, denomination: .whole)
-//    }
-//}

@@ -43,17 +43,23 @@ public extension Decimal.Error {
     }
 }
 
+internal extension NumberFormatter {
+    static var `default`: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ""
+        formatter.locale = Locale.current
+        return formatter
+    }
+}
+
 public extension Decimal {
     static func ten(toThePowerOf exponent: Int, roundingMode: NSDecimalNumber.RoundingMode = .plain) throws -> Decimal {
         return try pow(base: 10, exponent: exponent, roundingMode: roundingMode)
     }
     
-    
     var bigIntegerWithoutLoosingPrecision: BigUnsignedInt? {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = ""
-        formatter.locale = Locale.current
+        let formatter = NumberFormatter.default
         guard let decimalString = formatter.string(for: self) else {
             incorrectImplementationShouldAlwaysBeAble(to: "Format a decimal: \(self)")
         }
@@ -99,7 +105,6 @@ public extension Decimal {
         } else { incorrectImplementation("Base case where exponent=\(exponent) should have been earlier.") }
     }
     
-    
     static func divide(nominator: Decimal, denominator: Decimal, roundingMode: NSDecimalNumber.RoundingMode = .plain) throws -> Decimal {
         return try doOperation(lhs: nominator, rhs: denominator, roundingMode: roundingMode, NSDecimalDivide)
     }
@@ -107,9 +112,31 @@ public extension Decimal {
     static func multiply(_ lhs: Decimal, _ rhs: Decimal, roundingMode: NSDecimalNumber.RoundingMode = .plain) throws -> Decimal {
         return try doOperation(lhs: lhs, rhs: rhs, roundingMode: roundingMode, NSDecimalMultiply)
     }
- 
-}
+     
+    static func multiplyNS(
+        _ lhsDecimal: Decimal,
+        _ rhsDecimal: Decimal,
+        scale: Int16 = .max,
+        roundingMode: NSDecimalNumber.RoundingMode = .plain
+    ) -> Decimal {
+        
+        let handler = NSDecimalNumberHandler(
+            roundingMode: roundingMode,
+            scale: scale,
+            raiseOnExactness: true,
+            raiseOnOverflow: true,
+            raiseOnUnderflow: true,
+            raiseOnDivideByZero: true
+        )
+        
+        let lhs = NSDecimalNumber(decimal: lhsDecimal)
+        let rhs = NSDecimalNumber(decimal: rhsDecimal)
 
+        let product = lhs.multiplying(by: rhs, withBehavior: handler)
+        
+        return product.decimalValue
+    }
+}
 
 private extension Decimal {
     static func doOperation(
