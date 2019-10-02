@@ -57,7 +57,7 @@ public extension ConsumeTokenActionToParticleGroupsMapper {
 
         let tokenDefinition = typedTokenDefinition.tokenDefinition
         
-        guard action.amount.isExactMultipleOfGranularity(tokenDefinition.granularity) else {
+        guard action.amount.isMultiple(of: tokenDefinition.granularity) else {
             
             throw ConsumeTokensActionError.amountNotMultipleOfGranularity(
                 token: rri,

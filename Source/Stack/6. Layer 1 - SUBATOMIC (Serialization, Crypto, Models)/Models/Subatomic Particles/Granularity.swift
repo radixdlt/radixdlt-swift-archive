@@ -24,8 +24,6 @@
 
 import Foundation
 
-// swiftlint:disable colon opening_brace
-
 /// The smallest non-divisible amount of subunits one can have is introduced. For the formal definition read [RIP - Tokens][1].
 ///
 /// - seeAlso:
@@ -33,134 +31,145 @@ import Foundation
 ///
 /// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
 ///
-public struct Granularity:
-    PrefixedJSONCodable,
-    CBORDataConvertible,
-    StringRepresentable,
-    Comparable,
-    Hashable,
-    CustomStringConvertible
-{
-
-// swiftlint:enable colon opening_brace
-    
-    public typealias Value = PositiveAmount
-    
-    public let value: Value
-
-    public init(value: PositiveAmount) throws {
-        if value > Granularity.subunitsDenominator {
-            throw Error.tooLarge(expectedAtMost: Granularity.subunitsDenominator, butGot: value)
-        }
-        self.value = value
+public typealias Granularity = UnsignedAmount<UInt256Bound, GranularityAmountTrait>
+public extension Granularity {
+    static var `default`: Self {
+        return 1
     }
 }
 
-public extension Granularity {
+public typealias UInt256 = UnsignedAmount<UInt256Bound, NoTrait>
+
+import BigInt
+
+public protocol ValueBoundWhichIsSubsetOfOther: ValueBound where Self.Magnitude == Superset.Magnitude {
+    associatedtype Superset: ValueBound
+}
+public extension ValueBoundWhichIsSubsetOfOther {
     
-    // MARK: - Subunits
-    static var subunitsDenominatorDecimalExponent: Int { return 18 }
-    static var subunitsDenominator: PositiveAmount {
-        let magnitude = PositiveAmount.Magnitude(10).power(Granularity.subunitsDenominatorDecimalExponent)
-        return PositiveAmount(validated: magnitude)
-    }
-    static let max: Granularity = {
-        // swiftlint:disable:next force_try
-        return try! Granularity(value: subunitsDenominator)
-    }()
+    static var greatestFiniteMagnitude: Magnitude { Superset.greatestFiniteMagnitude }
     
-    static let one: Granularity = {
-        // swiftlint:disable:next force_try
-        return try! Granularity(int: 1)
-    }()
-    
-    static let min = Granularity.one
+    static var leastNormalMagnitude: Magnitude { Superset.leastNormalMagnitude }
 }
 
-public extension Granularity {
-    init(magnitude: PositiveAmount.Magnitude) throws {
+public struct UInt256Bound: ValueBound {}
+public extension UInt256Bound {
+    typealias Magnitude = BigUInt
+    static var greatestFiniteMagnitude: Magnitude { Magnitude(2).power(256) - 1 }
+    static var leastNormalMagnitude: Magnitude { 0 }
+}
+
+public struct UInt256NonZeroBound: ValueBoundWhichIsSubsetOfOther {}
+public extension UInt256NonZeroBound {
+    typealias Superset = UInt256Bound
+    typealias Magnitude = BigUInt
+    static var leastNormalMagnitude: Magnitude { 1 }
+}
+
+public typealias PositiveAmount = UnsignedAmount<UInt256NonZeroBound, TokenAmountTrait>
+public typealias NonNegativeAmount = UnsignedAmount<UInt256Bound, TokenAmountTrait>
+
+public protocol AmountTrait {}
+public struct NoTrait: AmountTrait {}
+public struct GranularityAmountTrait: AmountTrait {}
+public struct TokenAmountTrait: AmountTrait {}
+public struct SupplyAmountTrait: AmountTrait {}
+
+
+public typealias Supply = UnsignedAmount<UInt256Bound, SupplyAmountTrait>
+public typealias PositiveSupply = UnsignedAmount<UInt256NonZeroBound, SupplyAmountTrait>
+
+public extension UnsignedAmountType {
+    static var max: Self {
         do {
-            let positiveAmount = try PositiveAmount(validating: magnitude)
-            try self.init(value: positiveAmount)
-        } catch PositiveAmount.Error.amountCannotBeZero {
-            throw Error.cannotBeZero
+            return try Self.init(magnitude: Bound.greatestFiniteMagnitude)
         } catch {
-            throw error
+            incorrectImplementationShouldAlwaysBeAble(to: "Create max")
         }
     }
     
-    init(int: UInt) throws {
-        let magnitude = PositiveAmount.Magnitude(int)
-        try self.init(magnitude: magnitude)
+    static var min: Self {
+        do {
+            return try Self.init(magnitude: Bound.leastNormalMagnitude)
+        } catch {
+            incorrectImplementationShouldAlwaysBeAble(to: "Create min")
+        }
     }
 }
 
-// MARK: Comparable
-public extension Granularity {
-    static func < (lhs: Granularity, rhs: Granularity) -> Bool {
-        return lhs.value < rhs.value
+public extension UnsignedAmountType {
+    init(subtractedFromMax: Self) throws {
+        let difference = try Self.subtraction(minuend: Self.max, subtrahend: subtractedFromMax)
+        self = difference
     }
 }
 
-// MARK: DSONPrefixSpecifying
-public extension Granularity {
-    var dsonPrefix: DSONPrefix {
-        return .unsignedBigInteger
+public extension UnsignedAmountType {
+    init<Other>(subset other: Other)
+        where
+        Other: UnsignedAmountType,
+        Other.Bound: ValueBoundWhichIsSubsetOfOther,
+        Other.Bound.Superset == Self.Bound
+        // , Other.Trait == Self.Trait
+    {
+        do {
+            try self.init(magnitude: other.magnitude, denomination: other.measuredIn)
+        } catch {
+            incorrectImplementationShouldAlwaysBeAble(to: "Create from Other if `Bound: ValueBoundWhichIsSubsetOfOther`", error)
+        }
     }
 }
 
-// MARK: - DataConvertible
-public extension Granularity {
-    var asData: Data {
-        return value.toHexString(case: .lower, mode: .minimumLength(64, .prepend)).asData
+
+public extension UnsignedAmountType {
+    init<Other>(other: Other)
+        where
+        Other: UnsignedAmountType,
+        Other.Bound == Self.Bound
+//        , Other.Trait == Self.Trait
+    {
+        do {
+            try self.init(magnitude: other.magnitude, denomination: other.measuredIn)
+        } catch {
+            incorrectImplementationShouldAlwaysBeAble(to: "Create from Other if `Bound`s equal", error)
+        }
     }
 }
 
-// MARK: - StringInitializable
-public extension Granularity {
-    init(string: String) throws {
-        let decimalString = try DecimalString(unvalidated: string)
-        let value = try PositiveAmount(string: decimalString.stringValue)
-        try self.init(value: value)
+
+public extension UnsignedAmountType {
+    init<Other>(related other: Other) throws
+        where
+        Other: UnsignedAmountType,
+        Other.Bound.Magnitude == Self.Bound.Magnitude,
+        Other.Trait == Self.Trait
+    {
+        try self.init(magnitude: other.magnitude, denomination: other.measuredIn)
     }
 }
 
-// MARK: - StringRepresentable
-public extension Granularity {
-    var stringValue: String {
-        return decimalString
-    }
-    
-}
-
-public extension Granularity {
-    var decimalString: String {
-        return value.magnitude.toDecimalString()
-    }
-}
-    
-// MARK: - PrefixedJSONDecodable
-public extension Granularity {
-    static let jsonPrefix = JSONPrefix.uint256DecimalString
-}
-
-// MARK: - CustomStringConvertible
-public extension Granularity {
-    var description: String {
-        return stringValue
+public extension UnsignedAmountType {
+    init<Other>(unrelated other: Other) throws
+        where
+        Other: UnsignedAmountType,
+        Other.Bound.Magnitude == Self.Bound.Magnitude
+    {
+        try self.init(magnitude: other.magnitude, denomination: other.measuredIn)
     }
 }
 
-// MARK: - Error
-public extension Granularity {
-    enum Error: Swift.Error, Equatable {
-        case cannotBeZero
-        case tooLarge(expectedAtMost: PositiveAmount, butGot: PositiveAmount)
-        case failedToCreateBigInt(fromString: String)
+public extension AmountType {
+    init<I>(signed: I, denomination: Denomination = Self.measuredIn) throws where I: SignedInteger & MagnitudeType, I.Magnitude == Magnitude {
+        guard signed.signum() >= 0 else {
+            throw ValueError.valueCannotBeNegative
+        }
+        let magnitude = abs(signed).magnitude
+        try self.init(magnitude: magnitude, denomination: Self.measuredIn)
     }
 }
 
-// MARK: - Presets
-public extension Granularity {
-    static let `default` = Granularity.one
+public extension UnsignedAmountType {
+    func isMultiple<Other>(of other: Other) -> Bool where Other: UnsignedAmountType, Other.Magnitude == Self.Magnitude {
+        magnitude.isMultiple(of: other.magnitude)
+    }
 }

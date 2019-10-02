@@ -36,7 +36,8 @@ public extension CreateTokenAction.InitialSupply.SupplyTypeDefinition {
     var initialSupply: Supply {
         switch self {
         case .fixed(let positiveInitialSupply):
-            return Supply(positiveSupply: positiveInitialSupply)
+//            return Supply(positiveSupply: positiveInitialSupply)
+            return Supply(subset: positiveInitialSupply)
         case .mutable(let nonNegativeInitialSupply):
             return nonNegativeInitialSupply ?? .zero
         }
@@ -50,7 +51,7 @@ public extension CreateTokenAction.InitialSupply.SupplyTypeDefinition {
     }
     
     func isExactMultipleOfGranularity(_ granularity: Granularity) throws {
-        guard initialSupply.isExactMultipleOfGranularity(granularity) else {
+        guard initialSupply.isMultiple(of: granularity) else {
             throw CreateTokenAction.Error.initialSupplyNotMultipleOfGranularity
         }
     }

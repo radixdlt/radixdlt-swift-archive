@@ -178,6 +178,7 @@
 		E63B207222FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B207122FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift */; };
 		E63B207422FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B207322FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift */; };
 		E63B207622FDB45E00D6FF79 /* CreateTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63B207522FDB45E00D6FF79 /* CreateTokenTests.swift */; };
+		E63BD45B23450E12007C753A /* UnsignedAmount+BinaryInteger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63BD45A23450E12007C753A /* UnsignedAmount+BinaryInteger.swift */; };
 		E640F638225DFC3D00855256 /* PublicKeyOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F637225DFC3D00855256 /* PublicKeyOwner.swift */; };
 		E640F63C225E21E600855256 /* Int+BitsPerByte.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63B225E21E600855256 /* Int+BitsPerByte.swift */; };
 		E640F63F225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */; };
@@ -296,7 +297,6 @@
 		E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753E22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift */; };
 		E69E754122A97E0400AC631B /* AmountAndGranularityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E754022A97E0400AC631B /* AmountAndGranularityTests.swift */; };
 		E69E754422A9891200AC631B /* DecimalStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E754322A9891200AC631B /* DecimalStringTests.swift */; };
-		E69E754622A989D900AC631B /* Amount+MultipleOfGranularity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E754522A989D900AC631B /* Amount+MultipleOfGranularity.swift */; };
 		E69E754922A98A1300AC631B /* CreateTokenActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E754822A98A1300AC631B /* CreateTokenActionTests.swift */; };
 		E69E754D22AA32BA00AC631B /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E754C22AA32BA00AC631B /* ApplicationState.swift */; };
 		E69E755322AA338600AC631B /* ProofOfWorkWorking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E755222AA338600AC631B /* ProofOfWorkWorking.swift */; };
@@ -471,12 +471,7 @@
 		E6E279712271CD1C0067D46E /* Description.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278E22271CD1C0067D46E /* Description.swift */; };
 		E6E279722271CD1C0067D46E /* ResourceIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278E42271CD1C0067D46E /* ResourceIdentifier.swift */; };
 		E6E279732271CD1C0067D46E /* ResourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278E52271CD1C0067D46E /* ResourceType.swift */; };
-		E6E279742271CD1C0067D46E /* NonNegativeAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278E72271CD1C0067D46E /* NonNegativeAmount.swift */; };
-		E6E279752271CD1C0067D46E /* PositiveAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278E82271CD1C0067D46E /* PositiveAmount.swift */; };
-		E6E279762271CD1C0067D46E /* SignedAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278E92271CD1C0067D46E /* SignedAmount.swift */; };
-		E6E279772271CD1C0067D46E /* Amount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278EB2271CD1C0067D46E /* Amount.swift */; };
-		E6E279782271CD1C0067D46E /* NonNegativeAmountConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278EC2271CD1C0067D46E /* NonNegativeAmountConvertible.swift */; };
-		E6E279792271CD1C0067D46E /* UnsignedNumeric.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278ED2271CD1C0067D46E /* UnsignedNumeric.swift */; };
+		E6E279772271CD1C0067D46E /* UnsignedAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278EB2271CD1C0067D46E /* UnsignedAmount.swift */; };
 		E6E2797A2271CD1C0067D46E /* TokenPermissions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278EF2271CD1C0067D46E /* TokenPermissions.swift */; };
 		E6E2797B2271CD1C0067D46E /* TokenPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278F02271CD1C0067D46E /* TokenPermission.swift */; };
 		E6E2797C2271CD1C0067D46E /* TokenTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278F12271CD1C0067D46E /* TokenTransition.swift */; };
@@ -582,11 +577,6 @@
 		E6F5484722771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484622771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift */; };
 		E6F5484C2277346500EE6311 /* NonNegativeAmountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484B2277346500EE6311 /* NonNegativeAmountTests.swift */; };
 		E6F5484E227735AF00EE6311 /* CompareAnyAmountWithAnyAmountTests.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484D227735AF00EE6311 /* CompareAnyAmountWithAnyAmountTests.swift.swift */; };
-		E6F548502277454D00EE6311 /* AmountSign.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484F2277454D00EE6311 /* AmountSign.swift */; };
-		E6F548522277456300EE6311 /* Amount+Sign+Check.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F548512277456300EE6311 /* Amount+Sign+Check.swift */; };
-		E6F548542277457000EE6311 /* AmountAndSign.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F548532277457000EE6311 /* AmountAndSign.swift */; };
-		E6F548562277458000EE6311 /* Amount+AmountAndSign.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F548552277458000EE6311 /* Amount+AmountAndSign.swift */; };
-		E6F548582277459A00EE6311 /* Amount+CompareWithAnyAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F548572277459A00EE6311 /* Amount+CompareWithAnyAmount.swift */; };
 		E6F5485A22788BF400EE6311 /* CreateTokenActionToParticleGroupsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5485922788BF400EE6311 /* CreateTokenActionToParticleGroupsMapperTests.swift */; };
 		E6FB03C921EC95E8002CE331 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C721EC95E8002CE331 /* RxSwift.framework */; };
 		E6FB03CA21EC95E8002CE331 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */; };
@@ -844,6 +834,7 @@
 		E63B207122FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomToUniqueIdMapper.swift; sourceTree = "<group>"; };
 		E63B207322FD9E5200D6FF79 /* ResultOfUserAction+BlockingWait.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResultOfUserAction+BlockingWait.swift"; sourceTree = "<group>"; };
 		E63B207522FDB45E00D6FF79 /* CreateTokenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTokenTests.swift; sourceTree = "<group>"; };
+		E63BD45A23450E12007C753A /* UnsignedAmount+BinaryInteger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnsignedAmount+BinaryInteger.swift"; sourceTree = "<group>"; };
 		E640F637225DFC3D00855256 /* PublicKeyOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyOwner.swift; sourceTree = "<group>"; };
 		E640F63B225E21E600855256 /* Int+BitsPerByte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+BitsPerByte.swift"; sourceTree = "<group>"; };
 		E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProofOfWork+NumberOfLeadingZeros.swift"; sourceTree = "<group>"; };
@@ -953,7 +944,6 @@
 		E69E753E22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Models+ExpressibleByIntegerLiteral.swift"; sourceTree = "<group>"; };
 		E69E754022A97E0400AC631B /* AmountAndGranularityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountAndGranularityTests.swift; sourceTree = "<group>"; };
 		E69E754322A9891200AC631B /* DecimalStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalStringTests.swift; sourceTree = "<group>"; };
-		E69E754522A989D900AC631B /* Amount+MultipleOfGranularity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Amount+MultipleOfGranularity.swift"; sourceTree = "<group>"; };
 		E69E754822A98A1300AC631B /* CreateTokenActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTokenActionTests.swift; sourceTree = "<group>"; };
 		E69E754C22AA32BA00AC631B /* ApplicationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationState.swift; sourceTree = "<group>"; };
 		E69E755222AA338600AC631B /* ProofOfWorkWorking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProofOfWorkWorking.swift; sourceTree = "<group>"; };
@@ -1126,12 +1116,7 @@
 		E6E278E22271CD1C0067D46E /* Description.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Description.swift; sourceTree = "<group>"; };
 		E6E278E42271CD1C0067D46E /* ResourceIdentifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceIdentifier.swift; sourceTree = "<group>"; };
 		E6E278E52271CD1C0067D46E /* ResourceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceType.swift; sourceTree = "<group>"; };
-		E6E278E72271CD1C0067D46E /* NonNegativeAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonNegativeAmount.swift; sourceTree = "<group>"; };
-		E6E278E82271CD1C0067D46E /* PositiveAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PositiveAmount.swift; sourceTree = "<group>"; };
-		E6E278E92271CD1C0067D46E /* SignedAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignedAmount.swift; sourceTree = "<group>"; };
-		E6E278EB2271CD1C0067D46E /* Amount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Amount.swift; sourceTree = "<group>"; };
-		E6E278EC2271CD1C0067D46E /* NonNegativeAmountConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonNegativeAmountConvertible.swift; sourceTree = "<group>"; };
-		E6E278ED2271CD1C0067D46E /* UnsignedNumeric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsignedNumeric.swift; sourceTree = "<group>"; };
+		E6E278EB2271CD1C0067D46E /* UnsignedAmount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsignedAmount.swift; sourceTree = "<group>"; };
 		E6E278EF2271CD1C0067D46E /* TokenPermissions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenPermissions.swift; sourceTree = "<group>"; };
 		E6E278F02271CD1C0067D46E /* TokenPermission.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenPermission.swift; sourceTree = "<group>"; };
 		E6E278F12271CD1C0067D46E /* TokenTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenTransition.swift; sourceTree = "<group>"; };
@@ -1239,11 +1224,6 @@
 		E6F5484622771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTransferTokenActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E6F5484B2277346500EE6311 /* NonNegativeAmountTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonNegativeAmountTests.swift; sourceTree = "<group>"; };
 		E6F5484D227735AF00EE6311 /* CompareAnyAmountWithAnyAmountTests.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompareAnyAmountWithAnyAmountTests.swift.swift; sourceTree = "<group>"; };
-		E6F5484F2277454D00EE6311 /* AmountSign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountSign.swift; sourceTree = "<group>"; };
-		E6F548512277456300EE6311 /* Amount+Sign+Check.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Amount+Sign+Check.swift"; sourceTree = "<group>"; };
-		E6F548532277457000EE6311 /* AmountAndSign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountAndSign.swift; sourceTree = "<group>"; };
-		E6F548552277458000EE6311 /* Amount+AmountAndSign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Amount+AmountAndSign.swift"; sourceTree = "<group>"; };
-		E6F548572277459A00EE6311 /* Amount+CompareWithAnyAmount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Amount+CompareWithAnyAmount.swift"; sourceTree = "<group>"; };
 		E6F5485922788BF400EE6311 /* CreateTokenActionToParticleGroupsMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTokenActionToParticleGroupsMapperTests.swift; sourceTree = "<group>"; };
 		E6FB03C721EC95E8002CE331 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
@@ -3481,28 +3461,18 @@
 		E6E278E62271CD1C0067D46E /* Amount */ = {
 			isa = PBXGroup;
 			children = (
-				E6E278E72271CD1C0067D46E /* NonNegativeAmount.swift */,
-				E6E278E82271CD1C0067D46E /* PositiveAmount.swift */,
-				E6E278E92271CD1C0067D46E /* SignedAmount.swift */,
-				E6E278EA2271CD1C0067D46E /* Protocols */,
+				E6E278EA2271CD1C0067D46E /* UnsignedAmount */,
 			);
 			path = Amount;
 			sourceTree = "<group>";
 		};
-		E6E278EA2271CD1C0067D46E /* Protocols */ = {
+		E6E278EA2271CD1C0067D46E /* UnsignedAmount */ = {
 			isa = PBXGroup;
 			children = (
-				E6E278EB2271CD1C0067D46E /* Amount.swift */,
-				E69E754522A989D900AC631B /* Amount+MultipleOfGranularity.swift */,
-				E6F5484F2277454D00EE6311 /* AmountSign.swift */,
-				E6F548512277456300EE6311 /* Amount+Sign+Check.swift */,
-				E6F548572277459A00EE6311 /* Amount+CompareWithAnyAmount.swift */,
-				E6F548532277457000EE6311 /* AmountAndSign.swift */,
-				E6F548552277458000EE6311 /* Amount+AmountAndSign.swift */,
-				E6E278EC2271CD1C0067D46E /* NonNegativeAmountConvertible.swift */,
-				E6E278ED2271CD1C0067D46E /* UnsignedNumeric.swift */,
+				E6E278EB2271CD1C0067D46E /* UnsignedAmount.swift */,
+				E63BD45A23450E12007C753A /* UnsignedAmount+BinaryInteger.swift */,
 			);
-			path = Protocols;
+			path = UnsignedAmount;
 			sourceTree = "<group>";
 		};
 		E6E278EE2271CD1C0067D46E /* TokenPermission */ = {
@@ -4352,7 +4322,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E69E754622A989D900AC631B /* Amount+MultipleOfGranularity.swift in Sources */,
 				E61EB9A222D86F56007826D3 /* Supply.swift in Sources */,
 				E6E2796E2271CD1C0067D46E /* ArrayDecodable.swift in Sources */,
 				E6E279272271CD1C0067D46E /* DERCoding.swift in Sources */,
@@ -4385,11 +4354,9 @@
 				E6ED1A7C21F8E7E000654105 /* ObservableType_Extensions_Optional.swift in Sources */,
 				E6E279242271CD1C0067D46E /* Signatures.swift in Sources */,
 				E68BD82522A0331800FCE4D3 /* MetaDataCommonValue.swift in Sources */,
-				E6F548522277456300EE6311 /* Amount+Sign+Check.swift in Sources */,
 				E6E279992271CD1C0067D46E /* InvalidStringError.swift in Sources */,
 				E626E20022B41B350046D2AC /* AnyAtomToActionMapper.swift in Sources */,
 				E6CEE73021F5D4E000D745EC /* CharacterSet.swift in Sources */,
-				E6E279792271CD1C0067D46E /* UnsignedNumeric.swift in Sources */,
 				E605540F2303153D00528510 /* SendMessageAction+Init+TextMessage.swift in Sources */,
 				E6340C8D22FC2D090044BA97 /* TransactionMaker.swift in Sources */,
 				E6A508B7224E713F00128123 /* Accountable.swift in Sources */,
@@ -4446,7 +4413,6 @@
 				E689DB83225F655100340CF3 /* RadixApplicationClient.swift in Sources */,
 				E6A508B5224E713F00128123 /* AddressConvertible.swift in Sources */,
 				E6055425230418FC00528510 /* CreateTokenAction.InitialSupply+SupplyTypeDefinition.swift in Sources */,
-				E6E279762271CD1C0067D46E /* SignedAmount.swift in Sources */,
 				E626E1E622B3FB530046D2AC /* TokenBalance.swift in Sources */,
 				E689DBAB225F8F3200340CF3 /* TransferTokensAction.swift in Sources */,
 				E689DBB3225F903F00340CF3 /* DefaultRESTClient.swift in Sources */,
@@ -4454,7 +4420,6 @@
 				E6E2798F2271CD1C0067D46E /* StringRepresentable.swift in Sources */,
 				E606F149230188AF004D4D3D /* ConsumeTokensActionError.swift in Sources */,
 				E6474AEF22674B17009C4FDC /* AtomWithFee.swift in Sources */,
-				E6F548562277458000EE6311 /* Amount+AmountAndSign.swift in Sources */,
 				E626E1F222B3FFF60046D2AC /* BaseAtomToExecutedActionsMapper.swift in Sources */,
 				E6CABA0922D4BC6300B6D00C /* SigningError.swift in Sources */,
 				4869242A2333A2A80009F9DB /* UserActionMaking.swift in Sources */,
@@ -4529,7 +4494,7 @@
 				E6E2792E2271CD1C0067D46E /* SignedAtomVerifier.swift in Sources */,
 				E6340C8522FAEB5F0044BA97 /* Transaction.swift in Sources */,
 				E6725657228B4426004631F1 /* SubscriptionError.swift in Sources */,
-				E6E279772271CD1C0067D46E /* Amount.swift in Sources */,
+				E6E279772271CD1C0067D46E /* UnsignedAmount.swift in Sources */,
 				E6E279952271CD1C0067D46E /* MinLengthSpecifying.swift in Sources */,
 				E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */,
 				E6E2796A2271CD1C0067D46E /* DictionaryDecodable.swift in Sources */,
@@ -4545,7 +4510,6 @@
 				E6474AD922661FE8009C4FDC /* RPCResult.swift in Sources */,
 				E6E279852271CD1C0067D46E /* MetaDataKey.swift in Sources */,
 				E6A507E8224E20BF00128123 /* RPCResponseLookingLikeRequest.swift in Sources */,
-				E6F548542277457000EE6311 /* AmountAndSign.swift in Sources */,
 				E6E279872271CD1C0067D46E /* Planck.swift in Sources */,
 				E69E755522AA33A400AC631B /* DefaultProofOfWorkWorker.swift in Sources */,
 				E6E2793C2271CD1C0067D46E /* PrivateKey+ECEIS+Decrypt.swift in Sources */,
@@ -4592,12 +4556,10 @@
 				E6055437230549A600528510 /* DefaultStateSubsciber.swift in Sources */,
 				E6E2794D2271CD1C0067D46E /* KeyedDecodingContainer+PrefixedJson+Decode.swift in Sources */,
 				E6A50885224E713F00128123 /* ShardRange.swift in Sources */,
-				E6E279742271CD1C0067D46E /* NonNegativeAmount.swift in Sources */,
 				E68DFA2E22FC50F40050F69E /* UniqueMaking.swift in Sources */,
 				E64641EE22F3482700E05034 /* FixedSupplyTokenDefinitionParticle+CodingKeys.swift in Sources */,
 				E6A508AB224E713F00128123 /* MutableSupplyTokenDefinitionParticle+CodingKeys.swift in Sources */,
 				E6E279962271CD1C0067D46E /* LowerBound.swift in Sources */,
-				E6E279752271CD1C0067D46E /* PositiveAmount.swift in Sources */,
 				E6D156842270589200AC3438 /* DefaultCreateTokenActionToParticleGroupsMapper.swift in Sources */,
 				E606F14B230188BC004D4D3D /* ConsumeTokensActionErrorInitializable.swift in Sources */,
 				E64641EF22F3482700E05034 /* FixedSupplyTokenDefinitionParticle.swift in Sources */,
@@ -4659,6 +4621,7 @@
 				E689DBA6225F882800340CF3 /* UniverseConfigRequesting.swift in Sources */,
 				E6725655228B441A004631F1 /* RPCErrorCode.swift in Sources */,
 				E68727FE2343BC6400FF4FCE /* Locale+DecimalSeparator.swift in Sources */,
+				E63BD45B23450E12007C753A /* UnsignedAmount+BinaryInteger.swift in Sources */,
 				E6F5484722771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift in Sources */,
 				E606FC4B22CB5E2200A7E52E /* WebSocketsEpic.swift in Sources */,
 				E6E279672271CD1C0067D46E /* BigInteger+StringConversion.swift in Sources */,
@@ -4669,7 +4632,6 @@
 				E6340C9622FC4F890044BA97 /* TransactionSubscriber.swift in Sources */,
 				E6E279472271CD1C0067D46E /* AtomModelDecodingError.swift in Sources */,
 				E672564E228B43D1004631F1 /* RPCError.swift in Sources */,
-				E6E279782271CD1C0067D46E /* NonNegativeAmountConvertible.swift in Sources */,
 				E6CB4B3D22C633D000B7382A /* AtomStatusObservationRequesting.swift in Sources */,
 				E6E279362271CD1C0067D46E /* Mnemonic+Strength.swift in Sources */,
 				E68DFA3222FC64140050F69E /* ExecutedTransaction.swift in Sources */,
@@ -4712,7 +4674,6 @@
 				E62EFDFE224A4EC100B6DAD6 /* RPCClient.swift in Sources */,
 				E606FC1822C9FA0E00A7E52E /* FindANodeEpic.swift in Sources */,
 				E6474AD222661F03009C4FDC /* FullDuplexCommunicating.swift in Sources */,
-				E6F548502277454D00EE6311 /* AmountSign.swift in Sources */,
 				E6F5483D22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift in Sources */,
 				E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */,
 				E6474ADF22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift in Sources */,
@@ -4735,7 +4696,6 @@
 				E637564722B7CEFA00C4F9A2 /* RadixNodeState.swift in Sources */,
 				E60554172303164700528510 /* EncryptionMode+EncryptContext.swift in Sources */,
 				E6D15681227056F800AC3438 /* CreateTokenAction.swift in Sources */,
-				E6F548582277459A00EE6311 /* Amount+CompareWithAnyAmount.swift in Sources */,
 				E68DFA3422FC64290050F69E /* TransactionConvertible.swift in Sources */,
 				E6340C8B22FC2CF70044BA97 /* TransactionToAtomMapper.swift in Sources */,
 				E69E752722A1903600AC631B /* AtomToSendMessageActionMapper.swift in Sources */,

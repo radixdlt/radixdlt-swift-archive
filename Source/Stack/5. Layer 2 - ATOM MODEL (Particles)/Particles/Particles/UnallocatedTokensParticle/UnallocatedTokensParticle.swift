@@ -88,8 +88,9 @@ public extension UnallocatedTokensParticle {
         
         let granularity = try container.decode(Granularity.self, forKey: .granularity)
         let nonce = try container.decode(Nonce.self, forKey: .nonce)
-        let positiveAmount = try container.decode(PositiveAmount.self, forKey: .amount)
-        let amount = try Supply(positiveAmount: positiveAmount)
+//        let positiveAmount = try container.decode(PositiveAmount.self, forKey: .amount)
+//        let amount = try Supply(positiveAmount: positiveAmount)
+        let amount = try container.decode(Supply.self, forKey: .amount)
         let permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
         let tokenDefinitionReference = try container.decode(ResourceIdentifier.self, forKey: .tokenDefinitionReference)
         
@@ -111,7 +112,7 @@ public extension UnallocatedTokensParticle {
             EncodableKeyValue(key: .granularity, value: granularity),
             EncodableKeyValue(key: .nonce, value: nonce),
             EncodableKeyValue(key: .tokenDefinitionReference, value: tokenDefinitionReference),
-            EncodableKeyValue(key: .amount, value: try PositiveAmount(nonNegative: amount.amount))
+            EncodableKeyValue(key: .amount, value: amount)
         ]
     }
 }

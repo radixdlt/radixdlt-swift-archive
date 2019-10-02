@@ -53,7 +53,7 @@ public extension TransferTokensAction {
     init(
         from sender: AddressConvertible,
         to recipient: AddressConvertible,
-        tokenAmount: TokenAmount,
+        tokenAmount: PositiveAmount,
         tokenResourceIdentifier: ResourceIdentifier,
         attachment: Data? = nil
     ) {

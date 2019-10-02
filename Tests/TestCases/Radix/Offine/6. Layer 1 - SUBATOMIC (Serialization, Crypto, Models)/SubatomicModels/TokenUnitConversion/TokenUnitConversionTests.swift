@@ -35,12 +35,12 @@ class TokenUnitConversionTests: XCTestCase {
     
     
     func testDecimalLotsOfZeros() {
-        let lhs = try! TokenAmount(
+        let lhs = try! PositiveAmount(
             string: "0.000000000000000000000000000000000001",
             denomination: .exa
         )
         
-        let rhs = TokenAmount(
+        let rhs = PositiveAmount(
             positiveAmount: 1,
             denomination: .atto
         )
@@ -49,12 +49,12 @@ class TokenUnitConversionTests: XCTestCase {
     
 
     func test1Eminus72baseE54() {
-        let lhs = try! TokenAmount(
+        let lhs = try! PositiveAmount(
             string: "0.000000000000000000000000000000000000000000000000000000000000000000000001",
             denomination: .exponent(of: 54, nameIfUnknown: "E54", symbolIfUnknown: "BIG")
         )
         
-        let rhs = TokenAmount(
+        let rhs = PositiveAmount(
             positiveAmount: 1,
             denomination: .atto
         )
@@ -62,12 +62,12 @@ class TokenUnitConversionTests: XCTestCase {
     }
     
     func testDecimalLotsOfZeros60() {
-        let lhs = try! TokenAmount(
+        let lhs = try! PositiveAmount(
             string: "0.000000000000000000000000000000000000000000000000000000000001",
             denomination: .exponent(of: 42, nameIfUnknown: "E42", symbolIfUnknown: "BIG")
         )
         
-        let rhs = TokenAmount(
+        let rhs = PositiveAmount(
             positiveAmount: 1,
             denomination: .atto
         )
@@ -79,11 +79,11 @@ class TokenUnitConversionTests: XCTestCase {
     func testBigInAttoEqBigInAtto() {
         let amount: PositiveAmount = "123456789012345678901234567890123456"
         XCTAssertEqual(
-            TokenAmount(
+            PositiveAmount(
                 positiveAmount: amount,
                 denomination: .atto
             ),
-            TokenAmount(
+            PositiveAmount(
                 positiveAmount: amount,
                 denomination: .atto
             )
@@ -92,11 +92,11 @@ class TokenUnitConversionTests: XCTestCase {
     
     func testBigInExaEqBigInExa() {
         XCTAssertEqual(
-            try! TokenAmount(
+            try! PositiveAmount(
                 string: "0.123456789012345678901234567890123456",
                 denomination: .exa
             ),
-            try! TokenAmount(
+            try! PositiveAmount(
                 string: "0.123456789012345678901234567890123456",
                 denomination: .exa
             )
@@ -105,21 +105,21 @@ class TokenUnitConversionTests: XCTestCase {
     
     func testExaToAtto36Decimals() {
         XCTAssertEqual(
-            try! TokenAmount(
+            try! PositiveAmount(
                 string: "0.123456789012345678901234567890123456",
                 denomination: .exa
             ),
-            TokenAmount(positiveAmount: "123456789012345678901234567890123456", denomination: .atto)
+            PositiveAmount(positiveAmount: "123456789012345678901234567890123456", denomination: .atto)
         )
     }
     
     func testExaToAtto35Decimals() {
         XCTAssertEqual(
-            try! TokenAmount(
+            try! PositiveAmount(
                 string: "1.23456789012345678901234567890123456",
                 denomination: .exa
             ),
-            TokenAmount(positiveAmount: "1234567890123456789012345678901234560", denomination: .atto)
+            PositiveAmount(positiveAmount: "1234567890123456789012345678901234560", denomination: .atto)
         )
     }
     
@@ -127,33 +127,33 @@ class TokenUnitConversionTests: XCTestCase {
     func testTooManyDecimalThrows() {
         let amountString = "0.0123456789012345678901234567890123456"
         XCTAssertThrowsSpecificError(
-            try TokenAmount(string: amountString, denomination: .exa),
-            TokenAmount.Error.amountFromStringNotRepresentableInDenomination(amountString: amountString, specifiedDenomination: .exa)
+            try PositiveAmount(string: amountString, denomination: .exa),
+            PositiveAmount.Error.amountFromStringNotRepresentableInDenomination(amountString: amountString, specifiedDenomination: .exa)
         )
     }
     
     func testThatUsingDecimalStringForAttoResultsInErrorThrown() {
         XCTAssertThrowsSpecificError(
-            try TokenAmount(string: "0.1", denomination: .atto),
-            TokenAmount.Error.amountFromStringNotRepresentableInDenomination(amountString: "0.1", specifiedDenomination: .atto)
+            try PositiveAmount(string: "0.1", denomination: .atto),
+            PositiveAmount.Error.amountFromStringNotRepresentableInDenomination(amountString: "0.1", specifiedDenomination: .atto)
         )
     }
     
     func testThatUsingDoubleForAttoResultsInErrorThrown() {
         XCTAssertThrowsSpecificError(
             // We expect a compilation warning below
-            try TokenAmount(double: 0.1, denomination: .atto),
-            TokenAmount.Error.amountInAttoIsOnlyMeasuredInIntegers(butPassedDouble: 0.1)
+            try PositiveAmount(double: 0.1, denomination: .atto),
+            PositiveAmount.Error.amountInAttoIsOnlyMeasuredInIntegers(butPassedDouble: 0.1)
         )
     }
     
     func testDecimalLotsOfDigits() throws {
-        let lhs = try! TokenAmount(
+        let lhs = try! PositiveAmount(
             string: "0.010203040506070809101112131415161718",
             denomination: .exa
         )
         
-        let rhs = TokenAmount(
+        let rhs = PositiveAmount(
             positiveAmount: "10203040506070809101112131415161718",
             denomination: .atto
         )
@@ -182,8 +182,8 @@ class TokenUnitConversionTests: XCTestCase {
     }
     
     func testFromWhole() {
-        let amount = TokenAmount(positiveAmount: 237, denomination: .whole)
-        let amountInAtto = TokenAmount(positiveAmount: "237000000000000000000", denomination: .atto)
+        let amount = PositiveAmount(positiveAmount: 237, denomination: .whole)
+        let amountInAtto = PositiveAmount(positiveAmount: "237000000000000000000", denomination: .atto)
         XCTAssertEqual(amount, amountInAtto)
         XCTAssertFalse(amount > amountInAtto)
         XCTAssertFalse(amount < amountInAtto)
@@ -215,15 +215,15 @@ class TokenUnitConversionTests: XCTestCase {
     
     func testTokenAmountComparableGreaterThan() {
         XCTAssertGreaterThan(
-            TokenAmount(positiveAmount: 2, denomination: .whole),
-            TokenAmount(positiveAmount: 1, denomination: .whole)
+            PositiveAmount(positiveAmount: 2, denomination: .whole),
+            PositiveAmount(positiveAmount: 1, denomination: .whole)
         )
     }
     
     func testTokenAmountComparableLessThan() {
         XCTAssertLessThan(
-            TokenAmount(positiveAmount: 2, denomination: .whole),
-            TokenAmount(positiveAmount: 3, denomination: .whole)
+            PositiveAmount(positiveAmount: 2, denomination: .whole),
+            PositiveAmount(positiveAmount: 3, denomination: .whole)
         )
     }
     

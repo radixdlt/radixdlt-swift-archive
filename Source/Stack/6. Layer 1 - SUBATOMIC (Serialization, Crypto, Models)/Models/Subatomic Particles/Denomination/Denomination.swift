@@ -83,6 +83,7 @@ public extension Denomination {
     static var atto         : Self { .init(Denomination.minAllowedExponent, s: "a") }
     
     static let minAllowedExponent: Int = -18
+    static let min: Self = .atto
 }
 
 // swiftlint:enable colon comma
@@ -102,7 +103,19 @@ public extension Denomination {
     var description: String {
         return name
     }
+}
+
+public extension Denomination {
     
+    func expressValueInSmallestPossibleDenomination<M>(value: M) -> M where M: BinaryInteger {
+        if exponent == Self.minAllowedExponent { return value }
+        
+        let exponentDelta: Int = abs(Self.minAllowedExponent - self.exponent)
+        
+        let factorInt = Int(pow(Double(10), Double(exponentDelta)))
+        let factor = M(factorInt)
+        return value * factor
+    }
 }
 
 public extension Denomination {

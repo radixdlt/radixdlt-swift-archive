@@ -59,7 +59,7 @@ public struct TransferrableTokensParticle:
         planck: Planck = Planck()
     ) throws {
         
-        guard amount.isExactMultipleOfGranularity(granularity) else {
+        guard amount.isMultiple(of: granularity) else {
             throw Error.amountNotMultipleOfGranularity(amount: amount, tokenGranularity: granularity)
         }
         

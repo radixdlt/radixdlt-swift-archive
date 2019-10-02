@@ -37,7 +37,7 @@ public extension TransferTokensActionToParticleGroupsMapper {
             transitioner: { try TransferrableTokensParticle(transferrableTokensParticle: $0, amount: $1, address: transfer.recipient) },
             transitionAndMigrateCombiner: TransferrableTokensParticle.reducing(particles:),
             migrator: TransferrableTokensParticle.init(transferrableTokensParticle:amount:),
-            amountMapper: { $0.amount.asNonNegative }
+            amountMapper: { NonNegativeAmount(subset: $0.amount) }
         )
         
         let particles = try transitioner.particlesFrom(transfer: transfer, upParticles: upParticles)
@@ -77,7 +77,7 @@ private extension FungibleParticleTransitioner where From == TransferrableTokens
         do {
             transition = try self.transition(
                 unconsumedFungibles: transferrableTokensParticles,
-                toAmount: transfer.amount.asNonNegative
+                toAmount: NonNegativeAmount(subset: transfer.amount)
             )
         } catch Error.notEnoughFungibles(_, let balance) {
             throw TransferError.insufficientFunds(currentBalance: balance, butTriedToTransfer: transfer.amount)

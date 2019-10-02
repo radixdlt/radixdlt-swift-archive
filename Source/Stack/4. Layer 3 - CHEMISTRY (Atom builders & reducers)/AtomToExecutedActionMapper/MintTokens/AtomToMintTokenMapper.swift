@@ -39,6 +39,32 @@ public extension AtomToMintTokenMapper {
     }
 }
 
+public extension NonNegativeAmount {
+   
+    static func fromTransferrableTokens(
+        particles: [TransferrableTokensParticle],
+        amountMapper: (TransferrableTokensParticle) -> NonNegativeAmount = { NonNegativeAmount(subset: $0.amount) }
+    ) -> NonNegativeAmount {
+        return reducing(particles.map(amountMapper))
+    }
+    
+    static func reducing(_ amounts: [NonNegativeAmount]) -> NonNegativeAmount {
+        return amounts.reduce(NonNegativeAmount.zero, +)
+    }
+}
+
+enum SignedAmount {
+    
+    static func fromSpunTransferrableTokens(particles: [SpunParticle<TransferrableTokensParticle>]) -> BigSignedInt {
+        let upParticles = particles.filter(spin: .up).map { $0.particle }
+        let downParticles = particles.filter(spin: .down).map { $0.particle }
+        
+        let amountFromUpParticles = NonNegativeAmount.fromTransferrableTokens(particles: upParticles)
+        let amountFromDownParticles = NonNegativeAmount.fromTransferrableTokens(particles: downParticles)
+        return BigSignedInt(amountFromUpParticles.magnitude) - BigSignedInt(amountFromDownParticles)
+    }
+}
+
 private func mintTokensActionFrom(particleGroup: ParticleGroup) -> MintTokensAction? {
     guard
         let unallocatedTokensParticle = particleGroup.firstUnallocatedTokensParticle(spin: .down),
@@ -50,8 +76,8 @@ private func mintTokensActionFrom(particleGroup: ParticleGroup) -> MintTokensAct
     
     let spunTransferrableTokensParticles = particleGroup.spunTransferrableTokensParticles(filter: { $0.tokenDefinitionReference == rri && $0.address == minter })
     
-    let signedAmount = SignedAmount.fromSpunTransferrableTokens(particles: spunTransferrableTokensParticles)
-    guard let positiveAmount = try? PositiveAmount(signedAmount: signedAmount) else { return nil }
+    let signedAmount: BigSignedInt = SignedAmount.fromSpunTransferrableTokens(particles: spunTransferrableTokensParticles)
+    guard let positiveAmount = try? PositiveAmount(signed: signedAmount) else { return nil }
     return MintTokensAction(tokenDefinitionReference: rri, amount: positiveAmount, minter: minter)
 }
 

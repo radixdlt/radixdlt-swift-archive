@@ -63,7 +63,7 @@ public extension DefaultBurnTokensActionToParticleGroupsMapper {
             transitionedCombiner: { $0 },
             migrator: TransferrableTokensParticle.init(transferrableTokensParticle:amount:),
             migratedCombiner: TransferrableTokensParticle.reducing(particles:),
-            amountMapper: { $0.amount.asNonNegative }
+            amountMapper: { NonNegativeAmount(subset: $0.amount) }
         )
         
         let spunParticles = try transitioner.particlesFrom(burn: action, upParticles: upParticles)
@@ -110,7 +110,7 @@ private extension FungibleParticleTransitioner where
         
         let transition: Transition
         do {
-            transition = try self.transition(unconsumedFungibles: transferrableTokensParticles, toAmount: burn.amount.asNonNegative)
+            transition = try self.transition(unconsumedFungibles: transferrableTokensParticles, toAmount: NonNegativeAmount(subset: burn.amount))
         } catch Error.notEnoughFungibles(_, let balance) {
             throw BurnError.insufficientTokens(
                 token: rri,

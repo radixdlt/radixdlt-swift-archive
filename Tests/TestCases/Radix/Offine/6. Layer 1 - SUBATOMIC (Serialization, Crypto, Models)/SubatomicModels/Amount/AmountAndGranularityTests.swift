@@ -35,7 +35,7 @@ class AmountAndGranularityTests: XCTestCase {
     
     func testGranularityOfOneSignedAmount() {
         func doTest(_ signedAmount: SignedAmount) {
-            XCTAssertTrue(signedAmount.isExactMultipleOfGranularity(granularityOfOne))
+            XCTAssertTrue(signedAmount.isMultiple(of: granularityOfOne))
         }
         doTest(-3)
         doTest(-2)
@@ -48,10 +48,10 @@ class AmountAndGranularityTests: XCTestCase {
     
     func testGranularityOfTwoSignedAmount() {
         func okGran(_ signedAmount: SignedAmount) {
-            XCTAssertTrue(signedAmount.isExactMultipleOfGranularity(granularityOfTwo))
+            XCTAssertTrue(signedAmount.isMultiple(of: granularityOfTwo))
         }
         func badGran(_ signedAmount: SignedAmount) {
-            XCTAssertFalse(signedAmount.isExactMultipleOfGranularity(granularityOfTwo))
+            XCTAssertFalse(signedAmount.isMultiple(of: granularityOfTwo))
         }
         okGran(-4)
         badGran(-3)
@@ -66,7 +66,7 @@ class AmountAndGranularityTests: XCTestCase {
     
     func testGranularityOfOneNonNegativeAmount() {
         func doTest(_ signedAmount: NonNegativeAmount) {
-            XCTAssertTrue(signedAmount.isExactMultipleOfGranularity(granularityOfOne))
+            XCTAssertTrue(signedAmount.isMultiple(of: granularityOfOne))
         }
         doTest(0)
         doTest(1)
@@ -76,10 +76,10 @@ class AmountAndGranularityTests: XCTestCase {
     
     func testGranularityOfTwoNonNegativeAmount() {
         func okGran(_ signedAmount: NonNegativeAmount) {
-            XCTAssertTrue(signedAmount.isExactMultipleOfGranularity(granularityOfTwo))
+            XCTAssertTrue(signedAmount.isMultiple(of: granularityOfTwo))
         }
         func badGran(_ signedAmount: NonNegativeAmount) {
-            XCTAssertFalse(signedAmount.isExactMultipleOfGranularity(granularityOfTwo))
+            XCTAssertFalse(signedAmount.isMultiple(of: granularityOfTwo))
         }
         okGran(0)
         badGran(1)
@@ -90,7 +90,7 @@ class AmountAndGranularityTests: XCTestCase {
     
     func testGranularityOfOnePositiveAmount() {
         func doTest(_ signedAmount: PositiveAmount) {
-            XCTAssertTrue(signedAmount.isExactMultipleOfGranularity(granularityOfOne))
+            XCTAssertTrue(signedAmount.isMultiple(of: granularityOfOne))
         }
         doTest(1)
         doTest(2)
@@ -99,10 +99,10 @@ class AmountAndGranularityTests: XCTestCase {
     
     func testGranularityOfThreePositiveAmount() {
         func okGran(_ signedAmount: PositiveAmount) {
-            XCTAssertTrue(signedAmount.isExactMultipleOfGranularity(granularityOfThree))
+            XCTAssertTrue(signedAmount.isMultiple(of: granularityOfThree))
         }
         func badGran(_ signedAmount: PositiveAmount) {
-            XCTAssertFalse(signedAmount.isExactMultipleOfGranularity(granularityOfThree))
+            XCTAssertFalse(signedAmount.isMultiple(of: granularityOfThree))
         }
         badGran(1)
         badGran(2)
@@ -118,10 +118,10 @@ class AmountAndGranularityTests: XCTestCase {
     
     func testMaxGran() {
         func okGran(_ signedAmount: PositiveAmount) {
-            XCTAssertTrue(signedAmount.isExactMultipleOfGranularity(Granularity.max))
+            XCTAssertTrue(signedAmount.isMultiple(of: Granularity.max))
         }
         func badGran(_ signedAmount: PositiveAmount) {
-            XCTAssertFalse(signedAmount.isExactMultipleOfGranularity(Granularity.max))
+            XCTAssertFalse(signedAmount.isMultiple(of: Granularity.max))
         }
         okGran(Granularity.subunitsDenominator)
         badGran(1)
