@@ -221,7 +221,7 @@ extension CreateTokenScreen.ViewModel {
             case name(Name.Error)
             case symbol(Symbol.Error)
             case description(Description.Error)
-            case granularity(Granularity.Error)
+            case granularity(AmountError)
             case supply(SupplyFromInputError)
             case iconUrlStringNotAUrl
         }
@@ -396,7 +396,7 @@ private extension CreateTokenScreen.ViewModel {
     func granularity() throws -> Granularity {
         do {
             return try Granularity(unvalidated: input.granularity)
-        } catch let error as Granularity.Error {
+        } catch let error as AmountError {
             throw Error.inputError(.granularity(error))
         } catch { unexpectedlyMissedToCatch(error: error) }
     }

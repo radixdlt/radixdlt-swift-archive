@@ -29,7 +29,7 @@ import XCTest
 class NonNegativeAmountTests: XCTestCase {
     
     func testNonNegativeAmount256BitMaxValue() {
-        XCTAssertEqual(NonNegativeAmount.maxValue256Bits.hex, String(repeating: "f", count: 64))
+        XCTAssertEqual(NonNegativeAmount.max.hex, String(repeating: "f", count: 64))
     }
     
     func testAdd() {
@@ -100,35 +100,20 @@ class NonNegativeAmountTests: XCTestCase {
         XCTAssertEqual(a, 2)
     }
     
-    func testNegated() {
-        let a: NonNegativeAmount = 3
-        let negated: SignedAmount = a.negated()
-        XCTAssertEqual(negated, -3)
-        XCTAssertEqual(negated.negated(), 3)
-    }
-    
-    func testNegatedZero() {
-        let a: NonNegativeAmount = 0
-        let negated: SignedAmount = a.negated()
-        XCTAssertAllEqual(
-            0,
-            negated,
-            negated.negated()
-        )
-    }
-    
-    func testAbs() {
-        let a: NonNegativeAmount = 3
-        XCTAssertEqual(a.abs.magnitude, a.magnitude)
-    }
-  
-    func testAbsZero() {
-        let a: NonNegativeAmount = 0
+    func testGreaterThanZeroLiteral() {
+        func assertIsLargerThanZero(_ nonNegativeAmount: NonNegativeAmount) {
+            if nonNegativeAmount > 0 {
+                XCTAssertTrue(true)
+            } else {
+                XCTFail("Should have been larager than zero")
+            }
+        }
         
-        XCTAssertAllEqual(
-            0,
-            a.magnitude,
-            a.abs.magnitude
-        )
+        assertIsLargerThanZero(1)
+    }
+    
+    func testBinaryIntegerProtocolMethods() {
+        let amount: NonNegativeAmount = 15
+        XCTAssertEqual(amount.bitWidth, 4)
     }
 }

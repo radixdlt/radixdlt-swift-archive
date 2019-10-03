@@ -25,6 +25,10 @@
 import XCTest
 @testable import RadixSDK
 
+private extension Supply {
+    static let hundred: Supply = 10
+}
+
 class TokenDefinitionsStateReducerTests: XCTestCase {
 
     func testTokenWithNoMint() {
@@ -54,11 +58,11 @@ class TokenDefinitionsStateReducerTests: XCTestCase {
     func testTokenWithMint() {
         let tokenDefinitionParticle = makeMutableSupplyTokenDefinitionParticle(tokenPermissions: [.mint: .tokenOwnerOnly])
         
-        let expecteRri = tokenDefinitionParticle.tokenDefinitionReference
+        let expectedRri = tokenDefinitionParticle.tokenDefinitionReference
         
         let unallocatedTokensParticle = UnallocatedTokensParticle(
-            amount: try! Supply(subtractingFromMax: 100),
-            tokenDefinitionReference: expecteRri
+            amount: try! Supply(subtractedFromMax: Supply.hundred),
+            tokenDefinitionReference: expectedRri
         )
         
         print(try! RadixJSONEncoder().encode(unallocatedTokensParticle).toString())
@@ -67,8 +71,8 @@ class TokenDefinitionsStateReducerTests: XCTestCase {
         let state_Un = try! reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: unallocatedTokensParticle))
         let state_Un_Td = try! reducer.reduce(state: state_Un, upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
         
-        XCTAssertEqual(state_Un_Td.tokenState(identifier: expecteRri)?.totalSupply, 100)
-        XCTAssertEqual(state_Un_Td.tokenState(identifier: expecteRri)?.tokenSupplyType, .mutable)
+        XCTAssertEqual(state_Un_Td.tokenState(identifier: expectedRri)?.totalSupply, Supply.hundred)
+        XCTAssertEqual(state_Un_Td.tokenState(identifier: expectedRri)?.tokenSupplyType, .mutable)
 
         // Assert that no action is performed on `TransferrableTokensParticle`.
         let transferrableTokensParticle = try! TransferrableTokensParticle(mutableSupplyToken: tokenDefinitionParticle, amount: .irrelevant)

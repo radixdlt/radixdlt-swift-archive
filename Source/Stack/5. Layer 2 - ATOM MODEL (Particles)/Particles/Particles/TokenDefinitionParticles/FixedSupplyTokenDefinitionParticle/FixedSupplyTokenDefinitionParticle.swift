@@ -61,9 +61,7 @@ public struct FixedSupplyTokenDefinitionParticle:
         self.rri = ResourceIdentifier(address: address, symbol: symbol)
         self.granularity = granularity
         self.iconUrl = iconUrl
-//        self.supply = supply.amount
-        // FIXME
-        implementMe()
+        self.supply = PositiveAmount(other: supply)
     }
 }
 

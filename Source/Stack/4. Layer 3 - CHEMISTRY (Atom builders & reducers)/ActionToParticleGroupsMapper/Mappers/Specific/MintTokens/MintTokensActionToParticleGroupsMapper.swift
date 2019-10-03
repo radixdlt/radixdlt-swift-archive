@@ -153,8 +153,7 @@ private extension FungibleParticleTransitioner where From == UnallocatedTokensPa
             transition = try self.transition(unconsumedFungibles: unallocatedTokensParticles, toAmount: NonNegativeAmount(subset: mint.amount))
         } catch Error.notEnoughFungibles(_, let balance) {
             
-            
-            guard let currentSupply = try? Supply(subtractedFromMax: Supply(other: balance)) else {
+            guard let currentSupply = try? Supply(subtractedFromMax: balance) else {
                 incorrectImplementationShouldAlwaysBeAble(to: "Derive current supply.")
             }
             

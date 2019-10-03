@@ -128,7 +128,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         // THEN:  I see that action fails with error `InsufficientFunds`
         transfer.blockingAssertThrows(
-            error: TransferError.insufficientFunds(currentBalance: NonNegativeAmount(positive: initialSupply.amount), butTriedToTransfer: amount)
+            error: TransferError.insufficientFunds(currentBalance: NonNegativeAmount(subset: initialSupply), butTriedToTransfer: amount)
         )
     }
     

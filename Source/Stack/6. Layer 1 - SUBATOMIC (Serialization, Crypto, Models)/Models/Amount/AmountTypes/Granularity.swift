@@ -23,47 +23,25 @@
 //
 
 import Foundation
-@testable import RadixSDK
-import XCTest
 
-class PositiveAmountTests: XCTestCase {
-    func testPositiveAmount256BitMaxValue() {
-        XCTAssertEqual(PositiveAmount.max.hex, String(repeating: "f", count: 64))
-    }
-    
-    func testAdd() {
-        let a: PositiveAmount = 2
-        let b: PositiveAmount = 3
-        XCTAssertEqual(a + b, 5)
-    }
-    
-    func testMultiply() {
-        let a: PositiveAmount = 2
-        let b: PositiveAmount = 3
-        XCTAssertEqual(a * b, 6)
-    }
-    
-    func testSubtract() {
-        let a: PositiveAmount = 2
-        let b: PositiveAmount = 3
-        XCTAssertEqual(b - a, 1)
-    }
-    
-    func testAddInout() {
-        var a: PositiveAmount = 2
-        a += 3
-        XCTAssertEqual(a, 5)
-    }
-    
-    func testMultiplyInout() {
-        var a: PositiveAmount = 2
-        a *= 5
-        XCTAssertEqual(a, 10)
-    }
-    
-    func testSubtractInout() {
-        var a: PositiveAmount = 9
-        a -= 7
-        XCTAssertEqual(a, 2)
+public struct GranularityAmountTrait: AmountTrait {}
+
+/// The smallest non-divisible amount of subunits one can have is introduced. For the formal definition read [RIP - Tokens][1].
+///
+/// - seeAlso:
+/// `MutableSupplyTokenDefinitionParticle`
+///
+/// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
+///
+public typealias Granularity = UnsignedAmount<UInt256NonZeroBound, GranularityAmountTrait>
+
+// MARK: Presets
+public extension Granularity {
+    static var `default`: Self {
+        do {
+            return try Granularity(magnitude: 1, denomination: .atto)
+        } catch {
+            incorrectImplementationShouldAlwaysBeAble(to: "Create `default` value for Granularity", error)
+        }
     }
 }

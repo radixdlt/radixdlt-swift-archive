@@ -26,6 +26,10 @@ import XCTest
 @testable import RadixSDK
 import RxSwift
 
+private extension Supply {
+    static let ten: Supply = 10
+}
+
 class MintTokensTests: LocalhostNodeTest {
 
     private var aliceIdentity: AbstractIdentity!
@@ -102,7 +106,7 @@ class MintTokensTests: LocalhostNodeTest {
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
-            supply: .mutable(initial: Supply(subtractingFromMax: 10))
+            supply: .mutable(initial: Supply(subtractedFromMax: Supply.ten))
         )
         
         XCTAssertTrue(
@@ -117,7 +121,7 @@ class MintTokensTests: LocalhostNodeTest {
             error: MintError.tokenOverMint(
                 token: fooToken,
                 maxSupply: Supply.max,
-                currentSupply: try! Supply(subtractingFromMax: 10),
+                currentSupply: try! Supply(subtractedFromMax: Supply.ten),
                 byMintingAmount: 20
             )
         )
@@ -132,7 +136,7 @@ class MintTokensTests: LocalhostNodeTest {
         
         // GIVEN: ... and a previously created FooToken, for which Alice does **NOT** have the appropriate permissions
         let (tokenCreation, fooToken) = try! bobApp.createToken(
-            supply: .mutable(initial: Supply(subtractingFromMax: 10))
+            supply: .mutable(initial: Supply(subtractedFromMax: Supply.ten))
         )
         
         XCTAssertTrue(

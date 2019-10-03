@@ -24,16 +24,10 @@
 
 import Foundation
 
-//public struct PositiveAmount: Comparable, CustomStringConvertible {
-//
-//    /// The use can never spend negative amounts, nor can she create a token with a negative supply, thus safe to bound to at least `NonNegativeAmount`. But since the zero amount (`0`) is not so relevant, we skip support for that.
-//    public let amountMeasuredInAtto: PositiveAmount
-//
-//    /// `amount` is a non negative integer type, we do not allow dealing with decimal values due to lack of `BigDecimal` in Swift. Using Swift standard library (`Foundation`)'s number type `Decimal` does not provide us with enough precision.
-//    ///
-//    public init(positiveAmount nonConvertedAmount: PositiveAmount, denomination from: Denomination) {
-//        self.amountMeasuredInAtto = Self.convertToAtto(amount: nonConvertedAmount, from: from)
-//    }
-//}
-//
+public struct UInt256Bound: ValueBound {}
 
+public extension UInt256Bound {
+    typealias Magnitude = BigUnsignedInt
+    
+    static var greatestFiniteMagnitude: Magnitude { Magnitude(2).power(256) - 1 }
+}

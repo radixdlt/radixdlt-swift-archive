@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,47 +23,20 @@
 //
 
 import Foundation
-@testable import RadixSDK
-import XCTest
 
-class PositiveAmountTests: XCTestCase {
-    func testPositiveAmount256BitMaxValue() {
-        XCTAssertEqual(PositiveAmount.max.hex, String(repeating: "f", count: 64))
-    }
-    
-    func testAdd() {
-        let a: PositiveAmount = 2
-        let b: PositiveAmount = 3
-        XCTAssertEqual(a + b, 5)
-    }
-    
-    func testMultiply() {
-        let a: PositiveAmount = 2
-        let b: PositiveAmount = 3
-        XCTAssertEqual(a * b, 6)
-    }
-    
-    func testSubtract() {
-        let a: PositiveAmount = 2
-        let b: PositiveAmount = 3
-        XCTAssertEqual(b - a, 1)
-    }
-    
-    func testAddInout() {
-        var a: PositiveAmount = 2
-        a += 3
-        XCTAssertEqual(a, 5)
-    }
-    
-    func testMultiplyInout() {
-        var a: PositiveAmount = 2
-        a *= 5
-        XCTAssertEqual(a, 10)
-    }
-    
-    func testSubtractInout() {
-        var a: PositiveAmount = 9
-        a -= 7
-        XCTAssertEqual(a, 2)
-    }
+public protocol BinaryIntegerFromString {
+    init?<S>(_ text: S, radix: Int) where S: StringProtocol
 }
+
+extension UInt64: BinaryIntegerFromString {}
+extension UInt32: BinaryIntegerFromString {}
+extension UInt16: BinaryIntegerFromString {}
+extension UInt8: BinaryIntegerFromString {}
+extension Int64: BinaryIntegerFromString {}
+extension Int32: BinaryIntegerFromString {}
+extension Int16: BinaryIntegerFromString {}
+extension Int8: BinaryIntegerFromString {}
+
+import BigInt
+extension BigUInt: BinaryIntegerFromString {}
+extension BigInt: BinaryIntegerFromString {}

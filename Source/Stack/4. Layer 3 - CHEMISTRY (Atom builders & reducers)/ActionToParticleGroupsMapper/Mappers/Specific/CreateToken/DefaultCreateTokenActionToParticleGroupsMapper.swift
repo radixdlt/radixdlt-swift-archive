@@ -61,8 +61,7 @@ private extension CreateTokenActionToParticleGroupsMapper {
             unallocated.withSpin(.up)
         ]
         
-        let initialSupply = initialSupplyDefinition.initialSupply
-        guard let positiveInitialSupplyAmount = try? PositiveAmount(unrelated: initialSupply) else {
+        guard let positiveInitialSupplyAmount = try? PositiveAmount(unrelated: initialSupplyDefinition.initialSupply) else {
             return [tokenCreationGroup]
         }
         
@@ -75,8 +74,7 @@ private extension CreateTokenActionToParticleGroupsMapper {
             minted.withSpin(.up)
         ]
         
-        let positiveInitialSupply = PositiveSupply(other: positiveInitialSupplyAmount)
-        if let positiveLeftOverSupply = try? PositiveSupply(subtractedFromMax: positiveInitialSupply) {
+        if let positiveLeftOverSupply = try? PositiveSupply(subtractedFromMax: positiveInitialSupplyAmount) {
             
             let unallocatedFromLeftOverSupply = UnallocatedTokensParticle(
                 mutableSupplyTokenDefinitionParticle: mutableSupplyToken,
