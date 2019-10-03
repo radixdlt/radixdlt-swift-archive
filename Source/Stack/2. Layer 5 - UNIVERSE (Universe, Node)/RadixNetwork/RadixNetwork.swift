@@ -86,7 +86,6 @@ extension RadixNetworkState {
         nodeInfo newNodeInfo: NodeInfo? = nil,
         universeConfig newUniverseConfig: UniverseConfig? = nil
     ) -> RadixNetworkState {
-        
         let newNodeState: RadixNodeState
         let maybeCurrentState = nodes.valueFor(key: node)
         let newWSStatus = webSocketStatusValue.getValue(existing: maybeCurrentState?.websocketStatus)

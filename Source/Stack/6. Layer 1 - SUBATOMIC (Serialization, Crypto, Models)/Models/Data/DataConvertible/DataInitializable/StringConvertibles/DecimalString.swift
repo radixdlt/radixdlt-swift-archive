@@ -42,7 +42,7 @@ public struct DecimalString:
         do {
             self.value = try DecimalString.validate(unvalidated)
         } catch {
-            fatalError("Passed unvalid string, error: \(error)")
+            badLiteralValue(unvalidated, error: error)
         }
     }
 }

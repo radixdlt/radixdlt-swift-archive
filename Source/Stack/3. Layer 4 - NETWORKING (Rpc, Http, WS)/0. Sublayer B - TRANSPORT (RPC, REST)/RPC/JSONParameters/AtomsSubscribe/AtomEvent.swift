@@ -44,7 +44,7 @@ public extension AtomEvent {
     enum AtomEventType:
         String,
         StringInitializable,
-        PrefixedJsonDecodable,
+        PrefixedJSONDecodable,
         Decodable {
         // swiftlint:enable colon
         

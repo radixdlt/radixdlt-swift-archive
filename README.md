@@ -63,7 +63,7 @@ Here are some example usages. The code below is an excerpt of an existing the un
 ```swift
 let aliceIdentity = AbstractIdentity()
 
-let application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+let application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
 
 /// A Radix `Address` is dependent on `RadixUniverse` of the `RadixApplicationClient`. Betanet, Alphanet, Mainnet are examples of different Universes.
 let alice: Address = application.addressOfActiveAccount

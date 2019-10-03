@@ -42,7 +42,7 @@ class BurnTokensTests: LocalhostNodeTest {
         
         aliceIdentity = AbstractIdentity()
         bobIdentity = AbstractIdentity()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
         carolAccount = Account()
@@ -58,7 +58,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let fooToken = createTokenAction.identifier
 
         XCTAssertTrue(
-            application.create(token: createTokenAction).blockingWasSuccessfull()
+            application.create(token: createTokenAction).blockingWasSuccessful()
         )
 
         let tokenContext = TokenContext(rri: fooToken, actor: alice)
@@ -71,9 +71,8 @@ class BurnTokensTests: LocalhostNodeTest {
         }
 
         let result = application.send(transaction: transaction)
-
         XCTAssertTrue(
-            result.blockingWasSuccessfull(timeout: 40)
+            result.blockingWasSuccessful(timeout: 40)
         )
 
         guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: .enoughForPOW) else { return }
@@ -87,7 +86,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let fooToken = createTokenAction.identifier
         
         XCTAssertTrue(
-            application.create(token: createTokenAction).blockingWasSuccessfull()
+            application.create(token: createTokenAction).blockingWasSuccessful()
         )
         
         let tokenContext = TokenContext(rri: fooToken, actor: alice)
@@ -105,7 +104,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let result = application.send(transaction: transaction)
         
         XCTAssertTrue(
-            result.blockingWasSuccessfull(timeout: 40)
+            result.blockingWasSuccessful(timeout: 40)
         )
         
         guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: .enoughForPOW) else { return }
@@ -118,7 +117,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 35))
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         /// GIVEN: And a previously created FooToken, for which Alice has the appropriate permissions
         guard let fooTokenStateAfterCreation = application.observeTokenState(identifier: fooToken).blockingTakeFirst() else { return }
@@ -133,7 +132,7 @@ class BurnTokensTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             // THEN: the burning succeeds
-            burning.blockingWasSuccessfull(timeout: .enoughForPOW)
+            burning.blockingWasSuccessful(timeout: .enoughForPOW)
         
         )
         // THEN: AND the supply of FooToken is changed
@@ -151,7 +150,7 @@ class BurnTokensTests: LocalhostNodeTest {
     func testBurnFailsDueUnknownRRI() {
         // GIVEN: Radix identity Alice and an application layer action BurnToken
         
-        // WHEN Alice call Burn on RRI for some nonexisting FoobarToken
+        // WHEN Alice call Burn on RRI for some non existing FoobarToken
         let foobarToken: ResourceIdentifier = "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/FoobarToken"
         let burning = application.burnTokens(amount: 123, ofType: foobarToken)
         
@@ -161,20 +160,20 @@ class BurnTokensTests: LocalhostNodeTest {
         )
     }
     
-    func testBurnFailsDueToExceedingBalance() {
+    func testBurnFailDueToExceedingBalance() {
         // GIVEN: Radix identity Alice and an application layer action BurnToken
         
         // GIVEN: ... and a previously created FooToken which has a supply of max - 10 tokens, for which Alice has the appropriate permissions.
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 10))
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: Alice call Burn(20) on FooToken
         let burning = application.burnTokens(amount: 20, ofType: fooToken)
         
-        // THEN: an error supplyExcceedsMax is thrown
+        // THEN: an error supplyExceedsMax is thrown
         burning.blockingAssertThrows(
             error: BurnError.insufficientTokens(
                 token: fooToken,
@@ -186,14 +185,14 @@ class BurnTokensTests: LocalhostNodeTest {
     
     func testBurnFailDueToWrongPermissions() {
         // GIVEN: Radix identity Alice and an application layer action BurnToken ...
-        let bobApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: bobIdentity)
+        let bobApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: bobIdentity)
         let aliceApp = application!
         
         // GIVEN: ... and a previously created FooToken, for which Alice does **NOT** have the appropriate permissions
         let (tokenCreation, fooToken) = bobApp.createToken(supply: .mutable(initial: 1000))
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         aliceApp.pull(address: bob).disposed(by: disposeBag)
@@ -219,7 +218,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let (tokenCreation, fooToken) = application.createMultiIssuanceToken(initialSupply: 1000)
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: Alice tries to burn Carols coins
@@ -236,7 +235,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let (tokenCreation, fooToken) = application.createFixedSupplyToken(supply: 10)
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: Alice call Burn for FooToken
@@ -254,7 +253,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let (tokenCreation, fooToken) = application.createMultiIssuanceToken(initialSupply: 30, granularity: 3)
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: Alice call Burn(2) for FooToken, where 3∤2 (3 does not divide 2)

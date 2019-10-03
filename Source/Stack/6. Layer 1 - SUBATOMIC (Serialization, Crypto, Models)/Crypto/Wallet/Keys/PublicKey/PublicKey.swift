@@ -117,7 +117,7 @@ public extension PublicKey {
         do {
             try self.init(data: bitcoinKitPublicKey.data)
         } catch {
-            incorrectImplementation("Should always be possible to create a PublicKey from a PrivateKey")
+            incorrectImplementationShouldAlwaysBeAble(to: "Create a `PublicKey` from a `PrivateKey`", error)
         }
     }
 }

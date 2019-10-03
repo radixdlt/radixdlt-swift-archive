@@ -28,31 +28,31 @@ public protocol Hashing {
     func hash(data: Data) -> Data
 }
 
-public protocol Sha256Hashing: Hashing {
+public protocol SHA256Hashing: Hashing {
     func sha256(of data: Data) -> Data
 }
 
-public extension Sha256Hashing {
+public extension SHA256Hashing {
     func hash(data: Data) -> Data {
         return sha256(of: data)
     }
 }
 
-public protocol Sha256TwiceHashing: Hashing {
+public protocol SHA256TwiceHashing: Hashing {
     func sha256Twice(of data: Data) -> Data
 }
 
-public extension Sha256TwiceHashing {
+public extension SHA256TwiceHashing {
     func hash(data: Data) -> Data {
         return sha256Twice(of: data)
     }
 }
 
-public protocol Sha512TwiceHashing: Hashing {
+public protocol SHA512TwiceHashing: Hashing {
     func sha512Twice(of data: Data) -> Data
 }
 
-public extension Sha512TwiceHashing {
+public extension SHA512TwiceHashing {
     func hash(data: Data) -> Data {
         return sha512Twice(of: data)
     }

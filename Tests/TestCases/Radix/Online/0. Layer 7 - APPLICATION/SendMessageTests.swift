@@ -35,7 +35,7 @@ class SendMessageTests: LocalhostNodeTest {
     private let claraAccount = Account()
     private let dianaAccount = Account()
     
-    private lazy var application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+    private lazy var application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
     
     private lazy var alice = application.addressOfActiveAccount
     private lazy var bob = application.addressOf(account: bobAccount)
@@ -52,7 +52,7 @@ class SendMessageTests: LocalhostNodeTest {
         let result = application.sendPlainTextMessage(message, to: bob)
         
         // THEN: I see that action completes successfully
-        XCTAssertTrue(result.blockingWasSuccessfull(timeout: .enoughForPOW))
+        XCTAssertTrue(result.blockingWasSuccessful(timeout: .enoughForPOW))
         
         print(try! result.atom().debugDescription)
 
@@ -70,7 +70,7 @@ class SendMessageTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
-            result.blockingWasSuccessfull(timeout: .enoughForPOW)
+            result.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         guard let sentMessage = application.observeMyMessages().blockingTakeLast() else { return }
@@ -86,7 +86,7 @@ class SendMessageTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
-            result.blockingWasSuccessfull(timeout: .enoughForPOW)
+            result.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         guard let sentMessage = application.observeMyMessages().blockingTakeLast() else { return }
@@ -100,7 +100,7 @@ class SendMessageTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
-            result.blockingWasSuccessfull(timeout: .enoughForPOW)
+            result.blockingWasSuccessful(timeout: .enoughForPOW)
         )
     }
     
@@ -133,7 +133,7 @@ class SendMessageTests: LocalhostNodeTest {
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully
-            result.blockingWasSuccessfull(timeout: .enoughForPOW)
+            result.blockingWasSuccessful(timeout: .enoughForPOW)
         )
     }
 }

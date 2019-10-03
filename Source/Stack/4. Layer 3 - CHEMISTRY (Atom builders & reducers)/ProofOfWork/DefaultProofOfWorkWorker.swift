@@ -28,11 +28,11 @@ import RxSwift
 public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
     private let dispatchQueue = DispatchQueue(label: "Radix.DefaultProofOfWorkWorker", qos: .userInitiated)
     private let targetNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros
-    private let sha256TwiceHasher: Sha256TwiceHashing
+    private let sha256TwiceHasher: SHA256TwiceHashing
 
     public init(
         targetNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros = .default,
-        sha256TwiceHasher: Sha256TwiceHashing = Sha256TwiceHasher()
+        sha256TwiceHasher: SHA256TwiceHashing = SHA256TwiceHasher()
     ) {
         self.targetNumberOfLeadingZeros = targetNumberOfLeadingZeros
         self.sha256TwiceHasher = sha256TwiceHasher

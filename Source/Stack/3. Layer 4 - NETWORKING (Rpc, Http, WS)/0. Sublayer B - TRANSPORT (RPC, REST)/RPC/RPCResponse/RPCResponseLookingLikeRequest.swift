@@ -24,7 +24,7 @@
 
 import Foundation
 
-public struct RPCResponseLookingLikeRequest<Params>: Decodable, RPCResposeResultConvertible, RPCNotificationResponseConvertible where Params: Decodable {
+public struct RPCResponseLookingLikeRequest<Params>: Decodable, RPCResponseResultConvertible, RPCNotificationResponseConvertible where Params: Decodable {
     public let params: Params
     public let method: RPCNotification
 }

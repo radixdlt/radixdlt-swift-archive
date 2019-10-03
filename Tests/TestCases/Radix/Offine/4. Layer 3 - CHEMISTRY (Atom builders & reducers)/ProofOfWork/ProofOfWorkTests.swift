@@ -77,7 +77,7 @@ class ProofOfWorkTest: XCTestCase {
                 expectedNonce: vector.expectedResultingNonce,
                 magic: vector.magic,
                 seed: vector.seed,
-                sha256TwiceHasher: Sha256TwiceHasher()
+                sha256TwiceHasher: SHA256TwiceHasher()
             )
         }
         vectorsForHighNonce.forEach(test(vector:))
@@ -90,7 +90,7 @@ private extension ProofOfWorkTest {
         expectedNonce: Nonce,
         magic overridingMagic: Magic? = nil,
         seed overridingSeed: HexString? = nil,
-        sha256TwiceHasher: Sha256TwiceHashing = Sha256TwiceHasher()
+        sha256TwiceHasher: SHA256TwiceHashing = SHA256TwiceHasher()
     ) {
     
         let magicUsed = overridingMagic ?? magic

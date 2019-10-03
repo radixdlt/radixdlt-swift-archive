@@ -36,8 +36,8 @@ public extension AnyEncodableKeyValuesProcessing {
 
     // By default perform no preProcessing
     var preProcess: Process {
-        return { proccessed, _ in
-            return proccessed
+        return { processed, _ in
+            return processed
         }
     }
     
@@ -49,8 +49,8 @@ public extension AnyEncodableKeyValuesProcessing {
     
     // By default perform no postProcessing
     var postProcess: Process {
-        return { proccessed, _ in
-            return proccessed
+        return { processed, _ in
+            return processed
         }
     }
 }

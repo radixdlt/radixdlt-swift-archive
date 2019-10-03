@@ -87,14 +87,14 @@ public extension String {
     
     init(data: Data, encodingForced: String.Encoding = .default) {
         guard let string = String(data: data, encoding: encodingForced) else {
-            incorrectImplementation("Should always be able to get string from data")
+            incorrectImplementationShouldAlwaysBeAble(to: "Get initialise a `String` from `Data`")
         }
         self = string
     }
     
     func toData(encodingForced: String.Encoding = .default) -> Data {
         guard let encodedData = self.data(using: encodingForced) else {
-            incorrectImplementation("Should always be able to encode string to data")
+            incorrectImplementationShouldAlwaysBeAble(to: "Encode a `String` into `Data`")
         }
         return encodedData
     }

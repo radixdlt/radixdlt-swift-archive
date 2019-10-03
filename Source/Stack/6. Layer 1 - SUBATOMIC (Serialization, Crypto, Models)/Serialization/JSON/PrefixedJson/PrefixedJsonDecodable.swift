@@ -24,23 +24,23 @@
 
 import Foundation
 
-public protocol PrefixedJsonDecodable: JSONPrefixSpecifying, Decodable, StringInitializable {
+public protocol PrefixedJSONDecodable: JSONPrefixSpecifying, Decodable, StringInitializable {
     init(prefixedString: PrefixedStringWithValue) throws
 }
 
-public extension PrefixedJsonDecodable where Self: StringRepresentable {
+public extension PrefixedJSONDecodable where Self: StringRepresentable {
     static var jsonPrefix: JSONPrefix {
         return .string
     }
 }
 
-public extension PrefixedJsonDecodable where Self: StringInitializable {
+public extension PrefixedJSONDecodable where Self: StringInitializable {
     static var jsonPrefix: JSONPrefix {
         return .string
     }
 }
 
-public extension PrefixedJsonDecodable {
+public extension PrefixedJSONDecodable {
     init(prefixedString: PrefixedStringWithValue) throws {
         guard prefixedString.jsonPrefix == Self.jsonPrefix else {
             throw PrefixedStringWithValue.Error.prefixMismatch(expected: Self.jsonPrefix, butGot: prefixedString.jsonPrefix)

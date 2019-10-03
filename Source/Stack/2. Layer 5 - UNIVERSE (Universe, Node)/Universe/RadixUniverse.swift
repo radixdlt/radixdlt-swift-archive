@@ -107,7 +107,7 @@ public extension DefaultRadixUniverse {
                 discoveryMode: bootstrapConfig.discoveryMode
             )
         } catch {
-            incorrectImplementation("Should always be able to create RadixUniverse from bootstrap config")
+            incorrectImplementationShouldAlwaysBeAble(to: "Create a `RadixUniverse` from a boot strap config", error)
         }
     }
 }

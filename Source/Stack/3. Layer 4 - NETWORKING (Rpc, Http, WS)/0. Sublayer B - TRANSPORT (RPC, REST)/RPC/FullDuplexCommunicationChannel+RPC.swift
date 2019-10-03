@@ -70,12 +70,12 @@ private extension FullDuplexCommunicationChannel {
                 case .parseAsNotification(let expectedNotification, let expectedSubscriberId):
                     guard
                         let notificationMethodFromResponseAsString = jsonObj[RPCResponseLookingLikeRequestCodingKeys.method.rawValue] as? String,
-                        let notificationMethodFromRespons = RPCNotification(rawValue: notificationMethodFromResponseAsString),
-                        notificationMethodFromRespons == expectedNotification,
+                        let notificationMethodFromResponse = RPCNotification(rawValue: notificationMethodFromResponseAsString),
+                        notificationMethodFromResponse == expectedNotification,
                         let subscriberIdWrapperJson = jsonObj[RPCResponseLookingLikeRequestCodingKeys.params.rawValue] as? JSON,
                         let subscriberIdFromResponseAsString = subscriberIdWrapperJson["subscriberId"] as? String,
-                        case let subscriberIdFromRespons = SubscriberId(validated: subscriberIdFromResponseAsString),
-                        subscriberIdFromRespons == expectedSubscriberId
+                        case let subscriberIdFromResponse = SubscriberId(validated: subscriberIdFromResponseAsString),
+                        subscriberIdFromResponse == expectedSubscriberId
                     else {
                         return false
                     }

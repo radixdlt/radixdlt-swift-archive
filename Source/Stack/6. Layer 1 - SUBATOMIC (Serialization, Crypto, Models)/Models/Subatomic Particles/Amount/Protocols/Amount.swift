@@ -28,7 +28,7 @@ import Foundation
 
 /// Base protocol for `PositiveAmount` and `SignedAmount`
 public protocol Amount:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     StringRepresentable,
     CBORDataConvertible,
     Numeric,
@@ -170,7 +170,7 @@ public extension Amount {
     }
 }
 
-// MARK: - PrefixedJsonDecodable
+// MARK: - PrefixedJSONDecodable
 public extension Amount {
     static var jsonPrefix: JSONPrefix { return .uint256DecimalString }
 }

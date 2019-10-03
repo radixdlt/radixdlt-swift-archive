@@ -70,7 +70,7 @@ public struct TokenState:
     }
 }
 
-// MARK: - Convenience Initializers
+// MARK: - Convenience Initialisers
 
 internal extension TokenState {
     init(

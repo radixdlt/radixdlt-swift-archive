@@ -35,13 +35,14 @@ import Foundation
 /// [1]: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/407241467/RIP-2+Tokens
 ///
 public struct Symbol:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     CBORStringConvertible,
     CharacterSetSpecifying,
     MinLengthSpecifying,
     MaxLengthSpecifying,
     Throwing,
-    Hashable
+    Hashable,
+    Comparable
 {
 // swiftlint:enable colon opening_brace
     
@@ -55,8 +56,26 @@ public struct Symbol:
         do {
             self.value = try Symbol.validate(unvalidated)
         } catch {
-            fatalError("Passed unvalid string, error: \(error)")
+            badLiteralValue(unvalidated, error: error)
         }
+    }
+}
+
+public extension Symbol {
+    static func <= (lhs: Self, rhs: Self) -> Bool {
+        lhs.stringValue <= rhs.stringValue
+    }
+    
+    static func >= (lhs: Self, rhs: Self) -> Bool {
+        lhs.stringValue >= rhs.stringValue
+    }
+    
+    static func < (lhs: Self, rhs: Self) -> Bool {
+        lhs.stringValue < rhs.stringValue
+    }
+    
+    static func > (lhs: Self, rhs: Self) -> Bool {
+        lhs.stringValue > rhs.stringValue
     }
 }
 

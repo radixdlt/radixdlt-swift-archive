@@ -31,7 +31,7 @@ public extension BigInteger {
         do {
             return try HexString(string: string)
         } catch {
-            incorrectImplementation("Should always be able to create HexString, error: \(error)")
+            incorrectImplementationShouldAlwaysBeAble(to: "Create `HexString`", error)
         }
     }
     

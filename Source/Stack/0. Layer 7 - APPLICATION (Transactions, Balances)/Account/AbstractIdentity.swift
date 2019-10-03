@@ -54,7 +54,7 @@ public extension AbstractIdentity {
         do {
             return try accountSubject.value()
         } catch {
-            incorrectImplementation("Should always have an acctive account")
+            incorrectImplementationShouldAlwaysBeAble(to: "Access active account.", error)
         }
     }
     

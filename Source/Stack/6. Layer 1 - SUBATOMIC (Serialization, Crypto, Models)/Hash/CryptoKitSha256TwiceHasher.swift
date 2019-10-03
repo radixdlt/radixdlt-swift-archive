@@ -25,7 +25,7 @@
 import Foundation
 import CryptoKit
 
-public struct CryptoKitSha256TwiceHasher: Sha256TwiceHashing {
+public struct CryptoKitSha256TwiceHasher: SHA256TwiceHashing {
     public init() {}
     public func sha256Twice(of data: Data) -> Data {
         let once = SHA256.hash(data: data).asData

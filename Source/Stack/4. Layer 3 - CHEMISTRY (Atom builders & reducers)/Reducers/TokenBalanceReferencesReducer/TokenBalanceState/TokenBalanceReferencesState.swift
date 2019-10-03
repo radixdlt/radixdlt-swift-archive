@@ -43,7 +43,7 @@ public extension TokenBalanceReferencesState {
     }
 }
 
-// MARK: Value retrival
+// MARK: Value Retrieval
 public extension TokenBalanceReferencesState {
     func tokenReferenceBalance(of tokenIdentifier: ResourceIdentifier) -> TokenReferenceBalance? {
         return dictionary[tokenIdentifier]

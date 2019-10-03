@@ -54,7 +54,7 @@ public struct Signature:
     
     public static let rUpperBound = Secp256k1.order - 1
     
-    /// Max allow value of `S` part is ther **order** of the curve `secp256k1`
+    /// Max allow value of `S` part is the **order** of the curve `secp256k1`
     ///
     /// *LOW S* (mentioned in [BIP-62][1] and [BIP-146][2]) can easily be supported by changing `sUpperBound` to
     ///
@@ -145,7 +145,7 @@ public extension Signature {
 
 // MARK: - DataConvertible
 public extension Signature {
-    /// Byte length of 64 is ensured by prepending leading 0 byte's to R and S respectivly before concatenation
+    /// Byte length of 64 is ensured by prepending leading 0 byte's to R and S respectively before concatenation
     var asData: Data {
         let rData = r.toData(minByteCount: 32, concatMode: .prepend)
         let sData = s.toData(minByteCount: 32, concatMode: .prepend)

@@ -68,7 +68,7 @@ private extension AtomWithFee {
             let proofOfWorkAtomWithSignature = try AtomWithFee(atomWithPow: atomWithPowAndSignature)
             return try SignedAtom(proofOfWorkAtom: proofOfWorkAtomWithSignature, signatureId: signatureId)
         } catch {
-            incorrectImplementation("Should always be able to add signature to an atom")
+            incorrectImplementationShouldAlwaysBeAble(to: "Add signature to an atom", error)
         }
     }
 }

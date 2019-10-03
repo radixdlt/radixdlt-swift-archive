@@ -69,6 +69,8 @@ public extension UniverseBootstrap {
         )
     }
     
+    static var `default`: UniverseBootstrap { localhostSingleNode }
+    
 //    static var betanet: UniverseBootstrap {
 //        return UniverseBootstrap(
 //            config: .betanet,

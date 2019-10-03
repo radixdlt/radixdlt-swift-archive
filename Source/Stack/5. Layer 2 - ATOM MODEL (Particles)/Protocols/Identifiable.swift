@@ -28,7 +28,7 @@ import Foundation
 
 /// A type that is identifiable using a `ResourceIdentifier`.
 ///
-/// Since and `ResourceIdentifier` has an `Address`, this type also conforms to `Accoutable`,
+/// Since and `ResourceIdentifier` has an `Address`, this type also conforms to `Accountable`,
 /// containing a single address.
 ///
 /// Although this protocol looks very similar to `TokenDefinitionReferencing` - which also has

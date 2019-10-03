@@ -25,20 +25,20 @@
 import Foundation
 
 public protocol DSONPrefixedDataConvertible: CBORConvertible, DSONPrefixSpecifying {
-    var dborEncodedData: Data { get }
+    var cborEncodedData: Data { get }
 }
 
 // MARK: - CBORConvertible
 public extension DSONPrefixedDataConvertible {
     func toCBOR() -> CBOR {
-        return CBOR.bytes(dborEncodedData, dsonPrefix: dsonPrefix)
+        return CBOR.bytes(cborEncodedData, dsonPrefix: dsonPrefix)
     }
 }
 
 // MARK: - DSONPrefixSpecifying
 public extension DSONPrefixedDataConvertible where Self: DataConvertible {
     
-    var dborEncodedData: Data {
+    var cborEncodedData: Data {
         return asData
     }
     

@@ -44,7 +44,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
     // MARK: Public Properties
     public let networkState: Observable<RadixNetworkState>
 
-    // MARK: Private Properites
+    // MARK: Private Properties
     private let networkStateSubject: BehaviorSubject<RadixNetworkState>
     private let nodeActionSubject: PublishSubject<NodeAction>
     private let reducedNodeActions: Observable<NodeAction>

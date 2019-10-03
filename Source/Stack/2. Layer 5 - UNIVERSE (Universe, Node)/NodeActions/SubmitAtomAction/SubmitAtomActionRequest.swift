@@ -39,6 +39,8 @@ public extension SubmitAtomActionRequest {
     var shards: Shards {
         do {
             return try atom.requiredFirstShards()
-        } catch { incorrectImplementation("should always be able to get shards") }
+        } catch {
+            incorrectImplementationShouldAlwaysBeAble(to: "get shards.", error)
+        }
     }
 }

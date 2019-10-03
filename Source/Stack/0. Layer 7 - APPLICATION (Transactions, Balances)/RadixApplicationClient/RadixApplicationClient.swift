@@ -60,7 +60,7 @@ public final class RadixApplicationClient:
     /// A subscriber of state, derived from particles
     private let stateSubscriber: StateSubscriber
     
-    /// A subscriber of exectued transactions at a given address
+    /// A subscriber of executed transactions at a given address
     private let transactionSubscriber: TransactionSubscriber
 
     private let disposeBag = DisposeBag()
@@ -84,7 +84,7 @@ public final class RadixApplicationClient:
 // MARK: Convenience Init
 public extension RadixApplicationClient {
     
-    /// Initializes a RadixApplicationClient from a BootstrapConfig
+    /// Initialises a RadixApplicationClient from a BootstrapConfig
     convenience init(bootstrapConfig: BootstrapConfig, identity: AbstractIdentity) {
         let universe = DefaultRadixUniverse(bootstrapConfig: bootstrapConfig)
         let atomStore = universe.atomStore
@@ -95,7 +95,7 @@ public extension RadixApplicationClient {
             universe: universe
         )
         
-        let stateSubscriber = DefaultStateSubsciber(
+        let stateSubscriber = DefaultStateSubscriber(
             atomStore: atomStore
         )
         
@@ -228,7 +228,7 @@ public extension RadixApplicationClient {
     }
 }
 
-// MARK: TokenDefintionsState Observation
+// MARK: TokenDefinitionsState Observation
 public extension RadixApplicationClient {
     func observeTokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
         return observeState(ofType: TokenDefinitionsState.self, at: address)

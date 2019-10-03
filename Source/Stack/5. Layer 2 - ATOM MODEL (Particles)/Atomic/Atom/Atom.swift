@@ -57,9 +57,9 @@ extension Atom: AnyEncodableKeyValuesProcessing {
     
     // Remove "serializer" from hash calculation to match RadixCore `ImmutableAtom` type.
     public var postProcess: Process {
-        return { proccessed, output in
-            guard output.contains(.hash) else { return proccessed }
-            var mutable = proccessed
+        return { processed, output in
+            guard output.contains(.hash) else { return processed }
+            var mutable = processed
             mutable.removeAll(where: { $0.key == Atom.CodingKeys.serializer.rawValue })
             return mutable
         }

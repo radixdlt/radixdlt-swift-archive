@@ -42,7 +42,7 @@ public extension RadixHashable where Self: DSONEncodable {
         do {
             return RadixHash(unhashedData: try toDSON(output: .hash))
         } catch {
-            incorrectImplementation("Should always be able to hash, error: \(error)")
+            incorrectImplementationShouldAlwaysBeAble(to: "Create hash.", error)
         }
     }
 }

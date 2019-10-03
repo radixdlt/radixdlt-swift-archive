@@ -59,7 +59,7 @@ public protocol DictionaryEncodable: Encodable, DictionaryConvertible {
 
 public typealias DictionaryCodable = DictionaryDecodable & DictionaryEncodable
 
-extension String: PrefixedJsonEncodable {
+extension String: PrefixedJSONEncodable {
     public var prefixedString: PrefixedStringWithValue {
         return PrefixedStringWithValue(value: self, prefix: .string)
     }
@@ -74,7 +74,7 @@ public extension DictionaryEncodable where Key: StringRepresentable {
     }
 }
 
-public extension DictionaryEncodable where Value: PrefixedJsonEncodable {
+public extension DictionaryEncodable where Value: PrefixedJSONEncodable {
     static var valueEncoder: (Value) throws -> PrefixedStringWithValue {
         return {
             $0.prefixedString
@@ -88,7 +88,7 @@ public extension Encodable where Self: DictionaryEncodable {
         let map = try [String: String](uniqueKeysWithValues: dictionary.map {
             (
                 try Self.keyEncoder($0.key),
-                try Self.valueEncoder($0.value).identifer
+                try Self.valueEncoder($0.value).identifier
             )
         })
         try container.encode(map)

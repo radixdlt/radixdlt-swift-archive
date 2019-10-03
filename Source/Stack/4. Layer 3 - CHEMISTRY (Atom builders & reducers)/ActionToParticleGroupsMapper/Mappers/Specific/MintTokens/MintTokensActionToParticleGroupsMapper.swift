@@ -154,7 +154,7 @@ private extension FungibleParticleTransitioner where From == UnallocatedTokensPa
         } catch Error.notEnoughFungibles(_, let balance) {
             
             guard let currentSupply = try? Supply(subtractingFromMax: balance) else {
-                incorrectImplementation("Should alsways be able to derive current supply.")
+                incorrectImplementationShouldAlwaysBeAble(to: "Derive current supply.")
             }
             
             throw MintError.tokenOverMint(

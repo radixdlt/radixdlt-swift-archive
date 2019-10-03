@@ -28,7 +28,7 @@ import Foundation
 
 /// `EUID` is an abbreviation for `Extended Unique Identifier`, and holds a 128 bit int
 public struct EUID:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     StringRepresentable,
     DataInitializable,
     CBORDataConvertible,
@@ -50,7 +50,7 @@ public struct EUID:
     }
 }
 
-// MARK: - Convenience Initializers
+// MARK: - Convenience Initialisers
 public extension EUID {
 
     init(value: Value) throws {
@@ -142,7 +142,7 @@ public extension EUID {
     }
 }
 
-// MARK: - PrefixedJsonDecodable
+// MARK: - PrefixedJSONDecodable
 public extension EUID {
     static let jsonPrefix: JSONPrefix = .euidHex
 }

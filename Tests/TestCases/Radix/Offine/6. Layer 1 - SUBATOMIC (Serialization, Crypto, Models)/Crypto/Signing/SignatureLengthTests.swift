@@ -36,7 +36,7 @@ class SignatureLengthTests: XCTestCase {
         // UTF8 encoding of some randomly generated UUID string...
         let unhashedDataHex: HexString = "3833323861653832383165383465396538656461313432636130646363623761"
         let unhashedData = unhashedDataHex.asData
-        let hashedData = Sha256Hasher().sha256(of: unhashedData)
+        let hashedData = SHA256Hasher().sha256(of: unhashedData)
         XCTAssertEqual(hashedData.hex, "8ba38dc358bb67bdaa3088e996efb9c328bfcf08792aaf22a8875dea7c2ea951")
 
         do {

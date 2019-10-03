@@ -46,11 +46,11 @@ public extension SpunParticleContainer {
     }
 }
 
-public protocol InvertableSpunParticleConvertible {
+public protocol InvertibleSpunParticleConvertible {
     func invertedSpin() -> Self
 }
 
-public struct SpunParticle<Particle>: SpunParticleContainer, InvertableSpunParticleConvertible, Throwing where Particle: ParticleConvertible {
+public struct SpunParticle<Particle>: SpunParticleContainer, InvertibleSpunParticleConvertible, Throwing where Particle: ParticleConvertible {
     
     public let spin: Spin
     public let particle: Particle

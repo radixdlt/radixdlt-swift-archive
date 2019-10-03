@@ -120,8 +120,8 @@ public extension ExpressibleBySubatomicParts where Self: Atomic {
     }
     
     var postProcess: Process {
-        return { proccessed, _ in
-            return proccessed
+        return { processed, _ in
+            return processed
         }
     }
 }

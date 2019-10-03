@@ -39,7 +39,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         
         aliceIdentity = AbstractIdentity()
         
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostSingleNode, identity: aliceIdentity)
+        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
         
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: .init())
@@ -52,7 +52,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         XCTAssertTrue(
             application.createToken(supply: .mutableZeroSupply)
                 .result
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         guard let transaction = application.observeMyTransactions().blockingTakeFirst(timeout: 1) else {
@@ -74,7 +74,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         XCTAssertTrue(
             application.createToken(supply: .mutable(initial: 123))
                 .result
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         guard let transaction = application.observeMyTransactions().blockingTakeFirst(timeout: 1) else {
@@ -104,7 +104,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
             application.createToken(supply: .mutable(initial: 10))
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         XCTAssertTrue(
@@ -115,7 +115,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
                 amount: 5,
                 message: "For taxi fare"
             )
-            .blockingWasSuccessfull(timeout: .enoughForPOW)
+            .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions
@@ -144,12 +144,12 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
             application.createToken(supply: .mutable(initial: 123))
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         XCTAssertTrue(
             //  WHEN: Alice makes a transaction containing a single BurnTokensAction of FooToken
-            application.burnTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            application.burnTokens(amount: 23, ofType: fooToken).blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions
@@ -173,12 +173,12 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
             application.createToken(supply: .mutableZeroSupply)
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         XCTAssertTrue(
             //  WHEN: Alice makes a transaction containing a single MintTokensAction of FooToken
-            application.mintTokens(amount: 23, ofType: fooToken).blockingWasSuccessfull(timeout: .enoughForPOW)
+            application.mintTokens(amount: 23, ofType: fooToken).blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions
@@ -199,7 +199,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         // WHEN Alice observes her transactions after having made one with a single `SendMessageAction`
         XCTAssertTrue(
             application.sendEncryptedMessage("Hey Bob, this is secret!", to: bob)
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions
@@ -225,7 +225,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         // WHEN Alice observes her transactions after having made one with a single `PutUniqueIdAction`
         XCTAssertTrue(
             application.putUnique(string: "Foobar")
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         // WHEN: and observes her transactions
@@ -251,7 +251,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
             application.createToken(supply: .mutableZeroSupply)
         
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         //  WHEN: Alice makes a transaction containing 2 MintTokensAction of FooToken and 2 PutUnique and observes her transactions
@@ -264,7 +264,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
             
         XCTAssertTrue(
             application.send(transaction: newTransaction)
-                .blockingWasSuccessfull(timeout: 40)
+                .blockingWasSuccessful(timeout: 40)
         )
         
         // WHEN: and observes her transactions
@@ -304,7 +304,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 35))
                 
         XCTAssertTrue(
-            tokenCreation.blockingWasSuccessfull(timeout: .enoughForPOW)
+            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         let mintAndUniqueTx = Transaction {
@@ -315,7 +315,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         XCTAssertTrue(
             application.send(transaction: mintAndUniqueTx)
                 // THEN: the Transaction is successfully sent
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         let burnAndUniqueTx = Transaction {
@@ -326,7 +326,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         XCTAssertTrue(
             application.send(transaction: burnAndUniqueTx)
                 // THEN: the Transaction is successfully sent
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         let onlyUniqueTx = Transaction {
@@ -336,7 +336,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         XCTAssertTrue(
             application.send(transaction: onlyUniqueTx)
                 // THEN: the Transaction is successfully sent
-                .blockingWasSuccessfull(timeout: .enoughForPOW)
+                .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
         

@@ -27,7 +27,7 @@ import Foundation
 // swiftlint:disable colon
 
 public struct StringValue:
-    PrefixedJsonCodable,
+    PrefixedJSONCodable,
     CBORStringConvertible,
     DSONEncodable,
     StringConvertible,

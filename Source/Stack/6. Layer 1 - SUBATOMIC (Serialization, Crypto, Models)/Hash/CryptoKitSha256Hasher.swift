@@ -32,7 +32,7 @@ public extension CryptoKit.Digest {
 extension SHA256.Digest: DataConvertible {}
 extension SHA512.Digest: DataConvertible {}
 
-public struct CryptoKitSha256Hasher: Sha256Hashing {
+public struct CryptoKitSha256Hasher: SHA256Hashing {
     public init() {}
     public func sha256(of data: Data) -> Data {
         return SHA256.hash(data: data).asData

@@ -25,7 +25,7 @@
 import Foundation
 import CryptoSwift
 
-public struct Sha512TwiceHasher: Sha512TwiceHashing {
+public struct SHA512TwiceHasher: SHA512TwiceHashing {
     public init() {}
     public func sha512Twice(of data: Data) -> Data {
         return data.sha512().sha512()
