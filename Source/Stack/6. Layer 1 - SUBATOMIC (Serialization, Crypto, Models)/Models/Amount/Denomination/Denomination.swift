@@ -30,7 +30,7 @@ import Foundation
 ///
 /// [1]: https://en.wikipedia.org/wiki/Metric_prefix#List_of_SI_prefixes
 ///
-public struct Denomination: CustomStringConvertible {
+public struct Denomination: Hashable, CustomStringConvertible {
     
     /// The important value, the exponent to raise `10` to the power of, e.g. the decimal value of this denomination value is `10^{exponent}`
     public let exponent: Int
@@ -52,6 +52,12 @@ public struct Denomination: CustomStringConvertible {
 public extension Denomination {
     enum Error: Swift.Error, Equatable {
         case exponentMustBeGreaterThanOrEqualTo(min: Int)
+    }
+}
+
+public extension Denomination {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(exponent)
     }
 }
 

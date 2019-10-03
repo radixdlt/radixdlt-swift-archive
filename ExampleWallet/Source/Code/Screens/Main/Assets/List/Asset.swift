@@ -32,19 +32,12 @@ struct Asset {
     
     init(tokenBalance: TokenBalance) {
         self.token = tokenBalance.token
-//        self.balance = TokenUnitConversions.subunitsToUnits(<#T##subunits: NonNegativeAmountConvertible##NonNegativeAmountConvertible#>)
-        self.balance = tokenBalance.amount.convertedFromSubunits()
+        self.balance = tokenBalance.amount
     }
 }
 
 extension Asset: Swift.Identifiable {
     var id: ResourceIdentifier {
         return token.tokenDefinitionReference
-    }
-}
-
-extension NonNegativeAmountConvertible {
-    func convertedFromSubunits() -> Self {
-        return TokenUnitConversions.subunitsToUnits(self)
     }
 }
