@@ -68,7 +68,7 @@ private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date)
     let invertedSpunTransferrableTokensParticles = spunTransferrableTokensParticles.invertedSpin()
     
     let signedAmount = SignedAmount.fromSpunTransferrableTokens(particles: invertedSpunTransferrableTokensParticles)
-    guard let positiveAmount = try? PositiveAmount(signedAmount: signedAmount) else { return nil }
+    guard let positiveAmount = try? PositiveAmount(signed: signedAmount) else { return nil }
 
     return TransferTokensAction(
         from: sender,

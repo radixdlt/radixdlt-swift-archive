@@ -61,12 +61,11 @@ private extension CreateTokenActionToParticleGroupsMapper {
             unallocated.withSpin(.up)
         ]
         
-        let initialSupply = initialSupplyDefinition.initialSupply
-        guard let positiveInitialSupply = initialSupply.positiveAmount else {
+        guard let positiveInitialSupplyAmount = try? PositiveAmount(unrelated: initialSupplyDefinition.initialSupply) else {
             return [tokenCreationGroup]
         }
         
-        guard let minted = try? TransferrableTokensParticle(mutableSupplyTokenDefinitionParticle: mutableSupplyToken, amount: positiveInitialSupply) else {
+        guard let minted = try? TransferrableTokensParticle(mutableSupplyTokenDefinitionParticle: mutableSupplyToken, amount: positiveInitialSupplyAmount) else {
             incorrectImplementation("Should not be able to init CreateTokenAction with non matching granularity and amount.")
         }
         
@@ -75,7 +74,7 @@ private extension CreateTokenActionToParticleGroupsMapper {
             minted.withSpin(.up)
         ]
         
-        if let positiveLeftOverSupply = try? PositiveSupply(subtractedFromMax: initialSupply) {
+        if let positiveLeftOverSupply = try? PositiveSupply(subtractedFromMax: positiveInitialSupplyAmount) {
             
             let unallocatedFromLeftOverSupply = UnallocatedTokensParticle(
                 mutableSupplyTokenDefinitionParticle: mutableSupplyToken,
@@ -95,7 +94,7 @@ private extension CreateTokenActionToParticleGroupsMapper {
     func fixedSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
         let initialSupplyDefinition = try initialSupplyDefinitionFrom(action: action)
         
-        let positiveSupply = try PositiveSupply(supply: initialSupplyDefinition.initialSupply)
+        let positiveSupply = try PositiveSupply(related: initialSupplyDefinition.initialSupply)
         
         let fixedSupplyToken = FixedSupplyTokenDefinitionParticle(createTokenAction: action, positiveSupply: positiveSupply)
         let rriParticle = ResourceIdentifierParticle(token: fixedSupplyToken)

@@ -62,7 +62,7 @@ private extension TokenDefinitionsState {
         
         let existingValue = valueFor(identifier: rri)
         let existingSupplyOrMax = existingValue?.supply ?? Supply.max
-        let updatedSupply = try existingSupplyOrMax.subtracting(unallocatedTokensParticle.amount)
+        let updatedSupply = try existingSupplyOrMax.subtracting(subtrahend: unallocatedTokensParticle.amount)
         
         switch existingValue {
         case .none, .some(.justSupply):

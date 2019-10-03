@@ -45,7 +45,7 @@ internal extension TransferrableTokensParticle {
     ) throws {
     
         try self.init(
-            amount: positiveSupply.amount,
+            amount: PositiveAmount(other: positiveSupply),
             address: fixedSupplyTokenDefinitionParticle.address,
             tokenDefinitionReference: fixedSupplyTokenDefinitionParticle.tokenDefinitionReference,
             permissions: nil,
@@ -74,7 +74,7 @@ internal extension TransferrableTokensParticle {
         address: Address
     ) throws {
         
-        let positiveAmount = try PositiveAmount(nonNegative: nonNegativeAmount)
+        let positiveAmount = try PositiveAmount(related: nonNegativeAmount)
         
         try self.init(
             transferrableTokensParticle: transferrableTokensParticle,
@@ -102,7 +102,7 @@ internal extension TransferrableTokensParticle {
         amount nonNegativeAmount: NonNegativeAmount
     ) throws {
         
-        let positiveAmount = try PositiveAmount(nonNegative: nonNegativeAmount)
+        let positiveAmount = try PositiveAmount(related: nonNegativeAmount)
         
         try self.init(
             transferrableTokensParticle: transferrableTokensParticle,
@@ -131,7 +131,7 @@ internal extension TransferrableTokensParticle {
         address: Address
     ) throws {
         
-        let positiveAmount = try PositiveAmount(nonNegative: amount)
+        let positiveAmount = try PositiveAmount(related: amount)
         
         try self.init(
             unallocatedTokensParticle: unallocatedTokensParticle,

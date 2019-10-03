@@ -50,14 +50,14 @@ class CreateTokenActionToParticleGroupsMapperTests: XCTestCase {
     }
     
     func testAssertMaxSupplySubtractedFromMaxIsZero() {
-        XCTAssertEqual(try Supply.max.subtractedAmountFromMax(), 0)
+        XCTAssertEqual(Supply.max - Supply.max, 0)
     }
     
     func testAssert100SubtractedFromMaxSupplyIsCorrectValue() {
         let hundred: Supply = 100
         XCTAssertEqual(
-            try? Supply(subtractingFromMax: hundred.amount),
-            try? Supply(nonNegativeAmount: Supply.maxAmountValue - hundred.amount)
+            try? Supply(subtractedFromMax: hundred),
+            try? Supply.max.subtracting(subtrahend: hundred)
         )
     }
 }
@@ -83,7 +83,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         case .fixed: break
         case .mutable(let maybeInitial):
             guard let mutableInitialSupply = maybeInitial,
-                mutableInitialSupply.amount > 0 else { return }
+                mutableInitialSupply > 0 else { return }
             
             XCTAssertEqual(particleGroups.count, 2)
             let mintTokenGroup = particleGroups[1]
@@ -91,7 +91,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
             assertCorrectnessMintTokenGroup(
                 mintTokenGroup,
                 tokenCreationGroup: tokenCreationGroup,
-                initialSupply: mutableInitialSupply.positiveAmount!,
+                initialSupply: try! PositiveAmount(unrelated: mutableInitialSupply),
                 createTokenAction: createTokenAction
             )
         }
@@ -112,8 +112,8 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         }
         
         let expectUnallocatedFromLeftOverSupply: Bool
-        if let leftOverSupply = try? Supply(subtractingFromMax: initialSupplyAmount.asNonNegative) {
-            expectUnallocatedFromLeftOverSupply = leftOverSupply.amount >= 1
+        if let leftOverSupply = try? Supply(subtractedFromMax: Supply(subset: initialSupplyAmount)) {
+            expectUnallocatedFromLeftOverSupply = leftOverSupply >= 1
         } else {
             expectUnallocatedFromLeftOverSupply = false
         }
@@ -143,8 +143,8 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         )
         
         XCTAssertEqual(
-            transferrableTokensParticle.amount.abs,
-            createTokenAction.supplyDefinition!.initialSupply.amount
+            transferrableTokensParticle.amount,
+            try! PositiveAmount(unrelated: createTokenAction.supplyDefinition!.initialSupply)
         )
         
         if expectUnallocatedFromLeftOverSupply {

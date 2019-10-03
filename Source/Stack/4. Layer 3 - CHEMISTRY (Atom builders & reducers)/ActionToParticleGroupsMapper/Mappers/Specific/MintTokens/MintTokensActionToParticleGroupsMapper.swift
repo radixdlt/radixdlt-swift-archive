@@ -63,7 +63,7 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
             transitionedCombiner: { $0 },
             migrator: UnallocatedTokensParticle.init(unallocatedTokensParticle:amount:),
             migratedCombiner: { $0 },
-            amountMapper: { $0.amount.amount }
+            amountMapper: { NonNegativeAmount(other: $0.amount) }
         )
         
         let spunParticles = try transitioner.particlesFrom(mint: action, upParticles: upParticles)
@@ -96,7 +96,7 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
         
         let mintAmount = mintAction.amount
         let granularity = mutableSupplyTokensParticle.granularity
-        guard mintAmount.isExactMultipleOfGranularity(granularity) else {
+        guard mintAmount.isMultiple(of: granularity) else {
             throw Error.amountNotMultipleOfGranularity(
                 token: rri,
                 triedToMintAmount: mintAmount,
@@ -150,10 +150,10 @@ private extension FungibleParticleTransitioner where From == UnallocatedTokensPa
         
         let transition: Transition
         do {
-            transition = try self.transition(unconsumedFungibles: unallocatedTokensParticles, toAmount: mint.amount.asNonNegative)
+            transition = try self.transition(unconsumedFungibles: unallocatedTokensParticles, toAmount: NonNegativeAmount(subset: mint.amount))
         } catch Error.notEnoughFungibles(_, let balance) {
             
-            guard let currentSupply = try? Supply(subtractingFromMax: balance) else {
+            guard let currentSupply = try? Supply(subtractedFromMax: balance) else {
                 incorrectImplementationShouldAlwaysBeAble(to: "Derive current supply.")
             }
             

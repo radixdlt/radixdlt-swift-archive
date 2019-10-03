@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,27 +23,11 @@
 //
 
 import Foundation
-@testable import RadixSDK
-import XCTest
 
-class SpinAmountArithmeticTests: XCTestCase {
-    func testThatUpSpinTimesPlusOneEqualsPlusOne() {
-        let plusOne: PositiveAmount = 1
-        XCTAssertEqual(Spin.up * plusOne, 1)
-    }
-    
-    func testThatDownSpinTimesPlusOneEqualsMinusOne() {
-        let plusOne: PositiveAmount = 1
-        XCTAssertEqual(Spin.down * plusOne, -1)
-    }
-    
-    func testThatUpSpinTimesMinusOneEqualsMinusOne() {
-        let minusOne: SignedAmount = -1
-        XCTAssertEqual(Spin.up * minusOne, -1)
-    }
-    
-    func testThatDownSpinTimesMinusOneEqualsPlusOne() {
-        let minusOne: SignedAmount = -1
-        XCTAssertEqual(Spin.down * minusOne, 1)
+public extension Comparable {
+    static func compare<C>(_ lhs: Self, _ rhs: Self, keyPath: KeyPath<Self, C>, _ comparison: (C, C) -> Bool) -> Bool where C: Comparable {
+        let lhsValue = lhs[keyPath: keyPath]
+        let rhsValue = rhs[keyPath: keyPath]
+        return comparison(lhsValue, rhsValue)
     }
 }

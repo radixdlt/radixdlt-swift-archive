@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,16 +24,33 @@
 
 import Foundation
 
-public extension Amount {
-    var isZero: Bool {
-        return sign.isZero
+public protocol ValueBound where Magnitude.Magnitude == Magnitude {
+    associatedtype Magnitude: MagnitudeType
+    static var isSigned: Bool { get }
+    
+    /// Greatest possible magnitude measured in the smallest possible `Denomination` (`Denomination.minExponent`)
+    static var greatestFiniteMagnitude: Magnitude { get }
+    
+    /// Smallest possible magnitude measured in the smallest possible `Denomination` (`Denomination.minExponent`)
+    static var leastNormalMagnitude: Magnitude { get }
+    
+    static func contains(value: Magnitude) throws
+}
+
+public extension ValueBound {
+    static var isSigned: Bool { Magnitude.isSigned }
+ 
+    static func contains(value: Magnitude) throws {
+        if value > Self.greatestFiniteMagnitude { throw AmountError.valueTooBig }
+        if value < Self.leastNormalMagnitude { throw AmountError.valueTooSmall }
+        // all is well
     }
     
-    var isPositive: Bool {
-        return sign.isPositive
-    }
-    
-    var isNegative: Bool {
-        return sign.isNegative
-    }
+    static var leastNormalMagnitude: Magnitude { 0 }
+}
+
+public enum AmountError: Swift.Error, Equatable {
+    case valueTooBig
+    case valueTooSmall
+    case valueCannotBeNegative
 }

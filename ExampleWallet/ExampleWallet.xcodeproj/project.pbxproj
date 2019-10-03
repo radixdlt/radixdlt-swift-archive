@@ -127,11 +127,11 @@
 		48E1A5F7232170F1009A34C6 /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E1A5F6232170F1009A34C6 /* Wallet.swift */; };
 		48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */; };
 		48FC13232317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13222317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift */; };
+		E6278018233E473D008F2857 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E6278017233E473D008F2857 /* Kingfisher */; };
+		E627801A233E473D008F2857 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = E6278019233E473D008F2857 /* KingfisherSwiftUI */; };
 		E6694EFA233A399400143AC8 /* LoremIpsum.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6694EF9233A399400143AC8 /* LoremIpsum.swift */; };
 		E6694EFC233A5AEC00143AC8 /* FaucetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6694EFB233A5AEC00143AC8 /* FaucetService.swift */; };
 		E690CF7C23391E8F00099C48 /* CreateTokenScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E690CF7B23391E8F00099C48 /* CreateTokenScreen.swift */; };
-		E690CF7F233A165F00099C48 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E690CF7E233A165F00099C48 /* Kingfisher */; };
-		E690CF81233A165F00099C48 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = E690CF80233A165F00099C48 /* KingfisherSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -301,7 +301,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E690CF81233A165F00099C48 /* KingfisherSwiftUI in Frameworks */,
+				E627801A233E473D008F2857 /* KingfisherSwiftUI in Frameworks */,
 				48A767E72316ACB3004949D7 /* KeychainSwift in Frameworks */,
 				48A9601E231006200074AC26 /* RadixSDK.framework in Frameworks */,
 				4802E44C231010B5007EC847 /* RxBlocking.framework in Frameworks */,
@@ -316,7 +316,7 @@
 				4802E456231010B5007EC847 /* BitcoinKit.framework in Frameworks */,
 				48BE083A23152A53008435F5 /* QGrid in Frameworks */,
 				4802E457231010B5007EC847 /* Starscream.framework in Frameworks */,
-				E690CF7F233A165F00099C48 /* Kingfisher in Frameworks */,
+				E6278018233E473D008F2857 /* Kingfisher in Frameworks */,
 				4802E458231010B5007EC847 /* RxSwift.framework in Frameworks */,
 				4802E459231010B5007EC847 /* SwiftyBeaver.framework in Frameworks */,
 			);
@@ -853,8 +853,8 @@
 			packageProductDependencies = (
 				48BE083923152A53008435F5 /* QGrid */,
 				48A767E62316ACB3004949D7 /* KeychainSwift */,
-				E690CF7E233A165F00099C48 /* Kingfisher */,
-				E690CF80233A165F00099C48 /* KingfisherSwiftUI */,
+				E6278017233E473D008F2857 /* Kingfisher */,
+				E6278019233E473D008F2857 /* KingfisherSwiftUI */,
 			);
 			productName = "SwiftUI-Wallet";
 			productReference = 48092508230AC2A50056DB28 /* ExampleWallet.app */;
@@ -932,7 +932,7 @@
 			packageReferences = (
 				48BE083823152A52008435F5 /* XCRemoteSwiftPackageReference "QGrid" */,
 				48A767E52316ACB3004949D7 /* XCRemoteSwiftPackageReference "keychain-swift" */,
-				E690CF7D233A165F00099C48 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				E6278016233E473D008F2857 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 48092509230AC2A50056DB28 /* Products */;
 			projectDirPath = "";
@@ -1452,12 +1452,12 @@
 				minimumVersion = 0.1.2;
 			};
 		};
-		E690CF7D233A165F00099C48 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+		E6278016233E473D008F2857 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
-				kind = revision;
-				revision = 25437551dfccbc9ceeaf9297fd95b480ff1cc5de;
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1473,14 +1473,14 @@
 			package = 48BE083823152A52008435F5 /* XCRemoteSwiftPackageReference "QGrid" */;
 			productName = QGrid;
 		};
-		E690CF7E233A165F00099C48 /* Kingfisher */ = {
+		E6278017233E473D008F2857 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E690CF7D233A165F00099C48 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			package = E6278016233E473D008F2857 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
 		};
-		E690CF80233A165F00099C48 /* KingfisherSwiftUI */ = {
+		E6278019233E473D008F2857 /* KingfisherSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E690CF7D233A165F00099C48 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			package = E6278016233E473D008F2857 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = KingfisherSwiftUI;
 		};
 /* End XCSwiftPackageProductDependency section */

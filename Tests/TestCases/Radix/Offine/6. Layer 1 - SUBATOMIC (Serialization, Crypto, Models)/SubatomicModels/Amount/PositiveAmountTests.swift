@@ -28,7 +28,7 @@ import XCTest
 
 class PositiveAmountTests: XCTestCase {
     func testPositiveAmount256BitMaxValue() {
-        XCTAssertEqual(PositiveAmount.maxValue256Bits.hex, String(repeating: "f", count: 64))
+        XCTAssertEqual(PositiveAmount.max.hex, String(repeating: "f", count: 64))
     }
     
     func testAdd() {
@@ -65,26 +65,5 @@ class PositiveAmountTests: XCTestCase {
         var a: PositiveAmount = 9
         a -= 7
         XCTAssertEqual(a, 2)
-    }
-    
-    func testNegated() {
-        let a: PositiveAmount = 3
-        let negated: SignedAmount = a.negated()
-        XCTAssertEqual(negated, -3)
-        XCTAssertEqual(negated.negated(), 3)
-    }
-    
-    func testAbs() {
-        let a: PositiveAmount = 3
-        XCTAssertEqual(a.abs.magnitude, a.magnitude)
-    }
-    
-    func testThatZeroThrows() {
-        XCTAssertThrowsError(try PositiveAmount(validating: 0), "Should not be able to create a Positive amount from `0`") { error in
-            guard let amountError = error as? PositiveAmount.Error else {
-                return XCTFail("Wrong Error type")
-            }
-            XCTAssertEqual(amountError, PositiveAmount.Error.amountCannotBeZero)
-        }
     }
 }

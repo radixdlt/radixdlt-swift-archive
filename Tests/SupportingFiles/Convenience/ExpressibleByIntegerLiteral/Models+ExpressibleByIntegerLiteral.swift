@@ -25,17 +25,17 @@
 import Foundation
 @testable import RadixSDK
 
-// MARK: - ExpressibleByIntegerLiteral
-extension Granularity: ExpressibleByIntegerLiteral {}
-public extension Granularity {
-    init(integerLiteral int: UInt) {
-        do {
-            try self.init(int: int)
-        } catch {
-            fatalError("Passed bad value, error: \(error), value: \(int)")
-        }
-    }
-}
+//// MARK: - ExpressibleByIntegerLiteral
+//extension Granularity: ExpressibleByIntegerLiteral {}
+//public extension Granularity {
+//    init(integerLiteral int: UInt) {
+//        do {
+//            try self.init(int: int)
+//        } catch {
+//            fatalError("Passed bad value, error: \(error), value: \(int)")
+//        }
+//    }
+//}
 
 // MARK: - ExpressibleByIntegerLiteral
 extension EUID: ExpressibleByIntegerLiteral {}
@@ -49,29 +49,29 @@ public extension EUID {
     }
 }
 
-// MARK: - ExpressibleByIntegerLiteral
-extension Supply: ExpressibleByIntegerLiteral {}
-public extension Supply {
-    init(integerLiteral unvalidated: Int) {
-        do {
-            let nonNegativeAmount = try NonNegativeAmount(integer: unvalidated)
-            try self.init(nonNegativeAmount: nonNegativeAmount)
-        } catch {
-            badLiteralValue(unvalidated, error: error)
-        }
-    }
-}
-
-
-// MARK: - ExpressibleByIntegerLiteral
-extension PositiveSupply: ExpressibleByIntegerLiteral {}
-public extension PositiveSupply {
-    init(integerLiteral unvalidated: Int) {
-        do {
-            let amount = try PositiveAmount(integer: unvalidated)
-            try self.init(amount: amount)
-        } catch {
-            badLiteralValue(unvalidated, error: error)
-        }
-    }
-}
+//// MARK: - ExpressibleByIntegerLiteral
+//extension Supply: ExpressibleByIntegerLiteral {}
+//public extension Supply {
+//    init(integerLiteral unvalidated: Int) {
+//        do {
+//            let nonNegativeAmount = try NonNegativeAmount(integer: unvalidated)
+//            try self.init(nonNegativeAmount: nonNegativeAmount)
+//        } catch {
+//            badLiteralValue(unvalidated, error: error)
+//        }
+//    }
+//}
+//
+//
+//// MARK: - ExpressibleByIntegerLiteral
+//extension PositiveSupply: ExpressibleByIntegerLiteral {}
+//public extension PositiveSupply {
+//    init(integerLiteral unvalidated: Int) {
+//        do {
+//            let amount = try PositiveAmount(integer: unvalidated)
+//            try self.init(amount: amount)
+//        } catch {
+//            badLiteralValue(unvalidated, error: error)
+//        }
+//    }
+//}

@@ -48,7 +48,7 @@ public extension TokenReferenceBalance {
         
         self.init(
             tokenResourceIdentifier: particle.tokenDefinitionReference,
-            amount: NonNegativeAmount(positive: particle.amount),
+            amount: NonNegativeAmount(subset: particle.amount),
             owner: particle.address
         )
     }

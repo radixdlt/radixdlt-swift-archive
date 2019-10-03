@@ -29,16 +29,15 @@ import XCTest
 class GranularityTests: XCTestCase {
     
     func testThatCannotCreateZeroGranularity() {
-        XCTAssertThrowsSpecificError(try Granularity(int: 0), Granularity.Error.cannotBeZero)
+        XCTAssertThrowsSpecificError(try Granularity(magnitude: 0), AmountError.valueTooSmall)
     }
     
     func testAssertTooLargeThrowsError() {
         
-        let expectedError: Granularity.Error = .tooLarge(expectedAtMost: Granularity.subunitsDenominator, butGot: Granularity.subunitsDenominator + 1)
         
         XCTAssertThrowsSpecificError(
-            try Granularity(value: Granularity.subunitsDenominator + 1),
-            expectedError
+            try Granularity(magnitude: Granularity.Bound.greatestFiniteMagnitude + 1),
+            AmountError.valueTooBig
         )
     }
     

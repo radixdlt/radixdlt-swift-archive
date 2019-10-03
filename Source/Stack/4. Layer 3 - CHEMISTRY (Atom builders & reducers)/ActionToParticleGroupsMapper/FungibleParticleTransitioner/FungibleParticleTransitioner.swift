@@ -140,7 +140,7 @@ public extension FungibleParticleTransitioner {
             consumerTotal += particleAmount
             
             let amountToTransfer = min(left, particleAmount)
-            let amountToKeep = particleAmount - amountToTransfer
+            let amountToKeep: NonNegativeAmount = try particleAmount.subtracting(subtrahend: amountToTransfer)
             
             try transition(amount: amountToTransfer, fungible: unconsumedFungible)
             if amountToKeep > 0 {

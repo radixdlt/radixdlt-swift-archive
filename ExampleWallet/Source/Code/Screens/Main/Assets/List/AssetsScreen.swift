@@ -104,11 +104,11 @@ private extension AssetsScreen {
 private extension AssetsScreen {
     
     func hasUserPermission(toMint asset: Asset) -> Bool {
-        return asset.tokenBalance.token.canBeMinted(by: radix.myActiveAddress)
+        return asset.token.canBeMinted(by: radix.myActiveAddress)
     }
     
     func hasUserPermission(toBurn asset: Asset) -> Bool {
-        return asset.tokenBalance.token.canBeBurned(by: radix.myActiveAddress)
+        return asset.token.canBeBurned(by: radix.myActiveAddress)
     }
     
     func mintAsset(_ asset: Asset) {

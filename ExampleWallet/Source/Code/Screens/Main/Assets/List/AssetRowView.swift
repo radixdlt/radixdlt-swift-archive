@@ -74,11 +74,11 @@ extension AssetRowView {
 }
 
 extension AssetRowView.ViewModel {
-    private var token: TokenDefinition { asset.tokenBalance.token }
+    private var token: TokenDefinition { asset.token }
 
     var name: String { token.name.stringValue }
 
-    var balance: String { "\(asset.tokenBalance.amount.stringValue) \(token.symbol.stringValue)" }
+    var balance: String { "\(asset.balance.stringValue) \(token.symbol.stringValue)" }
 
     var iconUrl: URL? { token.iconUrl }
 }

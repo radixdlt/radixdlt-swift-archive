@@ -69,18 +69,12 @@ public final class Radix: ObservableObject {
             self.activeAccount = wallet.accountFromSimpleAccount(myNewActive)
         }
 
-        forward(function: Client.observeMyBalances) { [unowned self] myTokenBalances in
-            print("💰 my token balances updated: \(myTokenBalances)")
-            self.assets = myTokenBalances.balancePerToken.map {
-                Asset(tokenBalance: $0.value)
-            }
-        }
         
         wallet.objectWillChange.subscribe(objectWillChange).store(in: &cancellables)
-        
-        client.pull(address: myActiveAddress).disposed(by: rxDisposeBag)
-        
-        client.observeMyTokenDefinitions().subscribe(onNext: { print("✅ my token: \($0)") }).disposed(by: rxDisposeBag)
+        client.pull().disposed(by: rxDisposeBag)
+       
+        observeMyBalance()
+        observeMyMessages()
     }
 
 }
@@ -89,6 +83,8 @@ public final class Radix: ObservableObject {
 extension Radix {
     final class Debug {
         private unowned let client: Client
+        private let rxDisposeBag = DisposeBag()
+        private var cancellables = Set<AnyCancellable>()
         init(client: Client) {
             self.client = client
         }
@@ -98,6 +94,24 @@ extension Radix {
 extension Radix.Debug {
     func createToken(_ action: CreateTokenAction) -> AnyPublisher<Never, Swift.Error> {
         client.create(token: action).toCompletable().asPublisher()
+    }
+    
+    func requestTokensFromFaucet() {
+        let faucet = client.universeConfig.faucetAddress
+        print("🚰 Requesting tokens from faucet service with address: \(faucet.full)")
+        client.sendPlainTextMessage("Please give me some tokens", to: faucet)
+            .toCompletable().asPublisher().sink(
+                receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        print("⚠️ Failed requesting tokens from faucet, error: \(error)")
+                    case .finished:
+                        print("✅ Successfully requested tokens from faucet, with address: \(faucet)")
+                    }
+            },
+                receiveValue: { print("⚠️ Request tokens from faucet update: \($0)") }
+        ).store(in: &cancellables)
+        
     }
 }
 #endif
@@ -155,6 +169,43 @@ private extension Radix {
 
     var identity: AbstractIdentity {
         client.identity
+    }
+    
+    var faucetAddress: Address {
+        client.universeConfig.faucetAddress
+    }
+    
+    func observeMyBalance() {
+        forward(function: Client.observeMyBalances) { [unowned self] myTokenBalances in
+            self.assets = myTokenBalances
+                .balancePerToken
+                .map { $0.value }
+                .sorted(by: \.token.symbol)
+                .map {
+                    Asset(tokenBalance: $0)
+            }
+        }
+    }
+    
+    func observeMyMessages() {
+        func formatAddress(_ address: Address) -> String {
+            var prefix = ""
+            if address == myActiveAddress {
+                prefix = "me "
+            } else if address == faucetAddress {
+                prefix = "🚰 "
+            }
+            return "\(prefix)<\(address.short)>"
+        }
+        
+        client.observeMyMessages()
+            .subscribe(onNext: {
+                print(
+                    """
+                    📩: \(formatAddress($0.sender)) ➡️ \(formatAddress($0.recipient)): "\($0.textMessage().map { $0 } ?? "<encrypted>")"
+                    """
+                )
+            }).disposed(by: rxDisposeBag)
     }
 }
 

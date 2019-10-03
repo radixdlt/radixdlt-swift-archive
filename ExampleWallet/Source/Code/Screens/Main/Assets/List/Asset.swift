@@ -27,11 +27,17 @@ import Foundation
 import RadixSDK
 
 struct Asset {
-    let tokenBalance: TokenBalance
+    let token: TokenDefinition
+    let balance: NonNegativeAmount
+    
+    init(tokenBalance: TokenBalance) {
+        self.token = tokenBalance.token
+        self.balance = tokenBalance.amount
+    }
 }
 
 extension Asset: Swift.Identifiable {
     var id: ResourceIdentifier {
-        return tokenBalance.token.tokenDefinitionReference
+        return token.tokenDefinitionReference
     }
 }

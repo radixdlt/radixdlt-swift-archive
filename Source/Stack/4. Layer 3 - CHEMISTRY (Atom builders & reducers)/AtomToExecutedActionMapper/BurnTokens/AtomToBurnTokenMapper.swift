@@ -53,7 +53,7 @@ private func burnTokensActionFrom(particleGroup: ParticleGroup) -> BurnTokensAct
     let invertedSpunTransferrableTokensParticles = spunTransferrableTokensParticles.invertedSpin()
     
     let signedAmount = SignedAmount.fromSpunTransferrableTokens(particles: invertedSpunTransferrableTokensParticles)
-    guard let positiveAmount = try? PositiveAmount(signedAmount: signedAmount) else { return nil }
+    guard let positiveAmount = try? PositiveAmount(signed: signedAmount) else { return nil }
     return BurnTokensAction(tokenDefinitionReference: rri, amount: positiveAmount, burner: burner)
 }
 

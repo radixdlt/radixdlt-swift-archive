@@ -127,11 +127,19 @@ private extension CreateTokenScreen {
                     }
                 }.pickerStyle(SegmentedPickerStyle())
                 
-                if self.viewModel.input.supplyType == .mutable {
-                    tokenPermissionsView
+                Picker("Denomination", selection: $viewModel.input.denomination) {
+                    ForEach(Denomination.allCases) {
+                        Text($0.name).tag($0)
+                    }
                 }
                 
                 TextField(self.viewModel.supplyHint, text: $viewModel.input.supply)
+                
+                Text("Supply: '\(self.viewModel.supplyFormatted)'")
+                
+                if self.viewModel.input.supplyType == .mutable {
+                    tokenPermissionsView
+                }
             }
         }
     }
@@ -195,10 +203,12 @@ extension CreateTokenScreen.ViewModel {
         @Published fileprivate var symbol: String = ""
         @Published fileprivate var description: String = loremIpsum(.firstFiveWords)
         @Published fileprivate var imageUrl: String = "https://img.icons8.com/color/64/000000/swift.png"
-        @Published fileprivate var granularity: String = "\(Granularity.default.decimalString)"
+        @Published fileprivate var granularity: String = "\(Granularity.default)"
         
         @Published fileprivate var supplyType: SupplyType = .mutable
         @Published fileprivate var supply: String = ""
+        
+        @Published fileprivate var denomination: Denomination = .whole
         
         @Published fileprivate var anyoneHasPermissionToBurn = false
         @Published fileprivate var anyoneHasPermissionToMint = false
@@ -213,7 +223,7 @@ extension CreateTokenScreen.ViewModel {
             case name(Name.Error)
             case symbol(Symbol.Error)
             case description(Description.Error)
-            case granularity(Granularity.Error)
+            case granularity(AmountError)
             case supply(SupplyFromInputError)
             case iconUrlStringNotAUrl
         }
@@ -288,6 +298,14 @@ extension CreateTokenScreen.ViewModel.Error.InputError {
 internal extension CreateTokenScreen.ViewModel {
     var supplyHint: String { input.supplyType.hint }
     
+    var supplyFormatted: String {
+        do {
+            return try makeSupplyAmount(magnitudeString: input.supply, denomination: input.denomination).description
+        } catch {
+            return input.supply
+        }
+    }
+    
     var canCreate: Bool {
         do {
             _ = try makeAction()
@@ -326,13 +344,40 @@ internal extension CreateTokenScreen.ViewModel {
  
 }
 private extension CreateTokenScreen.ViewModel {
+    
+    func makeSupplyAmount(magnitudeString: String, denomination: Denomination) throws -> NonNegativeAmount {
+        return try NonNegativeAmount(string: magnitudeString, denomination: denomination)
+    }
+    
+    func makeSupply(nonNegativeAmount: NonNegativeAmount, type: SupplyType) throws -> CreateTokenAction.InitialSupply.SupplyTypeDefinition {
+        do {
+            switch type {
+            case .fixed:
+                let positiveSupply = try PositiveSupply(unrelated: nonNegativeAmount)
+                return .fixed(to: positiveSupply)
+            case .mutable:
+                let supply = try Supply(unrelated: nonNegativeAmount)
+                return .mutable(initial: supply)
+            }
+        } catch let error as Supply.Error {
+            throw Error.inputError(.supply(.supplyError(error)))
+        } catch let positiveAmountError as PositiveAmount.Error {
+            throw Error.inputError(.supply(.positiveAmountError(positiveAmountError)))
+        } catch let nonNegativeAmountError as NonNegativeAmount.Error {
+            throw Error.inputError(.supply(.nonNegativeAmountError(nonNegativeAmountError)))
+        } catch { unexpectedlyMissedToCatch(error: error) }
+    }
+    
     func makeAction() throws -> CreateTokenAction {
-        try CreateTokenAction(
+        
+        let supplyAmount = try makeSupplyAmount(magnitudeString: input.supply, denomination: input.denomination)
+        
+        return try CreateTokenAction(
             creator: myAddress,
             name: try name(),
             symbol: try symbol(),
             description: try description(),
-            supply: try makeSupply(amount: input.supply, type: input.supplyType),
+            supply: try makeSupply(nonNegativeAmount: supplyAmount, type: input.supplyType),
             iconUrl: iconUrl,
             granularity: try granularity(),
             permissions: tokenPermissions
@@ -380,7 +425,7 @@ private extension CreateTokenScreen.ViewModel {
     func granularity() throws -> Granularity {
         do {
             return try Granularity(unvalidated: input.granularity)
-        } catch let error as Granularity.Error {
+        } catch let error as AmountError {
             throw Error.inputError(.granularity(error))
         } catch { unexpectedlyMissedToCatch(error: error) }
     }
@@ -390,27 +435,6 @@ private extension CreateTokenScreen.ViewModel {
     }
     
     var iconUrl: URL? { URL(string: input.imageUrl) }
-    
-    func makeSupply(amount amountString: String, type: SupplyType) throws -> CreateTokenAction.InitialSupply.SupplyTypeDefinition {
-        do {
-            switch type {
-            case .fixed:
-                let amount = try PositiveAmount(string: amountString)
-                let positiveSupply = try PositiveSupply(amount: amount)
-                return .fixed(to: positiveSupply)
-            case .mutable:
-                let amount = try NonNegativeAmount(string: amountString)
-                let supply = try Supply(nonNegativeAmount: amount)
-                return .mutable(initial: supply)
-            }
-        } catch let error as Supply.Error {
-            throw Error.inputError(.supply(.supplyError(error)))
-        } catch let positiveAmountError as PositiveAmount.Error {
-            throw Error.inputError(.supply(.positiveAmountError(positiveAmountError)))
-        } catch let nonNegativeAmountError as NonNegativeAmount.Error {
-            throw Error.inputError(.supply(.nonNegativeAmountError(nonNegativeAmountError)))
-        } catch { unexpectedlyMissedToCatch(error: error) }
-    }
 }
 
 extension SupplyType: CaseIterable, Swift.Identifiable {
@@ -431,4 +455,8 @@ extension SupplyType: CaseIterable, Swift.Identifiable {
         case .fixed: return "Supply (required > 0)"
         }
     }
+}
+
+extension Denomination: Swift.Identifiable {
+    public var id: Int { exponent }
 }

@@ -50,6 +50,18 @@ public struct TransferTokensAction: ConsumeTokensAction {
 }
 
 public extension TransferTokensAction {
+    init(
+        from sender: AddressConvertible,
+        to recipient: AddressConvertible,
+        tokenAmount: PositiveAmount,
+        tokenResourceIdentifier: ResourceIdentifier,
+        attachment: Data? = nil
+    ) {
+        implementMe()
+    }
+}
+
+public extension TransferTokensAction {
     var user: Address { return sender }
     var nameOfAction: UserActionName { return .transferTokens }
     var identifierForTokenToConsume: ResourceIdentifier { return tokenResourceIdentifier }

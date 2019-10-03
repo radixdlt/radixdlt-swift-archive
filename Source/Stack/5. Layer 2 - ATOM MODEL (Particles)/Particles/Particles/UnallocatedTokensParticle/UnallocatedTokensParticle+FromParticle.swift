@@ -36,7 +36,7 @@ internal extension UnallocatedTokensParticle {
         ) {
         
         self.init(
-            amount: Supply(positiveSupply: positiveSupply),
+            amount: Supply(subset: positiveSupply),
             tokenDefinitionReference: mutableSupplyTokenDefinitionParticle.tokenDefinitionReference,
             permissions: mutableSupplyTokenDefinitionParticle.permissions,
             granularity: mutableSupplyTokenDefinitionParticle.granularity
@@ -61,7 +61,7 @@ internal extension UnallocatedTokensParticle {
         amount nonNegativeAmount: NonNegativeAmount
     ) throws {
         
-        let amount = try Supply(nonNegativeAmount: nonNegativeAmount)
+        let amount = try Supply(unrelated: nonNegativeAmount)
     
         self.init(
             unallocatedTokensParticle:
@@ -92,7 +92,7 @@ internal extension UnallocatedTokensParticle {
         amount nonNegativeAmount: NonNegativeAmount
     ) throws {
         
-        let amount = try Supply(nonNegativeAmount: nonNegativeAmount)
+        let amount = try Supply(unrelated: nonNegativeAmount)
         
         try self.init(
             transferrableTokensParticle: transferrableTokensParticle,

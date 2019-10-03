@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,41 +24,4 @@
 
 import Foundation
 
-/// A non negative integer representing some amount, e.g. amount of tokens to transfer.
-public struct NonNegativeAmount: NonNegativeAmountConvertible, Throwing {
-    public typealias Magnitude = BigUnsignedInt
-    public let magnitude: Magnitude
-    
-    public init(validated: Magnitude) {
-        self.magnitude = validated
-    }
-}
-
-public extension NonNegativeAmount {
-    init(positive: PositiveAmount) {
-        self.init(validated: positive.magnitude)
-    }
-    
-    static func fromTransferrableTokens(
-        particles: [TransferrableTokensParticle],
-        amountMapper: (TransferrableTokensParticle) -> NonNegativeAmount = { $0.amount.asNonNegative }
-    ) -> NonNegativeAmount {
-        return reducing(particles.map(amountMapper))
-    }
-    
-    static func reducing(_ amounts: [NonNegativeAmount]) -> NonNegativeAmount {
-        return amounts.reduce(NonNegativeAmount.zero, +)
-    }
-}
-
-// MARK: - Zero
-public extension NonNegativeAmount {
-    static var zero: NonNegativeAmount {
-        return NonNegativeAmount(validated: 0)
-    }
-}
-
-// MARK: - Throwing
-public extension NonNegativeAmount {
-    typealias Error = NonNegativeAmountError
-}
+public protocol AmountTrait {}

@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,19 +24,19 @@
 
 import Foundation
 
-public enum AmountAndSign: CustomStringConvertible {
-    case negative(BigUnsignedInt)
-    case zero
-    case positive(BigUnsignedInt)
+public protocol BinaryIntegerFromString {
+    init?<S>(_ text: S, radix: Int) where S: StringProtocol
 }
 
-// MARK: - CustomStringConvertible
-public extension AmountAndSign {
-    var description: String {
-        switch self {
-        case .negative(let negative): return "-\(negative)"
-        case .positive(let positive): return "\(positive)"
-        case .zero: return "0"
-        }
-    }
-}
+extension UInt64: BinaryIntegerFromString {}
+extension UInt32: BinaryIntegerFromString {}
+extension UInt16: BinaryIntegerFromString {}
+extension UInt8: BinaryIntegerFromString {}
+extension Int64: BinaryIntegerFromString {}
+extension Int32: BinaryIntegerFromString {}
+extension Int16: BinaryIntegerFromString {}
+extension Int8: BinaryIntegerFromString {}
+
+import BigInt
+extension BigUInt: BinaryIntegerFromString {}
+extension BigInt: BinaryIntegerFromString {}

@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,13 +24,10 @@
 
 import Foundation
 
-public extension Amount {
-    var amountAndSign: AmountAndSign {
-        let amount = abs.magnitude
-        switch sign {
-        case .negative: return .negative(amount)
-        case .positive: return .positive(amount)
-        case .zero: return .zero
-        }
-    }
+public struct UInt256Bound: ValueBound {}
+
+public extension UInt256Bound {
+    typealias Magnitude = BigUnsignedInt
+    
+    static var greatestFiniteMagnitude: Magnitude { Magnitude(2).power(256) - 1 }
 }
