@@ -24,6 +24,8 @@
 
 import Foundation
 
-public struct TokenAmountTrait: AmountTrait {}
+public struct TokenAmountTrait: AmountTrait {
+    public static let context = "TokenAmount"
+}
 
 public typealias PositiveAmount = UnsignedAmount<UInt256NonZeroBound, TokenAmountTrait>

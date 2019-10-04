@@ -28,7 +28,7 @@ import RadixSDK
 
 
 // MARK: - Identifiable
-extension Mnemonic.Strength: Swift.Identifiable {
+extension Mnemonic.Strength: Identifiable {
     var displayableString: String {
         return "#\(wordCount)"
     }
@@ -43,7 +43,7 @@ extension Mnemonic.Strength: Swift.Identifiable {
     static var max: Mnemonic.Strength { Mnemonic.Strength.allCases.last! }
 }
 
-extension Mnemonic.Language: Swift.Identifiable {
+extension Mnemonic.Language: Identifiable {
     public var id: Int {
         guard let index = Mnemonic.Language.allCases.enumerated().first(where: { $0.element.rawValue == self.rawValue })?.offset else {
             incorrectImplementationShouldAlwaysBeAble(to: "Find index of mnemonic language")

@@ -25,7 +25,7 @@
 import Foundation
 
 // MARK: - RootContent
-public enum RootContent: Int, Equatable, Swift.Identifiable {
+public enum RootContent: Int, Equatable, Identifiable {
     case main
 
     // Onboarding

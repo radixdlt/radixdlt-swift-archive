@@ -90,7 +90,7 @@ private extension Wallet {
     }
 }
 
-public struct Account: Swift.Identifiable, Hashable {
+public struct Account: Identifiable, Hashable {
     public let name: String
     public let address: Address
     private let account: HDSubAccountAtIndex

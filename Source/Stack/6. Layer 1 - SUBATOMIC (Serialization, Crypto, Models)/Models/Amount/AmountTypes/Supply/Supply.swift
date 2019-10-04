@@ -24,6 +24,8 @@
 
 import Foundation
 
-public struct SupplyAmountTrait: AmountTrait {}
+public struct SupplyAmountTrait: AmountTrait {
+    public static let context = "TokenSupply"
+}
 
 public typealias Supply = UnsignedAmount<UInt256Bound, SupplyAmountTrait>

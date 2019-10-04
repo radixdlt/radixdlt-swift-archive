@@ -30,6 +30,6 @@ extension View {
     }
 }
 
-public extension Swift.Identifiable where Self: RawRepresentable, ID == RawValue {
+public extension Identifiable where Self: RawRepresentable, ID == RawValue {
     var id: ID { rawValue }
 }

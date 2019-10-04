@@ -27,7 +27,7 @@ import SwiftUI
 
 import RadixSDK
 
-struct MnemonicWord: Swift.Identifiable, Equatable {
+struct MnemonicWord: Identifiable, Equatable {
     let id: Int
     let word: String
     init(id: Int, word: String) {

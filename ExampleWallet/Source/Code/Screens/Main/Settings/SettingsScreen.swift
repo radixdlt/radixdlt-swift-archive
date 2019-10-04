@@ -44,6 +44,9 @@ extension SettingsScreen: View {
                 Button("💰 Create token") {
                     self.isPresentingCreateTokenModal = true
                 }
+                NavigationLink(destination: NetworkScreen()) {
+                    Text("🛰 Network")
+                }
             }
             #endif
             

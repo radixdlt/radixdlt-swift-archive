@@ -45,7 +45,7 @@ extension MnemonicHintView: View {
                     .padding([.top, .bottom])
                     .padding([.leading, .trailing], 8)
                     .foregroundColor(Color.white)
-                    .background(Color.Radix.saphire)
+                    .background(Color.Radix.sapphire)
                     .cornerRadius(5)
                 }
             }
@@ -83,7 +83,7 @@ extension MnemonicHintView {
 private extension MnemonicHintView.ViewModel {
     func confirm(word: Mnemonic.Word, dueToPerfectMatch: Bool = false) {
         wordSubject.send(word.value)
-        print("confirmed word: '\(word.value)' (perfect match: \(dueToPerfectMatch))")
+//        print("confirmed word: '\(word.value)' (perfect match: \(dueToPerfectMatch))")
     }
 
     func userChangedInput(to wordInputString: String) {
@@ -105,6 +105,6 @@ private extension MnemonicHintView.ViewModel {
     }
 }
 
-extension Mnemonic.Word: Swift.Identifiable {
+extension Mnemonic.Word: Identifiable {
     public var id: String { value }
 }

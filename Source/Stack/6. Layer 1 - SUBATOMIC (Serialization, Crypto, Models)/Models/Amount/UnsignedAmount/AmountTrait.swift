@@ -24,4 +24,6 @@
 
 import Foundation
 
-public protocol AmountTrait {}
+public protocol AmountTrait {
+    static var context: String { get }
+}

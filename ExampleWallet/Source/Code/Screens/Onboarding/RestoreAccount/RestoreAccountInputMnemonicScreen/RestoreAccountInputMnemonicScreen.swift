@@ -26,6 +26,7 @@ import SwiftUI
 import RadixSDK
 import Combine
 
+/// Screen where user inputs the mnemonic used for restoration of an account
 struct RestoreAccountInputMnemonicScreen {
     @EnvironmentObject private var viewModel: ViewModel
 }
@@ -37,6 +38,7 @@ extension RestoreAccountInputMnemonicScreen: View {
             List(viewModel.inputWords) { inputMnemonicWord in
                 InputMnemonicCell(mnemonicInput: inputMnemonicWord)
             }
+            .dismissKeyboard(on: [.tap, .drag])
 
             Button("Restore") {
                 self.viewModel.confirmMnemonic()
@@ -57,12 +59,13 @@ extension RestoreAccountInputMnemonicScreen: View {
     }
 }
 
-// MARK: - VIEWMODEL
+// MARK: - ViewModel
 extension RestoreAccountInputMnemonicScreen {
     final class ViewModel: ObservableObject {
 
         fileprivate let inputWords: [MnemonicInput]
 
+        // Match against known mnemonic word list to give suggestions
         fileprivate let mnemonicWordListMatcher: MnemonicWordListMatcher
 
         fileprivate let wordCount: Int
@@ -109,20 +112,7 @@ extension RestoreAccountInputMnemonicScreen {
             inputWords.forEach({ [unowned self] in $0.objectWillChange.subscribe(self.objectWillChange).store(in: &cancellables) })
 
             #if DEBUG
-            inputWords[0].wordSubject.send("badge")
-            inputWords[1].wordSubject.send("submit")
-            inputWords[2].wordSubject.send("return")
-            inputWords[3].wordSubject.send("inflict")
-            inputWords[4].wordSubject.send("kangaroo")
-            inputWords[5].wordSubject.send("position")
-            inputWords[6].wordSubject.send("joke")
-            inputWords[7].wordSubject.send("merit")
-            inputWords[8].wordSubject.send("envelope")
-            inputWords[9].wordSubject.send("term")
-            inputWords[10].wordSubject.send("special")
-//            inputWords[11].wordSubject.send("develop")
-
-            // will create an address: "JGdYaT8VUbafwXEBSoxfitXmHvg2Xq1BhvNVi3Cxd8mNp4LazBk"
+            prefillWithWords(all: false)
             #endif
         }
 
@@ -177,3 +167,25 @@ struct NeedConfirmationOfNonChecksummedMnemonic {
         self.nonChecksummedMnemonic = nonChecksummedMnemonic
     }
 }
+
+#if DEBUG
+private extension RestoreAccountInputMnemonicScreen.ViewModel {
+    /// Menmonic which should result in an address: "JGdYaT8VUbafwXEBSoxfitXmHvg2Xq1BhvNVi3Cxd8mNp4LazBk"
+    func prefillWithWords(all: Bool = false) {
+        inputWords[0].wordSubject.send("badge")
+        inputWords[1].wordSubject.send("submit")
+        inputWords[2].wordSubject.send("return")
+        inputWords[3].wordSubject.send("inflict")
+        inputWords[4].wordSubject.send("kangaroo")
+        inputWords[5].wordSubject.send("position")
+        inputWords[6].wordSubject.send("joke")
+        inputWords[7].wordSubject.send("merit")
+        inputWords[8].wordSubject.send("envelope")
+        inputWords[9].wordSubject.send("term")
+        inputWords[10].wordSubject.send("special")
+        if all {
+            inputWords[11].wordSubject.send("develop")
+        }
+    }
+}
+#endif

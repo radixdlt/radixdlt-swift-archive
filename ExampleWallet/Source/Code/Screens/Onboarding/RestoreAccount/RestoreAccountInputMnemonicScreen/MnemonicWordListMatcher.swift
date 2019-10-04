@@ -70,7 +70,7 @@ extension MnemonicWordListMatcher {
             searchResult = .candidates(result)
         }
 
-        print("🔎: '\(needle)' => \(searchResult)")
+//        print("🔎: '\(needle)' => \(searchResult)")
         return searchResult
     }
 }

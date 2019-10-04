@@ -27,7 +27,7 @@ import SwiftUI
 import Combine
 
 // MARK: - MnemonicInput (CellViewModel)
-final class MnemonicInput: ObservableObject, Swift.Identifiable {
+final class MnemonicInput: ObservableObject, Identifiable {
 
     let mnemonicWordListMatcher: MnemonicWordListMatcher
     let wordSubject = CurrentValueSubject<String, Never>("")

@@ -33,8 +33,14 @@ struct InputMnemonicCell {
 
     init(mnemonicInput: MnemonicInput) {
         self.id = mnemonicInput.id
-        self.viewModel = InputMnemonicViewModel(wordSubject: mnemonicInput.wordSubject, mnemonicWordListMatcher: mnemonicInput.mnemonicWordListMatcher)
+        
+        self.viewModel = InputMnemonicViewModel(
+            wordSubject: mnemonicInput.wordSubject,
+            mnemonicWordListMatcher: mnemonicInput.mnemonicWordListMatcher
+        )
+        
     }
+    
 }
 
 extension InputMnemonicCell: View {
@@ -52,7 +58,10 @@ private extension InputMnemonicCell {
     }
 
     var mnemonicHintViewModel: MnemonicHintView.ViewModel {
-        MnemonicHintView.ViewModel(wordSubject: viewModel.wordSubject, mnemonicWordListMatcher: viewModel.mnemonicWordListMatcher)
+        return MnemonicHintView.ViewModel(
+            wordSubject: viewModel.wordSubject,
+            mnemonicWordListMatcher: viewModel.mnemonicWordListMatcher
+        )
     }
 }
 
@@ -70,13 +79,13 @@ class InputMnemonicViewModel: ObservableObject {
         }
     }
 
-    private var cancellable: Cancellable?
+    private var cancellables = Set<AnyCancellable>()
 
     let objectWillChange = PassthroughSubject<Void, Never>()
 
     init(wordSubject: CurrentValueSubject<String, Never>, mnemonicWordListMatcher: MnemonicWordListMatcher) {
         self.wordSubject = wordSubject
         self.mnemonicWordListMatcher = mnemonicWordListMatcher
-        cancellable = wordSubject.removeDuplicates().eraseMapToVoid().subscribe(objectWillChange)
+        wordSubject.removeDuplicates().eraseMapToVoid().subscribe(objectWillChange).store(in: &cancellables)
     }
 }

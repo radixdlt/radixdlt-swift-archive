@@ -127,10 +127,13 @@
 		48E1A5F7232170F1009A34C6 /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E1A5F6232170F1009A34C6 /* Wallet.swift */; };
 		48E58F26230E840900E3CC86 /* EdgeSet_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */; };
 		48FC13232317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13222317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift */; };
+		E614546D234795170035A4B3 /* NetworkScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E614546C234795170035A4B3 /* NetworkScreen.swift */; };
+		E614546F234795D10035A4B3 /* AssetDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E614546E234795D10035A4B3 /* AssetDetailsScreen.swift */; };
 		E6278018233E473D008F2857 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E6278017233E473D008F2857 /* Kingfisher */; };
 		E627801A233E473D008F2857 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = E6278019233E473D008F2857 /* KingfisherSwiftUI */; };
 		E6694EFA233A399400143AC8 /* LoremIpsum.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6694EF9233A399400143AC8 /* LoremIpsum.swift */; };
 		E6694EFC233A5AEC00143AC8 /* FaucetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6694EFB233A5AEC00143AC8 /* FaucetService.swift */; };
+		E6741C5023476C91008AD736 /* DismissKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6741C4F23476C91008AD736 /* DismissKeyboard.swift */; };
 		E690CF7C23391E8F00099C48 /* CreateTokenScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E690CF7B23391E8F00099C48 /* CreateTokenScreen.swift */; };
 /* End PBXBuildFile section */
 
@@ -291,8 +294,11 @@
 		48E1A5F6232170F1009A34C6 /* Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallet.swift; sourceTree = "<group>"; };
 		48E58F25230E840900E3CC86 /* EdgeSet_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeSet_Extension.swift; sourceTree = "<group>"; };
 		48FC13222317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountInputMnemonicScreen.swift; sourceTree = "<group>"; };
+		E614546C234795170035A4B3 /* NetworkScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkScreen.swift; sourceTree = "<group>"; };
+		E614546E234795D10035A4B3 /* AssetDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDetailsScreen.swift; sourceTree = "<group>"; };
 		E6694EF9233A399400143AC8 /* LoremIpsum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoremIpsum.swift; sourceTree = "<group>"; };
 		E6694EFB233A5AEC00143AC8 /* FaucetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaucetService.swift; sourceTree = "<group>"; };
+		E6741C4F23476C91008AD736 /* DismissKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissKeyboard.swift; sourceTree = "<group>"; };
 		E690CF7B23391E8F00099C48 /* CreateTokenScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTokenScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -391,9 +397,10 @@
 			children = (
 				48E1A5F5232170E2009A34C6 /* Wallet */,
 				48E58F23230E83EC00E3CC86 /* Extensions */,
+				4844FC75230C2199003106AB /* ViewModifiers */,
 				4844FC79230C4601003106AB /* Views */,
 				48BE082823151F1C008435F5 /* DataStore */,
-				48ACA67B230AF3B000BF0029 /* Style */,
+				48ACA67B230AF3B000BF0029 /* Assets */,
 				4809257D230AC6750056DB28 /* App */,
 				4809257E230AC6830056DB28 /* Screens */,
 			);
@@ -539,14 +546,6 @@
 			path = Roboto;
 			sourceTree = "<group>";
 		};
-		4844FC6B230C20EC003106AB /* Styles */ = {
-			isa = PBXGroup;
-			children = (
-				4844FC6D230C2125003106AB /* ButtonStyles.swift */,
-			);
-			path = Styles;
-			sourceTree = "<group>";
-		};
 		4844FC6F230C2152003106AB /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -566,7 +565,9 @@
 		4844FC75230C2199003106AB /* ViewModifiers */ = {
 			isa = PBXGroup;
 			children = (
+				4844FC6D230C2125003106AB /* ButtonStyles.swift */,
 				4844FC76230C21B0003106AB /* View+Enabled.swift */,
+				E6741C4F23476C91008AD736 /* DismissKeyboard.swift */,
 			);
 			path = ViewModifiers;
 			sourceTree = "<group>";
@@ -713,15 +714,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		48ACA67B230AF3B000BF0029 /* Style */ = {
+		48ACA67B230AF3B000BF0029 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				4844FC75230C2199003106AB /* ViewModifiers */,
 				4844FC72230C2175003106AB /* Color */,
 				4844FC6F230C2152003106AB /* Fonts */,
-				4844FC6B230C20EC003106AB /* Styles */,
 			);
-			path = Style;
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		48AF8723231C206400EF3D1F /* RxSwift+Combine */ = {
@@ -779,6 +778,7 @@
 			children = (
 				48A96018231004690074AC26 /* AssetsScreen.swift */,
 				48BE082D23151F70008435F5 /* Asset.swift */,
+				E614546E234795D10035A4B3 /* AssetDetailsScreen.swift */,
 				48BE082F23151F8A008435F5 /* AssetRowView.swift */,
 			);
 			path = List;
@@ -827,9 +827,18 @@
 			isa = PBXGroup;
 			children = (
 				48A9600E231003E70074AC26 /* SettingsScreen.swift */,
-				E690CF7B23391E8F00099C48 /* CreateTokenScreen.swift */,
+				E614546B234795060035A4B3 /* DeveloperTools */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		E614546B234795060035A4B3 /* DeveloperTools */ = {
+			isa = PBXGroup;
+			children = (
+				E690CF7B23391E8F00099C48 /* CreateTokenScreen.swift */,
+				E614546C234795170035A4B3 /* NetworkScreen.swift */,
+			);
+			path = DeveloperTools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1027,6 +1036,7 @@
 			files = (
 				4802E46123112E66007EC847 /* BackUpMnemonicScreen.swift in Sources */,
 				486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */,
+				E614546F234795D10035A4B3 /* AssetDetailsScreen.swift in Sources */,
 				48A9600F231003E70074AC26 /* SettingsScreen.swift in Sources */,
 				48596A402316D048005C1804 /* KeyValueStoring+Codable.swift in Sources */,
 				48FC13232317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift in Sources */,
@@ -1049,6 +1059,7 @@
 				4844FC77230C21B0003106AB /* View+Enabled.swift in Sources */,
 				48596A4F2316D0E9005C1804 /* SecurePersistence.swift in Sources */,
 				48596A5B2316D197005C1804 /* Preferences+ValueRetrieval.swift in Sources */,
+				E614546D234795170035A4B3 /* NetworkScreen.swift in Sources */,
 				E690CF7C23391E8F00099C48 /* CreateTokenScreen.swift in Sources */,
 				48BE083723152702008435F5 /* ConfirmMnemonicScreen.swift in Sources */,
 				48596A482316D090005C1804 /* AnyKeyValueStoring.swift in Sources */,
@@ -1064,6 +1075,7 @@
 				484DACB0231D89AD00CD4E5D /* MnemonicInput.swift in Sources */,
 				48A96011231004050074AC26 /* LearnScreen.swift in Sources */,
 				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
+				E6741C5023476C91008AD736 /* DismissKeyboard.swift in Sources */,
 				48AF8727231C20C100EF3D1F /* RxSubscription.swift in Sources */,
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48B561F6231AE6FB001B8E74 /* AppState+Update+AppShould.swift in Sources */,

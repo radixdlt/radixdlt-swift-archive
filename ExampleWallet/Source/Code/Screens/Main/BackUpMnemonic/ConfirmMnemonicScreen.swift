@@ -80,7 +80,7 @@ private extension ConfirmMnemonicScreen {
     var restartButton: some View {
         Button("Restart") {
             self.viewModel.unselectAll()
-        }.buttonStyleSaphire()
+        }.buttonStyleSapphire()
     }
 
     var confirmButton: some View {

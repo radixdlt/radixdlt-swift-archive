@@ -31,7 +31,8 @@ public struct UniqueParticle:
     ParticleConvertible,
     RadixModelTypeStaticSpecifying,
     RadixCodable,
-    Identifiable
+    Accountable,
+    Hashable
 {
     
     // swiftlint:enable colon opening_brace
@@ -76,9 +77,15 @@ public extension UniqueParticle {
     }
 }
 
-// MARK: - Identifiable
 public extension UniqueParticle {
     var identifier: ResourceIdentifier {
         return ResourceIdentifier(address: address, name: name)
+    }
+}
+
+// MARK: - Accountable
+public extension UniqueParticle {
+    func addresses() throws -> Addresses {
+        return try Addresses(addresses: [identifier.address])
     }
 }

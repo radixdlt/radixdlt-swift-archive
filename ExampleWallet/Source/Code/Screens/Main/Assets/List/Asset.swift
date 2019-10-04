@@ -36,7 +36,7 @@ struct Asset {
     }
 }
 
-extension Asset: Swift.Identifiable {
+extension Asset: Identifiable {
     var id: ResourceIdentifier {
         return token.tokenDefinitionReference
     }

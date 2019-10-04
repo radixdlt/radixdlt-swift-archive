@@ -50,8 +50,8 @@ where
     }
     
     public init(magnitude: Magnitude, denomination: Denomination = Self.measuredIn) throws {
-        let magnitudeInSmallestPossibleDenomination = denomination.expressValueInSmallestPossibleDenomination(value: magnitude)
-        try self.init(magnitudeInSmallestPossibleDenomination: magnitudeInSmallestPossibleDenomination)
+        try self.init(
+            magnitudeInSmallestPossibleDenomination: denomination.expressMagnitudeInSmallestPossibleDenomination(magnitude))
     }
 }
 
@@ -63,7 +63,6 @@ public extension UnsignedAmount {
         case amountMustBePositive
         case amountInAttoIsOnlyMeasuredInIntegers(butPassedDouble: Double)
         case amountFromStringNotRepresentableInDenomination(amountString: String, specifiedDenomination: Denomination)
-        case amountNotRepresentableAsIntegerInDenomination(amount: UnsignedAmount.Magnitude, fromDenomination: Denomination, toDenomination: Denomination)
     }
 }
 
@@ -85,7 +84,7 @@ public extension UnsignedAmount {
     }
     
     func display(in desiredDenomination: Denomination) throws -> String {
-        let converted = try Self.convertMagnitude(magnitude, from: self.measuredIn, to: desiredDenomination)
+        let converted = try Denomination.convertMagnitude(magnitude, from: self.measuredIn, to: desiredDenomination)
         return format(amount: converted, denomination: desiredDenomination)
     }
     
@@ -98,38 +97,10 @@ public extension UnsignedAmount {
 // MARK: - Conversion
 public extension UnsignedAmount {
     
-    static func convertMagnitude(
-        _ magnitude: Magnitude,
-        from: Denomination,
-        to: Denomination
-    ) throws -> Magnitude {
-        
-        let exponentDelta = abs(to.exponent - from.exponent)
-        let factorInt = Int(pow(Double(10), Double(exponentDelta)))
-        let factor = Magnitude(factorInt)
-        
-        if from == to {
-            return magnitude
-        } else if from > to {
-            return magnitude * factor
-        } else if from < to {
-            let (quotient, remainder) = magnitude.quotientAndRemainder(dividingBy: factor)
-            guard remainder == 0 else {
-                throw Error.amountNotRepresentableAsIntegerInDenomination(
-                    amount: magnitude,
-                    fromDenomination: from,
-                    toDenomination: to
-                )
-            }
-            
-            return quotient
-        } else { incorrectImplementation("All cases should have been handled already.") }
-    }
-    
     func expressedInBiggestPossibleDenomination() -> (amount: Magnitude, denomination: Denomination) {
         
         for denomination in Denomination.allCases.sorted().reversed() {
-            if let convertedAmount = try? Self.convertMagnitude(magnitude, from: self.measuredIn, to: denomination) {
+            if let convertedAmount = try? Denomination.convertMagnitude(magnitude, from: self.measuredIn, to: denomination) {
                 return (amount: convertedAmount, denomination: denomination)
             }
         }

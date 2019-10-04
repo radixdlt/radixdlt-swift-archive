@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,35 +23,16 @@
 //
 
 import Foundation
+import SwiftUI
 
-// swiftlint:disable colon opening_brace
-
-/// A type that is identifiable using a `ResourceIdentifier`.
-///
-/// Since and `ResourceIdentifier` has an `Address`, this type also conforms to `Accountable`,
-/// containing a single address.
-///
-/// Although this protocol looks very similar to `TokenDefinitionReferencing` - which also has
-/// a `ResourceIdentifier` property, they are used differently. This type
-/// is defining an identifiable type, whereas `TokenDefinitionReferencing`
-/// references this type.
-///
-/// - seeAlso: `TokenDefinitionReferencing`
-/// - seeAlso: `ResourceIdentifier`
-/// - seeAlso: `MutableSupplyTokenDefinitionParticle`
-public protocol Identifiable:
-    Accountable,
-    Hashable
-{
-    
-    // swiftlint:enable colon opening_brace
-    
-    var identifier: ResourceIdentifier { get }
+struct AssetDetailsScreen {
+    let asset: Asset
 }
 
-// MARK: - Accountable
-public extension Identifiable {
-    func addresses() throws -> Addresses {
-        return try Addresses(addresses: [identifier.address])
+// MARK: View
+extension AssetDetailsScreen: View {
+    var body: some View {
+        Text("\(asset.token.name.stringValue)")
     }
 }
+

@@ -343,7 +343,6 @@
 		E6A508B4224E713F00128123 /* ParticleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5085C224E713F00128123 /* ParticleGroup.swift */; };
 		E6A508B5224E713F00128123 /* AddressConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A5085E224E713F00128123 /* AddressConvertible.swift */; };
 		E6A508B7224E713F00128123 /* Accountable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50861224E713F00128123 /* Accountable.swift */; };
-		E6A508B9224E713F00128123 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A50863224E713F00128123 /* Identifiable.swift */; };
 		E6A508C6224EAD5700128123 /* TokenBalanceReferencesState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A508C5224EAD5700128123 /* TokenBalanceReferencesState.swift */; };
 		E6A508D4224FB68700128123 /* TestScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A508D3224FB68700128123 /* TestScheduler.swift */; };
 		E6A508D6224FBCA600128123 /* AtomSubmitAndSubscribeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A508D5224FBCA600128123 /* AtomSubmitAndSubscribeRequest.swift */; };
@@ -1001,7 +1000,6 @@
 		E6A5085C224E713F00128123 /* ParticleGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticleGroup.swift; sourceTree = "<group>"; };
 		E6A5085E224E713F00128123 /* AddressConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressConvertible.swift; sourceTree = "<group>"; };
 		E6A50861224E713F00128123 /* Accountable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accountable.swift; sourceTree = "<group>"; };
-		E6A50863224E713F00128123 /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		E6A508C5224EAD5700128123 /* TokenBalanceReferencesState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceReferencesState.swift; sourceTree = "<group>"; };
 		E6A508D3224FB68700128123 /* TestScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestScheduler.swift; sourceTree = "<group>"; };
 		E6A508D5224FBCA600128123 /* AtomSubmitAndSubscribeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSubmitAndSubscribeRequest.swift; sourceTree = "<group>"; };
@@ -2842,7 +2840,6 @@
 				E6A5085E224E713F00128123 /* AddressConvertible.swift */,
 				E640F637225DFC3D00855256 /* PublicKeyOwner.swift */,
 				E6A50861224E713F00128123 /* Accountable.swift */,
-				E6A50863224E713F00128123 /* Identifiable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -4807,7 +4804,6 @@
 				E672564B228AEBE0004631F1 /* TokenCreating.swift in Sources */,
 				E6474AC8226614DE009C4FDC /* Host+ExpressibleByStringLiteral.swift in Sources */,
 				E6E2798E2271CD1C0067D46E /* DataInitializable.swift in Sources */,
-				E6A508B9224E713F00128123 /* Identifiable.swift in Sources */,
 				E6E279402271CD1C0067D46E /* SHA256TwiceHasher.swift in Sources */,
 				E6E2798B2271CD1C0067D46E /* StringConversionMode.swift in Sources */,
 				E6E279442271CD1C0067D46E /* StringValue.swift in Sources */,

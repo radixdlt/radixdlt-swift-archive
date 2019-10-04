@@ -203,7 +203,7 @@ extension CreateTokenScreen.ViewModel {
         @Published fileprivate var symbol: String = ""
         @Published fileprivate var description: String = loremIpsum(.firstFiveWords)
         @Published fileprivate var imageUrl: String = "https://img.icons8.com/color/64/000000/swift.png"
-        @Published fileprivate var granularity: String = "\(Granularity.default)"
+        @Published fileprivate var granularity: String = "\(Granularity.default.magnitude)"
         
         @Published fileprivate var supplyType: SupplyType = .mutable
         @Published fileprivate var supply: String = ""
@@ -338,7 +338,7 @@ internal extension CreateTokenScreen.ViewModel {
         } catch let createTokenError as CreateTokenScreen.ViewModel.Error {
             self.createTokenError = createTokenError
         } catch {
-            incorrectImplementation("unexpected erorr type: \(error)")
+            incorrectImplementation("unexpected error type: \(error)")
         }
     }
  
@@ -437,7 +437,7 @@ private extension CreateTokenScreen.ViewModel {
     var iconUrl: URL? { URL(string: input.imageUrl) }
 }
 
-extension SupplyType: CaseIterable, Swift.Identifiable {
+extension SupplyType: CaseIterable, Identifiable {
     public static var allCases: [SupplyType] { [.fixed, .mutable] }
     public var id: Int { rawValue }
     
@@ -457,6 +457,6 @@ extension SupplyType: CaseIterable, Swift.Identifiable {
     }
 }
 
-extension Denomination: Swift.Identifiable {
+extension Denomination: Identifiable {
     public var id: Int { exponent }
 }

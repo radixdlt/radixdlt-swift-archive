@@ -28,11 +28,6 @@ import Foundation
 
 /// A type that references a `MutableSupplyTokenDefinitionParticle` using a `ResourceIdentifier`.
 ///
-/// Although this protocol looks very similar to `Identifiable` - which also has
-/// a `ResourceIdentifier` property, they are used differently. This is the counterpart
-/// of `Identifiable`, a type referencing an `Identifiable` type.
-///
-/// - seeAlso: `Identifiable`
 /// - seeAlso: `ResourceIdentifier`
 /// - seeAlso: `MutableSupplyTokenDefinitionParticle`
 public protocol TokenDefinitionReferencing:

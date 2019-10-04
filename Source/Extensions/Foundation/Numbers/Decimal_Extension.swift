@@ -54,38 +54,21 @@ internal extension NumberFormatter {
 }
 
 public extension Decimal {
-    static func ten(toThePowerOf exponent: Int, roundingMode: NSDecimalNumber.RoundingMode = .plain) throws -> Decimal {
+    
+    static func ten(
+        toThePowerOf exponent: Int,
+        roundingMode: NSDecimalNumber.RoundingMode = .plain
+    ) throws -> Decimal {
+        
         return try pow(base: 10, exponent: exponent, roundingMode: roundingMode)
     }
     
-    var bigIntegerWithoutLoosingPrecision: BigUnsignedInt? {
-        let formatter = NumberFormatter.default
-        guard let decimalString = formatter.string(for: self) else {
-            incorrectImplementationShouldAlwaysBeAble(to: "Format a decimal: \(self)")
-        }
-        guard let decimalSeparator = formatter.decimalSeparator else {
-            incorrectImplementationShouldAlwaysBeAble(to: "Read decimal separator")
-        }
-        let components = decimalString.components(separatedBy: decimalSeparator)
-        if components.count == 1 {
-            let component = components[0]
-            return BigUnsignedInt(component, radix: 10)
-        } else if components.count == 2 {
-            let secondComponent = components[1]
-            
-            guard let decimalFromSecondComponent = Decimal(string: secondComponent), decimalFromSecondComponent == .zero else {
-                return nil
-            }
-            let firstComponent = components[0]
-            return BigUnsignedInt(firstComponent, radix: 10)
-            
-        } else {
-            incorrectImplementation("Too many components: \(components), expected 1 or 2 from decimalString: \(decimalString)")
-        }
+    static func pow(
+        base: Decimal,
+        exponent: Int,
+        roundingMode: NSDecimalNumber.RoundingMode = .plain
+    ) throws -> Decimal {
         
-    }
-    
-    static func pow(base: Decimal, exponent: Int, roundingMode: NSDecimalNumber.RoundingMode = .plain) throws -> Decimal {
         if exponent == 0 { return Decimal(1) }
         if exponent == 1 { return base }
         
@@ -105,40 +88,18 @@ public extension Decimal {
         } else { incorrectImplementation("Base case where exponent=\(exponent) should have been earlier.") }
     }
     
-    static func divide(nominator: Decimal, denominator: Decimal, roundingMode: NSDecimalNumber.RoundingMode = .plain) throws -> Decimal {
-        return try doOperation(lhs: nominator, rhs: denominator, roundingMode: roundingMode, NSDecimalDivide)
-    }
-    
-    static func multiply(_ lhs: Decimal, _ rhs: Decimal, roundingMode: NSDecimalNumber.RoundingMode = .plain) throws -> Decimal {
-        return try doOperation(lhs: lhs, rhs: rhs, roundingMode: roundingMode, NSDecimalMultiply)
-    }
-     
-    static func multiplyNS(
-        _ lhsDecimal: Decimal,
-        _ rhsDecimal: Decimal,
-        scale: Int16 = .max,
+    static func divide(
+        nominator: Decimal,
+        denominator: Decimal,
         roundingMode: NSDecimalNumber.RoundingMode = .plain
-    ) -> Decimal {
+    ) throws -> Decimal {
         
-        let handler = NSDecimalNumberHandler(
-            roundingMode: roundingMode,
-            scale: scale,
-            raiseOnExactness: true,
-            raiseOnOverflow: true,
-            raiseOnUnderflow: true,
-            raiseOnDivideByZero: true
-        )
-        
-        let lhs = NSDecimalNumber(decimal: lhsDecimal)
-        let rhs = NSDecimalNumber(decimal: rhsDecimal)
-
-        let product = lhs.multiplying(by: rhs, withBehavior: handler)
-        
-        return product.decimalValue
+        return try doOperation(lhs: nominator, rhs: denominator, roundingMode: roundingMode, NSDecimalDivide)
     }
 }
 
 private extension Decimal {
+    
     static func doOperation(
         lhs: Decimal,
         rhs: Decimal,

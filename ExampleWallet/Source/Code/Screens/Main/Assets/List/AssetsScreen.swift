@@ -49,10 +49,13 @@ extension AssetsScreen: View {
             isPresented: $isShowingBackUpMnemonicWarningSheet,
             onDismiss: {
                 self.isShowingBackUpMnemonicWarningSheet = false
-        }
+            }
         ) {
-            BackUpMnemonicScreen(mnemonicToBackUp: self.securePersistence.mnemonic!, isPresentingBackUpFlow: self.$isShowingBackUpMnemonicWarningSheet)
-                .environmentObject(self.appState)
+            BackUpMnemonicScreen(
+                mnemonicToBackUp: self.securePersistence.mnemonic!,
+                isPresentingBackUpFlow: self.$isShowingBackUpMnemonicWarningSheet
+            )
+            .environmentObject(self.appState)
         }
         .onAppear {
             self.presentBackUpMnemonicWarningIfNeeded()
@@ -60,33 +63,36 @@ extension AssetsScreen: View {
     }
 }
 
+// MARK: - Subviews
 private extension AssetsScreen {
 
     var assetsList: some View {
         List(radix.assets) { asset in
-            AssetRowView(asset: asset)
-                .contextMenu {
-                    #if DEBUG
-                    if self.hasUserPermission(toMint: asset) {
-                        Button("🖨 Mint token") { self.mintAsset(asset) }
-                    }
-                    
-                    if self.hasUserPermission(toBurn: asset) {
-                        Button("🔥 Burn token") { self.burnAsset(asset) }
-                    }
-                    #endif
+            NavigationLink(destination: AssetDetailsScreen(asset: asset)) {
+                AssetRowView(asset: asset)
+                    .contextMenu {
+                        #if DEBUG
+                        if self.hasUserPermission(toMint: asset) {
+                            Button("🖨 Mint token") { self.mintAsset(asset) }
+                        }
                         
-                    Button("💸 Transfer token") {
-                        self.transferAsset(asset)
-                    }
+                        if self.hasUserPermission(toBurn: asset) {
+                            Button("🔥 Burn token") { self.burnAsset(asset) }
+                        }
+                        #endif
+                        
+                        Button("💸 Transfer token") {
+                            self.transferAsset(asset)
+                        }
                 }
+            }
         }.listStyle(GroupedListStyle())
     }
 
     var sendOrReceiveTransactionButtons: some View {
         HStack {
             NavigationLink(destination: ReceiveTransactionScreen()) {
-                Text("Receive").buttonStyleSaphire()
+                Text("Receive").buttonStyleSapphire()
             }
 
             NavigationLink(destination: SendScreen()) {
@@ -95,9 +101,32 @@ private extension AssetsScreen {
         }.padding()
     }
     
+}
+
+// MARK: - Actions
+   private extension AssetsScreen {
+    
     func transferAsset(_ asset: Asset) {
         print("💸 Transfer: \(asset)")
     }
+    
+    
+    func presentBackUpMnemonicWarningIfNeeded(delay: DispatchTimeInterval = .seconds(1)) {
+        guard needsToBackupMnemonic else { return }
+        performOnMainThread(after: delay) {
+            self.isShowingBackUpMnemonicWarningSheet = true
+        }
+    }
+
+    var needsToBackupMnemonic: Bool {
+        guard
+            securePersistence.mnemonic != nil,
+            radix.hasEverReceivedAnyTransactionToAnyAccount
+        else { return false }
+        return true
+    }
+
+    
 }
 
 #if DEBUG
@@ -116,29 +145,11 @@ private extension AssetsScreen {
     }
     
     func burnAsset(_ asset: Asset) {
-         print("🔥 Burn \(asset)")
-     }
+        print("🔥 Burn \(asset)")
+    }
 }
 #endif
 
-private extension AssetsScreen {
-    func presentBackUpMnemonicWarningIfNeeded(delay: DispatchTimeInterval = .seconds(1)) {
-        guard needsToBackupMnemonic else { return }
-        performOnMainThread(after: delay) {
-            self.isShowingBackUpMnemonicWarningSheet = true
-        }
-    }
-
-    var needsToBackupMnemonic: Bool {
-        guard
-            securePersistence.mnemonic != nil,
-            radix.hasEverReceivedAnyTransactionToAnyAccount
-        else { return false }
-        return true
-    }
-
-    
-}
 
 extension Asset {
     enum Action {

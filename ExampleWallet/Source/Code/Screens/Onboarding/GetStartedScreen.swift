@@ -50,7 +50,7 @@ extension GetStartedScreen: View {
                 LabelledDivider(Text("GetStarted.Text.Or"))
 
                 NavigationLink(destination: self.restoreAccountFlow) {
-                    Text("GetStarted.Button.RestoreAccount").buttonStyleSaphire()
+                    Text("GetStarted.Button.RestoreAccount").buttonStyleSapphire()
                 }
 
             }.padding(20)

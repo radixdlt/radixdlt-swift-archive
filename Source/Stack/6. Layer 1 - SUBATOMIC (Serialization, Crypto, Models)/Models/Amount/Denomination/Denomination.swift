@@ -51,7 +51,14 @@ public struct Denomination: Hashable, CustomStringConvertible {
 
 public extension Denomination {
     enum Error: Swift.Error, Equatable {
+        
         case exponentMustBeGreaterThanOrEqualTo(min: Int)
+        
+        case amountNotRepresentableAsIntegerInDenomination(
+            amount: BigUnsignedInt,
+            fromDenomination: Denomination,
+            toDenomination: Denomination
+        )
     }
 }
 
@@ -113,15 +120,42 @@ public extension Denomination {
 
 public extension Denomination {
     
-    func expressValueInSmallestPossibleDenomination<M>(value: M) -> M where M: BinaryInteger {
-        if exponent == Self.minAllowedExponent { return value }
-        
-        let exponentDelta: Int = abs(Self.minAllowedExponent - self.exponent)
-        
-        let factorInt = Int(pow(Double(10), Double(exponentDelta)))
-        let factor = M(factorInt)
-        return value * factor
+    func expressMagnitudeInSmallestPossibleDenomination<Magnitude>(_ magnitude: Magnitude) -> Magnitude where Magnitude: MagnitudeType {
+        do {
+            return try Self.convertMagnitude(magnitude, from: self, to: Self.min)
+        } catch {
+            incorrectImplementationShouldAlwaysBeAble(to: "Convert to smallest possible denomination.")
+        }
     }
+    
+    static func convertMagnitude<Magnitude>(
+        _ magnitude: Magnitude,
+        from: Denomination,
+        to: Denomination
+    ) throws -> Magnitude where Magnitude: MagnitudeType {
+        
+        let exponentDelta = abs(to.exponent - from.exponent)
+        let factorInt = Int(pow(Double(10), Double(exponentDelta)))
+        let factor = Magnitude(factorInt)
+        
+        if from == to {
+            return magnitude
+        } else if from > to {
+            return magnitude * factor
+        } else if from < to {
+            let (quotient, remainder) = magnitude.quotientAndRemainder(dividingBy: factor)
+            guard remainder == 0 else {
+                throw Error.amountNotRepresentableAsIntegerInDenomination(
+                    amount: BigUnsignedInt(magnitude),
+                    fromDenomination: from,
+                    toDenomination: to
+                )
+            }
+            
+            return quotient
+        } else { incorrectImplementation("All cases should have been handled already.") }
+    }
+    
 }
 
 public extension Denomination {

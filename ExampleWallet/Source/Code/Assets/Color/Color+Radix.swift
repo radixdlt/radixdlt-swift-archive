@@ -25,36 +25,30 @@
 import Foundation
 import SwiftUI
 
-struct ButtonStyle: ViewModifier {
+extension Color {
+    enum Radix {}
+}
 
-    private let color: Color
-    private let enabled: Bool
-    init(color: Color, enabled: Bool = true) {
-        self.color = color
-        self.enabled = enabled
-    }
+extension Color.Radix {
 
-    dynamic func body(content: Content) -> some View {
-        content
-            .padding()
-            .frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
-            .foregroundColor(Color.white)
-            .background(enabled ? color : Color.black)
-            .cornerRadius(5)
+    static var emerald:     Color { .rgb(036, 180, 126) }
+    static var forest:      Color { .rgb(062, 207, 142) }
+    static var dusk:        Color { .rgb(082, 095, 127) }
+    static var sapphire:     Color { .rgb(086, 091, 185) }
+    static var ruby:        Color { .rgb(255, 089, 100) }
+
+}
+
+extension Color {
+    static func rgb(_ red: UInt8, _ green: UInt8, _ blue: UInt8) -> Color {
+        func value(_ raw: UInt8) -> Double {
+            return Double(raw)/Double(255)
+        }
+        return Color(
+            red: value(red),
+            green: value(green),
+            blue: value(blue)
+        )
     }
 }
 
-extension View {
-    dynamic func buttonStyleEmerald(enabled: Bool = true) -> some View {
-        ModifiedContent(content: self, modifier: ButtonStyle(color: Color.Radix.emerald, enabled: enabled))
-    }
-
-    dynamic func buttonStyleSaphire(enabled: Bool = true) -> some View {
-        ModifiedContent(content: self, modifier: ButtonStyle(color: Color.Radix.saphire, enabled: enabled))
-    }
-
-    dynamic func buttonStyleRuby(enabled: Bool = true) -> some View {
-          ModifiedContent(content: self, modifier: ButtonStyle(color: Color.Radix.ruby, enabled: enabled))
-      }
-
-}
