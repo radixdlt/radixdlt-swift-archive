@@ -135,7 +135,7 @@ private extension CreateTokenScreen {
                 
                 TextField(self.viewModel.supplyHint, text: $viewModel.input.supply)
                 
-                Text("Supply: '\(self.viewModel.supplyFormatted)'")
+                Text("Supply: \(self.viewModel.supplyFormatted)")
                 
                 if self.viewModel.input.supplyType == .mutable {
                     tokenPermissionsView
@@ -173,6 +173,7 @@ private extension CreateTokenScreen {
     }
 }
 
+// MARK: ViewModel
 extension CreateTokenScreen {
     final class ViewModel: ObservableObject {
         
@@ -196,6 +197,9 @@ extension CreateTokenScreen {
     }
 }
 
+
+// MARK: ViewModel + Input
+import RadixSDK
 extension CreateTokenScreen.ViewModel {
     final class Input: ObservableObject {
         
@@ -206,15 +210,23 @@ extension CreateTokenScreen.ViewModel {
         @Published fileprivate var granularity: String = "\(Granularity.default.magnitude)"
         
         @Published fileprivate var supplyType: SupplyType = .mutable
-        @Published fileprivate var supply: String = ""
+        @Published fileprivate var supply: String = "123"
         
         @Published fileprivate var denomination: Denomination = .whole
         
         @Published fileprivate var anyoneHasPermissionToBurn = false
         @Published fileprivate var anyoneHasPermissionToMint = false
+        
+        init() {
+            let randomEnglishWord = Mnemonic.WordList.english.randomElement()!.value
+            self.symbol = randomEnglishWord.uppercased()
+            self.name = randomEnglishWord
+        }
     }
 }
 
+
+// MARK: ViewModel + Error
 extension CreateTokenScreen.ViewModel {
     enum Error: Swift.Error, CustomStringConvertible {
         indirect case inputError(InputError)
@@ -300,7 +312,12 @@ internal extension CreateTokenScreen.ViewModel {
     
     var supplyFormatted: String {
         do {
-            return try makeSupplyAmount(magnitudeString: input.supply, denomination: input.denomination).description
+            let nonNegativeAmount: NonNegativeAmount = try makeSupplyAmount(
+                magnitudeString: input.supply,
+                denomination: input.denomination
+            )
+            
+            return nonNegativeAmount.displayUsingHighestPossibleNamedDenominator()
         } catch {
             return input.supply
         }
@@ -343,6 +360,9 @@ internal extension CreateTokenScreen.ViewModel {
     }
  
 }
+
+
+// MARK: ViewModel - Input -> Models
 private extension CreateTokenScreen.ViewModel {
     
     func makeSupplyAmount(magnitudeString: String, denomination: Denomination) throws -> NonNegativeAmount {

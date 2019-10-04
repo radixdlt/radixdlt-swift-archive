@@ -27,6 +27,7 @@ import BigInt
 
 public protocol BigInteger: BinaryInteger, DataConvertible, DataInitializable {
     func serialize() -> Data
+    func power(_ exponent: Int) -> Self
 }
 
 // MARK: - DataConvertible

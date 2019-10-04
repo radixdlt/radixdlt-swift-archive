@@ -36,7 +36,7 @@ public struct UnsignedAmount<Bound, Trait>:
 where
     Trait: AmountTrait,
     Bound: ValueBound,
-    Bound.Magnitude: BigInteger & StringRepresentable & StringInitializable
+    Bound.Magnitude: StringRepresentable & StringInitializable
 {
     // swiftlint:enable colon opening_brace
     public typealias Magnitude = Bound.Magnitude

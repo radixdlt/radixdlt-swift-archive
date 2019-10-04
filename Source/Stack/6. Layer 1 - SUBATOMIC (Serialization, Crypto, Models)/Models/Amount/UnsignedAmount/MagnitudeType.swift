@@ -24,4 +24,4 @@
 
 import Foundation
 
-public typealias MagnitudeType = BinaryInteger & BinaryIntegerFromString & Codable
+public typealias MagnitudeType = BigInteger & BinaryIntegerFromString & Codable

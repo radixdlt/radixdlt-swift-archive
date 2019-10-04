@@ -135,8 +135,7 @@ public extension Denomination {
     ) throws -> Magnitude where Magnitude: MagnitudeType {
         
         let exponentDelta = abs(to.exponent - from.exponent)
-        let factorInt = Int(pow(Double(10), Double(exponentDelta)))
-        let factor = Magnitude(factorInt)
+        let factor = Magnitude(10).power(exponentDelta)
         
         if from == to {
             return magnitude
