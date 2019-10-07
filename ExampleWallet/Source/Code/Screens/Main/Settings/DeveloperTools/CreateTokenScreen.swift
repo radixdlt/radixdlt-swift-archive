@@ -206,7 +206,7 @@ extension CreateTokenScreen.ViewModel {
         @Published fileprivate var name: String = ""
         @Published fileprivate var symbol: String = ""
         @Published fileprivate var description: String = loremIpsum(.firstFiveWords)
-        @Published fileprivate var imageUrl: String = "https://img.icons8.com/color/64/000000/swift.png"
+        @Published fileprivate var imageUrl: String = "" // "https://img.icons8.com/color/64/000000/swift.png"
         @Published fileprivate var granularity: String = "\(Granularity.default.magnitude)"
         
         @Published fileprivate var supplyType: SupplyType = .mutable

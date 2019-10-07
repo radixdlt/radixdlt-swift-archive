@@ -44,11 +44,7 @@ extension AssetRowView: View {
     var body: some View {
         HStack {
 
-            KFImage(viewModel.iconUrl)
-                .placeholder {
-                    Image(systemName: "arrow.2.circlepath.circle").font(.largeTitle)
-                }
-                .resizable()
+            iconView
                 .frame(width: 32, height: 32, alignment: .center)
 
             Text(viewModel.name).font(.roboto(size: 18, weight: .regular))
@@ -59,6 +55,32 @@ extension AssetRowView: View {
         }
         .foregroundColor(Color.Radix.dusk)
         .padding()
+    }
+}
+
+// MARK: - Subviews
+extension AssetRowView {
+    
+    private var imageFromUrl: some View {
+        KFImage(viewModel.iconUrl)
+            .placeholder {
+                Image(systemName: "arrow.2.circlepath.circle").font(.largeTitle)
+        }
+        .resizable()
+    }
+    
+    var iconView: some View {
+        #if DEBUG
+        return Group {
+            if viewModel.iconUrl != nil {
+                imageFromUrl
+            } else {
+                Image(systemName: SystemNamedImages.deterministicRandom(seed: viewModel.rri))
+            }
+        }.eraseToAny()
+        #else
+        return imageFromUrl.eraseToAny()
+        #endif
     }
 }
 
@@ -75,10 +97,11 @@ extension AssetRowView {
 
 extension AssetRowView.ViewModel {
     private var token: TokenDefinition { asset.token }
+    var rri: ResourceIdentifier { asset.id }
 
     var name: String { token.name.stringValue }
 
-    var balance: String { "\(asset.balance.stringValue) \(token.symbol.stringValue)" }
+    var balance: String { "\(asset.balance.displayUsingHighestPossibleNamedDenominator()) \(token.symbol.stringValue)" }
 
     var iconUrl: URL? { token.iconUrl }
 }

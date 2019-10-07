@@ -129,6 +129,7 @@
 		48FC13232317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FC13222317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift */; };
 		E614546D234795170035A4B3 /* NetworkScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E614546C234795170035A4B3 /* NetworkScreen.swift */; };
 		E614546F234795D10035A4B3 /* AssetDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E614546E234795D10035A4B3 /* AssetDetailsScreen.swift */; };
+		E61B0AEF234B5172003EFD42 /* Image+SystemName+Suitable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61B0AEE234B5172003EFD42 /* Image+SystemName+Suitable.swift */; };
 		E6278018233E473D008F2857 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E6278017233E473D008F2857 /* Kingfisher */; };
 		E627801A233E473D008F2857 /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = E6278019233E473D008F2857 /* KingfisherSwiftUI */; };
 		E6694EFA233A399400143AC8 /* LoremIpsum.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6694EF9233A399400143AC8 /* LoremIpsum.swift */; };
@@ -296,6 +297,7 @@
 		48FC13222317FF000094A85E /* RestoreAccountInputMnemonicScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountInputMnemonicScreen.swift; sourceTree = "<group>"; };
 		E614546C234795170035A4B3 /* NetworkScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkScreen.swift; sourceTree = "<group>"; };
 		E614546E234795D10035A4B3 /* AssetDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDetailsScreen.swift; sourceTree = "<group>"; };
+		E61B0AEE234B5172003EFD42 /* Image+SystemName+Suitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+SystemName+Suitable.swift"; sourceTree = "<group>"; };
 		E6694EF9233A399400143AC8 /* LoremIpsum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoremIpsum.swift; sourceTree = "<group>"; };
 		E6694EFB233A5AEC00143AC8 /* FaucetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaucetService.swift; sourceTree = "<group>"; };
 		E6741C4F23476C91008AD736 /* DismissKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissKeyboard.swift; sourceTree = "<group>"; };
@@ -810,6 +812,7 @@
 				48E58F24230E83F500E3CC86 /* SwiftUI+Extensions */,
 				48596A342316BBD3005C1804 /* UIKit+Extensions */,
 				486D86ED230D6A27006A967A /* Foundation+Extensions */,
+				E61B0AEE234B5172003EFD42 /* Image+SystemName+Suitable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1036,6 +1039,7 @@
 			files = (
 				4802E46123112E66007EC847 /* BackUpMnemonicScreen.swift in Sources */,
 				486D86EF230D6A45006A967A /* String_Extensions.swift in Sources */,
+				E61B0AEF234B5172003EFD42 /* Image+SystemName+Suitable.swift in Sources */,
 				E614546F234795D10035A4B3 /* AssetDetailsScreen.swift in Sources */,
 				48A9600F231003E70074AC26 /* SettingsScreen.swift in Sources */,
 				48596A402316D048005C1804 /* KeyValueStoring+Codable.swift in Sources */,

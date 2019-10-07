@@ -110,6 +110,7 @@
 		E615C51B22B7AF0800604E90 /* Magical.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51A22B7AF0800604E90 /* Magical.swift */; };
 		E6166BE022609C9F003A9442 /* DefaultRPCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6166BDF22609C9F003A9442 /* DefaultRPCClient.swift */; };
 		E6166BED2260CD5D003A9442 /* Port.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6166BEC2260CD5D003A9442 /* Port.swift */; };
+		E61B0AF1234B5729003EFD42 /* SwiftHashesAreDeterministicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61B0AF0234B5729003EFD42 /* SwiftHashesAreDeterministicTests.swift */; };
 		E61EB99C22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB99B22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */; };
 		E61EB9A222D86F56007826D3 /* Supply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A122D86F56007826D3 /* Supply.swift */; };
 		E61EB9A422D87130007826D3 /* SupplyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A322D87130007826D3 /* SupplyType.swift */; };
@@ -771,6 +772,7 @@
 		E615C51A22B7AF0800604E90 /* Magical.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Magical.swift; sourceTree = "<group>"; };
 		E6166BDF22609C9F003A9442 /* DefaultRPCClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultRPCClient.swift; sourceTree = "<group>"; };
 		E6166BEC2260CD5D003A9442 /* Port.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Port.swift; sourceTree = "<group>"; };
+		E61B0AF0234B5729003EFD42 /* SwiftHashesAreDeterministicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftHashesAreDeterministicTests.swift; sourceTree = "<group>"; };
 		E61EB99B22D75B47007826D3 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceOfNativeTokenFromGenesisAtomsTests.swift; sourceTree = "<group>"; };
 		E61EB9A122D86F56007826D3 /* Supply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supply.swift; sourceTree = "<group>"; };
 		E61EB9A322D87130007826D3 /* SupplyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyType.swift; sourceTree = "<group>"; };
@@ -3987,6 +3989,7 @@
 				E6725644228AD41F004631F1 /* Spin */,
 				E6E27A0C2271CE250067D46E /* Particles */,
 				E6CB4B2722C501A800B7382A /* MagicTests.swift */,
+				E61B0AF0234B5729003EFD42 /* SwiftHashesAreDeterministicTests.swift */,
 			);
 			path = "5. Layer 2 - ATOM MODEL (Particles)";
 			sourceTree = "<group>";
@@ -4942,6 +4945,7 @@
 				E6E27A3F2271CE250067D46E /* CBOREncodingPrimitivesIntTests.swift in Sources */,
 				E621BE8622983DCD00E97542 /* AtomIdentifierTests.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
+				E61B0AF1234B5729003EFD42 /* SwiftHashesAreDeterministicTests.swift in Sources */,
 				E64641F122F361F500E05034 /* TooLongSymbolTests.swift in Sources */,
 				E6E27A3D2271CE250067D46E /* DSONEncodingAddressHolderTests.swift in Sources */,
 				E69D851F22F7555E0039A207 /* BurnTokensTests.swift in Sources */,
