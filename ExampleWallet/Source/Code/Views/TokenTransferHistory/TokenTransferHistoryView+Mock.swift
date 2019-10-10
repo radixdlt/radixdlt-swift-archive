@@ -37,22 +37,11 @@ func mockTokenTransfersDuringPeriod(
     var periods = [TokenTransfersDuringPeriod]()
     
     let calendar = Calendar.current
+    let otherAddresses = randomAddresses()
     
     func mockTransfers(numberOfTransfers: Int) -> [TokenTransfer] {
         var transfers = [TokenTransfer]()
         
-        let otherAddresses: [Address] = [
-            "JF57CPSxkg1xXaob3sLKrtsmsG43dmAtjADnPJE9g3BLSADfhfZ",
-            "JHWZuF9gcNKmJhHYSgF1s39r2BUxcmUYGQRrqSyotoSqzKCZVvF",
-            "JFekjzr9AigFBdSQprMgJJVjHzPtJwbExNQpTLe4vqFcvKYrrJ5",
-            "JFHrQXanUKFEdfB9W8MXHMPE6mFp8zEuW1gNZj5oQMi1WixgxSd",
-            "JHbknGSx9AG4XiUA4ih1C94H5ppgUNo5zQJDjT5EQ5SvCpwiqWe",
-            "JFbnroPqnGLU35qccGHaEwEbjAvD7ehH5wG9KEkc8xZbsSQ44Wx",
-            "JHXqRzon4DAsbqSmxgGuMWoLXdcTjJadez1iYbvzsyJtEXFagnm",
-            "JGMPHoiwsMQAjJCcDSjkhejHh1SSz7ztLgqNifmSr8fdVhnes3Y",
-            "JGGoHWzvskZakA2tWnmyDCCdqABEv4fV49JLV81DEYKmk3vkHDd",
-            "JEmGGNXnBqJbh6bTWJ5Uufbfc2bWV7rFPHvAjrZTtYxQE6p4Ses"
-        ]
         
         for index in 0..<numberOfTransfers {
             let otherAddress = otherAddresses.randomElement()!
@@ -93,6 +82,21 @@ func mockTokenTransfersDuringPeriod(
     }
     
     return periods
+}
+
+func randomAddresses() -> [Address] {
+    [
+        "JF57CPSxkg1xXaob3sLKrtsmsG43dmAtjADnPJE9g3BLSADfhfZ",
+        "JHWZuF9gcNKmJhHYSgF1s39r2BUxcmUYGQRrqSyotoSqzKCZVvF",
+        "JFekjzr9AigFBdSQprMgJJVjHzPtJwbExNQpTLe4vqFcvKYrrJ5",
+        "JFHrQXanUKFEdfB9W8MXHMPE6mFp8zEuW1gNZj5oQMi1WixgxSd",
+        "JHbknGSx9AG4XiUA4ih1C94H5ppgUNo5zQJDjT5EQ5SvCpwiqWe",
+        "JFbnroPqnGLU35qccGHaEwEbjAvD7ehH5wG9KEkc8xZbsSQ44Wx",
+        "JHXqRzon4DAsbqSmxgGuMWoLXdcTjJadez1iYbvzsyJtEXFagnm",
+        "JGMPHoiwsMQAjJCcDSjkhejHh1SSz7ztLgqNifmSr8fdVhnes3Y",
+        "JGGoHWzvskZakA2tWnmyDCCdqABEv4fV49JLV81DEYKmk3vkHDd",
+        "JEmGGNXnBqJbh6bTWJ5Uufbfc2bWV7rFPHvAjrZTtYxQE6p4Ses"
+    ]
 }
 
 #endif

@@ -79,3 +79,18 @@ func mintOrBurnView(
 }
 
 #endif
+
+
+// MARK: - Preview
+
+#if DEBUG
+struct AssetDetailsScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        AssetDetailsScreen(
+            asset: mockAssets()[1],
+            myAddress: randomAddresses().randomElement()!
+        )
+    }
+}
+
+#endif

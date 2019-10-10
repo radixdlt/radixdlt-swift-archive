@@ -27,7 +27,7 @@ import RadixSDK
 
 #if DEBUG
 
-func mockTokenBalances() -> [Asset] {
+func mockAssets() -> [Asset] {
     let tokenBalances: [TokenBalance] = [
         TokenBalance(
             token:

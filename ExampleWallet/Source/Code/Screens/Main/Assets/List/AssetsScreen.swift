@@ -80,7 +80,7 @@ private extension AssetsScreen {
     var assets: [Asset] {
         var radixAssets = radix.assets
         #if DEBUG
-        radixAssets += mockTokenBalances()
+        radixAssets += mockAssets()
         #endif
         return radixAssets
     }
@@ -124,29 +124,3 @@ typealias ReceiveOrSendView = Either<ReceiveTransactionScreen, SendScreen>
 func receiveOrSendView() -> ReceiveOrSendView {
     ReceiveOrSendView(primary: "Receive", secondary: "Send")
 }
-
-//struct ReceiveOrSendView {
-//    @Environment(\.sizeCategory) var sizeCategory
-//}
-//
-//extension ReceiveOrSendView: View {
-//    var body: some View {
-//        let buttons = Group {
-//            NavigationLink(destination: ReceiveTransactionScreen()) {
-//                Text("Receive").buttonStyleSapphire()
-//            }
-//
-//            NavigationLink(destination: SendScreen()) {
-//                Text("Send").buttonStyleEmerald()
-//            }
-//        }
-//
-//        return Group {
-//            if sizeCategory == .accessibilityLarge {
-//                VStack { buttons }
-//            } else {
-//                HStack { buttons }
-//            }
-//        }.padding()
-//    }
-//}

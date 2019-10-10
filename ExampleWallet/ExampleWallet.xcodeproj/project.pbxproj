@@ -29,8 +29,8 @@
 		4809255C230AC4240056DB28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48092553230AC4240056DB28 /* Assets.xcassets */; };
 		4809255D230AC4240056DB28 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 48092555230AC4240056DB28 /* Preview Assets.xcassets */; };
 		4809255E230AC4240056DB28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48092556230AC4240056DB28 /* LaunchScreen.storyboard */; };
-		48092575230AC61E0056DB28 /* SwiftUI_WalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092572230AC61E0056DB28 /* SwiftUI_WalletUITests.swift */; };
-		4809257C230AC6300056DB28 /* SwiftUI_WalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4809257A230AC6300056DB28 /* SwiftUI_WalletTests.swift */; };
+		48092575230AC61E0056DB28 /* ExampleWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48092572230AC61E0056DB28 /* ExampleWalletUITests.swift */; };
+		4809257C230AC6300056DB28 /* ExampleWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4809257A230AC6300056DB28 /* ExampleWalletTests.swift */; };
 		481C208F231FDE30004611DF /* RestoreAccountChooseMnemonicStrenghtScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481C208E231FDE30004611DF /* RestoreAccountChooseMnemonicStrenghtScreen.swift */; };
 		4843CB15230BE30E00AD24D4 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB02230BE30E00AD24D4 /* Roboto-Medium.ttf */; };
 		4843CB16230BE30E00AD24D4 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4843CB03230BE30E00AD24D4 /* Roboto-Light.ttf */; };
@@ -209,10 +209,10 @@
 		48092555230AC4240056DB28 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		48092557230AC4240056DB28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		48092558230AC4240056DB28 /* SwiftUI-Wallet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-Wallet-Info.plist"; sourceTree = "<group>"; };
-		48092572230AC61E0056DB28 /* SwiftUI_WalletUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUI_WalletUITests.swift; sourceTree = "<group>"; };
+		48092572230AC61E0056DB28 /* ExampleWalletUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleWalletUITests.swift; sourceTree = "<group>"; };
 		48092574230AC61E0056DB28 /* SwiftUI-UITests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-UITests-Info.plist"; sourceTree = "<group>"; };
 		48092578230AC6300056DB28 /* SwiftUI-UnitTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftUI-UnitTests-Info.plist"; sourceTree = "<group>"; };
-		4809257A230AC6300056DB28 /* SwiftUI_WalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUI_WalletTests.swift; sourceTree = "<group>"; };
+		4809257A230AC6300056DB28 /* ExampleWalletTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExampleWalletTests.swift; sourceTree = "<group>"; };
 		481C208E231FDE30004611DF /* RestoreAccountChooseMnemonicStrenghtScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountChooseMnemonicStrenghtScreen.swift; sourceTree = "<group>"; };
 		4843CB02230BE30E00AD24D4 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		4843CB03230BE30E00AD24D4 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
@@ -477,7 +477,7 @@
 		48092571230AC61E0056DB28 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				48092572230AC61E0056DB28 /* SwiftUI_WalletUITests.swift */,
+				48092572230AC61E0056DB28 /* ExampleWalletUITests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -501,7 +501,7 @@
 		48092579230AC6300056DB28 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				4809257A230AC6300056DB28 /* SwiftUI_WalletTests.swift */,
+				4809257A230AC6300056DB28 /* ExampleWalletTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -1204,7 +1204,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4809257C230AC6300056DB28 /* SwiftUI_WalletTests.swift in Sources */,
+				4809257C230AC6300056DB28 /* ExampleWalletTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1212,7 +1212,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48092575230AC61E0056DB28 /* SwiftUI_WalletUITests.swift in Sources */,
+				48092575230AC61E0056DB28 /* ExampleWalletUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1428,7 +1428,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftUI-Wallet.app/SwiftUI-Wallet";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ExampleWallet.app/ExampleWallet";
 			};
 			name = Debug;
 		};
@@ -1448,7 +1448,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftUI-Wallet.app/SwiftUI-Wallet";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ExampleWallet.app/ExampleWallet";
 			};
 			name = Release;
 		};
@@ -1465,9 +1465,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.SwiftUI-WalletUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "SwiftUI-Wallet";
+				TEST_TARGET_NAME = ExampleWallet;
 			};
 			name = Debug;
 		};
@@ -1484,9 +1485,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.radixdlt.SwiftUI-WalletUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "SwiftUI-Wallet";
+				TEST_TARGET_NAME = ExampleWallet;
 			};
 			name = Release;
 		};
