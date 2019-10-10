@@ -25,10 +25,15 @@
 import Foundation
 import SwiftUI
 
-struct SendScreen {}
+enum Orientation: Int, Equatable {
+    case vertical, horizontal
+}
 
-extension SendScreen: View {
-    var body: some View {
-        Text("Send screen")
+extension Orientation {
+    func stackView<Content>(@ViewBuilder body: () -> Content) -> AnyView where Content: View {
+        switch self {
+        case .vertical: return VStack(alignment: .leading, content: body).eraseToAny()
+        case .horizontal: return HStack(content: body).eraseToAny()
+        }
     }
 }

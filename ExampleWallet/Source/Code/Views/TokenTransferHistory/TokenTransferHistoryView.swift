@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,18 +23,37 @@
 //
 
 import Foundation
+import SwiftUI
+import RadixSDK
 
-// MARK: - EncodableKeyValueListConvertible
-public extension FixedSupplyTokenDefinitionParticle {
+struct TokenTransferHistoryView {
+    let asset: Asset
+    let myAddress: Address
     
-    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-        return [
-            EncodableKeyValue(key: .iconUrl, ifPresent: try? StringValue(string: iconUrl?.absoluteString)),
-            EncodableKeyValue(key: .description, value: description),
-            EncodableKeyValue(key: .granularity, value: granularity),
-            EncodableKeyValue(key: .supply, value: fixedTokenSupply),
-            EncodableKeyValue(key: .rri, value: rri),
-            EncodableKeyValue(key: .name, value: name)
-        ].compactMap { $0 }
+    init(for asset: Asset, myAddress: Address) {
+        self.asset = asset
+        self.myAddress = myAddress
+    }
+    
+}
+
+// MARK: - View
+extension TokenTransferHistoryView: View {
+    var body: some View {
+        ForEach(transfersDuringPeriods) { transfersDuringPeriod in
+            TokenTransfersDuringPeriodView(transfersDuringPeriod: transfersDuringPeriod)
+        }
     }
 }
+
+// MARK: - Private
+private extension TokenTransferHistoryView {
+    var transfersDuringPeriods: [TokenTransfersDuringPeriod] {
+        #if DEBUG
+        return mockTokenTransfersDuringPeriod(asset: asset, myAddress: myAddress)
+        #else
+        implementMe()
+        #endif
+    }
+}
+

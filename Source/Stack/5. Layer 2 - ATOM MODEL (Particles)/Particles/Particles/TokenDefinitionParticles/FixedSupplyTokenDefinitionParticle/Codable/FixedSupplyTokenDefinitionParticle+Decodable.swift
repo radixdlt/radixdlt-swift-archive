@@ -38,7 +38,7 @@ public extension FixedSupplyTokenDefinitionParticle {
         _ = try Symbol(string: rri.name)
         
         granularity = try container.decode(Granularity.self, forKey: .granularity)
-        supply = try container.decode(PositiveAmount.self, forKey: .supply)
+        fixedTokenSupply = try container.decode(PositiveAmount.self, forKey: .supply)
         iconUrl = URL(string: try container.decodeIfPresent(StringValue.self, forKey: .iconUrl)?.value)
     }
 }

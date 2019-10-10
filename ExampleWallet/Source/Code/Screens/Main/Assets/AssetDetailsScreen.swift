@@ -24,9 +24,58 @@
 
 import Foundation
 import SwiftUI
+import RadixSDK
 
-struct LearnScreen: View {
+struct AssetDetailsScreen {
+    let asset: Asset
+    let myAddress: Address
+}
+
+// MARK: View
+extension AssetDetailsScreen: View {
     var body: some View {
-        Text("Learn")
+        VStack(alignment: .leading, spacing: 0) {
+            List {
+                AssetInfoView(of: asset)
+                
+                TokenTransferHistoryView(for: asset, myAddress: myAddress)
+            }
+            
+            VStack {
+                receiveOrSendView()
+                
+                #if DEBUG
+                mintOrBurnView(asset: asset, myAddress: myAddress)
+                #endif
+            }
+        }
+        .navigationBarTitle(asset.name)
     }
 }
+
+// MARK: - Debug
+#if DEBUG
+
+func mintOrBurnView(
+    asset: Asset,
+    myAddress: Address
+) -> Either<MintTokensScreen, BurnTokensScreen> {
+    
+    let canMint = asset.token.canBeMinted(by: myAddress)
+    let canBurn = asset.token.canBeBurned(by: myAddress)
+    
+    return Either(
+        
+        MintTokensScreen(asset: asset),
+        present: canMint,
+        color: Color.Radix.emerald,
+        
+        or:
+        
+        BurnTokensScreen(asset: asset),
+        present: canBurn,
+        color: Color.Radix.ruby
+    )
+}
+
+#endif

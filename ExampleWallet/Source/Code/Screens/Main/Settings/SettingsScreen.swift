@@ -30,7 +30,7 @@ struct SettingsScreen {
     @EnvironmentObject private var radix: Radix
 
     #if DEBUG
-    @State private var isPresentingCreateTokenModal = false
+    @State private var isPresentingCreateTokenScreen = false
     #endif
     
 }
@@ -42,9 +42,9 @@ extension SettingsScreen: View {
             #if DEBUG
             Section(header: centeredText("🔨 Developer")) {
                 Button("💰 Create token") {
-                    self.isPresentingCreateTokenModal = true
+                    self.isPresentingCreateTokenScreen = true
                 }
-                NavigationLink(destination: NetworkScreen()) {
+                NavigationLink(destination: NetworkScreen().environmentObject(NetworkScreen.ViewModel(radixDebug: radix.debug))) {
                     Text("🛰 Network")
                 }
             }
@@ -66,7 +66,7 @@ extension SettingsScreen: View {
                 }.buttonStyleRuby()
             }
         }
-        .sheet(isPresented: $isPresentingCreateTokenModal) {
+        .sheet(isPresented: $isPresentingCreateTokenScreen) {
             CreateTokenScreen().environmentObject(CreateTokenScreen.ViewModel(radix: self.radix))
         }
     }

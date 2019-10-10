@@ -25,9 +25,34 @@
 import Foundation
 import SwiftUI
 
-struct ContactsScreen: View {
-    var body: some View {
-        Text("Contacts list overview")
+struct AssetInfoView {
+    let asset: Asset
+    
+    init(of asset: Asset) {
+        self.asset = asset
     }
+    
 }
 
+// MARK: - View
+extension AssetInfoView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            Labelled("Your balance", value: asset.balanceOf)
+                .fontForValue(.roboto(size: 40, weight: .regular))
+            
+            Labelled("Description", value: asset.tokenDescription)
+            
+            HStack(spacing: 30) {
+                Labelled("Supply type", value: asset.supplyType)
+                Spacer()
+                Labelled("Total supply", value: asset.totalSupply)
+            }
+            
+            Labelled("RRI", value: asset.rri)
+            
+        }
+        .background(Color.Radix.sapphire)
+        .foregroundColor(.white)
+    }
+}

@@ -24,15 +24,22 @@
 
 import Foundation
 import SwiftUI
+import RadixSDK
 
-struct AssetDetailsScreen {
-    let asset: Asset
+struct TokenTransfersDuringPeriodView {
+    let transfersDuringPeriod: TokenTransfersDuringPeriod
 }
 
-// MARK: View
-extension AssetDetailsScreen: View {
+// MARK: - View
+extension TokenTransfersDuringPeriodView: View {
     var body: some View {
-        Text("\(asset.token.name.stringValue)")
+        Section(header: Text(transfersDuringPeriod.date.formatted())) {
+            ForEach(transfersDuringPeriod.transfers) { transfer in
+                NavigationLink(destination: TransferDetailsView(transfer: transfer)) {
+                    TokenTransferRowView(transfer: transfer)
+                        .padding([.top, .bottom])
+                }
+            }
+        }
     }
 }
-

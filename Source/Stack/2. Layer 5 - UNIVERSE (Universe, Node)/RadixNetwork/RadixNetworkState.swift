@@ -39,6 +39,16 @@ public extension RadixNetworkState {
     }
 }
 
+public extension RadixNetworkState {
+    var readyNodes: [RadixNodeState] {
+        nodes.filter { $0.value.websocketStatus == .ready }.map { $0.value }
+    }
+    
+    var unreadyNodes: [RadixNodeState] {
+        nodes.filter { $0.value.websocketStatus != .ready }.map { $0.value }
+    }
+}
+
 // MARK: - CustomDebugStringConvertible
 public extension RadixNetworkState {
     var debugDescription: String {
@@ -51,3 +61,4 @@ public extension RadixNetworkState {
         """
     }
 }
+

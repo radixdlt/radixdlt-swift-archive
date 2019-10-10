@@ -75,7 +75,8 @@ private func transferOfTokens(particleGroup: ParticleGroup, atomTimestamp: Date)
         to: recipient,
         amount: positiveAmount,
         tokenResourceIdentifier: rri,
-        attachment: particleGroup.attachmentData
+        attachment: particleGroup.attachmentData,
+        date: atomTimestamp
     )
 }
 

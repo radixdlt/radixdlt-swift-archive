@@ -31,6 +31,7 @@ import RxSwift
 public struct Node:
     Hashable,
     Equatable,
+    Identifiable,
     CustomDebugStringConvertible
 {
     // swiftlint:enable colon opening_brace
@@ -44,6 +45,20 @@ public struct Node:
         self.host = host
         self.isUsingSSL = isUsingSSL
         self.websocketsUrl = try URLFormatter.format(host: host, protocol: .websockets, useSSL: isUsingSSL)
+    }
+}
+
+// MARK: - Equatable
+public extension Node {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.host == rhs.host
+    }
+}
+
+// MARK: - Identifiable
+public extension Node {
+    var id: String {
+        "\(host.domain):\(host.port)"
     }
 }
 

@@ -22,13 +22,17 @@
 // SOFTWARE.
 //
 
+import Foundation
 import SwiftUI
 
-struct NetworkScreen {}
+protocol EmptyInitializable {
+    init()
+}
 
-// MARK: View
-extension NetworkScreen: View {
+struct SendScreen: EmptyInitializable {}
+
+extension SendScreen: View {
     var body: some View {
-        Text("network")
+        Text("Send screen")
     }
 }

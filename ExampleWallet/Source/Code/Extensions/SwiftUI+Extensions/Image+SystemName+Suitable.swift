@@ -33,7 +33,6 @@ enum SystemNamedImages {
     
     static func deterministicRandom<Seed>(seed: Seed) -> String where Seed: Hashable {
         let hash = abs(seed.hashValue)
-        print("abs(hash) of \(seed) is: \(hash)")
         let indexFromHash = hash % Self.suitableIcons.count
         return suitableIcons[indexFromHash]
     }

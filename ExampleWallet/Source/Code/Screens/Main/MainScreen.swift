@@ -33,7 +33,7 @@ struct MainScreen {
     @EnvironmentObject private var radix: Radix
     @EnvironmentObject private var securePersistence: SecurePersistence
     // MARK: Stateful Properties
-    @State private var isPresentingSwitchAccountModal = false
+    @State private var isPresentingSwitchAccountScreen = false
 }
 
 // MARK: - View
@@ -51,27 +51,6 @@ extension MainScreen: View {
                 }
             }
 
-            tab(.contacts) {
-                NavigationView {
-                    ContactsScreen()
-                        .navigationBarItems(trailing: switchAccountButton)
-                }
-            }
-
-            tab(.apps) {
-                NavigationView {
-                    AppsScreen()
-                        .navigationBarItems(trailing: switchAccountButton)
-                }
-            }
-
-            tab(.learn) {
-                NavigationView {
-                    LearnScreen()
-                        .navigationBarItems(trailing: switchAccountButton)
-                }
-            }
-
             tab(.settings) {
                 NavigationView {
                     SettingsScreen()
@@ -81,7 +60,7 @@ extension MainScreen: View {
         }
         .font(.roboto(size: 20))
         .accentColor(Color.Radix.emerald)
-        .sheet(isPresented: $isPresentingSwitchAccountModal) {
+        .sheet(isPresented: $isPresentingSwitchAccountScreen) {
             SwitchAccountScreen()
                 .environmentObject(self.radix)
         }
@@ -91,7 +70,7 @@ extension MainScreen: View {
 
 private extension MainScreen {
     var switchAccountButton: some View {
-        Button(action: { self.isPresentingSwitchAccountModal = true }) {
+        Button(action: { self.isPresentingSwitchAccountScreen = true }) {
             Image("Icon/Button/Profile")
         }
     }

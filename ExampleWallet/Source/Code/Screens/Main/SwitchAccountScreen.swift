@@ -49,15 +49,15 @@ extension SwitchAccountScreen: View {
 }
 
 private extension SwitchAccountScreen {
-
+    
     func addNewAccount() {
         radix.addNewAccount()
     }
-
+    
     func switchAccount(to account: Account) {
         radix.switchAccount(to: account)
     }
-
+    
     func isSelected(_ account: Account) -> Bool {
         radix.activeAccount == account
     }

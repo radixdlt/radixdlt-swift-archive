@@ -44,7 +44,7 @@ public struct FixedSupplyTokenDefinitionParticle:
     public let description: Description
     public let rri: ResourceIdentifier
     public let granularity: Granularity
-    public let supply: PositiveAmount
+    public let fixedTokenSupply: PositiveAmount
     public let iconUrl: URL?
     
     public init(
@@ -61,7 +61,7 @@ public struct FixedSupplyTokenDefinitionParticle:
         self.rri = ResourceIdentifier(address: address, symbol: symbol)
         self.granularity = granularity
         self.iconUrl = iconUrl
-        self.supply = PositiveAmount(other: supply)
+        self.fixedTokenSupply = PositiveAmount(other: supply)
     }
 }
 
@@ -118,12 +118,14 @@ public extension FixedSupplyTokenDefinitionParticle {
     }
     
     var tokenPermissions: TokenPermissions? { nil }
+    
+    var supply: Supply? { Supply(subset: fixedTokenSupply) }
 }
 
 public extension FixedSupplyTokenDefinitionParticle {
     var debugPayloadDescription: String {
         return """
-        fixed(\(supply)), \(self.tokenDefinitionReference)"
+        fixed(\(fixedTokenSupply)), \(self.tokenDefinitionReference)"
         """
     }
 }

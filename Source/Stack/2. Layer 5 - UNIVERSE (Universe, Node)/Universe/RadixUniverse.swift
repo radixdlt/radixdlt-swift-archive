@@ -35,7 +35,7 @@ public protocol RadixUniverse {
 }
 
 public extension RadixUniverse {
-    var connectedToNodes: Observable<[Node]> { networkController.connectedToNodes }
+    var readyNodes: Observable<[RadixNodeState]> { networkController.readyNodes }
 }
 
 // MARK: - RadixUniverse

@@ -23,10 +23,13 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct AppsScreen: View {
-    var body: some View {
-        Text("Apps")
-    }
+struct TokenTransfersDuringPeriod {
+    let date: Date
+    let transfers: [TokenTransfer]
+}
+
+// MARK: - Identifiable
+extension TokenTransfersDuringPeriod: Identifiable {
+    var id: Date { date }
 }

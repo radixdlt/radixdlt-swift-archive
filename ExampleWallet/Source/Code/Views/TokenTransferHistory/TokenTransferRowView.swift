@@ -22,37 +22,51 @@
 // SOFTWARE.
 //
 
+import Foundation
 import SwiftUI
 
-// MARK: - ROOT SCREEN
-struct RootScreen {
-    @EnvironmentObject private var appState: AppState
-    @EnvironmentObject private var securePersistence: SecurePersistence
+// MARK: - TokenTransferRowView
+struct TokenTransferRowView {
+    let transfer: TokenTransfer
 }
 
-extension RootScreen: View {
+// MARK: - TokenTransferRowView + View
+extension TokenTransferRowView: View {
     var body: some View {
-        rootView
-            .accentColor(.defaultAccentColor)
-            .foregroundColor(.defaultForegroundColor)
+        HStack {
+            arrowImageView
+            infoView.frame(idealHeight: 50, maxHeight: 60)
+        }
     }
 }
 
-private extension RootScreen {
-    var rootView: some View {
-        Group<AnyView> {
-            if appState.rootContent == .welcome {
-                return WelcomeScreen().eraseToAny()
-            } else if appState.rootContent == .getStarted {
-                return GetStartedScreen().eraseToAny()
-            } else {
-                return MainScreen()
-                    .environmentObject(
-                        appState.update().appShould.connectToRadix()
-                )
-                    .environmentObject(securePersistence)
-                    .eraseToAny()
+private extension TokenTransferRowView {
+    var arrowImageView: some View {
+        Image("""
+            Icon/Arrows/\(transfer.iSpent ? "Up" : "Down")
+            """
+        )
+            .foregroundColor(transfer.iSpent ? Color.Radix.ruby : Color.Radix.emerald)
+    }
+    
+    var infoView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            
+            HStack {
+                Text("Personal")
+                Spacer()
+                Text(transfer.amount)
+                    .foregroundColor(
+                        transfer.transferType == .iSpent ? Color.red : Color.green
+                ).multilineTextAlignment(.trailing)
             }
+            .font(.roboto(size: 18))
+            
+            HStack {
+                Text(transfer.iSpent ? "From" : "To")
+                AddressView(address: transfer.addressOfOther)
+            }
+            .font(.roboto(size: 12))
         }
     }
 }

@@ -27,6 +27,8 @@ import SwiftUI
 
 public extension Font {
 
+    static var `default`: Self { .roboto(size: 18, weight: .regular) }
+    
     static func roboto(
         size: CGFloat,
         weight: Font.Roboto.Weight = .regular

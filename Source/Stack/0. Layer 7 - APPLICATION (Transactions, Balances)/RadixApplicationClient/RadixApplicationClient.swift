@@ -27,6 +27,8 @@ import RxSwift
 import RxSwiftExt
 import RxOptional
 
+// MARK: - RadixApplicationClient
+
  // swiftlint:disable opening_brace colon
 
 public final class RadixApplicationClient:
@@ -48,6 +50,8 @@ public final class RadixApplicationClient:
 {
     // swiftlint:enable opening_brace colon
     
+    // MARK: - Stored properties
+
     /// The chosen Radix universe, a network of nodes running a specific version of the Radix Node Runner software
     public let universe: RadixUniverse
     
@@ -306,8 +310,6 @@ public extension RadixApplicationClient {
     func pull() -> Disposable {
         return pull(address: addressOfActiveAccount)
     }
-
-    var observeConnectedToNodes: Observable<[Node]> { universe.connectedToNodes }
 
     var snapshotActiveAccount: Account {
         identity.snapshotActiveAccount

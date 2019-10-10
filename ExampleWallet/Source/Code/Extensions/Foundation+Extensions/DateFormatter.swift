@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,17 +24,16 @@
 
 import Foundation
 
-// MARK: - EncodableKeyValueListConvertible
-public extension FixedSupplyTokenDefinitionParticle {
-    
-    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-        return [
-            EncodableKeyValue(key: .iconUrl, ifPresent: try? StringValue(string: iconUrl?.absoluteString)),
-            EncodableKeyValue(key: .description, value: description),
-            EncodableKeyValue(key: .granularity, value: granularity),
-            EncodableKeyValue(key: .supply, value: fixedTokenSupply),
-            EncodableKeyValue(key: .rri, value: rri),
-            EncodableKeyValue(key: .name, value: name)
-        ].compactMap { $0 }
+extension DateFormatter {
+    static var `default`: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter
+    }
+}
+
+extension Date {
+    func formatted(by formatter: DateFormatter = .default) -> String {
+        formatter.string(from: self)
     }
 }

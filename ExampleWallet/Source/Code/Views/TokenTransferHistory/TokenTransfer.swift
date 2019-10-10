@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,18 +23,53 @@
 //
 
 import Foundation
+import RadixSDK
 
-// MARK: - EncodableKeyValueListConvertible
-public extension FixedSupplyTokenDefinitionParticle {
+// MARK: - TokenTransfer
+struct TokenTransfer {
     
-    func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {
-        return [
-            EncodableKeyValue(key: .iconUrl, ifPresent: try? StringValue(string: iconUrl?.absoluteString)),
-            EncodableKeyValue(key: .description, value: description),
-            EncodableKeyValue(key: .granularity, value: granularity),
-            EncodableKeyValue(key: .supply, value: fixedTokenSupply),
-            EncodableKeyValue(key: .rri, value: rri),
-            EncodableKeyValue(key: .name, value: name)
-        ].compactMap { $0 }
+    private let transfer: RadixSDK.TransferTokensAction
+    let iSpent: Bool
+    
+    init(
+        transfer: RadixSDK.TransferTokensAction,
+        iAmTheSender: (Address) -> Bool
+    ) {
+        self.transfer = transfer
+        self.iSpent = iAmTheSender(transfer.sender)
+    }
+}
+
+extension TokenTransfer {
+    var amount: String {
+        let minusOrPlus = iSpent ? "-" : "+"
+        let amount = transfer.amount.displayInWholeDenominationFallbackToHighestPossible()
+        return "\(minusOrPlus) \(amount) \(transfer.tokenResourceIdentifier.name.uppercased())"
+    }
+    
+    var addressOfOther: Address {
+        if iSpent {
+            return transfer.recipient
+        } else {
+            return transfer.sender
+        }
+    }
+    
+    var transferType: TransferType {
+        iSpent ? .iSpent : .iReceived
+    }
+}
+
+// MARK: - Identifiable
+extension TokenTransfer: Identifiable {
+    var id: Int {
+        transfer.hashValue
+    }
+}
+
+// MARK: - TransferType
+extension TokenTransfer {
+    enum TransferType: Int, Equatable {
+        case iSpent, iReceived
     }
 }

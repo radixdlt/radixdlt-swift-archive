@@ -28,8 +28,8 @@ import Combine
 struct WelcomeScreen {
     @EnvironmentObject private var appState: AppState
 
-    @State private var isPresentingTermsWebViewModal = false
-    @State private var isPresentingPrivacyWebViewModal = false
+    @State private var isPresentingTermsWebView = false
+    @State private var isPresentingPrivacyWebView = false
 
     @State private var hasAgreedToTermsAndConditions = false
     @State private var hasAgreedToPrivacyPolicy = false
@@ -38,8 +38,7 @@ struct WelcomeScreen {
 // MARK: - View
 extension WelcomeScreen: View {
     var body: some View {
-
-        return NavigationView {
+        NavigationView {
             VStack(spacing: 30) {
                 RadixLogo.whiteText.frame(height: 50, alignment: .center)
                 Spacer()
@@ -80,13 +79,13 @@ private extension WelcomeScreen {
 
     var toggleTermsAndConditions: some View {
         Toggle(isOn: $hasAgreedToTermsAndConditions) {
-            modalWebView(link: .terms, isPresented: $isPresentingTermsWebViewModal)
+            modalWebView(link: .terms, isPresented: $isPresentingTermsWebView)
         }
     }
 
     var togglePrivacyPolicy: some View {
         Toggle(isOn: $hasAgreedToPrivacyPolicy) {
-            modalWebView(link: .privacy, isPresented: $isPresentingPrivacyWebViewModal)
+            modalWebView(link: .privacy, isPresented: $isPresentingPrivacyWebView)
         }
     }
 }

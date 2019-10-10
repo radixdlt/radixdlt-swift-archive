@@ -28,22 +28,21 @@ import RxSwift
 public protocol RadixNetworkController {
     func dispatch(nodeAction: NodeAction)
     func getActions() -> Observable<NodeAction>
-    var networkState: Observable<RadixNetworkState> { get }
+
+    func observeNetworkState() -> Observable<RadixNetworkState>
+    var currentNetworkState: RadixNetworkState { get }
 }
 
 public extension RadixNetworkController {
-    var connectedToNodes: Observable<[Node]> {
-        return networkState.map {
-            $0.nodes.map { $0.value }.filter { $0.websocketStatus == .ready }.map { $0.node }
+    var readyNodes: Observable<[RadixNodeState]> {
+        observeNetworkState().map {
+            $0.readyNodes
         }
     }
 }
 
 public final class DefaultRadixNetworkController: RadixNetworkController {
     
-    // MARK: Public Properties
-    public let networkState: Observable<RadixNetworkState>
-
     // MARK: Private Properties
     private let networkStateSubject: BehaviorSubject<RadixNetworkState>
     private let nodeActionSubject: PublishSubject<NodeAction>
@@ -79,7 +78,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
         
         self.nodeActionSubject = nodeActionSubject
         self.networkStateSubject = networkStateSubject
-        self.networkState = networkState
+//        self.networkState = networkState
         self.reducedNodeActions = reducedNodeActions
         self._retainingVariableEpics = epics
         
@@ -111,4 +110,19 @@ public extension DefaultRadixNetworkController {
         nodeActionSubject.onNext(nodeAction)
     }
     
+}
+
+public extension DefaultRadixNetworkController {
+    func observeNetworkState() -> Observable<RadixNetworkState> {
+        return networkStateSubject.asObservable()
+    }
+    
+    var currentNetworkState: RadixNetworkState {
+        do {
+            return try networkStateSubject.value()
+        } catch {
+            incorrectImplementationShouldAlwaysBeAble(to: "Retreive NetworkState", error)
+        }
+    }
+
 }

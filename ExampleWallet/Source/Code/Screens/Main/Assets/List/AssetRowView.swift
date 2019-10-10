@@ -101,7 +101,7 @@ extension AssetRowView.ViewModel {
 
     var name: String { token.name.stringValue }
 
-    var balance: String { "\(asset.balance.displayUsingHighestPossibleNamedDenominator()) \(token.symbol.stringValue)" }
+    var balance: String { asset.balanceOf }
 
     var iconUrl: URL? { token.iconUrl }
 }
