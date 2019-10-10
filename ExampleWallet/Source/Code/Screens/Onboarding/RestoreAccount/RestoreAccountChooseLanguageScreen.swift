@@ -32,13 +32,11 @@ struct RestoreAccountChooseLanguageScreen {
 // MARK: - VIEW
 extension RestoreAccountChooseLanguageScreen: View {
     var body: some View {
-        NavigationView {
-            VStack {
-                Text("Language of mnemonic")
-                List(Mnemonic.Language.allCases) { language in
-                    NavigationLink(destination: self.chooseMnemonicStrenghtScreen(language: language)) {
-                        Text("\(language.rawValue)")
-                    }
+        VStack {
+            Text("Language of mnemonic")
+            List(Mnemonic.Language.allCases) { language in
+                NavigationLink(destination: self.chooseMnemonicStrenghtScreen(language: language)) {
+                    Text("\(language.rawValue)")
                 }
             }
         }

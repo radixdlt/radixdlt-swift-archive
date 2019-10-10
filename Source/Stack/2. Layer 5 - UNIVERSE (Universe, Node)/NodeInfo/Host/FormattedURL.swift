@@ -29,6 +29,7 @@ import Foundation
 public struct FormattedURL:
     HostConvertible,
     URLConvertible,
+    CustomStringConvertible,
     Hashable
 {
     // swiftlint:enable colon opening_brace
@@ -49,5 +50,11 @@ public struct FormattedURL:
 public extension FormattedURL {
     static var localhostWebsocket: FormattedURL {
         return URLFormatter.localhostWebsocket
+    }
+}
+
+public extension FormattedURL {
+    var description: String {
+        url.absoluteString
     }
 }

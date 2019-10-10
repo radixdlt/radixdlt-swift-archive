@@ -33,6 +33,7 @@ public struct TokenDefinition: TokenConvertible, Hashable {
     public let tokenSupplyType: SupplyType
     public let iconUrl: URL?
     public let tokenPermissions: TokenPermissions?
+    public let supply: Supply?
     
     public init(
         symbol: Symbol,
@@ -42,7 +43,8 @@ public struct TokenDefinition: TokenConvertible, Hashable {
         description: Description,
         tokenSupplyType: SupplyType,
         iconUrl: URL?,
-        tokenPermissions: TokenPermissions?
+        tokenPermissions: TokenPermissions?,
+        supply: Supply?
     ) {
         self.name = name
         self.symbol = symbol
@@ -52,6 +54,7 @@ public struct TokenDefinition: TokenConvertible, Hashable {
         self.tokenSupplyType = tokenSupplyType
         self.iconUrl = iconUrl
         self.tokenPermissions = tokenPermissions
+        self.supply = supply
     }
 }
 
@@ -65,7 +68,8 @@ public extension TokenDefinition {
             description: token.description,
             tokenSupplyType: token.tokenSupplyType,
             iconUrl: token.iconUrl,
-            tokenPermissions: token.tokenPermissions
+            tokenPermissions: token.tokenPermissions,
+            supply: token.supply
         )
     }
 }

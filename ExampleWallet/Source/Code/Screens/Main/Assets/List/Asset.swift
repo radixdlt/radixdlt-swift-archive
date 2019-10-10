@@ -28,16 +28,61 @@ import RadixSDK
 
 struct Asset {
     let token: TokenDefinition
-    let balance: NonNegativeAmount
+    private let balanceAmount: NonNegativeAmount
     
     init(tokenBalance: TokenBalance) {
         self.token = tokenBalance.token
-        self.balance = tokenBalance.amount
+        self.balanceAmount = tokenBalance.amount
     }
 }
 
 extension Asset: Identifiable {
     var id: ResourceIdentifier {
-        return token.tokenDefinitionReference
+        token.tokenDefinitionReference
+    }
+    
+    var rri: String {
+        id.stringValue
+    }
+    
+    var name: String {
+        token.name.stringValue
+    }
+    
+    var balance: String {
+        balanceAmount.displayInWholeDenominationFallbackToHighestPossible()
+    }
+    
+    var balanceOf: String {
+        "\(balance) \(symbol)"
+    }
+    
+    var symbol: String {
+        token.symbol.stringValue
+    }
+    
+    var tokenDescription: String {
+        token.description.stringValue
+    }
+    
+    var supplyType: String {
+        token.tokenSupplyType.displayedString
+    }
+    
+    var totalSupply: String {
+        guard let supply = token.supply else {
+            incorrectImplementation("Should always have supply, no?")
+        }
+        return supply.displayInWholeDenominationFallbackToHighestPossible()
+    }
+}
+
+extension UnsignedAmount {
+    func displayInWholeDenominationFallbackToHighestPossible() -> String {
+        do {
+            return try display(in: .whole)
+        } catch {
+            return displayUsingHighestPossibleNamedDenominator()
+        }
     }
 }

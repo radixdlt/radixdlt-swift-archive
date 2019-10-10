@@ -39,7 +39,7 @@ extension RestoreAccountInputMnemonicScreen: View {
                 InputMnemonicCell(mnemonicInput: inputMnemonicWord)
             }
             .dismissKeyboard(on: [.tap, .drag])
-
+            
             Button("Restore") {
                 self.viewModel.confirmMnemonic()
             }

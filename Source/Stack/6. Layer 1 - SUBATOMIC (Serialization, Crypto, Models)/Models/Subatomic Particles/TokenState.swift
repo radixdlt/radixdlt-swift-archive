@@ -98,3 +98,8 @@ public extension TokenState {
         case tokenDefinitionReferenceMismatch
     }
 }
+
+// MARK: TokenConvertible
+public extension TokenState {
+    var supply: Supply? { totalSupply }
+}

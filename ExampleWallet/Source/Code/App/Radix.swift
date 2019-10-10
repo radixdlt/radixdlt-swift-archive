@@ -36,9 +36,6 @@ public final class Radix: ObservableObject {
     private let client: Client
     private let wallet: Wallet
 
-    // MARK: Non Retained
-//    private unowned let securePersistence: SecurePersistence
-
     // MARK: ObservableObject
     public let objectWillChange = PassthroughSubject<Void, Never>()
 
@@ -92,6 +89,11 @@ extension Radix {
 }
 
 extension Radix.Debug {
+    
+    var networkState: AnyPublisher<RadixNetworkState, Never> {
+        client.universe.networkController.observeNetworkState().publisherAssertNoFailure
+    }
+    
     func createToken(_ action: CreateTokenAction) -> AnyPublisher<Never, Swift.Error> {
         client.create(token: action).toCompletable().asPublisher()
     }

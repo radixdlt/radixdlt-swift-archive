@@ -23,12 +23,13 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct SendScreen {}
+struct TokenTransfersDuringPeriod {
+    let date: Date
+    let transfers: [TokenTransfer]
+}
 
-extension SendScreen: View {
-    var body: some View {
-        Text("Send screen")
-    }
+// MARK: - Identifiable
+extension TokenTransfersDuringPeriod: Identifiable {
+    var id: Date { date }
 }

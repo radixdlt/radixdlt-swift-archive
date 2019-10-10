@@ -25,9 +25,13 @@
 import Foundation
 import SwiftUI
 
-struct ContactsScreen: View {
-    var body: some View {
-        Text("Contacts list overview")
-    }
+struct TransferDetailsView {
+    let transfer: TokenTransfer
 }
 
+// MARK: - View
+extension TransferDetailsView: View {
+    var body: some View {
+        Text(transfer.amount)
+    }
+}

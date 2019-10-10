@@ -71,6 +71,7 @@ public extension ExpressibleByStringLiteral where Self: StringInitializable {
     }
 }
 
+extension ResourceIdentifier: ExpressibleByStringInterpolation {}
 extension RadixHash: ExpressibleByStringLiteral {
     public init(stringLiteral unvalidated: String) {
         do {

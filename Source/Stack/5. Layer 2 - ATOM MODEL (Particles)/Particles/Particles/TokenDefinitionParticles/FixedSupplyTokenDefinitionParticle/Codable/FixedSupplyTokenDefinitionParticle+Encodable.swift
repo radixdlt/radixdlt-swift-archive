@@ -32,7 +32,7 @@ public extension FixedSupplyTokenDefinitionParticle {
             EncodableKeyValue(key: .iconUrl, ifPresent: try? StringValue(string: iconUrl?.absoluteString)),
             EncodableKeyValue(key: .description, value: description),
             EncodableKeyValue(key: .granularity, value: granularity),
-            EncodableKeyValue(key: .supply, value: supply),
+            EncodableKeyValue(key: .supply, value: fixedTokenSupply),
             EncodableKeyValue(key: .rri, value: rri),
             EncodableKeyValue(key: .name, value: name)
         ].compactMap { $0 }

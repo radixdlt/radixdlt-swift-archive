@@ -134,6 +134,8 @@ public extension MutableSupplyTokenDefinitionParticle {
     var tokenPermissions: TokenPermissions? {
         return permissions
     }
+    
+    var supply: Supply? { nil }
 }
 
 public extension MutableSupplyTokenDefinitionParticle {

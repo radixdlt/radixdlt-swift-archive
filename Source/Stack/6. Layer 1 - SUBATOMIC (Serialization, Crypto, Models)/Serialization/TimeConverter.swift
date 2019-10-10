@@ -24,8 +24,8 @@
 
 import Foundation
 
-public final class TimeConverter {
-    
+public enum TimeConverter {}
+public extension TimeConverter {
     static func stringFrom(date: Date) -> String {
         return millisecondsFrom(date: date).description
     }

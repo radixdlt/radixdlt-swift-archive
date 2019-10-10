@@ -56,6 +56,13 @@ public extension ResourceIdentifier {
     }
 }
 
+// MARK: - Hashable
+public extension ResourceIdentifier {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier)
+    }
+}
+
 // MARK: - DSONPrefixSpecifying
 public extension ResourceIdentifier {
     var dsonPrefix: DSONPrefix {

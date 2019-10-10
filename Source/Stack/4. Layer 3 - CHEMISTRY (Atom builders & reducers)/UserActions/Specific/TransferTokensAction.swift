@@ -25,7 +25,7 @@
 import Foundation
 
 /// A transfer of a non-zero amount of a certain token between two Radix accounts
-public struct TransferTokensAction: ConsumeTokensAction {
+public struct TransferTokensAction: ConsumeTokensAction, Hashable {
     
     public let sender: Address
     public let recipient: Address
@@ -34,33 +34,38 @@ public struct TransferTokensAction: ConsumeTokensAction {
     
     public let attachment: Data?
     
+    /// This `date` should **ONLY** be used for display purposes, has nothing to do with `API`/`hash`
+    public let date: Date
+    
     public init(
         from sender: AddressConvertible,
         to recipient: AddressConvertible,
         amount: PositiveAmount,
         tokenResourceIdentifier: ResourceIdentifier,
-        attachment: Data? = nil
+        attachment: Data? = nil,
+        date: Date? = nil
     ) {
         self.sender = sender.address
         self.recipient = recipient.address
         self.amount = amount
         self.tokenResourceIdentifier = tokenResourceIdentifier
         self.attachment = attachment
+        
+        self.date = date ?? Date()
     }
 }
 
+// MARK: - Hashable
 public extension TransferTokensAction {
-    init(
-        from sender: AddressConvertible,
-        to recipient: AddressConvertible,
-        tokenAmount: PositiveAmount,
-        tokenResourceIdentifier: ResourceIdentifier,
-        attachment: Data? = nil
-    ) {
-        implementMe()
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(sender)
+        hasher.combine(recipient)
+        hasher.combine(amount)
+        hasher.combine(tokenResourceIdentifier)
     }
 }
 
+// MARK: - UserAction
 public extension TransferTokensAction {
     var user: Address { return sender }
     var nameOfAction: UserActionName { return .transferTokens }

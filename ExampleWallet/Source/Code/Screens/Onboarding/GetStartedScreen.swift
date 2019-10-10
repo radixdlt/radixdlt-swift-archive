@@ -29,9 +29,9 @@ import Combine
 import RadixSDK
 
 struct GetStartedScreen {
-
+    
     @EnvironmentObject private var appState: AppState
-
+    
     // TODO allow for selection of language and strength
     private let mnemonicGenerator = Mnemonic.Generator(strength: .wordCountOf12, language: .english)
 }
@@ -39,22 +39,20 @@ struct GetStartedScreen {
 // MARK: - View
 extension GetStartedScreen: View {
     var body: some View {
-        NavigationView {
-            VStack {
-
-                Button("GetStarted.Button.ReceiveTransaction") {
-                    self.generateNewMnemonicAndProceedToMainScreen()
-                }
-                .buttonStyleEmerald()
-
-                LabelledDivider(Text("GetStarted.Text.Or"))
-
-                NavigationLink(destination: self.restoreAccountFlow) {
-                    Text("GetStarted.Button.RestoreAccount").buttonStyleSapphire()
-                }
-
-            }.padding(20)
-        }
+        VStack {
+            
+            Button("GetStarted.Button.ReceiveTransaction") {
+                self.generateNewMnemonicAndProceedToMainScreen()
+            }
+            .buttonStyleEmerald()
+            
+            LabelledDivider(Text("GetStarted.Text.Or"))
+            
+            NavigationLink(destination: self.restoreAccountFlow) {
+                Text("GetStarted.Button.RestoreAccount").buttonStyleSapphire()
+            }
+            
+        }.padding(20)
     }
 }
 
@@ -63,7 +61,7 @@ private extension GetStartedScreen {
         let newMnemonic = mnemonicGenerator.newMnemonic()
         appState.update().userDid.generate(mnemonic: newMnemonic)
     }
-
+    
     var restoreAccountFlow: some View {
         RestoreAccountChooseLanguageScreen()
             .environmentObject(appState)
@@ -76,7 +74,7 @@ struct GetStartedScreen_Previews: PreviewProvider {
         Group {
             GetStartedScreen()
                 .environment(\.locale, Locale(identifier: "en"))
-
+            
             GetStartedScreen()
                 .environment(\.locale, Locale(identifier: "sv"))
         }

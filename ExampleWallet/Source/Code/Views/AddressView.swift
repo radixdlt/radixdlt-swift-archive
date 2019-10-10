@@ -26,21 +26,26 @@ import SwiftUI
 
 import RadixSDK
 
-struct AddressView {
+struct AddressView: Equatable {
 
     private let address: Address
 
-    @State private var isShowingCopiedAddressAlert = false
+    @State private var isPresentingCopiedAddressAlert = false
 
     init(address: Address) {
         self.address = address
     }
 }
 
+extension AddressView {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.address == rhs.address
+    }
+}
+
 extension AddressView: View {
     var body: some View {
         Text(addressString)
-            .font(.roboto(size: 18))
             .lineLimit(nil)
             .contextMenu {
                 copyAddressButton
@@ -52,9 +57,9 @@ private extension AddressView {
     var copyAddressButton: some View {
         Button("Copy address") {
             UIPasteboard.general.string = self.addressString
-            self.isShowingCopiedAddressAlert = true
+            self.isPresentingCopiedAddressAlert = true
         }.buttonStyleEmerald()
-            .alert(isPresented: $isShowingCopiedAddressAlert) {
+            .alert(isPresented: $isPresentingCopiedAddressAlert) {
                 Alert(title: Text("Copied"), message: nil, dismissButton: nil)
         }
     }
@@ -63,3 +68,4 @@ private extension AddressView {
         address.stringValue
     }
 }
+

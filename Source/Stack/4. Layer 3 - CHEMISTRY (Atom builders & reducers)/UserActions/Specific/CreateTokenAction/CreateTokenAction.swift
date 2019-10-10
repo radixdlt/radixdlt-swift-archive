@@ -124,6 +124,24 @@ public extension CreateTokenAction {
             }
         }
     }
+    
+    var supply: Supply? {
+        switch initialSupplyContext {
+        case .defined(let supplyDefinition):
+            switch supplyDefinition {
+            case .fixed(let positiveSupply):
+                return Supply(subset: positiveSupply)
+            case .mutable(let supply):
+                return supply
+            }
+        case .derivedFromAtom(let derived):
+            switch derived {
+            case .fixedInitialSupply(let positiveSupply):
+                return Supply(subset: positiveSupply)
+            case .mutableSupply: return nil
+            }
+        }
+    }
 }
 
 public extension CreateTokenAction {

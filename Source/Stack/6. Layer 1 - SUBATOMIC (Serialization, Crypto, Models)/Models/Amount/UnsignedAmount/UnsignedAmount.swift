@@ -83,14 +83,14 @@ public extension UnsignedAmount {
         return format(amount: magnitude, denomination: self.measuredIn)
     }
     
-    func display(in desiredDenomination: Denomination) throws -> String {
+    func display(in desiredDenomination: Denomination, displayDenomination: Bool = false) throws -> String {
         let converted = try Denomination.convertMagnitude(magnitude, from: self.measuredIn, to: desiredDenomination)
-        return format(amount: converted, denomination: desiredDenomination)
+        return format(amount: converted, denomination: displayDenomination ? desiredDenomination : nil)
     }
     
-    func displayUsingHighestPossibleNamedDenominator() -> String {
+    func displayUsingHighestPossibleNamedDenominator(displayDenomination: Bool = false) -> String {
         let (amount, denomination) = expressedInBiggestPossibleDenomination()
-        return format(amount: amount, denomination: denomination)
+        return format(amount: amount, denomination: displayDenomination ? denomination : nil)
     }
 }
 
@@ -116,8 +116,12 @@ public extension UnsignedAmountType {
 }
 
 private extension UnsignedAmount {
-    func format(amount: Magnitude, denomination: Denomination) -> String {
-        return "\(amount) \(denomination.name) (\(denomination.exponentSuperscript))"
+    func format(amount: Magnitude, denomination: Denomination?) -> String {
+        if let denomination = denomination {
+            return "\(amount) \(denomination.name) (\(denomination.exponentSuperscript))"
+        } else {
+            return "\(amount)"
+        }
     }
 }
 

@@ -26,6 +26,11 @@ import Foundation
 import SwiftUI
 
 extension Color {
+    static var defaultAccentColor: Self = Color.Radix.emerald
+    static var defaultForegroundColor: Self = Color.Radix.dusk
+}
+
+extension Color {
     enum Radix {}
 }
 

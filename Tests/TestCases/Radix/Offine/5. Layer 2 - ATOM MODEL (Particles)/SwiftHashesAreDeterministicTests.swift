@@ -22,13 +22,21 @@
 // SOFTWARE.
 //
 
-import SwiftUI
+import Foundation
+@testable import RadixSDK
+import XCTest
 
-struct NetworkScreen {}
-
-// MARK: View
-extension NetworkScreen: View {
-    var body: some View {
-        Text("network")
+class SwiftHashTests: XCTestCase {
+    
+    // This Swift library has opted in for deterministic hashing using `SWIFT_DETERMINISTIC_HASHING` flag, as suggested by:
+    // https://github.com/apple/swift-evolution/blob/master/proposals/0206-hashable-enhancements.md#effect-on-abi-stability
+    func testHashString() {
+        XCTAssertEqual("Hello Hash".hashValue, -5126095785992718058)
+    }
+    
+    func testHashOfRRI() {
+        let address: Address = "JGdYaT8VUbafwXEBSoxfitXmHvg2Xq1BhvNVi3Cxd8mNp4LazBk"
+        let rri: ResourceIdentifier = "/\(address)/STABLE"
+        XCTAssertEqual(rri.hashValue, -9191205457814054942)
     }
 }

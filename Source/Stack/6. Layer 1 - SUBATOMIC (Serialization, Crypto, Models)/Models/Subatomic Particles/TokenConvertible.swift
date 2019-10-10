@@ -33,6 +33,7 @@ public protocol TokenConvertible: TokenDefinitionReferencing {
     var iconUrl: URL? { get }
     var tokenSupplyType: SupplyType { get }
     var tokenPermissions: TokenPermissions? { get }
+    var supply: Supply? { get }
 }
 
 // MARK: - Hashable Preparation

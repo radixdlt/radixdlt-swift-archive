@@ -29,13 +29,16 @@ import Combine
 import RadixSDK
 
 struct AssetsScreen {
-
+    
+    @Environment(\.sizeCategory) var sizeCategory
+    
     @EnvironmentObject private var securePersistence: SecurePersistence
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var radix: Radix
-
+    
     // MARK: - Stateful Properties
-    @State private var isShowingBackUpMnemonicWarningSheet = false
+    @State private var isPresentingBackUpMnemonicWarningScreen = false
+    @State private var isPresentingSwitchAccountScreen = false
 }
 
 // MARK: - View
@@ -43,120 +46,81 @@ extension AssetsScreen: View {
     var body: some View {
         VStack {
             assetsList
-            sendOrReceiveTransactionButtons
+            receiveOrSendView()
         }
-        .sheet(
-            isPresented: $isShowingBackUpMnemonicWarningSheet,
-            onDismiss: {
-                self.isShowingBackUpMnemonicWarningSheet = false
-            }
-        ) {
-            BackUpMnemonicScreen(
-                mnemonicToBackUp: self.securePersistence.mnemonic!,
-                isPresentingBackUpFlow: self.$isShowingBackUpMnemonicWarningSheet
-            )
-            .environmentObject(self.appState)
-        }
-        .onAppear {
-            self.presentBackUpMnemonicWarningIfNeeded()
-        }
+        .promptForBackingUpOf(
+            mnemonic: self.securePersistence.mnemonic,
+            if: self.radix.hasEverReceivedAnyTransactionToAnyAccount,
+            isPresented: $isPresentingBackUpMnemonicWarningScreen,
+            appState: self.appState
+        )
     }
 }
 
 // MARK: - Subviews
 private extension AssetsScreen {
-
+    
     var assetsList: some View {
-        List(radix.assets) { asset in
-            NavigationLink(destination: AssetDetailsScreen(asset: asset)) {
+        List(self.assets) { asset in
+            NavigationLink(destination:
+                AssetDetailsScreen(
+                    asset: asset,
+                    myAddress: self.radix.myActiveAddress
+                )
+            ) {
                 AssetRowView(asset: asset)
-                    .contextMenu {
-                        #if DEBUG
-                        if self.hasUserPermission(toMint: asset) {
-                            Button("🖨 Mint token") { self.mintAsset(asset) }
-                        }
-                        
-                        if self.hasUserPermission(toBurn: asset) {
-                            Button("🔥 Burn token") { self.burnAsset(asset) }
-                        }
-                        #endif
-                        
-                        Button("💸 Transfer token") {
-                            self.transferAsset(asset)
-                        }
-                }
             }
         }.listStyle(GroupedListStyle())
     }
-
-    var sendOrReceiveTransactionButtons: some View {
-        HStack {
-            NavigationLink(destination: ReceiveTransactionScreen()) {
-                Text("Receive").buttonStyleSapphire()
-            }
-
-            NavigationLink(destination: SendScreen()) {
-                Text("Send").buttonStyleEmerald()
-            }
-        }.padding()
-    }
     
 }
 
-// MARK: - Actions
-   private extension AssetsScreen {
-    
-    func transferAsset(_ asset: Asset) {
-        print("💸 Transfer: \(asset)")
+// MARK: - Data
+private extension AssetsScreen {
+    var assets: [Asset] {
+        var radixAssets = radix.assets
+        #if DEBUG
+        radixAssets += mockAssets()
+        #endif
+        return radixAssets
     }
+}
+
+// MARK: - View + Prompt for Backup
+extension View {
     
-    
-    func presentBackUpMnemonicWarningIfNeeded(delay: DispatchTimeInterval = .seconds(1)) {
-        guard needsToBackupMnemonic else { return }
-        performOnMainThread(after: delay) {
-            self.isShowingBackUpMnemonicWarningSheet = true
+    func promptForBackingUpOf(
+        mnemonic: @autoclosure @escaping () -> Mnemonic?,
+        `if` isNeeded: @autoclosure @escaping () -> Bool,
+        isPresented: Binding<Bool>,
+        after delay: DispatchTimeInterval = .seconds(1),
+        appState: AppState
+    ) -> some View {
+        
+        return self.sheet(
+            isPresented: isPresented,
+            onDismiss: {
+                isPresented.wrappedValue = false
+        }
+        ) {
+            BackUpMnemonicScreen(
+                mnemonicToBackUp: mnemonic()!,
+                isPresentingBackUpFlow: isPresented
+            )
+                .environmentObject(appState)
+        }.onAppear {
+            guard mnemonic() != nil && isNeeded() else { return }
+            performOnMainThread(after: delay) {
+                isPresented.wrappedValue = true
+            }
         }
     }
-
-    var needsToBackupMnemonic: Bool {
-        guard
-            securePersistence.mnemonic != nil,
-            radix.hasEverReceivedAnyTransactionToAnyAccount
-        else { return false }
-        return true
-    }
-
-    
 }
 
-#if DEBUG
-private extension AssetsScreen {
-    
-    func hasUserPermission(toMint asset: Asset) -> Bool {
-        return asset.token.canBeMinted(by: radix.myActiveAddress)
-    }
-    
-    func hasUserPermission(toBurn asset: Asset) -> Bool {
-        return asset.token.canBeBurned(by: radix.myActiveAddress)
-    }
-    
-    func mintAsset(_ asset: Asset) {
-        print("🖨 Mint \(asset)")
-    }
-    
-    func burnAsset(_ asset: Asset) {
-        print("🔥 Burn \(asset)")
-    }
-}
-#endif
+// MARK: - ReceiveOrSendView
 
+typealias ReceiveOrSendView = Either<ReceiveTransactionScreen, SendScreen>
 
-extension Asset {
-    enum Action {
-        case transfer
-        #if DEBUG
-        case burn
-        case mint
-        #endif
-    }
+func receiveOrSendView() -> ReceiveOrSendView {
+    ReceiveOrSendView(primary: "Receive", secondary: "Send")
 }

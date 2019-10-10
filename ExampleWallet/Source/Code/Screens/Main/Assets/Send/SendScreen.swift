@@ -25,14 +25,14 @@
 import Foundation
 import SwiftUI
 
-struct AssetDetailsScreen {
-    let asset: Asset
+protocol EmptyInitializable {
+    init()
 }
 
-// MARK: View
-extension AssetDetailsScreen: View {
+struct SendScreen: EmptyInitializable {}
+
+extension SendScreen: View {
     var body: some View {
-        Text("\(asset.token.name.stringValue)")
+        Text("Send screen")
     }
 }
-

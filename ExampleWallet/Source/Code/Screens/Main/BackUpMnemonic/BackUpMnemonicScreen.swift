@@ -29,10 +29,10 @@ import Combine
 import RadixSDK
 
 struct BackUpMnemonicScreen {
-
+    
     private let mnemonicToBackUp: Mnemonic
     private let isPresentingBackUpFlow: Binding<Bool>
-
+    
     init(mnemonicToBackUp: Mnemonic, isPresentingBackUpFlow: Binding<Bool>) {
         self.mnemonicToBackUp = mnemonicToBackUp
         self.isPresentingBackUpFlow = isPresentingBackUpFlow
@@ -47,7 +47,7 @@ extension BackUpMnemonicScreen: View {
                 List(words) { word in
                     Text(word.indexedWord)
                 }.listStyle(GroupedListStyle())
-
+                
                 NavigationLink(destination:
                     ConfirmMnemonicScreen(mnemonicToBackUp: mnemonicToBackUp, isPresentingBackUpFlow: self.isPresentingBackUpFlow)
                 ) {
@@ -59,11 +59,11 @@ extension BackUpMnemonicScreen: View {
 }
 
 private extension BackUpMnemonicScreen {
-
+    
     var words: [MnemonicWord] {
         return mnemonicToBackUp.words.map { $0.value }.enumerated().map {
             MnemonicWord(id: $0.offset, word: $0.element)
         }
     }
-
+    
 }

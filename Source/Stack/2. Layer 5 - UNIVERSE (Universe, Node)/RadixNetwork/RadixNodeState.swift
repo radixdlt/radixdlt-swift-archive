@@ -24,8 +24,15 @@
 
 import Foundation
 
+// swiftlint:disable colon opening_brace
+
 /// Immutable state at a certain point in time of a RadixNode (`Node`)
-public struct RadixNodeState: Equatable, CustomDebugStringConvertible {
+public struct RadixNodeState:
+    Equatable,
+    CustomDebugStringConvertible,
+    Identifiable
+{
+    // swiftlint:enable colon opening_brace
     public let node: Node
     public let websocketStatus: WebSocketStatus
     public let universeConfig: UniverseConfig?
@@ -53,6 +60,11 @@ public extension RadixNodeState {
     var debugDescription: String {
         return debugDescriptionIncludeNode(true)
     }
+}
+
+// MARK: Identifiable
+public extension RadixNodeState {
+    var id: Node.ID { node.id }
 }
 
 public extension RadixNodeState {

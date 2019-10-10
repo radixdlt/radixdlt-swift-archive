@@ -32,6 +32,14 @@ struct RootScreen {
 
 extension RootScreen: View {
     var body: some View {
+        rootView
+            .accentColor(.defaultAccentColor)
+            .foregroundColor(.defaultForegroundColor)
+    }
+}
+
+private extension RootScreen {
+    var rootView: some View {
         Group<AnyView> {
             if appState.rootContent == .welcome {
                 return WelcomeScreen().eraseToAny()
@@ -41,7 +49,7 @@ extension RootScreen: View {
                 return MainScreen()
                     .environmentObject(
                         appState.update().appShould.connectToRadix()
-                    )
+                )
                     .environmentObject(securePersistence)
                     .eraseToAny()
             }

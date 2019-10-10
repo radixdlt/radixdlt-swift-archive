@@ -41,20 +41,25 @@ struct ButtonStyle: ViewModifier {
             .foregroundColor(Color.white)
             .background(enabled ? color : Color.black)
             .cornerRadius(5)
+            .font(.roboto(size: 16, weight: .medium))
     }
 }
 
 extension View {
+    dynamic func buttonStyle(color: Color, enabled: Bool = true) -> some View {
+        ModifiedContent(content: self, modifier: ButtonStyle(color: color, enabled: enabled))
+    }
+        
     dynamic func buttonStyleEmerald(enabled: Bool = true) -> some View {
-        ModifiedContent(content: self, modifier: ButtonStyle(color: Color.Radix.emerald, enabled: enabled))
+        buttonStyle(color: Color.Radix.emerald, enabled: enabled)
     }
 
     dynamic func buttonStyleSapphire(enabled: Bool = true) -> some View {
-        ModifiedContent(content: self, modifier: ButtonStyle(color: Color.Radix.sapphire, enabled: enabled))
+        buttonStyle(color: Color.Radix.sapphire, enabled: enabled)
     }
 
     dynamic func buttonStyleRuby(enabled: Bool = true) -> some View {
-          ModifiedContent(content: self, modifier: ButtonStyle(color: Color.Radix.ruby, enabled: enabled))
+        buttonStyle(color: Color.Radix.ruby, enabled: enabled)
       }
 
 }

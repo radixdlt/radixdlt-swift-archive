@@ -52,7 +52,7 @@ public extension HDSubAccountAtIndex {
     var publicKey: PublicKey { keyPair.publicKey }
 }
 
-/// Hierarchical Deterministic ("HD")  Root Key wrapper
+/// Hierarchical Deterministic ("HD") Root Key wrapper
 public final class HDWallet: CustomStringConvertible {
     private let hdWallet: BitcoinKit.HDWallet
     private var derivedAccounts = [HDSubAccountAtIndex.Index: HDSubAccountAtIndex]()
@@ -128,7 +128,3 @@ private extension HDWallet {
         }
     }
 }
-//let accounts: [Account] = (0...highestKnownAccountIndex)
-//         .map { HDSubAccountAtIndex.Index($0) }
-//         .map { hdWallet.account(at: $0) }
-//         .map { Account.privateKeyPresent($0.keyPair) }

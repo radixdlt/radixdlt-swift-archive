@@ -23,10 +23,17 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct LearnScreen: View {
-    var body: some View {
-        Text("Learn")
+extension DateFormatter {
+    static var `default`: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter
+    }
+}
+
+extension Date {
+    func formatted(by formatter: DateFormatter = .default) -> String {
+        formatter.string(from: self)
     }
 }

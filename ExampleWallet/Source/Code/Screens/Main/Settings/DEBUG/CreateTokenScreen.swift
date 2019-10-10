@@ -30,14 +30,14 @@ import RadixSDK
 import KingfisherSwiftUI
 
 struct ActivityIndicator: UIViewRepresentable {
-
+    
     @Binding var isAnimating: Bool
     let style: UIActivityIndicatorView.Style
-
+    
     func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
         return UIActivityIndicatorView(style: style)
     }
-
+    
     func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
         isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
     }
@@ -46,7 +46,7 @@ struct ActivityIndicator: UIViewRepresentable {
 struct LoadingView<Content>: View where Content: View {
     
     var loadingText: String = "Loading..."
-    @Binding var isShowing: Bool
+    @Binding var isPresenting: Bool
     var content: () -> Content
     
     var body: some View {
@@ -54,8 +54,8 @@ struct LoadingView<Content>: View where Content: View {
             ZStack(alignment: .center) {
                 
                 self.content()
-                    .disabled(self.isShowing)
-                    .blur(radius: self.isShowing ? 3 : 0)
+                    .disabled(self.isPresenting)
+                    .blur(radius: self.isPresenting ? 3 : 0)
                 
                 VStack {
                     Text(self.loadingText)
@@ -66,7 +66,7 @@ struct LoadingView<Content>: View where Content: View {
                     .background(Color.secondary.colorInvert())
                     .foregroundColor(Color.primary)
                     .cornerRadius(20)
-                    .opacity(self.isShowing ? 1 : 0)
+                    .opacity(self.isPresenting ? 1 : 0)
                 
             }
         }
@@ -74,6 +74,7 @@ struct LoadingView<Content>: View where Content: View {
     
 }
 
+#if DEBUG
 struct CreateTokenScreen {
     @Environment(\.presentationMode) private var presentationMode
     @EnvironmentObject var viewModel: ViewModel
@@ -82,15 +83,14 @@ struct CreateTokenScreen {
 // MARK: - View
 extension CreateTokenScreen: View {
     var body: some View {
-        NavigationView {
-            LoadingView(isShowing: self.$viewModel.isLoading) {
-                VStack {
-                    self.inputList
-                    self.createTokenButton
-                }
+        LoadingView(isPresenting: self.$viewModel.isLoading) {
+            VStack {
+                self.inputList
+                self.createTokenButton
             }
-            .navigationBarTitle("Create a token")
-        }.alert(isPresented: self.$viewModel.isPresentingErrorDialog) {
+        }
+        .navigationBarTitle("Create a token")
+        .alert(isPresented: self.$viewModel.isPresentingErrorDialog) {
             self.invalidInputAlert
         }
     }
@@ -206,7 +206,7 @@ extension CreateTokenScreen.ViewModel {
         @Published fileprivate var name: String = ""
         @Published fileprivate var symbol: String = ""
         @Published fileprivate var description: String = loremIpsum(.firstFiveWords)
-        @Published fileprivate var imageUrl: String = "https://img.icons8.com/color/64/000000/swift.png"
+        @Published fileprivate var imageUrl: String = "" // "https://img.icons8.com/color/64/000000/swift.png"
         @Published fileprivate var granularity: String = "\(Granularity.default.magnitude)"
         
         @Published fileprivate var supplyType: SupplyType = .mutable
@@ -281,7 +281,7 @@ extension CreateTokenScreen.ViewModel.Error.InputError {
         case .description(let error):
             field = "description"
             reason = String(describing: error)
-        
+            
         case .name(let error):
             field = "name"
             reason = String(describing: error)
@@ -347,7 +347,7 @@ internal extension CreateTokenScreen.ViewModel {
                         print("✅ Successfully created token: '\(token.symbol)'")
                         dismiss()
                     }
-                },
+            },
                 receiveValue: { print("⚠️ Token creation update: \($0)") }
             ).store(in: &cancellables)
             
@@ -358,7 +358,7 @@ internal extension CreateTokenScreen.ViewModel {
             incorrectImplementation("unexpected error type: \(error)")
         }
     }
- 
+    
 }
 
 
@@ -456,6 +456,8 @@ private extension CreateTokenScreen.ViewModel {
     
     var iconUrl: URL? { URL(string: input.imageUrl) }
 }
+
+#endif
 
 extension SupplyType: CaseIterable, Identifiable {
     public static var allCases: [SupplyType] { [.fixed, .mutable] }

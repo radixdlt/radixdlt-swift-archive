@@ -46,7 +46,8 @@ public struct Address:
     DSONEncodable,
     Codable,
     Hashable,
-    CustomStringConvertible
+    CustomStringConvertible,
+    CustomDebugStringConvertible
 {
 
     // swiftlint:enable colon
@@ -169,6 +170,10 @@ public extension Address {
     }
     
     var description: String {
+        return full
+    }
+    
+    var debugDescription: String {
         return short
     }
     
