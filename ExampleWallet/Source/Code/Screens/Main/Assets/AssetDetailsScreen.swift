@@ -34,9 +34,9 @@ struct AssetDetailsScreen {
 // MARK: View
 extension AssetDetailsScreen: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading) {
             List {
-                AssetInfoView(of: asset)
+                AssetInfoView(of: asset).listRowInsets(EdgeInsets())
                 
                 TokenTransferHistoryView(for: asset, myAddress: myAddress)
             }

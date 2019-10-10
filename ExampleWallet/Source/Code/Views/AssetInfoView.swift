@@ -52,6 +52,7 @@ extension AssetInfoView: View {
             Labelled("RRI", value: asset.rri)
             
         }
+        .padding()
         .background(Color.Radix.sapphire)
         .foregroundColor(.white)
     }
