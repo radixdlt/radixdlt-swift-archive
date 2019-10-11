@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 let delayFromCancelObservationOfAtomStatusToClosingWebsocket = DispatchTimeInterval.seconds(5)
@@ -74,9 +73,9 @@ private extension SubmitAtomEpic {
 //        let atom = sendAction.atom
 //
 //        return CombineObservable<NodeAction>.create { observer in
-//            var disposables = [Disposable]()
+//            var disposables = [CombineDisposable]()
 //
-//            let pushAtomAndObserveItsStatusDisposable = rpcClient
+//            let pushAtomAndObserveItsStatusCombineDisposable = rpcClient
 //                .observeAtomStatusNotifications(subscriberId: subscriberId)
 //                .flatMap { statusEvent -> CombineObservable<NodeAction> in
 //                    let statusAction = SubmitAtomActionStatus(sendAction: sendAction, node: node, statusEvent: statusEvent)
@@ -90,7 +89,7 @@ private extension SubmitAtomEpic {
 //                        return CombineObservable.just(statusAction)
 //                    }
 //                }.do(onSubscribe: {
-//                    let startObservingAtomStatusDisposable = rpcClient
+//                    let startObservingAtomStatusCombineDisposable = rpcClient
 //                        .sendGetAtomStatusNotifications(atomIdentifier: atom.identifier(), subscriberId: subscriberId)
 //                        .andThen(rpcClient.pushAtom(atom))
 //                        .subscribe(
@@ -116,7 +115,7 @@ private extension SubmitAtomEpic {
 //
 //            disposables.append(pushAtomAndObserveItsStatusDisposable)
 //
-//            return Disposables.create(disposables)
+//            return CombineDisposables.create(disposables)
 //        }
 //        .do(onDispose: { [unowned self] in
 //            rpcClient

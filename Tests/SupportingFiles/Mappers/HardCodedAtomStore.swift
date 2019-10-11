@@ -24,7 +24,6 @@
 
 import Foundation
 @testable import RadixSDK
-import RxSwift
 import Combine
 
 struct HardCodedAtomStore: AtomStore {

@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDeriving, Magical {
@@ -164,7 +163,7 @@ private extension DefaultTransactionMaker {
 //            }.share(replay: 1, scope: .forever)
 //
 //        let result = ResultOfUserAction(updates: updates, cachedAtom: cachedAtom) { [unowned self] in
-//            // Disposable from calling `connect`
+//            // CombineDisposable from calling `connect`
 //            $0.disposed(by: self.disposeBag)
 //        }
 //

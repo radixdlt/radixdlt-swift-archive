@@ -24,7 +24,6 @@
 
 import Foundation
 import Alamofire
-import RxSwift
 import Combine
 
 public protocol URLConvertible {
@@ -100,7 +99,7 @@ public extension DefaultHTTPClient {
 //                        observer.onCompleted()
 //                    }
 //                }
-//                return Disposables.create { dataTask.cancel() }
+//                return CombineDisposables.create { dataTask.cancel() }
 //            }
 //        }
 //        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
@@ -122,7 +121,7 @@ private extension DefaultHTTPClient {
 //                guard let alamofireSession = alamofireSession else {
 //                    log.error("alamofireSession is nil")
 //                    observer.onError(Error.underlyingUrlSessionNil)
-//                    return Disposables.create()
+//                    return CombineDisposables.create()
 //                }
 //                let dataRequest: Alamofire.DataRequest = makeRequest(alamofireSession)
 //                    .validate()
@@ -138,7 +137,7 @@ private extension DefaultHTTPClient {
 //                            observer.onCompleted()
 //                        }
 //                }
-//                return Disposables.create { dataRequest.cancel() }
+//                return CombineDisposables.create { dataRequest.cancel() }
 //            }
 //        }
 //        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))

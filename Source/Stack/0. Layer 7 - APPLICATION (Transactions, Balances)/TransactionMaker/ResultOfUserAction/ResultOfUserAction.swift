@@ -23,10 +23,8 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
-import RxBlocking
-import RxSwiftExt
+
 
 public enum ResultOfUserAction: Throwing {
     
@@ -43,7 +41,7 @@ public enum ResultOfUserAction: Throwing {
 // MARK: Convenience Init
 public extension ResultOfUserAction {
 
-    init(updates: CombineObservable<SubmitAtomAction>, cachedAtom: CombineSingle<SignedAtom>, autoConnect: ((Disposable) -> Void)?) {
+    init(updates: CombineObservable<SubmitAtomAction>, cachedAtom: CombineSingle<SignedAtom>, autoConnect: ((CombineDisposable) -> Void)?) {
 //        let replayedUpdates = updates.replayAll()
 //
 //        let completable = updates.ofType(SubmitAtomActionStatus.self)

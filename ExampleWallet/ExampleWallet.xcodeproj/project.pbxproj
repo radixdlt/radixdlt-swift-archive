@@ -7,19 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4802E44C231010B5007EC847 /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E43E231010B5007EC847 /* RxBlocking.framework */; };
 		4802E44E231010B5007EC847 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E440231010B5007EC847 /* BigInt.framework */; };
-		4802E44F231010B5007EC847 /* RxSwiftExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E441231010B5007EC847 /* RxSwiftExt.framework */; };
-		4802E450231010B5007EC847 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E442231010B5007EC847 /* RxRelay.framework */; };
-		4802E451231010B5007EC847 /* RxOptional.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E443231010B5007EC847 /* RxOptional.framework */; };
-		4802E452231010B5007EC847 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E444231010B5007EC847 /* RxCocoa.framework */; };
 		4802E453231010B5007EC847 /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E445231010B5007EC847 /* SwiftCBOR.framework */; };
 		4802E454231010B5007EC847 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E446231010B5007EC847 /* CryptoSwift.framework */; };
 		4802E455231010B5007EC847 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E447231010B5007EC847 /* Alamofire.framework */; };
 		4802E456231010B5007EC847 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E448231010B5007EC847 /* BitcoinKit.framework */; };
 		4802E457231010B5007EC847 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E449231010B5007EC847 /* Starscream.framework */; };
-		4802E458231010B5007EC847 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E44A231010B5007EC847 /* RxSwift.framework */; };
-		4802E459231010B5007EC847 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4802E44B231010B5007EC847 /* SwiftyBeaver.framework */; };
 		4802E46123112E66007EC847 /* BackUpMnemonicScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46023112E66007EC847 /* BackUpMnemonicScreen.swift */; };
 		4802E46323128B20007EC847 /* Macro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E46223128B20007EC847 /* Macro.swift */; };
 		4802E4672312A986007EC847 /* Mnemonic+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4802E4662312A986007EC847 /* Mnemonic+Codable.swift */; };
@@ -336,12 +329,7 @@
 				E627801A233E473D008F2857 /* KingfisherSwiftUI in Frameworks */,
 				48A767E72316ACB3004949D7 /* KeychainSwift in Frameworks */,
 				48A9601E231006200074AC26 /* RadixSDK.framework in Frameworks */,
-				4802E44C231010B5007EC847 /* RxBlocking.framework in Frameworks */,
 				4802E44E231010B5007EC847 /* BigInt.framework in Frameworks */,
-				4802E44F231010B5007EC847 /* RxSwiftExt.framework in Frameworks */,
-				4802E450231010B5007EC847 /* RxRelay.framework in Frameworks */,
-				4802E451231010B5007EC847 /* RxOptional.framework in Frameworks */,
-				4802E452231010B5007EC847 /* RxCocoa.framework in Frameworks */,
 				4802E453231010B5007EC847 /* SwiftCBOR.framework in Frameworks */,
 				4802E454231010B5007EC847 /* CryptoSwift.framework in Frameworks */,
 				4802E455231010B5007EC847 /* Alamofire.framework in Frameworks */,
@@ -349,8 +337,6 @@
 				48BE083A23152A53008435F5 /* QGrid in Frameworks */,
 				4802E457231010B5007EC847 /* Starscream.framework in Frameworks */,
 				E6278018233E473D008F2857 /* Kingfisher in Frameworks */,
-				4802E458231010B5007EC847 /* RxSwift.framework in Frameworks */,
-				4802E459231010B5007EC847 /* SwiftyBeaver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

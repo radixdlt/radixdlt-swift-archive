@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 public final class DefaultStateSubscriber: StateSubscriber {

@@ -27,6 +27,9 @@ import Combine
 
 // swiftlint:disable all
 
+// Replace `RxSwift.Disposable`
+public typealias CombineDisposable = Combine.Cancellable
+
 // Replaced: `RxSwift.BehaviourSubject`
 public typealias CurrentValueSubjectNoFail<Element> = Combine.CurrentValueSubject<Element, Never>
 
@@ -46,10 +49,15 @@ public typealias CombineMaybe<Element> = CombineSingle<Element?>
 public typealias CombineCompletableSpecifyError<Error> = Combine.AnyPublisher<(), Error> where Error: Swift.Error
 public typealias CombineCompletable = CombineCompletableSpecifyError<Never>
 
+
 // Replaced: `RxSwift.ConnectableObservable` !!! OBS !!! Not a one to one mapping, first chose
 // a suitable `ConnectableObservable` conforming type, for now `MakeConnectable` is hardcoded, also chose `Upstream`, for now `AnyPublisher<Element, Never>` is chosen
 public typealias CombineConnectableObservable<Element> = Combine.Publishers.MakeConnectable<CombineObservable<Element>>
 
+// Combine lacks `ReplaySubject`, what to do?
+// Figure this out, should we use `Entwine.ReplaySubject`:
+// SPM available: https://github.com/tcldr/Entwine
+public typealias CombineReplaySubject<Element> = PassthroughSubjectNoFail<Element>
 
 internal func combineMigrationInProgress() -> Never {
     fatalError("Migration from RxSwift to Combine in progress")

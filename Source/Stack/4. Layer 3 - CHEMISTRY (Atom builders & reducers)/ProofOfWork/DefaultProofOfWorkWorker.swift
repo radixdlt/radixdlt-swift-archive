@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
@@ -71,7 +70,7 @@ public extension DefaultProofOfWorkWorker {
 //                }
 //            }
 //
-//            return Disposables.create {
+//            return CombineDisposables.create {
 //                if !powDone {
 //                    log.warning("POW cancelled")
 //                }

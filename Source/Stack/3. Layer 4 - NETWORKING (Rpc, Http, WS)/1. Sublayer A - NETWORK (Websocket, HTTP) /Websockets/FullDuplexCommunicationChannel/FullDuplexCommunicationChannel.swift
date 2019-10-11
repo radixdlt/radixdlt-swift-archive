@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 /// A channel open for communication in both directions, e.g. WebSockets

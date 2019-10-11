@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 /// Type that is can make transactions of different types between Radix accounts

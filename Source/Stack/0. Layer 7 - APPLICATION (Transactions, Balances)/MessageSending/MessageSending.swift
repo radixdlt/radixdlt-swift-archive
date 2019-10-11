@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 /// Important that `MessageSending` conforms to `ActiveAccountOwner` so that we can verify that the address

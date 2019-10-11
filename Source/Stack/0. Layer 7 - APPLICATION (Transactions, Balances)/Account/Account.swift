@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 public enum Account: Hashable, AtomSigning, SigningRequesting, PublicKeyOwner {

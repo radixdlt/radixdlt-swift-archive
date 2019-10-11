@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
@@ -175,7 +174,7 @@ private extension DefaultRPCClient {
     func sendStartOrCancelSubscription(request: RPCRootRequest, mode: SubscriptionMode) -> CombineCompletable {
         combineMigrationInProgress()
 //        return CombineCompletable.create { [unowned self] completable in
-//            let singleDisposable = self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
+//            let singleCombineDisposable = self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
 //                .subscribe(
 //                    onSuccess: { rpcResponseAboutSubscriptionChange in
 //                        if rpcResponseAboutSubscriptionChange.success {
@@ -189,7 +188,7 @@ private extension DefaultRPCClient {
 //                        unexpectedlyMissedToCatch(error: $0)
 //                }
 //            )
-//            return Disposables.create([singleDisposable])
+//            return CombineDisposables.create([singleCombineDisposable])
 //        }
     }
 }

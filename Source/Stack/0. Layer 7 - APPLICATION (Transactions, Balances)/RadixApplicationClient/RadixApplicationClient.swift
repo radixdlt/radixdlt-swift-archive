@@ -23,10 +23,7 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
-import RxSwiftExt
-import RxOptional
 
 // MARK: - RadixApplicationClient
 

@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 public protocol AtomToSendMessageActionMapper: AtomToSpecificExecutedActionMapper, Throwing where

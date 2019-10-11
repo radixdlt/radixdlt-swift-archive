@@ -23,7 +23,6 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
 
 public protocol AtomPuller {
@@ -48,11 +47,11 @@ public extension DefaultAtomPuller {
 //            return CombineObservable.create { [weak self] observer in
 //                guard let `self` = self else {
 //                    observer.onCompleted()
-//                    return Disposables.create()
+//                    return CombineDisposables.create()
 //                }
 //                self.networkController.dispatch(nodeAction: fetchAtomsRequest)
 //
-//                return Disposables.create {
+//                return CombineDisposables.create {
 //                    let cancelRequest = FetchAtomsActionCancel(request: fetchAtomsRequest)
 //                    self.networkController.dispatch(nodeAction: cancelRequest)
 //                }

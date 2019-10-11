@@ -23,9 +23,8 @@
 //
 
 import Foundation
-import RxSwift
 import Combine
-import RxSwiftExt
+
 
 public final class FetchAtomsEpic: NetworkWebsocketEpic {
     public let webSockets: WebSocketsEpic.WebSockets
@@ -38,7 +37,7 @@ public final class FetchAtomsEpic: NetworkWebsocketEpic {
 public extension FetchAtomsEpic {
     func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
         
-//        var disposableMap: [UUID: Disposable] = [:]
+//        var disposableMap: [UUID: CombineDisposable] = [:]
 //
 //        let fetch: CombineObservable<NodeAction> = actions
 //            .ofType(FindANodeResultAction.self)
@@ -49,10 +48,10 @@ public extension FetchAtomsEpic {
 //                let fetchAtomsActionRequest = castOrKill(instance: nodeFound.request, toType: FetchAtomsActionRequest.self)
 //                let uuid = fetchAtomsActionRequest.uuid
 //
-//                var fetchDisposable: Disposable?
+//                var fetchDisposable: CombineDisposable?
 //                let atomsObs = CombineObservable<NodeAction>.create { observer in
-//                    fetchDisposable = self.fetchAtoms(from: node, request: fetchAtomsActionRequest).subscribe(observer)
-//                    return Disposables.create()
+//                    fetchCombineDisposable = self.fetchAtoms(from: node, request: fetchAtomsActionRequest).subscribe(observer)
+//                    return CombineDisposables.create()
 //                }
 //
 //                return self.waitForConnection(toNode: node)
@@ -83,18 +82,18 @@ public extension FetchAtomsEpic {
 //
 //            observer.onNext(FetchAtomsActionSubscribe(address: address, node: node, uuid: uuid))
 //
-//            var disposables = [Disposable]()
+//            var disposables = [CombineDisposable]()
 //
-//            let atomObservationsDisposable = rpcClient.observeAtoms(subscriberId: subscriberIdFromUuid)
+//            let atomObservationsCombineDisposable = rpcClient.observeAtoms(subscriberId: subscriberIdFromUuid)
 //                .map { observation in FetchAtomsActionObservation(address: address, node: node, atomObservation: observation, uuid: uuid) }
 //                .subscribe(observer)
 //
-//            disposables.append(atomObservationsDisposable)
+//            disposables.append(atomObservationsCombineDisposable)
 //
 //            let sendAtomsSubscribeDisposable = rpcClient.sendAtomsSubscribe(to: address, subscriberId: subscriberIdFromUuid).subscribe()
 //
 //            disposables.append(sendAtomsSubscribeDisposable)
-//            return Disposables.create(disposables)
+//            return CombineDisposables.create(disposables)
 //        }.do(onDispose: { [unowned self] in
 //            rpcClient.cancelAtomsSubscription(subscriberId: subscriberIdFromUuid)
 //                .andThen(

@@ -24,7 +24,6 @@
 
 import Foundation
 import Starscream
-import RxSwift
 import Combine
 
 public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDelegate, WebSocketPongDelegate {

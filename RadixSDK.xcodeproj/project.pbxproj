@@ -69,12 +69,6 @@
 		E606F149230188AF004D4D3D /* ConsumeTokensActionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F148230188AF004D4D3D /* ConsumeTokensActionError.swift */; };
 		E606F14B230188BC004D4D3D /* ConsumeTokensActionErrorInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F14A230188BC004D4D3D /* ConsumeTokensActionErrorInitializable.swift */; };
 		E606F150230188F2004D4D3D /* ConsumeTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606F14F230188F2004D4D3D /* ConsumeTokenActionToParticleGroupsMapper.swift */; };
-		E606FC1122C9F85B00A7E52E /* RxOptional.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC0E22C9F85B00A7E52E /* RxOptional.framework */; };
-		E606FC1222C9F85B00A7E52E /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC0F22C9F85B00A7E52E /* RxRelay.framework */; };
-		E606FC1322C9F85B00A7E52E /* RxSwiftExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC1022C9F85B00A7E52E /* RxSwiftExt.framework */; };
-		E606FC1422C9F86C00A7E52E /* RxSwiftExt.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC1022C9F85B00A7E52E /* RxSwiftExt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E606FC1522C9F87100A7E52E /* RxOptional.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC0E22C9F85B00A7E52E /* RxOptional.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E606FC1622C9F87700A7E52E /* RxRelay.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC0F22C9F85B00A7E52E /* RxRelay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E606FC1822C9FA0E00A7E52E /* FindANodeEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC1722C9FA0E00A7E52E /* FindANodeEpic.swift */; };
 		E606FC2222CA578000A7E52E /* DiscoverNodesEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC2122CA577F00A7E52E /* DiscoverNodesEpic.swift */; };
 		E606FC2422CB45FD00A7E52E /* AddNodeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC2322CB45FD00A7E52E /* AddNodeAction.swift */; };
@@ -236,8 +230,6 @@
 		E685BBBA22BA5F5800563B1A /* CryptoSwift.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E685BBBB22BA5F5800563B1A /* BigInt.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E685BBBD22BA5F5800563B1A /* BitcoinKit.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E685BBBE22BA5F5800563B1A /* RxSwift.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C721EC95E8002CE331 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E685BBBF22BA5F5800563B1A /* SwiftyBeaver.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E68727FE2343BC6400FF4FCE /* Locale+DecimalSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68727FD2343BC6400FF4FCE /* Locale+DecimalSeparator.swift */; };
 		E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB76225F227800340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift */; };
 		E689DB7D225F61BF00340CF3 /* DefaultHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB7C225F61BF00340CF3 /* DefaultHTTPClient.swift */; };
@@ -321,9 +313,6 @@
 		E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A6430D2244D86F00CD4BFC /* PointMultiplicationTests.swift */; };
 		E6A643122244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A643112244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift */; };
 		E6A7479522CB9F7000DACEA0 /* GetNodeInfoActionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A7479422CB9F7000DACEA0 /* GetNodeInfoActionResult.swift */; };
-		E6A7479622CC913400DACEA0 /* RxOptional.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC0E22C9F85B00A7E52E /* RxOptional.framework */; };
-		E6A7479722CC913400DACEA0 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC0F22C9F85B00A7E52E /* RxRelay.framework */; };
-		E6A7479822CC913400DACEA0 /* RxSwiftExt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E606FC1022C9F85B00A7E52E /* RxSwiftExt.framework */; };
 		E6A7479922CC914300DACEA0 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
 		E6A7479B22CC960800DACEA0 /* JsonRpcResultAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A7479A22CC960800DACEA0 /* JsonRpcResultAction.swift */; };
 		E6A7479D22CCC72700DACEA0 /* Optional+IfPresentMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A7479C22CCC72700DACEA0 /* Optional+IfPresentMap.swift */; };
@@ -500,16 +489,12 @@
 		E6F5484222771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484122771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift */; };
 		E6F5484522771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484422771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift */; };
 		E6F5484722771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484622771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift */; };
-		E6FB03C921EC95E8002CE331 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C721EC95E8002CE331 /* RxSwift.framework */; };
-		E6FB03CA21EC95E8002CE331 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */; };
 		E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
 		E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
 		E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
 		E6FB03D721ECE4EC002CE331 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
 		E6FB03D821ECE4EC002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
 		E6FB03D921ECE4EC002CE331 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
-		E6FB03DA21ECE4EC002CE331 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C721EC95E8002CE331 /* RxSwift.framework */; };
-		E6FB03DC21ECE4EC002CE331 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */; };
 		E6FB03E221ECF186002CE331 /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB03E121ECF186002CE331 /* Macros.swift */; };
 		E6FCB65B22F0C76900ECC01B /* MintTokensAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB65A22F0C76900ECC01B /* MintTokensAction.swift */; };
 		E6FCB65E22F0C79A00ECC01B /* PutUniqueIdAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB65D22F0C79A00ECC01B /* PutUniqueIdAction.swift */; };
@@ -567,17 +552,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E606FC1622C9F87700A7E52E /* RxRelay.framework in Copy Carthage Frameworks */,
-				E606FC1522C9F87100A7E52E /* RxOptional.framework in Copy Carthage Frameworks */,
-				E606FC1422C9F86C00A7E52E /* RxSwiftExt.framework in Copy Carthage Frameworks */,
 				E6533FE422BA63950068B07D /* Starscream.framework in Copy Carthage Frameworks */,
 				E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */,
 				E685BBB922BA5F5800563B1A /* SwiftCBOR.framework in Copy Carthage Frameworks */,
 				E685BBBA22BA5F5800563B1A /* CryptoSwift.framework in Copy Carthage Frameworks */,
 				E685BBBB22BA5F5800563B1A /* BigInt.framework in Copy Carthage Frameworks */,
 				E685BBBD22BA5F5800563B1A /* BitcoinKit.framework in Copy Carthage Frameworks */,
-				E685BBBE22BA5F5800563B1A /* RxSwift.framework in Copy Carthage Frameworks */,
-				E685BBBF22BA5F5800563B1A /* SwiftyBeaver.framework in Copy Carthage Frameworks */,
 			);
 			name = "Copy Carthage Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1103,13 +1083,8 @@
 				E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */,
 				E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */,
 				E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */,
-				E606FC1122C9F85B00A7E52E /* RxOptional.framework in Frameworks */,
-				E606FC1222C9F85B00A7E52E /* RxRelay.framework in Frameworks */,
-				E606FC1322C9F85B00A7E52E /* RxSwiftExt.framework in Frameworks */,
-				E6FB03C921EC95E8002CE331 /* RxSwift.framework in Frameworks */,
 				E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */,
 				E6CEE75421F78B1300D745EC /* SwiftCBOR.framework in Frameworks */,
-				E6FB03CA21EC95E8002CE331 /* SwiftyBeaver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1121,13 +1096,8 @@
 				E6FB03D721ECE4EC002CE331 /* BigInt.framework in Frameworks */,
 				E6FB03D821ECE4EC002CE331 /* BitcoinKit.framework in Frameworks */,
 				E6FB03D921ECE4EC002CE331 /* CryptoSwift.framework in Frameworks */,
-				E6A7479622CC913400DACEA0 /* RxOptional.framework in Frameworks */,
 				E6A7479922CC914300DACEA0 /* Starscream.framework in Frameworks */,
-				E6A7479722CC913400DACEA0 /* RxRelay.framework in Frameworks */,
-				E6A7479822CC913400DACEA0 /* RxSwiftExt.framework in Frameworks */,
-				E6FB03DA21ECE4EC002CE331 /* RxSwift.framework in Frameworks */,
 				E6CEE75521F78B2000D745EC /* SwiftCBOR.framework in Frameworks */,
-				E6FB03DC21ECE4EC002CE331 /* SwiftyBeaver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
