@@ -31,33 +31,33 @@ import Combine
 public typealias CombineDisposable = Combine.Cancellable
 
 // Replaced: `RxSwift.BehaviourSubject`
-public typealias CurrentValueSubjectNoFail<Element> = Combine.CurrentValueSubject<Element, Never>
+public typealias CurrentValueSubjectNoFail<Output> = Combine.CurrentValueSubject<Output, Never>
 
 // Replaced: `RxSwift.PublishSubject`
-public typealias PassthroughSubjectNoFail<Element> = Combine.PassthroughSubject<Element, Never>
+public typealias PassthroughSubjectNoFail<Output> = Combine.PassthroughSubject<Output, Never>
 
 // Replaced: `RxSwift.Observable`
-public typealias CombineObservable<Element> = Combine.AnyPublisher<Element, Never>
+public typealias CombineObservable<Output> = Combine.AnyPublisher<Output, Never>
 
 // Replaced: `RxSwift.Single`
-public typealias CombineSingle<Element> = Combine.Future<Element, Never>
+public typealias CombineSingle<Output> = Combine.Future<Output, Never>
 
 // Replaced: `RxSwift.Maybe`
-public typealias CombineMaybe<Element> = CombineSingle<Element?>
+public typealias CombineMaybe<Output> = CombineSingle<Output?>
 
 // Replaced: `RxSwift.Completable`
-public typealias CombineCompletableSpecifyError<Error> = Combine.AnyPublisher<(), Error> where Error: Swift.Error
-public typealias CombineCompletable = CombineCompletableSpecifyError<Never>
+public typealias CombineCompletableSpecifyFailure<Failure> = Combine.AnyPublisher<(), Failure> where Failure: Swift.Error
+public typealias CombineCompletable = CombineCompletableSpecifyFailure<Never>
 
 
 // Replaced: `RxSwift.ConnectableObservable` !!! OBS !!! Not a one to one mapping, first chose
-// a suitable `ConnectableObservable` conforming type, for now `MakeConnectable` is hardcoded, also chose `Upstream`, for now `AnyPublisher<Element, Never>` is chosen
-public typealias CombineConnectableObservable<Element> = Combine.Publishers.MakeConnectable<CombineObservable<Element>>
+// a suitable `ConnectableObservable` conforming type, for now `MakeConnectable` is hardcoded, also chose `Upstream`, for now `AnyPublisher<Output, Never>` is chosen
+public typealias CombineConnectableObservable<Output> = Combine.Publishers.MakeConnectable<CombineObservable<Output>>
 
 // Combine lacks `ReplaySubject`, what to do?
 // Figure this out, should we use `Entwine.ReplaySubject`:
 // SPM available: https://github.com/tcldr/Entwine
-public typealias CombineReplaySubject<Element> = PassthroughSubjectNoFail<Element>
+public typealias CombineReplaySubject<Output> = PassthroughSubjectNoFail<Output>
 
 internal func combineMigrationInProgress() -> Never {
     fatalError("Migration from RxSwift to Combine in progress")
@@ -70,35 +70,35 @@ public extension Publisher {
         combineMigrationInProgress()
     }
     
-    func filterMap<Other>(_ selector: @escaping (Element) throws -> CombineObservable<Other>) -> CombineObservable<Other> {
+    func filterMap<Other>(_ selector: @escaping (Output) throws -> CombineObservable<Other>) -> CombineObservable<Other> {
         combineMigrationInProgress()
     }
     
-    func cache() -> CombineObservable<Element> {
+    func cache() -> CombineObservable<Output> {
         combineMigrationInProgress()
     }
     
-    func firstOrError() -> CombineSingle<Element> {
+    func firstOrError() -> CombineSingle<Output> {
         combineMigrationInProgress()
     }
     
-    func lastOrError() -> CombineSingle<Element> {
+    func lastOrError() -> CombineSingle<Output> {
         combineMigrationInProgress()
     }
     
-    func flatMapIterable<Other>(_ selector: @escaping (Element) -> [Other]) -> CombineObservable<Other> {
+    func flatMapIterable<Other>(_ selector: @escaping (Output) -> [Other]) -> CombineObservable<Other> {
         combineMigrationInProgress()
     }
     
-    func flatMapToSingle<Other>(_ selector: @escaping (Element) throws -> CombineSingle<Other>) -> CombineSingle<Other> {
+    func flatMapToSingle<Other>(_ selector: @escaping (Output) throws -> CombineSingle<Other>) -> CombineSingle<Other> {
         combineMigrationInProgress()
     }
     
-    func flatMapCompletable(_ selector: @escaping (Element) -> CombineCompletable) -> CombineCompletable {
+    func flatMapCompletable(_ selector: @escaping (Output) -> CombineCompletable) -> CombineCompletable {
     combineMigrationInProgress()
     }
     
-    func flatMapSingle<Other>(_ selector: @escaping (Element) throws -> CombineSingle<Other>) -> CombineObservable<Other> {
+    func flatMapSingle<Other>(_ selector: @escaping (Output) throws -> CombineSingle<Other>) -> CombineObservable<Other> {
     combineMigrationInProgress()
     }
     
@@ -113,11 +113,10 @@ public extension Publisher {
 
 // extension CombineCompletable
 public extension Publisher {
-    func andThen(_ other: CombineObservable<Element>) -> CombineObservable<Element> {
+    func andThen(_ other: CombineObservable<Output>) -> CombineObservable<Output> {
         combineMigrationInProgress()
         
     }
-//    where Other: Publisher, Other.Output == Self.Output, Other.Failure == Self.Failure
 }
 
 public typealias DisposeBag = Set<AnyCancellable>
@@ -130,28 +129,28 @@ public extension Cancellable {
 // extension CombineSingle
 public extension Publisher {
     
-    func subscribe(onNext: ((Element) -> Void)? = nil, onError: ((Swift.Error) -> Void)? = nil, onCompleted: (() -> Void)? = nil, onDisposed: (() -> Void)? = nil)
+    func subscribe(onNext: ((Output) -> Void)? = nil, onError: ((Swift.Error) -> Void)? = nil, onCompleted: (() -> Void)? = nil, onDisposed: (() -> Void)? = nil)
         -> Cancellable {
             combineMigrationInProgress()
     }
     
     func `do`(
-        onSuccess: ((Element) -> Void)? = nil,
+        onSuccess: ((Output) -> Void)? = nil,
         onFailure: ((Error) -> Void)? = nil
     ) -> Self {
         combineMigrationInProgress()
     }
     
     
-    func flatMapObservable<Other>(_ selector: @escaping (Element) throws -> CombineObservable<Other>) -> CombineObservable<Other> {
+    func flatMapObservable<Other>(_ selector: @escaping (Output) throws -> CombineObservable<Other>) -> CombineObservable<Other> {
         combineMigrationInProgress()
     }
     
-    func cache() -> CombineSingle<Element> {
+    func cache() -> CombineSingle<Output> {
         combineMigrationInProgress()
     }
     
-    func asSingle() -> CombineSingle<Element> {
+    func asSingle() -> CombineSingle<Output> {
         combineMigrationInProgress()
     }
         
@@ -159,7 +158,7 @@ public extension Publisher {
         combineMigrationInProgress()
     }
     
-    static func create(_ creation: (AnySubscriber<Element, Never>) -> Cancellable) -> Self {
+    static func create(_ creation: (AnySubscriber<Output, Never>) -> Cancellable) -> Self {
         combineMigrationInProgress()
     }
     
@@ -168,7 +167,7 @@ public extension Publisher {
     }
     
     
-    static func just(_ foobar: Element) -> Self {
+    static func just(_ foobar: Output) -> Self {
         combineMigrationInProgress()
     }
     
@@ -182,80 +181,71 @@ public extension Publisher {
     
     static func combineLatest<Collection: Swift.Collection>(
         _ collection: Collection,
-        resultSelector: @escaping ([Collection.Element.Element]) throws -> Element
-    ) -> CombineObservable<Element> where Collection.Element: Publisher {
+        resultSelector: @escaping ([Collection.Element.Output]) throws -> Output
+    ) -> CombineObservable<Output> where Collection.Element: Publisher {
         combineMigrationInProgress()
     }
 
-    static func from(_ elements: [Element]) -> CombineObservable<Element> {
+    static func from(_ Outputs: [Output]) -> CombineObservable<Output> {
         combineMigrationInProgress()
     }
     
     func `do`(
-        onNext: ((Element) throws -> Void)? = nil,
-        afterNext: ((Element) throws -> Void)? = nil,
+        onNext: ((Output) throws -> Void)? = nil,
+        afterNext: ((Output) throws -> Void)? = nil,
         onError: ((Swift.Error) throws -> Void)? = nil,
         afterError: ((Swift.Error) throws -> Void)? = nil, onCompleted: (() throws -> Void)? = nil, afterCompleted: (() throws -> Void)? = nil, onSubscribe: (() -> Void)? = nil, onSubscribed: (() -> Void)? = nil, onDispose: (() -> Void)? = nil)
-        -> CombineObservable<Element> {
+        -> CombineObservable<Output> {
             combineMigrationInProgress()
     }
     
-    func ignoreElementsObservable() -> CombineObservable<Element> {
+    func ignoreOutputsObservable() -> CombineObservable<Output> {
         combineMigrationInProgress()
     }
     
-    func take(_ n: Int) -> CombineObservable<Element> {
+    func take(_ n: Int) -> CombineObservable<Output> {
         combineMigrationInProgress()
     }
 }
 
 // extension CombineObservable
-public extension Publisher where Element: OptionalType {
-    func ifNilReturnEmpty() -> CombineObservable<Element.Wrapped> {
+public extension Publisher where Output: OptionalType {
+    func ifNilReturnEmpty() -> CombineObservable<Output.Wrapped> {
         
         combineMigrationInProgress()
     }
     
-    func ifNil(throw error: Error) -> CombineObservable<Element.Wrapped> {
+    func ifNil(throw error: Swift.Error) -> CombineObservable<Output.Wrapped> {
         
         combineMigrationInProgress()
     }
     
-    func ifNilKill(_ message: String) -> CombineObservable<Element.Wrapped> {
+    func ifNilKill(_ message: String) -> CombineObservable<Output.Wrapped> {
         
         combineMigrationInProgress()
     }
     
-    func replaceNilWith(_ element: Element) -> CombineObservable<Element.Wrapped> {
+    func replaceNilWith(_ Output: Output) -> CombineObservable<Output.Wrapped> {
         combineMigrationInProgress()
         
     }
 }
 
 // extension ObservableType
-public extension Publisher where Element: LengthMeasurable {
-    func ifEmpty<ErrorType>(throw errorIfEmpty: ErrorType) -> CombineObservable<Element> where ErrorType: Swift.Error {
+public extension Publisher where Output: LengthMeasurable {
+    func ifEmpty<ErrorType>(throw errorIfEmpty: ErrorType) -> CombineObservable<Output> where ErrorType: Swift.Error {
          combineMigrationInProgress()
     }
 }
 
-public extension Publisher where Element: Sequence {
-    func first<ErrorType>(ifEmptyThrow errorIfEmpty: ErrorType) -> CombineObservable<Element.Element> where ErrorType: Swift.Error {
-        combineMigrationInProgress()
-    }
-}
 
-extension Publisher where Element == Void {
+extension Publisher where Output == Void {
     func flatMapCompletableVoid(_ selector: @escaping () -> CombineCompletable) -> CombineCompletable {
         combineMigrationInProgress()
     }
 }
 
 public extension Publisher {
-    
-    typealias Element = Output
-    typealias Error = Failure
-    
     func toBlocking(timeout: TimeInterval = 1) -> Combine.Publishers.BlockingPublisher<Output, Failure> {
         combineMigrationInProgress()
     }
@@ -267,13 +257,13 @@ public extension Combine.Publishers {
 }
 
 public extension Subject {
-    func onNext(_ element: Element) {
-        self.send(element)
+    func onNext(_ Output: Output) {
+        self.send(Output)
     }
     var hasObservers: Bool {
         combineMigrationInProgress()
     }
-    func asObservable() -> CombineObservable<Element> {
+    func asObservable() -> CombineObservable<Output> {
         combineMigrationInProgress()
     }
 }
