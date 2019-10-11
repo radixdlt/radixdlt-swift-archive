@@ -25,6 +25,17 @@
 import Foundation
 import Combine
 
+/// A Radix Network epic that is responsible for finding and connecting to suitable nodes.
+///
+/// Listens to the following `NodeAction`'s:
+/// `FindANodeRequestAction`
+///
+/// outputs the following actions:
+/// `DiscoverMoreNodesAction`,
+/// `GetNodeInfoActionRequest`,
+/// `GetUniverseConfigActionRequest`,
+/// `ConnectWebSocketAction`
+///
 public final class FindANodeEpic: RadixNetworkEpic {
     public typealias PeerSelector = (NonEmptySet<Node>) -> Node
     private let peerSelector: PeerSelector
@@ -36,12 +47,32 @@ public final class FindANodeEpic: RadixNetworkEpic {
     }
 }
 
+//public enum NetworkEpicError: Swift.Error {
+//    case findANodeError(FindANodeError)
+//}
+//
+//public protocol NetworkEpicErrorType: Swift.Error {
+//    func eraseToNetworkError() -> NetworkEpicError
+//}
+//
+//public extension FindANodeError {
+//    func eraseToNetworkError() -> NetworkEpicError {
+//        NetworkEpicError.findANodeError(self)
+//    }
+//}
+
+public enum FindANodeError: Swift.Error {
+    case none
+}
+
 public extension FindANodeEpic {
+ 
+    typealias Error = FindANodeError
     
     func epic(
-        actions: CombineObservable<NodeAction>,
-        networkState: CombineObservable<RadixNetworkState>
-    ) -> CombineObservable<NodeAction> {
+        actions: AnyPublisher<NodeAction, Never>,
+        networkState: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, FindANodeError> {
        
 //        return actions.ofType(FindANodeRequestAction.self)
 //            .flatMap { findANodeRequestAction -> CombineObservable<NodeAction> in
@@ -131,7 +162,6 @@ private extension FindANodeEpic {
         
     }
 }
-
 private let maxSimultaneousConnectionsRequest = 2
 
 private func getConnectedNodes(shards: Shards, state: RadixNetworkState) -> [Node] {
