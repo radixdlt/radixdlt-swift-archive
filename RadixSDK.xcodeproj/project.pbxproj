@@ -579,6 +579,7 @@
 		E6ED1A6521F8E69000654105 /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A6421F8E69000654105 /* NodeInfo.swift */; };
 		E6ED1A7821F8E78900654105 /* Optional+OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */; };
 		E6ED1A7C21F8E7E000654105 /* ObservableType_Extensions_Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A7B21F8E7E000654105 /* ObservableType_Extensions_Optional.swift */; };
+		E6EFD6C52350C50D00B7387B /* ErrorAutoEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6EFD6C42350C50D00B7387B /* ErrorAutoEquatable.swift */; };
 		E6F548392277022500EE6311 /* GetTokenBalanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F548382277022500EE6311 /* GetTokenBalanceTests.swift */; };
 		E6F5483D22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */; };
 		E6F5483F22771E5200EE6311 /* UserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5483E22771E5200EE6311 /* UserAction.swift */; };
@@ -1235,6 +1236,7 @@
 		E6ED1A6421F8E69000654105 /* NodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInfo.swift; sourceTree = "<group>"; };
 		E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+OptionalType.swift"; sourceTree = "<group>"; };
 		E6ED1A7B21F8E7E000654105 /* ObservableType_Extensions_Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableType_Extensions_Optional.swift; sourceTree = "<group>"; };
+		E6EFD6C42350C50D00B7387B /* ErrorAutoEquatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAutoEquatable.swift; sourceTree = "<group>"; };
 		E6F548382277022500EE6311 /* GetTokenBalanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetTokenBalanceTests.swift; sourceTree = "<group>"; };
 		E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatelessActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E6F5483E22771E5200EE6311 /* UserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAction.swift; sourceTree = "<group>"; };
@@ -1747,6 +1749,7 @@
 				E6D325AA21EE377500851F4E /* TestExtensions */,
 				E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */,
 				E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */,
+				E6EFD6C42350C50D00B7387B /* ErrorAutoEquatable.swift */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -4922,6 +4925,7 @@
 				E6638CE823351C70004C9846 /* URLFormatterFailingTests.swift in Sources */,
 				E6E27A232271CE250067D46E /* AtomJsonSerializationTwoParticleGroupsTests.swift in Sources */,
 				E6E27A2E2271CE250067D46E /* AddressInvalidChecksumTests.swift in Sources */,
+				E6EFD6C52350C50D00B7387B /* ErrorAutoEquatable.swift in Sources */,
 				E6E27A552271EEE20067D46E /* XCTestCase_Extensions.swift in Sources */,
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
 				E6E27A252271CE250067D46E /* AtomJsonDeserializationInvalidSerializerValueTests.swift in Sources */,
