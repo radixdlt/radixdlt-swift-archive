@@ -42,7 +42,7 @@ public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDe
     
     private let activeAccount: CombineObservable<Account>
     
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     
     public init(
         activeAccount: CombineObservable<Account>,
@@ -114,13 +114,14 @@ public extension DefaultTransactionMaker {
 private extension DefaultTransactionMaker {
     
     func addFee(to atom: Atom) -> CombineSingle<AtomWithFee> {
-        return activeAccount.flatMapToSingle { [unowned self] in
-            self.feeMapper.feeBasedOn(
-                atom: atom,
-                universeConfig: self.universeConfig,
-                key: $0.publicKey
-            )
-        }
+//        return activeAccount.flatMapToSingle { [unowned self] in
+//            self.feeMapper.feeBasedOn(
+//                atom: atom,
+//                universeConfig: self.universeConfig,
+//                key: $0.publicKey
+//            )
+//        }
+        combineMigrationInProgress()
     }
     
     func sign(atom: CombineSingle<UnsignedAtom>) -> CombineSingle<SignedAtom> {

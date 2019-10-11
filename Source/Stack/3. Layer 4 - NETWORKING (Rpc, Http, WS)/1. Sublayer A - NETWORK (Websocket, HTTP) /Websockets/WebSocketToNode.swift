@@ -38,7 +38,7 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
     
     public let state: CombineObservable<WebSocketStatus>
     private var socket: WebSocket?
-    private let bag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     internal let node: Node
     
     public init(node: Node, shouldConnect: Bool) {
@@ -55,7 +55,7 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
 //            .subscribe(
 //                onNext: { _ in stateSubject.onNext(.disconnected) },
 //                onError: { _ in stateSubject.onNext(.disconnected) }
-//        ).disposed(by: bag)
+//        ).store(in: &cancellables)
         combineMigrationInProgress()
         
         self.stateSubject = stateSubject
@@ -64,7 +64,7 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
         self.messages = receivedMessagesSubject.asObservable()
         self.state = stateSubject.asObservable()
         
-        self.state.subscribe(onNext: { log.verbose("WS status -> `\($0)`") }).disposed(by: bag)
+        self.state.subscribe(onNext: { log.verbose("WS status -> `\($0)`") }).store(in: &cancellables)
     }
     
     private func createSocket(shouldConnect: Bool) -> WebSocket {
@@ -90,7 +90,8 @@ public extension WebSocketToNode {
     }
     
     func waitForConnection() -> CombineCompletable {
-        return state.filter { $0.isReady }.take(1).asSingle().asCompletable()
+//        return state.filter { $0.isReady }.take(1).asSingle().asCompletable()
+        combineMigrationInProgress()
     }
     
     func sendMessage(_ message: String) {
@@ -112,12 +113,11 @@ public extension WebSocketToNode {
     }
     
     func connect() {
-        let status = try? stateSubject.value
-        switch status {
-        case .none, .disconnected?, .failed?:
+        switch stateSubject.value {
+        case .disconnected, .failed:
             stateSubject.onNext(.connecting)
             socket = createSocket(shouldConnect: true)
-        case .closing?, .connecting?, .ready?: return
+        case .closing, .connecting, .ready: return
         }
         
     }
@@ -144,11 +144,7 @@ private extension WebSocketToNode {
     }
 
     func hasStatus(_ status: WebSocketStatus) -> Bool {
-        do {
-            return try stateSubject.value == status
-        } catch {
-            return false
-        }
+        stateSubject.value == status
     }
     
     func sendQueued() {

@@ -28,7 +28,7 @@ import Combine
 public final class ConnectWebSocketEpic: NetworkWebsocketEpic {
     public let webSockets: WebSocketsEpic.WebSockets
     
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     
     public init(webSockets: WebSocketsEpic.WebSockets) {
         self.webSockets = webSockets
@@ -60,7 +60,7 @@ public extension ConnectWebSocketEpic {
 public final class RadixJsonRpcAutoConnectEpic: NetworkWebsocketEpic {
     public let webSockets: WebSocketsEpic.WebSockets
     
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     
     public init(webSockets: WebSocketsEpic.WebSockets) {
         self.webSockets = webSockets
@@ -86,7 +86,7 @@ public extension RadixJsonRpcAutoConnectEpic {
 public final class RadixJsonRpcAutoCloseEpic: NetworkWebsocketEpic {
     public let webSockets: WebSocketsEpic.WebSockets
     
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     
     public init(webSockets: WebSocketsEpic.WebSockets) {
         self.webSockets = webSockets

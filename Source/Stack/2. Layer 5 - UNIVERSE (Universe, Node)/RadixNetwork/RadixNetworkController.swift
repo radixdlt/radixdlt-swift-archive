@@ -48,7 +48,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
     private let nodeActionSubject: PassthroughSubjectNoFail<NodeAction>
     private let reducedNodeActions: CombineObservable<NodeAction>
 
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
 
     private let _retainingVariableEpics: [RadixNetworkEpic]
     

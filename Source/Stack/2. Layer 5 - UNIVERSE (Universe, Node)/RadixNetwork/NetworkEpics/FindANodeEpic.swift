@@ -47,20 +47,6 @@ public final class FindANodeEpic: RadixNetworkEpic {
     }
 }
 
-//public enum NetworkEpicError: Swift.Error {
-//    case findANodeError(FindANodeError)
-//}
-//
-//public protocol NetworkEpicErrorType: Swift.Error {
-//    func eraseToNetworkError() -> NetworkEpicError
-//}
-//
-//public extension FindANodeError {
-//    func eraseToNetworkError() -> NetworkEpicError {
-//        NetworkEpicError.findANodeError(self)
-//    }
-//}
-
 public enum FindANodeError: Swift.Error {
     case none
 }
@@ -73,96 +59,10 @@ public extension FindANodeEpic {
         actions: AnyPublisher<NodeAction, Never>,
         networkState: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, FindANodeError> {
-       
-//        return actions.ofType(FindANodeRequestAction.self)
-//            .flatMap { findANodeRequestAction -> CombineObservable<NodeAction> in
-//                let connectedNodes: CombineObservable<[Node]> = networkState.map { state in
-//                    getConnectedNodes(shards: findANodeRequestAction.shards, state: state)
-//                }
-//
-//                let selectedNode: CombineObservable<NodeAction> = connectedNodes
-//                    .compactMap { try? NonEmptySet(array: $0) }
-//                    .firstOrError()
-//                    .map { [unowned self] in self.peerSelector($0) }
-//                    .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) }
-//                    .cache()
-//
-//                let findConnectionAction: CombineObservable<NodeAction> = connectedNodes
-//                    .filter { $0.isEmpty }
-//                    .firstOrError()
-//                    .asCompletable()
-//                    .andThen(
-//                        CombineObservable<Int>.timer(RxTimeInterval.seconds(0), period: RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
-//                            .withLatestFrom(networkState) { $1 }
-//                            .flatMapIterable { [unowned self] (state: RadixNetworkState) in
-//                                self.nextConnectionRequest(shards: findANodeRequestAction.shards, state: state)
-//                        }
-//
-//                    )
-//                    .takeUntil(selectedNode)
-//
-//                let cleanupConnections: CombineObservable<NodeAction> = findConnectionAction
-//                    .ofType(ConnectWebSocketAction.self)
-//                    .flatMap { connectWebsocketAction -> CombineObservable<NodeAction> in
-//                        let node = connectWebsocketAction.node
-//                        return selectedNode.map { $0.node }
-//                            .filter { $0 != node }
-//                            .map { CloseWebSocketAction(node: $0) }
-//                }
-//
-//                return CombineObservable<NodeAction>.merge(
-//                    findConnectionAction.concat(selectedNode),
-//                    cleanupConnections
-//                )
-//
-//        }
-//        .eraseToAnyPublisher()
+//        return actions.compactMap { $0 as? FindANodeRequestAction }.cat
         combineMigrationInProgress()
     }
 }
-
-private extension FindANodeEpic {
-    func nextConnectionRequest(shards: Shards, state: RadixNetworkState) -> [NodeAction] {
-        
-        let statusMap: [WebSocketStatus: [Node]] = WebSocketStatus.allCases.map { status in
-            return KeyValuePair<WebSocketStatus, [Node]>(key: status, value:
-                state.nodes
-                    .filter { $0.value.websocketStatus == status }
-                    .map { $0.key }
-            )
-            }.toDictionary()
-        
-        let connectingNodeCount = statusMap.valueFor(key: .connecting)?.count ?? 0
-        
-        guard connectingNodeCount < maxSimultaneousConnectionsRequest else {
-            return []
-        }
-        
-        guard let disconnectedPeers = statusMap.valueFor(key: .disconnected) else {
-            return [DiscoverMoreNodesAction()]
-        }
-        
-        let correctShardNodes = try? NonEmptySet(array: disconnectedPeers.filter { state.nodes[$0]?.shardSpace?.intersectsWithShards(shards) ?? false })
-        if let correctShardNodes = correctShardNodes {
-            return [ConnectWebSocketAction(node: self.peerSelector(correctShardNodes))]
-        }
-        assert(correctShardNodes == nil, "Non nil correctShardNodes should have been handled above")
-        
-        guard
-            let nodesWithUnknownShard = try? NonEmptySet(array: disconnectedPeers.filter { state.nodes.valueFor(key: $0)?.shardSpace == nil }) else {
-                return [DiscoverMoreNodesAction()]
-        }
-        
-        return nodesWithUnknownShard.flatMap {
-            [NodeAction](arrayLiteral:
-                GetNodeInfoActionRequest(node: $0),
-                GetUniverseConfigActionRequest(node: $0)
-            )
-        }
-        
-    }
-}
-private let maxSimultaneousConnectionsRequest = 2
 
 private func getConnectedNodes(shards: Shards, state: RadixNetworkState) -> [Node] {
     return state.nodes

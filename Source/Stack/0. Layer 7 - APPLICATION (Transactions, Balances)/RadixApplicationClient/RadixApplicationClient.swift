@@ -65,7 +65,7 @@ public final class RadixApplicationClient:
     /// A subscriber of executed transactions at a given address
     private let transactionSubscriber: TransactionSubscriber
 
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     
     public init(
         identity: AbstractIdentity,

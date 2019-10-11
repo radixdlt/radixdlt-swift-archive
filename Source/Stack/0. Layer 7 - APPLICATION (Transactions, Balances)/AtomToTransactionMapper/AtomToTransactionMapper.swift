@@ -25,8 +25,6 @@
 import Foundation
 import Combine
 
-
-
 public protocol AtomToTransactionMapper {
     func transactionFromAtom(_ atom: Atom) -> CombineObservable<ExecutedTransaction>
 }

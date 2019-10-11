@@ -111,7 +111,8 @@ internal extension DefaultRPCClient {
     }
     
     func makeCompletableMapError<ErrorToMapTo>(request rootRequest: RPCRootRequest, errorMapper: @escaping (RPCError) -> (ErrorToMapTo)) -> CombineCompletable where ErrorToMapTo: ErrorMappedFromRPCError {
-        return make(request: rootRequest, responseType: ResponseOnFireAndForgetRequest.self, errorMapper: errorMapper).asCompletable()
+//        return make(request: rootRequest, responseType: ResponseOnFireAndForgetRequest.self, errorMapper: errorMapper).asCompletable()
+        combineMigrationInProgress()
     }
     
     func observe<NotificationResponse>(notification: RPCNotification, subscriberId: SubscriberId, responseType: NotificationResponse.Type) -> CombineObservable<NotificationResponse> where NotificationResponse: Decodable {
@@ -158,10 +159,10 @@ private extension DefaultRPCClient {
     
     func makeRequestMapToResponseOrError<Model>(request rootRequest: RPCRootRequest, responseType: Model.Type) -> CombineSingle<RPCResult<Model>> where Model: Decodable {
         
-        let rpcRequest = RPCRequest(rootRequest: rootRequest)
+//        let rpcRequest = RPCRequest(rootRequest: rootRequest)
         
-        let message = rpcRequest.jsonString
-        let requestId = rpcRequest.requestUuid
+//        let message = rpcRequest.jsonString
+//        let requestId = rpcRequest.requestUuid
         
 //        return channel.responseOrErrorForMessage(requestId: requestId).take(1).asSingle()
 //            .do(onSubscribed: {

@@ -25,7 +25,6 @@
 import Foundation
 import Combine
 
-
 public final class DefaultTransactionSubscriber: TransactionSubscriber {
     
     private let atomStore: AtomStore

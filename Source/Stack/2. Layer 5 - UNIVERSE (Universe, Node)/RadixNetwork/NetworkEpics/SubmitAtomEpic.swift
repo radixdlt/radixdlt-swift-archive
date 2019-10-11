@@ -30,7 +30,7 @@ let delayFromCancelObservationOfAtomStatusToClosingWebsocket = DispatchTimeInter
 public final class SubmitAtomEpic: NetworkWebsocketEpic {
     
     public let webSockets: WebSocketsEpic.WebSockets
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     
     public init(webSockets: WebSocketsEpic.WebSockets) {
         self.webSockets = webSockets
@@ -65,7 +65,6 @@ public extension SubmitAtomEpic {
 
 private extension SubmitAtomEpic {
 
-    // swiftlint:disable:next function_body_length
     func submitAtom(sendAction: SubmitAtomActionSend, toNode node: Node) -> CombineObservable<NodeAction> {
 //        let websocketToNode = webSockets.webSocket(to: node, shouldConnect: false)
 //        let rpcClient =  DefaultRPCClient(channel: websocketToNode)

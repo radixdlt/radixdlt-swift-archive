@@ -28,7 +28,7 @@ import Combine
 
 public final class FetchAtomsEpic: NetworkWebsocketEpic {
     public let webSockets: WebSocketsEpic.WebSockets
-    private let disposeBag = DisposeBag()
+    private var cancellables = Set<AnyCancellable>()
     public init(webSockets: WebSocketsEpic.WebSockets) {
         self.webSockets = webSockets
     }

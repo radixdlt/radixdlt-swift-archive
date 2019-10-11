@@ -66,42 +66,6 @@ internal func combineMigrationInProgress() -> Never {
 // extension CombineObservable
 public extension Publisher {
     
-    func asCompletable() -> CombineCompletable {
-        combineMigrationInProgress()
-    }
-    
-    func filterMap<Other>(_ selector: @escaping (Output) throws -> CombineObservable<Other>) -> CombineObservable<Other> {
-        combineMigrationInProgress()
-    }
-    
-    func cache() -> CombineObservable<Output> {
-        combineMigrationInProgress()
-    }
-    
-    func firstOrError() -> CombineSingle<Output> {
-        combineMigrationInProgress()
-    }
-    
-    func lastOrError() -> CombineSingle<Output> {
-        combineMigrationInProgress()
-    }
-    
-    func flatMapIterable<Other>(_ selector: @escaping (Output) -> [Other]) -> CombineObservable<Other> {
-        combineMigrationInProgress()
-    }
-    
-    func flatMapToSingle<Other>(_ selector: @escaping (Output) throws -> CombineSingle<Other>) -> CombineSingle<Other> {
-        combineMigrationInProgress()
-    }
-    
-    func flatMapCompletable(_ selector: @escaping (Output) -> CombineCompletable) -> CombineCompletable {
-    combineMigrationInProgress()
-    }
-    
-    func flatMapSingle<Other>(_ selector: @escaping (Output) throws -> CombineSingle<Other>) -> CombineObservable<Other> {
-    combineMigrationInProgress()
-    }
-    
     func mapToVoid() -> CombineObservable<Void> {
         combineMigrationInProgress()
     }
@@ -115,14 +79,6 @@ public extension Publisher {
 public extension Publisher {
     func andThen(_ other: CombineObservable<Output>) -> CombineObservable<Output> {
         combineMigrationInProgress()
-        
-    }
-}
-
-public typealias DisposeBag = Set<AnyCancellable>
-public extension Cancellable {
-    func disposed(by setOfCancellables: DisposeBag) {
-          combineMigrationInProgress()
     }
 }
 

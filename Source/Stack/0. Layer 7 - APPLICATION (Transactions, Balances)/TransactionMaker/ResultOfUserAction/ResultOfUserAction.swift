@@ -25,7 +25,6 @@
 import Foundation
 import Combine
 
-
 public enum ResultOfUserAction: Throwing {
     
     case pendingSending(
