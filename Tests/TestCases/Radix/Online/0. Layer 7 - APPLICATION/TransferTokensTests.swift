@@ -27,6 +27,7 @@ import Foundation
 import XCTest
 @testable import RadixSDK
 import RxSwift
+import Combine
 
 class TransferTokensTests: LocalhostNodeTest {
     

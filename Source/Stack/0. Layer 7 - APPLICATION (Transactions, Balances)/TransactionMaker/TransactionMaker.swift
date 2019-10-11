@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol TransactionMaker: TransactionToAtomMapper {
     func send(transaction: Transaction, toOriginNode: Node?) -> ResultOfUserAction

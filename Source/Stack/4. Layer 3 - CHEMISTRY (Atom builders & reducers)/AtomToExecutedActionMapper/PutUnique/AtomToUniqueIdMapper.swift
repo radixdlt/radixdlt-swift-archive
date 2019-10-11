@@ -24,13 +24,14 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 // MARK: AtomToUniqueIdMapper
 public protocol AtomToUniqueIdMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == PutUniqueIdAction {}
 
 public extension AtomToUniqueIdMapper {
     
-    func mapAtomToActions(_ atom: Atom) -> Observable<[PutUniqueIdAction]> {
+    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[PutUniqueIdAction]> {
         guard atom.containsAnyUniqueParticle(spin: .up) else { return .just([]) }
         
         var uniqueActions = [PutUniqueIdAction]()
@@ -46,7 +47,7 @@ public extension AtomToUniqueIdMapper {
             )
         }
         
-        return Observable.just(uniqueActions)
+        return CombineObservable.just(uniqueActions)
     }
 }
 

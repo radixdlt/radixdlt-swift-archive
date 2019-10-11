@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 import RxSwiftExt
 
 public final class DefaultTransactionSubscriber: TransactionSubscriber {
@@ -43,7 +44,7 @@ public final class DefaultTransactionSubscriber: TransactionSubscriber {
 public extension DefaultTransactionSubscriber {
     convenience init(
         atomStore: AtomStore,
-        activeAccount: Observable<Account>
+        activeAccount: CombineObservable<Account>
     ) {
         self.init(
             atomStore: atomStore,
@@ -55,20 +56,21 @@ public extension DefaultTransactionSubscriber {
 // MARK: TransactionSubscriber
 public extension DefaultTransactionSubscriber {
     
-    func observeTransactions(at address: Address) -> Observable<ExecutedTransaction> {
-        return atomStore.atomObservations(of: address)
-            .filterMap { (atomObservation: AtomObservation) -> FilterMap<Atom> in
-                guard case .store(let atom, _, _) = atomObservation else { return .ignore }
-                return .map(atom)
-            }.flatMap { [unowned self] in
-                return self.atomToTransactionMapper.transactionFromAtom($0)
-        }
+    func observeTransactions(at address: Address) -> CombineObservable<ExecutedTransaction> {
+//        return atomStore.atomObservations(of: address)
+//            .filterMap { (atomObservation: AtomObservation) -> FilterMap<Atom> in
+//                guard case .store(let atom, _, _) = atomObservation else { return .ignore }
+//                return .map(atom)
+//            }.flatMap { [unowned self] in
+//                return self.atomToTransactionMapper.transactionFromAtom($0)
+//        }
+        combineMigrationInProgress()
     }
 }
 
 // MARK: AtomToTransactionMapper
 public extension DefaultTransactionSubscriber {
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
+    func transactionFromAtom(_ atom: Atom) -> CombineObservable<ExecutedTransaction> {
         return atomToTransactionMapper.transactionFromAtom(atom)
     }
 }

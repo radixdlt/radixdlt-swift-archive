@@ -24,13 +24,14 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public final class DefaultAtomToTransactionMapper: AtomToTransactionMapper {
     
     /// A list of type-erased mappers from `Atom` to `UserAction`
     private let atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper]
     
-    public init(activeAccount: Observable<Account>) {
+    public init(activeAccount: CombineObservable<Account>) {
         atomToExecutedActionMappers = .atomToActionMappers(activeAccount: activeAccount)
     }
 }
@@ -43,19 +44,20 @@ public extension DefaultAtomToTransactionMapper {
 
 public extension DefaultAtomToTransactionMapper {
     
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
-        return Observable.combineLatest(
-            atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
-        ) { $0.flatMap { $0 } }
-            .map { optionalActions in return optionalActions.compactMap { $0 } }
-            .map { ExecutedTransaction(atom: atom, actions: $0) }
+    func transactionFromAtom(_ atom: Atom) -> CombineObservable<ExecutedTransaction> {
+//        return CombineObservable.combineLatest(
+//            atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
+//        ) { $0.flatMap { $0 } }
+//            .map { optionalActions in return optionalActions.compactMap { $0 } }
+//            .map { ExecutedTransaction(atom: atom, actions: $0) }
+        combineMigrationInProgress()
     }
     
 }
 
 // MARK: - Default mappers
 public extension Array where Element == AnyAtomToExecutedActionMapper {
-    static func atomToActionMappers(activeAccount: Observable<Account>) -> [AnyAtomToExecutedActionMapper] {
+    static func atomToActionMappers(activeAccount: CombineObservable<Account>) -> [AnyAtomToExecutedActionMapper] {
         return [
             AnyAtomToExecutedActionMapper(any: DefaultAtomToSendMessageActionMapper(activeAccount: activeAccount) ),
             AnyAtomToExecutedActionMapper(any: DefaultAtomToCreateTokenMapper()),

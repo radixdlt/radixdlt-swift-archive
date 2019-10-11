@@ -24,7 +24,8 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol UniverseConfigRequesting {
-    func getUniverseConfig() -> Single<UniverseConfig>
+    func getUniverseConfig() -> CombineSingle<UniverseConfig>
 }

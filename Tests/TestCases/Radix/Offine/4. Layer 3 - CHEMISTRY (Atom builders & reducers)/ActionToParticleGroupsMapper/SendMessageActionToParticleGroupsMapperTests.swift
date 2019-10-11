@@ -25,6 +25,7 @@
 import XCTest
 @testable import RadixSDK
 import RxSwift
+import Combine
 
 class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
     
@@ -201,7 +202,7 @@ private struct AccountWithAddress: SigningRequesting, AddressConvertible, Equata
     }
 }
 extension AccountWithAddress {
-    var privateKeyForSigning: Single<PrivateKey> {
+    var privateKeyForSigning: CombineSingle<PrivateKey> {
         return account.privateKeyForSigning
     }
 }

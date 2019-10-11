@@ -24,18 +24,19 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol AtomToCreateTokenMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == CreateTokenAction {}
 
 public extension AtomToCreateTokenMapper {
-    func mapAtomToActions(_ atom: Atom) -> Observable<[CreateTokenAction]> {
+    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[CreateTokenAction]> {
         var createTokenActions = [CreateTokenAction]()
         for particleGroup in atom {
             guard let createTokenAction = createTokensActionFrom(particleGroup: particleGroup, atomIdentifier: atom.identifier()) else { continue }
             createTokenActions.append(createTokenAction)
         }
         
-        return Observable.just(createTokenActions)
+        return CombineObservable.just(createTokenActions)
     }
 }
 

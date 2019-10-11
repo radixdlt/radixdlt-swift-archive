@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public final class WebSocketEventsEpic: NetworkWebsocketEpic {
     public let webSockets: WebSocketsEpic.WebSockets
@@ -33,12 +34,15 @@ public final class WebSocketEventsEpic: NetworkWebsocketEpic {
 }
 
 public extension WebSocketEventsEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
+    func epic(
+        actions: CombineObservable<NodeAction>,
+        networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
+        
         return webSockets.getNewSocketsToNode().flatMap { webSocketToNode in
             webSocketToNode.state.map { webSocketStatus in
                 WebSocketEvent(node: webSocketToNode.node, webSocketStatus: webSocketStatus)
             }
-        }
+        }.eraseToAnyPublisher()
     }
 }
 

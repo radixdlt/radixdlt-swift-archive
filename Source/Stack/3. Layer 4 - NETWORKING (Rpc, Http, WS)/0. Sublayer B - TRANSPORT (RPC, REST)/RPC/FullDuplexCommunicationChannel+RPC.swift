@@ -24,25 +24,28 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 extension FullDuplexCommunicationChannel {
     
-    func responseForMessage<Model>(requestId: String) -> Observable<Model> where Model: Decodable {
+    func responseForMessage<Model>(requestId: String) -> CombineObservable<Model> where Model: Decodable {
         
-        return responseOrErrorForMessage(requestId: requestId).map {
-            try $0.get().model
-        }
+//        return responseOrErrorForMessage(requestId: requestId).map {
+//            try $0.get().model
+//        }
+        combineMigrationInProgress()
     }
     
-    func responseOrErrorForMessage<Model>(requestId: String) -> Observable<RPCResult<Model>> where Model: Decodable {
+    func responseOrErrorForMessage<Model>(requestId: String) -> CombineObservable<RPCResult<Model>> where Model: Decodable {
         return resultForMessage(parseMode: .responseOnRequest(withId: requestId))
     }
     
-    func observeNotification<Model>(_ notification: RPCNotification, subscriberId: SubscriberId) -> Observable<Model> where Model: Decodable {
+    func observeNotification<Model>(_ notification: RPCNotification, subscriberId: SubscriberId) -> CombineObservable<Model> where Model: Decodable {
         
-        return resultForMessage(parseMode: .parseAsNotification(notification, subscriberId: subscriberId)).map {
-            try $0.get().model
-        }
+//        return resultForMessage(parseMode: .parseAsNotification(notification, subscriberId: subscriberId)).map {
+//            try $0.get().model
+//        }
+        combineMigrationInProgress()
     }
 }
 
@@ -55,45 +58,48 @@ private extension FullDuplexCommunicationChannel {
 
     func resultForMessage<Model>(
         parseMode: ParseJsonRpcResponseMode
-    ) -> Observable<RPCResult<Model>> where Model: Decodable {
-
-        return messages
-            .map { $0.toData() }
-            .filter {
-                guard
-                    let jsonObj = try? JSONSerialization.jsonObject(with: $0, options: []) as? JSON
-                    else {
-                       incorrectImplementation("not json!")
-                }
-                
-                switch parseMode {
-                case .parseAsNotification(let expectedNotification, let expectedSubscriberId):
-                    guard
-                        let notificationMethodFromResponseAsString = jsonObj[RPCResponseLookingLikeRequestCodingKeys.method.rawValue] as? String,
-                        let notificationMethodFromResponse = RPCNotification(rawValue: notificationMethodFromResponseAsString),
-                        notificationMethodFromResponse == expectedNotification,
-                        let subscriberIdWrapperJson = jsonObj[RPCResponseLookingLikeRequestCodingKeys.params.rawValue] as? JSON,
-                        let subscriberIdFromResponseAsString = subscriberIdWrapperJson["subscriberId"] as? String,
-                        case let subscriberIdFromResponse = SubscriberId(validated: subscriberIdFromResponseAsString),
-                        subscriberIdFromResponse == expectedSubscriberId
-                    else {
-                        return false
-                    }
-                    return true
-                    
-                case .responseOnRequest(let rpcRequestId):
-                    guard
-                        let requestIdFromResponse = jsonObj[RPCResponseResultWithRequestIdCodingKeys.id.rawValue] as? String,
-                        requestIdFromResponse == rpcRequestId
-                        else {
-                            return false
-                            
-                    }
-                    return true
-                }
-            }
-            .map { try JSONDecoder().decode(RPCResult<Model>.self, from: $0) }
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            .subscribeOn(MainScheduler.instance)
+    ) -> CombineObservable<RPCResult<Model>> where Model: Decodable {
+       
+        combineMigrationInProgress()
+//        return messages
+//            .map { $0.toData() }
+//            .filter {
+//                guard
+//                    let jsonObj = try? JSONSerialization.jsonObject(with: $0, options: []) as? JSON
+//                    else {
+//                       incorrectImplementation("not json!")
+//                }
+//                
+//                switch parseMode {
+//                case .parseAsNotification(let expectedNotification, let expectedSubscriberId):
+//                    guard
+//                        let notificationMethodFromResponseAsString = jsonObj[RPCResponseLookingLikeRequestCodingKeys.method.rawValue] as? String,
+//                        let notificationMethodFromResponse = RPCNotification(rawValue: notificationMethodFromResponseAsString),
+//                        notificationMethodFromResponse == expectedNotification,
+//                        let subscriberIdWrapperJson = jsonObj[RPCResponseLookingLikeRequestCodingKeys.params.rawValue] as? JSON,
+//                        let subscriberIdFromResponseAsString = subscriberIdWrapperJson["subscriberId"] as? String,
+//                        case let subscriberIdFromResponse = SubscriberId(validated: subscriberIdFromResponseAsString),
+//                        subscriberIdFromResponse == expectedSubscriberId
+//                    else {
+//                        return false
+//                    }
+//                    return true
+//                    
+//                case .responseOnRequest(let rpcRequestId):
+//                    guard
+//                        let requestIdFromResponse = jsonObj[RPCResponseResultWithRequestIdCodingKeys.id.rawValue] as? String,
+//                        requestIdFromResponse == rpcRequestId
+//                        else {
+//                            return false
+//                            
+//                    }
+//                    return true
+//                }
+//            }
+//    .eraseToAnyPublisher()
+        
+//            .map { try JSONDecoder().decode(RPCResult<Model>.self, from: $0) }
+//            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+//            .subscribeOn(MainScheduler.instance)
     }
 }

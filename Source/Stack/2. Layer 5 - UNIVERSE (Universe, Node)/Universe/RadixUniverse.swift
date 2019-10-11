@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol RadixUniverse {
     
@@ -35,7 +36,7 @@ public protocol RadixUniverse {
 }
 
 public extension RadixUniverse {
-    var readyNodes: Observable<[RadixNodeState]> { networkController.readyNodes }
+    var readyNodes: CombineObservable<[RadixNodeState]> { networkController.readyNodes }
 }
 
 // MARK: - RadixUniverse

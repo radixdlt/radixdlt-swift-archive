@@ -24,7 +24,8 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol NodeNetworkDetailsRequesting {
-    func networkDetails() -> Single<NodeNetworkDetails>
+    func networkDetails() -> CombineSingle<NodeNetworkDetails>
 }

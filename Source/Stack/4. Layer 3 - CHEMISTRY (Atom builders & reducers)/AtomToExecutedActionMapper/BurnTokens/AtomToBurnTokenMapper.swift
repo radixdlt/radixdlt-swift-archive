@@ -24,18 +24,19 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol AtomToBurnTokenMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == BurnTokensAction {}
 
 public extension AtomToBurnTokenMapper {
-    func mapAtomToActions(_ atom: Atom) -> Observable<[BurnTokensAction]> {
+    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[BurnTokensAction]> {
         var burnActions = [BurnTokensAction]()
         for particleGroup in atom {
             guard let burnAction = burnTokensActionFrom(particleGroup: particleGroup) else { continue }
             burnActions.append(burnAction)
         }
         
-        return Observable.just(burnActions)
+        return CombineObservable.just(burnActions)
     }
 }
 

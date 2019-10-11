@@ -24,21 +24,22 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public extension NodeNetworkDetailsRequesting where Self: HTTPClientOwner {
-    func networkDetails() -> Single<NodeNetworkDetails> {
+    func networkDetails() -> CombineSingle<NodeNetworkDetails> {
         return httpClient.request(.network)
     }
 }
 
 public extension LivePeersRequesting where Self: HTTPClientOwner {
-    func getLivePeers() -> Single<[NodeInfo]> {
+    func getLivePeers() -> CombineSingle<[NodeInfo]> {
         return httpClient.request(.getLivePeers)
     }
 }
 
 public extension UniverseConfigRequesting where Self: HTTPClientOwner {
-    func getUniverseConfig() -> Single<UniverseConfig> {
+    func getUniverseConfig() -> CombineSingle<UniverseConfig> {
         return httpClient.request(.getUniverseConfig)
     }
 }

@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 let delayFromCancelObservationOfAtomStatusToClosingWebsocket = DispatchTimeInterval.seconds(5)
 
@@ -38,97 +39,99 @@ public final class SubmitAtomEpic: NetworkWebsocketEpic {
 }
 
 public extension SubmitAtomEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
+    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
         
-        let foundNode: Observable<NodeAction> = actions
-            .ofType(FindANodeResultAction.self)
-            .filter { $0.request is SubmitAtomActionRequest }
-            .map {
-                let request = castOrKill(instance: $0.request, toType: SubmitAtomActionRequest.self)
-                return SubmitAtomActionSend(request: request, node: $0.node)
-        }
-        
-        let submitToNode: Observable<NodeAction> = actions
-            .ofType(SubmitAtomActionSend.self)
-            .flatMap { [unowned self] in
-                self.waitForConnection(toNode: $0.node)
-                    .andThen(self.submitAtom(sendAction: $0, toNode: $0.node))
-        }
-        
-        return Observable.merge(
-            foundNode,
-            submitToNode
-        )
+//        let foundNode: CombineObservable<NodeAction> = actions
+//            .ofType(FindANodeResultAction.self)
+//            .filter { $0.request is SubmitAtomActionRequest }
+//            .map {
+//                let request = castOrKill(instance: $0.request, toType: SubmitAtomActionRequest.self)
+//                return SubmitAtomActionSend(request: request, node: $0.node)
+//        }
+//
+//        let submitToNode: CombineObservable<NodeAction> = actions
+//            .ofType(SubmitAtomActionSend.self)
+//            .flatMap { [unowned self] in
+//                self.waitForConnection(toNode: $0.node)
+//                    .andThen(self.submitAtom(sendAction: $0, toNode: $0.node))
+//        }
+//
+//        return CombineObservable.merge(
+//            foundNode,
+//            submitToNode
+//        )
+        combineMigrationInProgress()
     }
 }
 
 private extension SubmitAtomEpic {
 
     // swiftlint:disable:next function_body_length
-    func submitAtom(sendAction: SubmitAtomActionSend, toNode node: Node) -> Observable<NodeAction> {
-        let websocketToNode = webSockets.webSocket(to: node, shouldConnect: false)
-        let rpcClient =  DefaultRPCClient(channel: websocketToNode)
-        let subscriberId = SubscriberId(uuid: UUID())
-        let atom = sendAction.atom
-
-        return Observable<NodeAction>.create { observer in
-            var disposables = [Disposable]()
-
-            let pushAtomAndObserveItsStatusDisposable = rpcClient
-                .observeAtomStatusNotifications(subscriberId: subscriberId)
-                .flatMap { statusEvent -> Observable<NodeAction> in
-                    let statusAction = SubmitAtomActionStatus(sendAction: sendAction, node: node, statusEvent: statusEvent)
-
-                    if statusEvent == .stored || !sendAction.isCompletingOnStoreOnly {
-                        return Observable.of(
-                            statusAction,
-                            SubmitAtomActionCompleted(sendAction: sendAction, node: node)
-                        )
-                    } else { 
-                        return Observable.just(statusAction)
-                    }
-                }.do(onSubscribe: {
-                    let startObservingAtomStatusDisposable = rpcClient
-                        .sendGetAtomStatusNotifications(atomIdentifier: atom.identifier(), subscriberId: subscriberId)
-                        .andThen(rpcClient.pushAtom(atom))
-                        .subscribe(
-                            onCompleted: { observer.onNext(SubmitAtomActionReceived(sendAction: sendAction, node: node)) },
-                            onError: { error in
-                                if let submitAtomError = error as? SubmitAtomError {
-                                    observer.onNext(
-                                        SubmitAtomActionStatus(
-                                            sendAction: sendAction,
-                                            node: node,
-                                            statusEvent: .notStored(reason: AtomNotStoredReason(.evictedInvalidAtom, error: submitAtomError)))
-                                    )
-                                    observer.onNext(
-                                        SubmitAtomActionCompleted(sendAction: sendAction, node: node)
-                                    )
-                                } else {
-                                    observer.onError(error)
-                                }
-                        }
-                    )
-                    disposables.append(startObservingAtomStatusDisposable)
-                }).subscribe(observer)
-
-            disposables.append(pushAtomAndObserveItsStatusDisposable)
-
-            return Disposables.create(disposables)
-        }
-        .do(onDispose: { [unowned self] in
-            rpcClient
-                .closeAtomStatusNotifications(subscriberId: subscriberId)
-                .andThen(
-                    Observable<Int>.timer(delayFromCancelObservationOfAtomStatusToClosingWebsocket, scheduler: MainScheduler.instance).mapToVoid()
-                        .flatMapCompletableVoid {
-                            self.close(webSocketToNode: websocketToNode, useDelay: false)
-                            return Completable.completed()
-                    }
-                ).subscribe().disposed(by: self.disposeBag)
-        })
-        .takeUntil(.inclusive) { $0 is SubmitAtomActionCompleted }
-
+    func submitAtom(sendAction: SubmitAtomActionSend, toNode node: Node) -> CombineObservable<NodeAction> {
+//        let websocketToNode = webSockets.webSocket(to: node, shouldConnect: false)
+//        let rpcClient =  DefaultRPCClient(channel: websocketToNode)
+//        let subscriberId = SubscriberId(uuid: UUID())
+//        let atom = sendAction.atom
+//
+//        return CombineObservable<NodeAction>.create { observer in
+//            var disposables = [Disposable]()
+//
+//            let pushAtomAndObserveItsStatusDisposable = rpcClient
+//                .observeAtomStatusNotifications(subscriberId: subscriberId)
+//                .flatMap { statusEvent -> CombineObservable<NodeAction> in
+//                    let statusAction = SubmitAtomActionStatus(sendAction: sendAction, node: node, statusEvent: statusEvent)
+//
+//                    if statusEvent == .stored || !sendAction.isCompletingOnStoreOnly {
+//                        return CombineObservable.of(
+//                            statusAction,
+//                            SubmitAtomActionCompleted(sendAction: sendAction, node: node)
+//                        )
+//                    } else {
+//                        return CombineObservable.just(statusAction)
+//                    }
+//                }.do(onSubscribe: {
+//                    let startObservingAtomStatusDisposable = rpcClient
+//                        .sendGetAtomStatusNotifications(atomIdentifier: atom.identifier(), subscriberId: subscriberId)
+//                        .andThen(rpcClient.pushAtom(atom))
+//                        .subscribe(
+//                            onCompleted: { observer.onNext(SubmitAtomActionReceived(sendAction: sendAction, node: node)) },
+//                            onError: { error in
+//                                if let submitAtomError = error as? SubmitAtomError {
+//                                    observer.onNext(
+//                                        SubmitAtomActionStatus(
+//                                            sendAction: sendAction,
+//                                            node: node,
+//                                            statusEvent: .notStored(reason: AtomNotStoredReason(.evictedInvalidAtom, error: submitAtomError)))
+//                                    )
+//                                    observer.onNext(
+//                                        SubmitAtomActionCompleted(sendAction: sendAction, node: node)
+//                                    )
+//                                } else {
+//                                    observer.onError(error)
+//                                }
+//                        }
+//                    )
+//                    disposables.append(startObservingAtomStatusDisposable)
+//                }).subscribe(observer)
+//
+//            disposables.append(pushAtomAndObserveItsStatusDisposable)
+//
+//            return Disposables.create(disposables)
+//        }
+//        .do(onDispose: { [unowned self] in
+//            rpcClient
+//                .closeAtomStatusNotifications(subscriberId: subscriberId)
+//                .andThen(
+//                    CombineObservable<Int>.timer(delayFromCancelObservationOfAtomStatusToClosingWebsocket, scheduler: MainScheduler.instance).mapToVoid()
+//                        .flatMapCompletableVoid {
+//                            self.close(webSocketToNode: websocketToNode, useDelay: false)
+//                            return CombineCompletable.completed()
+//                    }
+//                ).subscribe().disposed(by: self.disposeBag)
+//        })
+//        .takeUntil(.inclusive) { $0 is SubmitAtomActionCompleted }
+        
+        combineMigrationInProgress()
     }
 }
 

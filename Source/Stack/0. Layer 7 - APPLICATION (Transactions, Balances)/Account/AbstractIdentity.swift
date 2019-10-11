@@ -24,20 +24,21 @@
 
 import Foundation
 import RxSwift
+import Combine
 import BitcoinKit
 
 public final class AbstractIdentity: CustomStringConvertible {
     public typealias AccountSelector = (NonEmptyArray<Account>) -> Account
     
     public private(set) var accounts: NonEmptyArray<Account>
-    private let accountSubject: BehaviorSubject<Account>
+    private let accountSubject: CurrentValueSubjectNoFail<Account>
     
     public init(
         accounts: NonEmptyArray<Account>,
         selectInitialActiveAccount: AccountSelector = { $0.first }
     ) {
         self.accounts = accounts
-        self.accountSubject = BehaviorSubject(value: selectInitialActiveAccount(accounts))
+        self.accountSubject = CurrentValueSubjectNoFail(selectInitialActiveAccount(accounts))
     }
 }
 
@@ -51,11 +52,7 @@ public extension AbstractIdentity {
 public extension AbstractIdentity {
 
     var snapshotActiveAccount: Account {
-        do {
-            return try accountSubject.value()
-        } catch {
-            incorrectImplementationShouldAlwaysBeAble(to: "Access active account.", error)
-        }
+        accountSubject.value
     }
     
     @discardableResult
@@ -72,7 +69,7 @@ public extension AbstractIdentity {
         accountSubject.onNext(selectedAccount)
     }
     
-    var activeAccountObservable: Observable<Account> {
+    var activeAccountObservable: CombineObservable<Account> {
         return accountSubject.asObservable()
     }
 

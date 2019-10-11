@@ -24,9 +24,10 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 /// A channel open for communication in both directions, e.g. WebSockets
 public protocol FullDuplexCommunicationChannel {
     func sendMessage(_ message: String)
-    var messages: Observable<String> { get }
+    var messages: CombineObservable<String> { get }
 }

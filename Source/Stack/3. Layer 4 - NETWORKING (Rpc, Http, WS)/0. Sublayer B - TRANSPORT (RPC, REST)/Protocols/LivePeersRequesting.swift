@@ -24,7 +24,8 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol LivePeersRequesting {
-    func getLivePeers() -> Single<[NodeInfo]>
+    func getLivePeers() -> CombineSingle<[NodeInfo]>
 }

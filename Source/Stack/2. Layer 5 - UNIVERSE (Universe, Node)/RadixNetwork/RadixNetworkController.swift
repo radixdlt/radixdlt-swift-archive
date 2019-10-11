@@ -24,29 +24,30 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol RadixNetworkController {
     func dispatch(nodeAction: NodeAction)
-    func getActions() -> Observable<NodeAction>
+    func getActions() -> CombineObservable<NodeAction>
 
-    func observeNetworkState() -> Observable<RadixNetworkState>
+    func observeNetworkState() -> CombineObservable<RadixNetworkState>
     var currentNetworkState: RadixNetworkState { get }
 }
 
 public extension RadixNetworkController {
-    var readyNodes: Observable<[RadixNodeState]> {
+    var readyNodes: CombineObservable<[RadixNodeState]> {
         observeNetworkState().map {
             $0.readyNodes
-        }
+        }.eraseToAnyPublisher()
     }
 }
 
 public final class DefaultRadixNetworkController: RadixNetworkController {
     
     // MARK: Private Properties
-    private let networkStateSubject: BehaviorSubject<RadixNetworkState>
-    private let nodeActionSubject: PublishSubject<NodeAction>
-    private let reducedNodeActions: Observable<NodeAction>
+    private let networkStateSubject: CurrentValueSubjectNoFail<RadixNetworkState>
+    private let nodeActionSubject: PassthroughSubjectNoFail<NodeAction>
+    private let reducedNodeActions: CombineObservable<NodeAction>
 
     private let disposeBag = DisposeBag()
 
@@ -59,50 +60,52 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
         reducers: [SomeReducer<NodeAction>]
     ) {
         
-        let networkStateSubject = BehaviorSubject(value: initialNetworkState)
-        let nodeActionSubject = PublishSubject<NodeAction>()
+//        let networkStateSubject = CurrentValueSubjectNoFail(initialNetworkState)
+//        let nodeActionSubject = PassthroughSubjectNoFail<NodeAction>()
+//
+//        let reducedNodeActions = nodeActionSubject.asObservable().do(onNext: { action in
+//            let state = try networkStateSubject.value
+//            let nextState = network.reduce(state: state, action: action)
+//            reducers.forEach {
+//                $0.reduce(action: action)
+//            }
+//
+//            if nextState != state {
+//                networkStateSubject.onNext(nextState)
+//            }
+//        }).publish()
+//
+//        let networkState = networkStateSubject.asObservable()
+//
+//        self.nodeActionSubject = nodeActionSubject
+//        self.networkStateSubject = networkStateSubject
+////        self.networkState = networkState
+//        self.reducedNodeActions = reducedNodeActions
+//        self._retainingVariableEpics = epics
+//
+//        // Then run Epics
+//        let updates: [CombineObservable<NodeAction>] = epics.map { epic in
+//            epic.epic(actions: reducedNodeActions, networkState: networkState)
+//        }
+//
+//        CombineObservable.merge(updates).subscribe(
+//            onNext: { [unowned self] in
+//                self.dispatch(nodeAction: $0)
+//            },
+//            onError: {
+//                networkStateSubject.onError($0)
+//            }
+//        ).disposed(by: disposeBag)
+//
+//        reducedNodeActions.connect().disposed(by: disposeBag)
         
-        let reducedNodeActions = nodeActionSubject.asObservable().do(onNext: { action in
-            let state = try networkStateSubject.value()
-            let nextState = network.reduce(state: state, action: action)
-            reducers.forEach {
-                $0.reduce(action: action)
-            }
-   
-            if nextState != state {
-                networkStateSubject.onNext(nextState)
-            }
-        }).publish()
-        
-        let networkState = networkStateSubject.asObservable()
-        
-        self.nodeActionSubject = nodeActionSubject
-        self.networkStateSubject = networkStateSubject
-//        self.networkState = networkState
-        self.reducedNodeActions = reducedNodeActions
-        self._retainingVariableEpics = epics
-        
-        // Then run Epics
-        let updates: [Observable<NodeAction>] = epics.map { epic in
-            epic.epic(actions: reducedNodeActions, networkState: networkState)
-        }
-        
-        Observable.merge(updates).subscribe(
-            onNext: { [unowned self] in
-                self.dispatch(nodeAction: $0)
-            },
-            onError: {
-                networkStateSubject.onError($0)
-            }
-        ).disposed(by: disposeBag)
-        
-        reducedNodeActions.connect().disposed(by: disposeBag)
+        combineMigrationInProgress()
     }
 }
 
 public extension DefaultRadixNetworkController {
     
-    func getActions() -> Observable<NodeAction> {
+    func getActions() -> CombineObservable<NodeAction> {
         return reducedNodeActions
     }
     
@@ -113,16 +116,12 @@ public extension DefaultRadixNetworkController {
 }
 
 public extension DefaultRadixNetworkController {
-    func observeNetworkState() -> Observable<RadixNetworkState> {
+    func observeNetworkState() -> CombineObservable<RadixNetworkState> {
         return networkStateSubject.asObservable()
     }
     
     var currentNetworkState: RadixNetworkState {
-        do {
-            return try networkStateSubject.value()
-        } catch {
-            incorrectImplementationShouldAlwaysBeAble(to: "Retreive NetworkState", error)
-        }
+        networkStateSubject.value
     }
 
 }

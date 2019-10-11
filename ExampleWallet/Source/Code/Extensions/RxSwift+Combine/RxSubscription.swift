@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import RxSwift
+import Combine
 
 // TODO replace with RxCombine: https://github.com/freak4pc/RxCombine
 

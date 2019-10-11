@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 /// Important that `MessageSending` conforms to `ActiveAccountOwner` so that we can verify that the address
 /// of a message `sender` is the same as the `addressOfActiveAccount` that signs the message. In order
@@ -33,7 +34,7 @@ public protocol MessageSending: ActiveAccountOwner {
     
     /// Sends a message
     func send(message: SendMessageAction) -> ResultOfUserAction
-    func observeMessages(toOrFrom address: Address) -> Observable<SendMessageAction>
+    func observeMessages(toOrFrom address: Address) -> CombineObservable<SendMessageAction>
 }
 
 public extension MessageSending {
@@ -69,7 +70,7 @@ public extension MessageSending {
 
 // MARK: Sent
 public extension MessageSending {
-    func observeMyMessages() -> Observable<SendMessageAction> {
+    func observeMyMessages() -> CombineObservable<SendMessageAction> {
         return observeMessages(toOrFrom: addressOfActiveAccount)
     }
 }

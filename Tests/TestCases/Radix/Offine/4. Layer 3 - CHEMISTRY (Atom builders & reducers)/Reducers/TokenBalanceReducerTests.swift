@@ -28,6 +28,7 @@ import XCTest
 import RxTest
 import RxBlocking
 import RxSwift
+import Combine
 
 
 class TokenBalanceReducerTests: XCTestCase {

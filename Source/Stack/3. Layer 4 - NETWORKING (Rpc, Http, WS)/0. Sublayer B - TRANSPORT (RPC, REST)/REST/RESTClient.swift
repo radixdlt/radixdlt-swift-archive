@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 // swiftlint:disable colon opening_brace
 
@@ -38,11 +39,14 @@ public protocol RESTClient:
 
 public extension NodeNetworkDetailsRequesting where Self: RESTClient {
     
-    func getInfo() -> Single<NodeInfo> {
+    func getInfo() -> CombineSingle<NodeInfo> {
         return networkDetails().map {
             $0.udp
-        }.flatMap { (nodesInfos: [NodeInfo]) -> Single<NodeInfo> in
-            return Observable.from(nodesInfos).asSingle()
-        }
+            }.eraseToAnyPublisher()
+        .flatMap {
+//            (nodesInfos: [NodeInfo]) -> CombineSingle<NodeInfo> in
+            CombineObservable.from($0)
+        }.eraseToAnyPublisher()
+        .asSingle()
     }
 }

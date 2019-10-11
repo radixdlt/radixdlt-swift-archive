@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDeriving, Magical {
     
@@ -40,12 +41,12 @@ public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDe
     
     private let radixNetworkController: RadixNetworkController
     
-    private let activeAccount: Observable<Account>
+    private let activeAccount: CombineObservable<Account>
     
     private let disposeBag = DisposeBag()
     
     public init(
-        activeAccount: Observable<Account>,
+        activeAccount: CombineObservable<Account>,
         radixNetworkController: RadixNetworkController,
         universeConfig: UniverseConfig,
         transactionToAtomMapper: TransactionToAtomMapper,
@@ -61,7 +62,7 @@ public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDe
 
 public extension DefaultTransactionMaker {
     convenience init(
-        activeAccount: Observable<Account>,
+        activeAccount: CombineObservable<Account>,
         universe: RadixUniverse
         ) {
         
@@ -113,7 +114,7 @@ public extension DefaultTransactionMaker {
 
 private extension DefaultTransactionMaker {
     
-    func addFee(to atom: Atom) -> Single<AtomWithFee> {
+    func addFee(to atom: Atom) -> CombineSingle<AtomWithFee> {
         return activeAccount.flatMapToSingle { [unowned self] in
             self.feeMapper.feeBasedOn(
                 atom: atom,
@@ -123,64 +124,67 @@ private extension DefaultTransactionMaker {
         }
     }
     
-    func sign(atom: Single<UnsignedAtom>) -> Single<SignedAtom> {
-        return activeAccount.flatMapToSingle { account in
-            if account.privateKey == nil, case .throwErrorDirectly = self.strategyNoSigningKeyIsPresent {
-                return Single.error(SigningError.noSigningKeyPresentButWasExpectedToBe)
-            }
-            return atom.flatMap {
-                try account.sign(atom: $0)
-            }
-        }
+    func sign(atom: CombineSingle<UnsignedAtom>) -> CombineSingle<SignedAtom> {
+//        return activeAccount.flatMapToSingle { account in
+//            if account.privateKey == nil, case .throwErrorDirectly = self.strategyNoSigningKeyIsPresent {
+//                return CombineSingle.error(SigningError.noSigningKeyPresentButWasExpectedToBe)
+//            }
+//            return atom.flatMap {
+//                try account.sign(atom: $0)
+//            }
+//        }
+        combineMigrationInProgress()
     }
     
     func createAtomSubmission(
-        atom atomSingle: Single<SignedAtom>,
+        atom atomSingle: CombineSingle<SignedAtom>,
         completeOnAtomStoredOnly: Bool,
         originNode: Node?
         ) -> ResultOfUserAction {
         
-        let cachedAtom = atomSingle.cache()
-        let updates = cachedAtom
-            .flatMapObservable { [unowned self] (atom: SignedAtom) -> Observable<SubmitAtomAction> in
-                let initialAction: SubmitAtomAction
-                
-                if let originNode = originNode {
-                    initialAction = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
-                } else {
-                    initialAction = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
-                }
-                
-                let status: Observable<SubmitAtomAction> = self.radixNetworkController
-                    .getActions()
-                    .ofType(SubmitAtomAction.self)
-                    .filter { $0.uuid == initialAction.uuid }
-                    .takeWhile { !$0.isCompleted }
-                
-                self.radixNetworkController.dispatch(nodeAction: initialAction)
-                return status
-            }.share(replay: 1, scope: .forever)
-        
-        let result = ResultOfUserAction(updates: updates, cachedAtom: cachedAtom) { [unowned self] in
-            // Disposable from calling `connect`
-            $0.disposed(by: self.disposeBag)
-        }
-        
-        return result
+//        let cachedAtom = atomSingle.cache()
+//        let updates = cachedAtom
+//            .flatMapObservable { [unowned self] (atom: SignedAtom) -> CombineObservable<SubmitAtomAction> in
+//                let initialAction: SubmitAtomAction
+//
+//                if let originNode = originNode {
+//                    initialAction = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
+//                } else {
+//                    initialAction = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
+//                }
+//
+//                let status: CombineObservable<SubmitAtomAction> = self.radixNetworkController
+//                    .getActions()
+//                    .ofType(SubmitAtomAction.self)
+//                    .filter { $0.uuid == initialAction.uuid }
+//                    .takeWhile { !$0.isCompleted }
+//
+//                self.radixNetworkController.dispatch(nodeAction: initialAction)
+//                return status
+//            }.share(replay: 1, scope: .forever)
+//
+//        let result = ResultOfUserAction(updates: updates, cachedAtom: cachedAtom) { [unowned self] in
+//            // Disposable from calling `connect`
+//            $0.disposed(by: self.disposeBag)
+//        }
+//
+//        return result
+        combineMigrationInProgress()
     }
     
-    var addressOfActiveAccount: Observable<Address> {
+    var addressOfActiveAccount: CombineObservable<Address> {
         return activeAccount.map { [unowned self] in
             self.addressOf(account: $0)
-        }
+        }.eraseToAnyPublisher()
     }
     
-    func buildAtomFrom(transaction: Transaction) throws -> Single<UnsignedAtom> {
-        return addressOfActiveAccount.flatMapToSingle { [unowned self] in
-            let atom = try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: $0)
-            return self.addFee(to: atom).map {
-                try UnsignedAtom(atomWithPow: $0)
-            }
-        }
+    func buildAtomFrom(transaction: Transaction) throws -> CombineSingle<UnsignedAtom> {
+//        return addressOfActiveAccount.flatMapToSingle { [unowned self] in
+//            let atom = try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: $0)
+//            return self.addFee(to: atom).map {
+//                try UnsignedAtom(atomWithPow: $0)
+//            }
+//        }
+        combineMigrationInProgress()
     }
 }

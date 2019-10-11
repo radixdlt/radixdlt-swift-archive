@@ -25,18 +25,19 @@
 import Foundation
 import Starscream
 import RxSwift
+import Combine
 
 public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDelegate, WebSocketPongDelegate {
     
-    private let stateSubject: BehaviorSubject<WebSocketStatus>
-    private let receivedMessagesSubject = PublishSubject<String>()
+    private let stateSubject: CurrentValueSubjectNoFail<WebSocketStatus>
+    private let receivedMessagesSubject = PassthroughSubjectNoFail<String>()
     
     // Received messages
-    public let messages: Observable<String>
+    public let messages: CombineObservable<String>
     
     private var queuedOutgoingMessages = [String]()
     
-    public let state: Observable<WebSocketStatus>
+    public let state: CombineObservable<WebSocketStatus>
     private var socket: WebSocket?
     private let bag = DisposeBag()
     internal let node: Node
@@ -48,14 +49,15 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
             }
         }
         
-        let stateSubject = BehaviorSubject<WebSocketStatus>(value: .disconnected)
+        let stateSubject = CurrentValueSubjectNoFail<WebSocketStatus>(.disconnected)
         
-        stateSubject.filter { $0 == .failed }
-            .debounce(RxTimeInterval.seconds(60), scheduler: MainScheduler.instance)
-            .subscribe(
-                onNext: { _ in stateSubject.onNext(.disconnected) },
-                onError: { _ in stateSubject.onNext(.disconnected) }
-        ).disposed(by: bag)
+//        stateSubject.filter { $0 == .failed }
+//            .debounce(RxTimeInterval.seconds(60), scheduler: MainScheduler.instance)
+//            .subscribe(
+//                onNext: { _ in stateSubject.onNext(.disconnected) },
+//                onError: { _ in stateSubject.onNext(.disconnected) }
+//        ).disposed(by: bag)
+        combineMigrationInProgress()
         
         self.stateSubject = stateSubject
         self.node = node
@@ -88,7 +90,7 @@ public extension WebSocketToNode {
         case hasDisconnected
     }
     
-    func waitForConnection() -> Completable {
+    func waitForConnection() -> CombineCompletable {
         return state.filter { $0.isReady }.take(1).asSingle().asCompletable()
     }
     
@@ -111,7 +113,7 @@ public extension WebSocketToNode {
     }
     
     func connect() {
-        let status = try? stateSubject.value()
+        let status = try? stateSubject.value
         switch status {
         case .none, .disconnected?, .failed?:
             stateSubject.onNext(.connecting)
@@ -144,7 +146,7 @@ private extension WebSocketToNode {
 
     func hasStatus(_ status: WebSocketStatus) -> Bool {
         do {
-            return try stateSubject.value() == status
+            return try stateSubject.value == status
         } catch {
             return false
         }

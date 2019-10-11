@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public final class ConnectWebSocketEpic: NetworkWebsocketEpic {
     public let webSockets: WebSocketsEpic.WebSockets
@@ -36,39 +37,24 @@ public final class ConnectWebSocketEpic: NetworkWebsocketEpic {
 }
 
 public extension ConnectWebSocketEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
-        let onConnect: Observable<NodeAction> = actions
-            .filter { type(of: $0) == ConnectWebSocketAction.self }
-            .do(onNext: { [unowned self] in
-                log.verbose("Acting upon ConnectWebSocketAction")
-                self.webSockets.webSocket(to: $0.node, shouldConnect: true)
-                
-            }).ignoreElementsObservable()
-        
-        let onClose: Observable<NodeAction> = actions
-            .filter { type(of: $0) == CloseWebSocketAction.self }
-            .do(onNext: { [unowned self] in
-                log.verbose("Acting upon CloseWebSocketAction")
-                self.webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: $0.node)
-            }).ignoreElementsObservable()
-        
-        return Observable.merge(onConnect, onClose)
-    }
-}
-
-extension ObservableConvertibleType {
-    func ignoreElementsObservable() -> Observable<Element> {
-        return self.asObservable().materialize().flatMap { event in
-            return Observable<Element>.create { observer in
-                switch event {
-                case .error(let error):
-                    observer.onError(error)
-                case .completed: observer.onCompleted()
-                case .next: break /* the purpose of this switch is to NOT pass along any `next` event */
-                }
-                return Disposables.create()
-            }
-        }
+    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
+//        let onConnect: CombineObservable<NodeAction> = actions
+//            .filter { type(of: $0) == ConnectWebSocketAction.self }
+//            .do(onNext: { [unowned self] in
+//                log.verbose("Acting upon ConnectWebSocketAction")
+//                self.webSockets.webSocket(to: $0.node, shouldConnect: true)
+//
+//            }).ignoreElementsObservable()
+//
+//        let onClose: CombineObservable<NodeAction> = actions
+//            .filter { type(of: $0) == CloseWebSocketAction.self }
+//            .do(onNext: { [unowned self] in
+//                log.verbose("Acting upon CloseWebSocketAction")
+//                self.webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: $0.node)
+//            }).ignoreElementsObservable()
+//
+//        return CombineObservable.merge(onConnect, onClose)
+        combineMigrationInProgress()
     }
 }
 
@@ -83,16 +69,17 @@ public final class RadixJsonRpcAutoConnectEpic: NetworkWebsocketEpic {
 }
 
 public extension RadixJsonRpcAutoConnectEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
-        return actions
-            .filter { $0 is JsonRpcMethodNodeAction }
-            .flatMap { [unowned self] rpcMethodAction -> Observable<NodeAction> in
-                return self.waitForConnection(toNode: rpcMethodAction.node)
-                    .andThen(
-                        Observable.just(rpcMethodAction)
-                            .ignoreElementsObservable()
-                )
-        }
+    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
+//        return actions
+//            .filter { $0 is JsonRpcMethodNodeAction }
+//            .flatMap { [unowned self] rpcMethodAction -> CombineObservable<NodeAction> in
+//                return self.waitForConnection(toNode: rpcMethodAction.node)
+//                    .andThen(
+//                        CombineObservable.just(rpcMethodAction)
+//                            .ignoreElementsObservable()
+//                )
+//        }
+        combineMigrationInProgress()
         
     }
 }
@@ -107,13 +94,14 @@ public final class RadixJsonRpcAutoCloseEpic: NetworkWebsocketEpic {
     }
 }
 public extension RadixJsonRpcAutoCloseEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
-        return actions
-            .filter { $0 is BaseJsonRpcResultAction }
-            .delay(RxTimeInterval.seconds(5), scheduler: MainScheduler.instance)
-            .do(onNext: { [unowned self] actionResult in
-                self.webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: actionResult.node)
-            }).ignoreElementsObservable()
+    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
+//        return actions
+//            .filter { $0 is BaseJsonRpcResultAction }
+//            .delay(RxTimeInterval.seconds(5), scheduler: MainScheduler.instance)
+//            .do(onNext: { [unowned self] actionResult in
+//                self.webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: actionResult.node)
+//            }).ignoreElementsObservable()
+        combineMigrationInProgress()
         
     }
 }

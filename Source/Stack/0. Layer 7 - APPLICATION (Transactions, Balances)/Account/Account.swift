@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public enum Account: Hashable, AtomSigning, SigningRequesting, PublicKeyOwner {
     case privateKeyPresent(KeyPair)
@@ -45,9 +46,9 @@ public extension Account {
         }
     }
     
-    var privateKeyForSigning: Single<PrivateKey> {
+    var privateKeyForSigning: CombineSingle<PrivateKey> {
         if let privateKey = privateKey {
-            return Single.just(privateKey)
+            return CombineSingle.just(privateKey)
         } else {
             return requestSignableKeyFromUser(matchingPublicKey: publicKey)
         }
@@ -61,7 +62,7 @@ public extension Account {
 }
 
 public extension Account {
-    func requestSignableKeyFromUser(matchingPublicKey: PublicKey) -> Single<PrivateKey> {
+    func requestSignableKeyFromUser(matchingPublicKey: PublicKey) -> CombineSingle<PrivateKey> {
         implementMe()
     }
 }

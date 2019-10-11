@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol BootstrapConfig: CustomDebugStringConvertible {
     var config: UniverseConfig { get }
@@ -54,7 +55,7 @@ public extension DiscoveryMode {
 }
 
 public extension DiscoveryMode {
-    static func byDiscovery(config: UniverseConfig, seedNodes: Observable<Node>) -> DiscoveryMode {
+    static func byDiscovery(config: UniverseConfig, seedNodes: CombineObservable<Node>) -> DiscoveryMode {
         return .byDiscoveryEpics(
             NonEmptyArray([
                 DiscoverNodesEpic(seedNodes: seedNodes, universeConfig: config)

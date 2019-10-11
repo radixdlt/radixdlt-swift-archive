@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public struct UniverseBootstrap: BootstrapConfig {
     public let config: UniverseConfig
@@ -31,7 +32,7 @@ public struct UniverseBootstrap: BootstrapConfig {
 }
 
 private extension UniverseBootstrap {
-    init(config: UniverseConfig, seedNodes: Observable<Node>) {
+    init(config: UniverseConfig, seedNodes: CombineObservable<Node>) {
         self.config = config
         self.discoveryMode = .byDiscovery(config: config, seedNodes: seedNodes)
     }

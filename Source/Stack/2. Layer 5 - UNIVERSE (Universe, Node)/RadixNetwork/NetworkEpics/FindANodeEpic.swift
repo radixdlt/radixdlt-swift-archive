@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public final class FindANodeEpic: RadixNetworkEpic {
     public typealias PeerSelector = (NonEmptySet<Node>) -> Node
@@ -38,49 +39,55 @@ public final class FindANodeEpic: RadixNetworkEpic {
 
 public extension FindANodeEpic {
     
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
-        return actions.ofType(FindANodeRequestAction.self)
-            .flatMap { findANodeRequestAction -> Observable<NodeAction> in
-                let connectedNodes: Observable<[Node]> = networkState.map { state in
-                    getConnectedNodes(shards: findANodeRequestAction.shards, state: state)
-                }
-                
-                let selectedNode: Observable<NodeAction> = connectedNodes
-                    .compactMap { try? NonEmptySet(array: $0) }
-                    .firstOrError()
-                    .map { [unowned self] in self.peerSelector($0) }
-                    .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) }
-                    .cache()
-                
-                let findConnectionAction: Observable<NodeAction> = connectedNodes
-                    .filter { $0.isEmpty }
-                    .firstOrError()
-                    .asCompletable()
-                    .andThen(
-                        Observable<Int>.timer(RxTimeInterval.seconds(0), period: RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
-                            .withLatestFrom(networkState) { $1 }
-                            .flatMapIterable { [unowned self] (state: RadixNetworkState) in
-                                self.nextConnectionRequest(shards: findANodeRequestAction.shards, state: state)
-                        }
-                        
-                    )
-                    .takeUntil(selectedNode)
-                
-                let cleanupConnections: Observable<NodeAction> = findConnectionAction
-                    .ofType(ConnectWebSocketAction.self)
-                    .flatMap { connectWebsocketAction -> Observable<NodeAction> in
-                        let node = connectWebsocketAction.node
-                        return selectedNode.map { $0.node }
-                            .filter { $0 != node }
-                            .map { CloseWebSocketAction(node: $0) }
-                }
-                
-                return Observable<NodeAction>.merge(
-                    findConnectionAction.concat(selectedNode),
-                    cleanupConnections
-                )
-                
-        }
+    func epic(
+        actions: CombineObservable<NodeAction>,
+        networkState: CombineObservable<RadixNetworkState>
+    ) -> CombineObservable<NodeAction> {
+       
+//        return actions.ofType(FindANodeRequestAction.self)
+//            .flatMap { findANodeRequestAction -> CombineObservable<NodeAction> in
+//                let connectedNodes: CombineObservable<[Node]> = networkState.map { state in
+//                    getConnectedNodes(shards: findANodeRequestAction.shards, state: state)
+//                }
+//
+//                let selectedNode: CombineObservable<NodeAction> = connectedNodes
+//                    .compactMap { try? NonEmptySet(array: $0) }
+//                    .firstOrError()
+//                    .map { [unowned self] in self.peerSelector($0) }
+//                    .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) }
+//                    .cache()
+//
+//                let findConnectionAction: CombineObservable<NodeAction> = connectedNodes
+//                    .filter { $0.isEmpty }
+//                    .firstOrError()
+//                    .asCompletable()
+//                    .andThen(
+//                        CombineObservable<Int>.timer(RxTimeInterval.seconds(0), period: RxTimeInterval.seconds(1), scheduler: MainScheduler.instance)
+//                            .withLatestFrom(networkState) { $1 }
+//                            .flatMapIterable { [unowned self] (state: RadixNetworkState) in
+//                                self.nextConnectionRequest(shards: findANodeRequestAction.shards, state: state)
+//                        }
+//
+//                    )
+//                    .takeUntil(selectedNode)
+//
+//                let cleanupConnections: CombineObservable<NodeAction> = findConnectionAction
+//                    .ofType(ConnectWebSocketAction.self)
+//                    .flatMap { connectWebsocketAction -> CombineObservable<NodeAction> in
+//                        let node = connectWebsocketAction.node
+//                        return selectedNode.map { $0.node }
+//                            .filter { $0 != node }
+//                            .map { CloseWebSocketAction(node: $0) }
+//                }
+//
+//                return CombineObservable<NodeAction>.merge(
+//                    findConnectionAction.concat(selectedNode),
+//                    cleanupConnections
+//                )
+//
+//        }
+//        .eraseToAnyPublisher()
+        combineMigrationInProgress()
     }
 }
 

@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol AtomToTokenTransferMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == TransferTokensAction {}
 
@@ -35,7 +36,7 @@ public extension DefaultAtomToTokenTransferMapper {
     
     typealias SpecificExecutedAction = TransferTokensAction
     
-    func mapAtomToActions(_ atom: Atom) -> Observable<[TransferTokensAction]> {
+    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[TransferTokensAction]> {
         var transferredTokens = [TransferTokensAction]()
         
         for particleGroup in atom {
@@ -43,7 +44,7 @@ public extension DefaultAtomToTokenTransferMapper {
             transferredTokens.append(transfer)
         }
         
-        return Observable.just(transferredTokens)
+        return CombineObservable.just(transferredTokens)
     }
 }
 

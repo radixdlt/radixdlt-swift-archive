@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol AtomStore {
     
@@ -33,11 +34,11 @@ public protocol AtomStore {
     /// - Parameter address: The address to check for sync
     /// - Returns: a never ending observable which emits timestamp for when this local `AtomStore` is
     /// synced with some origin
-    func onSync(address: Address) -> Observable<Date>
+    func onSync(address: Address) -> CombineObservable<Date>
     
     /// Retrieves a never ending observable of atom observations (`stored` and `deleted`)
     /// which are then processed by the local store
-    func atomObservations(of address: Address) -> Observable<AtomObservation>
+    func atomObservations(of address: Address) -> CombineObservable<AtomObservation>
     
     func upParticles(at address: Address) -> [AnyUpParticle]
     
@@ -92,37 +93,39 @@ public extension InMemoryAtomStore {
 
 public extension InMemoryAtomStore {
     
-    func onSync(address: Address) -> Observable<Date> {
-        if let existingListenerAtAddress = syncListeners.listener(of: address) {
-            return existingListenerAtAddress.asObservable()
-        } else {
-            let newListener = ReplaySubject<Date>.createUnbounded()
-            syncListeners.addListener(newListener, of: address)
-            defer {
-                if synced.valueForKey(key: address, ifAbsent: { false }) {
-                    newListener.onNext(Date())
-                }
-            }
-            return newListener.asObservable()
-        }
+    func onSync(address: Address) -> CombineObservable<Date> {
+//        if let existingListenerAtAddress = syncListeners.listener(of: address) {
+//            return existingListenerAtAddress.asObservable()
+//        } else {
+//            let newListener = ReplaySubject<Date>.createUnbounded()
+//            syncListeners.addListener(newListener, of: address)
+//            defer {
+//                if synced.valueForKey(key: address, ifAbsent: { false }) {
+//                    newListener.onNext(Date())
+//                }
+//            }
+//            return newListener.asObservable()
+//        }
+        combineMigrationInProgress()
     }
     
-    func atomObservations(of address: Address) -> Observable<AtomObservation> {
+    func atomObservations(of address: Address) -> CombineObservable<AtomObservation> {
         
-        if let existingListenerAtAddress = atomUpdateListeners.listener(of: address) {
-            return existingListenerAtAddress.asObservable()
-        } else {
-            let newListener = ReplaySubject<AtomObservation>.createUnbounded()
-            atomUpdateListeners.addListener(newListener, of: address)
-            // Replay history
-            atoms.filter {
-                $0.value.isStore && $0.key.allAddresses.contains(address)
-            }.compactMap {
-                $0.value
-            }.forEach { newListener.onNext($0) }
-            return newListener.asObservable()
-        }
+//        if let existingListenerAtAddress = atomUpdateListeners.listener(of: address) {
+//            return existingListenerAtAddress.asObservable()
+//        } else {
+//            let newListener = ReplaySubject<AtomObservation>.createUnbounded()
+//            atomUpdateListeners.addListener(newListener, of: address)
+//            // Replay history
+//            atoms.filter {
+//                $0.value.isStore && $0.key.allAddresses.contains(address)
+//            }.compactMap {
+//                $0.value
+//            }.forEach { newListener.onNext($0) }
+//            return newListener.asObservable()
+//        }
 
+        combineMigrationInProgress()
     }
     
     func upParticles(at address: Address) -> [AnyUpParticle] {

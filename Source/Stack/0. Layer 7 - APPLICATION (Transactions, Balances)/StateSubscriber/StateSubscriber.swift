@@ -24,10 +24,11 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol StateSubscriber {
     func observeState<State>(
         ofType stateType: State.Type,
         at address: Address
-    ) -> Observable<State> where State: ApplicationState
+    ) -> CombineObservable<State> where State: ApplicationState
 }

@@ -24,9 +24,10 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol AtomPuller {
-    func pull(address: Address) -> Observable<Any>
+    func pull(address: Address) -> CombineObservable<Any>
 }
 
 public final class DefaultAtomPuller: AtomPuller {
@@ -40,29 +41,31 @@ public final class DefaultAtomPuller: AtomPuller {
 }
 
 public extension DefaultAtomPuller {
-    func pull(address: Address) -> Observable<Any> {
-        return requestCache.valueForKey(key: address) {
-            let fetchAtomsRequest = FetchAtomsActionRequest(address: address)
-            return Observable.create { [weak self] observer in
-                guard let `self` = self else {
-                    observer.onCompleted()
-                    return Disposables.create()
-                }
-                self.networkController.dispatch(nodeAction: fetchAtomsRequest)
-                
-                return Disposables.create {
-                    let cancelRequest = FetchAtomsActionCancel(request: fetchAtomsRequest)
-                    self.networkController.dispatch(nodeAction: cancelRequest)
-                }
-            }
-        }.map { $0 }
+    func pull(address: Address) -> CombineObservable<Any> {
+        
+//        return requestCache.valueForKey(key: address) {
+//            let fetchAtomsRequest = FetchAtomsActionRequest(address: address)
+//            return CombineObservable.create { [weak self] observer in
+//                guard let `self` = self else {
+//                    observer.onCompleted()
+//                    return Disposables.create()
+//                }
+//                self.networkController.dispatch(nodeAction: fetchAtomsRequest)
+//
+//                return Disposables.create {
+//                    let cancelRequest = FetchAtomsActionCancel(request: fetchAtomsRequest)
+//                    self.networkController.dispatch(nodeAction: cancelRequest)
+//                }
+//            }
+//            }.map { $0 }.eraseToAnyPublisher()
+        combineMigrationInProgress()
     }
 }
 
 internal extension DefaultAtomPuller {
     struct RequestCache: DictionaryConvertibleMutable, ExpressibleByDictionaryLiteral {
         public typealias Key = Address
-        public typealias Value = Observable<FetchAtomsAction>
+        public typealias Value = CombineObservable<FetchAtomsAction>
         public typealias Map = [Key: Value]
         public var dictionary: Map
         public init(dictionary: Map) {

@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 // swiftlint:disable file_length
 // syntactic sugar mostly
@@ -33,7 +34,7 @@ public protocol TokenCreating {
     /// Creates a new kind of Token
     func create(token: CreateTokenAction) -> ResultOfUserAction
     
-    func observeMyTokenDefinitions() -> Observable<TokenDefinitionsState>
+    func observeMyTokenDefinitions() -> CombineObservable<TokenDefinitionsState>
 }
 
 public extension TokenCreating {

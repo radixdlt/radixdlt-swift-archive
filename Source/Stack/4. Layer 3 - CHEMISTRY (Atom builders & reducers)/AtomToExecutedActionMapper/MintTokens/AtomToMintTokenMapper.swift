@@ -24,18 +24,19 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol AtomToMintTokenMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == MintTokensAction {}
 
 public extension AtomToMintTokenMapper {
-    func mapAtomToActions(_ atom: Atom) -> Observable<[MintTokensAction]> {
+    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[MintTokensAction]> {
         var mintActions = [MintTokensAction]()
         for particleGroup in atom {
             guard let mintAction = mintTokensActionFrom(particleGroup: particleGroup) else { continue }
             mintActions.append(mintAction)
         }
         
-        return Observable.just(mintActions)
+        return CombineObservable.just(mintActions)
     }
 }
 

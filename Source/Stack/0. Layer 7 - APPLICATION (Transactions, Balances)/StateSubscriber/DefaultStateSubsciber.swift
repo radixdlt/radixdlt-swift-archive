@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public final class DefaultStateSubscriber: StateSubscriber {
     
@@ -44,14 +45,16 @@ public extension DefaultStateSubscriber {
     func observeState<State>(
         ofType stateType: State.Type,
         at address: Address
-    ) -> Observable<State> where State: ApplicationState {
+    ) -> CombineObservable<State> where State: ApplicationState {
         
-        return atomStore.onSync(address: address)
-            .map { [unowned self] date in
-                let upParticles = self.atomStore.upParticles(at: address)
-                let reducedState = try self.particlesToStateReducer.reduce(upParticles: upParticles, to: stateType)
-                return reducedState
-        }
+//        return atomStore.onSync(address: address)
+//            .map { [unowned self] date in
+//                let upParticles = self.atomStore.upParticles(at: address)
+//                let reducedState = try self.particlesToStateReducer.reduce(upParticles: upParticles, to: stateType)
+//                return reducedState
+//        }
+        
+        combineMigrationInProgress()
     }
 }
 

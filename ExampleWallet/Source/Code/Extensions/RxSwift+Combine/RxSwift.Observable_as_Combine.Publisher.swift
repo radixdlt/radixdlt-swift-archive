@@ -1,5 +1,5 @@
 //
-//  Observable+Combine.swift
+//  CombineObservable+Combine.swift
 //  RxCombine
 //
 //  Created by Shai Mishali on 11/06/2019.
@@ -9,12 +9,13 @@
 import Foundation
 import Combine
 import RxSwift
+import Combine
 
 // TODO replace with RxCombine: https://github.com/freak4pc/RxCombine
 
 public extension ObservableConvertibleType {
     /// An `AnyPublisher` of the underlying Observable's Element type
-    /// so the Observable pushes events to the Publisher.
+    /// so the CombineObservable pushes events to the Publisher.
     var publisher: AnyPublisher<Element, Swift.Error> {
         RxPublisher(upstream: self).eraseToAnyPublisher()
     }
@@ -24,7 +25,7 @@ public extension ObservableConvertibleType {
     }
 
     /// Returns a `AnyPublisher` of the underlying Observable's Element type
-    /// so the Observable pushes events to the Publisher.
+    /// so the CombineObservable pushes events to the Publisher.
     ///
     /// - returns: AnyPublisher of the underlying Observable's Element type.
     /// - note: This is an alias for the `publisher` property.

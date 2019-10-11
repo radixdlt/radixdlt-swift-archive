@@ -24,13 +24,14 @@
 
 import Foundation
 import RxSwift
+import Combine
 import RxSwiftExt
 
 public final class DiscoverNodesEpic: RadixNetworkEpic {
-    private let seedNodes: Observable<Node>
+    private let seedNodes: CombineObservable<Node>
     private let universeConfig: UniverseConfig
     
-    public init(seedNodes: Observable<Node>, universeConfig: UniverseConfig) {
+    public init(seedNodes: CombineObservable<Node>, universeConfig: UniverseConfig) {
         self.seedNodes = seedNodes
         self.universeConfig = universeConfig
     }
@@ -39,63 +40,68 @@ public final class DiscoverNodesEpic: RadixNetworkEpic {
 public extension DiscoverNodesEpic {
     
     // swiftlint:disable:next function_body_length
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
-        let getUniverseConfigsOfSeedNodes: Observable<NodeAction> = actions
-            .ofType(DiscoverMoreNodesAction.self)
-            .flatMap { [unowned self] _ in self.seedNodes }
-            .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }
-            .catchError { .just(DiscoverMoreNodesActionError(reason: $0)) }
+    func epic(
+        actions: CombineObservable<NodeAction>,
+        networkState: CombineObservable<RadixNetworkState>
+    ) -> CombineObservable<NodeAction> {
         
-        // TODO Store universe configs in a Node Table instead of filter out Node in FindANodeEpic
-        let seedNodesHavingMismatchingUniverse: Observable<NodeAction> = actions
-            .ofType(GetUniverseConfigActionResult.self)
-            .filter { [unowned self] in $0.result != self.universeConfig }
-            .map { [unowned self] in NodeUniverseMismatch(node: $0.node, expectedConfig: self.universeConfig, actualConfig: $0.result) }
-        
-        let connectedSeedNodes: Observable<Node> = actions
-            .ofType(GetUniverseConfigActionResult.self)
-            .filter { [unowned self] in $0.result == self.universeConfig }
-            .map { $0.node }
-            .publish()
-            .autoConnect(numberOfSubscribers: 3)
-        
-        let addSeedNodes: Observable<NodeAction> = connectedSeedNodes.map { AddNodeAction(node: $0) }
-        let addSeedNodesInfo: Observable<NodeAction> = connectedSeedNodes.map { GetNodeInfoActionRequest(node: $0) }
-        let addSeedNodeSiblings: Observable<NodeAction> = connectedSeedNodes.map { GetLivePeersActionRequest(node: $0) }
-        
-        let addNodes: Observable<NodeAction> = actions
-            .ofType(GetLivePeersActionResult.self)
-            .flatMap { (livePeersResult: GetLivePeersActionResult) -> Observable<NodeAction> in
-                return Observable.combineLatest(
-                    Observable.just(livePeersResult.result),
-                    Observable.concat(networkState.firstOrError().asObservable(), Observable.never())
-                ) { (nodeInfos, state) in
-                    
-                    return nodeInfos.compactMap { (nodeInfo: NodeInfo) -> AddNodeAction? in
-                        guard
-                            let nodeFromInfo = try? Node(
-                                ensureDomainNotNil: nodeInfo.host?.domain,
-                                port: livePeersResult.node.host.port,
-                                isUsingSSL: livePeersResult.node.isUsingSSL
-                            ),
-                            !state.nodes.containsValue(forKey: nodeFromInfo)
-                            else { return nil }
-                        return AddNodeAction(node: nodeFromInfo, nodeInfo: nodeInfo)
-                        }.asSet.asArray /* removing duplicates */
-                    }.flatMap { (addNodeActionList: [AddNodeAction]) -> Observable<NodeAction> in
-                        return Observable<NodeAction>.from(addNodeActionList)
-                }
-        }
-    
-        return Observable.merge([
-            addSeedNodes,
-            addSeedNodesInfo,
-            addSeedNodeSiblings,
-            addNodes,
-            getUniverseConfigsOfSeedNodes,
-            seedNodesHavingMismatchingUniverse
-        ])
-        
+//        let getUniverseConfigsOfSeedNodes: CombineObservable<NodeAction> = actions
+//            .ofType(DiscoverMoreNodesAction.self)
+//            .flatMap { [unowned self] _ in self.seedNodes }
+//            .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }
+//            .catchError { .just(DiscoverMoreNodesActionError(reason: $0)) }
+//
+//        // TODO Store universe configs in a Node Table instead of filter out Node in FindANodeEpic
+//        let seedNodesHavingMismatchingUniverse: CombineObservable<NodeAction> = actions
+//            .ofType(GetUniverseConfigActionResult.self)
+//            .filter { [unowned self] in $0.result != self.universeConfig }
+//            .map { [unowned self] in NodeUniverseMismatch(node: $0.node, expectedConfig: self.universeConfig, actualConfig: $0.result) }
+//
+//        let connectedSeedNodes: CombineObservable<Node> = actions
+//            .ofType(GetUniverseConfigActionResult.self)
+//            .filter { [unowned self] in $0.result == self.universeConfig }
+//            .map { $0.node }
+//            .publish()
+//            .autoConnect(numberOfSubscribers: 3)
+//
+//        let addSeedNodes: CombineObservable<NodeAction> = connectedSeedNodes.map { AddNodeAction(node: $0) }
+//        let addSeedNodesInfo: CombineObservable<NodeAction> = connectedSeedNodes.map { GetNodeInfoActionRequest(node: $0) }
+//        let addSeedNodeSiblings: CombineObservable<NodeAction> = connectedSeedNodes.map { GetLivePeersActionRequest(node: $0) }
+//
+//        let addNodes: CombineObservable<NodeAction> = actions
+//            .ofType(GetLivePeersActionResult.self)
+//            .flatMap { (livePeersResult: GetLivePeersActionResult) -> CombineObservable<NodeAction> in
+//                return CombineObservable.combineLatest(
+//                    CombineObservable.just(livePeersResult.result),
+//                    CombineObservable.concat(networkState.firstOrError().asObservable(), CombineObservable.never())
+//                ) { (nodeInfos, state) in
+//
+//                    return nodeInfos.compactMap { (nodeInfo: NodeInfo) -> AddNodeAction? in
+//                        guard
+//                            let nodeFromInfo = try? Node(
+//                                ensureDomainNotNil: nodeInfo.host?.domain,
+//                                port: livePeersResult.node.host.port,
+//                                isUsingSSL: livePeersResult.node.isUsingSSL
+//                            ),
+//                            !state.nodes.containsValue(forKey: nodeFromInfo)
+//                            else { return nil }
+//                        return AddNodeAction(node: nodeFromInfo, nodeInfo: nodeInfo)
+//                        }.asSet.asArray /* removing duplicates */
+//                    }.flatMap { (addNodeActionList: [AddNodeAction]) -> CombineObservable<NodeAction> in
+//                        return CombineObservable<NodeAction>.from(addNodeActionList)
+//                }
+//        }
+//
+//        return CombineObservable.merge([
+//            addSeedNodes,
+//            addSeedNodesInfo,
+//            addSeedNodeSiblings,
+//            addNodes,
+//            getUniverseConfigsOfSeedNodes,
+//            seedNodesHavingMismatchingUniverse
+//        ])
+//
+        combineMigrationInProgress()
     }
     
 }

@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 import RxSwiftExt
 import RxOptional
 
@@ -134,7 +135,7 @@ public extension RadixApplicationClient {
 
 // MARK: AtomToTransactionMapper
 public extension RadixApplicationClient {
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
+    func transactionFromAtom(_ atom: Atom) -> CombineObservable<ExecutedTransaction> {
         return transactionSubscriber.transactionFromAtom(atom)
     }
 }
@@ -146,7 +147,7 @@ public extension RadixApplicationClient {
     }
     
     /// Returns a hot observable of the latest state of token definitions at the user's address
-    func observeMyTokenDefinitions() -> Observable<TokenDefinitionsState> {
+    func observeMyTokenDefinitions() -> CombineObservable<TokenDefinitionsState> {
         return observeTokenDefinitions(at: addressOfActiveAccount)
     }
 }
@@ -171,7 +172,7 @@ public extension RadixApplicationClient {
         return execute(actions: transferTokensAction)
     }
     
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokensAction> {
+    func observeTokenTransfers(toOrFrom address: Address) -> CombineObservable<TransferTokensAction> {
         return observeActions(ofType: TransferTokensAction.self, at: address)
     }
 }
@@ -182,7 +183,7 @@ public extension RadixApplicationClient {
         return execute(actions: sendMessageAction)
     }
     
-    func observeMessages(toOrFrom address: Address) -> Observable<SendMessageAction> {
+    func observeMessages(toOrFrom address: Address) -> CombineObservable<SendMessageAction> {
         return observeActions(ofType: SendMessageAction.self, at: address)
     }
 }
@@ -197,19 +198,20 @@ public extension RadixApplicationClient {
 // MARK: AccountBalancing
 public extension RadixApplicationClient {
     
-    func observeBalances(ownedBy owner: AddressConvertible) -> Observable<TokenBalances> {
-        return observeBalanceReferences(at: owner.address).flatMap {
-            Observable.combineLatest($0.dictionary.values
-                .map { tokenReferenceBalance -> Observable<TokenBalance> in
-                    let rriOfToken = tokenReferenceBalance.tokenResourceIdentifier
-                    return self.observeTokenDefinitions(at: rriOfToken.address).map { tokenDefinitionState -> TokenBalance in
-                        
-                        guard let tokenDefinition = tokenDefinitionState.tokenDefinition(identifier: rriOfToken) else { incorrectImplementation("Expected token definition") }
-                        
-                        return try TokenBalance(tokenDefinition: tokenDefinition, tokenReferenceBalance: tokenReferenceBalance)
-                    }
-            }) { $0 } /* Observable.combineLatest continued */
-        }.map { TokenBalances(balances: $0) }
+    func observeBalances(ownedBy owner: AddressConvertible) -> CombineObservable<TokenBalances> {
+//        return observeBalanceReferences(at: owner.address).flatMap {
+//            CombineObservable.combineLatest($0.dictionary.values
+//                .map { tokenReferenceBalance -> CombineObservable<TokenBalance> in
+//                    let rriOfToken = tokenReferenceBalance.tokenResourceIdentifier
+//                    return self.observeTokenDefinitions(at: rriOfToken.address).map { tokenDefinitionState -> TokenBalance in
+//
+//                        guard let tokenDefinition = tokenDefinitionState.tokenDefinition(identifier: rriOfToken) else { incorrectImplementation("Expected token definition") }
+//
+//                        return try TokenBalance(tokenDefinition: tokenDefinition, tokenReferenceBalance: tokenReferenceBalance)
+//                    }
+//            }) { $0 }
+//            }.map { TokenBalances(balances: $0) }.eraseToAnyPublisher()
+        combineMigrationInProgress()
     }
 }
 
@@ -219,7 +221,7 @@ public extension RadixApplicationClient {
     func observeState<State>(
         ofType stateType: State.Type,
         at address: Address
-    ) -> Observable<State>
+    ) -> CombineObservable<State>
         where State: ApplicationState {
         return stateSubscriber.observeState(ofType: stateType, at: address)
     }
@@ -227,25 +229,25 @@ public extension RadixApplicationClient {
 
 // MARK: TransactionSubscriber
 public extension RadixApplicationClient {
-    func observeTransactions(at address: Address) -> Observable<ExecutedTransaction> {
+    func observeTransactions(at address: Address) -> CombineObservable<ExecutedTransaction> {
         return transactionSubscriber.observeTransactions(at: address)
     }
 }
 
 // MARK: TokenDefinitionsState Observation
 public extension RadixApplicationClient {
-    func observeTokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
+    func observeTokenDefinitions(at address: Address) -> CombineObservable<TokenDefinitionsState> {
         return observeState(ofType: TokenDefinitionsState.self, at: address)
     }
     
-    func observeTokenDefinition(identifier: ResourceIdentifier) -> Observable<TokenDefinition> {
+    func observeTokenDefinition(identifier: ResourceIdentifier) -> CombineObservable<TokenDefinition> {
         let address = identifier.address
         return observeTokenDefinitions(at: address).map {
             $0.tokenDefinition(identifier: identifier)
             }.ifNilReturnEmpty()
     }
     
-    func observeTokenState(identifier: ResourceIdentifier) -> Observable<TokenState> {
+    func observeTokenState(identifier: ResourceIdentifier) -> CombineObservable<TokenState> {
         let address = identifier.address
         return observeTokenDefinitions(at: address).map {
             $0.tokenState(identifier: identifier)
@@ -255,7 +257,7 @@ public extension RadixApplicationClient {
 
 // MARK: TokenBalanceReferencesState Observation
 public extension RadixApplicationClient {
-    func observeBalanceReferences(at address: Address) -> Observable<TokenBalanceReferencesState> {
+    func observeBalanceReferences(at address: Address) -> CombineObservable<TokenBalanceReferencesState> {
         return observeState(ofType: TokenBalanceReferencesState.self, at: address)
     }
 }
@@ -269,14 +271,14 @@ public extension RadixApplicationClient {
 public extension RadixApplicationClient {
     var addressOfActiveAccount: Address { snapshotActiveAccount.addressFromMagic(magic) }
 
-    func observeAddressOfActiveAccount() -> Observable<Address> {
+    func observeAddressOfActiveAccount() -> CombineObservable<Address> {
         let magic = self.magic
         return identity.activeAccountObservable.map { newActiveAccount in
             return newActiveAccount.addressFromMagic(magic)
-        }
+        }.eraseToAnyPublisher()
     }
 
-    func observeActiveAccount() -> Observable<Account> {
+    func observeActiveAccount() -> CombineObservable<Account> {
         identity.activeAccountObservable
     }
 }
@@ -303,11 +305,11 @@ public extension RadixApplicationClient {
         identity.addAccount(newAccount)
     }
     
-    func pull(address: Address) -> Disposable {
+    func pull(address: Address) -> Cancellable {
         return atomPuller.pull(address: address).subscribe()
     }
     
-    func pull() -> Disposable {
+    func pull() -> Cancellable {
         return pull(address: addressOfActiveAccount)
     }
 

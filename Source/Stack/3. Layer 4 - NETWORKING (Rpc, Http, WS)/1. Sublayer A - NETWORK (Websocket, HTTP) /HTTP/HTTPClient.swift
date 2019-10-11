@@ -24,19 +24,20 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol HTTPClient {
-    func request<D>(router: Router, decodeAs type: D.Type) -> Single<D> where D: Decodable
+    func request<D>(router: Router, decodeAs type: D.Type) -> CombineSingle<D> where D: Decodable
     
-    func loadContent(of page: String) -> Single<String>
+    func loadContent(of page: String) -> CombineSingle<String>
 }
 
 public extension HTTPClient {
-    func request<D>(router: Router) -> Single<D> where D: Decodable {
+    func request<D>(router: Router) -> CombineSingle<D> where D: Decodable {
         return request(router: router, decodeAs: D.self)
     }
     
-    func request<D>(_ nodeRouter: NodeRouter) -> Single<D> where D: Decodable {
+    func request<D>(_ nodeRouter: NodeRouter) -> CombineSingle<D> where D: Decodable {
         return request(router: nodeRouter, decodeAs: D.self)
     }
 }

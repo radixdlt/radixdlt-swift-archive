@@ -24,31 +24,33 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol AtomToSendMessageActionMapper: AtomToSpecificExecutedActionMapper, Throwing where
     SpecificExecutedAction == SendMessageAction,
     Error == DecryptMessageFromAtomMapperError {}
 
 public final class DefaultAtomToSendMessageActionMapper: AtomToSendMessageActionMapper {
-    private let activeAccount: Observable<Account>
+    private let activeAccount: CombineObservable<Account>
     public init(
-        activeAccount: Observable<Account>
+        activeAccount: CombineObservable<Account>
     ) {
         self.activeAccount = activeAccount
     }
 }
 
 public extension DefaultAtomToSendMessageActionMapper {
-    func mapAtomToActions(_ atom: Atom) -> Observable<[SendMessageAction]> {
-        guard atom.containsAnyMessageParticle() else { return Observable.just([]) }
+    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[SendMessageAction]> {
+        guard atom.containsAnyMessageParticle() else { return CombineObservable.just([]) }
         
-        return activeAccount.flatMap {
-            $0.privateKeyForSigning
-        }.map {
-            try EncryptedMessageContext(atom: atom).decryptMessageIfNeeded(key: $0)
-        }.map {
-            [$0]
-        }
+//        return activeAccount.flatMap {
+//            $0.privateKeyForSigning
+//        }.map {
+//            try EncryptedMessageContext(atom: atom).decryptMessageIfNeeded(key: $0)
+//        }.map {
+//            [$0]
+//        }
+        incorrectImplementation()
     }
 }
 

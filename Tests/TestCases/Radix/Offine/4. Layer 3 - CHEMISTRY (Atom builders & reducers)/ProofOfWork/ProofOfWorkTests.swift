@@ -26,6 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 import RxSwift
+import Combine
 import RxTest
 import RxBlocking
 

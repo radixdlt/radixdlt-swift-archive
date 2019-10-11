@@ -25,6 +25,7 @@
 import Foundation
 import Alamofire
 import RxSwift
+import Combine
 
 public protocol URLConvertible {
     var url: URL { get }
@@ -79,32 +80,33 @@ public extension DefaultHTTPClient {
 
 // MARK: - HTTPClient
 public extension DefaultHTTPClient {
-    func request<D>(router: Router, decodeAs type: D.Type) -> Single<D> where D: Decodable {
+    func request<D>(router: Router, decodeAs type: D.Type) -> CombineSingle<D> where D: Decodable {
         return request { alamofireSession in
             alamofireSession.request(router)
         }
     }
     
-    func loadContent(of page: String) -> Single<String> {
-        return Observable.deferred { [unowned alamofireSession] in
-            return Observable<String>.create { observer in
-                let dataTask = alamofireSession.request(page).responseString { response in
-                    switch response.result {
-                    case .failure(let error):
-                        log.error(error)
-                        observer.onError(error)
-                    case .success(let string):
-                        log.debug(string)
-                        observer.onNext(string)
-                        observer.onCompleted()
-                    }
-                }
-                return Disposables.create { dataTask.cancel() }
-            }
-        }
-        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-        .subscribeOn(MainScheduler.instance)
-        .asSingle()
+    func loadContent(of page: String) -> CombineSingle<String> {
+//        return CombineObservable.deferred { [unowned alamofireSession] in
+//            return CombineObservable<String>.create { observer in
+//                let dataTask = alamofireSession.request(page).responseString { response in
+//                    switch response.result {
+//                    case .failure(let error):
+//                        log.error(error)
+//                        observer.onError(error)
+//                    case .success(let string):
+//                        log.debug(string)
+//                        observer.onNext(string)
+//                        observer.onCompleted()
+//                    }
+//                }
+//                return Disposables.create { dataTask.cancel() }
+//            }
+//        }
+//        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+//        .subscribeOn(MainScheduler.instance)
+//        .asSingle()
+        combineMigrationInProgress()
     }
     
     enum Error: Swift.Error {
@@ -114,34 +116,35 @@ public extension DefaultHTTPClient {
 
 // MARK: - Private
 private extension DefaultHTTPClient {
-    func request<D>(_ makeRequest: @escaping (Alamofire.Session) -> Alamofire.DataRequest) -> Single<D> where D: Decodable {
-        return Observable<D>.deferred { [weak alamofireSession] in
-            return Observable.create { observer in
-                guard let alamofireSession = alamofireSession else {
-                    log.error("alamofireSession is nil")
-                    observer.onError(Error.underlyingUrlSessionNil)
-                    return Disposables.create()
-                }
-                let dataRequest: Alamofire.DataRequest = makeRequest(alamofireSession)
-                    .validate()
-                    .responseString { $0.responseString.printIfPresent() }
-                    .responseDecodable { (response: DataResponse<D>) -> Void in
-                        switch response.result {
-                        case .failure(let error):
-                            log.error(error)
-                            observer.onError(error)
-                        case .success(let model):
-                            log.verbose(model)
-                            observer.onNext(model)
-                            observer.onCompleted()
-                        }
-                }
-                return Disposables.create { dataRequest.cancel() }
-            }
-        }
-        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-        .subscribeOn(MainScheduler.instance)
-        .asSingle()
+    func request<D>(_ makeRequest: @escaping (Alamofire.Session) -> Alamofire.DataRequest) -> CombineSingle<D> where D: Decodable {
+//        return CombineObservable<D>.deferred { [weak alamofireSession] in
+//            return CombineObservable.create { observer in
+//                guard let alamofireSession = alamofireSession else {
+//                    log.error("alamofireSession is nil")
+//                    observer.onError(Error.underlyingUrlSessionNil)
+//                    return Disposables.create()
+//                }
+//                let dataRequest: Alamofire.DataRequest = makeRequest(alamofireSession)
+//                    .validate()
+//                    .responseString { $0.responseString.printIfPresent() }
+//                    .responseDecodable { (response: DataResponse<D>) -> Void in
+//                        switch response.result {
+//                        case .failure(let error):
+//                            log.error(error)
+//                            observer.onError(error)
+//                        case .success(let model):
+//                            log.verbose(model)
+//                            observer.onNext(model)
+//                            observer.onCompleted()
+//                        }
+//                }
+//                return Disposables.create { dataRequest.cancel() }
+//            }
+//        }
+//        .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+//        .subscribeOn(MainScheduler.instance)
+//        .asSingle()
+        combineMigrationInProgress()
     }
 }
 

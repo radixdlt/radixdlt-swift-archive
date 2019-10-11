@@ -24,10 +24,11 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public struct AnyAtomToExecutedActionMapper: BaseAtomToUserActionMapper {
     
-    private let _mapAtomSomeUserActions: (Atom) -> Observable<[UserAction]>
+    private let _mapAtomSomeUserActions: (Atom) -> CombineObservable<[UserAction]>
     
     public init<Concrete>(any concrete: Concrete) where Concrete: BaseAtomToUserActionMapper {
         self._mapAtomSomeUserActions = {
@@ -37,7 +38,7 @@ public struct AnyAtomToExecutedActionMapper: BaseAtomToUserActionMapper {
 }
 
 public extension AnyAtomToExecutedActionMapper {
-    func mapAtomSomeUserActions(_ atom: Atom) -> Observable<[UserAction]> {
+    func mapAtomSomeUserActions(_ atom: Atom) -> CombineObservable<[UserAction]> {
         return self._mapAtomSomeUserActions(atom)
     }
 }

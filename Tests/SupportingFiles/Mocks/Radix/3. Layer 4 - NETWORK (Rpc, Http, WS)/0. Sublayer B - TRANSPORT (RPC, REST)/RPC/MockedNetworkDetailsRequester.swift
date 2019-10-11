@@ -25,16 +25,17 @@
 import Foundation
 @testable import RadixSDK
 import RxSwift
+import Combine
 
 //struct MockedNetworkDetailsRequester: NodeNetworkDetailsRequesting {
-//    private let single: Single<NodeNetworkDetails>
-//    init(_ single: Single<NodeNetworkDetails>) {
+//    private let single: CombineSingle<NodeNetworkDetails>
+//    init(_ single: CombineSingle<NodeNetworkDetails>) {
 //        self.single = single
 //    }
-//    init(subject: PublishSubject<NodeNetworkDetails>) {
+//    init(subject: PassthroughSubjectNoFail<NodeNetworkDetails>) {
 //        self.init(subject.asObservable())
 //    }
-//    func networkDetails() -> Single<NodeNetworkDetails> {
+//    func networkDetails() -> CombineSingle<NodeNetworkDetails> {
 //        return single
 //    }
 //}

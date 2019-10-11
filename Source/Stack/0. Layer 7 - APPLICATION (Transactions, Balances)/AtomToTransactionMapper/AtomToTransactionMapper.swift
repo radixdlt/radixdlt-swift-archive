@@ -24,25 +24,28 @@
 
 import Foundation
 import RxSwift
+import Combine
 import RxSwiftExt
 import RxOptional
 
 public protocol AtomToTransactionMapper {
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction>
+    func transactionFromAtom(_ atom: Atom) -> CombineObservable<ExecutedTransaction>
 }
 
 public extension AtomToTransactionMapper {
     /// Boolean `OR` of `actionTypes`
-    func transactionFrom(atom: Atom, actionMatchingAnyType actionTypes: [UserAction.Type]) -> Observable<ExecutedTransaction> {
+    func transactionFrom(atom: Atom, actionMatchingAnyType actionTypes: [UserAction.Type]) -> CombineObservable<ExecutedTransaction> {
         return transactionFromAtom(atom).filter {
             $0.contains(actionMatchingAnyType: actionTypes)
         }
+        .eraseToAnyPublisher()
     }
     
     /// Boolean `AND` of `requiredActionTypes`
-    func transactionFrom(atom: Atom, actionMatchingAllTypes requiredActionTypes: [UserAction.Type]) -> Observable<ExecutedTransaction> {
+    func transactionFrom(atom: Atom, actionMatchingAllTypes requiredActionTypes: [UserAction.Type]) -> CombineObservable<ExecutedTransaction> {
         return transactionFromAtom(atom).filter {
             $0.contains(actionMatchingAll: requiredActionTypes)
         }
+        .eraseToAnyPublisher()
     }
 }

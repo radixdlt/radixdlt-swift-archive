@@ -24,13 +24,14 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol RadixNetworkEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction>
+    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction>
 }
 
 public extension RadixNetworkEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
+    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
         abstract()
     }
 }

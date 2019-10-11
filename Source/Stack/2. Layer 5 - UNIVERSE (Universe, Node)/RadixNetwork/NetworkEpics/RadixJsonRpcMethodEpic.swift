@@ -24,10 +24,11 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public final class RadixJsonRpcMethodEpic<Request, Result>: NetworkWebsocketEpic where Request: JsonRpcMethodNodeAction, Result: JsonRpcResultAction {
     
-    public typealias MethodCall = (RPCClient, Request) -> Single<Result>
+    public typealias MethodCall = (RPCClient, Request) -> CombineSingle<Result>
     
     public let webSockets: WebSocketsEpic.WebSockets
     private let methodCall: MethodCall
@@ -42,16 +43,17 @@ public final class RadixJsonRpcMethodEpic<Request, Result>: NetworkWebsocketEpic
 }
 
 public extension RadixJsonRpcMethodEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
-        return actions
-            .ofType(Request.self)
-            .flatMapSingle { [unowned self] (rpcMethod: Request) -> Single<Result> in
-                return self.waitForConnectionReturnWS(toNode: rpcMethod.node)
-                    .map { DefaultRPCClient(channel: $0) }
-                    .flatMap { rpcClient -> Single<Result> in
-                        return self.methodCall(rpcClient, rpcMethod)
-                    }
-            }.map { $0 }
+    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
+        combineMigrationInProgress()
+//        return actions
+//            .ofType(Request.self)
+//            .flatMapSingle { [unowned self] (rpcMethod: Request) -> CombineSingle<Result> in
+//                return self.waitForConnectionReturnWS(toNode: rpcMethod.node)
+//                    .map { DefaultRPCClient(channel: $0) }
+//                    .flatMap { rpcClient -> CombineSingle<Result> in
+//                        return self.methodCall(rpcClient, rpcMethod)
+//                    }
+//            }.map { $0 }
     }
 }
 
@@ -60,24 +62,28 @@ public extension RadixJsonRpcMethodEpic {
     static func createGetLivePeersEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
         return RadixJsonRpcMethodEpic<GetLivePeersActionRequest, GetLivePeersActionResult>(
             webSockets: webSockets
-        ) { (rpcClient: RPCClient, action: GetLivePeersActionRequest) -> Single<GetLivePeersActionResult> in
-            rpcClient.getLivePeers().map { GetLivePeersActionResult(node: action.node, result: $0) }
+        ) { (rpcClient: RPCClient, action: GetLivePeersActionRequest) -> CombineSingle<GetLivePeersActionResult> in
+            rpcClient.getLivePeers().map { GetLivePeersActionResult(node: action.node, result: $0) }.asSingle()
         }
     }
     
     static func createGetNodeInfoEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
         return RadixJsonRpcMethodEpic<GetNodeInfoActionRequest, GetNodeInfoActionResult>(
             webSockets: webSockets
-        ) { (rpcClient: RPCClient, action: GetNodeInfoActionRequest) -> Single<GetNodeInfoActionResult> in
-            rpcClient.getInfo().map { GetNodeInfoActionResult(node: action.node, result: $0) }
+        ) { (rpcClient: RPCClient, action: GetNodeInfoActionRequest) -> CombineSingle<GetNodeInfoActionResult> in
+            rpcClient.getInfo().map { GetNodeInfoActionResult(node: action.node, result: $0) }.asSingle()
+            
         }
     }
     
     static func createUniverseConfigEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
+        
         return RadixJsonRpcMethodEpic<GetUniverseConfigActionRequest, GetUniverseConfigActionResult>(
             webSockets: webSockets
-        ) { (rpcClient: RPCClient, action: GetUniverseConfigActionRequest) -> Single<GetUniverseConfigActionResult> in
-            rpcClient.getUniverseConfig().map { GetUniverseConfigActionResult(node: action.node, result: $0) }
+        ) { (rpcClient: RPCClient, action: GetUniverseConfigActionRequest) -> CombineSingle<GetUniverseConfigActionResult> in
+            
+            rpcClient.getUniverseConfig().map { GetUniverseConfigActionResult(node: action.node, result: $0) }.asSingle()
         }
+        
     }
 }

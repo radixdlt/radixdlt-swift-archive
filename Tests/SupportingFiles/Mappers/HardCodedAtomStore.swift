@@ -25,6 +25,7 @@
 import Foundation
 @testable import RadixSDK
 import RxSwift
+import Combine
 
 struct HardCodedAtomStore: AtomStore {
     private let upParticles: [AnyUpParticle]
@@ -35,12 +36,14 @@ struct HardCodedAtomStore: AtomStore {
 
 extension HardCodedAtomStore {
 
-    func onSync(address: Address) -> Observable<Date> {
-        return .empty()
+    func onSync(address: Address) -> CombineObservable<Date> {
+//        return CombineObservable.just
+        combineMigrationInProgress()
     }
 
-    func atomObservations(of address: Address) -> Observable<AtomObservation> {
-         return .empty()
+    func atomObservations(of address: Address) -> CombineObservable<AtomObservation> {
+//         return .empty()
+        combineMigrationInProgress()
     }
 
     func upParticles(at address: Address) -> [AnyUpParticle] {

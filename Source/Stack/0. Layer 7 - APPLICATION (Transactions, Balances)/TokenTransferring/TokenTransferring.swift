@@ -24,12 +24,13 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 /// Type that is can make transactions of different types between Radix accounts
 public protocol TokenTransferring: ActiveAccountOwner {
 
     func transfer(tokens: TransferTokensAction) -> ResultOfUserAction
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokensAction>
+    func observeTokenTransfers(toOrFrom address: Address) -> CombineObservable<TransferTokensAction>
 }
 
 public extension TokenTransferring {
@@ -122,7 +123,7 @@ public extension TokenTransferring {
     /// of executed Token Transfers, either by you or someone else, the latter
     /// returns a stream of `ExecutedTransaction`, which is a container of UserActions
     /// submitted in a single Atom at some earlier point in time
-    func observeMyTokenTransfers() -> Observable<TransferTokensAction> {
+    func observeMyTokenTransfers() -> CombineObservable<TransferTokensAction> {
         return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
     }
 }

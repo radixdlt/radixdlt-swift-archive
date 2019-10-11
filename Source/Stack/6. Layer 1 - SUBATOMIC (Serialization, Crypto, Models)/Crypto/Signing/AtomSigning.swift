@@ -24,20 +24,22 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol AtomSigning {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom>
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> CombineSingle<SignedAtom>
 }
 
 // MARK: - Default Implementation
 public extension AtomSigning where Self: SigningRequesting, Self: PublicKeyOwner {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom> {
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> CombineSingle<SignedAtom> {
         let signatureId = publicKey.hashEUID
         
-        return privateKeyForSigning.map {
-            try Signer.sign(unsignedAtom, privateKey: $0)
-        }.map {
-            unsignedAtom.signed(signature: $0, signatureId: signatureId)
-        }
+//        return privateKeyForSigning.map {
+//            try Signer.sign(unsignedAtom, privateKey: $0)
+//        }.map {
+//            unsignedAtom.signed(signature: $0, signatureId: signatureId)
+//        }
+        combineMigrationInProgress()
     }
 }

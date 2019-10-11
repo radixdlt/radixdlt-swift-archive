@@ -25,6 +25,7 @@
 import XCTest
 @testable import RadixSDK
 import RxSwift
+import Combine
 
 private extension Supply {
     static let ten: Supply = 10

@@ -25,20 +25,21 @@
 import Foundation
 @testable import RadixSDK
 import RxSwift
+import Combine
 
 struct MockedHTTPClient: HTTPClient {
-    private let httpResponse: Observable<String>
-    init(httpResponse: Observable<String>) {
+    private let httpResponse: CombineObservable<String>
+    init(httpResponse: CombineObservable<String>) {
         self.httpResponse = httpResponse
     }
     
-    func request<D>(router: Router, decodeAs type: D.Type) -> Single<D> where D: Decodable {
+    func request<D>(router: Router, decodeAs type: D.Type) -> CombineSingle<D> where D: Decodable {
         return httpResponse.map {
             try JSONDecoder().decode(D.self, from: $0.toData())
         }
     }
     
-    func loadContent(of page: String) -> Single<String> {
+    func loadContent(of page: String) -> CombineSingle<String> {
         abstract()
     }
 }

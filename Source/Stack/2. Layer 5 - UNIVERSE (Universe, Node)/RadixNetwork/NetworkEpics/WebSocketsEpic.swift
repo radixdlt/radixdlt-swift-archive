@@ -24,6 +24,7 @@
 
 import Foundation
 import RxSwift
+import Combine
 
 public protocol NetworkWebsocketEpic: RadixNetworkEpic {
     var webSockets: WebSocketsEpic.WebSockets { get }
@@ -36,14 +37,21 @@ public extension NetworkWebsocketEpic {
 }
 
 public extension NetworkWebsocketEpic {
-    func waitForConnection(toNode node: Node) -> Completable {
+    func waitForConnection(toNode node: Node) -> CombineCompletable {
         let websocketToNode = webSockets.webSocket(to: node, shouldConnect: true)
         return websocketToNode.waitForConnection()
     }
     
-    func waitForConnectionReturnWS(toNode node: Node) -> Single<WebSocketToNode> {
-        let websocketToNode = webSockets.webSocket(to: node, shouldConnect: true)
-        return websocketToNode.waitForConnection().andThen(Single.just(websocketToNode))
+    func waitForConnectionReturnWS(toNode node: Node) -> CombineSingle<WebSocketToNode> {
+        
+//        let websocketToNode = webSockets.webSocket(to: node, shouldConnect: true)
+//
+//        return websocketToNode.waitForConnection()
+//            .andThen(
+//                CombineSingle.just(websocketToNode)
+//        )
+        
+        combineMigrationInProgress()
     }
     
     func close(webSocketToNode: WebSocketToNode, useDelay: Bool = false) {
@@ -70,35 +78,40 @@ public final class WebSocketsEpic: RadixNetworkEpic {
 }
 
 public extension WebSocketsEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
-        let webSockets = WebSockets()
-        return Observable.merge(
-            epicFromWebsockets
-                .map { [unowned self] epicFromWebSocket in
-                    let newEpic = epicFromWebSocket(webSockets)
-                    self._retainingVariableEpics.append(newEpic)
-                    return newEpic
-                }
-                .map { (newlyCreatedEpic: NetworkWebsocketEpic) -> Observable<NodeAction> in
-                    return newlyCreatedEpic.epic(actions: actions, networkState: networkState)
-                }
-        )
+    func epic(
+        actions: CombineObservable<NodeAction>,
+        networkState: CombineObservable<RadixNetworkState>
+    ) -> CombineObservable<NodeAction> {
+        
+//        let webSockets = WebSockets()
+//        return CombineObservable.merge(
+//            epicFromWebsockets
+//                .map { [unowned self] epicFromWebSocket in
+//                    let newEpic = epicFromWebSocket(webSockets)
+//                    self._retainingVariableEpics.append(newEpic)
+//                    return newEpic
+//                }
+//                .map { (newlyCreatedEpic: NetworkWebsocketEpic) -> CombineObservable<NodeAction> in
+//                    return newlyCreatedEpic.epic(actions: actions, networkState: networkState)
+//                }
+//        )
+        combineMigrationInProgress()
     }
 }
 
 public extension WebSocketsEpic {
     final class WebSockets {
-        private let newSocketsToNodeSubject: PublishSubject<WebSocketToNode>
+        private let newSocketsToNodeSubject: PassthroughSubjectNoFail<WebSocketToNode>
         private var webSockets = [Node: WebSocketToNode]()
         fileprivate init() {
-            self.newSocketsToNodeSubject = PublishSubject()
+            self.newSocketsToNodeSubject = PassthroughSubjectNoFail()
         }
     }
 }
 
 internal extension WebSocketsEpic.WebSockets {
     
-    func getNewSocketsToNode() -> Observable<WebSocketToNode> {
+    func getNewSocketsToNode() -> CombineObservable<WebSocketToNode> {
         return newSocketsToNodeSubject.asObservable()
     }
     
