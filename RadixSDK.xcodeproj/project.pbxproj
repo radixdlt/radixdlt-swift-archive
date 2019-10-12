@@ -254,6 +254,8 @@
 		E68BD821229ED06C00FCE4D3 /* EncryptedPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD820229ED06C00FCE4D3 /* EncryptedPrivateKey.swift */; };
 		E68BD82522A0331800FCE4D3 /* MetaDataCommonValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */; };
 		E68BD82722A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */; };
+		E68DE4A42352344700F1E7A0 /* PublisherPipeOperatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DE4A32352344700F1E7A0 /* PublisherPipeOperatorTests.swift */; };
+		E68DE4A62352357800F1E7A0 /* PublisherPipeOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DE4A52352357800F1E7A0 /* PublisherPipeOperator.swift */; };
 		E68DFA2E22FC50F40050F69E /* UniqueMaking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA2D22FC50F40050F69E /* UniqueMaking.swift */; };
 		E68DFA3222FC64140050F69E /* ExecutedTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA3122FC64140050F69E /* ExecutedTransaction.swift */; };
 		E68DFA3422FC64290050F69E /* TransactionConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA3322FC64290050F69E /* TransactionConvertible.swift */; };
@@ -814,6 +816,8 @@
 		E68BD820229ED06C00FCE4D3 /* EncryptedPrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedPrivateKey.swift; sourceTree = "<group>"; };
 		E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataCommonValue.swift; sourceTree = "<group>"; };
 		E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DictionaryConvertible+ArrayInitializable.swift"; sourceTree = "<group>"; };
+		E68DE4A32352344700F1E7A0 /* PublisherPipeOperatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherPipeOperatorTests.swift; sourceTree = "<group>"; };
+		E68DE4A52352357800F1E7A0 /* PublisherPipeOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherPipeOperator.swift; sourceTree = "<group>"; };
 		E68DFA2D22FC50F40050F69E /* UniqueMaking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueMaking.swift; sourceTree = "<group>"; };
 		E68DFA3122FC64140050F69E /* ExecutedTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutedTransaction.swift; sourceTree = "<group>"; };
 		E68DFA3322FC64290050F69E /* TransactionConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionConvertible.swift; sourceTree = "<group>"; };
@@ -1479,6 +1483,7 @@
 				E6D325AE21EE488600851F4E /* Extensions */,
 				E620AB4521E785D600B36EC2 /* SupportingFiles */,
 				E6EFD6C0234F7CE200B7387B /* CombineBridge.swift */,
+				E68DE4A52352357800F1E7A0 /* PublisherPipeOperator.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -1497,6 +1502,7 @@
 		E620AB5221E7874300B36EC2 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				E68DE4A32352344700F1E7A0 /* PublisherPipeOperatorTests.swift */,
 				E620AB5321E7874300B36EC2 /* SupportingFiles */,
 				E620AB5521E7874300B36EC2 /* TestCases */,
 			);
@@ -3862,6 +3868,7 @@
 				E6E2798C2271CD1C0067D46E /* Data+StringConversion.swift in Sources */,
 				E689DB7D225F61BF00340CF3 /* DefaultHTTPClient.swift in Sources */,
 				E6E279A12271CD1C0067D46E /* Throwing.swift in Sources */,
+				E68DE4A62352357800F1E7A0 /* PublisherPipeOperator.swift in Sources */,
 				E6E279492271CD1C0067D46E /* RadixJSONEncoder.swift in Sources */,
 				E6340C8322FAD7AE0044BA97 /* TransferrableTokensParticle+FromParticle.swift in Sources */,
 				E6E279512271CD1C0067D46E /* JSONPrefixSpecifying.swift in Sources */,
@@ -4068,6 +4075,7 @@
 				E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */,
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
+				E68DE4A42352344700F1E7A0 /* PublisherPipeOperatorTests.swift in Sources */,
 				E62F35302273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E6055447230553C700528510 /* Test+Convenience+RadixApplicationClient.swift in Sources */,
 				E60554452305529600528510 /* Identity+Account.swift in Sources */,

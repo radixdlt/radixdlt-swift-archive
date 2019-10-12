@@ -40,7 +40,7 @@ public typealias PassthroughSubjectNoFail<Output> = Combine.PassthroughSubject<O
 public typealias CombineObservable<Output> = Combine.AnyPublisher<Output, Never>
 
 // Replaced: `RxSwift.Single`
-public typealias CombineSingle<Output> = Combine.Future<Output, Never>
+public typealias CombineSingle<Output> = CombineObservable<Output>
 
 // Replaced: `RxSwift.Maybe`
 public typealias CombineMaybe<Output> = CombineSingle<Output?>
@@ -97,23 +97,6 @@ public extension Publisher {
         combineMigrationInProgress()
     }
     
-    
-    func flatMapObservable<Other>(_ selector: @escaping (Output) throws -> CombineObservable<Other>) -> CombineObservable<Other> {
-        combineMigrationInProgress()
-    }
-    
-    func cache() -> CombineSingle<Output> {
-        combineMigrationInProgress()
-    }
-    
-    func asSingle() -> CombineSingle<Output> {
-        combineMigrationInProgress()
-    }
-        
-    func flatMapCompletableVoid(_ selector: @escaping () -> CombineCompletable) -> CombineCompletable {
-        combineMigrationInProgress()
-    }
-    
     static func create(_ creation: (AnySubscriber<Output, Never>) -> Cancellable) -> Self {
         combineMigrationInProgress()
     }
@@ -127,18 +110,7 @@ public extension Publisher {
         combineMigrationInProgress()
     }
     
-    static func merge<A, B>(_ foobarA: A, _ foobarB: B) -> Self where A: Publisher, B: Publisher, A.Output == Self.Output, B.Output == Self.Output, A.Failure == Self.Failure, B.Failure == Self.Failure {
-        combineMigrationInProgress()
-    }
-    
     static func combineLatest<A, B>(_ foobarA: A, _ foobarB: B) -> Self where A: Publisher, B: Publisher, A.Output == Self.Output, B.Output == Self.Output, A.Failure == Self.Failure, B.Failure == Self.Failure {
-        combineMigrationInProgress()
-    }
-    
-    static func combineLatest<Collection: Swift.Collection>(
-        _ collection: Collection,
-        resultSelector: @escaping ([Collection.Element.Output]) throws -> Output
-    ) -> CombineObservable<Output> where Collection.Element: Publisher {
         combineMigrationInProgress()
     }
 

@@ -64,13 +64,68 @@ public extension FindANodeEpic {
     }
 }
 
-private func getConnectedNodes(shards: Shards, state: RadixNetworkState) -> [Node] {
-    return state.nodes
-        .filter { $0.value.websocketStatus == .ready }
-        .filter { $0.value.shardSpace?.intersectsWithShards(shards) ?? false }
-        .map {
-            return $0.key
-            
+struct InfoForNode: Equatable {
+    let nodeInfo: NodeInfo
+    let node: Node
+}
+
+struct NodeWithConfig: Equatable {
+    let infoForNode: InfoForNode
+    let universeConfig: UniverseConfig
+}
+extension NodeWithConfig {
+    var nodeInfo: NodeInfo { infoForNode.nodeInfo }
+    var node: Node { infoForNode.node }
+}
+
+internal extension FindANodeEpic {
+    var mine: UniverseConfig { abstract() }
+    var myAddress: Address { abstract() }
+    var myShard: Shards { .init(single: myAddress.shard) }
+    
+    func findANode(originURL: URL) -> AnyPublisher<InfoForNode, Never> {
+        implementMe()
+    }
+    
+    func universeConfig(of node: Node) -> AnyPublisher<UniverseConfig, Never> {
+        abstract()
+    }
+    
+    func flatMapGetUniverseConfig<P>(_ publisher: P) -> AnyPublisher<NodeWithConfig, Never> where P: Publisher, P.Output == InfoForNode, P.Failure == Never {
+        
+        publisher.flatMap { infoForNode in
+            self.universeConfig(of: infoForNode.node).map { universeConfigOfNode in
+                NodeWithConfig(infoForNode: infoForNode, universeConfig: universeConfigOfNode)
+            }
         }
+        .eraseToAnyPublisher()
+    }
+    
+    func filterIsInMyUniverse<P>(_ publisher: P) -> AnyPublisher<NodeWithConfig, Never> where P: Publisher, P.Output == NodeWithConfig, P.Failure == Never {
+        publisher.filter { $0.universeConfig == self.mine }
+            .eraseToAnyPublisher()
+    }
+    
+    func filterCanServeMe<P>(_ publisher: P) -> AnyPublisher<NodeWithConfig, Never> where P: Publisher, P.Output == NodeWithConfig, P.Failure == Never {
+        publisher.filter { $0.nodeInfo.shardSpace.intersectsWithShards(self.myShard) }.eraseToAnyPublisher()
+    }
+    
+    func findSuitableNode() -> AnyPublisher<NodeWithConfig, Never> {
+        findANode(originURL: "localhost:8080")
+            |> flatMapGetUniverseConfig
+            |> filterIsInMyUniverse
+            |> filterCanServeMe
+    }
     
 }
+
+//private func getConnectedNodes(shards: Shards, state: RadixNetworkState) -> [Node] {
+//    return state.nodes
+//        .filter { $0.value.websocketStatus == .ready }
+//        .filter { $0.value.shardSpace?.intersectsWithShards(shards) ?? false }
+//        .map {
+//            return $0.key
+//
+//        }
+//
+//}

@@ -46,6 +46,5 @@ public extension NodeNetworkDetailsRequesting where Self: RESTClient {
 //            (nodesInfos: [NodeInfo]) -> CombineSingle<NodeInfo> in
             CombineObservable.from($0)
         }.eraseToAnyPublisher()
-        .asSingle()
     }
 }
