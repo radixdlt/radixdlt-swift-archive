@@ -35,7 +35,7 @@ public extension AtomToMintTokenMapper {
             mintActions.append(mintAction)
         }
         
-        return CombineObservable.just(mintActions)
+        return Just(mintActions).eraseToAnyPublisher()
     }
 }
 

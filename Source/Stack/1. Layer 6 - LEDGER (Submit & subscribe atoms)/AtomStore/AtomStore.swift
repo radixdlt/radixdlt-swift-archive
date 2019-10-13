@@ -94,16 +94,16 @@ public extension InMemoryAtomStore {
     
     func onSync(address: Address) -> CombineObservable<Date> {
 //        if let existingListenerAtAddress = syncListeners.listener(of: address) {
-//            return existingListenerAtAddress.asObservable()
+//            return existingListenerAtAddress.eraseToAnyPublisher()
 //        } else {
 //            let newListener = CombineReplaySubject<Date>.createUnbounded()
 //            syncListeners.addListener(newListener, of: address)
 //            defer {
 //                if synced.valueForKey(key: address, ifAbsent: { false }) {
-//                    newListener.onNext(Date())
+//                    newListener.send(Date())
 //                }
 //            }
-//            return newListener.asObservable()
+//            return newListener.eraseToAnyPublisher()
 //        }
         combineMigrationInProgress()
     }
@@ -111,7 +111,7 @@ public extension InMemoryAtomStore {
     func atomObservations(of address: Address) -> CombineObservable<AtomObservation> {
         
 //        if let existingListenerAtAddress = atomUpdateListeners.listener(of: address) {
-//            return existingListenerAtAddress.asObservable()
+//            return existingListenerAtAddress.eraseToAnyPublisher()
 //        } else {
 //            let newListener = CombineReplaySubject<AtomObservation>.createUnbounded()
 //            atomUpdateListeners.addListener(newListener, of: address)
@@ -120,8 +120,8 @@ public extension InMemoryAtomStore {
 //                $0.value.isStore && $0.key.allAddresses.contains(address)
 //            }.compactMap {
 //                $0.value
-//            }.forEach { newListener.onNext($0) }
-//            return newListener.asObservable()
+//            }.forEach { newListener.send($0) }
+//            return newListener.eraseToAnyPublisher()
 //        }
 
         combineMigrationInProgress()
@@ -248,7 +248,7 @@ extension InMemoryAtomStore.ListenerOf {
     func notifyLister(of address: Address, about element: Element) {
         guard let listenerOfAddress = listener(of: address) else {
             return }
-        listenerOfAddress.onNext(element)
+        listenerOfAddress.send(element)
     }
     
     func listener(of address: Address) -> CombineReplaySubject<Element>? {

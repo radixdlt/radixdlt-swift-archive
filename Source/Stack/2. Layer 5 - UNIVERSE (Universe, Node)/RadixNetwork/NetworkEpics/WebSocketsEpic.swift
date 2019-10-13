@@ -111,14 +111,14 @@ public extension WebSocketsEpic {
 internal extension WebSocketsEpic.WebSockets {
     
     func getNewSocketsToNode() -> CombineObservable<WebSocketToNode> {
-        return newSocketsToNodeSubject.asObservable()
+        return newSocketsToNodeSubject.eraseToAnyPublisher()
     }
     
     @discardableResult
     func webSocket(to node: Node, shouldConnect: Bool) -> WebSocketToNode {
         return webSockets.valueForKey(key: node) { [unowned self] in
             let newSocket = WebSocketToNode(node: node, shouldConnect: shouldConnect)
-            self.newSocketsToNodeSubject.onNext(newSocket)
+            self.newSocketsToNodeSubject.send(newSocket)
             return newSocket
         }
     }

@@ -85,23 +85,23 @@ private extension SubmitAtomEpic {
 //                            SubmitAtomActionCompleted(sendAction: sendAction, node: node)
 //                        )
 //                    } else {
-//                        return CombineObservable.just(statusAction)
+//                        return Just(statusAction)
 //                    }
 //                }.do(onSubscribe: {
 //                    let startObservingAtomStatusCombineDisposable = rpcClient
 //                        .sendGetAtomStatusNotifications(atomIdentifier: atom.identifier(), subscriberId: subscriberId)
 //                        .andThen(rpcClient.pushAtom(atom))
 //                        .subscribe(
-//                            onCompleted: { observer.onNext(SubmitAtomActionReceived(sendAction: sendAction, node: node)) },
+//                            onCompleted: { observer.send(SubmitAtomActionReceived(sendAction: sendAction, node: node)) },
 //                            onError: { error in
 //                                if let submitAtomError = error as? SubmitAtomError {
-//                                    observer.onNext(
+//                                    observer.send(
 //                                        SubmitAtomActionStatus(
 //                                            sendAction: sendAction,
 //                                            node: node,
 //                                            statusEvent: .notStored(reason: AtomNotStoredReason(.evictedInvalidAtom, error: submitAtomError)))
 //                                    )
-//                                    observer.onNext(
+//                                    observer.send(
 //                                        SubmitAtomActionCompleted(sendAction: sendAction, node: node)
 //                                    )
 //                                } else {
@@ -133,13 +133,19 @@ private extension SubmitAtomEpic {
     }
 }
 
+///  A dispatch action request for a connected node with some given shards
 public protocol FindANodeRequestAction: NodeAction {
     /// A shard space which must be intersected with a node's shard space to be selected, shards which can be picked amongst to find a matching supporting node
     var shards: Shards { get }
 }
 
+/// The result of a `FindANodeRequestAction` action
 public struct FindANodeResultAction: NodeAction {
-    public let node: Node /* selected node */
+    
+    /// The found / selected node
+    public let node: Node
+    
+    /// The original request
     public let request: FindANodeRequestAction
     
 }

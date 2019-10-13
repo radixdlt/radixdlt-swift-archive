@@ -32,7 +32,7 @@ import Combine
 //        self.single = single
 //    }
 //    init(subject: PassthroughSubjectNoFail<NodeNetworkDetails>) {
-//        self.init(subject.asObservable())
+//        self.init(subject.eraseToAnyPublisher())
 //    }
 //    func networkDetails() -> CombineSingle<NodeNetworkDetails> {
 //        return single

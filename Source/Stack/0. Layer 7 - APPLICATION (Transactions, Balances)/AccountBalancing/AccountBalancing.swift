@@ -59,11 +59,13 @@ public extension AccountBalancing {
     
     func observeMyBalanceOfNativeTokensOrZero() -> CombineObservable<TokenBalance> {
         return observeMyBalanceOfNativeTokens()
-            .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
+            .replaceNil(with: TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
+            .eraseToAnyPublisher()
     }
     
     func balanceOfNativeTokensOrZero(ownedBy owner: AddressConvertible) -> CombineObservable<TokenBalance> {
         return observeBalance(ofToken: nativeTokenIdentifier, ownedBy: owner)
-            .replaceNilWith(TokenBalance.zero(token: nativeTokenDefinition, ownedBy: owner))
+            .replaceNil(with: TokenBalance.zero(token: nativeTokenDefinition, ownedBy: owner))
+            .eraseToAnyPublisher()
     }
 }

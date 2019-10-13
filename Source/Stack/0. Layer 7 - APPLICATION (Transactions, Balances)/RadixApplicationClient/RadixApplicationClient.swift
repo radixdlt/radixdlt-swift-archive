@@ -241,14 +241,14 @@ public extension RadixApplicationClient {
         let address = identifier.address
         return observeTokenDefinitions(at: address).map {
             $0.tokenDefinition(identifier: identifier)
-            }.ifNilReturnEmpty()
+            }.replaceNilWithEmpty()
     }
     
     func observeTokenState(identifier: ResourceIdentifier) -> CombineObservable<TokenState> {
         let address = identifier.address
         return observeTokenDefinitions(at: address).map {
             $0.tokenState(identifier: identifier)
-            }.ifNilReturnEmpty()
+            }.replaceNilWithEmpty()
     }
 }
 
@@ -303,7 +303,7 @@ public extension RadixApplicationClient {
     }
     
     func pull(address: Address) -> Cancellable {
-        return atomPuller.pull(address: address).subscribe()
+        return atomPuller.pull(address: address).sink(receiveValue: { _ in })
     }
     
     func pull() -> Cancellable {

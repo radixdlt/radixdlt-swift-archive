@@ -25,12 +25,56 @@
 import Foundation
 @testable import RadixSDK
 import XCTest
+import Combine
 
 class FindANodeEpicTests: XCTestCase {
     
-    let epic = FindANodeEpic()
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+    }
     
     func test_that_we_can_create_an_epic() {
-        XCTAssertNotNil(epic)
+        XCTAssertNotNil(FindANodeEpic())
     }
+    
+    func test_filterActionsRequiringNode() {
+        
+        let epic = FindANodeEpic()
+        var returnValues = [NodeAction]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        let nodeSubject = PassthroughSubject<NodeAction, Never>()
+        
+        let function = epic.filterActionsRequiringNode
+        
+        let publisher = function(nodeSubject.eraseToAnyPublisher())
+        
+        let cancellable = publisher.sink(
+            receiveCompletion: { completion in
+                expectation.fulfill()
+        },
+            receiveValue: { nodeAction in returnValues.append(nodeAction) })
+            
+        
+        nodeSubject.send(DiscoverMoreNodesAction())
+        nodeSubject.send(FetchAtomsActionRequest(address: .irrelevant))
+        nodeSubject.send(AddNodeAction(node: .mocked))
+        nodeSubject.send(FetchAtomsActionRequest(address: .irrelevant))
+        nodeSubject.send(ConnectWebSocketAction(node: .mocked))
+        
+        
+        nodeSubject.send(completion: .finished)
+        
+        wait(for: [expectation], timeout: 0.01)
+        
+        XCTAssertEqual(returnValues.count, 2)
+        XCTAssertTrue(returnValues.allSatisfy { $0 is FetchAtomsActionRequest})
+        
+        XCTAssertNotNil(cancellable)
+    }
+}
+
+extension Node {
+    static var mocked: Node { try! .init(host: .local(), isUsingSSL: false) }
 }

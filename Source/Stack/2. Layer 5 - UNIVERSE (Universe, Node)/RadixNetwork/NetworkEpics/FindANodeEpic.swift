@@ -31,10 +31,12 @@ import Combine
 /// `FindANodeRequestAction`
 ///
 /// outputs the following actions:
+/// `FindANodeResultAction`
 /// `DiscoverMoreNodesAction`,
 /// `GetNodeInfoActionRequest`,
 /// `GetUniverseConfigActionRequest`,
-/// `ConnectWebSocketAction`
+/// `ConnectWebSocketAction`,
+/// `CloseWebSocketAction`
 ///
 public final class FindANodeEpic: RadixNetworkEpic {
     public typealias PeerSelector = (NonEmptySet<Node>) -> Node
@@ -47,9 +49,20 @@ public final class FindANodeEpic: RadixNetworkEpic {
     }
 }
 
-public enum FindANodeError: Swift.Error {
-    case none
+public enum NetworkEpicsError: Swift.Error, Equatable {
+    indirect case findANodeError(FindANodeError)
 }
+
+public enum FindANodeError: Swift.Error, Equatable {
+    case networkEpicsError(NetworkEpicsError)
+}
+
+public typealias Pipe<Output, Failure> = (AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> where Failure: Swift.Error
+
+public typealias PipeNodeAction<Failure> = Pipe<NodeAction, Failure> where Failure: Swift.Error
+
+// TODO: replace `Never` with `FindANodeError`
+public typealias PipeFindANodeEpicActions = PipeNodeAction<Never>
 
 public extension FindANodeEpic {
  
@@ -58,10 +71,20 @@ public extension FindANodeEpic {
     func epic(
         actions: AnyPublisher<NodeAction, Never>,
         networkState: AnyPublisher<RadixNetworkState, Never>
-    ) -> AnyPublisher<NodeAction, FindANodeError> {
-//        return actions.compactMap { $0 as? FindANodeRequestAction }.cat
+    ) -> AnyPublisher<NodeAction, Never> {
+       
+//        actions
+//            |> filterActionsRequiringNode
+        
         combineMigrationInProgress()
     }
+
+    var filterActionsRequiringNode: PipeFindANodeEpicActions {
+        return { publisher in
+            publisher.compactMap { $0 as? FindANodeRequestAction }.eraseToAnyPublisher()
+        }
+    }
+
 }
 
 struct InfoForNode: Equatable {
@@ -119,13 +142,3 @@ internal extension FindANodeEpic {
     
 }
 
-//private func getConnectedNodes(shards: Shards, state: RadixNetworkState) -> [Node] {
-//    return state.nodes
-//        .filter { $0.value.websocketStatus == .ready }
-//        .filter { $0.value.shardSpace?.intersectsWithShards(shards) ?? false }
-//        .map {
-//            return $0.key
-//
-//        }
-//
-//}

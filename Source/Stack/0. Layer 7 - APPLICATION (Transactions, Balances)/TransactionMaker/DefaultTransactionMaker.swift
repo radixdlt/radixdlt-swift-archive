@@ -94,9 +94,7 @@ public extension DefaultTransactionMaker {
             
             let unsignedAtom = try buildAtomFrom(transaction: transaction)
             
-            let signedAtom = sign(atom: unsignedAtom).do(onSuccess: {
-                log.debug("Atom(id: `\($0.shortAid)`) from \(transaction)")
-            })
+            let signedAtom = sign(atom: unsignedAtom)
             
             return createAtomSubmission(
                 atom: signedAtom,

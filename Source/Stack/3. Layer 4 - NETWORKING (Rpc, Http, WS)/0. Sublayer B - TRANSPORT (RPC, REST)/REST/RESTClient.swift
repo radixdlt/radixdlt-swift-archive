@@ -38,13 +38,9 @@ public protocol RESTClient:
 
 public extension NodeNetworkDetailsRequesting where Self: RESTClient {
     
-    func getInfo() -> CombineSingle<NodeInfo> {
-        return networkDetails().map {
+    func getInfo() -> AnyPublisher<[NodeInfo], Never> { // Single?
+        networkDetails().map {
             $0.udp
-            }.eraseToAnyPublisher()
-        .flatMap {
-//            (nodesInfos: [NodeInfo]) -> CombineSingle<NodeInfo> in
-            CombineObservable.from($0)
         }.eraseToAnyPublisher()
     }
 }

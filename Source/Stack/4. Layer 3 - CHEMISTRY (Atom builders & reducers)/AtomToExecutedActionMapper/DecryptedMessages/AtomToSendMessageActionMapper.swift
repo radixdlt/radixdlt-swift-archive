@@ -40,7 +40,9 @@ public final class DefaultAtomToSendMessageActionMapper: AtomToSendMessageAction
 
 public extension DefaultAtomToSendMessageActionMapper {
     func mapAtomToActions(_ atom: Atom) -> CombineObservable<[SendMessageAction]> {
-        guard atom.containsAnyMessageParticle() else { return CombineObservable.just([]) }
+        guard atom.containsAnyMessageParticle() else {
+            return Just([]).eraseToAnyPublisher()
+        }
         
 //        return activeAccount.flatMap {
 //            $0.privateKeyForSigning

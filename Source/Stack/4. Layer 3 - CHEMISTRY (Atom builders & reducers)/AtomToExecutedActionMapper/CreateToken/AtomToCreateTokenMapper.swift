@@ -28,14 +28,23 @@ import Combine
 public protocol AtomToCreateTokenMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == CreateTokenAction {}
 
 public extension AtomToCreateTokenMapper {
-    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[CreateTokenAction]> {
+    
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[CreateTokenAction], Never> {
+        
         var createTokenActions = [CreateTokenAction]()
+        
         for particleGroup in atom {
-            guard let createTokenAction = createTokensActionFrom(particleGroup: particleGroup, atomIdentifier: atom.identifier()) else { continue }
+            guard
+                let createTokenAction = createTokensActionFrom(
+                    particleGroup: particleGroup,
+                    atomIdentifier: atom.identifier()
+                    )
+                else { continue }
+            
             createTokenActions.append(createTokenAction)
         }
         
-        return CombineObservable.just(createTokenActions)
+        return Just(createTokenActions).eraseToAnyPublisher()
     }
 }
 

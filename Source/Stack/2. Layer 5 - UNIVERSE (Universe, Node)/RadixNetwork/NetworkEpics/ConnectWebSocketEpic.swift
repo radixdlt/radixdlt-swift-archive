@@ -74,7 +74,7 @@ public extension RadixJsonRpcAutoConnectEpic {
 //            .flatMap { [unowned self] rpcMethodAction -> CombineObservable<NodeAction> in
 //                return self.waitForConnection(toNode: rpcMethodAction.node)
 //                    .andThen(
-//                        CombineObservable.just(rpcMethodAction)
+//                        Just(rpcMethodAction)
 //                            .ignoreElementsObservable()
 //                )
 //        }

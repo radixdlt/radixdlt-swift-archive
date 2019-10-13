@@ -35,7 +35,7 @@ public extension AtomToBurnTokenMapper {
             burnActions.append(burnAction)
         }
         
-        return CombineObservable.just(burnActions)
+        return Just(burnActions).eraseToAnyPublisher()
     }
 }
 

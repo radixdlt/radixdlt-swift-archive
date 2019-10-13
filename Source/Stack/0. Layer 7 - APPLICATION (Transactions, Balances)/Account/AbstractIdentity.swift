@@ -57,7 +57,7 @@ public extension AbstractIdentity {
     @discardableResult
     func selectAccount(_ selector: AccountSelector) -> Account {
         let newActiveAccount = selector(accounts)
-        accountSubject.onNext(newActiveAccount)
+        accountSubject.send(newActiveAccount)
         return newActiveAccount
     }
 
@@ -65,11 +65,11 @@ public extension AbstractIdentity {
         guard accounts.contains(selectedAccount) else {
             incorrectImplementation("AbstractIdentity does not contain account: \(selectedAccount)")
         }
-        accountSubject.onNext(selectedAccount)
+        accountSubject.send(selectedAccount)
     }
     
     var activeAccountObservable: CombineObservable<Account> {
-        return accountSubject.asObservable()
+        return accountSubject.eraseToAnyPublisher()
     }
 
     func addAccount(_ newAccount: Account) {

@@ -45,9 +45,9 @@ public extension Account {
         }
     }
     
-    var privateKeyForSigning: CombineSingle<PrivateKey> {
+    var privateKeyForSigning: AnyPublisher<PrivateKey, Never> { // Single?
         if let privateKey = privateKey {
-            return CombineSingle.just(privateKey)
+            return Just(privateKey).eraseToAnyPublisher()
         } else {
             return requestSignableKeyFromUser(matchingPublicKey: publicKey)
         }

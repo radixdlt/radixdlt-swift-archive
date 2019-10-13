@@ -63,135 +63,14 @@ internal func combineMigrationInProgress() -> Never {
     fatalError("Migration from RxSwift to Combine in progress")
 }
 
-// extension CombineObservable
-public extension Publisher {
-    
-    func mapToVoid() -> CombineObservable<Void> {
-        combineMigrationInProgress()
-    }
-    
-    func ofType<SomeType>(_ type: SomeType) -> CombineObservable<SomeType> {
-        combineMigrationInProgress()
-    }
-}
-
-// extension CombineCompletable
-public extension Publisher {
-    func andThen(_ other: CombineObservable<Output>) -> CombineObservable<Output> {
-        combineMigrationInProgress()
-    }
-}
-
-// extension CombineSingle
-public extension Publisher {
-    
-    func subscribe(onNext: ((Output) -> Void)? = nil, onError: ((Swift.Error) -> Void)? = nil, onCompleted: (() -> Void)? = nil, onDisposed: (() -> Void)? = nil)
-        -> Cancellable {
-            combineMigrationInProgress()
-    }
-    
-    func `do`(
-        onSuccess: ((Output) -> Void)? = nil,
-        onFailure: ((Error) -> Void)? = nil
-    ) -> Self {
-        combineMigrationInProgress()
-    }
-    
-    static func create(_ creation: (AnySubscriber<Output, Never>) -> Cancellable) -> Self {
-        combineMigrationInProgress()
-    }
-    
-    static func deferred(_ creation: () -> Self) -> Self {
-        combineMigrationInProgress()
-    }
-    
-    
-    static func just(_ foobar: Output) -> Self {
-        combineMigrationInProgress()
-    }
-    
-    static func combineLatest<A, B>(_ foobarA: A, _ foobarB: B) -> Self where A: Publisher, B: Publisher, A.Output == Self.Output, B.Output == Self.Output, A.Failure == Self.Failure, B.Failure == Self.Failure {
-        combineMigrationInProgress()
-    }
-
-    static func from(_ Outputs: [Output]) -> CombineObservable<Output> {
-        combineMigrationInProgress()
-    }
-    
-    func `do`(
-        onNext: ((Output) throws -> Void)? = nil,
-        afterNext: ((Output) throws -> Void)? = nil,
-        onError: ((Swift.Error) throws -> Void)? = nil,
-        afterError: ((Swift.Error) throws -> Void)? = nil, onCompleted: (() throws -> Void)? = nil, afterCompleted: (() throws -> Void)? = nil, onSubscribe: (() -> Void)? = nil, onSubscribed: (() -> Void)? = nil, onDispose: (() -> Void)? = nil)
-        -> CombineObservable<Output> {
-            combineMigrationInProgress()
-    }
-    
-    func ignoreOutputsObservable() -> CombineObservable<Output> {
-        combineMigrationInProgress()
-    }
-    
-    func take(_ n: Int) -> CombineObservable<Output> {
-        combineMigrationInProgress()
-    }
-}
-
-// extension CombineObservable
 public extension Publisher where Output: OptionalType {
-    func ifNilReturnEmpty() -> CombineObservable<Output.Wrapped> {
-        
-        combineMigrationInProgress()
-    }
-    
-    func ifNil(throw error: Swift.Error) -> CombineObservable<Output.Wrapped> {
-        
-        combineMigrationInProgress()
-    }
-    
-    func ifNilKill(_ message: String) -> CombineObservable<Output.Wrapped> {
-        
-        combineMigrationInProgress()
-    }
-    
-    func replaceNilWith(_ Output: Output) -> CombineObservable<Output.Wrapped> {
-        combineMigrationInProgress()
-        
-    }
-}
-
-// extension ObservableType
-public extension Publisher where Output: LengthMeasurable {
-    func ifEmpty<ErrorType>(throw errorIfEmpty: ErrorType) -> CombineObservable<Output> where ErrorType: Swift.Error {
-         combineMigrationInProgress()
-    }
-}
-
-
-extension Publisher where Output == Void {
-    func flatMapCompletableVoid(_ selector: @escaping () -> CombineCompletable) -> CombineCompletable {
-        combineMigrationInProgress()
-    }
-}
-
-public extension Publisher {
-    func toBlocking(timeout: TimeInterval = 1) -> Combine.Publishers.BlockingPublisher<Output, Failure> {
-        combineMigrationInProgress()
-    }
-    
-}
-
-public extension Combine.Publishers {
-    struct BlockingPublisher<Output, Failure> where Failure: Swift.Error {}
-}
-
-public extension Subject {
-    func onNext(_ Output: Output) {
-        self.send(Output)
-    }
-    var hasObservers: Bool {
-        combineMigrationInProgress()
-    }
-    func asObservable() -> CombineObservable<Output> {
-        combineMigrationInProgress()
+    func replaceNilWithEmpty() -> AnyPublisher<Output.Wrapped, Failure> {
+        return flatMap { (wrappedOptional: Output) -> AnyPublisher<Output.Wrapped, Failure> in
+            if wrappedOptional.value != nil {
+                return self.map { $0.value! }.eraseToAnyPublisher()
+            } else {
+                return Empty<Output.Wrapped, Failure>().eraseToAnyPublisher()
+            }
+        }.eraseToAnyPublisher()
     }
 }

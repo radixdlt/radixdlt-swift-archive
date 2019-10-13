@@ -71,8 +71,8 @@ public extension DiscoverNodesEpic {
 //            .ofType(GetLivePeersActionResult.self)
 //            .flatMap { (livePeersResult: GetLivePeersActionResult) -> CombineObservable<NodeAction> in
 //                return CombineObservable.combineLatest(
-//                    CombineObservable.just(livePeersResult.result),
-//                    CombineObservable.concat(networkState.firstOrError().asObservable(), CombineObservable.never())
+//                    Just(livePeersResult.result),
+//                    CombineObservable.concat(networkState.firstOrError().eraseToAnyPublisher(), CombineObservable.never())
 //                ) { (nodeInfos, state) in
 //
 //                    return nodeInfos.compactMap { (nodeInfo: NodeInfo) -> AddNodeAction? in

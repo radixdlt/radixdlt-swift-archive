@@ -95,7 +95,7 @@ public extension DefaultHTTPClient {
 //                        observer.onError(error)
 //                    case .success(let string):
 //                        log.debug(string)
-//                        observer.onNext(string)
+//                        observer.send(string)
 //                        observer.onCompleted()
 //                    }
 //                }
@@ -133,7 +133,7 @@ private extension DefaultHTTPClient {
 //                            observer.onError(error)
 //                        case .success(let model):
 //                            log.verbose(model)
-//                            observer.onNext(model)
+//                            observer.send(model)
 //                            observer.onCompleted()
 //                        }
 //                }

@@ -30,11 +30,14 @@ public protocol NodeNetworkInfoRequesting {
 }
 
 public protocol NodeInfoRequesting {
-    func getInfo() -> CombineSingle<NodeInfo>
+    func getInfo() -> AnyPublisher<[NodeInfo], Never> // Single?
 }
 
 public extension NodeInfoRequesting where Self: NodeNetworkInfoRequesting {
-    func getInfo() -> CombineSingle<NodeInfo> {
-        return getNetworkInfo().map { NodeInfo(system: $0, host: nil) }.eraseToAnyPublisher()
+    func getInfo() -> AnyPublisher<[NodeInfo], Never> { // Single?
+        getNetworkInfo()
+            .map { NodeInfo(system: $0, host: nil) }
+            .map { [$0] } // `NodeInfo -> [NodeInfo]`
+            .eraseToAnyPublisher()
     }
 }

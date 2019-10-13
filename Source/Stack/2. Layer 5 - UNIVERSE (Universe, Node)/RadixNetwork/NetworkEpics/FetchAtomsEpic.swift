@@ -80,7 +80,7 @@ public extension FetchAtomsEpic {
 //
 //        return CombineObservable.create { observer in
 //
-//            observer.onNext(FetchAtomsActionSubscribe(address: address, node: node, uuid: uuid))
+//            observer.send(FetchAtomsActionSubscribe(address: address, node: node, uuid: uuid))
 //
 //            var disposables = [CombineDisposable]()
 //

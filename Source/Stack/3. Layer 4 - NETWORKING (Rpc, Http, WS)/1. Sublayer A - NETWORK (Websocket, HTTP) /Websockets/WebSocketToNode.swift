@@ -53,18 +53,20 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
 //        stateSubject.filter { $0 == .failed }
 //            .debounce(RxTimeInterval.seconds(60), scheduler: MainScheduler.instance)
 //            .subscribe(
-//                onNext: { _ in stateSubject.onNext(.disconnected) },
-//                onError: { _ in stateSubject.onNext(.disconnected) }
+//                onNext: { _ in stateSubject.send(.disconnected) },
+//                onError: { _ in stateSubject.send(.disconnected) }
 //        ).store(in: &cancellables)
         combineMigrationInProgress()
         
         self.stateSubject = stateSubject
         self.node = node
         
-        self.messages = receivedMessagesSubject.asObservable()
-        self.state = stateSubject.asObservable()
+        self.messages = receivedMessagesSubject.eraseToAnyPublisher()
+        self.state = stateSubject.eraseToAnyPublisher()
         
-        self.state.subscribe(onNext: { log.verbose("WS status -> `\($0)`") }).store(in: &cancellables)
+        self.state.sink(
+            receiveValue: { log.verbose("WS status -> `\($0)`") }
+        ).store(in: &cancellables)
     }
     
     private func createSocket(shouldConnect: Bool) -> WebSocket {
@@ -107,15 +109,17 @@ public extension WebSocketToNode {
     /// Close the websocket only if no it has no observers, returns `true` if it was able to close, otherwise `false`.
     @discardableResult
     func closeIfNoOneListens() -> Bool {
-        guard !receivedMessagesSubject.hasObservers else { return false }
-        closeDisregardingListeners()
-        return true
+//        guard !receivedMessagesSubject.hasObservers else { return false }
+//        closeDisregardingListeners()
+//        return true
+ 
+        combineMigrationInProgress()
     }
     
     func connect() {
         switch stateSubject.value {
         case .disconnected, .failed:
-            stateSubject.onNext(.connecting)
+            stateSubject.send(.connecting)
             socket = createSocket(shouldConnect: true)
         case .closing, .connecting, .ready: return
         }
@@ -139,7 +143,7 @@ private extension WebSocketToNode {
     }
     
     func closeDisregardingListeners() {
-        stateSubject.onNext(.closing)
+        stateSubject.send(.closing)
         socket?.disconnect()
     }
 
@@ -164,25 +168,25 @@ public extension WebSocketToNode {
         log.debug("Websocket closed")
         guard !isClosing else {
             self.socket = nil
-            return stateSubject.onNext(.disconnected)
+            return stateSubject.send(.disconnected)
         }
         if error != nil {
             self.socket = nil
-            stateSubject.onNext(.failed)
+            stateSubject.send(.failed)
         } else {
-            stateSubject.onNext(.disconnected)
+            stateSubject.send(.disconnected)
         }
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if text.contains("Radix.welcome") {
             log.verbose("Received welcome message, which we ignore, proceed sending queued")
-            stateSubject.onNext(.ready)
+            stateSubject.send(.ready)
             sendQueued()
         } else {
             log.debug("Received response over websockets (text of #\(text.count) chars)")
             log.verbose("Received response over websockets: \n<\(text)>\n")
-            receivedMessagesSubject.onNext(text)
+            receivedMessagesSubject.send(text)
         }
     }
     

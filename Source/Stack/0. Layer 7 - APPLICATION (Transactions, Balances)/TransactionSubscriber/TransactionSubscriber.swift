@@ -32,26 +32,40 @@ public protocol TransactionSubscriber: AtomToTransactionMapper {
 
 public extension TransactionSubscriber {
     /// Boolean `OR` of `actionTypes`
-    func observeTransactions(at address: Address, containingActionOfAnyType actionTypes: [UserAction.Type]) -> CombineObservable<ExecutedTransaction> {
-        return observeTransactions(at: address).filter {
-            $0.contains(actionMatchingAnyType: actionTypes)
-        }.eraseToAnyPublisher()
+    func observeTransactions(
+        at address: Address,
+        containingActionOfAnyType actionTypes: [UserAction.Type]
+    ) -> AnyPublisher<ExecutedTransaction, Never> {
+        
+        observeTransactions(at: address)
+            .filter {
+                $0.contains(actionMatchingAnyType: actionTypes)
+            }
+            .eraseToAnyPublisher()
     }
     
     /// Boolean `AND` of `requiredActionTypes`
-    func observeTransactions(at address: Address, containingActionsOfAllTypes requiredActionTypes: [UserAction.Type]) -> CombineObservable<ExecutedTransaction> {
-        return observeTransactions(at: address).filter {
-            $0.contains(actionMatchingAll: requiredActionTypes)
-        }.eraseToAnyPublisher()
+    func observeTransactions(
+        at address: Address,
+        containingActionsOfAllTypes requiredActionTypes: [UserAction.Type]
+    ) -> AnyPublisher<ExecutedTransaction, Never> {
+        
+        observeTransactions(at: address)
+            .filter {
+                $0.contains(actionMatchingAll: requiredActionTypes)
+            }
+            .eraseToAnyPublisher()
     }
     
     func observeActions<Action>(
         ofType actionType: Action.Type,
         at address: Address
-    ) -> CombineObservable<Action> where Action: UserAction {
-        return observeTransactions(at: address)
-            .flatMap { CombineObservable.from($0.actions(ofType: actionType)) }
-        .eraseToAnyPublisher()
+    ) -> AnyPublisher<Action, Never> where Action: UserAction {
+        
+//        observeTransactions(at: address)
+//            .flatMap { CombineObservable.from($0.actions(ofType: actionType)) }
+//        .eraseToAnyPublisher()
+        combineMigrationInProgress()
     }
     
 }

@@ -26,7 +26,7 @@ import Foundation
 import Combine
 
 public protocol AtomPuller {
-    func pull(address: Address) -> CombineObservable<Any>
+    func pull(address: Address) -> AnyPublisher<Any, Never>
 }
 
 public final class DefaultAtomPuller: AtomPuller {
@@ -40,7 +40,7 @@ public final class DefaultAtomPuller: AtomPuller {
 }
 
 public extension DefaultAtomPuller {
-    func pull(address: Address) -> CombineObservable<Any> {
+    func pull(address: Address) -> AnyPublisher<Any, Never> {
         
 //        return requestCache.valueForKey(key: address) {
 //            let fetchAtomsRequest = FetchAtomsActionRequest(address: address)

@@ -30,8 +30,8 @@ public protocol AtomToUniqueIdMapper: AtomToSpecificExecutedActionMapper where S
 
 public extension AtomToUniqueIdMapper {
     
-    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[PutUniqueIdAction]> {
-        guard atom.containsAnyUniqueParticle(spin: .up) else { return .just([]) }
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[PutUniqueIdAction], Never> {
+        guard atom.containsAnyUniqueParticle(spin: .up) else { return Just([]).eraseToAnyPublisher() }
         
         var uniqueActions = [PutUniqueIdAction]()
         for particleGroup in atom {
@@ -46,7 +46,7 @@ public extension AtomToUniqueIdMapper {
             )
         }
         
-        return CombineObservable.just(uniqueActions)
+        return Just(uniqueActions).eraseToAnyPublisher()
     }
 }
 

@@ -74,7 +74,7 @@ public extension UniverseBootstrap {
 //    static var betanet: UniverseBootstrap {
 //        return UniverseBootstrap(
 //            config: .betanet,
-//            seedNodes: OriginNodeFinder.betanet.findSomeOriginNode(port: .nodeFinder).asObservable()
+//            seedNodes: OriginNodeFinder.betanet.findSomeOriginNode(port: .nodeFinder).eraseToAnyPublisher()
 //        )
 //    }
 }

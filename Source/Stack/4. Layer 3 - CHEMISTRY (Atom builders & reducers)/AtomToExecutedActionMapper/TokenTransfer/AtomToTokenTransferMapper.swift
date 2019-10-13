@@ -43,7 +43,7 @@ public extension DefaultAtomToTokenTransferMapper {
             transferredTokens.append(transfer)
         }
         
-        return CombineObservable.just(transferredTokens)
+        return Just(transferredTokens).eraseToAnyPublisher()
     }
 }
 

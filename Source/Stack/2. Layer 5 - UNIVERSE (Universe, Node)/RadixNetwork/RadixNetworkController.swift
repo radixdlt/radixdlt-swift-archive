@@ -62,7 +62,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
 //        let networkStateSubject = CurrentValueSubjectNoFail(initialNetworkState)
 //        let nodeActionSubject = PassthroughSubjectNoFail<NodeAction>()
 //
-//        let reducedNodeActions = nodeActionSubject.asObservable().do(onNext: { action in
+//        let reducedNodeActions = nodeActionSubject.eraseToAnyPublisher().do(onNext: { action in
 //            let state = try networkStateSubject.value
 //            let nextState = network.reduce(state: state, action: action)
 //            reducers.forEach {
@@ -70,11 +70,11 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
 //            }
 //
 //            if nextState != state {
-//                networkStateSubject.onNext(nextState)
+//                networkStateSubject.send(nextState)
 //            }
 //        }).publish()
 //
-//        let networkState = networkStateSubject.asObservable()
+//        let networkState = networkStateSubject.eraseToAnyPublisher()
 //
 //        self.nodeActionSubject = nodeActionSubject
 //        self.networkStateSubject = networkStateSubject
@@ -109,14 +109,14 @@ public extension DefaultRadixNetworkController {
     }
     
     func dispatch(nodeAction: NodeAction) {
-        nodeActionSubject.onNext(nodeAction)
+        nodeActionSubject.send(nodeAction)
     }
     
 }
 
 public extension DefaultRadixNetworkController {
     func observeNetworkState() -> CombineObservable<RadixNetworkState> {
-        return networkStateSubject.asObservable()
+        networkStateSubject.eraseToAnyPublisher()
     }
     
     var currentNetworkState: RadixNetworkState {

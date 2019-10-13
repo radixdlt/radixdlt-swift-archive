@@ -26,7 +26,7 @@ import Foundation
 import Combine
 
 public protocol SigningRequesting {
-    var privateKeyForSigning: CombineSingle<PrivateKey> { get }
+    var privateKeyForSigning: AnyPublisher<PrivateKey, Never> { get } // Single?
 }
 
 public protocol Signing: SigningRequesting {
@@ -34,7 +34,7 @@ public protocol Signing: SigningRequesting {
 }
 
 public extension Signing {
-    var privateKeyForSigning: CombineSingle<PrivateKey> {
-        return CombineSingle.just(privateKey)
+    var privateKeyForSigning: AnyPublisher<PrivateKey, Never> { // Single?
+        Just(privateKey).eraseToAnyPublisher()
     }
 }
