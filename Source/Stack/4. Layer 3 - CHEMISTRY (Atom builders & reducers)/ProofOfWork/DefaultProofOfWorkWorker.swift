@@ -49,34 +49,19 @@ public extension DefaultProofOfWorkWorker {
     func work(
         seed: Data,
         magic: Magic
-    ) -> CombineSingle<ProofOfWork> {
-//        return CombineSingle.create { [unowned self] single in
-//            var powDone = false
-//            self.dispatchQueue.async {
-//                log.verbose("POW started")
-//                self.doWork(
-//                    seed: seed,
-//                    magic: magic
-//                ) { resultOfWork in
-//                    switch resultOfWork {
-//                    case .failure(let error):
-//                        log.error("POW failed: \(error), seed: \(seed), magic: \(magic), #0: \(self.targetNumberOfLeadingZeros)")
-//                        single(.error(error))
-//                    case .success(let pow):
-//                        powDone = true
-//                        log.verbose("POW done")
-//                        single(.success(pow))
-//                    }
-//                }
-//            }
-//
-//            return CombineDisposables.create {
-//                if !powDone {
-//                    log.warning("POW cancelled")
-//                }
-//            }
-//        }
-        combineMigrationInProgress()
+    ) -> Future<ProofOfWork, ProofOfWork.Error> {
+        
+        return Future<ProofOfWork, ProofOfWork.Error> { promise in
+            self.dispatchQueue.async {
+                log.verbose("POW started")
+                self.doWork(
+                    seed: seed,
+                    magic: magic
+                ) { resultOfWork in
+                    promise(resultOfWork)
+                }
+            }
+        }
     }
 }
 
@@ -85,7 +70,7 @@ internal extension DefaultProofOfWorkWorker {
     func doWork(
         seed: Data,
         magic: Magic,
-        done: ((Result<ProofOfWork, Error>) -> Void)
+        done: ((Result<ProofOfWork, ProofOfWork.Error>) -> Void)
     ) {
         guard seed.length == DefaultProofOfWorkWorker.expectedByteCountOfSeed else {
             let error = ProofOfWork.Error.workInputIncorrectLengthOfSeed(expectedByteCountOf: DefaultProofOfWorkWorker.expectedByteCountOfSeed, butGot: seed.length)
@@ -109,10 +94,11 @@ internal extension DefaultProofOfWorkWorker {
 
 extension DefaultProofOfWorkWorker: FeeMapper {}
 public extension DefaultProofOfWorkWorker {
-    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> CombineSingle<AtomWithFee> {
-//        return work(atom: atom, magic: universeConfig.magic).map {
-//            try AtomWithFee(atomWithoutPow: atom, proofOfWork: $0)
-//        }
-        combineMigrationInProgress()
+    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> AnyPublisher<AtomWithFee, AtomWithFee.Error> {
+        return work(atom: atom, magic: universeConfig.magic).tryMap {
+            try AtomWithFee(atomWithoutPow: atom, proofOfWork: $0)
+        }
+        .mapError { AtomWithFee.Error.powError($0) }
+        .eraseToAnyPublisher()
     }
 }

@@ -25,7 +25,6 @@
 import Foundation
 import Combine
 
-
 public final class DiscoverNodesEpic: RadixNetworkEpic {
     private let seedNodes: CombineObservable<Node>
     private let universeConfig: UniverseConfig
@@ -38,7 +37,6 @@ public final class DiscoverNodesEpic: RadixNetworkEpic {
 
 public extension DiscoverNodesEpic {
     
-    // swiftlint:disable:next function_body_length
     func epic(
         actions: CombineObservable<NodeAction>,
         networkState: CombineObservable<RadixNetworkState>

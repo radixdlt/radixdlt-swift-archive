@@ -25,7 +25,6 @@
 import Foundation
 import Combine
 
-
 public final class FetchAtomsEpic: NetworkWebsocketEpic {
     public let webSockets: WebSocketsEpic.WebSockets
     private var cancellables = Set<AnyCancellable>()

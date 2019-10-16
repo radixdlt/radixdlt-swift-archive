@@ -30,6 +30,10 @@ import Combine
 import RxTest
 import RxBlocking
 
+extension TimeInterval {
+    static var enoughForPOW: Self { 10 }
+}
+
 class ProofOfWorkTest: XCTestCase {
     
     private let magic: Magic = 12345
@@ -58,16 +62,21 @@ class ProofOfWorkTest: XCTestCase {
     }
     
     func test14LeadingZeroRx() {
-        let powWorker = DefaultProofOfWorkWorker(targetNumberOfLeadingZeros: 14)
+//        let powWorker = DefaultProofOfWorkWorker(targetNumberOfLeadingZeros: 14)
 
-        guard let pow = doPow(
-            worker: powWorker,
-            seed: seed.asData,
-            magic: magic,
-            timeout: 0.5
-        ) else { return XCTFail("timeout") }
-
-        XCTAssertEqual(pow.nonce, 9255)
+//        guard let pow = doPow(
+//            worker: powWorker,
+//            seed: seed.asData,
+//            magic: magic,
+//            timeout: 0.5
+//        ) else { return XCTFail("timeout") }
+//
+//        XCTAssertEqual(pow.nonce, 9255)
+        
+        doTest(
+            zeros: 14,
+            expectedNonce: 9255
+        )
     }
     
     func omitted_testSlowVectors() {
@@ -77,8 +86,7 @@ class ProofOfWorkTest: XCTestCase {
                 zeros: vector.zeros,
                 expectedNonce: vector.expectedResultingNonce,
                 magic: vector.magic,
-                seed: vector.seed,
-                sha256TwiceHasher: SHA256TwiceHasher()
+                seed: vector.seed
             )
         }
         vectorsForHighNonce.forEach(test(vector:))
@@ -93,7 +101,9 @@ private extension ProofOfWorkTest {
         seed overridingSeed: HexString? = nil,
         sha256TwiceHasher: SHA256TwiceHashing = SHA256TwiceHasher()
     ) {
-    
+        
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
         let magicUsed = overridingMagic ?? magic
         let seedUsed = overridingSeed ?? seed
 
@@ -102,75 +112,54 @@ private extension ProofOfWorkTest {
             sha256TwiceHasher: sha256TwiceHasher
         )
 
-        worker.doWork(seed: seedUsed.asData, magic: magicUsed) {
-            switch $0 {
-            case .failure(let error): XCTFail("Unexpected error: \(error)")
-            case .success(let pow): XCTAssertEqual(pow.nonce, expectedNonce)
-            }
-        }
-    }
-}
-
-extension XCTestCase {
-    
-    func doPow(
-        worker: DefaultProofOfWorkWorker,
-        atom: Atom,
-        magic: Magic,
-        timeout: TimeInterval? = .enoughForPOW,
-        _ function: String = #function, _ file: String = #file, _ line: Int = #line
-        ) -> ProofOfWork? {
-        return doPow(
-            worker: worker,
-            seed: atom.radixHash.asData,
-            magic: magic,
-            timeout: timeout, function, file, line
-        )
-    }
-    
-    func doPow(
-        worker: DefaultProofOfWorkWorker,
-        seed: Data,
-        magic: Magic,
-        timeout: TimeInterval? = nil,
-        _ function: String = #function, _ file: String = #file, _ line: Int = #line
-        ) -> ProofOfWork? {
+        var pow: ProofOfWork?
+        var cancellable: AnyCancellable?
+        cancellable = worker.work(seed: seedUsed.asData, magic: magicUsed).sink(
+            receiveCompletion: { completion in
+                expectation.fulfill()
+        },
+            receiveValue: { pow = $0 })
         
-        return worker.work(
-            seed: seed,
-            magic: magic
-        ).blockingSingle(timeout: timeout, function: function, file: file, line: line)
-    }
-}
-
-extension PrimitiveSequenceType where Self: ObservableConvertibleType, Trait == SingleTrait {
-    func blockingSingle(
-        timeout: TimeInterval? = .default,
-        failOnTimeout: Bool = true,
-        failOnNil: Bool = true,
-        function: String = #function,
-        file: String = #file,
-        line: Int = #line
-    ) -> Element? {
-        let description = "\(function) in \(file), at line: \(line)"
-        do {
-            return try toBlocking(timeout: timeout).single()
-        } catch RxError.timeout {
-            if failOnTimeout {
-                XCTFail("Timeout, \(description)")
-            }
-            return nil
-        } catch RxError.moreThanOneElement {
-            fatalError("RxError.moreThanOneElement, \(description)")
-        } catch let rpcError as RPCError {
-            fatalError("rpcError: \(rpcError)")
-        } catch {
-            XCTFail("Unexpected error thrown: \(error), \(description)")
-            return nil
-        }
+        
+        wait(for: [expectation], timeout: .enoughForPOW)
+        XCTAssertEqual(pow?.nonce, expectedNonce)
+        XCTAssertNotNil(cancellable)
         
     }
 }
+
+//extension XCTestCase {
+//
+//    func doPow(
+//        worker: DefaultProofOfWorkWorker,
+//        atom: Atom,
+//        magic: Magic,
+//        timeout: TimeInterval? = .enoughForPOW,
+//        _ function: String = #function, _ file: String = #file, _ line: Int = #line
+//        ) -> ProofOfWork? {
+//        return doPow(
+//            worker: worker,
+//            seed: atom.radixHash.asData,
+//            magic: magic,
+//            timeout: timeout, function, file, line
+//        )
+//    }
+//
+//    func doPow(
+//        worker: DefaultProofOfWorkWorker,
+//        seed: Data,
+//        magic: Magic,
+//        timeout: TimeInterval? = nil,
+//        _ function: String = #function, _ file: String = #file, _ line: Int = #line
+//        ) -> ProofOfWork? {
+//
+//        return worker.work(
+//            seed: seed,
+//            magic: magic
+//        )
+//    }
+//}
+
 
 private typealias Vector = (expectedResultingNonce: Nonce, seed: HexString, magic: Magic, zeros: ProofOfWork.NumberOfLeadingZeros)
 private let vectorsForHighNonce: [Vector] = [

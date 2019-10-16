@@ -32,8 +32,7 @@ public protocol AtomSigning {
 // MARK: - Default Implementation
 public extension AtomSigning where Self: SigningRequesting, Self: PublicKeyOwner {
     func sign(atom unsignedAtom: UnsignedAtom) throws -> CombineSingle<SignedAtom> {
-        let signatureId = publicKey.hashEUID
-        
+//        let signatureId = publicKey.hashEUID
 //        return privateKeyForSigning.map {
 //            try Signer.sign(unsignedAtom, privateKey: $0)
 //        }.map {

@@ -24,5 +24,5 @@ import Foundation
 import Combine
 
 public protocol FeeMapper {
-    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> CombineSingle<AtomWithFee>
+    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> AnyPublisher<AtomWithFee, AtomWithFee.Error>
 }

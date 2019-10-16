@@ -64,27 +64,54 @@ public typealias PipeNodeAction<Failure> = Pipe<NodeAction, Failure> where Failu
 // TODO: replace `Never` with `FindANodeError`
 public typealias PipeFindANodeEpicActions = PipeNodeAction<Never>
 
+postfix operator ^
+postfix func ^ <P>(publisher: P) -> AnyPublisher<P.Output, P.Failure> where P: Publisher {
+    return publisher.eraseToAnyPublisher()
+}
+
 public extension FindANodeEpic {
  
     typealias Error = FindANodeError
     
     func epic(
-        actions: AnyPublisher<NodeAction, Never>,
-        networkState: AnyPublisher<RadixNetworkState, Never>
+        actions actionsPublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
        
-//        actions
-//            |> filterActionsRequiringNode
+//        actionsPublisher
+//            .compactMap { $0 as? FindANodeRequestAction }^
+//            .flatMap { findANodeRequestAction in
+//
+//                let shardsOfRequest = findANodeRequestAction.shards
+//
+//                let connectedNodes = networkStatePublisher.map { networkState in
+//                    getConnectedNodes(shards: shardsOfRequest, networkState: networkState)
+//                }^
+//
+//
+//            }^
         
         combineMigrationInProgress()
     }
-
-    var filterActionsRequiringNode: PipeFindANodeEpicActions {
-        return { publisher in
-            publisher.compactMap { $0 as? FindANodeRequestAction }.eraseToAnyPublisher()
-        }
+    
+    func filterActionsRequiringNode(_ publisher: AnyPublisher<NodeAction, Never>) -> AnyPublisher<NodeAction, Never> {
+        publisher.compactMap { $0 as? FindANodeRequestAction }.eraseToAnyPublisher()
     }
+    
+    func getConnectedNodes(findANodeRequestAction: FindANodeRequestAction, networkState: RadixNetworkState) -> [Node] {
+        combineMigrationInProgress()
+    }
+    
+}
 
+internal func getConnectedNodes(shards: Shards, networkState: RadixNetworkState) -> [Node] {
+    return networkState.nodes
+        .filter { $0.value.websocketStatus == .ready }
+        .filter { $0.value.shardSpace?.intersectsWithShards(shards) ?? false }
+        .map {
+            return $0.key
+    }
+    
 }
 
 struct InfoForNode: Equatable {
@@ -101,7 +128,7 @@ extension NodeWithConfig {
     var node: Node { infoForNode.node }
 }
 
-internal extension FindANodeEpic {
+private enum Foo {
     var mine: UniverseConfig { abstract() }
     var myAddress: Address { abstract() }
     var myShard: Shards { .init(single: myAddress.shard) }

@@ -26,7 +26,11 @@ import Foundation
 import Combine
 
 public protocol ProofOfWorkWorker {
-    func work(seed: Data, magic: Magic) -> CombineSingle<ProofOfWork>
+    
+    func work(
+        seed: Data,
+        magic: Magic
+    ) -> Future<ProofOfWork, ProofOfWork.Error>
 }
 
 // MARK: - Convenience
@@ -34,9 +38,9 @@ public extension ProofOfWorkWorker {
     func work(
         atom: Atom,
         magic: Magic
-    ) -> CombineSingle<ProofOfWork> {
+    ) -> Future<ProofOfWork, ProofOfWork.Error> {
         
-        return work(
+        work(
             seed: atom.radixHash.asData,
             magic: magic
         )
