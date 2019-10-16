@@ -34,77 +34,190 @@ class PrivateKeyTests: XCTestCase {
         continueAfterFailure = false
     }
     
-    func testBitcoinKitPerformanceOfRestorationUsingMnemonic24Words() {
-        measure {
-            let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords) { _ in }
-            let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
-            let privateKey = try! wallet.privateKey(index: expected.hdWalletIndex)
-            XCTAssertEqual(privateKey.toWIF(), expected.wif)
-        }
+    // MARK: - MOTION... HIP
+    // MARK: TESTNET
+    // MARK: No passphrase
+    func test_testnet__Motion_Hip__no_passphrase_index_0() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "",
+            index: 0,
+            expectedPrivateKey: "900ccb6b2136dc7821e6edd6bf0cbbf182c753d19e8be2bd567d2a5c9d57ef6c",
+            network: .testnetBTC,
+            expectedAddress: "JFCqwzgrKMgGQVMeGpzeGmQG2Nowy9o1gwv9X5Gyg7z5XK1XwBq")
     }
     
-    func testSeeds() {
-        let first =  BitcoinKit.Mnemonic.seed(mnemonic: ["increase", "spy", "seminar", "avocado", "rack", "predict", "fine", "worry", "minor", "depth", "render", "picture"]) { _ in }
-        XCTAssertEqual(first.hex, "716a00b93ee5db0c64c341c1d7d7e92cd9a3579526658cb28e40ce5d6d19c82b757ee532d38d380162ff44e6c3062ffe8d323d1600158136a20f03f865532567")
-        let second = BitcoinKit.Mnemonic.seed(mnemonic: ["fit", "shock", "trip", "pelican", "cave", "fiscal", "grass", "private", "play", "glow", "margin", "snow"]) { _ in }
-        
-        XCTAssertEqual(second.hex, "34ccaa37089fa9e9346ad5e6a3c19972e32c4935f9ef1c30ca01b29870110cb9fa60f96b6758d68c84671de134502e4139c20c0387d5c86d8e76ffd05990d84a")
-        
-        let third = BitcoinKit.Mnemonic.seed(mnemonic: ["minimum", "where", "edge", "win", "state", "antique", "cattle", "follow", "army", "life", "spoon", "gain"]) { _ in }
-
-        XCTAssertEqual(third.hex, "c4f99552b187e98f9410137ccfe60b314e71184648281f6ba8774d93b9c9fb00c0d12b63cc5ab4375b4f1b24727db2ef94bb415f61bc737effebfe7e7dbc56d8")
-    }
-  
-    func testBitcoinKitGenerate12Mneominic() {
-        let words = try! BitcoinKit.Mnemonic.generate(strength: Mnemonic.Strength.default, language: Mnemonic.Language.english)
-        XCTAssertEqual(words.count, 12)
-    }
-
-    func testMnemonicGeneratorThat12WordsResultsIn12Words() {
-        let mnemonic = try! Mnemonic.Generator(strength: .wordCountOf12).generate()
-        XCTAssertEqual(mnemonic.words.count, 12)
-    }
-
-    func testBitcoinKitPerformanceOfSignAndVerify() {
-        let magic: Magic = 2
-        let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords) { _ in }
-        let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
-        let privateKeyBicoinKit = try! wallet.privateKey(index: expected.hdWalletIndex)
-        let privateKey = try! PrivateKey(data: privateKeyBicoinKit.data)
-        XCTAssertEqual(privateKey.hex, "3737eade55463b1cbae340bb3bc770d42a6e54a39e3fd92c080b1621b170eb03")
-        let account = Account.init(privateKey: privateKey)
-        let address = Address(
-            magic: magic,
-            publicKey: account.publicKey
+    func test_testnet__Motion_Hip__no_passphrase_index_1() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "",
+            index: 1,
+            expectedPrivateKey: "49408cb9f102c550ad816eecc9bf80bd35592f5e5edeb7fff4139aa2a6c95923",
+            network: .testnetBTC,
+            expectedAddress: "JHRvmeA4oGBk65QKSxBALAvm8G1L6mE6Kpi74eYKpm6Sz1XobtN"
         )
-        XCTAssertEqual(address.full, "JEqnJtuyrXLkEDRT6ADTGSMe6etWyKNVdffC5icSh4hWhJYcvCx")
-        let publicKey = PublicKey(private: privateKey)
-        XCTAssertEqual(publicKey.description, expected.publicKey)
-        
-        measure {
-            do {
-                
-                let message = try SignableMessage(data: expected.messageHashedUTF8Encoded)
-                
-                let signature = try Signer.sign(message, privateKey: privateKey)
-                XCTAssertEqual(try signature.toDER().hex, expected.signature)
-             
-                XCTAssertTrue(try SignatureVerifier.verifyThat(signature: signature, signedMessage: message, usingKey: publicKey))
-            } catch {
-                XCTFail("error: \(error)")
-            }
-        }
+    }
+    
+    func test_testnet__Motion_Hip__no_passphrase_index_1337() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "",
+            index: 1337,
+            expectedPrivateKey: "39e02fdcab4dc3c065db44b96aa55715df8ec57047254b4aca4775ebb148a70e",
+            network: .testnetBTC,
+            expectedAddress: "JFobjoiq7LbCWNRuxM3Vikb7aYRwB2wEpSvfhqR2hgWfS2Pk6iV"
+        )
+    }
+    
+    // MARK: Passhrases
+    func test_testnet__Motion_Hip__passphrase_foobar_index_0() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "foobar",
+            index: 0,
+            expectedPrivateKey: "f865dbcb513d463c780331a8eb16b96929168cf609f68168b165ce711af74ed4",
+            network: .testnetBTC,
+            expectedAddress: "JFXLdVEtsDP8nG7qkUkS68VeL9EV586SZEV6LvjrpEtksHNbaSC")
+    }
+    
+    func test_testnet__Motion_Hip__passphrase_foobar_index_1() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "foobar",
+            index: 1,
+            expectedPrivateKey: "dc614794c16118a981954f0e2a58b5eea1a2fe11bbf1ce9b4b80531130bd38a1",
+            network: .testnetBTC,
+            expectedAddress: "JGwtDw9uSsY66vNqNZWLb8UU3Q9eeMtkHmfws6zicLH7CYer3cn"
+        )
+    }
+    
+    func test_testnet__Motion_Hip__passphrase_foobar_index_1337() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "foobar",
+            index: 1337,
+            expectedPrivateKey: "257aa52acf8b0c4829ccdafe26660ffd037d79691abca17791a54d94633ec21d",
+            network: .testnetBTC,
+            expectedAddress: "JHGgyc2fGUwYEE9BonsFYvG8EH8yX6m4RDEFX2xeuhBBseLgzCb"
+        )
+    }
+    
+    // MARK: MAINNET
+    // MARK: No passphrase
+    func test_mainnet__Motion_Hip__no_passphrase_index_0() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "",
+            index: 0,
+            expectedPrivateKey: "f4502ffee734e2550beab37d3d7d45186cbc02d99ff124a19de333362396589b",
+            expectedAddress: "JGpR4tMXRngjpdf5Dt7SZhKB1kzW5Ma9RMgVQArr2MWKsQRxrFR")
+    }
+    
+    func test_mainnet__Motion_Hip__no_passphrase_index_1() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "",
+            index: 1,
+            expectedPrivateKey: "0f3f5de07179a964836a37501919707958e0dde98747c9872ddde3139d531b16",
+            expectedAddress: "JFGWA7RvUEo4CvhhEmBjo85unhEDQ9Y8Q5525JP3e1eomYUux11"
+        )
+    }
+    
+    func test_mainnet__Motion_Hip__no_passphrase_index_1337() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "",
+            index: 1337,
+            expectedPrivateKey: "42dfdc74e4b2d0b1c17dde81a538b1be314ebb11e6ca68b01f0cc1328b3c686a",
+            expectedAddress: "JGjNMpeo3G8gson65QhEs7sQ4nYgCbfDRtQbUwpmA1eBs39rAL4"
+        )
+    }
+    
+    // MARK: Passhrases
+    func test_mainnet__Motion_Hip__passphrase_foobar_index_0() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "foobar",
+            index: 0,
+            expectedPrivateKey: "0b3237496d654b0cc27a9cf2fbad011a58aac40e3dc8312a1a10aa641297d938",
+            expectedAddress: "JFryJk3f9c2igEUGVVxTMuAGnNJq98eRyB8Q74gPPdkoQ9qd6JD")
+    }
+    
+    func test_mainnet__Motion_Hip__passphrase_foobar_index_1() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "foobar",
+            index: 1,
+            expectedPrivateKey: "325fed46473e394bbce41f4dc70f9676eb632f284d2cf4c7b4f5ac520cc7ef92",
+            expectedAddress: "JHxRyEZHfF7v9KqFqGD8yGRhq8g88bTFB81X4QffXZhQmgW2eE4"
+        )
+    }
+    
+    func test_mainnet__Motion_Hip__passphrase_foobar_index_1337() {
+        doTest(
+            mnemonic: "motion clever argue fever suffer point energy alpha target quality engine hip",
+            passphrase: "foobar",
+            index: 1337,
+            expectedPrivateKey: "9ffb4b44ee6acb2b8d339a0c69564206780a68b25a78c3e0e0ec9aee4706cb91",
+            expectedAddress: "JHNyuVuiH4Qdtzghc4UmsFEirCi3kNsPmTDNywaZ9eo7AVSAKo5"
+        )
+    }
+    
+    
+    // MARK: - GOWN... TENNIS
+    func test_mainnet__Gown_Tennis__no_passphrase_index_0() {
+        doTest(
+            mnemonic: "gown pulp squeeze squeeze chuckle glance skill glare force dog absurd tennis",
+            passphrase: "",
+            index: 0,
+            expectedPrivateKey: "d4ab3ef327b48a8ac3fe284958111ec5e967df755fef51c3cdbd46986ec15ef8",
+            network: .mainnetBTC,
+            expectedAddress: "JG5fHyFKCHJCHGTQRXUkM8XMwFouhooYvPR8zitxf1BqGfEXxQ2")
+    }
+    
+    func test_mainnet__Gown_Tennis__no_passphrase_index_237() {
+        doTest(
+            mnemonic: "gown pulp squeeze squeeze chuckle glance skill glare force dog absurd tennis",
+            passphrase: "Lorem ipsum dolor sit amet",
+            index: 237,
+            expectedPrivateKey: "1ef53329cadeee337442aa0b1caa7f17bbd90a5b91605ee2e59829d7e8bea97a",
+            network: .mainnetBTC,
+            expectedAddress: "JGonZ6hHZBwZZkeHzf4XAr17R42WdW1Zn11wwW839rzxKW2NAkn")
     }
  
 }
-private let messageText = "Hello BitcoinKit"
-private let expected = (
-    seedWords: ["economy", "clinic", "damage", "energy", "settle", "lady", "crumble", "crack", "valley", "blast", "hair", "double", "cute", "gather", "deer", "smooth", "finish", "ethics", "sauce", "raw", "novel", "hospital", "twice", "actual"],
-    network: BitcoinKit.Network.testnetBTC,
-    hdWalletIndex: UInt32(0),
-    wif: "cPS3DcP8WFCwJnyeqHDF8LkLNCeqEP3PaNm6QvbnZ9mbJ7wKNP5w",
-    publicKey: "025b29b14985d1e22fa22146072c643f449b5ebc0117cea585625c75270baf9fcf",
-    message: messageText,
-    messageHashedUTF8Encoded: Crypto.sha256(messageText.toData()),
-    signature: "3045022100d91b331dd05b4e0c298c6b408a1697a47053156b07e6113e97bef396fe5eaeb702202f14d9f28e207338f752fe6921835645848f310f9fe86040032b5c61e69add64"
-)
+
+private extension PrivateKeyTests {
+    func doTest(
+        mnemonic mnemonicString: String,
+        passphrase: String = "",
+        index: Int = 0,
+        expectedPrivateKey: String,
+        network: BitcoinKit.Network = .mainnetBTC,
+        expectedAddress: String
+    ) {
+        
+        let mnemonicWords = mnemonicString.split(separator: " ").map { String($0) }
+        
+        let seed = BitcoinKit.Mnemonic.seed(mnemonic: mnemonicWords, passphrase: passphrase) { _ in }
+        
+        let wallet = BitcoinKit.HDWallet(seed: seed, network: network)
+        
+        let privateKeyBicoinKit = try! wallet.privateKey(index: UInt32(index))
+        
+        let privateKey = try! PrivateKey(data: privateKeyBicoinKit.data)
+        
+        XCTAssertEqual(privateKey.hex, expectedPrivateKey)
+        
+        
+        let publicKey = PublicKey(private: privateKey)
+        
+        let magic: Magic = -1332248574
+        let address = Address(
+            magic: magic,
+            publicKey: publicKey
+        )
+        XCTAssertEqual(address.full, expectedAddress)
+        
+    }
+}
