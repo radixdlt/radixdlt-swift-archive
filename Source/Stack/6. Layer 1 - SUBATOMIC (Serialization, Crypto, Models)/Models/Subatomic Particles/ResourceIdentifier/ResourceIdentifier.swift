@@ -93,11 +93,19 @@ public extension ResourceIdentifier {
 
 // MARK: - StringInitializable
 public extension ResourceIdentifier {
+
+    /// Expect the string: "/address/name", with two separator, to result in these three components: [<ADDRESS>, <NAME/SYMBOL>], not counting the actual first component being the empty string
+    static let componentCount = Index.allCases.count
+
     init(string: String) throws {
         let components = string.components(separatedBy: ResourceIdentifier.separator)
         let componentCount = components.count - 1 // ignoring the empty string
         guard componentCount == ResourceIdentifier.componentCount else {
-            throw Error.incorrectComponentCount(expected: ResourceIdentifier.componentCount, butGot: componentCount)
+
+            throw Error.incorrectComponentCount(
+                got: componentCount
+            )
+
         }
         guard components[0].isEmpty else {
             throw Error.unexpectedLeadingPath
@@ -120,8 +128,7 @@ public extension ResourceIdentifier {
 
 // MARK: - Private
 private extension ResourceIdentifier {
-    /// Expect the string: "/address/name", with two separator, to result in these three components: [<ADDRESS>, <NAME/SYMBOL>], not counting the actual first component being the empty string
-    static let componentCount = Index.allCases.count
+
     static let separator = "/"
     enum Index: Int, CaseIterable {
         case address = 1
@@ -132,7 +139,12 @@ private extension ResourceIdentifier {
 // MARK: - Error
 public extension ResourceIdentifier {
     enum Error: Swift.Error, Equatable {
-        case incorrectComponentCount(expected: Int, butGot: Int)
+
+        case incorrectComponentCount(
+            got: Int,
+            butExpected: Int = ResourceIdentifier.componentCount
+        )
+
         case unexpectedLeadingPath
         case addressPathIsEmpty
         case namePathEmpty

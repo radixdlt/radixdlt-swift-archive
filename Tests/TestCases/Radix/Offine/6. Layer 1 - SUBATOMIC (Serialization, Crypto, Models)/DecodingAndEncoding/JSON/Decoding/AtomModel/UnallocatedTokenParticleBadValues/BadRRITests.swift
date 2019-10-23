@@ -35,7 +35,7 @@ class BadRRITests: AtomJsonDeserializationUnallocatedTokenBadValuesTests {
             // I try decoding the bad json string into an Atom
             try decode(Atom.self, jsonString: badJson),
             // THEN
-            ResourceIdentifier.Error.incorrectComponentCount(expected: 2, butGot: 1),
+            ResourceIdentifier.Error.incorrectComponentCount(got: 1),
             "Decoding should fail to deserialize JSON with an RRI without name/symbol"
         )
     }
