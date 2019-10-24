@@ -1,7 +1,2 @@
-github "Alamofire/Alamofire" "5.0.0-beta.3"
-github "daltoniam/Starscream" >= 3.0.2
-github "https://github.com/Sajjon/BitcoinKit.git" "fd73469592123b5b8704de05cbcf721db0331a20"
-
-github "attaswift/BigInt"
-github "krzyzanowskim/CryptoSwift"
-github "https://github.com/myfreeweb/SwiftCBOR.git" "3e0cb0135632583362dfa0cfaaf790a36890d7fd"
+# Goal is to remove Carthage completely, but for now BitcoinKit only builds using Carthage
+github "yenom/BitcoinKit"

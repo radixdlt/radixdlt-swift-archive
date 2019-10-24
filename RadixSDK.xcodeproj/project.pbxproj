@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -205,10 +205,6 @@
 		E64BFF8A226879C100501726 /* ProofOfWorkWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF89226879C100501726 /* ProofOfWorkWorker.swift */; };
 		E64BFF8D2268985800501726 /* ResourceIdentifierParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF8C2268985800501726 /* ResourceIdentifierParticle.swift */; };
 		E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF932269B96A00501726 /* Optional+Debug.swift */; };
-		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
-		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
-		E6533FE422BA63950068B07D /* Starscream.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E654778922BFB3B700D968BD /* BootstrapConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E654778822BFB3B700D968BD /* BootstrapConfig.swift */; };
 		E654778B22BFB3C500D968BD /* UniverseBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E654778A22BFB3C500D968BD /* UniverseBootstrap.swift */; };
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
@@ -228,9 +224,6 @@
 		E67A715421FBC65800F4B2D0 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A715321FBC65800F4B2D0 /* String+Extensions.swift */; };
 		E67A8CC5235635AB00206E33 /* ProofOfWorkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A8CC3235635AB00206E33 /* ProofOfWorkTests.swift */; };
 		E67A8CC6235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A8CC4235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift */; };
-		E685BBB922BA5F5800563B1A /* SwiftCBOR.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E685BBBA22BA5F5800563B1A /* CryptoSwift.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E685BBBB22BA5F5800563B1A /* BigInt.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E685BBBD22BA5F5800563B1A /* BitcoinKit.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E68727FE2343BC6400FF4FCE /* Locale+DecimalSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68727FD2343BC6400FF4FCE /* Locale+DecimalSeparator.swift */; };
 		E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB76225F227800340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift */; };
@@ -344,7 +337,6 @@
 		E6CB4B4322C6340300B7382A /* AtomStatusEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CB4B4222C6340300B7382A /* AtomStatusEvent.swift */; };
 		E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE70B21F5AE7800D745EC /* TestableConvenienceInitializers.swift */; };
 		E6CEE73021F5D4E000D745EC /* CharacterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE72F21F5D4E000D745EC /* CharacterSet.swift */; };
-		E6CEE75421F78B1300D745EC /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */; };
 		E6CEE75521F78B2000D745EC /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */; };
 		E6D1318321F7B2050014792D /* Data+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D1318221F7B2050014792D /* Data+Hex.swift */; };
 		E6D15681227056F800AC3438 /* CreateTokenAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D15680227056F800AC3438 /* CreateTokenAction.swift */; };
@@ -495,8 +487,6 @@
 		E6F5484522771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484422771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift */; };
 		E6F5484722771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484622771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift */; };
 		E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
-		E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
-		E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
 		E6FB03D721ECE4EC002CE331 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
 		E6FB03D821ECE4EC002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
 		E6FB03D921ECE4EC002CE331 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
@@ -557,11 +547,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E6533FE422BA63950068B07D /* Starscream.framework in Copy Carthage Frameworks */,
-				E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */,
-				E685BBB922BA5F5800563B1A /* SwiftCBOR.framework in Copy Carthage Frameworks */,
-				E685BBBA22BA5F5800563B1A /* CryptoSwift.framework in Copy Carthage Frameworks */,
-				E685BBBB22BA5F5800563B1A /* BigInt.framework in Copy Carthage Frameworks */,
 				E685BBBD22BA5F5800563B1A /* BitcoinKit.framework in Copy Carthage Frameworks */,
 			);
 			name = "Copy Carthage Frameworks";
@@ -1089,12 +1074,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */,
-				E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */,
 				E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */,
-				E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */,
-				E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */,
-				E6CEE75421F78B1300D745EC /* SwiftCBOR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1480,7 +1460,7 @@
 			path = TokenBalanceReferencesReducer;
 			sourceTree = "<group>";
 		};
-		E620AB4021E783F600B36EC2 /* Source */ = {
+		E620AB4021E783F600B36EC2 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				E689DB86225F77C600340CF3 /* Stack */,
@@ -1489,7 +1469,7 @@
 				E6EFD6C0234F7CE200B7387B /* CombineBridge.swift */,
 				E68DE4A52352357800F1E7A0 /* PublisherPipeOperator.swift */,
 			);
-			path = Source;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		E620AB4521E785D600B36EC2 /* SupportingFiles */ = {
@@ -1769,7 +1749,7 @@
 			isa = PBXGroup;
 			children = (
 				E6DE2C2D21E7A02C007DDA26 /* README.md */,
-				E620AB4021E783F600B36EC2 /* Source */,
+				E620AB4021E783F600B36EC2 /* Sources */,
 				E620AB5221E7874300B36EC2 /* Tests */,
 				E645E72F21E7827D00532ACD /* Products */,
 				E6FB03C621EC95E8002CE331 /* Frameworks */,
@@ -3480,6 +3460,8 @@
 			dependencies = (
 			);
 			name = "RadixSDK iOS";
+			packageProductDependencies = (
+			);
 			productName = RadixDLTSDK;
 			productReference = E645E72E21E7827D00532ACD /* RadixSDK.framework */;
 			productType = "com.apple.product-type.framework";
@@ -3523,7 +3505,7 @@
 				};
 			};
 			buildConfigurationList = E645E72821E7827D00532ACD /* Build configuration list for PBXProject "RadixSDK" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -3531,6 +3513,8 @@
 				Base,
 			);
 			mainGroup = E645E72421E7827D00532ACD;
+			packageReferences = (
+			);
 			productRefGroup = E645E72F21E7827D00532ACD /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -4266,7 +4250,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
+				INFOPLIST_FILE = "Sources/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -4304,7 +4288,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
+				INFOPLIST_FILE = "Sources/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
