@@ -37,10 +37,6 @@ public final class DefaultRadixNetwork: RadixNetwork {
     }
 }
 
-public protocol RadixNetworkNodeAction: NodeAction {
-    var node: Node { get }
-}
-
 public extension DefaultRadixNetwork {
     
     func reduce(state: RadixNetworkState, action nodeAction: NodeAction) -> RadixNetworkState {
@@ -63,42 +59,7 @@ public extension DefaultRadixNetwork {
     }
 }
 
-extension RadixNodeState {
-    fileprivate func merging(
-        webSocketStatus newWSStatus: WebSocketStatus,
-        nodeInfo newNodeInfo: NodeInfo? = nil,
-        universeConfig newUniverseConfig: UniverseConfig? = nil
-    ) -> RadixNodeState {
-    
-        return RadixNodeState.init(
-            node: node,
-            webSocketStatus: newWSStatus,
-            nodeInfo: newNodeInfo ?? self.nodeInfo,
-            universeConfig: newUniverseConfig ?? self.universeConfig
-        )
-    }
-}
-
-extension RadixNetworkState {
-    fileprivate func insertingMergeIfNeeded(
-        for node: Node,
-        webSocketStatusValue: ExistingOrNewValue<WebSocketStatus> = .existingElseCrash,
-        nodeInfo newNodeInfo: NodeInfo? = nil,
-        universeConfig newUniverseConfig: UniverseConfig? = nil
-    ) -> RadixNetworkState {
-        let newNodeState: RadixNodeState
-        let maybeCurrentState = nodes.valueFor(key: node)
-        let newWSStatus = webSocketStatusValue.getValue(existing: maybeCurrentState?.websocketStatus)
-        if let currentState = maybeCurrentState {
-            newNodeState = currentState.merging(webSocketStatus: newWSStatus, nodeInfo: newNodeInfo, universeConfig: newUniverseConfig)
-        } else {
-            newNodeState = RadixNodeState(node: node, webSocketStatus: newWSStatus, nodeInfo: newNodeInfo, universeConfig: newUniverseConfig)
-        }
-        return RadixNetworkState(nodes: self.nodes.inserting(value: newNodeState, forKey: node))
-    }
-}
-
-private enum ExistingOrNewValue<Value> {
+internal enum ExistingOrNewValue<Value> {
     case existingElseCrash
     case new(Value)
 }

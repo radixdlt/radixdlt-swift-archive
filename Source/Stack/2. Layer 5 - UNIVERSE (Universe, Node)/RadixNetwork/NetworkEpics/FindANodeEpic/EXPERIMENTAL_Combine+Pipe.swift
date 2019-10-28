@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,95 +25,6 @@
 import Foundation
 import Combine
 
-/// A Radix Network epic that is responsible for finding and connecting to suitable nodes.
-///
-/// Listens to the following `NodeAction`'s:
-/// `FindANodeRequestAction`
-///
-/// outputs the following actions:
-/// `FindANodeResultAction`
-/// `DiscoverMoreNodesAction`,
-/// `GetNodeInfoActionRequest`,
-/// `GetUniverseConfigActionRequest`,
-/// `ConnectWebSocketAction`,
-/// `CloseWebSocketAction`
-///
-public final class FindANodeEpic: RadixNetworkEpic {
-    public typealias PeerSelector = (NonEmptySet<Node>) -> Node
-    private let peerSelector: PeerSelector
-    
-    init(
-        peerSelector: @escaping PeerSelector = { $0.randomElement() }
-    ) {
-        self.peerSelector = peerSelector
-    }
-}
-
-public enum NetworkEpicsError: Swift.Error, Equatable {
-    indirect case findANodeError(FindANodeError)
-}
-
-public enum FindANodeError: Swift.Error, Equatable {
-    case networkEpicsError(NetworkEpicsError)
-}
-
-public typealias Pipe<Output, Failure> = (AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> where Failure: Swift.Error
-
-public typealias PipeNodeAction<Failure> = Pipe<NodeAction, Failure> where Failure: Swift.Error
-
-// TODO: replace `Never` with `FindANodeError`
-public typealias PipeFindANodeEpicActions = PipeNodeAction<Never>
-
-postfix operator ^
-postfix func ^ <P>(publisher: P) -> AnyPublisher<P.Output, P.Failure> where P: Publisher {
-    return publisher.eraseToAnyPublisher()
-}
-
-public extension FindANodeEpic {
- 
-    typealias Error = FindANodeError
-    
-    func epic(
-        actions actionsPublisher: AnyPublisher<NodeAction, Never>,
-        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
-    ) -> AnyPublisher<NodeAction, Never> {
-       
-//        actionsPublisher
-//            .compactMap { $0 as? FindANodeRequestAction }^
-//            .flatMap { findANodeRequestAction in
-//
-//                let shardsOfRequest = findANodeRequestAction.shards
-//
-//                let connectedNodes = networkStatePublisher.map { networkState in
-//                    getConnectedNodes(shards: shardsOfRequest, networkState: networkState)
-//                }^
-//
-//
-//            }^
-        
-        combineMigrationInProgress()
-    }
-    
-    func filterActionsRequiringNode(_ publisher: AnyPublisher<NodeAction, Never>) -> AnyPublisher<NodeAction, Never> {
-        publisher.compactMap { $0 as? FindANodeRequestAction }.eraseToAnyPublisher()
-    }
-    
-    func getConnectedNodes(findANodeRequestAction: FindANodeRequestAction, networkState: RadixNetworkState) -> [Node] {
-        combineMigrationInProgress()
-    }
-    
-}
-
-internal func getConnectedNodes(shards: Shards, networkState: RadixNetworkState) -> [Node] {
-    return networkState.nodes
-        .filter { $0.value.websocketStatus == .ready }
-        .filter { $0.value.shardSpace?.intersectsWithShards(shards) ?? false }
-        .map {
-            return $0.key
-    }
-    
-}
-
 struct InfoForNode: Equatable {
     let nodeInfo: NodeInfo
     let node: Node
@@ -127,6 +38,14 @@ extension NodeWithConfig {
     var nodeInfo: NodeInfo { infoForNode.nodeInfo }
     var node: Node { infoForNode.node }
 }
+
+public typealias Pipe<Output, Failure> = (AnyPublisher<Output, Failure>) -> AnyPublisher<Output, Failure> where Failure: Swift.Error
+
+public typealias PipeNodeAction<Failure> = Pipe<NodeAction, Failure> where Failure: Swift.Error
+
+// TODO: replace `Never` with `FindANodeError`
+public typealias PipeFindANodeEpicActions = PipeNodeAction<Never>
+
 
 private enum Foo {
     var mine: UniverseConfig { abstract() }

@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,21 +24,29 @@
 
 import Foundation
 
-//internal protocol KeyValueTuple {
-//    associatedtype Key: Hashable
-//    associatedtype Value
-//    var key: Key { get }
-//    var value: Value { get }
-//}
-//
-//internal struct KeyValuePair<Key, Value>: KeyValueTuple where Key: Hashable {
-//    let key: Key
-//    let value: Value
-//}
+public final class NodeCompatibilityChecker {
+    private let _isCompatibleNode: (RadixNodeState, Shards) -> Bool
+    public init(_ isCompatibleNode: @escaping (RadixNodeState, Shards) -> Bool) {
+        self._isCompatibleNode = isCompatibleNode
+    }
+}
 
-//extension Array where Element: KeyValueTuple {
-extension Swift.KeyValuePairs where Key: Hashable {
-    func toDictionary() -> [Key: Value] {
-        return [Key: Value].init(uniqueKeysWithValues: self.map { ($0.key, $0.value) })
+public extension NodeCompatibilityChecker {
+    
+//    func isCompatibleNode(shardSpace: RadixNodeState, shards: Shards) -> Bool {
+//        _isCompatibleNode(shardSpace, shards)
+//    }
+    
+    func isCompatibleNode(nodeState: RadixNodeState, shards: Shards) -> Bool {
+        return _isCompatibleNode(nodeState, shards)
+    }
+}
+
+public extension NodeCompatibilityChecker {
+    static func matchingShards(using matcher: ShardsMatcher = .default) -> Self {
+        return Self { nodeState, shards in
+            guard let shardSpace = nodeState.shardSpace else { return false }
+            return matcher.does(shardSpace: shardSpace, intersectWithShards: shards)
+        }
     }
 }

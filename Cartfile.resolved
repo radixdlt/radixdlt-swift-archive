@@ -1,5 +1,6 @@
 github "Alamofire/Alamofire" "5.0.0-beta.3"
 github "Sajjon/BitcoinKit" "fd73469592123b5b8704de05cbcf721db0331a20"
+github "SwiftyBeaver/SwiftyBeaver" "1.8.3"
 github "attaswift/BigInt" "v4.0.0"
 github "daltoniam/Starscream" "3.1.0"
 github "krzyzanowskim/CryptoSwift" "1.0.0"

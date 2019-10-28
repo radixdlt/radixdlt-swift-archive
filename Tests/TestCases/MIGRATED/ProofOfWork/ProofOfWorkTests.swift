@@ -25,10 +25,7 @@
 import Foundation
 @testable import RadixSDK
 import XCTest
-import RxSwift
 import Combine
-import RxTest
-import RxBlocking
 
 extension TimeInterval {
     static var enoughForPOW: Self { 10 }

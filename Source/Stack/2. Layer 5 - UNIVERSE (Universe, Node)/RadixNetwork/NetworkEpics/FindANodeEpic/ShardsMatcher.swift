@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,21 +24,21 @@
 
 import Foundation
 
-//internal protocol KeyValueTuple {
-//    associatedtype Key: Hashable
-//    associatedtype Value
-//    var key: Key { get }
-//    var value: Value { get }
-//}
-//
-//internal struct KeyValuePair<Key, Value>: KeyValueTuple where Key: Hashable {
-//    let key: Key
-//    let value: Value
-//}
-
-//extension Array where Element: KeyValueTuple {
-extension Swift.KeyValuePairs where Key: Hashable {
-    func toDictionary() -> [Key: Value] {
-        return [Key: Value].init(uniqueKeysWithValues: self.map { ($0.key, $0.value) })
+public struct ShardsMatcher {
+    public typealias DoesShardSpaceIntersectWithShards = (ShardSpace, Shards) -> Bool
+    private let doesShardSpaceIntersectWithShards: DoesShardSpaceIntersectWithShards
+    public init(
+        doesShardSpaceIntersectWithShards: @escaping DoesShardSpaceIntersectWithShards = { $0.intersectsWithShards($1) }) {
+        self.doesShardSpaceIntersectWithShards = doesShardSpaceIntersectWithShards
     }
+}
+
+public extension ShardsMatcher {
+    func does(shardSpace: ShardSpace, intersectWithShards shards: Shards) -> Bool {
+        doesShardSpaceIntersectWithShards(shardSpace, shards)
+    }
+}
+
+public extension ShardsMatcher {
+    static var `default`: Self { .init() }
 }

@@ -56,7 +56,8 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
 //                onNext: { _ in stateSubject.send(.disconnected) },
 //                onError: { _ in stateSubject.send(.disconnected) }
 //        ).store(in: &cancellables)
-        combineMigrationInProgress()
+       
+        logBroken()
         
         self.stateSubject = stateSubject
         self.node = node

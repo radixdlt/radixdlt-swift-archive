@@ -121,10 +121,11 @@ public extension DefaultRadixUniverse {
 
 private extension RadixNetworkState {
     init(nodesDisconnectFromWS: [Node]) {
-        self.init(nodes:
-            nodesDisconnectFromWS
-                .map { KeyValuePair<Node, RadixNodeState>(key: $0, value: .init(node: $0, webSocketStatus: .disconnected)) }
-                .toDictionary()
-        )
+//        self.init(nodes:
+//            nodesDisconnectFromWS
+//                .map { KeyValuePair<Node, RadixNodeState>(key: $0, value: .init(node: $0, webSocketStatus: .disconnected)) }
+//                .toDictionary()
+//        )
+        fatalError()
     }
 }

@@ -27,6 +27,7 @@ import Foundation
 // swiftlint:disable colon opening_brace
 
 public struct NonEmptySet<ElementInSet>:
+    NonEmptyCollection,
     ArrayConvertible,
     Throwing,
     Hashable,
@@ -81,9 +82,37 @@ public extension NonEmptySet {
     }
 }
 
+public protocol NonEmptyCollection {
+    associatedtype Element
+    var elements: [Element] { get }
+    var first: Element { get }
+    var last: Element { get }
+}
+
+public extension NonEmptyCollection {
+    var first: Element {
+        guard let first = elements.first else {
+            incorrectImplementation("A non empty array should indeed contain at least one element")
+        }
+        return first
+    }
+    
+    var last: Element {
+        guard let last = elements.last else {
+            incorrectImplementation("A non empty array should indeed contain at least one element")
+        }
+        return last
+    }
+
+}
+
 public extension NonEmptySet {
     typealias Element = ElementInSet
     var elements: [Element] { return set.asArray }
+    
+//    var first: Element { elements.first! }
+//    var last: Element { elements.last! }
+    
 }
 
 public extension NonEmptySet {

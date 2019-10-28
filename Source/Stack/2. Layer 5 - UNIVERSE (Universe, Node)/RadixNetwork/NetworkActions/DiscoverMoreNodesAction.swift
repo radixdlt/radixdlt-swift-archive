@@ -25,5 +25,7 @@
 import Foundation
 
 public struct DiscoverMoreNodesAction: NodeAction {
-    public init() {}
+    public init() {
+        
+    }
 }

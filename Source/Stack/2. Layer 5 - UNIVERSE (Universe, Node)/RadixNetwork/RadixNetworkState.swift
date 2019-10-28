@@ -25,27 +25,71 @@
 import Foundation
 
 /// Current state of nodes connected to
-public struct RadixNetworkState: Equatable, CustomDebugStringConvertible {
-    public let nodes: [Node: RadixNodeState]
-
+public struct RadixNetworkState: ExpressibleByDictionaryLiteral, ExpressibleByArrayLiteral, Equatable, CustomDebugStringConvertible {
+    
+    let nodes: [Node: RadixNodeState]
     public init(nodes: [Node: RadixNodeState] = [:]) {
         self.nodes = nodes
     }
 }
 
 public extension RadixNetworkState {
-    init(node: Node, state: RadixNodeState) {
-        self.init(nodes: [node: state])
+    
+    typealias Key = Node
+    typealias Value = RadixNodeState
+    typealias Element = RadixNodeState
+    
+    init(arrayLiteral nodeStates: RadixNodeState...) {
+        self.nodes = [Key: Value](uniqueKeysWithValues: nodeStates.map { ($0.node, $0) })
+    }
+        
+    init(keyValuePairs nodes: KeyValuePairs<Key, Value>) {
+        self.nodes = [Key: Value](uniqueKeysWithValues: nodes.map { ($0.key, $0.value) })
+    }
+    
+    init(dictionaryLiteral nodes: (Key, Value)...) {
+        self.nodes = [Key: Value](uniqueKeysWithValues: nodes)
+    }
+}
+
+public extension RadixNetworkState {
+    subscript(node: Key) -> Value? { nodes[node] }
+}
+
+internal extension RadixNetworkState {
+    func insertingMergeIfNeeded(
+        for node: Node,
+        webSocketStatusValue: ExistingOrNewValue<WebSocketStatus> = .existingElseCrash,
+        nodeInfo newNodeInfo: NodeInfo? = nil,
+        universeConfig newUniverseConfig: UniverseConfig? = nil
+    ) -> RadixNetworkState {
+        let newNodeState: RadixNodeState
+        let maybeCurrentState = nodes.valueFor(key: node)
+        let newWSStatus = webSocketStatusValue.getValue(existing: maybeCurrentState?.websocketStatus)
+        if let currentState = maybeCurrentState {
+            newNodeState = currentState.merging(webSocketStatus: newWSStatus, nodeInfo: newNodeInfo, universeConfig: newUniverseConfig)
+        } else {
+            newNodeState = RadixNodeState(node: node, webSocketStatus: newWSStatus, nodeInfo: newNodeInfo, universeConfig: newUniverseConfig)
+        }
+        return RadixNetworkState(nodes: self.nodes.inserting(value: newNodeState, forKey: node))
     }
 }
 
 public extension RadixNetworkState {
     var readyNodes: [RadixNodeState] {
-        nodes.filter { $0.value.websocketStatus == .ready }.map { $0.value }
+//        nodes.filter { $0.value.websocketStatus == .ready }.map { $0.value }
+        nodesWithWebsocketStatus(.ready)
     }
     
     var unreadyNodes: [RadixNodeState] {
-        nodes.filter { $0.value.websocketStatus != .ready }.map { $0.value }
+//        nodes.filter { $0.value.websocketStatus != .ready }.map { $0.value }
+        nodesWithWebsocketStatus(.ready, !=)
+    }
+    
+    func nodesWithWebsocketStatus(_ websocketStatus: WebSocketStatus, _ compare: (WebSocketStatus, WebSocketStatus) -> Bool = { $0 == $1 }) -> [RadixNodeState] {
+        nodes.filter {
+            compare($0.value.websocketStatus, websocketStatus)
+        }.map { $0.value }
     }
 }
 

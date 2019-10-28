@@ -26,6 +26,21 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 import Combine
+import EntwineTest
+
+struct FindMeSomeNodeRequest: FindANodeRequestAction {
+    let shards: Shards
+}
+
+public extension ShardsMatcher {
+    static var alwaysMatch: Self { ShardsMatcher { _, _ in true } }
+}
+
+public extension NodeCompatibilityChecker {
+    static var allNodesAreSuitable: NodeCompatibilityChecker {
+        Self { _, _ in true }
+    }
+}
 
 class FindANodeEpicTests: XCTestCase {
     
@@ -36,6 +51,58 @@ class FindANodeEpicTests: XCTestCase {
     
     func test_that_we_can_create_an_epic() {
         XCTAssertNotNil(FindANodeEpic())
+    }
+    
+    func test_valid_client() {
+        
+        let testScheduler = TestScheduler(initialClock: 0)
+        
+        let node = try! Node(domain: "1.1.1.1", port: 1, isUsingSSL: false)
+//        let webSocketClient = WebSocketToNode(node: node, shouldConnect: false)
+        
+        let findMeSomeNodeRequest = FindMeSomeNodeRequest(shards: .init(single: 1))
+        
+        let findANodeEpic = FindANodeEpic(
+            radixPeerSelector: .first,
+            shardsMatcher: .alwaysMatch,
+            nodeCompatibilityChecker: .allNodesAreSuitable
+        )
+        
+        let networkState: RadixNetworkState = [RadixNodeState(node: node, webSocketStatus: .ready)]
+        
+        var returnValues = [NodeAction]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+//        let nodeActionSubject = PassthroughSubject<NodeAction, Never>()
+        
+        let cancellable = findANodeEpic.epic(
+//            actions: nodeActionSubject.eraseToAnyPublisher(),
+            actions: Just(findMeSomeNodeRequest).eraseToAnyPublisher(),
+            networkState: Just(networkState).eraseToAnyPublisher()
+        ).sink(
+            receiveCompletion: {
+                completion in
+                print("☢️ completion: \(completion)")
+                expectation.fulfill()
+                
+        },
+            receiveValue: { nodeAction in
+                
+                print("🔮 NodeAction: \(nodeAction)")
+                returnValues.append(nodeAction)
+                
+            }
+        )
+        
+//        nodeActionSubject.send(findMeSomeNodeRequest)
+        
+        wait(for: [expectation], timeout: 0.5)
+        
+        
+        XCTAssertEqual(returnValues.count, 1)
+        XCTAssertTrue(returnValues[0] is FindANodeResultAction)
+        XCTAssertEqual(returnValues[0].node, node)
+        XCTAssertNotNil(cancellable)
     }
     
     func test_filterActionsRequiringNode() {

@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +23,9 @@
 //
 
 import Foundation
+import Combine
 
-public enum NodeSelection {
-    case random
+postfix operator ^
+postfix func ^ <P>(publisher: P) -> AnyPublisher<P.Output, P.Failure> where P: Publisher {
+    return publisher.eraseToAnyPublisher()
 }

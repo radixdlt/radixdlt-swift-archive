@@ -38,7 +38,12 @@ public struct RadixNodeState:
     public let universeConfig: UniverseConfig?
     public let nodeInfo: NodeInfo?
     
-    public init(node: Node, webSocketStatus: WebSocketStatus, nodeInfo: NodeInfo? = nil, universeConfig: UniverseConfig? = nil) {
+    public init(
+        node: Node,
+        webSocketStatus: WebSocketStatus,
+        nodeInfo: NodeInfo? = nil,
+        universeConfig: UniverseConfig? = nil
+    ) {
         self.node = node
         self.websocketStatus = webSocketStatus
         self.nodeInfo = nodeInfo
@@ -75,3 +80,18 @@ public extension RadixNodeState {
     }
 }
 
+internal extension RadixNodeState {
+    func merging(
+        webSocketStatus newWSStatus: WebSocketStatus,
+        nodeInfo newNodeInfo: NodeInfo? = nil,
+        universeConfig newUniverseConfig: UniverseConfig? = nil
+    ) -> RadixNodeState {
+        
+        return RadixNodeState(
+            node: node,
+            webSocketStatus: newWSStatus,
+            nodeInfo: newNodeInfo ?? self.nodeInfo,
+            universeConfig: newUniverseConfig ?? self.universeConfig
+        )
+    }
+}
