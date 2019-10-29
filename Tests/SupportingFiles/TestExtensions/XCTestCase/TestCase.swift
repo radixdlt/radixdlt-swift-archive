@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +23,28 @@
 //
 
 import Foundation
+import XCTest
 
-public struct DiscoverMoreNodesAction: NodeAction {
-    public init() {}
+class TestCase: XCTestCase {
+    
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+    }
+}
+
+internal extension TestCase {
+    func forwardFailure(
+        description: String,
+        inFile filePath: String = #file,
+        atLine line: UInt = #line,
+        expected: Bool = false
+    ) {
+        recordFailure(
+            withDescription: description,
+            inFile: filePath,
+            atLine: Int(line),
+            expected: expected
+        )
+    }
 }

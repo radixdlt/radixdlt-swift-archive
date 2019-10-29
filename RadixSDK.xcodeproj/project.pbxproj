@@ -103,6 +103,12 @@
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
 		E620CA9423676A3900EB3EC3 /* EntwineTest in Frameworks */ = {isa = PBXBuildFile; productRef = E620CA9323676A3900EB3EC3 /* EntwineTest */; };
 		E620CA9623676A3900EB3EC3 /* Entwine in Frameworks */ = {isa = PBXBuildFile; productRef = E620CA9523676A3900EB3EC3 /* Entwine */; };
+		E620CA9823682F0800EB3EC3 /* Combine+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9723682F0800EB3EC3 /* Combine+Debug.swift */; };
+		E620CA9C23686B8F00EB3EC3 /* FindANodeEpicHelpersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9B23686B8F00EB3EC3 /* FindANodeEpicHelpersTest.swift */; };
+		E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9D23687C6300EB3EC3 /* TestCase.swift */; };
+		E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */; };
+		E620CAA22368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAA12368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift */; };
+		E620CAA42368AC1D00EB3EC3 /* NextConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAA32368AC1D00EB3EC3 /* NextConnection.swift */; };
 		E621BE832298394D00E97542 /* AtomIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E621BE822298394D00E97542 /* AtomIdentifier.swift */; };
 		E6235FF92367406E00F4DC7E /* NodeCompatibilityChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6235FF82367406E00F4DC7E /* NodeCompatibilityChecker.swift */; };
 		E626E1DC22B3F9AB0046D2AC /* AtomPuller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626E1DB22B3F9AB0046D2AC /* AtomPuller.swift */; };
@@ -677,6 +683,12 @@
 		E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RadixSDK-Info.plist"; sourceTree = "<group>"; };
 		E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RadixSDKTests-Info.plist"; sourceTree = "<group>"; };
 		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
+		E620CA9723682F0800EB3EC3 /* Combine+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Combine+Debug.swift"; sourceTree = "<group>"; };
+		E620CA9B23686B8F00EB3EC3 /* FindANodeEpicHelpersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindANodeEpicHelpersTest.swift; sourceTree = "<group>"; };
+		E620CA9D23687C6300EB3EC3 /* TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase.swift; sourceTree = "<group>"; };
+		E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase_Extensions.swift; sourceTree = "<group>"; };
+		E620CAA12368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindANodeEpicMilestonesTest.swift; sourceTree = "<group>"; };
+		E620CAA32368AC1D00EB3EC3 /* NextConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextConnection.swift; sourceTree = "<group>"; };
 		E621BE822298394D00E97542 /* AtomIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomIdentifier.swift; sourceTree = "<group>"; };
 		E6235FF82367406E00F4DC7E /* NodeCompatibilityChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeCompatibilityChecker.swift; sourceTree = "<group>"; };
 		E626E1DB22B3F9AB0046D2AC /* AtomPuller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomPuller.swift; sourceTree = "<group>"; };
@@ -1504,6 +1516,7 @@
 				E620AB4521E785D600B36EC2 /* SupportingFiles */,
 				E6EFD6C0234F7CE200B7387B /* CombineBridge.swift */,
 				E68DE4A52352357800F1E7A0 /* PublisherPipeOperator.swift */,
+				E620CA9723682F0800EB3EC3 /* Combine+Debug.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -1569,6 +1582,16 @@
 				E631DAA921F24D3A0063F632 /* PrivateKeyTests */,
 			);
 			path = Keys;
+			sourceTree = "<group>";
+		};
+		E620CA9923686B6A00EB3EC3 /* FindANodeEpicTests */ = {
+			isa = PBXGroup;
+			children = (
+				E6BACE832350E87E006D97C6 /* FindANodeEpicTests.swift */,
+				E620CA9B23686B8F00EB3EC3 /* FindANodeEpicHelpersTest.swift */,
+				E620CAA12368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift */,
+			);
+			path = FindANodeEpicTests;
 			sourceTree = "<group>";
 		};
 		E621BE812298381800E97542 /* AtomIdentifier (AID) */ = {
@@ -1778,6 +1801,7 @@
 				E63E4FB923671BAC00B90CF7 /* EraseToAnyPublisherOperator.swift */,
 				E63E4FB523671B5000B90CF7 /* RadixPeerSelector.swift */,
 				E606FC1722C9FA0E00A7E52E /* FindANodeEpic.swift */,
+				E620CAA32368AC1D00EB3EC3 /* NextConnection.swift */,
 				E63E4FBB23671BE200B90CF7 /* EXPERIMENTAL_Combine+Pipe.swift */,
 			);
 			path = FindANodeEpic;
@@ -2646,7 +2670,7 @@
 		E6BACE812350E859006D97C6 /* NEW */ = {
 			isa = PBXGroup;
 			children = (
-				E6BACE832350E87E006D97C6 /* FindANodeEpicTests.swift */,
+				E620CA9923686B6A00EB3EC3 /* FindANodeEpicTests */,
 			);
 			path = NEW;
 			sourceTree = "<group>";
@@ -3338,6 +3362,8 @@
 			isa = PBXGroup;
 			children = (
 				E6E27A542271EEE20067D46E /* XCTestCase_Extensions.swift */,
+				E620CA9D23687C6300EB3EC3 /* TestCase.swift */,
+				E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */,
 			);
 			path = XCTestCase;
 			sourceTree = "<group>";
@@ -3767,6 +3793,7 @@
 				E6474AEA22664056009C4FDC /* FullDuplexCommunicationChannel+RPC.swift in Sources */,
 				E6E279822271CD1C0067D46E /* MetaData.swift in Sources */,
 				E654778B22BFB3C500D968BD /* UniverseBootstrap.swift in Sources */,
+				E620CA9823682F0800EB3EC3 /* Combine+Debug.swift in Sources */,
 				E63B206F22FD648600D6FF79 /* Particles+Filtering.swift in Sources */,
 				E6474AC122661483009C4FDC /* FormattedURL.swift in Sources */,
 				E605543E23054A7000528510 /* DefaultTransactionMaker.swift in Sources */,
@@ -4028,6 +4055,7 @@
 				E6E279422271CD1C0067D46E /* Hashing.swift in Sources */,
 				E6CB4B4322C6340300B7382A /* AtomStatusEvent.swift in Sources */,
 				E605544123054AA500528510 /* DefaultTransactionToAtomMapper.swift in Sources */,
+				E620CAA42368AC1D00EB3EC3 /* NextConnection.swift in Sources */,
 				E69E753C22A9781700AC631B /* DecimalString.swift in Sources */,
 				E605A6E92345DCBF00E47257 /* ValueBoundWhichIsSubsetOfOther.swift in Sources */,
 				E6E2792C2271CD1C0067D46E /* SignatureVerifier.swift in Sources */,
@@ -4137,8 +4165,10 @@
 				E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */,
 				E6BACE842350E87E006D97C6 /* FindANodeEpicTests.swift in Sources */,
 				48E2A6BE230EBA3200042C16 /* HardCodedAtomStore.swift in Sources */,
+				E620CA9C23686B8F00EB3EC3 /* FindANodeEpicHelpersTest.swift in Sources */,
 				E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */,
 				E67A8CC5235635AB00206E33 /* ProofOfWorkTests.swift in Sources */,
+				E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */,
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
 				E68DE4A42352344700F1E7A0 /* PublisherPipeOperatorTests.swift in Sources */,
@@ -4153,8 +4183,10 @@
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
 				E67A8CC6235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */,
 				E605544D23058AA100528510 /* ParticleSet.swift in Sources */,
+				E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */,
 				480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
+				E620CAA22368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

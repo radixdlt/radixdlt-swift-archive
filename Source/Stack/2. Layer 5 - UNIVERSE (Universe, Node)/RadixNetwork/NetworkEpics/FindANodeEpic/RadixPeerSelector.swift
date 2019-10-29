@@ -24,7 +24,7 @@
 
 import Foundation
 
-public struct RadixPeerSelector {
+public final class RadixPeerSelector {
     // Swift 5.2: Change to `callAsFunction`:
     // https://github.com/apple/swift-evolution/blob/master/proposals/0253-callable.md
     public typealias PeerSelector = (NonEmptySet<Node>) -> Node
@@ -36,11 +36,14 @@ public struct RadixPeerSelector {
 }
 
 public extension RadixPeerSelector {
-    static var random: Self {
+    
+    static var `default`: RadixPeerSelector { .random }
+    
+    static var random: RadixPeerSelector {
         .init { $0.randomElement() }
     }
     
-    static var first: Self {
+    static var first: RadixPeerSelector {
         .init { $0.first }
     }
 }

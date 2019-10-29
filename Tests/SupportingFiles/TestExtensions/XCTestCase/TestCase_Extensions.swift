@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +23,29 @@
 //
 
 import Foundation
+import XCTest
 
-public struct DiscoverMoreNodesAction: NodeAction {
-    public init() {}
+extension TestCase {
+    
+    /// Since `Foobar.Type` does not conform to `Equatable`, even if `Foobar` conforms to `Equatable`, we are unable to write `XCTAssertEquals(type(of: foo), Foobar.self)`, this assert method fixes that.
+    func XCTAssertType<Actual, Expected>(
+        of actual: Actual,
+        is expectedType: Expected.Type,
+        
+        _ filePath: String = #file,
+        line: UInt = #line
+    ) {
+        
+        if let _ = actual as? Expected { return /* success */  }
+        let actualType = type(of: actual)
+        
+        forwardFailure(
+            description: "Expected '\(actual)' to be of type '\(expectedType)', but was: '\(actualType)'",
+            
+            inFile: filePath,
+            atLine: line,
+            expected: false
+        )
+    }
+    
 }

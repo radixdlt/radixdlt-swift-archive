@@ -24,6 +24,7 @@
 
 import Foundation
 import Combine
+import Entwine
 
 internal let void: Void = ()
 
@@ -46,16 +47,25 @@ public final class FindANodeEpic: RadixNetworkEpic {
     private let radixPeerSelector: RadixPeerSelector
     private let shardsMatcher: ShardsMatcher
     private let nodeCompatibilityChecker: NodeCompatibilityChecker
+    private let nextConnection: NextConnection
     
     init(
         radixPeerSelector: RadixPeerSelector = .random,
         shardsMatcher: ShardsMatcher = .default,
-        nodeCompatibilityChecker: NodeCompatibilityChecker? = nil
+        nodeCompatibilityChecker: NodeCompatibilityChecker? = nil,
+        determineIfMoreInfoOfNodeIsNeeded: NextConnection.DetermineIfMoreInfoIsNeeded = .ifShardSpaceIsUnknown
     ) {
         
         self.radixPeerSelector = radixPeerSelector
         self.shardsMatcher = shardsMatcher
+        
         self.nodeCompatibilityChecker = nodeCompatibilityChecker ?? NodeCompatibilityChecker.matchingShards(using: shardsMatcher)
+        
+        self.nextConnection = NextConnection(
+            radixPeerSelector: radixPeerSelector,
+            shardsMatcher: shardsMatcher,
+            determineIfMoreInfoIsNeeded: determineIfMoreInfoOfNodeIsNeeded
+        )
     }
 }
 
@@ -69,8 +79,6 @@ public extension FindANodeEpic {
 
 public extension FindANodeEpic {
     
-    // swiftlint:disable function_body_length
-    
     /// This method identifies `NodeAction` which has been marked being dependent on some `RadixNode` (actions conforming to `FindANodeRequestAction`),
     /// e.g. `SubmitAtomActionRequest` (needs to find a _suitable_ node to submit the atom to) and is responsible for finding,
     /// and connecting to a suitable node, doing this by dispatching other potentially required `NodeAction`s to other Network Epics.
@@ -81,138 +89,116 @@ public extension FindANodeEpic {
         
         return actionsPublisher
             .compactMap { $0 as? FindANodeRequestAction }^
-            .flatMap { [unowned nodeCompatibilityChecker] findANodeRequestAction -> AnyPublisher<NodeAction, Never> in
+            .flatMap { [unowned self, nodeCompatibilityChecker, radixPeerSelector, nextConnection] findANodeRequestAction -> AnyPublisher<NodeAction, Never> in
                 
                 let shardsOfRequest = findANodeRequestAction.shards
                 
-                let connectedNodes: AnyPublisher<[Node], Never> = networkStatePublisher.map { networkState in
-                    networkState.nodesWithWebsocketStatus(.ready)
-                        .filter { nodeState in
-                            nodeCompatibilityChecker.isCompatibleNode(nodeState: nodeState, shards: shardsOfRequest)
-                    }.map { $0.node }
-                    
-                    }^
-                    .debug { "1️⃣ connectedNodes: \($0)" }
+                let connectedNodes = Milestones.milestoneConnectedNodes(
+                    networkState: networkStatePublisher,
+                    shards: shardsOfRequest,
+                    nodeCompatibilityChecker: nodeCompatibilityChecker
+                )
                 
-                let selectedNode: AnyPublisher<NodeAction, Never> = connectedNodes
-                    .compactMap { try? NonEmptySet<Node>(array: $0) }^
-                    .map { [unowned self] in
-                        print("🍐 select: \($0)")
-                        return self.radixPeerSelector.selectPeer($0)
-                    }^
-                    .map { selectedNode in
-                        FindANodeResultAction(node: selectedNode, request: findANodeRequestAction)
-                    }^
-                    .debug { "2️⃣ selectedNode: \($0)" }
+                let selectedNode = Milestones.milestoneSelectedNode(
+                    connectedNodes: connectedNodes,
+                    radixPeerSelector: radixPeerSelector,
+                    findANodeRequestAction: findANodeRequestAction
+                )
                 
-                let findConnectionActions: AnyPublisher<NodeAction, Never> = connectedNodes
-                    .filter { $0.isEmpty }^
-                    .first()^
-                    .ignoreOutput()^
-                    .flatMap { _ in Empty<NodeAction, Never>() }
-                    .append(
-                        networkStatePublisher.map { networkState in
-                            self.nextConnectionRequest(
-                                shards: shardsOfRequest,
-                                networkState: networkState
-                            )
-                        }.flatMap { $0.publisher }^
-                    )
-                    .prefix(untilOutputFrom: selectedNode)^
-                    .debug { "3️⃣ findConnectionActions: \($0)" }
+                let findConnectionActions = Milestones.milestoneConnectionFor(
+                    connectedNode: connectedNodes,
+                    selectedNode: selectedNode,
+                    networkState: networkStatePublisher,
+                    shards: shardsOfRequest,
+                    nextConnection: nextConnection
+                )
                 
-                let cleanupConnections: AnyPublisher<NodeAction, Never> = findConnectionActions
-                    .compactMap { $0 as? ConnectWebSocketAction }^
-                    .flatMap { connectWebSocketAction -> AnyPublisher<NodeAction, Never> in
-                        let node = connectWebSocketAction.node
-                        return selectedNode
-                            .filter { $0.node != node }^
-                            .map { _ in CloseWebSocketAction(node: node) }^
-                    }^
-                    .debug { "4️⃣ cleanupConnections: \($0)" }
+                let cleanupConnections = Milestones.milestoneCleanup(
+                    findConnection: findConnectionActions,
+                    selectedNode: selectedNode
+                )
                 
-                return findConnectionActions.append(selectedNode)^
-                    .merge(with: cleanupConnections)^.debug { "⭐️ woho: \($0)" }
+                let selectNodeAndConnect = findConnectionActions.append(selectedNode)^
+                
+                return selectNodeAndConnect.merge(with: cleanupConnections)^
             }^
         
     }
-    
-    func nextConnectionRequest(shards: Shards, networkState: RadixNetworkState) -> [NodeAction] {
-        func nodesWithWebSocketStatus(_ websocketStatus: WebSocketStatus) -> [Node] {
-            networkState.nodesWithWebsocketStatus(websocketStatus).map { $0.node }
-        }
-        
-        guard nodesWithWebSocketStatus(.connecting).count < Self.maxSimultaneousConnectionRequests else {
-            return []
-        }
-        
-        let disconnectedPeers = nodesWithWebSocketStatus(.disconnected)
-        if disconnectedPeers.isEmpty {
-            return [DiscoverMoreNodesAction()]
-        }
-        
-        let correctShardNodes = disconnectedPeers
-            .filter { node in
-                guard let shardSpace = networkState[node]?.shardSpace else { return false }
-                return shardsMatcher.does(shardSpace: shardSpace, intersectWithShards: shards)
-        }
-        
-        if let correctShardNodesSet = try? NonEmptySet(array: correctShardNodes) {
-            let selectedNode = self.radixPeerSelector.selectPeer(correctShardNodesSet)
-            return [ConnectWebSocketAction(node: selectedNode)]
-        } else {
-            let unknownShardNodes = disconnectedPeers.filter { node in
-                guard let state = networkState[node] else {
-                    incorrectImplementation("No state for Node: \(node), sounds like a bug?")
-                }
-                return state.shardSpace == nil
-            }
-            
-            guard !unknownShardNodes.isEmpty else {
-                return [DiscoverMoreNodesAction()]
-            }
-            
-            return unknownShardNodes.flatMap { node -> [NodeAction] in
-                [
-                    GetNodeInfoActionRequest(node: node),
-                    GetUniverseConfigActionRequest(node: node)
-                ]
-            }
-            
-        }
-    }
-    
-    // swiftlint:enable function_body_length
-    
-    func filterActionsRequiringNode(_ publisher: AnyPublisher<NodeAction, Never>) -> AnyPublisher<NodeAction, Never> {
-        publisher.compactMap { $0 as? FindANodeRequestAction }.eraseToAnyPublisher()
-    }
-    
 }
 
+public extension FindANodeEpic {
+    enum Milestones {}
+}
 
-// MARK: Global
-internal extension Publisher {
+internal extension FindANodeEpic.Milestones {
     
-    //    func firstIgnoreOutputFuture() -> Future<Void, Never> {
-    //        return Future<Void, Never> { promise in
-    //            self.first()
-    //                .ignoreOutput()
-    //                .eraseToAnyPublisher()
-    //            .append(<#T##publisher: Publisher##Publisher#>)
-    //        }
-    //    }
-    
-    func debug(
-        _ receiveOutputMessage: @escaping (Output) -> String = { "🔮 received output: \($0)" }
-    ) -> AnyPublisher<Output, Failure> {
+    static func milestoneConnectedNodes(
+        networkState: AnyPublisher<RadixNetworkState, Never>,
+        shards: Shards,
+        nodeCompatibilityChecker: NodeCompatibilityChecker
+    ) -> AnyPublisher<[RadixNodeState], Never> {
         
-        self.handleEvents(
-            receiveSubscription: nil,
-            receiveOutput: { Swift.print(receiveOutputMessage($0)) },
-            receiveCompletion: nil,
-            receiveCancel: nil,
-            receiveRequest: nil
-        ).eraseToAnyPublisher()
+        networkState.map { networkState in
+            networkState.nodesWithWebsocketStatus(.ready)
+                .filter { nodeState in
+                    nodeCompatibilityChecker.isCompatibleNode(nodeState: nodeState, shards: shards)
+            }
+//            .map { $0.node }
+        }^
+    }
+    
+    static func milestoneSelectedNode(
+        connectedNodes: AnyPublisher<[RadixNodeState], Never>,
+        radixPeerSelector: RadixPeerSelector,
+        findANodeRequestAction: FindANodeRequestAction
+    ) -> AnyPublisher<NodeAction, Never> {
+        
+        return connectedNodes
+            .compactMap { nodeStates in try? NonEmptySet<Node>(array: nodeStates.map { $0.node }) }^
+            .first()^
+            .map { radixPeerSelector.selectPeer($0) }^
+            .map { selectedNode in
+                FindANodeResultAction(node: selectedNode, request: findANodeRequestAction)
+            }^
+    }
+    
+    static func milestoneConnectionFor(
+        connectedNode connectedNodePublisher: AnyPublisher<[RadixNodeState], Never>,
+        selectedNode selectedNodePublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>,
+        shards: Shards,
+        nextConnection: NextConnection
+    ) -> AnyPublisher<NodeAction, Never> {
+        
+        connectedNodePublisher
+            .filter { $0.isEmpty }^
+            .first()^
+            .ignoreOutput()^
+            .flatMap { _ in Empty<NodeAction, Never>() }^
+            .append(
+                networkStatePublisher.map { networkState in
+                    nextConnection.nextConnection(
+                        shards: shards,
+                        networkState: networkState
+                    )
+                }
+                .flatMap { $0.publisher }^
+            )^
+            .prefix(untilOutputFrom: selectedNodePublisher)^
+            .debug("findConnection")
+    }
+    
+    static func milestoneCleanup(
+        findConnection findConnectionPublisher: AnyPublisher<NodeAction, Never>,
+        selectedNode selectedNodePublisher: AnyPublisher<NodeAction, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
+        findConnectionPublisher
+            .compactMap { $0 as? ConnectWebSocketAction }^
+            .flatMap { connectWebSocketAction -> AnyPublisher<NodeAction, Never> in
+                let node = connectWebSocketAction.node
+                return selectedNodePublisher
+                    .filter { $0.node != node }^
+                    .map { _ in CloseWebSocketAction(node: node) }^
+            }^
     }
 }
