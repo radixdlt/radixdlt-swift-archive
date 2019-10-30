@@ -50,8 +50,8 @@ public extension DefaultRadixNetwork {
             return state.insertingMergeIfNeeded(for: node, universeConfig: universeConfigResult.result)
         } else if let addNodeAction = action as? AddNodeAction {
             return state.insertingMergeIfNeeded(for: node, webSocketStatusValue: .new(.disconnected), nodeInfo: addNodeAction.nodeInfo)
-        } else if let websocketEvent = action as? WebSocketEvent {
-            return state.insertingMergeIfNeeded(for: node, webSocketStatusValue: .new(websocketEvent.webSocketStatus))
+        } else if let webSocketEvent = action as? WebSocketEvent {
+            return state.insertingMergeIfNeeded(for: node, webSocketStatusValue: .new(webSocketEvent.webSocketStatus))
         } else {
             fatalError("missed something?")
         }

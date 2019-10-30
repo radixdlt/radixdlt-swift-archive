@@ -56,26 +56,31 @@ public extension DefaultRPCClient {
 
 // MARK: - Single's
 public extension DefaultRPCClient {
-    func getNetworkInfo() -> CombineSingle<RadixSystem> {
+    
+    // TODO: Precision should return `Single`?
+    func getNetworkInfo() -> AnyPublisher<RadixSystem, Never> {
         return make(request: .getNetworkInfo)
     }
     
-    func getLivePeers() -> CombineSingle<[NodeInfo]> {
+    // TODO: Precision should return `Single`?
+    func getLivePeers() -> AnyPublisher<[NodeInfo], Never> {
         return make(request: .getLivePeers)
     }
     
-    func getUniverseConfig() -> CombineSingle<UniverseConfig> {
+    // TODO: Precision should return `Single`?
+    func getUniverseConfig() -> AnyPublisher<UniverseConfig, Never> {
         return make(request: .getUniverse)
     }
     
-    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> CombineSingle<AtomStatus> {
+    // TODO: Precision should return `Single`?
+    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> AnyPublisher<AtomStatus, Never> {
         return make(request: .getAtomStatus(atomIdentifier: atomIdentifier))
     }
 }
 
-// MARK: - CombineCompletable
+// MARK: - Completable
 public extension DefaultRPCClient {
-    func pushAtom(_ atom: SignedAtom) -> CombineCompletable {
+    func pushAtom(_ atom: SignedAtom) -> Completable {
         return makeCompletableMapError(request: .submitAtom(atom: atom)) { SubmitAtomError(rpcError: $0) }
     }
 }
@@ -83,22 +88,22 @@ public extension DefaultRPCClient {
 // MARK: - Send Request for STARTING Subscribing To Some Notification
 public extension DefaultRPCClient {
     
-    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> CombineCompletable {
+    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable {
         return sendStartSubscription(request: .subscribe(to: address, subscriberId: subscriberId))
     }
     
-    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> CombineCompletable {
+    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> Completable {
         return sendStartSubscription(request: .getAtomStatusNotifications(atomIdentifier: atomIdentifier, subscriberId: subscriberId))
     }
 }
 
 // MARK: - Send Request for CLOSING Subscribing To Some Notification
 public extension DefaultRPCClient {
-    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> CombineCompletable {
+    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> Completable {
         return sendCancelSubscription(request: .closeAtomStatusNotifications(subscriberId: subscriberId))
     }
     
-    func cancelAtomsSubscription(subscriberId: SubscriberId) -> CombineCompletable {
+    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable {
         return sendCancelSubscription(request: .unsubscribe(subscriberId: subscriberId))
     }
 }
@@ -106,29 +111,45 @@ public extension DefaultRPCClient {
 // MARK: Internal
 internal extension DefaultRPCClient {
     
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> CombineSingle<ResultFromResponse> where ResultFromResponse: Decodable {
+    // TODO: Precision should return `Single`?
+    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> AnyPublisher<ResultFromResponse, Never> where ResultFromResponse: Decodable {
         return make(request: rootRequest, responseType: ResultFromResponse.self)
     }
     
-    func makeCompletableMapError<ErrorToMapTo>(request rootRequest: RPCRootRequest, errorMapper: @escaping (RPCError) -> (ErrorToMapTo)) -> CombineCompletable where ErrorToMapTo: ErrorMappedFromRPCError {
+    func makeCompletableMapError<ErrorToMapTo>(
+        request rootRequest: RPCRootRequest,
+        errorMapper: @escaping (RPCError) -> (ErrorToMapTo)
+    ) -> Completable where ErrorToMapTo: ErrorMappedFromRPCError {
+        
 //        return make(request: rootRequest, responseType: ResponseOnFireAndForgetRequest.self, errorMapper: errorMapper).asCompletable()
         combineMigrationInProgress()
     }
     
-    func observe<NotificationResponse>(notification: RPCNotification, subscriberId: SubscriberId, responseType: NotificationResponse.Type) -> CombineObservable<NotificationResponse> where NotificationResponse: Decodable {
+    func observe<NotificationResponse>(
+        notification: RPCNotification,
+        subscriberId: SubscriberId,
+        responseType: NotificationResponse.Type
+    ) -> CombineObservable<NotificationResponse> where NotificationResponse: Decodable {
+        
         return channel.observeNotification(notification, subscriberId: subscriberId)
     }
     
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest, responseType: ResultFromResponse.Type) -> CombineSingle<ResultFromResponse> where ResultFromResponse: Decodable {
+    // TODO: Precision should return `Single`?
+    func make<ResultFromResponse>(
+        request rootRequest: RPCRootRequest,
+        responseType: ResultFromResponse.Type
+    ) -> AnyPublisher<ResultFromResponse, Never> where ResultFromResponse: Decodable {
+        
         let noMapper: ((RPCError) -> RPCError)? = nil
         return make(request: rootRequest, responseType: responseType, errorMapper: noMapper)
     }
     
+    // TODO: Precision should return `Single`?
     func make<ResultFromResponse, MapToError>(
         request rootRequest: RPCRootRequest,
         responseType: ResultFromResponse.Type,
         errorMapper: ((RPCError) -> MapToError)?
-    ) -> CombineSingle<ResultFromResponse>
+    ) -> AnyPublisher<ResultFromResponse, Never>
         where
         ResultFromResponse: Decodable,
         MapToError: ErrorMappedFromRPCError {
@@ -145,11 +166,11 @@ internal extension DefaultRPCClient {
             combineMigrationInProgress()
     }
     
-    func sendStartSubscription(request: RPCRootRequest) -> CombineCompletable {
+    func sendStartSubscription(request: RPCRootRequest) -> Completable {
         return sendStartOrCancelSubscription(request: request, mode: .start)
     }
     
-    func sendCancelSubscription(request: RPCRootRequest) -> CombineCompletable {
+    func sendCancelSubscription(request: RPCRootRequest) -> Completable {
         return sendStartOrCancelSubscription(request: request, mode: .cancel)
     }
 }
@@ -157,7 +178,11 @@ internal extension DefaultRPCClient {
 // MARK: - Private
 private extension DefaultRPCClient {
     
-    func makeRequestMapToResponseOrError<Model>(request rootRequest: RPCRootRequest, responseType: Model.Type) -> CombineSingle<RPCResult<Model>> where Model: Decodable {
+    // TODO: Precision should return `Single`?
+    func makeRequestMapToResponseOrError<Model>(
+        request rootRequest: RPCRootRequest,
+        responseType: Model.Type
+    ) -> AnyPublisher<RPCResult<Model>, Never> where Model: Decodable {
         
 //        let rpcRequest = RPCRequest(rootRequest: rootRequest)
         
@@ -172,9 +197,9 @@ private extension DefaultRPCClient {
         combineMigrationInProgress()
     }
     
-    func sendStartOrCancelSubscription(request: RPCRootRequest, mode: SubscriptionMode) -> CombineCompletable {
+    func sendStartOrCancelSubscription(request: RPCRootRequest, mode: SubscriptionMode) -> Completable {
         combineMigrationInProgress()
-//        return CombineCompletable.create { [unowned self] completable in
+//        return Completable.create { [unowned self] completable in
 //            let singleCombineDisposable = self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
 //                .subscribe(
 //                    onSuccess: { rpcResponseAboutSubscriptionChange in

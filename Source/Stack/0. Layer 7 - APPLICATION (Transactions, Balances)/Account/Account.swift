@@ -61,7 +61,9 @@ public extension Account {
 }
 
 public extension Account {
-    func requestSignableKeyFromUser(matchingPublicKey: PublicKey) -> CombineSingle<PrivateKey> {
+    
+    // TODO: Precision should return `Single`?
+    func requestSignableKeyFromUser(matchingPublicKey: PublicKey) -> AnyPublisher<PrivateKey, Never> {
         implementMe()
     }
 }

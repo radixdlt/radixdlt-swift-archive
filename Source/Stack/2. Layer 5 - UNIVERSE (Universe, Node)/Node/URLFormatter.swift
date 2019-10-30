@@ -70,7 +70,7 @@ public extension URLFormatter {
     }
     
     static var localhostWebsocket: FormattedURL {
-        return URLFormatter.localhost(protocol: .websockets)
+        return URLFormatter.localhost(protocol: .webSockets)
     }
 }
 
@@ -116,7 +116,7 @@ public extension URLFormatter {
 
 public extension URLFormatter {
     enum CommuncationProtocol: Equatable, Hashable {
-        case websockets
+        case webSockets
         case hypertext
     }
 }
@@ -126,7 +126,7 @@ public extension URLFormatter.CommuncationProtocol {
     static func == (lhs: URLFormatter.CommuncationProtocol, rhs: URLFormatter.CommuncationProtocol) -> Bool {
         switch (lhs, rhs) {
         case (.hypertext, .hypertext): return true
-        case (.websockets, .websockets): return true
+        case (.webSockets, .webSockets): return true
         default: return false
         }
     }
@@ -141,14 +141,14 @@ private extension URLFormatter.CommuncationProtocol {
         
         switch self {
         case .hypertext: return secureIfNeeded("http")
-        case .websockets: return secureIfNeeded("ws")
+        case .webSockets: return secureIfNeeded("ws")
         }
     }
     
     var path: String {
         switch self {
         case .hypertext: return "/api"
-        case .websockets: return "/rpc"
+        case .webSockets: return "/rpc"
         }
     }
     
@@ -159,7 +159,7 @@ private extension URLFormatter.CommuncationProtocol {
     func failedToCreateUrl(from urlString: String) -> URLFormatter.Error {
         switch self {
         case .hypertext: return URLFormatter.Error.failedToCreateURLForHTTP(from: urlString)
-        case .websockets: return URLFormatter.Error.failedToCreateURLForWebsockets(from: urlString)
+        case .webSockets: return URLFormatter.Error.failedToCreateURLForWebsockets(from: urlString)
         }
     }
     

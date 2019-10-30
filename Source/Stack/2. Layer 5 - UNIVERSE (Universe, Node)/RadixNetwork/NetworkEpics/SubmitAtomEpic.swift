@@ -66,8 +66,8 @@ public extension SubmitAtomEpic {
 private extension SubmitAtomEpic {
 
     func submitAtom(sendAction: SubmitAtomActionSend, toNode node: Node) -> CombineObservable<NodeAction> {
-//        let websocketToNode = webSockets.webSocket(to: node, shouldConnect: false)
-//        let rpcClient =  DefaultRPCClient(channel: websocketToNode)
+//        let webSocketToNode = webSockets.webSocket(to: node, shouldConnect: false)
+//        let rpcClient =  DefaultRPCClient(channel: webSocketToNode)
 //        let subscriberId = SubscriberId(uuid: UUID())
 //        let atom = sendAction.atom
 //
@@ -122,8 +122,8 @@ private extension SubmitAtomEpic {
 //                .andThen(
 //                    CombineObservable<Int>.timer(delayFromCancelObservationOfAtomStatusToClosingWebsocket, scheduler: MainScheduler.instance).mapToVoid()
 //                        .flatMapCompletableVoid {
-//                            self.close(webSocketToNode: websocketToNode, useDelay: false)
-//                            return CombineCompletable.completed()
+//                            self.close(webSocketToNode: webSocketToNode, useDelay: false)
+//                            return Completable.completed()
 //                    }
 //                ).subscribe().disposed(by: self.disposeBag)
 //        })

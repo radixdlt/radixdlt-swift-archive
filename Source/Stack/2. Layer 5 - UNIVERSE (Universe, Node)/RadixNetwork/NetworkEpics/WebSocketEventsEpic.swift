@@ -25,6 +25,7 @@
 import Foundation
 import Combine
 
+// TODO: this should not be an epic
 public final class WebSocketEventsEpic: NetworkWebsocketEpic {
     public let webSockets: WebSocketsEpic.WebSockets
     public init(webSockets: WebSocketsEpic.WebSockets) {
@@ -33,12 +34,15 @@ public final class WebSocketEventsEpic: NetworkWebsocketEpic {
 }
 
 public extension WebSocketEventsEpic {
+    
+    // TODO neither `actions` nor `networkState` is used, thus this should not be an epic
     func epic(
-        actions: CombineObservable<NodeAction>,
-        networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
+        actions _: AnyPublisher<NodeAction, Never>,
+        networkState _: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
         
         return webSockets.getNewSocketsToNode().flatMap { webSocketToNode in
-            webSocketToNode.state.map { webSocketStatus in
+            webSocketToNode.webSocketStatus.map { webSocketStatus in
                 WebSocketEvent(node: webSocketToNode.node, webSocketStatus: webSocketStatus)
             }
         }.eraseToAnyPublisher()

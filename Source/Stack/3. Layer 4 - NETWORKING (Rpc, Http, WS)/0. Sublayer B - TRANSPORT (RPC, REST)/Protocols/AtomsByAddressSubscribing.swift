@@ -26,6 +26,6 @@ import Foundation
 import Combine
 
 public protocol AtomsByAddressSubscribing {
-    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> CombineCompletable
+    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable
     func observeAtoms(subscriberId: SubscriberId) -> CombineObservable<AtomObservation>
 }

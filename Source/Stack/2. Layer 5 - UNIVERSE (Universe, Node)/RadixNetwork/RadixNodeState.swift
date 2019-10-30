@@ -34,7 +34,7 @@ public struct RadixNodeState:
 {
     // swiftlint:enable colon opening_brace
     public let node: Node
-    public let websocketStatus: WebSocketStatus
+    public let webSocketStatus: WebSocketStatus
     public let universeConfig: UniverseConfig?
     public let nodeInfo: NodeInfo?
     
@@ -45,7 +45,7 @@ public struct RadixNodeState:
         universeConfig: UniverseConfig? = nil
     ) {
         self.node = node
-        self.websocketStatus = webSocketStatus
+        self.webSocketStatus = webSocketStatus
         self.nodeInfo = nodeInfo
         self.universeConfig = universeConfig
     }
@@ -56,7 +56,7 @@ public extension RadixNodeState {
         
         return """
         \(includeNode.ifTrue { "Node: \(node.debugDescription),\n" })
-        webSocketStatus: \(websocketStatus),
+        webSocketStatus: \(webSocketStatus),
         nodeInfo: \(nodeInfo.ifPresent(elseDefaultTo: "nil") { "\($0.shardSpace)" })
         universeConfig: \(universeConfig.ifPresent(elseDefaultTo: "nil") { "\($0)" }),
         """

@@ -65,7 +65,7 @@ internal extension RadixNetworkState {
     ) -> RadixNetworkState {
         let newNodeState: RadixNodeState
         let maybeCurrentState = nodes.valueFor(key: node)
-        let newWSStatus = webSocketStatusValue.getValue(existing: maybeCurrentState?.websocketStatus)
+        let newWSStatus = webSocketStatusValue.getValue(existing: maybeCurrentState?.webSocketStatus)
         if let currentState = maybeCurrentState {
             newNodeState = currentState.merging(webSocketStatus: newWSStatus, nodeInfo: newNodeInfo, universeConfig: newUniverseConfig)
         } else {
@@ -76,19 +76,22 @@ internal extension RadixNetworkState {
 }
 
 public extension RadixNetworkState {
-    var readyNodes: [RadixNodeState] {
-//        nodes.filter { $0.value.websocketStatus == .ready }.map { $0.value }
-        nodesWithWebsocketStatus(.ready)
+    func connectedNodes(where filter: (RadixNodeState) -> Bool = { _ in true }) -> [RadixNodeState] {
+        nodesWithWebsocketStatus(.connected, where: filter)
     }
     
-    var unreadyNodes: [RadixNodeState] {
-//        nodes.filter { $0.value.websocketStatus != .ready }.map { $0.value }
-        nodesWithWebsocketStatus(.ready, !=)
+    var disconnectedNodes: [RadixNodeState] {
+        nodesWithWebsocketStatus(.disconnected)
     }
     
-    func nodesWithWebsocketStatus(_ websocketStatus: WebSocketStatus, _ compare: (WebSocketStatus, WebSocketStatus) -> Bool = { $0 == $1 }) -> [RadixNodeState] {
+    func nodesWithWebsocketStatus(
+        _ webSocketStatus: WebSocketStatus,
+        where filter: (RadixNodeState) -> Bool = { _ in true }
+    ) -> [RadixNodeState] {
+        
         nodes.filter {
-            compare($0.value.websocketStatus, websocketStatus)
+            guard $0.value.webSocketStatus == webSocketStatus else { return false }
+            return filter($0.value)
         }.map { $0.value }
     }
 }

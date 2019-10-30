@@ -23,63 +23,67 @@
 //
 
 import Foundation
-import Starscream
-import Combine
 
-public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDelegate, WebSocketPongDelegate {
+// TODO replace Starscream with Apple's `URLSessionWebSocketTask` introduced in iOS 13: https://developer.apple.com/documentation/foundation/urlsessionwebSockettask
+import Starscream
+
+import Combine
+import Entwine
+
+// swiftlint:disable colon opening_brace
+
+public final class WebSocketToNode:
+    FullDuplexCommunicationChannel,
+    WebSocketDelegate,
+    WebSocketPongDelegate
+{
+    // swiftlint:enable colon opening_brace
     
-    private let stateSubject: CurrentValueSubjectNoFail<WebSocketStatus>
-    private let receivedMessagesSubject = PassthroughSubjectNoFail<String>()
+    // MARK: Primary Properties
     
-    // Received messages
-    public let messages: CombineObservable<String>
-    
-    private var queuedOutgoingMessages = [String]()
-    
-    public let state: CombineObservable<WebSocketStatus>
-    private var socket: WebSocket?
-    private var cancellables = Set<AnyCancellable>()
+    /// The Radix Node of the webSocket
     internal let node: Node
     
-    public init(node: Node, shouldConnect: Bool) {
-        defer {
-            if shouldConnect {
-                connect()
-            }
-        }
+    /// The pending webSocket to the `node`
+    private var socket: WebSocket?
+    
+    // MARK: Public Properties
+
+    /// Messages received over webSockets, required by `FullDuplexCommunicationChannel`
+    public let messages: AnyPublisher<String, Never>
+    
+    public let webSocketStatus: AnyPublisher<WebSocketStatus, Never>
+
+    // MARK: Private Properties
+    private let stateSubject: CurrentValueSubject<WebSocketStatus, Never>
+    
+    private let receivedMessagesSubject = PassthroughSubject<String, Never>()
+    
+    private var queuedOutgoingMessages = [String]()
+    private var cancellables = Set<AnyCancellable>()
+    
+    public init(node: Node) {
         
-        let stateSubject = CurrentValueSubjectNoFail<WebSocketStatus>(.disconnected)
+        let stateSubject = CurrentValueSubject<WebSocketStatus, Never>(.disconnected)
         
-//        stateSubject.filter { $0 == .failed }
-//            .debounce(RxTimeInterval.seconds(60), scheduler: MainScheduler.instance)
-//            .subscribe(
-//                onNext: { _ in stateSubject.send(.disconnected) },
-//                onError: { _ in stateSubject.send(.disconnected) }
-//        ).store(in: &cancellables)
-       
+        //        stateSubject.filter { $0 == .failed }
+        //            .debounce(RxTimeInterval.seconds(60), scheduler: MainScheduler.instance)
+        //            .subscribe(
+        //                onNext: { _ in stateSubject.send(.disconnected) },
+        //                onError: { _ in stateSubject.send(.disconnected) }
+        //        ).store(in: &cancellables)
+        
         logBroken()
         
         self.stateSubject = stateSubject
         self.node = node
         
         self.messages = receivedMessagesSubject.eraseToAnyPublisher()
-        self.state = stateSubject.eraseToAnyPublisher()
+        self.webSocketStatus = stateSubject.eraseToAnyPublisher()
         
-        self.state.sink(
+        self.webSocketStatus.sink(
             receiveValue: { log.verbose("WS status -> `\($0)`") }
         ).store(in: &cancellables)
-    }
-    
-    private func createSocket(shouldConnect: Bool) -> WebSocket {
-        let newSocket: WebSocket
-        defer {
-            newSocket.delegate = self
-            if shouldConnect {
-                newSocket.connect()
-            }
-        }
-        newSocket = WebSocket(url: node.websocketsUrl.url)
-        return newSocket
     }
     
     deinit {
@@ -87,18 +91,11 @@ public final class WebSocketToNode: FullDuplexCommunicationChannel, WebSocketDel
     }
 }
 
+// MARK: Public
 public extension WebSocketToNode {
-    enum Error: Swift.Error {
-        case hasDisconnected
-    }
-    
-    func waitForConnection() -> CombineCompletable {
-//        return state.filter { $0.isReady }.take(1).asSingle().asCompletable()
-        combineMigrationInProgress()
-    }
     
     func sendMessage(_ message: String) {
-        guard isReady else {
+        guard isConnected else {
             queuedOutgoingMessages.append(message)
             return
         }
@@ -107,59 +104,34 @@ public extension WebSocketToNode {
         socket?.write(string: message)
     }
     
-    /// Close the websocket only if no it has no observers, returns `true` if it was able to close, otherwise `false`.
+    /// Close the webSocket only if no it has no observers, returns `true` if it was able to close, otherwise `false`.
     @discardableResult
     func closeIfNoOneListens() -> Bool {
-//        guard !receivedMessagesSubject.hasObservers else { return false }
-//        closeDisregardingListeners()
-//        return true
- 
+        //        guard !receivedMessagesSubject.hasObservers else { return false }
+        //        closeDisregardingListeners()
+        //        return true
+        
         combineMigrationInProgress()
     }
     
-    func connect() {
+    @discardableResult
+    func connectAndNotifyWhenConnected() -> Future<Void, Never> {
         switch stateSubject.value {
         case .disconnected, .failed:
             stateSubject.send(.connecting)
-            socket = createSocket(shouldConnect: true)
-        case .closing, .connecting, .ready: return
+            socket = createAndConnectToSocket()
+        case .closing, .connecting, .connected: break
         }
         
+        return webSocketStatus.filter { $0.isConnected }
+            .first()
+            .ignoreOutput()
+            .asFuture()
     }
 }
 
-public extension WebSocketToNode {
-    var isReady: Bool {
-        return hasStatus(.ready)
-    }
-}
-
-private extension WebSocketToNode {
-    var hasDisconnected: Bool {
-        return hasStatus(.disconnected)
-    }
-    
-    var isClosing: Bool {
-        return hasStatus(.closing)
-    }
-    
-    func closeDisregardingListeners() {
-        stateSubject.send(.closing)
-        socket?.disconnect()
-    }
-
-    func hasStatus(_ status: WebSocketStatus) -> Bool {
-        stateSubject.value == status
-    }
-    
-    func sendQueued() {
-        queuedOutgoingMessages.forEach {
-            self.sendMessage($0)
-        }
-        queuedOutgoingMessages = []
-    }
-}
-
+// MARK: WebSocketDelegate
+// It is unfortunate that StarScream decided to spell out `webSocket` like `websocket` in their prefix of their delegate methods.
 public extension WebSocketToNode {
     func websocketDidConnect(socket: WebSocketClient) {
         log.verbose("Websocket did connect, to node: \(node)")
@@ -182,11 +154,11 @@ public extension WebSocketToNode {
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if text.contains("Radix.welcome") {
             log.verbose("Received welcome message, which we ignore, proceed sending queued")
-            stateSubject.send(.ready)
+            stateSubject.send(.connected) // Connected and ready to read messages from, since we have discarded this first Welcome message
             sendQueued()
         } else {
-            log.debug("Received response over websockets (text of #\(text.count) chars)")
-            log.verbose("Received response over websockets: \n<\(text)>\n")
+            log.debug("Received response over webSockets (text of #\(text.count) chars)")
+            log.verbose("Received response over webSockets: \n<\(text)>\n")
             receivedMessagesSubject.send(text)
         }
     }
@@ -198,5 +170,48 @@ public extension WebSocketToNode {
     func websocketDidReceivePong(socket: WebSocketClient, data: Data?) {
         log.info("Socket got pong")
     }
+}
+
+// MARK: - Private
+
+// MARK: Status
+private extension WebSocketToNode {
     
+    var isDisconnected: Bool {
+        return hasStatus(.disconnected)
+    }
+    
+    var isClosing: Bool {
+        return hasStatus(.closing)
+    }
+    
+    var isConnected: Bool {
+        return hasStatus(.connected)
+    }
+    
+    func hasStatus(_ status: WebSocketStatus) -> Bool {
+        stateSubject.value == status
+    }
+}
+
+// MARK: Helpers
+private extension WebSocketToNode {
+    func sendQueued() {
+        queuedOutgoingMessages.forEach {
+            self.sendMessage($0)
+        }
+        queuedOutgoingMessages = []
+    }
+    
+    func closeDisregardingListeners() {
+        stateSubject.send(.closing)
+        socket?.disconnect()
+    }
+    
+    func createAndConnectToSocket() -> WebSocket {
+        let newSocket = WebSocket(url: node.webSocketsUrl.url)
+        newSocket.delegate = self
+        newSocket.connect()
+        return newSocket
+    }
 }

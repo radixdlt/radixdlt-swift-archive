@@ -79,13 +79,15 @@ public extension DefaultHTTPClient {
 
 // MARK: - HTTPClient
 public extension DefaultHTTPClient {
-    func request<D>(router: Router, decodeAs type: D.Type) -> CombineSingle<D> where D: Decodable {
+    // TODO: Precision should return `Single`
+    func request<D>(router: Router, decodeAs type: D.Type) -> AnyPublisher<D, Never> where D: Decodable {
         return request { alamofireSession in
             alamofireSession.request(router)
         }
     }
     
-    func loadContent(of page: String) -> CombineSingle<String> {
+    // TODO: Precision should return `Single`?
+    func loadContent(of page: String) -> AnyPublisher<String, Never> {
 //        return CombineObservable.deferred { [unowned alamofireSession] in
 //            return CombineObservable<String>.create { observer in
 //                let dataTask = alamofireSession.request(page).responseString { response in
@@ -115,7 +117,9 @@ public extension DefaultHTTPClient {
 
 // MARK: - Private
 private extension DefaultHTTPClient {
-    func request<D>(_ makeRequest: @escaping (Alamofire.Session) -> Alamofire.DataRequest) -> CombineSingle<D> where D: Decodable {
+    
+    // TODO: Precision should return `Single`?
+    func request<D>(_ makeRequest: @escaping (Alamofire.Session) -> Alamofire.DataRequest) -> AnyPublisher<D, Never> where D: Decodable {
 //        return CombineObservable<D>.deferred { [weak alamofireSession] in
 //            return CombineObservable.create { observer in
 //                guard let alamofireSession = alamofireSession else {

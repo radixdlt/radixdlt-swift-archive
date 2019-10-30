@@ -26,18 +26,18 @@ import Foundation
 
 final class NextConnection {
     private let radixPeerSelector: RadixPeerSelector
-    private let shardsMatcher: ShardsMatcher
+    private let determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
     private let maxSimultaneousConnectionRequests: Int
     private let determineIfMoreInfoIsNeeded: DetermineIfMoreInfoIsNeeded
     
     internal init(
         radixPeerSelector: RadixPeerSelector = .default,
-        shardsMatcher: ShardsMatcher = .default,
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable = .default,
         maxSimultaneousConnectionRequests: Int = FindANodeEpic.maxSimultaneousConnectionRequests,
-        determineIfMoreInfoIsNeeded: DetermineIfMoreInfoIsNeeded = .ifShardSpaceIsUnknown
+        determineIfMoreInfoIsNeeded: DetermineIfMoreInfoIsNeeded = .default
     ) {
         self.radixPeerSelector = radixPeerSelector
-        self.shardsMatcher = shardsMatcher
+        self.determineIfPeerIsSuitable = determineIfPeerIsSuitable
         self.maxSimultaneousConnectionRequests = maxSimultaneousConnectionRequests
         self.determineIfMoreInfoIsNeeded = determineIfMoreInfoIsNeeded
     }
@@ -68,33 +68,33 @@ extension NextConnection.DetermineIfMoreInfoIsNeeded {
             $0.shardSpace == nil
         }
     }
+    
+    static let `default`: Self = .ifShardSpaceIsUnknown
 }
 
 extension NextConnection {
     func nextConnection(shards: Shards, networkState: RadixNetworkState) -> [NodeAction] {
         
-        func discoverMore() -> [NodeAction] {
-            let discoverMore: DiscoverMoreNodesAction = .init()
-            return [discoverMore]
-        }
+        func discoverMore() -> [NodeAction] { [DiscoverMoreNodesAction()] }
         
-        func nodesWithWebSocketStatus(_ websocketStatus: WebSocketStatus) -> [RadixNodeState] {
-            networkState.nodesWithWebsocketStatus(websocketStatus)//.map { $0.node }
+        func nodesWithWebSocketStatus(_ webSocketStatus: WebSocketStatus) -> [RadixNodeState] {
+            networkState.nodesWithWebsocketStatus(webSocketStatus)
         }
         
         guard nodesWithWebSocketStatus(.connecting).count < maxSimultaneousConnectionRequests else {
+            // Max pending connections => await, do nothing for now
             return []
         }
         
-        let disconnectedPeers = nodesWithWebSocketStatus(.disconnected)
-        if disconnectedPeers.isEmpty {
+        // We only care about nodes with ws status `.disconnected`, because these are the nodes we know of, that we potentially might wanna connect to (if suitable), otherwise we need to find more candidates
+        let candidateNodes = nodesWithWebSocketStatus(.disconnected)
+        
+        if candidateNodes.isEmpty {
             return discoverMore()
         }
         
-        let correctShardNodes = disconnectedPeers
-            .filter { nodeState in
-                guard let shardSpace = nodeState.shardSpace else { return false }
-                return shardsMatcher.does(shardSpace: shardSpace, intersectWithShards: shards)
+        let correctShardNodes = candidateNodes.filter {
+            determineIfPeerIsSuitable.isPeer(withState: $0, suitableBasedOnShards: shards)
         }
         
         if let correctShardNodesSet = try? NonEmptySet(array: correctShardNodes.map { $0.node }) {
@@ -102,7 +102,7 @@ extension NextConnection {
             return [ConnectWebSocketAction(node: selectedNode)]
         } else {
             
-            let moreInfoIsNeededForThese = determineIfMoreInfoIsNeeded.moreInfoIsNeeded(for: disconnectedPeers)
+            let moreInfoIsNeededForThese = determineIfMoreInfoIsNeeded.moreInfoIsNeeded(for: candidateNodes)
             if moreInfoIsNeededForThese.isEmpty {
                 return discoverMore()
             }

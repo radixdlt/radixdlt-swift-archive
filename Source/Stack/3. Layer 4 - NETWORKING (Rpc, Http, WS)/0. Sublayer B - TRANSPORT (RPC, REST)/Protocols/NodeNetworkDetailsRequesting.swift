@@ -26,5 +26,7 @@ import Foundation
 import Combine
 
 public protocol NodeNetworkDetailsRequesting {
-    func networkDetails() -> CombineSingle<NodeNetworkDetails>
+    
+    // TODO: Precision should return `Single`?
+    func networkDetails() -> AnyPublisher<NodeNetworkDetails, Never>
 }

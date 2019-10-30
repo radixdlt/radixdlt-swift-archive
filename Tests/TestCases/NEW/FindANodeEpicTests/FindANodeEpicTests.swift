@@ -46,11 +46,10 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         
         let findANodeEpic = FindANodeEpic(
             radixPeerSelector: .first,
-            shardsMatcher: .alwaysMatch,
-            nodeCompatibilityChecker: .allNodesAreSuitable
+            determineIfPeerIsSuitable: .allPeersAreSuitable
         )
         
-        let networkState: RadixNetworkState = [RadixNodeState(node: node1, webSocketStatus: .ready)]
+        let networkState: RadixNetworkState = [RadixNodeState(node: node1, webSocketStatus: .connected)]
         
         var returnValues = [NodeAction]()
         let expectation = XCTestExpectation(description: self.debugDescription)
@@ -89,13 +88,7 @@ struct FindMeSomeNodeRequest: FindANodeRequestAction {
     let shards: Shards
 }
 
-public extension ShardsMatcher {
-    static var alwaysMatch: Self { ShardsMatcher { _, _ in true } }
+public extension DetermineIfPeerIsSuitable {
+    static var allPeersAreSuitable: DetermineIfPeerIsSuitable { return Self { _, _ in true } }
+    static var allPeersAreUnsuitable: DetermineIfPeerIsSuitable { return Self { _, _ in false } }
 }
-
-public extension NodeCompatibilityChecker {
-    static var allNodesAreSuitable: NodeCompatibilityChecker {
-        Self { _, _ in true }
-    }
-}
-

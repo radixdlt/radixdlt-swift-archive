@@ -46,7 +46,6 @@ public typealias PipeNodeAction<Failure> = Pipe<NodeAction, Failure> where Failu
 // TODO: replace `Never` with `FindANodeError`
 public typealias PipeFindANodeEpicActions = PipeNodeAction<Never>
 
-
 private enum Foo {
     var mine: UniverseConfig { abstract() }
     var myAddress: Address { abstract() }

@@ -26,5 +26,5 @@ import Foundation
 import Combine
 
 public protocol AtomStatusObservationRequesting {
-    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> CombineCompletable
+    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> Completable
 }

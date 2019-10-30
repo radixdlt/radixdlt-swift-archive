@@ -37,7 +37,8 @@ extension TestCase {
     ) {
         
         if let _ = actual as? Expected { return /* success */  }
-        let actualType = type(of: actual)
+        let actualType = Mirror(reflecting: actual).subjectType
+        
         
         forwardFailure(
             description: "Expected '\(actual)' to be of type '\(expectedType)', but was: '\(actualType)'",

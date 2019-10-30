@@ -27,16 +27,16 @@ import Combine
 
 public protocol RadixNetworkController {
     func dispatch(nodeAction: NodeAction)
-    func getActions() -> CombineObservable<NodeAction>
+    func getActions() -> AnyPublisher<NodeAction, Never>
 
-    func observeNetworkState() -> CombineObservable<RadixNetworkState>
+    func observeNetworkState() -> AnyPublisher<RadixNetworkState, Never>
     var currentNetworkState: RadixNetworkState { get }
 }
 
 public extension RadixNetworkController {
-    var readyNodes: CombineObservable<[RadixNodeState]> {
+    var connectedNodes: AnyPublisher<[RadixNodeState], Never> {
         observeNetworkState().map {
-            $0.readyNodes
+            $0.connectedNodes()
         }.eraseToAnyPublisher()
     }
 }
@@ -44,9 +44,9 @@ public extension RadixNetworkController {
 public final class DefaultRadixNetworkController: RadixNetworkController {
     
     // MARK: Private Properties
-    private let networkStateSubject: CurrentValueSubjectNoFail<RadixNetworkState>
-    private let nodeActionSubject: PassthroughSubjectNoFail<NodeAction>
-    private let reducedNodeActions: CombineObservable<NodeAction>
+    private let networkStateSubject: CurrentValueSubject<RadixNetworkState, Never>
+    private let nodeActionSubject: PassthroughSubject<NodeAction, Never>
+    private let reducedNodeActions: AnyPublisher<NodeAction, Never>
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -59,8 +59,8 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
         reducers: [SomeReducer<NodeAction>]
     ) {
         
-//        let networkStateSubject = CurrentValueSubjectNoFail(initialNetworkState)
-//        let nodeActionSubject = PassthroughSubjectNoFail<NodeAction>()
+//        let networkStateSubject = CurrentValueSubject(initialNetworkState)
+//        let nodeActionSubject = PassthroughSubject<NodeAction>()
 //
 //        let reducedNodeActions = nodeActionSubject.eraseToAnyPublisher().do(onNext: { action in
 //            let state = try networkStateSubject.value

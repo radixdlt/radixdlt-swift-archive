@@ -29,9 +29,9 @@ public enum ResultOfUserAction: Throwing {
     
     case pendingSending(
         /// Ugly hack to retain this observable
-        cachedAtom: CombineSingle<SignedAtom>,
-        updates: CombineConnectableObservable<SubmitAtomAction>,
-        completable: CombineCompletable
+        cachedAtom: AnyPublisher<SignedAtom, Never>,
+        updates: Publishers.MakeConnectable<AnyPublisher<SubmitAtomAction, Never>>,
+        completable: Completable
     )
     
     case failedToStageAction(FailedToStageAction)
@@ -39,8 +39,13 @@ public enum ResultOfUserAction: Throwing {
 
 // MARK: Convenience Init
 public extension ResultOfUserAction {
-
-    init(updates: CombineObservable<SubmitAtomAction>, cachedAtom: CombineSingle<SignedAtom>, autoConnect: ((CombineDisposable) -> Void)?) {
+    
+    init(
+        updates: CombineObservable<SubmitAtomAction>,
+        cachedAtom: AnyPublisher<SignedAtom, Never>,
+        autoConnect: ((Cancellable) -> Void)?
+    ) {
+        
 //        let replayedUpdates = updates.replayAll()
 //
 //        let completable = updates.ofType(SubmitAtomActionStatus.self)
@@ -48,10 +53,10 @@ public extension ResultOfUserAction {
 //            .flatMapCompletable { submitAtomActionStatus in
 //                let statusEvent = submitAtomActionStatus.statusEvent
 //                switch statusEvent {
-//                case .stored: return CombineCompletable.completed()
+//                case .stored: return Completable.completed()
 //                case .notStored(let reason):
 //                    log.warning("Not stored, reason: \(reason)")
-//                    return CombineCompletable.error(Error.failedToSubmitAtom(reason.error))
+//                    return Completable.error(Error.failedToSubmitAtom(reason.error))
 //                }
 //            }
 //
@@ -108,13 +113,13 @@ public extension ResultOfUserAction {
         combineMigrationInProgress()
     }
     
-    func toCompletable() -> CombineCompletable {
+    func toCompletable() -> Completable {
         combineMigrationInProgress()
 //        switch self {
 //        case .pendingSending(_, _, let completable):
 //            return completable
 //        case .failedToStageAction(let failedAction):
-//            return CombineCompletable.error(Error.failedToStageAction(failedAction))
+//            return Completable.error(Error.failedToStageAction(failedAction))
 //        }
     }
     

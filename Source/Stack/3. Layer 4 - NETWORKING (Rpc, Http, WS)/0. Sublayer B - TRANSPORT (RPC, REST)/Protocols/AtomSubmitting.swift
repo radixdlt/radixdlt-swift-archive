@@ -26,5 +26,5 @@ import Foundation
 import Combine
 
 public protocol AtomSubmitting {
-    func pushAtom(_ atom: SignedAtom) -> CombineCompletable
+    func pushAtom(_ atom: SignedAtom) -> Completable
 }

@@ -27,14 +27,14 @@ import Foundation
 import Combine
 
 //struct MockedNetworkDetailsRequester: NodeNetworkDetailsRequesting {
-//    private let single: CombineSingle<NodeNetworkDetails>
-//    init(_ single: CombineSingle<NodeNetworkDetails>) {
+//    private let single: AnyPublisher<NodeNetworkDetails, Never>
+//    init(_ single: AnyPublisher<NodeNetworkDetails>) {
 //        self.single = single
 //    }
-//    init(subject: PassthroughSubjectNoFail<NodeNetworkDetails>) {
+//    init(subject: PassthroughSubject<NodeNetworkDetails>) {
 //        self.init(subject.eraseToAnyPublisher())
 //    }
-//    func networkDetails() -> CombineSingle<NodeNetworkDetails> {
+//    func networkDetails() -> AnyPublisher<NodeNetworkDetails, Never> {
 //        return single
 //    }
 //}

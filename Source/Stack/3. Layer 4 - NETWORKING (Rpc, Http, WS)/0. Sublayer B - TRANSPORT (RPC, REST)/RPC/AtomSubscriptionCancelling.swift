@@ -26,5 +26,5 @@ import Foundation
 import Combine
 
 public protocol AtomSubscriptionCancelling {
-    func cancelAtomsSubscription(subscriberId: SubscriberId) -> CombineCompletable
+    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable
 }

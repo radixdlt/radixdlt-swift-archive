@@ -26,19 +26,25 @@ import Foundation
 import Combine
 
 public extension NodeNetworkDetailsRequesting where Self: HTTPClientOwner {
-    func networkDetails() -> CombineSingle<NodeNetworkDetails> {
+    
+    // TODO: Precision should return `Single`?
+    func networkDetails() -> AnyPublisher<NodeNetworkDetails, Never> {
         return httpClient.request(.network)
     }
 }
 
 public extension LivePeersRequesting where Self: HTTPClientOwner {
-    func getLivePeers() -> CombineSingle<[NodeInfo]> {
+    
+    // TODO: Precision should return `Single`?
+    func getLivePeers() -> AnyPublisher<[NodeInfo], Never> {
         return httpClient.request(.getLivePeers)
     }
 }
 
 public extension UniverseConfigRequesting where Self: HTTPClientOwner {
-    func getUniverseConfig() -> CombineSingle<UniverseConfig> {
+    
+    // TODO: Precision should return `Single`?
+    func getUniverseConfig() -> AnyPublisher<UniverseConfig, Never> {
         return httpClient.request(.getUniverseConfig)
     }
 }

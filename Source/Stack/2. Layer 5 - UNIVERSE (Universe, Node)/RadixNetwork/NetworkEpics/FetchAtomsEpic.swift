@@ -99,11 +99,11 @@ public extension FetchAtomsEpic {
 //                    CombineObservable<Int>.timer(delayFromCancelObservationOfAtomStatusToClosingWebsocket, scheduler: MainScheduler.instance).mapToVoid()
 //                        .flatMapCompletableVoid {
 //                            self.close(webSocketToNode: webSocketToNode, useDelay: false)
-//                            return CombineCompletable.completed()
+//                            return Completable.completed()
 //                    }
 //                ).catchError { errorToSupress in
 //                    log.error("Supressing error: \(errorToSupress)")
-//                    return CombineCompletable.completed()
+//                    return Completable.completed()
 //                }.subscribe().disposed(by: self.disposeBag)
 //        })
 //    }

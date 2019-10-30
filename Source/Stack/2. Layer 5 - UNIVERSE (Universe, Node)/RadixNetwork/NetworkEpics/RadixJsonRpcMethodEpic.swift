@@ -27,7 +27,7 @@ import Combine
 
 // swiftlint:disable colon opening_brace
 
-/// A multipurpuse RadixNetworkEpic wrapping JSON-RPC API calls
+/// A multipurpose RadixNetworkEpic wrapping JSON-RPC API calls
 public final class RadixJsonRpcMethodEpic<Request, RpcMethodResult>:
     NetworkWebsocketEpic
 where
@@ -37,7 +37,8 @@ where
     
     // swiftlint:enable colon opening_brace
 
-    public typealias MethodCall = (RPCClient, Request) -> CombineSingle<RpcMethodResult>
+    // TODO: Precision should return `Single`?
+    public typealias MethodCall = (RPCClient, Request) -> AnyPublisher<RpcMethodResult, Never>
     
     public let webSockets: WebSocketsEpic.WebSockets
     private let methodCall: MethodCall
@@ -61,10 +62,10 @@ public extension RadixJsonRpcMethodEpic {
         combineMigrationInProgress()
 //        return actions
 //            .ofType(Request.self)
-//            .flatMapSingle { [unowned self] (rpcMethod: Request) -> CombineSingle<Result> in
+//            .flatMapSingle { [unowned self] (rpcMethod: Request) -> AnyPublisher<Result, Never> in
 //                return self.waitForConnectionReturnWS(toNode: rpcMethod.node)
 //                    .map { DefaultRPCClient(channel: $0) }
-//                    .flatMap { rpcClient -> CombineSingle<Result> in
+//                    .flatMap { rpcClient -> AnyPublisher<Result> in
 //                        return self.methodCall(rpcClient, rpcMethod)
 //                    }
 //            }.map { $0 }
@@ -78,7 +79,7 @@ public extension RadixJsonRpcMethodEpic {
         
 //        return RadixJsonRpcMethodEpic<GetLivePeersActionRequest, GetLivePeersActionResult>(
 //            webSockets: webSockets
-//        ) { (rpcClient: RPCClient, action: GetLivePeersActionRequest) -> CombineSingle<GetLivePeersActionResult> in
+//        ) { (rpcClient: RPCClient, action: GetLivePeersActionRequest) -> AnyPublisher<GetLivePeersActionResult, Never> in
 //
 //            rpcClient.getLivePeers().map { GetLivePeersActionResult(node: action.node, result: $0) }
 //        }
@@ -88,7 +89,7 @@ public extension RadixJsonRpcMethodEpic {
     static func createGetNodeInfoEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
 //        return RadixJsonRpcMethodEpic<GetNodeInfoActionRequest, GetNodeInfoActionResult>(
 //            webSockets: webSockets
-//        ) { (rpcClient: RPCClient, action: GetNodeInfoActionRequest) -> CombineSingle<GetNodeInfoActionResult> in
+//        ) { (rpcClient: RPCClient, action: GetNodeInfoActionRequest) -> AnyPublisher<GetNodeInfoActionResult, Never> in
 //            rpcClient.getInfo().map { GetNodeInfoActionResult(node: action.node, result: $0) }.asSingle()
 //
 //        }
@@ -99,7 +100,7 @@ public extension RadixJsonRpcMethodEpic {
         
 //        return RadixJsonRpcMethodEpic<GetUniverseConfigActionRequest, GetUniverseConfigActionResult>(
 //            webSockets: webSockets
-//        ) { (rpcClient: RPCClient, action: GetUniverseConfigActionRequest) -> CombineSingle<GetUniverseConfigActionResult> in
+//        ) { (rpcClient: RPCClient, action: GetUniverseConfigActionRequest) -> AnyPublisher<GetUniverseConfigActionResult, Never> in
 //
 //            rpcClient.getUniverseConfig().map { GetUniverseConfigActionResult(node: action.node, result: $0) }.asSingle()
 //        }

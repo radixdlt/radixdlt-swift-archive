@@ -30,14 +30,14 @@ public final class AbstractIdentity: CustomStringConvertible {
     public typealias AccountSelector = (NonEmptyArray<Account>) -> Account
     
     public private(set) var accounts: NonEmptyArray<Account>
-    private let accountSubject: CurrentValueSubjectNoFail<Account>
+    private let accountSubject: CurrentValueSubject<Account, Never>
     
     public init(
         accounts: NonEmptyArray<Account>,
         selectInitialActiveAccount: AccountSelector = { $0.first }
     ) {
         self.accounts = accounts
-        self.accountSubject = CurrentValueSubjectNoFail(selectInitialActiveAccount(accounts))
+        self.accountSubject = CurrentValueSubject(selectInitialActiveAccount(accounts))
     }
 }
 

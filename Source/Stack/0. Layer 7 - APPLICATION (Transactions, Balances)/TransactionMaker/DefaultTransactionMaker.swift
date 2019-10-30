@@ -111,7 +111,8 @@ public extension DefaultTransactionMaker {
 
 private extension DefaultTransactionMaker {
     
-    func addFee(to atom: Atom) -> CombineSingle<AtomWithFee> {
+    // TODO: Precision should return `Single`?
+    func addFee(to atom: Atom) -> AnyPublisher<AtomWithFee, Never> {
 //        return activeAccount.flatMapToSingle { [unowned self] in
 //            self.feeMapper.feeBasedOn(
 //                atom: atom,
@@ -122,10 +123,11 @@ private extension DefaultTransactionMaker {
         combineMigrationInProgress()
     }
     
-    func sign(atom: CombineSingle<UnsignedAtom>) -> CombineSingle<SignedAtom> {
+    // TODO: Precision should return `Single`?
+    func sign(atom: AnyPublisher<UnsignedAtom, Never>) -> AnyPublisher<SignedAtom, Never> {
 //        return activeAccount.flatMapToSingle { account in
 //            if account.privateKey == nil, case .throwErrorDirectly = self.strategyNoSigningKeyIsPresent {
-//                return CombineSingle.error(SigningError.noSigningKeyPresentButWasExpectedToBe)
+//                return AnyPublisher.error(SigningError.noSigningKeyPresentButWasExpectedToBe)
 //            }
 //            return atom.flatMap {
 //                try account.sign(atom: $0)
@@ -134,8 +136,9 @@ private extension DefaultTransactionMaker {
         combineMigrationInProgress()
     }
     
+    // TODO: Precision should return `Single`?
     func createAtomSubmission(
-        atom atomSingle: CombineSingle<SignedAtom>,
+        atom atomSingle: AnyPublisher<SignedAtom, Never>,
         completeOnAtomStoredOnly: Bool,
         originNode: Node?
         ) -> ResultOfUserAction {
@@ -176,7 +179,8 @@ private extension DefaultTransactionMaker {
         }.eraseToAnyPublisher()
     }
     
-    func buildAtomFrom(transaction: Transaction) throws -> CombineSingle<UnsignedAtom> {
+    // TODO: Precision should return `Single`?
+    func buildAtomFrom(transaction: Transaction) throws -> AnyPublisher<UnsignedAtom, Never> {
 //        return addressOfActiveAccount.flatMapToSingle { [unowned self] in
 //            let atom = try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: $0)
 //            return self.addFee(to: atom).map {

@@ -45,25 +45,21 @@ internal let void: Void = ()
 ///
 public final class FindANodeEpic: RadixNetworkEpic {
     private let radixPeerSelector: RadixPeerSelector
-    private let shardsMatcher: ShardsMatcher
-    private let nodeCompatibilityChecker: NodeCompatibilityChecker
+    private let determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
     private let nextConnection: NextConnection
     
     init(
         radixPeerSelector: RadixPeerSelector = .random,
-        shardsMatcher: ShardsMatcher = .default,
-        nodeCompatibilityChecker: NodeCompatibilityChecker? = nil,
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable = .default,
         determineIfMoreInfoOfNodeIsNeeded: NextConnection.DetermineIfMoreInfoIsNeeded = .ifShardSpaceIsUnknown
     ) {
         
         self.radixPeerSelector = radixPeerSelector
-        self.shardsMatcher = shardsMatcher
-        
-        self.nodeCompatibilityChecker = nodeCompatibilityChecker ?? NodeCompatibilityChecker.matchingShards(using: shardsMatcher)
+        self.determineIfPeerIsSuitable = determineIfPeerIsSuitable
         
         self.nextConnection = NextConnection(
             radixPeerSelector: radixPeerSelector,
-            shardsMatcher: shardsMatcher,
+            determineIfPeerIsSuitable: determineIfPeerIsSuitable,
             determineIfMoreInfoIsNeeded: determineIfMoreInfoOfNodeIsNeeded
         )
     }
@@ -89,14 +85,14 @@ public extension FindANodeEpic {
         
         return actionsPublisher
             .compactMap { $0 as? FindANodeRequestAction }^
-            .flatMap { [unowned self, nodeCompatibilityChecker, radixPeerSelector, nextConnection] findANodeRequestAction -> AnyPublisher<NodeAction, Never> in
+            .flatMap { [unowned determineIfPeerIsSuitable, radixPeerSelector, nextConnection] findANodeRequestAction -> AnyPublisher<NodeAction, Never> in
                 
                 let shardsOfRequest = findANodeRequestAction.shards
                 
                 let connectedNodes = Milestones.milestoneConnectedNodes(
                     networkState: networkStatePublisher,
                     shards: shardsOfRequest,
-                    nodeCompatibilityChecker: nodeCompatibilityChecker
+                    determineIfPeerIsSuitable: determineIfPeerIsSuitable
                 )
                 
                 let selectedNode = Milestones.milestoneSelectedNode(
@@ -122,7 +118,6 @@ public extension FindANodeEpic {
                 
                 return selectNodeAndConnect.merge(with: cleanupConnections)^
             }^
-        
     }
 }
 
@@ -133,17 +128,16 @@ public extension FindANodeEpic {
 internal extension FindANodeEpic.Milestones {
     
     static func milestoneConnectedNodes(
-        networkState: AnyPublisher<RadixNetworkState, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>,
         shards: Shards,
-        nodeCompatibilityChecker: NodeCompatibilityChecker
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
     ) -> AnyPublisher<[RadixNodeState], Never> {
         
-        networkState.map { networkState in
-            networkState.nodesWithWebsocketStatus(.ready)
-                .filter { nodeState in
-                    nodeCompatibilityChecker.isCompatibleNode(nodeState: nodeState, shards: shards)
+        networkStatePublisher.map { networkState in
+            networkState.connectedNodes { nodeState in
+                determineIfPeerIsSuitable.isPeer(withState: nodeState, suitableBasedOnShards: shards)
             }
-//            .map { $0.node }
+            
         }^
     }
     
@@ -162,6 +156,7 @@ internal extension FindANodeEpic.Milestones {
             }^
     }
     
+    // swiftlint:disable:next function_parameter_count
     static func milestoneConnectionFor(
         connectedNode connectedNodePublisher: AnyPublisher<[RadixNodeState], Never>,
         selectedNode selectedNodePublisher: AnyPublisher<NodeAction, Never>,

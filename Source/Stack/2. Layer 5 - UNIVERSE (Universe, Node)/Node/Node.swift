@@ -36,7 +36,7 @@ public struct Node:
 {
     // swiftlint:enable colon opening_brace
     
-    public let websocketsUrl: FormattedURL
+    public let webSocketsUrl: FormattedURL
     
     public let isUsingSSL: Bool
     public let host: Host
@@ -44,7 +44,7 @@ public struct Node:
     public init(host: Host, isUsingSSL: Bool) throws {
         self.host = host
         self.isUsingSSL = isUsingSSL
-        self.websocketsUrl = try URLFormatter.format(host: host, protocol: .websockets, useSSL: isUsingSSL)
+        self.webSocketsUrl = try URLFormatter.format(host: host, protocol: .webSockets, useSSL: isUsingSSL)
     }
 }
 
@@ -66,7 +66,7 @@ public extension Node {
 public extension Node {
     var debugDescription: String {
         return """
-        Node(\(websocketsUrl.domain))
+        Node(\(webSocketsUrl.domain))
         """
     }
 }

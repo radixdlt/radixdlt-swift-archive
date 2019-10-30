@@ -24,21 +24,29 @@
 
 import Foundation
 
-public struct ShardsMatcher {
-    public typealias DoesShardSpaceIntersectWithShards = (ShardSpace, Shards) -> Bool
-    private let doesShardSpaceIntersectWithShards: DoesShardSpaceIntersectWithShards
+public final class DetermineIfPeerIsSuitable {
+    public typealias IsPeerSuitable = (RadixNodeState, Shards) -> Bool
+    private let _isPeerSuitable: IsPeerSuitable
     public init(
-        doesShardSpaceIntersectWithShards: @escaping DoesShardSpaceIntersectWithShards = { $0.intersectsWithShards($1) }) {
-        self.doesShardSpaceIntersectWithShards = doesShardSpaceIntersectWithShards
+        isPeerSuitable: @escaping IsPeerSuitable) {
+        self._isPeerSuitable = isPeerSuitable
     }
 }
 
-public extension ShardsMatcher {
-    func does(shardSpace: ShardSpace, intersectWithShards shards: Shards) -> Bool {
-        doesShardSpaceIntersectWithShards(shardSpace, shards)
+public extension DetermineIfPeerIsSuitable {
+    func isPeer(withState nodeState: RadixNodeState, suitableBasedOnShards shards: Shards) -> Bool {
+        _isPeerSuitable(nodeState, shards)
     }
 }
 
-public extension ShardsMatcher {
-    static var `default`: Self { .init() }
+public extension DetermineIfPeerIsSuitable {
+    
+    static var ifShardSpaceIntersectsWithShards: DetermineIfPeerIsSuitable {
+        return Self {
+            guard let shardSpace = $0.shardSpace else { return false }
+            return shardSpace.intersectsWithShards($1)
+        }
+    }
+    
+    static let `default`: DetermineIfPeerIsSuitable = .ifShardSpaceIntersectsWithShards
 }

@@ -26,12 +26,14 @@ import Foundation
 import Combine
 
 public protocol AtomSigning {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> CombineSingle<SignedAtom>
+    // TODO: Precision should return `Single`?
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> AnyPublisher<SignedAtom, Never>
 }
 
 // MARK: - Default Implementation
 public extension AtomSigning where Self: SigningRequesting, Self: PublicKeyOwner {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> CombineSingle<SignedAtom> {
+    // TODO: Precision should return `Single`?
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> AnyPublisher<SignedAtom, Never> {
 //        let signatureId = publicKey.hashEUID
 //        return privateKeyForSigning.map {
 //            try Signer.sign(unsignedAtom, privateKey: $0)

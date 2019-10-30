@@ -24,6 +24,7 @@
 
 import Foundation
 import Combine
+import Entwine
 
 public protocol AtomStore {
     
@@ -85,7 +86,7 @@ public final class InMemoryAtomStore: AtomStore {
 
 public extension InMemoryAtomStore {
     final class ListenerOf<Element> {
-        private var listeners: [Address: CombineReplaySubject<Element>] = [:]
+        private var listeners: [Address: ReplaySubject<Element, Never>] = [:]
         public init() {}
     }
 }
@@ -96,7 +97,7 @@ public extension InMemoryAtomStore {
 //        if let existingListenerAtAddress = syncListeners.listener(of: address) {
 //            return existingListenerAtAddress.eraseToAnyPublisher()
 //        } else {
-//            let newListener = CombineReplaySubject<Date>.createUnbounded()
+//            let newListener = ReplaySubject<Date>.createUnbounded()
 //            syncListeners.addListener(newListener, of: address)
 //            defer {
 //                if synced.valueForKey(key: address, ifAbsent: { false }) {
@@ -113,7 +114,7 @@ public extension InMemoryAtomStore {
 //        if let existingListenerAtAddress = atomUpdateListeners.listener(of: address) {
 //            return existingListenerAtAddress.eraseToAnyPublisher()
 //        } else {
-//            let newListener = CombineReplaySubject<AtomObservation>.createUnbounded()
+//            let newListener = ReplaySubject<AtomObservation>.createUnbounded()
 //            atomUpdateListeners.addListener(newListener, of: address)
 //            // Replay history
 //            atoms.filter {
@@ -251,7 +252,7 @@ extension InMemoryAtomStore.ListenerOf {
         listenerOfAddress.send(element)
     }
     
-    func listener(of address: Address) -> CombineReplaySubject<Element>? {
+    func listener(of address: Address) -> ReplaySubject<Element, Never>? {
         return listeners[address]
     }
     
@@ -259,7 +260,7 @@ extension InMemoryAtomStore.ListenerOf {
         return listener(of: address) != nil
     }
     
-    func addListener(_ subject: CombineReplaySubject<Element>, of address: Address) {
+    func addListener(_ subject: ReplaySubject<Element, Never>, of address: Address) {
         guard !hasListener(of: address) else { return }
         listeners[address] = subject
     }

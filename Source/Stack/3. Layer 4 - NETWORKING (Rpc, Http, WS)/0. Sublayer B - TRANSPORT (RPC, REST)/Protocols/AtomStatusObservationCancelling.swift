@@ -26,5 +26,5 @@ import Foundation
 import Combine
 
 public protocol AtomStatusObservationCancelling {
-    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> CombineCompletable
+    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> Completable
 }
