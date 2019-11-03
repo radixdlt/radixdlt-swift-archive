@@ -84,7 +84,9 @@ public extension DefaultRadixUniverse {
                 RadixJsonRpcAutoConnectEpic.init(webSockets:),
                 RadixJsonRpcAutoCloseEpic.init(webSockets:)
             ]),
-            FindANodeEpic()
+            FindANodeEpic(
+                determineIfPeerIsSuitable: .ifShardSpaceIntersectsWithShards(andInSameUniverseAs: config)
+            )
         ]
         
         networkEpics.append(contentsOf: discoveryEpics)

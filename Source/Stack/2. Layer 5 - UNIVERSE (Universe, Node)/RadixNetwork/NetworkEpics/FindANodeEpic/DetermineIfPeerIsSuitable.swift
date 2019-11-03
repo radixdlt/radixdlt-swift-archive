@@ -34,19 +34,27 @@ public final class DetermineIfPeerIsSuitable {
 }
 
 public extension DetermineIfPeerIsSuitable {
-    func isPeer(withState nodeState: RadixNodeState, suitableBasedOnShards shards: Shards) -> Bool {
+    func isPeer(
+        withState nodeState: RadixNodeState,
+        shards: Shards//, universeConfig: UniverseConfig)
+    ) -> Bool {
         _isPeerSuitable(nodeState, shards)
     }
 }
 
 public extension DetermineIfPeerIsSuitable {
     
-    static var ifShardSpaceIntersectsWithShards: DetermineIfPeerIsSuitable {
+    static func ifShardSpaceIntersectsWithShards(andInSameUniverseAs expectedUniverseConfig: UniverseConfig) -> DetermineIfPeerIsSuitable {
         return Self {
+            guard let universeConfig = $0.universeConfig else { return false }
             guard let shardSpace = $0.shardSpace else { return false }
-            return shardSpace.intersectsWithShards($1)
+            
+            let shardMatch = shardSpace.intersectsWithShards($1)
+            let universeMatch = universeConfig == expectedUniverseConfig
+            
+            return shardMatch && universeMatch
         }
     }
     
-    static let `default`: DetermineIfPeerIsSuitable = .ifShardSpaceIntersectsWithShards
+//    static let `default`: DetermineIfPeerIsSuitable = .ifSameUniverseAndShardSpaceIntersectsWithShards
 }

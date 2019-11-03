@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,11 +24,29 @@
 
 import Foundation
 
-public struct ConnectWebSocketAction: NodeAction, Equatable {
-    public let node: Node
-//    public let requestedConnectionAt: Date
-    init(node: Node) {
-        self.node = node
-//        self.requestedConnectionAt = requestedConnectionAt
+public final class DetermineIfNodeIsTooSlowToConnect {
+    typealias TimeSinceConnectionRequest = TimeInterval
+    typealias IsTooSlow = (ConnectWebSocketAction, TimeInterval) -> Bool
+    
+    private let _isNodeTooSlow: IsTooSlow
+    
+    init(_ isNodeTooSlow: @escaping IsTooSlow) {
+        self._isNodeTooSlow = isNodeTooSlow
     }
+}
+public extension DetermineIfNodeIsTooSlowToConnect {
+    func isConnectionToNodeTooSlow(_ connectionRequest: ConnectWebSocketAction, timePassed: TimeInterval) -> Bool {
+        return _isNodeTooSlow(connectionRequest, timePassed)
+    }
+}
+
+public extension DetermineIfNodeIsTooSlowToConnect {
+    
+    static func ifSlowerThan(deadline: TimeInterval) -> DetermineIfNodeIsTooSlowToConnect {
+        return Self { _, secondsPassed in
+            return secondsPassed > deadline
+        }
+    }
+    
+    static let `default`: DetermineIfNodeIsTooSlowToConnect = .ifSlowerThan(deadline: FindANodeEpic.defaultWaitForConnectionDurationInSeconds)
 }

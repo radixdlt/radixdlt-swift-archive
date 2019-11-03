@@ -46,16 +46,9 @@ public final class WebSocketToNode:
     
     /// The pending webSocket to the `node`
     private var socket: WebSocket?
-    
-    // MARK: Public Properties
-
-    /// Messages received over webSockets, required by `FullDuplexCommunicationChannel`
-    public let messages: AnyPublisher<String, Never>
-    
-    public let webSocketStatus: AnyPublisher<WebSocketStatus, Never>
 
     // MARK: Private Properties
-    private let stateSubject: CurrentValueSubject<WebSocketStatus, Never>
+    private let webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>
     
     private let receivedMessagesSubject = PassthroughSubject<String, Never>()
     
@@ -64,7 +57,7 @@ public final class WebSocketToNode:
     
     public init(node: Node) {
         
-        let stateSubject = CurrentValueSubject<WebSocketStatus, Never>(.disconnected)
+        let webSocketStatusSubject = CurrentValueSubject<WebSocketStatus, Never>(.disconnected)
         
         //        stateSubject.filter { $0 == .failed }
         //            .debounce(RxTimeInterval.seconds(60), scheduler: MainScheduler.instance)
@@ -75,13 +68,10 @@ public final class WebSocketToNode:
         
         logBroken()
         
-        self.stateSubject = stateSubject
+        self.webSocketStatusSubject = webSocketStatusSubject
         self.node = node
         
-        self.messages = receivedMessagesSubject.eraseToAnyPublisher()
-        self.webSocketStatus = stateSubject.eraseToAnyPublisher()
-        
-        self.webSocketStatus.sink(
+        webSocketStatusSubject.sink(
             receiveValue: { log.verbose("WS status -> `\($0)`") }
         ).store(in: &cancellables)
     }
@@ -94,14 +84,8 @@ public final class WebSocketToNode:
 // MARK: Public
 public extension WebSocketToNode {
     
-    func sendMessage(_ message: String) {
-        guard isConnected else {
-            queuedOutgoingMessages.append(message)
-            return
-        }
-        log.verbose("Sending message of length: #\(message.count) chars")
-        log.verbose("Sending message:\n<\(message)>")
-        socket?.write(string: message)
+    var webSocketStatus: AnyPublisher<WebSocketStatus, Never> {
+        webSocketStatusSubject.eraseToAnyPublisher()
     }
     
     /// Close the webSocket only if no it has no observers, returns `true` if it was able to close, otherwise `false`.
@@ -116,9 +100,9 @@ public extension WebSocketToNode {
     
     @discardableResult
     func connectAndNotifyWhenConnected() -> Future<Void, Never> {
-        switch stateSubject.value {
+        switch webSocketStatusSubject.value {
         case .disconnected, .failed:
-            stateSubject.send(.connecting)
+            webSocketStatusSubject.send(.connecting)
             socket = createAndConnectToSocket()
         case .closing, .connecting, .connected: break
         }
@@ -127,6 +111,24 @@ public extension WebSocketToNode {
             .first()
             .ignoreOutput()
             .asFuture()
+    }
+}
+
+// MARK: FullDuplexCommunicationChannel
+public extension WebSocketToNode {
+    /// Messages received over webSockets, required by `FullDuplexCommunicationChannel`
+    var messages: AnyPublisher<String, Never> {
+        receivedMessagesSubject.eraseToAnyPublisher()
+    }
+    
+    func sendMessage(_ message: String) {
+        guard isConnected else {
+            queuedOutgoingMessages.append(message)
+            return
+        }
+        log.verbose("Sending message of length: #\(message.count) chars")
+        log.verbose("Sending message:\n<\(message)>")
+        socket?.write(string: message)
     }
 }
 
@@ -141,20 +143,20 @@ public extension WebSocketToNode {
         log.debug("Websocket closed")
         guard !isClosing else {
             self.socket = nil
-            return stateSubject.send(.disconnected)
+            return webSocketStatusSubject.send(.disconnected)
         }
         if error != nil {
             self.socket = nil
-            stateSubject.send(.failed)
+            webSocketStatusSubject.send(.failed)
         } else {
-            stateSubject.send(.disconnected)
+            webSocketStatusSubject.send(.disconnected)
         }
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if text.contains("Radix.welcome") {
             log.verbose("Received welcome message, which we ignore, proceed sending queued")
-            stateSubject.send(.connected) // Connected and ready to read messages from, since we have discarded this first Welcome message
+            webSocketStatusSubject.send(.connected) // Connected and ready to read messages from, since we have discarded this first Welcome message
             sendQueued()
         } else {
             log.debug("Received response over webSockets (text of #\(text.count) chars)")
@@ -190,7 +192,7 @@ private extension WebSocketToNode {
     }
     
     func hasStatus(_ status: WebSocketStatus) -> Bool {
-        stateSubject.value == status
+        webSocketStatusSubject.value == status
     }
 }
 
@@ -204,7 +206,7 @@ private extension WebSocketToNode {
     }
     
     func closeDisregardingListeners() {
-        stateSubject.send(.closing)
+        webSocketStatusSubject.send(.closing)
         socket?.disconnect()
     }
     

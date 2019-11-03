@@ -26,7 +26,7 @@ import Foundation
 import Combine
 import Entwine
 
-internal let void: Void = ()
+// swiftlint:disable all
 
 // MARK: FindANodeEpic
 
@@ -44,33 +44,45 @@ internal let void: Void = ()
 /// `CloseWebSocketAction`
 ///
 public final class FindANodeEpic: RadixNetworkEpic {
-    private let radixPeerSelector: RadixPeerSelector
-    private let determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
-    private let nextConnection: NextConnection
+//    private let universeConfig: UniverseConfig
+    private let peerSelector: RadixPeerSelector
+    private let isPeerSuitable: DetermineIfPeerIsSuitable
+    private let isMoreInfoAboutNodeNeeded: DetermineIfMoreInfoAboutNodeIsNeeded
+    private let isNodeTooSlowToConnect: DetermineIfNodeIsTooSlowToConnect
+    
+    private let waitForConnectionDurationInSeconds: TimeInterval
+    
+    // Internal due to testing
+    internal let maxSimultaneousConnectionRequests: Int
+    
+    private let backgroundQueue = DispatchQueue(label: "FindANodeEpic")
     
     init(
+//        universeConfig: UniverseConfig,
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable, // = .default,
         radixPeerSelector: RadixPeerSelector = .random,
-        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable = .default,
-        determineIfMoreInfoOfNodeIsNeeded: NextConnection.DetermineIfMoreInfoIsNeeded = .ifShardSpaceIsUnknown
+        determineIfMoreInfoAboutNodeIsNeeded: DetermineIfMoreInfoAboutNodeIsNeeded = .default,
+        determineIfNodeIsTooSlowToConnect: DetermineIfNodeIsTooSlowToConnect = .default,
+        waitForConnectionDurationInSeconds: TimeInterval = FindANodeEpic.defaultWaitForConnectionDurationInSeconds,
+        maxSimultaneousConnectionRequests: Int = FindANodeEpic.defaultMaxSimultaneousConnectionRequests
     ) {
+//        self.universeConfig = universeConfig
         
-        self.radixPeerSelector = radixPeerSelector
-        self.determineIfPeerIsSuitable = determineIfPeerIsSuitable
+        self.peerSelector = radixPeerSelector
+        self.isPeerSuitable = determineIfPeerIsSuitable
+        self.isMoreInfoAboutNodeNeeded = determineIfMoreInfoAboutNodeIsNeeded
+        self.isNodeTooSlowToConnect = determineIfNodeIsTooSlowToConnect
         
-        self.nextConnection = NextConnection(
-            radixPeerSelector: radixPeerSelector,
-            determineIfPeerIsSuitable: determineIfPeerIsSuitable,
-            determineIfMoreInfoIsNeeded: determineIfMoreInfoOfNodeIsNeeded
-        )
+        self.waitForConnectionDurationInSeconds = waitForConnectionDurationInSeconds
+        self.maxSimultaneousConnectionRequests = maxSimultaneousConnectionRequests
     }
 }
 
 // MARK: Public
 public extension FindANodeEpic {
-    
     typealias Error = FindANodeError
-    
-    static let maxSimultaneousConnectionRequests = 2
+    static let defaultMaxSimultaneousConnectionRequests = 2
+    static let defaultWaitForConnectionDurationInSeconds: TimeInterval = 2
 }
 
 public extension FindANodeEpic {
@@ -83,117 +95,179 @@ public extension FindANodeEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-        return actionsPublisher
-            .compactMap { $0 as? FindANodeRequestAction }^
-            .flatMap { [unowned determineIfPeerIsSuitable, radixPeerSelector, nextConnection] findANodeRequestAction -> AnyPublisher<NodeAction, Never> in
+//        let universeConfig = self.universeConfig
+        
+        return actionsPublisher.ofType(FindANodeRequestAction.self)
+            .combineLatest(
+                networkStatePublisher.prepend(RadixNetworkState.empty)
+                    //.drop(untilOutputFrom: actionsPublisher.ofType(FindANodeRequestAction.self))
+            ) { (action: $0, networkState: $1) }
+            .flatMap { [unowned isPeerSuitable, peerSelector] tuple -> AnyPublisher<NodeAction, Never> in
+                 
+                let (findANodeRequestAction, networkState) = tuple
                 
                 let shardsOfRequest = findANodeRequestAction.shards
                 
-                let connectedNodes = Milestones.milestoneConnectedNodes(
-                    networkState: networkStatePublisher,
-                    shards: shardsOfRequest,
-                    determineIfPeerIsSuitable: determineIfPeerIsSuitable
-                )
+                func getConnectedNodes(networkState: RadixNetworkState) -> [RadixNodeState] {
+                    return networkState.connectedNodes(where: {
+                        isPeerSuitable.isPeer(withState: $0, shards: shardsOfRequest)
+                    })
+                }
                 
-                let selectedNode = Milestones.milestoneSelectedNode(
-                    connectedNodes: connectedNodes,
-                    radixPeerSelector: radixPeerSelector,
-                    findANodeRequestAction: findANodeRequestAction
-                )
                 
-                let findConnectionActions = Milestones.milestoneConnectionFor(
-                    connectedNode: connectedNodes,
-                    selectedNode: selectedNode,
-                    networkState: networkStatePublisher,
-                    shards: shardsOfRequest,
-                    nextConnection: nextConnection
-                )
+                let connectedNodes: AnyPublisher<[RadixNodeState], Never> = networkStatePublisher.map {
+                    getConnectedNodes(networkState: $0)
+                    }^
+                     // .replay(1).autoConnect(2);
+                    .prepend(getConnectedNodes(networkState: networkState))^
+                    .handleEvents(receiveOutput: { print("🔗 connectedNode output: \($0)") })^
+                    
+                   
+//                    .makeConnectable().autoconnect()^
+//                    .debug("connectedNodes")
                 
-                let cleanupConnections = Milestones.milestoneCleanup(
-                    findConnection: findConnectionActions,
-                    selectedNode: selectedNode
-                )
+                let selectedNode: AnyPublisher<NodeAction, Never> = connectedNodes
+                    .compactMap { nodeStates in try? NonEmptySet(array: nodeStates.map { $0.node }) }^
+                    .first()^
+                    .map { peerSelector.selectPeer($0) }^
+                    .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) as NodeAction }^
+//                    .share()^ // Equivalent to RxJava: `cache()`
+                    .handleEvents(receiveOutput: { print("🎉 selectedNode output: \($0)") })^
+//                    .debug("selectedNode")
                 
-                let selectNodeAndConnect = findConnectionActions.append(selectedNode)^
+                let findConnectionActionsStream: AnyPublisher<NodeAction, Never> = connectedNodes
+//                    .handleEvents(receiveOutput: { print("1️⃣ output: \($0)") })^
+                    .filter { $0.isEmpty }^
+//                    .handleEvents(receiveOutput: { print("2️⃣ output: \($0)") })^
+                    .first()^
+//                    .handleEvents(receiveOutput: { print("3️⃣ output: \($0)") })^
+                    .ignoreOutput()^
+//                    .handleEvents(receiveCompletion: { print("4️⃣ completion: \($0)") })^
+                    .flatMap { _ in Empty<NodeAction, Never>.init() }^
+                    .append(
+                        Timer.publish(every: self.waitForConnectionDurationInSeconds, on: .current, in: .common)
+                            .autoconnect()^
+//                            .handleEvents(receiveOutput: { print("5️⃣ output: \($0)") })^
+                            .map { _ -> [NodeAction] in
+                                self.findAndConnectToSuitablePeer(shards: shardsOfRequest, networkState: networkState)
+                            }
+//                            .handleEvents(receiveOutput: { print("6️⃣ output: \($0)") })^
+                            .flattenSequence()
+                    )^
+                    .handleEvents(receiveOutput: { print("7️⃣ output: \($0)") })^
+                    .prefix(untilOutputFrom: selectedNode)^  // .replay(1).autoConnect(2);
+//                    .makeConnectable().autoconnect()^
+                    .handleEvents(receiveOutput: { print("8️⃣ output: \($0)") })^
                 
-                return selectNodeAndConnect.merge(with: cleanupConnections)^
-            }^
-    }
-}
-
-public extension FindANodeEpic {
-    enum Milestones {}
-}
-
-internal extension FindANodeEpic.Milestones {
-    
-    static func milestoneConnectedNodes(
-        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>,
-        shards: Shards,
-        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
-    ) -> AnyPublisher<[RadixNodeState], Never> {
-        
-        networkStatePublisher.map { networkState in
-            networkState.connectedNodes { nodeState in
-                determineIfPeerIsSuitable.isPeer(withState: nodeState, suitableBasedOnShards: shards)
-            }
-            
+                let cleanupConnections: AnyPublisher<NodeAction, Never> = findConnectionActionsStream
+                    .ofType(ConnectWebSocketAction.self)
+                    .handleEvents(receiveOutput: { print("9️⃣ output: \($0)") })^
+                    .flatMap { connectWebSocketAction -> AnyPublisher<NodeAction, Never> in
+                        let node = connectWebSocketAction.node
+                        return selectedNode
+                            .map { $0.node }^
+                             .handleEvents(receiveOutput: { print("❓ selected: \($0), connected to: \(node)") })^
+                            .filter { selectedNode in selectedNode != node }^
+                            .handleEvents(receiveOutput: { print("‼️ found inequality: \($0)") })^
+                            .map { CloseWebSocketAction(node: $0) }^
+                    }^
+                .handleEvents(receiveOutput: { print("💇🏻‍♂️ close ws: \($0)") })^
+//                    .debug("cleanupConnections")
+                
+                return findConnectionActionsStream
+                    .append(selectedNode)^
+                    .merge(with: cleanupConnections)^
         }^
     }
-    
-    static func milestoneSelectedNode(
-        connectedNodes: AnyPublisher<[RadixNodeState], Never>,
-        radixPeerSelector: RadixPeerSelector,
-        findANodeRequestAction: FindANodeRequestAction
-    ) -> AnyPublisher<NodeAction, Never> {
-        
-        return connectedNodes
-            .compactMap { nodeStates in try? NonEmptySet<Node>(array: nodeStates.map { $0.node }) }^
-            .first()^
-            .map { radixPeerSelector.selectPeer($0) }^
-            .map { selectedNode in
-                FindANodeResultAction(node: selectedNode, request: findANodeRequestAction)
-            }^
-    }
-    
-    // swiftlint:disable:next function_parameter_count
-    static func milestoneConnectionFor(
-        connectedNode connectedNodePublisher: AnyPublisher<[RadixNodeState], Never>,
-        selectedNode selectedNodePublisher: AnyPublisher<NodeAction, Never>,
-        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>,
-        shards: Shards,
-        nextConnection: NextConnection
-    ) -> AnyPublisher<NodeAction, Never> {
-        
-        connectedNodePublisher
-            .filter { $0.isEmpty }^
-            .first()^
-            .ignoreOutput()^
-            .flatMap { _ in Empty<NodeAction, Never>() }^
-            .append(
-                networkStatePublisher.map { networkState in
-                    nextConnection.nextConnection(
-                        shards: shards,
-                        networkState: networkState
-                    )
-                }
-                .flatMap { $0.publisher }^
-            )^
-            .prefix(untilOutputFrom: selectedNodePublisher)^
-            .debug("findConnection")
-    }
-    
-    static func milestoneCleanup(
-        findConnection findConnectionPublisher: AnyPublisher<NodeAction, Never>,
-        selectedNode selectedNodePublisher: AnyPublisher<NodeAction, Never>
-    ) -> AnyPublisher<NodeAction, Never> {
-        findConnectionPublisher
-            .compactMap { $0 as? ConnectWebSocketAction }^
-            .flatMap { connectWebSocketAction -> AnyPublisher<NodeAction, Never> in
-                let node = connectWebSocketAction.node
-                return selectedNodePublisher
-                    .filter { $0.node != node }^
-                    .map { _ in CloseWebSocketAction(node: node) }^
-            }^
+}
+
+// MARK: Internal
+internal extension FindANodeEpic {
+    func findAndConnectToSuitablePeer(
+        shards shardsOfRequest: Shards, networkState: RadixNetworkState
+    ) -> [NodeAction] {
+
+        // Max pending connections => await, do nothing for now
+        if networkState.connectingNodes.count >= maxSimultaneousConnectionRequests { return [] }
+
+        func discoverMore() -> [NodeAction] { [DiscoverMoreNodesAction()] }
+
+        func isSuitablePeer(_ nodeState: RadixNodeState) -> Bool {
+            isPeerSuitable.isPeer(withState: nodeState, shards: shardsOfRequest)
+        }
+
+
+        // We only care about nodes with ws status `.disconnected`, because these are the nodes we know of, that we potentially might wanna connect to (if suitable), otherwise we need to find more candidates
+        let disconnectedNodes = networkState.disconnectedNodes
+
+        if disconnectedNodes.isEmpty {
+            return discoverMore()
+        }
+
+        assert(disconnectedNodes.isEmpty == false)
+
+        if let disconnectedSuitablePeers = try? NonEmptySet(array: disconnectedNodes.filter { isSuitablePeer($0) }.map { $0.node }) {
+            let selectedPeer = peerSelector.selectPeer(disconnectedSuitablePeers)
+            return [ConnectWebSocketAction(node: selectedPeer)]
+        }
+
+        if case let peersWeNeedMoreInfoAbout = isMoreInfoAboutNodeNeeded.moreInfoIsNeeded(for: disconnectedNodes), !peersWeNeedMoreInfoAbout.isEmpty {
+            return peersWeNeedMoreInfoAbout.map { $0.node }
+                .flatMap { node -> [NodeAction] in
+                    [
+                        GetNodeInfoActionRequest(node: node),
+                        GetUniverseConfigActionRequest(node: node)
+                    ]
+            }
+        }
+
+        return discoverMore()
     }
 }
+
+
+//internal extension FindANodeEpic {
+//    func nextConnection(shards: Shards, networkState: RadixNetworkState) -> [NodeAction] {
+//
+//        func discoverMore() -> [NodeAction] { [DiscoverMoreNodesAction()] }
+//
+//        func nodesWithWebSocketStatus(_ webSocketStatus: WebSocketStatus) -> [RadixNodeState] {
+//            networkState.nodesWithWebsocketStatus(webSocketStatus)
+//        }
+//
+//        guard nodesWithWebSocketStatus(.connecting).count < maxSimultaneousConnectionRequests else {
+//            // Max pending connections => await, do nothing for now
+//            return []
+//        }
+//
+//        // We only care about nodes with ws status `.disconnected`, because these are the nodes we know of, that we potentially might wanna connect to (if suitable), otherwise we need to find more candidates
+//        let candidateNodes = nodesWithWebSocketStatus(.disconnected)
+//
+//        if candidateNodes.isEmpty {
+//            return discoverMore()
+//        }
+//
+//        let correctShardNodes = candidateNodes.filter {
+//            self.isPeerSuitable.isPeer(withState: $0, shards: shards)
+//        }
+//
+//        if let correctShardNodesSet = try? NonEmptySet(array: correctShardNodes.map { $0.node }) {
+//            let selectedNode = self.peerSelector.selectPeer(correctShardNodesSet)
+//            return [ConnectWebSocketAction(node: selectedNode)]
+//        } else {
+//
+//            let moreInfoIsNeededForThese = isMoreInfoAboutNodeNeeded.moreInfoIsNeeded(for: candidateNodes)
+//            if moreInfoIsNeededForThese.isEmpty {
+//                return discoverMore()
+//            }
+//
+//            return moreInfoIsNeededForThese.map { $0.node }
+//                .flatMap { node -> [NodeAction] in
+//                    [
+//                        GetNodeInfoActionRequest(node: node),
+//                        GetUniverseConfigActionRequest(node: node)
+//                    ]
+//            }
+//        }
+//    }
+//}

@@ -89,7 +89,12 @@
 		E606FC4D22CB5E3500A7E52E /* FetchAtomsEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC4C22CB5E3500A7E52E /* FetchAtomsEpic.swift */; };
 		E606FC4F22CB5E4200A7E52E /* WebSocketEventsEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC4E22CB5E4200A7E52E /* WebSocketEventsEpic.swift */; };
 		E606FC5122CB5E4E00A7E52E /* ConnectWebSocketEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E606FC5022CB5E4E00A7E52E /* ConnectWebSocketEpic.swift */; };
+		E60E0564236B005A000A10D6 /* EntwineTest in Frameworks */ = {isa = PBXBuildFile; productRef = E60E0563236B005A000A10D6 /* EntwineTest */; };
+		E60E0566236B005A000A10D6 /* Entwine in Frameworks */ = {isa = PBXBuildFile; productRef = E60E0565236B005A000A10D6 /* Entwine */; };
+		E60E0568236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60E0567236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift */; };
 		E612720A22F4298500DCF19C /* PositiveSupply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E612720922F4298500DCF19C /* PositiveSupply.swift */; };
+		E6127A65236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6127A64236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift */; };
+		E6127A67236DB42100318181 /* DispatchTimeInterval+SchedulerStride.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6127A66236DB42100318181 /* DispatchTimeInterval+SchedulerStride.swift */; };
 		E615C51322B790F100604E90 /* ParticleReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51222B790F100604E90 /* ParticleReducer.swift */; };
 		E615C51522B791D800604E90 /* TokenDefinitionsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51422B791D800604E90 /* TokenDefinitionsReducer.swift */; };
 		E615C51722B791E800604E90 /* TokenBalanceReferencesReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51622B791E800604E90 /* TokenBalanceReferencesReducer.swift */; };
@@ -101,14 +106,9 @@
 		E61EB9A422D87130007826D3 /* SupplyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A322D87130007826D3 /* SupplyType.swift */; };
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
-		E620CA9423676A3900EB3EC3 /* EntwineTest in Frameworks */ = {isa = PBXBuildFile; productRef = E620CA9323676A3900EB3EC3 /* EntwineTest */; };
-		E620CA9623676A3900EB3EC3 /* Entwine in Frameworks */ = {isa = PBXBuildFile; productRef = E620CA9523676A3900EB3EC3 /* Entwine */; };
 		E620CA9823682F0800EB3EC3 /* Combine+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9723682F0800EB3EC3 /* Combine+Debug.swift */; };
-		E620CA9C23686B8F00EB3EC3 /* NextConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9B23686B8F00EB3EC3 /* NextConnectionTests.swift */; };
 		E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9D23687C6300EB3EC3 /* TestCase.swift */; };
 		E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */; };
-		E620CAA22368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAA12368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift */; };
-		E620CAA42368AC1D00EB3EC3 /* NextConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAA32368AC1D00EB3EC3 /* NextConnection.swift */; };
 		E620CAA72369BD0500EB3EC3 /* WebSocketsEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAA62369BD0500EB3EC3 /* WebSocketsEpic.swift */; };
 		E620CAA92369BD1C00EB3EC3 /* WebSocketsEpic+WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAA82369BD1C00EB3EC3 /* WebSocketsEpic+WebSockets.swift */; };
 		E620CAAC2369BE9000EB3EC3 /* Combine_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */; };
@@ -671,7 +671,10 @@
 		E606FC4C22CB5E3500A7E52E /* FetchAtomsEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAtomsEpic.swift; sourceTree = "<group>"; };
 		E606FC4E22CB5E4200A7E52E /* WebSocketEventsEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEventsEpic.swift; sourceTree = "<group>"; };
 		E606FC5022CB5E4E00A7E52E /* ConnectWebSocketEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectWebSocketEpic.swift; sourceTree = "<group>"; };
+		E60E0567236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineIfMoreInfoAboutNodeIsNeeded.swift; sourceTree = "<group>"; };
 		E612720922F4298500DCF19C /* PositiveSupply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositiveSupply.swift; sourceTree = "<group>"; };
+		E6127A64236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineIfNodeIsTooSlowToConnect.swift; sourceTree = "<group>"; };
+		E6127A66236DB42100318181 /* DispatchTimeInterval+SchedulerStride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchTimeInterval+SchedulerStride.swift"; sourceTree = "<group>"; };
 		E615C51222B790F100604E90 /* ParticleReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleReducer.swift; sourceTree = "<group>"; };
 		E615C51422B791D800604E90 /* TokenDefinitionsReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDefinitionsReducer.swift; sourceTree = "<group>"; };
 		E615C51622B791E800604E90 /* TokenBalanceReferencesReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalanceReferencesReducer.swift; sourceTree = "<group>"; };
@@ -686,11 +689,9 @@
 		E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RadixSDKTests-Info.plist"; sourceTree = "<group>"; };
 		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
 		E620CA9723682F0800EB3EC3 /* Combine+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Combine+Debug.swift"; sourceTree = "<group>"; };
-		E620CA9B23686B8F00EB3EC3 /* NextConnectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextConnectionTests.swift; sourceTree = "<group>"; };
+		E620CA9B23686B8F00EB3EC3 /* FindANodeEpicGivenWhenThenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindANodeEpicGivenWhenThenTests.swift; sourceTree = "<group>"; };
 		E620CA9D23687C6300EB3EC3 /* TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase.swift; sourceTree = "<group>"; };
 		E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase_Extensions.swift; sourceTree = "<group>"; };
-		E620CAA12368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindANodeEpicMilestonesTest.swift; sourceTree = "<group>"; };
-		E620CAA32368AC1D00EB3EC3 /* NextConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextConnection.swift; sourceTree = "<group>"; };
 		E620CAA62369BD0500EB3EC3 /* WebSocketsEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketsEpic.swift; sourceTree = "<group>"; };
 		E620CAA82369BD1C00EB3EC3 /* WebSocketsEpic+WebSockets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WebSocketsEpic+WebSockets.swift"; sourceTree = "<group>"; };
 		E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combine_Extensions.swift; sourceTree = "<group>"; };
@@ -1120,11 +1121,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */,
-				E620CA9623676A3900EB3EC3 /* Entwine in Frameworks */,
+				E60E0566236B005A000A10D6 /* Entwine in Frameworks */,
 				E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */,
 				E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */,
 				E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */,
-				E620CA9423676A3900EB3EC3 /* EntwineTest in Frameworks */,
+				E60E0564236B005A000A10D6 /* EntwineTest in Frameworks */,
 				E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */,
 				E6CEE75421F78B1300D745EC /* SwiftCBOR.framework in Frameworks */,
 			);
@@ -1591,8 +1592,7 @@
 			isa = PBXGroup;
 			children = (
 				E6BACE832350E87E006D97C6 /* FindANodeEpicTests.swift */,
-				E620CA9B23686B8F00EB3EC3 /* NextConnectionTests.swift */,
-				E620CAA12368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift */,
+				E620CA9B23686B8F00EB3EC3 /* FindANodeEpicGivenWhenThenTests.swift */,
 			);
 			path = FindANodeEpicTests;
 			sourceTree = "<group>";
@@ -1821,7 +1821,9 @@
 				E63E4FB923671BAC00B90CF7 /* EraseToAnyPublisherOperator.swift */,
 				E63E4FB523671B5000B90CF7 /* RadixPeerSelector.swift */,
 				E606FC1722C9FA0E00A7E52E /* FindANodeEpic.swift */,
-				E620CAA32368AC1D00EB3EC3 /* NextConnection.swift */,
+				E6127A64236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift */,
+				E6127A66236DB42100318181 /* DispatchTimeInterval+SchedulerStride.swift */,
+				E60E0567236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift */,
 				E63E4FBB23671BE200B90CF7 /* EXPERIMENTAL_Combine+Pipe.swift */,
 			);
 			path = FindANodeEpic;
@@ -3559,8 +3561,8 @@
 			);
 			name = "RadixSDK iOS";
 			packageProductDependencies = (
-				E620CA9323676A3900EB3EC3 /* EntwineTest */,
-				E620CA9523676A3900EB3EC3 /* Entwine */,
+				E60E0563236B005A000A10D6 /* EntwineTest */,
+				E60E0565236B005A000A10D6 /* Entwine */,
 			);
 			productName = RadixDLTSDK;
 			productReference = E645E72E21E7827D00532ACD /* RadixSDK.framework */;
@@ -3614,7 +3616,7 @@
 			);
 			mainGroup = E645E72421E7827D00532ACD;
 			packageReferences = (
-				E620CA9223676A3900EB3EC3 /* XCRemoteSwiftPackageReference "Entwine" */,
+				E60E0562236B005A000A10D6 /* XCRemoteSwiftPackageReference "Entwine" */,
 			);
 			productRefGroup = E645E72F21E7827D00532ACD /* Products */;
 			projectDirPath = "";
@@ -3858,6 +3860,7 @@
 				E689DBB1225F8FA900340CF3 /* RESTClient.swift in Sources */,
 				E60553FE2301A48500528510 /* SpunParticles+Filtering.swift in Sources */,
 				E640F638225DFC3D00855256 /* PublicKeyOwner.swift in Sources */,
+				E6127A67236DB42100318181 /* DispatchTimeInterval+SchedulerStride.swift in Sources */,
 				E6474AF9226794D5009C4FDC /* ExpressibleBySubatomicParts.swift in Sources */,
 				E60554142303160600528510 /* EncryptionMode.swift in Sources */,
 				E6E2799A2271CD1C0067D46E /* MaxLengthSpecifying.swift in Sources */,
@@ -4068,6 +4071,7 @@
 				E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */,
 				E6474ADF22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift in Sources */,
 				E626E21222B4F7F00046D2AC /* StatefulActionToParticleGroupsMapper.swift in Sources */,
+				E60E0568236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift in Sources */,
 				E6E2795C2271CD1C0067D46E /* RadixCodable.swift in Sources */,
 				E6166BE022609C9F003A9442 /* DefaultRPCClient.swift in Sources */,
 				E68BD7F9229D781300FCE4D3 /* SignedInteger+CompareUnsigned.swift in Sources */,
@@ -4078,7 +4082,6 @@
 				E6E279422271CD1C0067D46E /* Hashing.swift in Sources */,
 				E6CB4B4322C6340300B7382A /* AtomStatusEvent.swift in Sources */,
 				E605544123054AA500528510 /* DefaultTransactionToAtomMapper.swift in Sources */,
-				E620CAA42368AC1D00EB3EC3 /* NextConnection.swift in Sources */,
 				E69E753C22A9781700AC631B /* DecimalString.swift in Sources */,
 				E605A6E92345DCBF00E47257 /* ValueBoundWhichIsSubsetOfOther.swift in Sources */,
 				E6E2792C2271CD1C0067D46E /* SignatureVerifier.swift in Sources */,
@@ -4106,6 +4109,7 @@
 				E6A508A3224E713F00128123 /* TransferrableTokensParticle.swift in Sources */,
 				E606F13F23016AE1004D4D3D /* UniquelyIdentifiedActionError.swift in Sources */,
 				E6E2798D2271CD1C0067D46E /* DataConvertible+StringConversion.swift in Sources */,
+				E6127A65236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift in Sources */,
 				E63B207222FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift in Sources */,
 				E6474AF22267931A009C4FDC /* ErrorMappedFromRPCError.swift in Sources */,
 				E606FC3822CB468300A7E52E /* GetUniverseConfigActionResult.swift in Sources */,
@@ -4189,7 +4193,6 @@
 				E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */,
 				E6BACE842350E87E006D97C6 /* FindANodeEpicTests.swift in Sources */,
 				48E2A6BE230EBA3200042C16 /* HardCodedAtomStore.swift in Sources */,
-				E620CA9C23686B8F00EB3EC3 /* NextConnectionTests.swift in Sources */,
 				E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */,
 				E67A8CC5235635AB00206E33 /* ProofOfWorkTests.swift in Sources */,
 				E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */,
@@ -4210,7 +4213,6 @@
 				E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */,
 				480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
-				E620CAA22368AA3D00EB3EC3 /* FindANodeEpicMilestonesTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4510,25 +4512,25 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E620CA9223676A3900EB3EC3 /* XCRemoteSwiftPackageReference "Entwine" */ = {
+		E60E0562236B005A000A10D6 /* XCRemoteSwiftPackageReference "Entwine" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/tcldr/Entwine";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.7.0;
+				minimumVersion = 0.8.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E620CA9323676A3900EB3EC3 /* EntwineTest */ = {
+		E60E0563236B005A000A10D6 /* EntwineTest */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E620CA9223676A3900EB3EC3 /* XCRemoteSwiftPackageReference "Entwine" */;
+			package = E60E0562236B005A000A10D6 /* XCRemoteSwiftPackageReference "Entwine" */;
 			productName = EntwineTest;
 		};
-		E620CA9523676A3900EB3EC3 /* Entwine */ = {
+		E60E0565236B005A000A10D6 /* Entwine */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E620CA9223676A3900EB3EC3 /* XCRemoteSwiftPackageReference "Entwine" */;
+			package = E60E0562236B005A000A10D6 /* XCRemoteSwiftPackageReference "Entwine" */;
 			productName = Entwine;
 		};
 /* End XCSwiftPackageProductDependency section */

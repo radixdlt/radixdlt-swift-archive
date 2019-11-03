@@ -25,18 +25,17 @@
 import Foundation
 @testable import RadixSDK
 import XCTest
+import Combine
 
-class FindANodeEpicTestCases: TestCase {
-    let node1 = makeNode()
-    let node2 = makeNode()
-}
+class FindANodeEpicGivenWhenThenTests: FindANodeEpicTestCases {
 
-class NextConnectionTests: FindANodeEpicTestCases {
+    typealias Given = FindANodeEpic
+
     // MARK: Test Cases
     func test_that_when_network_is_empty_we_wanna_discover_more_nodes() {
         
-        given_a_next_connection { nextConnection in
-            when_network_is_empty(given: nextConnection) { then, nodeActions in
+        given { dependency in
+            when_network_is_empty(given: dependency) { then, nodeActions in
                 then.a_single_DiscoverMoreNodesAction_can_be_found_in(the: nodeActions)
             }
         }
@@ -44,52 +43,51 @@ class NextConnectionTests: FindANodeEpicTestCases {
     
     func test_that_we_do_nothing_when_we_have_many_pending_connections() {
         
-        given_a_next_connection { nextConnection in
-            when_we_have_many_pending_connections(given: nextConnection) { then, nodeActions in
+        given { dependency in
+            when_we_have_many_pending_connections(given: dependency) { then, nodeActions in
                 then.no_element_can_be_found_in(the: nodeActions)
             }
         }
     }
-    
     func test_that_when_all_peers_are_unsuitable_we_wanna_discover_more() {
-        given_a_next_connection(
+        given(
             determineIfPeerIsSuitable: .allPeersAreUnsuitable, // Mock
-            determineIfMoreInfoIsNeeded: .neverAskForMoreInfo // Mock
-        ) { nextConnection in
-            when_we_know_of_a_single_disconnected_peer(given: nextConnection) { then, nodeActions, _ in
+            determineIfMoreInfoAboutNodeIsNeeded: .neverAskForMoreInfo // Mock
+        ) { dependency in
+            when_we_know_of_a_single_disconnected_peer(given: dependency) { then, nodeActions, _ in
                 then.a_single_DiscoverMoreNodesAction_can_be_found_in(the: nodeActions)
             }
         }
     }
     
     func test_that_when_peers_lack_detailed_data_we_ask_for_it() {
-        given_a_next_connection(
+        given(
             determineIfPeerIsSuitable: .allPeersAreUnsuitable // Mock
-        ) { nextConnection in
-            when_we_know_of_a_single_disconnected_peer(given: nextConnection) { then, nodeActions, disconnectedPeer in
+        ) { dependency in
+            when_we_know_of_a_single_disconnected_peer(given: dependency) { then, nodeActions, disconnectedPeer in
                 then.a_GetNodeInfo_and_GetUniverseConfig_can_be_found_in(the: nodeActions, forPeer: disconnectedPeer)
             }
         }
     }
     
     func test_that_we_wanna_connected_to_the_single_suitable_peer() {
-        given_a_next_connection(
+        given(
             determineIfPeerIsSuitable: .allPeersAreSuitable, // Mock,
-            determineIfMoreInfoIsNeeded: .neverAskForMoreInfo // Mock
-        ) { nextConnection in
-            when_we_know_of_a_single_disconnected_peer(given: nextConnection) { then, nodeActions, disconnectedPeer in
+            determineIfMoreInfoAboutNodeIsNeeded: .neverAskForMoreInfo // Mock
+        ) { dependency in
+            when_we_know_of_a_single_disconnected_peer(given: dependency) { then, nodeActions, disconnectedPeer in
                 then.a_single_ConnectWebSocketAction_can_be_found_in(the: nodeActions, forPeer: disconnectedPeer)
             }
         }
     }
     
     func test_that_we_wanna_connected_to_the_first_suitable_peer() {
-        given_a_next_connection(
+        given(
             radixPeerSelector: .first,
             determineIfPeerIsSuitable: .allPeersAreSuitable, // Mock,
-            determineIfMoreInfoIsNeeded: .neverAskForMoreInfo // Mock
-        ) { nextConnection in
-            when_we_know_of_two_disconnected_peers(given: nextConnection) { then, nodeActions, peers in
+            determineIfMoreInfoAboutNodeIsNeeded: .neverAskForMoreInfo // Mock
+        ) { dependency in
+            when_we_know_of_two_disconnected_peers(given: dependency) { then, nodeActions, peers in
                 XCTAssertEqual(peers.count, 2)
                 then.a_single_ConnectWebSocketAction_can_be_found_in(the: nodeActions, forPeer: peers.first!)
             }
@@ -97,12 +95,12 @@ class NextConnectionTests: FindANodeEpicTestCases {
     }
     
     func test_that_we_wanna_connected_to_the_last_suitable_peer() {
-        given_a_next_connection(
+        given(
             radixPeerSelector: .last,
             determineIfPeerIsSuitable: .allPeersAreSuitable, // Mock,
-            determineIfMoreInfoIsNeeded: .neverAskForMoreInfo // Mock
-        ) { nextConnection in
-            when_we_know_of_two_disconnected_peers(given: nextConnection) { then, nodeActions, peers in
+            determineIfMoreInfoAboutNodeIsNeeded: .neverAskForMoreInfo // Mock
+        ) { dependency in
+            when_we_know_of_two_disconnected_peers(given: dependency) { then, nodeActions, peers in
                 XCTAssertEqual(peers.count, 2)
                 then.a_single_ConnectWebSocketAction_can_be_found_in(the: nodeActions, forPeer: peers.last!)
             }
@@ -111,49 +109,48 @@ class NextConnectionTests: FindANodeEpicTestCases {
 }
 
 // MARK: WHEN
-private extension NextConnectionTests {
+private extension FindANodeEpicGivenWhenThenTests {
     
-    func when_network_is_empty(given nextConnection: NextConnection, fulfil: @escaping (NextConnectionTests, [NodeAction]) -> Void) {
-        when_next_connection_is_called(given: nextConnection, fulfil)
+    func when_network_is_empty(given dependency: Given, fulfil: @escaping (FindANodeEpicGivenWhenThenTests, [NodeAction]) -> Void) {
+        when_function_is_called(given: dependency, fulfil)
     }
-    
-    func when_we_have_many_pending_connections(given nextConnection: NextConnection, fulfil: @escaping (NextConnectionTests, [NodeAction]) -> Void) {
+    func when_we_have_many_pending_connections(given dependency: Given, fulfil: @escaping (FindANodeEpicGivenWhenThenTests, [NodeAction]) -> Void) {
         
         let networkOf2ConnectingNodes: RadixNetworkState = [
             RadixNodeState(node: node1, webSocketStatus: .connecting),
             RadixNodeState(node: node2, webSocketStatus: .connecting)
         ]
         
-        when_next_connection_is_called(
+        when_function_is_called(
             networkState: networkOf2ConnectingNodes,
-            given: nextConnection,
+            given: dependency,
             fulfil
         )
     }
     
     func when_we_know_of_two_disconnected_peers(
-        given nextConnection: NextConnection,
-        fulfil: @escaping (NextConnectionTests, [NodeAction], [Node]) -> Void
+        given dependency: Given,
+        fulfil: @escaping (FindANodeEpicGivenWhenThenTests, [NodeAction], [Node]) -> Void
     ) {
         let disconnectedPeer1 = RadixNodeState(node: node1, webSocketStatus: .disconnected)
         let disconnectedPeer2 = RadixNodeState(node: node2, webSocketStatus: .disconnected)
         
-        when_next_connection_is_called_many_peers(
+        when_function_is_called_many_peers(
             networkState: [disconnectedPeer1, disconnectedPeer2],
-            given: nextConnection,
+            given: dependency,
             fulfil
         )
     }
     
     func when_we_know_of_a_single_disconnected_peer(
-        given nextConnection: NextConnection,
-        fulfil: @escaping (NextConnectionTests, [NodeAction], Node) -> Void
+        given dependency: Given,
+        fulfil: @escaping (FindANodeEpicGivenWhenThenTests, [NodeAction], Node) -> Void
     ) {
         let disconnectedPeer = RadixNodeState(node: node1, webSocketStatus: .disconnected)
         
-        when_next_connection_is_called(
+        when_function_is_called(
             networkState: [disconnectedPeer],
-            given: nextConnection,
+            given: dependency,
             peer: disconnectedPeer.node,
             fulfil
         )
@@ -161,7 +158,7 @@ private extension NextConnectionTests {
 }
 
 // MARK: THEN
-private extension NextConnectionTests {
+private extension FindANodeEpicGivenWhenThenTests {
     
     func no_element_can_be_found_in(the nodeActions: [NodeAction], _ line: UInt = #line) {
         XCTAssertTrue(
@@ -242,81 +239,70 @@ private extension NextConnectionTests {
 }
 
 // MARK: Test utilities
-private extension NextConnectionTests {
+private extension FindANodeEpicGivenWhenThenTests {
     
-    func given_a_next_connection(
+    func given(
         radixPeerSelector: RadixPeerSelector = .default,
         determineIfPeerIsSuitable: DetermineIfPeerIsSuitable = .default,
-        determineIfMoreInfoIsNeeded: NextConnection.DetermineIfMoreInfoIsNeeded = .default,
-        _ fulfil: (NextConnection) -> Void
+        determineIfMoreInfoAboutNodeIsNeeded: DetermineIfMoreInfoAboutNodeIsNeeded = .default,
+        _ fulfil: (Given) -> Void
     ) {
-        let nextConnection = NextConnection(
+        let dependency = Given(
             radixPeerSelector: radixPeerSelector,
             determineIfPeerIsSuitable: determineIfPeerIsSuitable,
-            determineIfMoreInfoIsNeeded: determineIfMoreInfoIsNeeded
+            determineIfMoreInfoAboutNodeIsNeeded: determineIfMoreInfoAboutNodeIsNeeded
         )
             
-        fulfil(nextConnection)
+        fulfil(dependency)
     }
     
-    func when_next_connection_is_called(
+    func when_function_is_called(
         networkState: RadixNetworkState = .empty,
         shards: Shards = .irrelevant,
-        given nextConnection: NextConnection,
-        _ fulfil: (NextConnectionTests, [NodeAction]) -> Void
+        given dependency: Given,
+        _ fulfil: (FindANodeEpicGivenWhenThenTests, [NodeAction]) -> Void
     ) {
-        fulfil(self, nextConnection.nextConnection(shards: shards, networkState: networkState))
+        
+        fulfil(
+            self,
+            dependency.findAndConnectToSuitablePeer(
+                networkState: networkState,
+                findANodeRequestAction: FindNodeRequestGivenShards(shards: shards)
+            )
+        )
     }
     
-    func when_next_connection_is_called(
+    func when_function_is_called(
         networkState: RadixNetworkState = .empty,
         shards: Shards = .irrelevant,
-        given nextConnection: NextConnection,
+        given dependency: Given,
         peer: Node,
-        _ fulfil: (NextConnectionTests, [NodeAction], Node) -> Void
-    ) {
-        fulfil(self, nextConnection.nextConnection(shards: shards, networkState: networkState), peer)
-    }
-    
-    func when_next_connection_is_called_many_peers(
-        networkState: RadixNetworkState = .empty,
-        shards: Shards = .irrelevant,
-        given nextConnection: NextConnection,
-        _ fulfil: (NextConnectionTests, [NodeAction], [Node]) -> Void
+        _ fulfil: (FindANodeEpicGivenWhenThenTests, [NodeAction], Node) -> Void
     ) {
         fulfil(
             self,
-            nextConnection.nextConnection(shards: shards, networkState: networkState),
+            dependency.findAndConnectToSuitablePeer(
+                networkState: networkState,
+                findANodeRequestAction: FindNodeRequestGivenShards(shards: shards)
+            ),
+            peer
+        )
+    }
+
+    func when_function_is_called_many_peers(
+        networkState: RadixNetworkState = .empty,
+        shards: Shards = .irrelevant,
+        given dependency: Given,
+        _ fulfil: (FindANodeEpicGivenWhenThenTests, [NodeAction], [Node]) -> Void
+    ) {
+        fulfil(
+            self,
+            dependency.findAndConnectToSuitablePeer(
+                networkState: networkState,
+                findANodeRequestAction: FindNodeRequestGivenShards(shards: shards)
+            ),
             networkState.nodes.map { $0.key }
         )
     }
     
-}
-
-extension RadixNetworkState {
-    static var empty: Self { .init() }
-}
-
-extension Shards {
-    static var irrelevant: Self { .init(single: .irrelevant) }
-}
-
-var nextNode: UInt8 = 1
-func makeNode() -> Node {
-    defer { nextNode += 1 }
-    return try! Node(domain: "1.1.1.\(nextNode)", port: 1, isUsingSSL: false)
-}
-
-extension NextConnection.DetermineIfMoreInfoIsNeeded {
-    static var neverAskForMoreInfo: Self {
-        return Self { _ in false }
-    }
-    
-}
-
-public extension RadixPeerSelector {
-    
-    static var last: RadixPeerSelector {
-        .init { $0.last }
-    }
 }

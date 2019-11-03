@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,11 +24,27 @@
 
 import Foundation
 
-public struct ConnectWebSocketAction: NodeAction, Equatable {
-    public let node: Node
-//    public let requestedConnectionAt: Date
-    init(node: Node) {
-        self.node = node
-//        self.requestedConnectionAt = requestedConnectionAt
+extension DispatchTimeInterval {
+    var asSeconds: TimeInterval? {
+        switch self {
+        case .seconds(let secondsAsInt):
+            return TimeInterval(secondsAsInt)
+        case .milliseconds(let milliSecondsAsInt):
+            return TimeInterval(milliSecondsAsInt) / 1_000
+        case .microseconds(let microSecondsAsInt):
+            return TimeInterval(microSecondsAsInt) / 1_000_000
+        case .nanoseconds(let nanoSecondsAsInt):
+            return TimeInterval(nanoSecondsAsInt) / 1_000_000_000
+        case .never: return nil
+        @unknown default:
+            incorrectImplementation("Have not yet handled new enum case: \(self)")
+        }
+    }
+}
+
+private extension TimeInterval {
+    var asDispatchQueueSchedulerStrideSeconds: DispatchQueue.SchedulerTimeType.Stride {
+        let seconds = Int(self)
+        return DispatchQueue.SchedulerTimeType.Stride(.seconds(seconds))
     }
 }

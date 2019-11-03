@@ -37,6 +37,10 @@ public final class DefaultRadixNetwork: RadixNetwork {
     }
 }
 
+//public struct BlacklistNodeAction: NodeAction {
+//    init(node: Node, reason: RadixNodeState.Blacklisted.)
+//}
+
 public extension DefaultRadixNetwork {
     
     func reduce(state: RadixNetworkState, action nodeAction: NodeAction) -> RadixNetworkState {

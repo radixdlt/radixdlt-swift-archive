@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,11 +24,27 @@
 
 import Foundation
 
-public struct ConnectWebSocketAction: NodeAction, Equatable {
-    public let node: Node
-//    public let requestedConnectionAt: Date
-    init(node: Node) {
-        self.node = node
-//        self.requestedConnectionAt = requestedConnectionAt
+final class DetermineIfMoreInfoAboutNodeIsNeeded {
+    typealias Filter = (RadixNodeState) -> Bool
+    private let _filter: Filter
+    init(filter: @escaping Filter) {
+        self._filter = filter
     }
+}
+
+extension DetermineIfMoreInfoAboutNodeIsNeeded {
+    
+    func moreInfoIsNeeded(for nodes: [RadixNodeState]) -> [RadixNodeState] {
+        return nodes.filter(_filter)
+    }
+    
+}
+extension DetermineIfMoreInfoAboutNodeIsNeeded {
+    static var ifShardSpaceOrUniverseConfigIsUnknown: DetermineIfMoreInfoAboutNodeIsNeeded {
+        return Self {
+            $0.shardSpace == nil || $0.universeConfig == nil
+        }
+    }
+    
+    static let `default`: DetermineIfMoreInfoAboutNodeIsNeeded = .ifShardSpaceOrUniverseConfigIsUnknown
 }

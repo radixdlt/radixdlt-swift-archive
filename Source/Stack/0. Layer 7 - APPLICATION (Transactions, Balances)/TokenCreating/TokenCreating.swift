@@ -38,7 +38,6 @@ public protocol TokenCreating {
 
 public extension TokenCreating {
     
-    // swiftlint:disable:next function_parameter_count
     func createToken(
         creator: AddressConvertible,
         name: Name,

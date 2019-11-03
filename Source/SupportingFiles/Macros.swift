@@ -24,6 +24,8 @@
 
 import Foundation
 
+internal let void: Void = ()
+
 import SwiftyBeaver
 internal let log: SwiftyBeaver.Type = {
     let log = SwiftyBeaver.self

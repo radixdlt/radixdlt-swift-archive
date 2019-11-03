@@ -84,6 +84,10 @@ public extension RadixNetworkState {
         nodesWithWebsocketStatus(.disconnected)
     }
     
+    var connectingNodes: [RadixNodeState] {
+        nodesWithWebsocketStatus(.connecting)
+    }
+    
     func nodesWithWebsocketStatus(
         _ webSocketStatus: WebSocketStatus,
         where filter: (RadixNodeState) -> Bool = { _ in true }
@@ -109,3 +113,7 @@ public extension RadixNetworkState {
     }
 }
 
+// MARK: Preset
+public extension RadixNetworkState {
+    static var empty: Self { .init() }
+}
