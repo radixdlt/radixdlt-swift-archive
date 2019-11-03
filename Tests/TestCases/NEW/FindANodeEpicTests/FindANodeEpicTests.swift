@@ -97,7 +97,9 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
             actions: actionsSubject.eraseToAnyPublisher(),
             // we start with a default output (value) of the network state publisher inside implementation, so even if we use `Empty()` publisher here (not outputting any value), we expect the epic to emit a value.
             networkState: Empty().eraseToAnyPublisher()
-            ).first() // Only care about first
+            )
+            .receive(on: RunLoop.main)
+            .first() // Only care about first
             .sink(
                 receiveCompletion: { _ in expectation.fulfill() },
                 receiveValue: { returnValues.append($0) }
@@ -184,7 +186,9 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         let cancellable = findANodeEpic.epic(
             actions: actionsSubject.eraseToAnyPublisher(),
             networkState: networkStateSubject.eraseToAnyPublisher()
-            ).first() // only care about the first
+            )
+            .receive(on: RunLoop.main)
+            .first() // only care about the first
             .sink(
                 receiveCompletion: { _ in expectation.fulfill() },
                 receiveValue: { returnValues.append($0) }
@@ -201,15 +205,12 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         XCTAssertNotNil(cancellable)
     }
     
-    
     func test_that_we_wanna_disconnect_from_a_slow_node_and_connect_to_another_one() {
 
         let findMeSomeNodeRequest = FindMeSomeNodeRequest(shards: .init(single: 1))
 
         let slowNode = node1
         let fastNode = node2
-        print("slow node: \(slowNode)")
-        print("🚀 fast node: \(fastNode)")
         
         let waitForConnectionDurationInSeconds: TimeInterval = 0.1
         
@@ -259,7 +260,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
             .prefix(4)
         .sink(
             receiveCompletion: { _ in expectation.fulfill() },
-            receiveValue: { print("✅ outputted: \($0)"); returnValues.append($0) }
+            receiveValue: { returnValues.append($0) }
         )
         
         networkStateSubject.send(networkState)
@@ -288,6 +289,92 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         
         XCTAssertNotNil(cancellable)
     }
+    
+    func test_that_when_first_node_fails__then_second_node_should_connect() {
+        
+        let findMeSomeNodeRequest = FindMeSomeNodeRequest(shards: .init(single: 1))
+        
+        let failingNode = node1
+        let goodNode = node2
+        
+        let waitForConnectionDurationInSeconds: TimeInterval = 0.1
+        
+        let findANodeEpic = FindANodeEpic(
+            determineIfPeerIsSuitable: .allPeersAreSuitable,
+            radixPeerSelector: .prefer(order: [failingNode, goodNode]),
+            determineIfMoreInfoAboutNodeIsNeeded: .neverAskForMoreInfo,
+            waitForConnectionDurationInSeconds: waitForConnectionDurationInSeconds
+        )
+        
+        let networkState: RadixNetworkState = [
+            RadixNodeState(node: failingNode, webSocketStatus: .disconnected),
+            RadixNodeState(node: goodNode, webSocketStatus: .disconnected)
+        ]
+        
+        var returnValues = [NodeAction]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        let actionsSubject = PassthroughSubject<NodeAction, Never>()
+        let networkStateSubject = PassthroughSubject<RadixNetworkState, Never>()
+        
+        let cancellable = findANodeEpic.epic(
+            actions: actionsSubject.eraseToAnyPublisher(),
+            networkState: networkStateSubject.eraseToAnyPublisher()
+        )
+            .receive(on: RunLoop.main)
+            .handleEvents(
+                receiveOutput: { outputtedNodeAction in
+                    guard outputtedNodeAction is ConnectWebSocketAction else { return }
+                    if outputtedNodeAction.node == failingNode {
+                        networkStateSubject.send(
+                            [
+                                RadixNodeState(node: failingNode, webSocketStatus: .failed),
+                                RadixNodeState(node: goodNode, webSocketStatus: .disconnected)
+                            ]
+                        )
+                    } else {
+                        networkStateSubject.send(
+                            [
+                                RadixNodeState(node: failingNode, webSocketStatus: .failed),
+                                RadixNodeState(node: goodNode, webSocketStatus: .connected)
+                            ]
+                        )
+                    }
+            }
+        )
+            .prefix(4)
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { returnValues.append($0) }
+        )
+        
+        networkStateSubject.send(networkState)
+        actionsSubject.send(findMeSomeNodeRequest)
+        
+        
+        wait(for: [expectation], timeout: 5*waitForConnectionDurationInSeconds)
+        
+        XCTAssertEqual(returnValues.count, 4, "Expected 4 actions, but got: `\(returnValues.count)`, specifically: `\(returnValues)`")
+        
+        let action0 = returnValues[0]
+        XCTAssertType(of: action0, is: ConnectWebSocketAction.self)
+        XCTAssertEqual(action0.node, failingNode)
+        
+        let action1 = returnValues[1]
+        XCTAssertType(of: action1, is: ConnectWebSocketAction.self)
+        XCTAssertEqual(action1.node, goodNode)
+        
+        let action2 = returnValues[2]
+        XCTAssertType(of: action2, is: FindANodeResultAction.self)
+        XCTAssertEqual(action2.node, goodNode)
+        
+        let action3 = returnValues[3]
+        XCTAssertType(of: action3, is: CloseWebSocketAction.self)
+        XCTAssertEqual(action3.node, failingNode)
+        
+        XCTAssertNotNil(cancellable)
+    }
+    
 }
 
 // MARK: Helpers
