@@ -98,7 +98,7 @@ public extension FindANodeEpic {
         return actionsPublisher.ofType(FindANodeRequestAction.self)
             .combineLatest(
                 networkStatePublisher.prepend(RadixNetworkState.empty)
-            ) { (action: $0, networkState: $1) }
+            )
             .flatMap { [unowned isPeerSuitable, peerSelector] tuple -> AnyPublisher<NodeAction, Never> in
                  
                 let (findANodeRequestAction, networkState) = tuple
@@ -123,7 +123,6 @@ public extension FindANodeEpic {
                     .first()^
                     .map { peerSelector.selectPeer($0) }^
                     .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) as NodeAction }^
-                    .handleEvents(receiveOutput: { print("🎉 selectedNode output: \($0)") })^
                 
                 let findConnectionActionsStream: AnyPublisher<NodeAction, Never> = connectedNodes
                     .filter { $0.isEmpty }^
@@ -141,23 +140,18 @@ public extension FindANodeEpic {
                             $0.sameTypeOfActionAndSameNodeAs(other: $1)
                         })
                     )^
-                    .handleEvents(receiveOutput: { print("7️⃣ output: \($0)") })^
                     .prefix(untilOutputFrom: selectedNode)^
-                    .handleEvents(receiveOutput: { print("8️⃣ output: \($0)") })^
+                    .handleEvents(receiveOutput: { _ in /* FOR SOME STRANGE REASON THIS `handleEvents` makes code work */ })^
                 
                 let cleanupConnections: AnyPublisher<NodeAction, Never> = findConnectionActionsStream
                     .ofType(ConnectWebSocketAction.self)
-                    .handleEvents(receiveOutput: { print("9️⃣ output: \($0)") })^
                     .flatMap { connectWebSocketAction -> AnyPublisher<NodeAction, Never> in
                         let node = connectWebSocketAction.node
                         return selectedNode
                             .map { $0.node }^
-                             .handleEvents(receiveOutput: { print("❓ selected: \($0), connected to: \(node)") })^
                             .filter { selectedNode in selectedNode != node }^
-                            .handleEvents(receiveOutput: { print("‼️ found inequality: \($0)") })^
                             .map { _ in CloseWebSocketAction(node: node) }^
                     }^
-                .handleEvents(receiveOutput: { print("💇🏻‍♂️ close ws: \($0)") })^
                 
                 return findConnectionActionsStream
                     .append(selectedNode)^
