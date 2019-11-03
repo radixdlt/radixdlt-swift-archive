@@ -217,7 +217,6 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
             determineIfPeerIsSuitable: .allPeersAreSuitable,
             radixPeerSelector: .prefer(order: [slowNode, fastNode]),
             determineIfMoreInfoAboutNodeIsNeeded: .neverAskForMoreInfo,
-            determineIfNodeIsTooSlowToConnect: .tooSlowIfEqual(to: slowNode),
             waitForConnectionDurationInSeconds: waitForConnectionDurationInSeconds
         )
 
@@ -239,9 +238,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
             .receive(on: RunLoop.main)
         .handleEvents(
             receiveOutput: { outputtedNodeAction in
-                print("🤷‍♂️ handling output: \(outputtedNodeAction)")
                 guard outputtedNodeAction is ConnectWebSocketAction else { return }
-                print("🤷‍♂️🔗 handling ConnectWebSocketAction: \(outputtedNodeAction)")
                 if outputtedNodeAction.node == slowNode {
                     networkStateSubject.send(
                         [
@@ -261,7 +258,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         )
             .prefix(4)
         .sink(
-            receiveCompletion: { print("🥅 EXPECTATION FULFIL, completion: \($0)"); expectation.fulfill() },
+            receiveCompletion: { _ in expectation.fulfill() },
             receiveValue: { print("✅ outputted: \($0)"); returnValues.append($0) }
         )
         
@@ -311,15 +308,6 @@ public extension DetermineIfPeerIsSuitable {
     }
 }
 
-public extension DetermineIfNodeIsTooSlowToConnect {
-//    static var alwaysConsideredTooSlow: DetermineIfNodeIsTooSlowToConnect {
-//        return Self { _ in true }
-//    }
-    
-    static func tooSlowIfEqual(to tooSlowNode: Node) -> DetermineIfNodeIsTooSlowToConnect {
-        return Self { connectionAction, _ in connectionAction.node == tooSlowNode }
-    }
-}
 
 public extension RadixPeerSelector {
     

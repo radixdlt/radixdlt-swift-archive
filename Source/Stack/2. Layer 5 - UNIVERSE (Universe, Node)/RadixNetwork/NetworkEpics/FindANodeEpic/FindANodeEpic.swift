@@ -44,34 +44,26 @@ import Entwine
 /// `CloseWebSocketAction`
 ///
 public final class FindANodeEpic: RadixNetworkEpic {
-//    private let universeConfig: UniverseConfig
     private let peerSelector: RadixPeerSelector
     private let isPeerSuitable: DetermineIfPeerIsSuitable
     private let isMoreInfoAboutNodeNeeded: DetermineIfMoreInfoAboutNodeIsNeeded
-    private let isNodeTooSlowToConnect: DetermineIfNodeIsTooSlowToConnect
     
     private let waitForConnectionDurationInSeconds: TimeInterval
     
-    // Internal due to testing
-    internal let maxSimultaneousConnectionRequests: Int
-    
-    private let backgroundQueue = DispatchQueue(label: "FindANodeEpic")
+    private let maxSimultaneousConnectionRequests: Int
     
     init(
-//        universeConfig: UniverseConfig,
-        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable, // = .default,
-        radixPeerSelector: RadixPeerSelector = .random,
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable,
+        radixPeerSelector: RadixPeerSelector = .default,
         determineIfMoreInfoAboutNodeIsNeeded: DetermineIfMoreInfoAboutNodeIsNeeded = .default,
-        determineIfNodeIsTooSlowToConnect: DetermineIfNodeIsTooSlowToConnect = .default,
+        
         waitForConnectionDurationInSeconds: TimeInterval = FindANodeEpic.defaultWaitForConnectionDurationInSeconds,
         maxSimultaneousConnectionRequests: Int = FindANodeEpic.defaultMaxSimultaneousConnectionRequests
     ) {
-//        self.universeConfig = universeConfig
         
         self.peerSelector = radixPeerSelector
         self.isPeerSuitable = determineIfPeerIsSuitable
         self.isMoreInfoAboutNodeNeeded = determineIfMoreInfoAboutNodeIsNeeded
-        self.isNodeTooSlowToConnect = determineIfNodeIsTooSlowToConnect
         
         self.waitForConnectionDurationInSeconds = waitForConnectionDurationInSeconds
         self.maxSimultaneousConnectionRequests = maxSimultaneousConnectionRequests
@@ -117,20 +109,19 @@ public extension FindANodeEpic {
                     }^
                     .prepend(getConnectedNodes(networkState: networkState))^
                    
-                
+                // Stream to find node
                 let selectedNode: AnyPublisher<NodeAction, Never> = connectedNodes
                     .compactMap { nodeStates in try? NonEmptySet(array: nodeStates.map { $0.node }) }^
                     .first()^
                     .map { peerSelector.selectPeer($0) }^
                     .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) as NodeAction }^
                 
+                // Stream of new actions to find a new node
                 let findConnectionActionsStream: AnyPublisher<NodeAction, Never> = connectedNodes
                     .filter { $0.isEmpty }^
                     .first()^
-                    .ignoreOutput()^
-                    .flatMap { _ in Empty<NodeAction, Never>.init() }^
-                    .append(
-                        Timer.publish(every: self.waitForConnectionDurationInSeconds, on: .current, in: .common)
+                    .flatMap { _ in
+                        Timer.publish(every: self.waitForConnectionDurationInSeconds, on: .current, in: .default)
                             .autoconnect()^
                             .map { _ -> [NodeAction] in
                                 self.findAndConnectToSuitablePeer(shards: shardsOfRequest, networkState: networkState)
@@ -139,10 +130,20 @@ public extension FindANodeEpic {
                         .removeDuplicates(by: {
                             $0.sameTypeOfActionAndSameNodeAs(other: $1)
                         })
-                    )^
+                    }^
                     .prefix(untilOutputFrom: selectedNode)^
-                    .handleEvents(receiveOutput: { _ in /* FOR SOME STRANGE REASON THIS `handleEvents` makes code work */ })^
+                    
+                    // 🐉 HERE BE DRAGONS 🐉
+                    // For some strange reason this `flatMap { Just($0) }`
+                    // ( or `handleEvents(receiveOutput:{_ in /*do nothing*/})` )
+                    //makes the code work
+                    // without it we get nasty crashes in unit tests. Hopefully in Xcode 11.2+
+                    // get get better crash reports telling us why it crashes. I've tried
+                    // `makeConnectable()` (with or without `.autoconnect()`) instead,
+                    // but that didn't fix it.
+                    .flatMap { Just($0) }^ // or `.handleEvents(receiveOutput: { _ in })`
                 
+                // Cleanup and close connections which never worked out
                 let cleanupConnections: AnyPublisher<NodeAction, Never> = findConnectionActionsStream
                     .ofType(ConnectWebSocketAction.self)
                     .flatMap { connectWebSocketAction -> AnyPublisher<NodeAction, Never> in
@@ -159,22 +160,6 @@ public extension FindANodeEpic {
         }^
     }
 }
-
-private extension NodeAction {
-    func sameTypeOfActionAndSameNodeAs(other: NodeAction) -> Bool {
-        let selfType = Mirror(reflecting: self).subjectType
-        let otherType = Mirror(reflecting: other).subjectType
-        guard selfType == otherType else {
-            return false
-        }
-        let sameNode = self.node == other.node
-        if sameNode {
-            print("Same: \(self) and other: \(other)")
-        }
-        return sameNode
-    }
-}
-
 
 // MARK: Internal
 internal extension FindANodeEpic {
@@ -220,49 +205,23 @@ internal extension FindANodeEpic {
     }
 }
 
-
-//internal extension FindANodeEpic {
-//    func nextConnection(shards: Shards, networkState: RadixNetworkState) -> [NodeAction] {
-//
-//        func discoverMore() -> [NodeAction] { [DiscoverMoreNodesAction()] }
-//
-//        func nodesWithWebSocketStatus(_ webSocketStatus: WebSocketStatus) -> [RadixNodeState] {
-//            networkState.nodesWithWebsocketStatus(webSocketStatus)
-//        }
-//
-//        guard nodesWithWebSocketStatus(.connecting).count < maxSimultaneousConnectionRequests else {
-//            // Max pending connections => await, do nothing for now
-//            return []
-//        }
-//
-//        // We only care about nodes with ws status `.disconnected`, because these are the nodes we know of, that we potentially might wanna connect to (if suitable), otherwise we need to find more candidates
-//        let candidateNodes = nodesWithWebSocketStatus(.disconnected)
-//
-//        if candidateNodes.isEmpty {
-//            return discoverMore()
-//        }
-//
-//        let correctShardNodes = candidateNodes.filter {
-//            self.isPeerSuitable.isPeer(withState: $0, shards: shards)
-//        }
-//
-//        if let correctShardNodesSet = try? NonEmptySet(array: correctShardNodes.map { $0.node }) {
-//            let selectedNode = self.peerSelector.selectPeer(correctShardNodesSet)
-//            return [ConnectWebSocketAction(node: selectedNode)]
-//        } else {
-//
-//            let moreInfoIsNeededForThese = isMoreInfoAboutNodeNeeded.moreInfoIsNeeded(for: candidateNodes)
-//            if moreInfoIsNeededForThese.isEmpty {
-//                return discoverMore()
-//            }
-//
-//            return moreInfoIsNeededForThese.map { $0.node }
-//                .flatMap { node -> [NodeAction] in
-//                    [
-//                        GetNodeInfoActionRequest(node: node),
-//                        GetUniverseConfigActionRequest(node: node)
-//                    ]
-//            }
-//        }
-//    }
-//}
+private extension NodeAction {
+    func sameTypeOfActionAndSameNodeAs(other: NodeAction) -> Bool {
+        let selfType = Mirror(reflecting: self).subjectType
+        let otherType = Mirror(reflecting: other).subjectType
+        guard selfType == otherType else {
+            return false
+        }
+        
+        // Do NOT perform node comparison if either or is `DiscoverMoreNodesAction` (since that crashes the app)
+        if let _ = self as? DiscoverMoreNodesAction, let _ = other as? DiscoverMoreNodesAction {
+            return true
+        } else if let _ = self as? DiscoverMoreNodesAction {
+            return false
+        } else if let _ = other as? DiscoverMoreNodesAction {
+            return false
+        }
+      
+        return self.node == other.node
+    }
+}

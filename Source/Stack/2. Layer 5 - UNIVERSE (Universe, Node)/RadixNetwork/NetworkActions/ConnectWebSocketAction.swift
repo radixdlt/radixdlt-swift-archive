@@ -26,9 +26,8 @@ import Foundation
 
 public struct ConnectWebSocketAction: NodeAction, Equatable {
     public let node: Node
-//    public let requestedConnectionAt: Date
+    
     init(node: Node) {
         self.node = node
-//        self.requestedConnectionAt = requestedConnectionAt
     }
 }

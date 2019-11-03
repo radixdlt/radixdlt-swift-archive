@@ -82,27 +82,3 @@ public extension Publisher where Output: Sequence, Failure == Never {
             .eraseToAnyPublisher()
     }
 }
-
-public struct MeasuredOutput<Output, Time> where Time: SchedulerTimeIntervalConvertible & Comparable & SignedNumeric {
-    public let measuredTime: Time
-    public let output: Output
-}
-
-public extension MeasuredOutput where Time == DispatchQueue.SchedulerTimeType.Stride {
-    var timeInSeconds: TimeInterval {
-        return measuredTime.timeInterval.asSeconds!
-    }
-}
-
-public extension Publisher where Failure == Never {
-    /// Measures and emits the time interval and the output, between events received from an upstream publisher. This is using `measureInterval` but delivers the time measurement together with the outputted element.
-    func measuredOutput<S>(using scheduler: S, options: S.SchedulerOptions? = nil) -> AnyPublisher<MeasuredOutput<Output, S.SchedulerTimeType.Stride>, Never> where S: Scheduler {
-        
-        self.combineLatest(
-            self.measureInterval(using: scheduler, options: options)
-        ) { (output, timeMeasurement) in
-                MeasuredOutput(measuredTime: timeMeasurement, output: output)
-        }.eraseToAnyPublisher()
-
-    }
-}

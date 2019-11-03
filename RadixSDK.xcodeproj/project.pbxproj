@@ -93,7 +93,6 @@
 		E60E0566236B005A000A10D6 /* Entwine in Frameworks */ = {isa = PBXBuildFile; productRef = E60E0565236B005A000A10D6 /* Entwine */; };
 		E60E0568236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60E0567236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift */; };
 		E612720A22F4298500DCF19C /* PositiveSupply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E612720922F4298500DCF19C /* PositiveSupply.swift */; };
-		E6127A65236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6127A64236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift */; };
 		E6127A67236DB42100318181 /* DispatchTimeInterval+SchedulerStride.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6127A66236DB42100318181 /* DispatchTimeInterval+SchedulerStride.swift */; };
 		E615C51322B790F100604E90 /* ParticleReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51222B790F100604E90 /* ParticleReducer.swift */; };
 		E615C51522B791D800604E90 /* TokenDefinitionsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51422B791D800604E90 /* TokenDefinitionsReducer.swift */; };
@@ -673,7 +672,6 @@
 		E606FC5022CB5E4E00A7E52E /* ConnectWebSocketEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectWebSocketEpic.swift; sourceTree = "<group>"; };
 		E60E0567236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineIfMoreInfoAboutNodeIsNeeded.swift; sourceTree = "<group>"; };
 		E612720922F4298500DCF19C /* PositiveSupply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositiveSupply.swift; sourceTree = "<group>"; };
-		E6127A64236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineIfNodeIsTooSlowToConnect.swift; sourceTree = "<group>"; };
 		E6127A66236DB42100318181 /* DispatchTimeInterval+SchedulerStride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchTimeInterval+SchedulerStride.swift"; sourceTree = "<group>"; };
 		E615C51222B790F100604E90 /* ParticleReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleReducer.swift; sourceTree = "<group>"; };
 		E615C51422B791D800604E90 /* TokenDefinitionsReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDefinitionsReducer.swift; sourceTree = "<group>"; };
@@ -1821,7 +1819,6 @@
 				E63E4FB923671BAC00B90CF7 /* EraseToAnyPublisherOperator.swift */,
 				E63E4FB523671B5000B90CF7 /* RadixPeerSelector.swift */,
 				E606FC1722C9FA0E00A7E52E /* FindANodeEpic.swift */,
-				E6127A64236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift */,
 				E6127A66236DB42100318181 /* DispatchTimeInterval+SchedulerStride.swift */,
 				E60E0567236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift */,
 				E63E4FBB23671BE200B90CF7 /* EXPERIMENTAL_Combine+Pipe.swift */,
@@ -4109,7 +4106,6 @@
 				E6A508A3224E713F00128123 /* TransferrableTokensParticle.swift in Sources */,
 				E606F13F23016AE1004D4D3D /* UniquelyIdentifiedActionError.swift in Sources */,
 				E6E2798D2271CD1C0067D46E /* DataConvertible+StringConversion.swift in Sources */,
-				E6127A65236DB40100318181 /* DetermineIfNodeIsTooSlowToConnect.swift in Sources */,
 				E63B207222FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift in Sources */,
 				E6474AF22267931A009C4FDC /* ErrorMappedFromRPCError.swift in Sources */,
 				E606FC3822CB468300A7E52E /* GetUniverseConfigActionResult.swift in Sources */,
