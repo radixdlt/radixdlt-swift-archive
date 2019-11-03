@@ -95,12 +95,9 @@ public extension FindANodeEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-//        let universeConfig = self.universeConfig
-        
         return actionsPublisher.ofType(FindANodeRequestAction.self)
             .combineLatest(
                 networkStatePublisher.prepend(RadixNetworkState.empty)
-                    //.drop(untilOutputFrom: actionsPublisher.ofType(FindANodeRequestAction.self))
             ) { (action: $0, networkState: $1) }
             .flatMap { [unowned isPeerSuitable, peerSelector] tuple -> AnyPublisher<NodeAction, Never> in
                  
@@ -118,48 +115,34 @@ public extension FindANodeEpic {
                 let connectedNodes: AnyPublisher<[RadixNodeState], Never> = networkStatePublisher.map {
                     getConnectedNodes(networkState: $0)
                     }^
-                     // .replay(1).autoConnect(2);
                     .prepend(getConnectedNodes(networkState: networkState))^
-                    .handleEvents(receiveOutput: { print("🔗 connectedNode output: \($0)") })^
-                    
                    
-//                    .makeConnectable().autoconnect()^
-//                    .debug("connectedNodes")
                 
                 let selectedNode: AnyPublisher<NodeAction, Never> = connectedNodes
                     .compactMap { nodeStates in try? NonEmptySet(array: nodeStates.map { $0.node }) }^
                     .first()^
                     .map { peerSelector.selectPeer($0) }^
                     .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) as NodeAction }^
-//                    .share()^ // Equivalent to RxJava: `cache()`
                     .handleEvents(receiveOutput: { print("🎉 selectedNode output: \($0)") })^
-//                    .debug("selectedNode")
                 
                 let findConnectionActionsStream: AnyPublisher<NodeAction, Never> = connectedNodes
-//                    .handleEvents(receiveOutput: { print("1️⃣ output: \($0)") })^
                     .filter { $0.isEmpty }^
-//                    .handleEvents(receiveOutput: { print("2️⃣ output: \($0)") })^
                     .first()^
-//                    .handleEvents(receiveOutput: { print("3️⃣ output: \($0)") })^
                     .ignoreOutput()^
-//                    .handleEvents(receiveCompletion: { print("4️⃣ completion: \($0)") })^
                     .flatMap { _ in Empty<NodeAction, Never>.init() }^
                     .append(
                         Timer.publish(every: self.waitForConnectionDurationInSeconds, on: .current, in: .common)
                             .autoconnect()^
-//                            .handleEvents(receiveOutput: { print("5️⃣ output: \($0)") })^
                             .map { _ -> [NodeAction] in
                                 self.findAndConnectToSuitablePeer(shards: shardsOfRequest, networkState: networkState)
                             }
-//                            .handleEvents(receiveOutput: { print("6️⃣ output: \($0)") })^
                             .flattenSequence()
                         .removeDuplicates(by: {
                             $0.sameTypeOfActionAndSameNodeAs(other: $1)
                         })
                     )^
                     .handleEvents(receiveOutput: { print("7️⃣ output: \($0)") })^
-                    .prefix(untilOutputFrom: selectedNode)^  // .replay(1).autoConnect(2);
-//                    .makeConnectable().autoconnect()^
+                    .prefix(untilOutputFrom: selectedNode)^
                     .handleEvents(receiveOutput: { print("8️⃣ output: \($0)") })^
                 
                 let cleanupConnections: AnyPublisher<NodeAction, Never> = findConnectionActionsStream
@@ -175,7 +158,6 @@ public extension FindANodeEpic {
                             .map { _ in CloseWebSocketAction(node: node) }^
                     }^
                 .handleEvents(receiveOutput: { print("💇🏻‍♂️ close ws: \($0)") })^
-//                    .debug("cleanupConnections")
                 
                 return findConnectionActionsStream
                     .append(selectedNode)^

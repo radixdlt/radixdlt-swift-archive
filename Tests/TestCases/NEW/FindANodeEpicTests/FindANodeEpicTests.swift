@@ -37,9 +37,12 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
     func test_that_epic_returns_an_already_connected_and_suitable_node() {
         let findMeSomeNodeRequest = FindMeSomeNodeRequest(shards: .init(single: 1))
         
+        let waitForConnectionDurationInSeconds: TimeInterval = 0.1
+        
         let findANodeEpic = FindANodeEpic(
             determineIfPeerIsSuitable: .allPeersAreSuitable,
-            radixPeerSelector: .first
+            radixPeerSelector: .first,
+            waitForConnectionDurationInSeconds: waitForConnectionDurationInSeconds
         )
         
         let networkState: RadixNetworkState = [RadixNodeState(node: node1, webSocketStatus: .connected)]
@@ -64,7 +67,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         networkStateSubject.send(networkState)
         actionsSubject.send(findMeSomeNodeRequest)
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: 2 * waitForConnectionDurationInSeconds)
         
         XCTAssertEqual(returnValues.count, 1)
         XCTAssertType(of: returnValues[0], is: FindANodeResultAction.self)
@@ -76,10 +79,12 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         
         let findMeSomeNodeRequest = FindMeSomeNodeRequest(shards: .init(single: 1))
         
+        let waitForConnectionDurationInSeconds: TimeInterval = 0.1
+        
         let findANodeEpic = FindANodeEpic(
             determineIfPeerIsSuitable: .allPeersAreSuitable,
             radixPeerSelector: .first,
-            waitForConnectionDurationInSeconds: 0.01
+            waitForConnectionDurationInSeconds: waitForConnectionDurationInSeconds
         )
         
         
@@ -100,7 +105,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         
         actionsSubject.send(findMeSomeNodeRequest)
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: 2 * waitForConnectionDurationInSeconds)
         
         XCTAssertEqual(returnValues.count, 1)
         XCTAssertType(of: returnValues[0], is: DiscoverMoreNodesAction.self)
