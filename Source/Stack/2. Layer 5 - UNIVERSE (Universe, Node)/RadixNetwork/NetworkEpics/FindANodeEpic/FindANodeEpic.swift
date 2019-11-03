@@ -153,6 +153,9 @@ public extension FindANodeEpic {
                             }
 //                            .handleEvents(receiveOutput: { print("6️⃣ output: \($0)") })^
                             .flattenSequence()
+                        .removeDuplicates(by: {
+                            $0.sameTypeOfActionAndSameNodeAs(other: $1)
+                        })
                     )^
                     .handleEvents(receiveOutput: { print("7️⃣ output: \($0)") })^
                     .prefix(untilOutputFrom: selectedNode)^  // .replay(1).autoConnect(2);
@@ -169,7 +172,7 @@ public extension FindANodeEpic {
                              .handleEvents(receiveOutput: { print("❓ selected: \($0), connected to: \(node)") })^
                             .filter { selectedNode in selectedNode != node }^
                             .handleEvents(receiveOutput: { print("‼️ found inequality: \($0)") })^
-                            .map { CloseWebSocketAction(node: $0) }^
+                            .map { _ in CloseWebSocketAction(node: node) }^
                     }^
                 .handleEvents(receiveOutput: { print("💇🏻‍♂️ close ws: \($0)") })^
 //                    .debug("cleanupConnections")
@@ -180,6 +183,22 @@ public extension FindANodeEpic {
         }^
     }
 }
+
+private extension NodeAction {
+    func sameTypeOfActionAndSameNodeAs(other: NodeAction) -> Bool {
+        let selfType = Mirror(reflecting: self).subjectType
+        let otherType = Mirror(reflecting: other).subjectType
+        guard selfType == otherType else {
+            return false
+        }
+        let sameNode = self.node == other.node
+        if sameNode {
+            print("Same: \(self) and other: \(other)")
+        }
+        return sameNode
+    }
+}
+
 
 // MARK: Internal
 internal extension FindANodeEpic {

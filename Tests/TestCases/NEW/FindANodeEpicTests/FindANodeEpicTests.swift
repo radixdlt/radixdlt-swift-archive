@@ -268,7 +268,6 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         
         XCTAssertEqual(returnValues.count, 4, "Expected 4 actions, but got: `\(returnValues.count)`, specifically: `\(returnValues)`")
         
-        
         let action0 = returnValues[0]
         XCTAssertType(of: action0, is: ConnectWebSocketAction.self)
         XCTAssertEqual(action0.node, slowNode)
@@ -278,15 +277,14 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         XCTAssertEqual(action1.node, fastNode)
         
         let action2 = returnValues[2]
-        XCTAssertType(of: action2, is: CloseWebSocketAction.self)
-        XCTAssertEqual(action2.node, slowNode)
+        XCTAssertType(of: action2, is: FindANodeResultAction.self)
+        XCTAssertEqual(action2.node, fastNode)
         
         let action3 = returnValues[3]
-        XCTAssertType(of: action3, is: FindANodeResultAction.self)
-        XCTAssertEqual(action3.node, fastNode)
+        XCTAssertType(of: action3, is: CloseWebSocketAction.self)
+        XCTAssertEqual(action3.node, slowNode)
         
         XCTAssertNotNil(cancellable)
-        print("♥️♥️♥️♥️♥️♥️UNBELIVABLE???")
     }
 }
 
