@@ -38,7 +38,7 @@ where
     // swiftlint:enable colon opening_brace
 
     // TODO: Precision should return `Single`?
-    public typealias MethodCall = (RPCClient, Request) -> AnyPublisher<RpcMethodResult, Never>
+    public typealias MethodCall = (RPCClient, Request) -> Single<RpcMethodResult, Never>
     
     public let webSockets: WebSocketsEpic.WebSockets
     private let methodCall: MethodCall
@@ -55,20 +55,20 @@ where
 public extension RadixJsonRpcMethodEpic {
     
     func epic(
-        actions: CombineObservable<NodeAction>,
-        networkState: CombineObservable<RadixNetworkState>
-    ) -> CombineObservable<NodeAction> {
+        actions: AnyPublisher<NodeAction, Never>,
+        networkState: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
         
-        combineMigrationInProgress()
-//        return actions
-//            .ofType(Request.self)
-//            .flatMapSingle { [unowned self] (rpcMethod: Request) -> AnyPublisher<Result, Never> in
-//                return self.waitForConnectionReturnWS(toNode: rpcMethod.node)
-//                    .map { DefaultRPCClient(channel: $0) }
-//                    .flatMap { rpcClient -> AnyPublisher<Result> in
-//                        return self.methodCall(rpcClient, rpcMethod)
-//                    }
-//            }.map { $0 }
+        return actions
+            .ofType(Request.self)
+            .flatMap { [unowned self] rpcMethod in
+                return self.openWebSocketAndAwaitConnection(toNode: rpcMethod.node)
+                    .map { DefaultRPCClient(channel: $0) }
+                    .flatMap { rpcClient in
+                        return self.methodCall(rpcClient, rpcMethod)
+                    }
+            }
+        .map { $0 as NodeAction }^
     }
 }
 
@@ -77,34 +77,34 @@ public extension RadixJsonRpcMethodEpic {
     
     static func createGetLivePeersEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
         
-//        return RadixJsonRpcMethodEpic<GetLivePeersActionRequest, GetLivePeersActionResult>(
-//            webSockets: webSockets
-//        ) { (rpcClient: RPCClient, action: GetLivePeersActionRequest) -> AnyPublisher<GetLivePeersActionResult, Never> in
-//
-//            rpcClient.getLivePeers().map { GetLivePeersActionResult(node: action.node, result: $0) }
-//        }
-        combineMigrationInProgress()
+        return RadixJsonRpcMethodEpic<GetLivePeersActionRequest, GetLivePeersActionResult>(
+            webSockets: webSockets
+        ) { rpcClient, action in
+            rpcClient.getLivePeers(
+            ).map { GetLivePeersActionResult(node: action.node, result: $0) }
+                .eraseToAnyPublisher()
+        }
     }
     
     static func createGetNodeInfoEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
-//        return RadixJsonRpcMethodEpic<GetNodeInfoActionRequest, GetNodeInfoActionResult>(
-//            webSockets: webSockets
-//        ) { (rpcClient: RPCClient, action: GetNodeInfoActionRequest) -> AnyPublisher<GetNodeInfoActionResult, Never> in
-//            rpcClient.getInfo().map { GetNodeInfoActionResult(node: action.node, result: $0) }.asSingle()
-//
-//        }
-        combineMigrationInProgress()
+        RadixJsonRpcMethodEpic<GetNodeInfoActionRequest, GetNodeInfoActionResult>(
+            webSockets: webSockets
+        ) { rpcClient, action in
+            rpcClient.getInfo()
+                .map { GetNodeInfoActionResult(node: action.node, result: $0) }
+                .eraseToAnyPublisher()
+        }
     }
     
     static func createUniverseConfigEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
         
-//        return RadixJsonRpcMethodEpic<GetUniverseConfigActionRequest, GetUniverseConfigActionResult>(
-//            webSockets: webSockets
-//        ) { (rpcClient: RPCClient, action: GetUniverseConfigActionRequest) -> AnyPublisher<GetUniverseConfigActionResult, Never> in
-//
-//            rpcClient.getUniverseConfig().map { GetUniverseConfigActionResult(node: action.node, result: $0) }.asSingle()
-//        }
-//
-        combineMigrationInProgress()
+        return RadixJsonRpcMethodEpic<GetUniverseConfigActionRequest, GetUniverseConfigActionResult>(
+            webSockets: webSockets
+        ) { rpcClient, action in
+            rpcClient.getUniverseConfig()
+                .map { GetUniverseConfigActionResult(node: action.node, result: $0) }
+                .eraseToAnyPublisher()
+        }
+
     }
 }

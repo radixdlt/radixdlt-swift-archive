@@ -47,6 +47,20 @@ public extension Publisher where Output == Never, Failure == Never {
     }
 }
 
+public extension Publisher where Output == Void, Failure == Never {
+    func sink(receiveFinished finishHandler: @escaping () -> Void) -> Cancellable {
+        return sink(
+            receiveCompletion: { completion in
+                switch completion {
+                case .finished: finishHandler()
+                case .failure: incorrectImplementation("Should never fail, `Failure` == `Never`")
+                }
+            },
+            receiveValue: { _ in /* Doing nothing with `Void` output */ }
+        )
+    }
+}
+
 public extension Publisher {
     func ofType<T>(_ : T.Type) -> AnyPublisher<T, Failure> {
         compactMap { $0 as? T }.eraseToAnyPublisher()
@@ -60,7 +74,10 @@ public extension Publisher where Output == Never, Failure == Never {
             _ = self.sink(receiveFinished: { promise(.success(void)) })
         }
     }
+    
 }
+
+public typealias Single<Output, Failure> = AnyPublisher<Output, Failure> where Failure: Swift.Error
 
 public extension Publisher where Output: OptionalType {
     func replaceNilWithEmpty() -> AnyPublisher<Output.Wrapped, Failure> {

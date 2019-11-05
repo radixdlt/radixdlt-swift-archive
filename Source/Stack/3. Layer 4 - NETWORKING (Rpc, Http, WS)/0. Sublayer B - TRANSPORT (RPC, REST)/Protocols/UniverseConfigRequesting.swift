@@ -26,6 +26,5 @@ import Foundation
 import Combine
 
 public protocol UniverseConfigRequesting {
-    // TODO: Precision should return `Single`?
-    func getUniverseConfig() -> AnyPublisher<UniverseConfig, Never>
+    func getUniverseConfig() -> Single<UniverseConfig, Never>
 }

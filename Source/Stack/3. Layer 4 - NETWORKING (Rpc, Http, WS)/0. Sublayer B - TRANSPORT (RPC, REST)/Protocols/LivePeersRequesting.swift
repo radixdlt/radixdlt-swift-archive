@@ -26,7 +26,5 @@ import Foundation
 import Combine
 
 public protocol LivePeersRequesting {
-    
-    // TODO: Precision should return `Single`?
-    func getLivePeers() -> AnyPublisher<[NodeInfo], Never>
+    func getLivePeers() -> Single<[NodeInfo], Never>
 }

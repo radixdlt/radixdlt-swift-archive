@@ -27,23 +27,19 @@ import Combine
 
 public protocol NodeNetworkInfoRequesting {
     
-    // TODO: Precision should return `Single`?
-    func getNetworkInfo() -> AnyPublisher<RadixSystem, Never>
+    func getNetworkInfo() -> Single<RadixSystem, Never>
 }
 
 public protocol NodeInfoRequesting {
     
-    // TODO: Precision should return `Single`?
-    func getInfo() -> AnyPublisher<[NodeInfo], Never>
+    func getInfo() -> Single<NodeInfo, Never>
 }
 
 public extension NodeInfoRequesting where Self: NodeNetworkInfoRequesting {
-    
-    // TODO: Precision should return `Single`?
-    func getInfo() -> AnyPublisher<[NodeInfo], Never> {
+    func getInfo() -> Single<NodeInfo, Never> {
         getNetworkInfo()
             .map { NodeInfo(system: $0, host: nil) }
-            .map { [$0] } // `NodeInfo -> [NodeInfo]`
             .eraseToAnyPublisher()
     }
+    
 }

@@ -99,7 +99,7 @@ public extension WebSocketToNode {
     }
     
     @discardableResult
-    func connectAndNotifyWhenConnected() -> Future<Void, Never> {
+    func connectAndNotifyWhenConnected() -> Single<Node, Never> {
         switch webSocketStatusSubject.value {
         case .disconnected, .failed:
             webSocketStatusSubject.send(.connecting)
@@ -107,10 +107,12 @@ public extension WebSocketToNode {
         case .closing, .connecting, .connected: break
         }
         
+        let node = self.node
         return webSocketStatus.filter { $0.isConnected }
             .first()
             .ignoreOutput()
-            .asFuture()
+            .flatMap { _ in Just(node) }
+            .eraseToAnyPublisher()
     }
 }
 

@@ -27,21 +27,17 @@ import Combine
 
 public protocol HTTPClient {
     
-    // TODO: Precision should return `Single`?
-    func request<D>(router: Router, decodeAs type: D.Type) -> AnyPublisher<D, Never> where D: Decodable
+    func request<D>(router: Router, decodeAs type: D.Type) -> Single<D, Never> where D: Decodable
     
-    // TODO: Precision should return `Single`?
-    func loadContent(of page: String) -> AnyPublisher<String, Never>
+    func loadContent(of page: String) -> Single<String, Never>
 }
 
 public extension HTTPClient {
-    // TODO: Precision should return `Single`?
-    func request<D>(router: Router) -> AnyPublisher<D, Never> where D: Decodable {
+    func request<D>(router: Router) -> Single<D, Never> where D: Decodable {
         return request(router: router, decodeAs: D.self)
     }
     
-    // TODO: Precision should return `Single`?
-    func request<D>(_ nodeRouter: NodeRouter) -> AnyPublisher<D, Never> where D: Decodable {
+    func request<D>(_ nodeRouter: NodeRouter) -> Single<D, Never> where D: Decodable {
         return request(router: nodeRouter, decodeAs: D.self)
     }
 }

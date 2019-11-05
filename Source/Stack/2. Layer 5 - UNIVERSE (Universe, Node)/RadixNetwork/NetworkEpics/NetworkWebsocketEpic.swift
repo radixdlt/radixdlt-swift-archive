@@ -37,22 +37,11 @@ public extension NetworkWebsocketEpic {
 }
 
 public extension NetworkWebsocketEpic {
-    func openWebSocketToNodeAndWait(toNode node: Node) -> Future<Void, Never> {
-        let webSocketToNode = webSockets.newDisconnectedWebsocket(to: node)
-        return webSocketToNode.connectAndNotifyWhenConnected()
-    }
     
-    // TODO: Precision should return `Single`?
-    func waitForConnectionReturnWS(toNode node: Node) -> AnyPublisher<WebSocketToNode, Never> {
-        
-//        let webSocketToNode = webSockets.webSocket(to: node, shouldConnect: true)
-//
-//        return webSocketToNode.waitForConnection()
-//            .andThen(
-//                AnyPublisher.just(webSocketToNode)
-//        )
-        
-        combineMigrationInProgress()
+    func openWebSocketAndAwaitConnection(toNode node: Node) -> Single<WebSocketToNode, Never> {
+        let webSocketToNode = webSockets.newDisconnectedWebsocket(to: node)
+        return webSocketToNode.connectAndNotifyWhenConnected().map { _ in webSocketToNode }
+            .eraseToAnyPublisher()
     }
     
     func close(webSocketToNode: WebSocketToNode, useDelay: Bool = false) {

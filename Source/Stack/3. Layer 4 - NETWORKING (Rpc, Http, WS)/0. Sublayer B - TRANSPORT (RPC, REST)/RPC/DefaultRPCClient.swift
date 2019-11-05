@@ -37,7 +37,7 @@ public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
 
 // MARK: - Observing RPC Responses
 public extension DefaultRPCClient {
-    func observeAtoms(subscriberId: SubscriberId) -> CombineObservable<AtomObservation> {
+    func observeAtoms(subscriberId: SubscriberId) -> AnyPublisher<AtomObservation, Never> {
 //        return observe(notification: .subscribeUpdate, subscriberId: subscriberId, responseType: AtomSubscriptionUpdate.self)
 //            .map { $0.toAtomObservation() }
 //            .flatMap { (atomObservations: [AtomObservation]) -> CombineObservable<AtomObservation> in
@@ -46,7 +46,7 @@ public extension DefaultRPCClient {
         combineMigrationInProgress()
     }
     
-    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> CombineObservable<AtomStatusEvent> {
+    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<AtomStatusEvent, Never> {
         return self.observe(notification: .observeAtomStatusNotifications, subscriberId: subscriberId, responseType: AtomStatusEvent.self)
        
     }
@@ -57,23 +57,19 @@ public extension DefaultRPCClient {
 // MARK: - Single's
 public extension DefaultRPCClient {
     
-    // TODO: Precision should return `Single`?
-    func getNetworkInfo() -> AnyPublisher<RadixSystem, Never> {
+    func getNetworkInfo() -> Single<RadixSystem, Never> {
         return make(request: .getNetworkInfo)
     }
     
-    // TODO: Precision should return `Single`?
-    func getLivePeers() -> AnyPublisher<[NodeInfo], Never> {
+    func getLivePeers() -> Single<[NodeInfo], Never> {
         return make(request: .getLivePeers)
     }
     
-    // TODO: Precision should return `Single`?
-    func getUniverseConfig() -> AnyPublisher<UniverseConfig, Never> {
+    func getUniverseConfig() -> Single<UniverseConfig, Never> {
         return make(request: .getUniverse)
     }
     
-    // TODO: Precision should return `Single`?
-    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> AnyPublisher<AtomStatus, Never> {
+    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> Single<AtomStatus, Never> {
         return make(request: .getAtomStatus(atomIdentifier: atomIdentifier))
     }
 }
@@ -111,11 +107,11 @@ public extension DefaultRPCClient {
 // MARK: Internal
 internal extension DefaultRPCClient {
     
-    // TODO: Precision should return `Single`?
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> AnyPublisher<ResultFromResponse, Never> where ResultFromResponse: Decodable {
-        return make(request: rootRequest, responseType: ResultFromResponse.self)
+    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> Single<ResultFromResponse, Never> where ResultFromResponse: Decodable {
+//        return make(request: rootRequest, responseType: ResultFromResponse.self)
+        combineMigrationInProgress()
     }
-    
+
     func makeCompletableMapError<ErrorToMapTo>(
         request rootRequest: RPCRootRequest,
         errorMapper: @escaping (RPCError) -> (ErrorToMapTo)
@@ -134,22 +130,20 @@ internal extension DefaultRPCClient {
         return channel.observeNotification(notification, subscriberId: subscriberId)
     }
     
-    // TODO: Precision should return `Single`?
     func make<ResultFromResponse>(
         request rootRequest: RPCRootRequest,
         responseType: ResultFromResponse.Type
-    ) -> AnyPublisher<ResultFromResponse, Never> where ResultFromResponse: Decodable {
+    ) -> Single<ResultFromResponse, Never> where ResultFromResponse: Decodable {
         
         let noMapper: ((RPCError) -> RPCError)? = nil
         return make(request: rootRequest, responseType: responseType, errorMapper: noMapper)
     }
     
-    // TODO: Precision should return `Single`?
     func make<ResultFromResponse, MapToError>(
         request rootRequest: RPCRootRequest,
         responseType: ResultFromResponse.Type,
         errorMapper: ((RPCError) -> MapToError)?
-    ) -> AnyPublisher<ResultFromResponse, Never>
+    ) -> Single<ResultFromResponse, Never>
         where
         ResultFromResponse: Decodable,
         MapToError: ErrorMappedFromRPCError {
@@ -178,11 +172,10 @@ internal extension DefaultRPCClient {
 // MARK: - Private
 private extension DefaultRPCClient {
     
-    // TODO: Precision should return `Single`?
     func makeRequestMapToResponseOrError<Model>(
         request rootRequest: RPCRootRequest,
         responseType: Model.Type
-    ) -> AnyPublisher<RPCResult<Model>, Never> where Model: Decodable {
+    ) -> Single<RPCResult<Model>, Never> where Model: Decodable {
         
 //        let rpcRequest = RPCRequest(rootRequest: rootRequest)
         

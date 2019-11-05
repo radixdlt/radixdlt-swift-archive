@@ -27,6 +27,5 @@ import Combine
 
 public protocol AtomStatusChecking {
     
-    // TODO: Precision should return `Single`?
-    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> AnyPublisher<AtomStatus, Never>
+    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> Single<AtomStatus, Never>
 }
