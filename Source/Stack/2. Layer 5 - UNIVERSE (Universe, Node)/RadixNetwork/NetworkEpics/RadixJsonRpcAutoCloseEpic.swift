@@ -25,37 +25,33 @@
 import Foundation
 import Combine
 
-// MARK: WebSocketsEpic
-public final class WebSocketsEpic: RadixNetworkEpic {
-    public typealias EpicFromWebSocket = (WebSockets) -> NetworkWebsocketEpic
-    public typealias EpicsFromWebSockets = [EpicFromWebSocket]
-    private let epicFromWebsockets: EpicsFromWebSockets
+public final class RadixJsonRpcAutoCloseEpic: NetworkWebsocketEpic {
+    public let webSockets: WebSocketsEpic.WebSockets
     
-    private var _retainingVariableEpics = [NetworkWebsocketEpic]()
+    private var cancellables = Set<AnyCancellable>()
     
-    public init(epicFromWebsockets: EpicsFromWebSockets) {
-        self.epicFromWebsockets = epicFromWebsockets
+    private let backgroundQueue = DispatchQueue(label: "com.radixdlt.network.epics.jsonrpc.autoclose")
+    
+    public init(
+        webSockets: WebSocketsEpic.WebSockets
+    ) {
+        self.webSockets = webSockets
     }
 }
+public extension RadixJsonRpcAutoCloseEpic {
 
-public extension WebSocketsEpic {
     func handle(
         actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
-        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
+        networkState _: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
+
+        nodeActionPublisher
+            .filter { $0 is BaseJsonRpcResultAction }^
+            .delay(for: .seconds(5), scheduler: backgroundQueue)^
+            .handleEvents(
+                receiveOutput: { [unowned webSockets] nodeAction in webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeAction.node) }
+            )^
+            .dropAll()^
         
-        //        let webSockets = WebSockets()
-        //        return CombineObservable.merge(
-        //            epicFromWebsockets
-        //                .map { [unowned self] epicFromWebSocket in
-        //                    let newEpic = epicFromWebSocket(webSockets)
-        //                    self._retainingVariableEpics.append(newEpic)
-        //                    return newEpic
-        //                }
-        //                .map { (newlyCreatedEpic: NetworkWebsocketEpic) -> CombineObservable<NodeAction> in
-        //                    return newlyCreatedEpic.handle(actions: actions, networkState: networkState)
-        //                }
-        //        )
-        combineMigrationInProgress()
     }
 }

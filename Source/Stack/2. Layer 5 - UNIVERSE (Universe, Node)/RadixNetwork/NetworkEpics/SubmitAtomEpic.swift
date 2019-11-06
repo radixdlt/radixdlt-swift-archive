@@ -38,10 +38,13 @@ public final class SubmitAtomEpic: NetworkWebsocketEpic {
 }
 
 public extension SubmitAtomEpic {
-    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
         
 //        let foundNode: CombineObservable<NodeAction> = actions
-//            .ofType(FindANodeResultAction.self)
+//            .compactMap(typeAs: FindANodeResultAction.self)
 //            .filter { $0.request is SubmitAtomActionRequest }
 //            .map {
 //                let request = castOrKill(instance: $0.request, toType: SubmitAtomActionRequest.self)
@@ -49,7 +52,7 @@ public extension SubmitAtomEpic {
 //        }
 //
 //        let submitToNode: CombineObservable<NodeAction> = actions
-//            .ofType(SubmitAtomActionSend.self)
+//            .compactMap(typeAs: SubmitAtomActionSend.self)
 //            .flatMap { [unowned self] in
 //                self.waitForConnection(toNode: $0.node)
 //                    .andThen(self.submitAtom(sendAction: $0, toNode: $0.node))

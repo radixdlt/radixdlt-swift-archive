@@ -54,13 +54,13 @@ where
 
 public extension RadixJsonRpcMethodEpic {
     
-    func epic(
-        actions: AnyPublisher<NodeAction, Never>,
-        networkState: AnyPublisher<RadixNetworkState, Never>
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-        return actions
-            .ofType(Request.self)
+        return nodeActionPublisher
+            .compactMap(typeAs: Request.self)
             .flatMap { [unowned self] rpcMethod in
                 return self.openWebSocketAndAwaitConnection(toNode: rpcMethod.node)
                     .map { DefaultRPCClient(channel: $0) }

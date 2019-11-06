@@ -25,6 +25,50 @@
 import Foundation
 import Combine
 
+// MARK: Typealias
+public typealias Single<Output, Failure> = AnyPublisher<Output, Failure> where Failure: Swift.Error
+
+// MARK: Any
+public extension Publisher {
+    
+    /// Similar to `ignoreOutput`, but the type of `Output` remains intact, that is all elements are ignored
+    /// ("droppped"), but completion event get published. But whereas the `Output` type of the `ignoreOutput`
+    /// operator, changes to `Never`, this operator keeps it.
+    func dropAll() -> Publishers.Filter<Self> { filter { _ in false } }
+
+    /// `ignoreOutput` transforming the `Output` type to some specified type `T`, even though no element
+    /// is published, when using chaining this operator, .e.g. with an `append`, it might be advantagous
+    /// to be able to specify the type (since `append` requires the outputs of both publishers to be equal).
+    func ignoreOutput<T>(mapToType _: T.Type) -> AnyPublisher<T, Failure> {
+        ignoreOutput()
+            .flatMap { _ in Empty<T, Failure>() }
+            .eraseToAnyPublisher()
+    }
+    
+    func compactMap<T>(typeAs _: T.Type) -> AnyPublisher<T, Failure> {
+        compactMap { $0 as? T }.eraseToAnyPublisher()
+    }
+}
+
+// MARK: Output: OptionalType
+public extension Publisher where Output: OptionalType {
+    
+    func replaceNilWithEmpty() -> AnyPublisher<Output.Wrapped, Failure> {
+        return compactMap { $0.value }.eraseToAnyPublisher()
+    }
+}
+
+// MARK: Output: Sequence
+public extension Publisher where Output: Sequence, Failure == Never {
+    
+    /// Only available when `Output` conforms to `Sequence`, this operator flattens the sequence output to a Publisher of `Sequence.Element`, e.g. `Publisher<[X]> -> Publisher<X>`
+    func flattenSequence() -> AnyPublisher<Output.Element, Never> {
+        map { $0.publisher }.switchToLatest()
+            .eraseToAnyPublisher()
+    }
+}
+
+// MARK: Output == Never
 public extension Publisher where Output == Never {
     func sink(receiveCompletion completionHandler: @escaping (Subscribers.Completion<Failure>) -> Void) -> Cancellable {
         return sink(
@@ -47,6 +91,7 @@ public extension Publisher where Output == Never, Failure == Never {
     }
 }
 
+// MARK: Output == Void
 public extension Publisher where Output == Void, Failure == Never {
     func sink(receiveFinished finishHandler: @escaping () -> Void) -> Cancellable {
         return sink(
@@ -55,47 +100,8 @@ public extension Publisher where Output == Void, Failure == Never {
                 case .finished: finishHandler()
                 case .failure: incorrectImplementation("Should never fail, `Failure` == `Never`")
                 }
-            },
+        },
             receiveValue: { _ in /* Doing nothing with `Void` output */ }
         )
-    }
-}
-
-public extension Publisher {
-    func ofType<T>(_ : T.Type) -> AnyPublisher<T, Failure> {
-        compactMap { $0 as? T }.eraseToAnyPublisher()
-    }
-}
-
-public extension Publisher where Output == Never, Failure == Never {
-    func asFuture() -> Future<Void, Never> {
-        Future<Void, Never> { promise in
-            // TODO ok to ignore returned Cancellable?
-            _ = self.sink(receiveFinished: { promise(.success(void)) })
-        }
-    }
-    
-}
-
-public typealias Single<Output, Failure> = AnyPublisher<Output, Failure> where Failure: Swift.Error
-
-public extension Publisher where Output: OptionalType {
-    func replaceNilWithEmpty() -> AnyPublisher<Output.Wrapped, Failure> {
-        return flatMap { (wrappedOptional: Output) -> AnyPublisher<Output.Wrapped, Failure> in
-            if wrappedOptional.value != nil {
-                return self.map { $0.value! }.eraseToAnyPublisher()
-            } else {
-                return Empty<Output.Wrapped, Failure>().eraseToAnyPublisher()
-            }
-        }.eraseToAnyPublisher()
-    }
-}
-
-public extension Publisher where Output: Sequence, Failure == Never {
-    
-    /// Only available when `Output` conforms to `Sequence`, this operator flattens the sequence output to a Publisher of `Sequence.Element`, e.g. `Publisher<[X]> -> Publisher<X>`
-    func flattenSequence() -> AnyPublisher<Output.Element, Never> {
-        map { $0.publisher }.switchToLatest()
-            .eraseToAnyPublisher()
     }
 }

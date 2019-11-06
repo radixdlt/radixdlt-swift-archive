@@ -48,7 +48,7 @@ public extension ResultOfUserAction {
         
 //        let replayedUpdates = updates.replayAll()
 //
-//        let completable = updates.ofType(SubmitAtomActionStatus.self)
+//        let completable = updates.compactMap(typeAs: SubmitAtomActionStatus.self)
 //            .lastOrError()
 //            .flatMapCompletable { submitAtomActionStatus in
 //                let statusEvent = submitAtomActionStatus.statusEvent

@@ -26,11 +26,17 @@ import Foundation
 import Combine
 
 public protocol RadixNetworkEpic {
-    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction>
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never>
 }
 
 public extension RadixNetworkEpic {
-    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
-        abstract()
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
+        abstract("Self: \(Mirror(reflecting: self).subjectType)")
     }
 }

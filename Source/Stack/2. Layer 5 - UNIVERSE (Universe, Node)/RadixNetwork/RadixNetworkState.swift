@@ -39,8 +39,12 @@ public extension RadixNetworkState {
     typealias Value = RadixNodeState
     typealias Element = RadixNodeState
     
-    init(arrayLiteral nodeStates: RadixNodeState...) {
+    init(nodeStates: [RadixNodeState]) {
         self.nodes = [Key: Value](uniqueKeysWithValues: nodeStates.map { ($0.node, $0) })
+    }
+    
+    init(arrayLiteral nodeStates: RadixNodeState...) {
+        self.init(nodeStates: nodeStates)
     }
         
     init(keyValuePairs nodes: KeyValuePairs<Key, Value>) {

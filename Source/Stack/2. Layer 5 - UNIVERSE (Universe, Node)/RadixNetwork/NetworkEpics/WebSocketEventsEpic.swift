@@ -36,7 +36,7 @@ public final class WebSocketEventsEpic: NetworkWebsocketEpic {
 public extension WebSocketEventsEpic {
     
     // TODO neither `actions` nor `networkState` is used, thus this should not be an epic
-    func epic(
+    func handle(
         actions _: AnyPublisher<NodeAction, Never>,
         networkState _: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {

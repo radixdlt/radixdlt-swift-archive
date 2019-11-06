@@ -156,7 +156,7 @@ private extension DefaultTransactionMaker {
 //
 //                let status: CombineObservable<SubmitAtomAction> = self.radixNetworkController
 //                    .getActions()
-//                    .ofType(SubmitAtomAction.self)
+//                    .compactMap(typeAs: SubmitAtomAction.self)
 //                    .filter { $0.uuid == initialAction.uuid }
 //                    .takeWhile { !$0.isCompleted }
 //

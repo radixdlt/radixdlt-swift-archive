@@ -26,10 +26,10 @@ import Foundation
 import Combine
 
 public final class DiscoverNodesEpic: RadixNetworkEpic {
-    private let seedNodes: CombineObservable<Node>
+    private let seedNodes: AnyPublisher<Node, Never>
     private let universeConfig: UniverseConfig
     
-    public init(seedNodes: CombineObservable<Node>, universeConfig: UniverseConfig) {
+    public init(seedNodes: AnyPublisher<Node, Never>, universeConfig: UniverseConfig) {
         self.seedNodes = seedNodes
         self.universeConfig = universeConfig
     }
@@ -37,25 +37,25 @@ public final class DiscoverNodesEpic: RadixNetworkEpic {
 
 public extension DiscoverNodesEpic {
     
-    func epic(
-        actions: CombineObservable<NodeAction>,
-        networkState: CombineObservable<RadixNetworkState>
-    ) -> CombineObservable<NodeAction> {
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
         
 //        let getUniverseConfigsOfSeedNodes: CombineObservable<NodeAction> = actions
-//            .ofType(DiscoverMoreNodesAction.self)
+//            .compactMap(typeAs: DiscoverMoreNodesAction.self)
 //            .flatMap { [unowned self] _ in self.seedNodes }
 //            .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }
 //            .catchError { .just(DiscoverMoreNodesActionError(reason: $0)) }
 //
 //        // TODO Store universe configs in a Node Table instead of filter out Node in FindANodeEpic
 //        let seedNodesHavingMismatchingUniverse: CombineObservable<NodeAction> = actions
-//            .ofType(GetUniverseConfigActionResult.self)
+//            .compactMap(typeAs: GetUniverseConfigActionResult.self)
 //            .filter { [unowned self] in $0.result != self.universeConfig }
 //            .map { [unowned self] in NodeUniverseMismatch(node: $0.node, expectedConfig: self.universeConfig, actualConfig: $0.result) }
 //
 //        let connectedSeedNodes: CombineObservable<Node> = actions
-//            .ofType(GetUniverseConfigActionResult.self)
+//            .compactMap(typeAs: GetUniverseConfigActionResult.self)
 //            .filter { [unowned self] in $0.result == self.universeConfig }
 //            .map { $0.node }
 //            .publish()
@@ -66,7 +66,7 @@ public extension DiscoverNodesEpic {
 //        let addSeedNodeSiblings: CombineObservable<NodeAction> = connectedSeedNodes.map { GetLivePeersActionRequest(node: $0) }
 //
 //        let addNodes: CombineObservable<NodeAction> = actions
-//            .ofType(GetLivePeersActionResult.self)
+//            .compactMap(typeAs: GetLivePeersActionResult.self)
 //            .flatMap { (livePeersResult: GetLivePeersActionResult) -> CombineObservable<NodeAction> in
 //                return CombineObservable.combineLatest(
 //                    Just(livePeersResult.result),

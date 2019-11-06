@@ -101,6 +101,9 @@
 		E615C51B22B7AF0800604E90 /* Magical.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51A22B7AF0800604E90 /* Magical.swift */; };
 		E6166BE022609C9F003A9442 /* DefaultRPCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6166BDF22609C9F003A9442 /* DefaultRPCClient.swift */; };
 		E6166BED2260CD5D003A9442 /* Port.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6166BEC2260CD5D003A9442 /* Port.swift */; };
+		E61989CD2371FBE50092259A /* RadixJsonRpcAutoCloseEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61989CC2371FBE50092259A /* RadixJsonRpcAutoCloseEpic.swift */; };
+		E61989CF2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61989CE2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift */; };
+		E61989D12372C9670092259A /* DefaultRadixNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61989D02372C9670092259A /* DefaultRadixNetwork.swift */; };
 		E61EB9A222D86F56007826D3 /* Supply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A122D86F56007826D3 /* Supply.swift */; };
 		E61EB9A422D87130007826D3 /* SupplyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A322D87130007826D3 /* SupplyType.swift */; };
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -680,6 +683,9 @@
 		E615C51A22B7AF0800604E90 /* Magical.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Magical.swift; sourceTree = "<group>"; };
 		E6166BDF22609C9F003A9442 /* DefaultRPCClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultRPCClient.swift; sourceTree = "<group>"; };
 		E6166BEC2260CD5D003A9442 /* Port.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Port.swift; sourceTree = "<group>"; };
+		E61989CC2371FBE50092259A /* RadixJsonRpcAutoCloseEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJsonRpcAutoCloseEpic.swift; sourceTree = "<group>"; };
+		E61989CE2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJsonRpcAutoConnectEpic.swift; sourceTree = "<group>"; };
+		E61989D02372C9670092259A /* DefaultRadixNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRadixNetwork.swift; sourceTree = "<group>"; };
 		E61EB9A122D86F56007826D3 /* Supply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supply.swift; sourceTree = "<group>"; };
 		E61EB9A322D87130007826D3 /* SupplyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyType.swift; sourceTree = "<group>"; };
 		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
@@ -1754,6 +1760,7 @@
 				E637564D22B7E3B700C4F9A2 /* RadixNetworkController.swift */,
 				E6ABA76C22C3593B00536DC7 /* InMemoryAtomStoreReducer.swift */,
 				E6ABA76E22C3594C00536DC7 /* RadixNetwork.swift */,
+				E61989D02372C9670092259A /* DefaultRadixNetwork.swift */,
 				E6ABA77122C3595E00536DC7 /* NodeActions */,
 				E67129A222C2289C004F6D0A /* Consumer.swift */,
 				E67129A422C228AE004F6D0A /* Reducer.swift */,
@@ -2744,6 +2751,8 @@
 				E606FC4A22CB5E2200A7E52E /* NetworkWebsocketEpic.swift */,
 				E606FC4E22CB5E4200A7E52E /* WebSocketEventsEpic.swift */,
 				E606FC5022CB5E4E00A7E52E /* ConnectWebSocketEpic.swift */,
+				E61989CC2371FBE50092259A /* RadixJsonRpcAutoCloseEpic.swift */,
+				E61989CE2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift */,
 				E606FC4C22CB5E3500A7E52E /* FetchAtomsEpic.swift */,
 				E606FC2122CA577F00A7E52E /* DiscoverNodesEpic.swift */,
 				E6CB4B2C22C5100800B7382A /* RadixNetworkEpic.swift */,
@@ -3720,6 +3729,7 @@
 				E6E2799B2271CD1C0067D46E /* ExactLengthSpecifying.swift in Sources */,
 				E6A4ABC6221EDD4A006C5CA8 /* BigUInt_Extension.swift in Sources */,
 				E6166BED2260CD5D003A9442 /* Port.swift in Sources */,
+				E61989CF2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift in Sources */,
 				E60554232304188E00528510 /* CreateTokenAction+InitialSupply.swift in Sources */,
 				E6A508AE224E713F00128123 /* MutableSupplyTokenDefinitionParticle.swift in Sources */,
 				E6025402225CC3E2004B2F94 /* UniverseConfig+UniverseType.swift in Sources */,
@@ -3844,6 +3854,7 @@
 				E605A6EB2345DCDB00E47257 /* AmountTrait.swift in Sources */,
 				E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */,
 				E6ED1A4021F8836300654105 /* UniverseConfig.swift in Sources */,
+				E61989CD2371FBE50092259A /* RadixJsonRpcAutoCloseEpic.swift in Sources */,
 				E605542F230545E300528510 /* DefaultAtomToTransactionMapper.swift in Sources */,
 				E63E4FB12366E3A600B90CF7 /* RadixNetworkNodeAction.swift in Sources */,
 				E606F132230151E4004D4D3D /* ShardedParticleStateIdentifiable.swift in Sources */,
@@ -3935,6 +3946,7 @@
 				E6E2794E2271CD1C0067D46E /* PrefixedJsonDecodableByProxy.swift in Sources */,
 				E69E752522A1901000AC631B /* MetaDataOwner.swift in Sources */,
 				E62780232341F5B4008F2857 /* Denomination+Comparable.swift in Sources */,
+				E61989D12372C9670092259A /* DefaultRadixNetwork.swift in Sources */,
 				E627801D2341F529008F2857 /* Comparable_Extension.swift in Sources */,
 				E6E279842271CD1C0067D46E /* KeyValued.swift in Sources */,
 				E6055437230549A600528510 /* DefaultStateSubsciber.swift in Sources */,

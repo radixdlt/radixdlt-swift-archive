@@ -50,56 +50,77 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
 
     private var cancellables = Set<AnyCancellable>()
 
+    // TODO Combine can this be removed?
     private let _retainingVariableEpics: [RadixNetworkEpic]
     
+    // swiftlint:disable function_body_length
+    
+    /// Initialises and **starts** the controller of the Radix Network (collection of Radix Nodes).
     public init(
         network: RadixNetwork = DefaultRadixNetwork.init(),
         initialNetworkState: RadixNetworkState = RadixNetworkState(),
         epics: [RadixNetworkEpic],
-        reducers: [SomeReducer<NodeAction>]
+        nodeActionReducers: [SomeReducer<NodeAction>]
     ) {
         
-//        let networkStateSubject = CurrentValueSubject(initialNetworkState)
-//        let nodeActionSubject = PassthroughSubject<NodeAction>()
-//
-//        let reducedNodeActions = nodeActionSubject.eraseToAnyPublisher().do(onNext: { action in
-//            let state = try networkStateSubject.value
-//            let nextState = network.reduce(state: state, action: action)
-//            reducers.forEach {
-//                $0.reduce(action: action)
-//            }
-//
-//            if nextState != state {
-//                networkStateSubject.send(nextState)
-//            }
-//        }).publish()
-//
-//        let networkState = networkStateSubject.eraseToAnyPublisher()
-//
-//        self.nodeActionSubject = nodeActionSubject
-//        self.networkStateSubject = networkStateSubject
-////        self.networkState = networkState
-//        self.reducedNodeActions = reducedNodeActions
-//        self._retainingVariableEpics = epics
-//
-//        // Then run Epics
-//        let updates: [CombineObservable<NodeAction>] = epics.map { epic in
-//            epic.epic(actions: reducedNodeActions, networkState: networkState)
-//        }
-//
-//        CombineObservable.merge(updates).subscribe(
-//            onNext: { [unowned self] in
-//                self.dispatch(nodeAction: $0)
-//            },
-//            onError: {
-//                networkStateSubject.onError($0)
-//            }
-//        ).disposed(by: disposeBag)
-//
-//        reducedNodeActions.connect().disposed(by: disposeBag)
+        let networkStateSubject = CurrentValueSubject<RadixNetworkState, Never>(initialNetworkState)
+        let nodeActionSubject = PassthroughSubject<NodeAction, Never>()
+
+        let connectableReducedNodeActions = nodeActionSubject
+            .handleEvents(
+                receiveOutput: { action in
+                    let currentNetworkState = networkStateSubject.value
+                    
+                    let nextNetworkState = network.reduce(
+                        state: currentNetworkState,
+                        action: action
+                    )
+                    
+                    nodeActionReducers.forEach {
+                        $0.reduce(action: action)
+                    }
+                    
+                    if nextNetworkState != currentNetworkState {
+                        networkStateSubject.send(nextNetworkState)
+                    }
+                }
+            )
+            .makeConnectable()
+
+        let networkState = networkStateSubject.eraseToAnyPublisher()
+
+        self.nodeActionSubject = nodeActionSubject
+        self.networkStateSubject = networkStateSubject
+
+        self.reducedNodeActions = connectableReducedNodeActions.eraseToAnyPublisher()
+        self._retainingVariableEpics = epics
+
+        // Then run Epics
+        let updates: [AnyPublisher<NodeAction, Never>] = epics.map {
+            $0.handle(
+                actions: connectableReducedNodeActions.eraseToAnyPublisher(),
+                networkState: networkState
+            )
+        }
+
+        Publishers.MergeMany(updates).sink(
+            receiveCompletion: { completion in
+                switch completion {
+                case .finished: incorrectImplementation("Received unexpected `finish`, the epics should never finish")
+                case .failure(let error):
+                    // TODO Combine change `Failure` type of `networkStateSubject` to some new
+                    // Error type for RadixNetworkEpics...
+                    networkStateSubject.send(completion: .failure(error))
+                }
+            },
+            receiveValue: { [unowned self] in self.dispatch(nodeAction: $0) }
+        ).store(in: &cancellables)
         
-        combineMigrationInProgress()
+        connectableReducedNodeActions.connect().store(in: &cancellables)
+        
     }
+    // swiftlint:enable function_body_length
+
 }
 
 public extension DefaultRadixNetworkController {
@@ -111,10 +132,7 @@ public extension DefaultRadixNetworkController {
     func dispatch(nodeAction: NodeAction) {
         nodeActionSubject.send(nodeAction)
     }
-    
-}
 
-public extension DefaultRadixNetworkController {
     func observeNetworkState() -> CombineObservable<RadixNetworkState> {
         networkStateSubject.eraseToAnyPublisher()
     }

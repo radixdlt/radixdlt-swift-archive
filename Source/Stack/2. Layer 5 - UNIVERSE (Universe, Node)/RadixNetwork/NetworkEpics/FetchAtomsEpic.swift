@@ -34,12 +34,15 @@ public final class FetchAtomsEpic: NetworkWebsocketEpic {
 }
 
 public extension FetchAtomsEpic {
-    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
         
 //        var disposableMap: [UUID: CombineDisposable] = [:]
 //
 //        let fetch: CombineObservable<NodeAction> = actions
-//            .ofType(FindANodeResultAction.self)
+//            .compactMap(typeAs: FindANodeResultAction.self)
 //            .filter { $0.request is FetchAtomsActionRequest }
 //            .flatMap { [unowned self] (nodeFound: FindANodeResultAction) -> CombineObservable<NodeAction> in
 //
@@ -59,7 +62,7 @@ public extension FetchAtomsEpic {
 //        }
 //
 //        let cancelFetch: CombineObservable<NodeAction> = actions
-//            .ofType(FetchAtomsActionCancel.self)
+//            .compactMap(typeAs: FetchAtomsActionCancel.self)
 //            .do(onNext: { disposableMap.removeValue(forKey: $0.uuid)?.dispose() })
 //            .ignoreElementsObservable().map { $0 }
 //

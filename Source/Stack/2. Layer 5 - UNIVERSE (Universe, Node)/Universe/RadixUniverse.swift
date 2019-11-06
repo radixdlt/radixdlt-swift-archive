@@ -95,7 +95,7 @@ public extension DefaultRadixUniverse {
             network: DefaultRadixNetwork(),
             initialNetworkState: RadixNetworkState(nodesDisconnectFromWS: initialNetworkOfNodes.asArray),
             epics: networkEpics,
-            reducers: [SomeReducer(InMemoryAtomStoreReducer(atomStore: atomStore))]
+            nodeActionReducers: [SomeReducer(InMemoryAtomStoreReducer(atomStore: atomStore))]
         )
         
         try self.init(config: config, networkController: networkController, atomStore: atomStore)
@@ -122,12 +122,7 @@ public extension DefaultRadixUniverse {
 }
 
 private extension RadixNetworkState {
-    init(nodesDisconnectFromWS: [Node]) {
-//        self.init(nodes:
-//            nodesDisconnectFromWS
-//                .map { KeyValuePair<Node, RadixNodeState>(key: $0, value: .init(node: $0, webSocketStatus: .disconnected)) }
-//                .toDictionary()
-//        )
-        fatalError()
+    init(nodesDisconnectFromWS nodes: [Node]) {
+        self.init(nodeStates: nodes.map { .init(node: $0, webSocketStatus: .disconnected) })
     }
 }

@@ -36,71 +36,32 @@ public final class ConnectWebSocketEpic: NetworkWebsocketEpic {
 }
 
 public extension ConnectWebSocketEpic {
-    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
-//        let onConnect: CombineObservable<NodeAction> = actions
-//            .filter { type(of: $0) == ConnectWebSocketAction.self }
-//            .do(onNext: { [unowned self] in
-//                log.verbose("Acting upon ConnectWebSocketAction")
-//                self.webSockets.webSocket(to: $0.node, shouldConnect: true)
-//
-//            }).ignoreElementsObservable()
-//
-//        let onClose: CombineObservable<NodeAction> = actions
-//            .filter { type(of: $0) == CloseWebSocketAction.self }
-//            .do(onNext: { [unowned self] in
-//                log.verbose("Acting upon CloseWebSocketAction")
-//                self.webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: $0.node)
-//            }).ignoreElementsObservable()
-//
-//        return CombineObservable.merge(onConnect, onClose)
-        combineMigrationInProgress()
-    }
-}
-
-public final class RadixJsonRpcAutoConnectEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsEpic.WebSockets
     
-    private var cancellables = Set<AnyCancellable>()
-    
-    public init(webSockets: WebSocketsEpic.WebSockets) {
-        self.webSockets = webSockets
-    }
-}
-
-public extension RadixJsonRpcAutoConnectEpic {
-    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
-//        return actions
-//            .filter { $0 is JsonRpcMethodNodeAction }
-//            .flatMap { [unowned self] rpcMethodAction -> CombineObservable<NodeAction> in
-//                return self.waitForConnection(toNode: rpcMethodAction.node)
-//                    .andThen(
-//                        Just(rpcMethodAction)
-//                            .ignoreElementsObservable()
-//                )
-//        }
-        combineMigrationInProgress()
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
+        networkState _: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
         
-    }
-}
+        let onConnect: AnyPublisher<NodeAction, Never> = nodeActionPublisher
+            .filter { $0 is ConnectWebSocketAction }^
+            .handleEvents(
+                receiveOutput: { [unowned webSockets] connectWebSocketAction in
+                    webSockets.newDisconnectedWebsocket(
+                        to: connectWebSocketAction.node
+                    ).connectAndNotifyWhenConnected()
+                }
+            )^
+            .dropAll()^
 
-public final class RadixJsonRpcAutoCloseEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsEpic.WebSockets
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    public init(webSockets: WebSocketsEpic.WebSockets) {
-        self.webSockets = webSockets
-    }
-}
-public extension RadixJsonRpcAutoCloseEpic {
-    func epic(actions: CombineObservable<NodeAction>, networkState: CombineObservable<RadixNetworkState>) -> CombineObservable<NodeAction> {
-//        return actions
-//            .filter { $0 is BaseJsonRpcResultAction }
-//            .delay(RxTimeInterval.seconds(5), scheduler: MainScheduler.instance)
-//            .do(onNext: { [unowned self] actionResult in
-//                self.webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: actionResult.node)
-//            }).ignoreElementsObservable()
-        combineMigrationInProgress()
-        
+        let onClose: AnyPublisher<NodeAction, Never> = nodeActionPublisher
+            .filter { $0 is CloseWebSocketAction }^
+            .handleEvents(
+                receiveOutput: { [unowned webSockets] closeWebSocketAction in
+                    webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: closeWebSocketAction.node)
+                }
+            )^
+            .dropAll()^
+
+        return onConnect.merge(with: onClose)^
     }
 }

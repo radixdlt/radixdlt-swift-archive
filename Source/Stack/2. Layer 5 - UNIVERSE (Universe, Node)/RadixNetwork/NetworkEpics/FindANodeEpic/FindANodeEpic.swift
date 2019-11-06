@@ -82,12 +82,12 @@ public extension FindANodeEpic {
     /// This method identifies `NodeAction` which has been marked being dependent on some `RadixNode` (actions conforming to `FindANodeRequestAction`),
     /// e.g. `SubmitAtomActionRequest` (needs to find a _suitable_ node to submit the atom to) and is responsible for finding,
     /// and connecting to a suitable node, doing this by dispatching other potentially required `NodeAction`s to other Network Epics.
-    func epic(
-        actions actionsPublisher: AnyPublisher<NodeAction, Never>,
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-        return actionsPublisher.ofType(FindANodeRequestAction.self)
+        return nodeActionPublisher.compactMap(typeAs: FindANodeRequestAction.self)
             .combineLatest(
                 networkStatePublisher.prepend(RadixNetworkState.empty)
             )
@@ -145,7 +145,7 @@ public extension FindANodeEpic {
                 
                 // Cleanup and close connections which never worked out
                 let cleanupConnections: AnyPublisher<NodeAction, Never> = findConnectionActionsStream
-                    .ofType(ConnectWebSocketAction.self)
+                    .compactMap(typeAs: ConnectWebSocketAction.self)
                     .flatMap { connectWebSocketAction -> AnyPublisher<NodeAction, Never> in
                         let node = connectWebSocketAction.node
                         return selectedNode

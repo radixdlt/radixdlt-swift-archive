@@ -53,7 +53,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         let actionsSubject = PassthroughSubject<NodeAction, Never>()
         let networkStateSubject = PassthroughSubject<RadixNetworkState, Never>()
         
-        let cancellable = findANodeEpic.epic(
+        let cancellable = findANodeEpic.handle(
             actions: actionsSubject.eraseToAnyPublisher(),
             networkState: networkStateSubject.eraseToAnyPublisher()
         )
@@ -93,7 +93,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         
         let actionsSubject = PassthroughSubject<NodeAction, Never>()
         
-        let cancellable = findANodeEpic.epic(
+        let cancellable = findANodeEpic.handle(
             actions: actionsSubject.eraseToAnyPublisher(),
             // we start with a default output (value) of the network state publisher inside implementation, so even if we use `Empty()` publisher here (not outputting any value), we expect the epic to emit a value.
             networkState: Empty().eraseToAnyPublisher()
@@ -135,7 +135,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         let actionsSubject = PassthroughSubject<NodeAction, Never>()
         let networkStateSubject = PassthroughSubject<RadixNetworkState, Never>()
         
-        let cancellable = findANodeEpic.epic(
+        let cancellable = findANodeEpic.handle(
             actions: actionsSubject.eraseToAnyPublisher(),
             networkState: networkStateSubject.eraseToAnyPublisher()
             )
@@ -183,7 +183,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
             RadixNodeState(node: node, webSocketStatus: .disconnected)
         ]
         
-        let cancellable = findANodeEpic.epic(
+        let cancellable = findANodeEpic.handle(
             actions: actionsSubject.eraseToAnyPublisher(),
             networkState: networkStateSubject.eraseToAnyPublisher()
             )
@@ -232,7 +232,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         let actionsSubject = PassthroughSubject<NodeAction, Never>()
         let networkStateSubject = PassthroughSubject<RadixNetworkState, Never>()
 
-        let cancellable = findANodeEpic.epic(
+        let cancellable = findANodeEpic.handle(
             actions: actionsSubject.eraseToAnyPublisher(),
             networkState: networkStateSubject.eraseToAnyPublisher()
         )
@@ -317,7 +317,7 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         let actionsSubject = PassthroughSubject<NodeAction, Never>()
         let networkStateSubject = PassthroughSubject<RadixNetworkState, Never>()
         
-        let cancellable = findANodeEpic.epic(
+        let cancellable = findANodeEpic.handle(
             actions: actionsSubject.eraseToAnyPublisher(),
             networkState: networkStateSubject.eraseToAnyPublisher()
         )

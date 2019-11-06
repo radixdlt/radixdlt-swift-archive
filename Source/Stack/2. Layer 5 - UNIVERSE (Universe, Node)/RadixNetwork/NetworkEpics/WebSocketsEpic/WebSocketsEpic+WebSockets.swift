@@ -28,7 +28,9 @@ import Combine
 // MARK: WebSockets
 public extension WebSocketsEpic {
     final class WebSockets {
+        
         private let newSocketsToNodeSubject: PassthroughSubject<WebSocketToNode, Never>
+        
         private var webSockets = [Node: WebSocketToNode]()
         fileprivate init() {
             self.newSocketsToNodeSubject = PassthroughSubject()
@@ -38,7 +40,7 @@ public extension WebSocketsEpic {
 
 internal extension WebSocketsEpic.WebSockets {
     
-    func getNewSocketsToNode() -> CombineObservable<WebSocketToNode> {
+    func getNewSocketsToNode() -> AnyPublisher<WebSocketToNode, Never> {
         return newSocketsToNodeSubject.eraseToAnyPublisher()
     }
     
