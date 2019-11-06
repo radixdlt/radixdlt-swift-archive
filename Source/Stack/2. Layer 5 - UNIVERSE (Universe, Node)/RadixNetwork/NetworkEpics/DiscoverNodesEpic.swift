@@ -35,23 +35,6 @@ public final class DiscoverNodesEpic: RadixNetworkEpic {
     }
 }
 
-public extension Publishers {
-    /// The `ImmortalNever` publisher takes a generic type for `Output`, but will never output any element and will never finish.
-    /// The purpose of the generic `Output` type is to be able to perform concatenation/merging operations with other publishers,
-    /// such  as `append` which requires the type of `Output` to be equal
-    final class ImmortalNever<NeverOutput>: Publisher {}
-}
-
-// MARK: Publisher
-public extension Publishers.ImmortalNever {
-    typealias Output = NeverOutput
-    typealias Failure = Never
-        
-    func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
-        fatalError("what to do?")
-    }
-}
-
 public extension DiscoverNodesEpic {
     
     // swiftlint:disable function_body_length
@@ -88,7 +71,11 @@ public extension DiscoverNodesEpic {
             .compactMap(typeAs: GetLivePeersActionResult.self)
             .flatMap { (livePeersResult: GetLivePeersActionResult) -> AnyPublisher<NodeAction, Never> in
                 return Just(livePeersResult.result).combineLatest(
-                    networkStatePublisher.first()^.append(Publishers.ImmortalNever<RadixNetworkState>())
+                    networkStatePublisher
+                        .first()^
+                        .append(
+                            Empty<RadixNetworkState, Never>(completeImmediately: false)
+                        )
                 ) { (nodeInfos, state) in
 
                     return nodeInfos.compactMap { (nodeInfo: NodeInfo) -> AddNodeAction? in
