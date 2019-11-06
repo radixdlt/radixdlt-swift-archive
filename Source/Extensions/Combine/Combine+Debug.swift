@@ -30,7 +30,9 @@ import Combine
 internal extension Publisher {
     
     func debug(
-        _ message: String? = nil,
+        events: Publishers.EventsToDebug = .output,
+        _ prefix: String? = nil,
+        
         _ line: Int = #line,
         _ function: String = #function,
         _ file: String = #file
@@ -38,7 +40,7 @@ internal extension Publisher {
         
         let symbol: String = SFSymbolWithUnicode.deterministicRandom(seed: "\(file)\(function)\(line)")
         
-        let customMessage: String? = message != nil ? "__\(message!)__" : nil
+        let customMessage: String? = prefix != nil ? "__\(prefix!)__" : nil
         
         func log<Printable>(event: Publishers.Event, _ printable: Printable? = nil) {
             let fromPrintable: String? = printable != nil ? String(describing: printable!) : nil
@@ -48,16 +50,29 @@ internal extension Publisher {
         }
         
         return self.handleEvents(
-            receiveSubscription: { log(event: .subscription, $0) },
-            receiveOutput: { log(event: .output, $0) },
-            receiveCompletion: { log(event: .completion, $0) },
-            receiveCancel: { log(event: .cancel, Void?.none) },
-            receiveRequest: { log(event: .request, $0) }
+            receiveSubscription: events.contains(.subscription) ? { log(event: .subscription, $0) } : nil,
+            receiveOutput: events.contains(.output) ? { log(event: .output, $0) } : nil,
+            receiveCompletion: events.contains(.completion) ?{ log(event: .completion, $0) } : nil,
+            receiveCancel: events.contains(.cancel) ? { log(event: .cancel, Void?.none) } : nil,
+            receiveRequest: events.contains(.request) ? { log(event: .request, $0) } : nil
         ).eraseToAnyPublisher()
     }
 }
 
 extension Publishers {
+    
+    struct EventsToDebug: OptionSet {
+        let rawValue: Int
+        
+        static let cancel       = EventsToDebug(rawValue: 1 << 0)
+        static let completion   = EventsToDebug(rawValue: 1 << 1)
+        static let output       = EventsToDebug(rawValue: 1 << 2)
+        static let request      = EventsToDebug(rawValue: 1 << 3)
+        static let subscription = EventsToDebug(rawValue: 1 << 4)
+        
+        static let all: EventsToDebug = [.cancel, .completion, .output, .request, .subscription]
+    }
+    
     enum Event {
         case cancel
         case completion
