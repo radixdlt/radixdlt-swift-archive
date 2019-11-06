@@ -28,7 +28,7 @@ import Combine
 public protocol AtomToMintTokenMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == MintTokensAction {}
 
 public extension AtomToMintTokenMapper {
-    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[MintTokensAction]> {
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[MintTokensAction], Never> {
         var mintActions = [MintTokensAction]()
         for particleGroup in atom {
             guard let mintAction = mintTokensActionFrom(particleGroup: particleGroup) else { continue }

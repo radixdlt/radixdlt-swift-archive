@@ -35,12 +35,12 @@ struct HardCodedAtomStore: AtomStore {
 
 extension HardCodedAtomStore {
 
-    func onSync(address: Address) -> CombineObservable<Date> {
+    func onSync(address: Address) -> AnyPublisher<Date, Never> {
 //        return CombineObservable.just
         combineMigrationInProgress()
     }
 
-    func atomObservations(of address: Address) -> CombineObservable<AtomObservation> {
+    func atomObservations(of address: Address) -> AnyPublisher<AtomObservation, Never> {
 //         return .empty()
         combineMigrationInProgress()
     }

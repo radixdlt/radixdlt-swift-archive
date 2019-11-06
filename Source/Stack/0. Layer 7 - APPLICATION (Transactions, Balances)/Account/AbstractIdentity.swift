@@ -68,7 +68,7 @@ public extension AbstractIdentity {
         accountSubject.send(selectedAccount)
     }
     
-    var activeAccountObservable: CombineObservable<Account> {
+    var activeAccountObservable: AnyPublisher<Account, Never> {
         return accountSubject.eraseToAnyPublisher()
     }
 

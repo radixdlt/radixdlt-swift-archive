@@ -31,7 +31,7 @@ public struct UniverseBootstrap: BootstrapConfig {
 }
 
 private extension UniverseBootstrap {
-    init(config: UniverseConfig, seedNodes: CombineObservable<Node>) {
+    init(config: UniverseConfig, seedNodes: AnyPublisher<Node, Never>) {
         self.config = config
         self.discoveryMode = .byDiscovery(config: config, seedNodes: seedNodes)
     }

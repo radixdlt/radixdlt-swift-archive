@@ -40,12 +40,12 @@ public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDe
     
     private let radixNetworkController: RadixNetworkController
     
-    private let activeAccount: CombineObservable<Account>
+    private let activeAccount: AnyPublisher<Account, Never>
     
     private var cancellables = Set<AnyCancellable>()
     
     public init(
-        activeAccount: CombineObservable<Account>,
+        activeAccount: AnyPublisher<Account, Never>,
         radixNetworkController: RadixNetworkController,
         universeConfig: UniverseConfig,
         transactionToAtomMapper: TransactionToAtomMapper,
@@ -61,7 +61,7 @@ public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDe
 
 public extension DefaultTransactionMaker {
     convenience init(
-        activeAccount: CombineObservable<Account>,
+        activeAccount: AnyPublisher<Account, Never>,
         universe: RadixUniverse
         ) {
         
@@ -145,7 +145,7 @@ private extension DefaultTransactionMaker {
         
 //        let cachedAtom = atomSingle.cache()
 //        let updates = cachedAtom
-//            .flatMapObservable { [unowned self] (atom: SignedAtom) -> CombineObservable<SubmitAtomAction> in
+//            .flatMapObservable { [unowned self] (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
 //                let initialAction: SubmitAtomAction
 //
 //                if let originNode = originNode {
@@ -154,7 +154,7 @@ private extension DefaultTransactionMaker {
 //                    initialAction = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
 //                }
 //
-//                let status: CombineObservable<SubmitAtomAction> = self.radixNetworkController
+//                let status: AnyPublisher<SubmitAtomAction, Never> = self.radixNetworkController
 //                    .getActions()
 //                    .compactMap(typeAs: SubmitAtomAction.self)
 //                    .filter { $0.uuid == initialAction.uuid }
@@ -173,7 +173,7 @@ private extension DefaultTransactionMaker {
         combineMigrationInProgress()
     }
     
-    var addressOfActiveAccount: CombineObservable<Address> {
+    var addressOfActiveAccount: AnyPublisher<Address, Never> {
         return activeAccount.map { [unowned self] in
             self.addressOf(account: $0)
         }.eraseToAnyPublisher()

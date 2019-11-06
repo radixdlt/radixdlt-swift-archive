@@ -64,7 +64,7 @@ public extension DefaultAtomPuller {
 internal extension DefaultAtomPuller {
     struct RequestCache: DictionaryConvertibleMutable, ExpressibleByDictionaryLiteral {
         public typealias Key = Address
-        public typealias Value = CombineObservable<FetchAtomsAction>
+        public typealias Value = AnyPublisher<FetchAtomsAction, Never>
         public typealias Map = [Key: Value]
         public var dictionary: Map
         public init(dictionary: Map) {

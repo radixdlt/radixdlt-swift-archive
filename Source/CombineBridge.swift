@@ -28,7 +28,6 @@ import Combine
 // swiftlint:disable all
 
 // Replaced: `RxSwift.Observable`
-public typealias CombineObservable<Output> = AnyPublisher<Output, Never>
 public typealias Completable = AnyPublisher<Never, Never>
 
 internal func combineMigrationInProgress() -> Never {

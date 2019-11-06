@@ -27,12 +27,12 @@ import Combine
 
 public protocol AtomToSpecificExecutedActionMapper: BaseAtomToUserActionMapper {
     associatedtype SpecificExecutedAction: UserAction
-    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[SpecificExecutedAction]>
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[SpecificExecutedAction], Never>
 }
 
 public extension AtomToSpecificExecutedActionMapper {
         
-    func mapAtomSomeUserActions(_ atom: Atom) -> CombineObservable<[UserAction]> {
+    func mapAtomSomeUserActions(_ atom: Atom) -> AnyPublisher<[UserAction], Never> {
         return mapAtomToActions(atom).map { actions in return actions.map { $0 } }.eraseToAnyPublisher()
     }
 }

@@ -87,7 +87,7 @@ public extension DefaultHTTPClient {
     
     func loadContent(of page: String) -> Single<String, Never> {
 //        return CombineObservable.deferred { [unowned alamofireSession] in
-//            return CombineObservable<String>.create { observer in
+//            return AnyPublisher<String, Never>.create { observer in
 //                let dataTask = alamofireSession.request(page).responseString { response in
 //                    switch response.result {
 //                    case .failure(let error):
@@ -117,7 +117,7 @@ public extension DefaultHTTPClient {
 private extension DefaultHTTPClient {
     
     func request<D>(_ makeRequest: @escaping (Alamofire.Session) -> Alamofire.DataRequest) -> Single<D, Never> where D: Decodable {
-//        return CombineObservable<D>.deferred { [weak alamofireSession] in
+//        return AnyPublisher<D, Never>.deferred { [weak alamofireSession] in
 //            return CombineObservable.create { observer in
 //                guard let alamofireSession = alamofireSession else {
 //                    log.error("alamofireSession is nil")

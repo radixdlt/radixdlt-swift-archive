@@ -27,8 +27,8 @@ import Foundation
 import Combine
 
 struct MockedHTTPClient: HTTPClient {
-    private let httpResponse: CombineObservable<String>
-    init(httpResponse: CombineObservable<String>) {
+    private let httpResponse: AnyPublisher<String, Never>
+    init(httpResponse: AnyPublisher<String, Never>) {
         self.httpResponse = httpResponse
     }
     

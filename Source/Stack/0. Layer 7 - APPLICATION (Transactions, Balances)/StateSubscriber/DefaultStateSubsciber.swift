@@ -44,7 +44,7 @@ public extension DefaultStateSubscriber {
     func observeState<State>(
         ofType stateType: State.Type,
         at address: Address
-    ) -> CombineObservable<State> where State: ApplicationState {
+    ) -> AnyPublisher<State, Never> where State: ApplicationState {
         
 //        return atomStore.onSync(address: address)
 //            .map { [unowned self] date in

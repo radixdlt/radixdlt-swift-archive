@@ -27,7 +27,7 @@ import Combine
 
 public struct AnyAtomToExecutedActionMapper: BaseAtomToUserActionMapper {
     
-    private let _mapAtomSomeUserActions: (Atom) -> CombineObservable<[UserAction]>
+    private let _mapAtomSomeUserActions: (Atom) -> AnyPublisher<[UserAction], Never>
     
     public init<Concrete>(any concrete: Concrete) where Concrete: BaseAtomToUserActionMapper {
         self._mapAtomSomeUserActions = {
@@ -37,7 +37,7 @@ public struct AnyAtomToExecutedActionMapper: BaseAtomToUserActionMapper {
 }
 
 public extension AnyAtomToExecutedActionMapper {
-    func mapAtomSomeUserActions(_ atom: Atom) -> CombineObservable<[UserAction]> {
+    func mapAtomSomeUserActions(_ atom: Atom) -> AnyPublisher<[UserAction], Never> {
         return self._mapAtomSomeUserActions(atom)
     }
 }

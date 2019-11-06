@@ -26,5 +26,5 @@ import Foundation
 import Combine
 
 public protocol AtomStatusObserving {
-    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> CombineObservable<AtomStatusEvent>
+    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<AtomStatusEvent, Never>
 }

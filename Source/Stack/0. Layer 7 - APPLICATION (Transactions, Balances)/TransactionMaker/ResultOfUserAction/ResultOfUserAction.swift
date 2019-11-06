@@ -41,7 +41,7 @@ public enum ResultOfUserAction: Throwing {
 public extension ResultOfUserAction {
     
     init(
-        updates: CombineObservable<SubmitAtomAction>,
+        updates: AnyPublisher<SubmitAtomAction, Never>,
         cachedAtom: AnyPublisher<SignedAtom, Never>,
         autoConnect: ((Cancellable) -> Void)?
     ) {
@@ -103,12 +103,12 @@ public struct FailedToStageAction: Swift.Error {
 
 // MARK: RxBlocking
 public extension ResultOfUserAction {
-    func toObservable() -> CombineObservable<SubmitAtomAction> {
+    func toObservable() -> AnyPublisher<SubmitAtomAction, Never> {
 //        switch self {
 //        case .pendingSending(_, let updates, _):
 //            return updates
 //        case .failedToStageAction(let failedAction):
-//            return CombineObservable<SubmitAtomAction>.error(Error.failedToStageAction(failedAction))
+//            return AnyPublisher<SubmitAtomAction, Never>.error(Error.failedToStageAction(failedAction))
 //        }
         combineMigrationInProgress()
     }

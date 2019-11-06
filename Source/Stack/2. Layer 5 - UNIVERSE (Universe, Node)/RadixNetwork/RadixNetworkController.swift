@@ -125,7 +125,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
 
 public extension DefaultRadixNetworkController {
     
-    func getActions() -> CombineObservable<NodeAction> {
+    func getActions() -> AnyPublisher<NodeAction, Never> {
         return reducedNodeActions
     }
     
@@ -133,7 +133,7 @@ public extension DefaultRadixNetworkController {
         nodeActionSubject.send(nodeAction)
     }
 
-    func observeNetworkState() -> CombineObservable<RadixNetworkState> {
+    func observeNetworkState() -> AnyPublisher<RadixNetworkState, Never> {
         networkStateSubject.eraseToAnyPublisher()
     }
     

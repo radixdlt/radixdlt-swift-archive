@@ -45,8 +45,8 @@ protocol TokenTransferring {
 
 protocol AccountBalancing {
     /// `AddressConvertible` is a protocol for something that can return a Radix `Address` (`Address` conforms to `AddressConvertible`, returning `self`).
-    func observeBalances(ownedBy owner: AddressConvertible) -> CombineObservable<TokenBalances>
-    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> CombineObservable<TokenBalance?>
+    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, Never>
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance?, Never>
 }
 
 protocol MessageSending {

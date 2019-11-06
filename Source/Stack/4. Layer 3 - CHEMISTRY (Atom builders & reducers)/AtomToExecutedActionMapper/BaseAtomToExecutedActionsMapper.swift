@@ -26,5 +26,5 @@ import Foundation
 import Combine
 
 public protocol BaseAtomToUserActionMapper {
-    func mapAtomSomeUserActions(_ atom: Atom) -> CombineObservable<[UserAction]>
+    func mapAtomSomeUserActions(_ atom: Atom) -> AnyPublisher<[UserAction], Never>
 }

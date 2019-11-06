@@ -33,7 +33,7 @@ public protocol MessageSending: ActiveAccountOwner {
     
     /// Sends a message
     func send(message: SendMessageAction) -> ResultOfUserAction
-    func observeMessages(toOrFrom address: Address) -> CombineObservable<SendMessageAction>
+    func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, Never>
 }
 
 public extension MessageSending {
@@ -69,7 +69,7 @@ public extension MessageSending {
 
 // MARK: Sent
 public extension MessageSending {
-    func observeMyMessages() -> CombineObservable<SendMessageAction> {
+    func observeMyMessages() -> AnyPublisher<SendMessageAction, Never> {
         return observeMessages(toOrFrom: addressOfActiveAccount)
     }
 }

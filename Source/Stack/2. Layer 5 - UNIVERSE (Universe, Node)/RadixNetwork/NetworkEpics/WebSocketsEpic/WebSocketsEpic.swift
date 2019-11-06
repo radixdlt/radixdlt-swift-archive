@@ -52,7 +52,7 @@ public extension WebSocketsEpic {
         //                    self._retainingVariableEpics.append(newEpic)
         //                    return newEpic
         //                }
-        //                .map { (newlyCreatedEpic: NetworkWebsocketEpic) -> CombineObservable<NodeAction> in
+        //                .map { (newlyCreatedEpic: NetworkWebsocketEpic) -> AnyPublisher<NodeAction, Never> in
         //                    return newlyCreatedEpic.handle(actions: actions, networkState: networkState)
         //                }
         //        )

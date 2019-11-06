@@ -27,7 +27,7 @@ import Combine
 
 extension FullDuplexCommunicationChannel {
     
-    func responseForMessage<Model>(requestId: String) -> CombineObservable<Model> where Model: Decodable {
+    func responseForMessage<Model>(requestId: String) -> AnyPublisher<Model, Never> where Model: Decodable {
         
 //        return responseOrErrorForMessage(requestId: requestId).map {
 //            try $0.get().model
@@ -35,11 +35,11 @@ extension FullDuplexCommunicationChannel {
         combineMigrationInProgress()
     }
     
-    func responseOrErrorForMessage<Model>(requestId: String) -> CombineObservable<RPCResult<Model>> where Model: Decodable {
+    func responseOrErrorForMessage<Model>(requestId: String) -> AnyPublisher<RPCResult<Model>, Never> where Model: Decodable {
         return resultForMessage(parseMode: .responseOnRequest(withId: requestId))
     }
     
-    func observeNotification<Model>(_ notification: RPCNotification, subscriberId: SubscriberId) -> CombineObservable<Model> where Model: Decodable {
+    func observeNotification<Model>(_ notification: RPCNotification, subscriberId: SubscriberId) -> AnyPublisher<Model, Never> where Model: Decodable {
         
 //        return resultForMessage(parseMode: .parseAsNotification(notification, subscriberId: subscriberId)).map {
 //            try $0.get().model
@@ -57,7 +57,7 @@ private extension FullDuplexCommunicationChannel {
 
     func resultForMessage<Model>(
         parseMode: ParseJsonRpcResponseMode
-    ) -> CombineObservable<RPCResult<Model>> where Model: Decodable {
+    ) -> AnyPublisher<RPCResult<Model>, Never> where Model: Decodable {
        
         combineMigrationInProgress()
 //        return messages

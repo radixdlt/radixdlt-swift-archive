@@ -29,8 +29,8 @@ public protocol AccountBalancing: ActiveAccountOwner {
     
     var nativeTokenDefinition: TokenDefinition { get }
         
-    func observeBalances(ownedBy owner: AddressConvertible) -> CombineObservable<TokenBalances>
-    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> CombineObservable<TokenBalance?>
+    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, Never>
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance?, Never>
 }
 
 public extension AccountBalancing {
@@ -39,31 +39,31 @@ public extension AccountBalancing {
         return nativeTokenDefinition.tokenDefinitionReference
     }
     
-    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> CombineObservable<TokenBalance?> {
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance?, Never> {
         return observeBalances(ownedBy: owner).map {
             $0.balance(ofToken: tokenIdentifier)
         }.eraseToAnyPublisher()
     }
     
-    func observeMyBalances() -> CombineObservable<TokenBalances> {
+    func observeMyBalances() -> AnyPublisher<TokenBalances, Never> {
         return observeBalances(ownedBy: addressOfActiveAccount)
     }
     
-    func observeMyBalance(ofToken tokenIdentifier: ResourceIdentifier) -> CombineObservable<TokenBalance?> {
+    func observeMyBalance(ofToken tokenIdentifier: ResourceIdentifier) -> AnyPublisher<TokenBalance?, Never> {
         return observeBalance(ofToken: tokenIdentifier, ownedBy: addressOfActiveAccount)
     }
     
-    func observeMyBalanceOfNativeTokens() -> CombineObservable<TokenBalance?> {
+    func observeMyBalanceOfNativeTokens() -> AnyPublisher<TokenBalance?, Never> {
         return observeMyBalance(ofToken: nativeTokenIdentifier)
     }
     
-    func observeMyBalanceOfNativeTokensOrZero() -> CombineObservable<TokenBalance> {
+    func observeMyBalanceOfNativeTokensOrZero() -> AnyPublisher<TokenBalance, Never> {
         return observeMyBalanceOfNativeTokens()
             .replaceNil(with: TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
             .eraseToAnyPublisher()
     }
     
-    func balanceOfNativeTokensOrZero(ownedBy owner: AddressConvertible) -> CombineObservable<TokenBalance> {
+    func balanceOfNativeTokensOrZero(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance, Never> {
         return observeBalance(ofToken: nativeTokenIdentifier, ownedBy: owner)
             .replaceNil(with: TokenBalance.zero(token: nativeTokenDefinition, ownedBy: owner))
             .eraseToAnyPublisher()

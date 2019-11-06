@@ -33,7 +33,7 @@ public protocol TokenCreating {
     /// Creates a new kind of Token
     func create(token: CreateTokenAction) -> ResultOfUserAction
     
-    func observeMyTokenDefinitions() -> CombineObservable<TokenDefinitionsState>
+    func observeMyTokenDefinitions() -> AnyPublisher<TokenDefinitionsState, Never>
 }
 
 public extension TokenCreating {

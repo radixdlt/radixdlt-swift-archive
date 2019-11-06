@@ -30,7 +30,7 @@ public final class DefaultAtomToTransactionMapper: AtomToTransactionMapper {
     /// A list of type-erased mappers from `Atom` to `UserAction`
     private let atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper]
     
-    public init(activeAccount: CombineObservable<Account>) {
+    public init(activeAccount: AnyPublisher<Account, Never>) {
         atomToExecutedActionMappers = .atomToActionMappers(activeAccount: activeAccount)
     }
 }
@@ -43,7 +43,7 @@ public extension DefaultAtomToTransactionMapper {
 
 public extension DefaultAtomToTransactionMapper {
     
-    func transactionFromAtom(_ atom: Atom) -> CombineObservable<ExecutedTransaction> {
+    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, Never> {
 //        return CombineObservable.combineLatest(
 //            atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
 //        ) { $0.flatMap { $0 } }
@@ -56,7 +56,7 @@ public extension DefaultAtomToTransactionMapper {
 
 // MARK: - Default mappers
 public extension Array where Element == AnyAtomToExecutedActionMapper {
-    static func atomToActionMappers(activeAccount: CombineObservable<Account>) -> [AnyAtomToExecutedActionMapper] {
+    static func atomToActionMappers(activeAccount: AnyPublisher<Account, Never>) -> [AnyAtomToExecutedActionMapper] {
         return [
             AnyAtomToExecutedActionMapper(any: DefaultAtomToSendMessageActionMapper(activeAccount: activeAccount) ),
             AnyAtomToExecutedActionMapper(any: DefaultAtomToCreateTokenMapper()),

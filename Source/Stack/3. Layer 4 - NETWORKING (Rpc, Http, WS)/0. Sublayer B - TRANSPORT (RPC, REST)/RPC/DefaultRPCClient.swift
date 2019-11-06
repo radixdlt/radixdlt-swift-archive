@@ -40,7 +40,7 @@ public extension DefaultRPCClient {
     func observeAtoms(subscriberId: SubscriberId) -> AnyPublisher<AtomObservation, Never> {
 //        return observe(notification: .subscribeUpdate, subscriberId: subscriberId, responseType: AtomSubscriptionUpdate.self)
 //            .map { $0.toAtomObservation() }
-//            .flatMap { (atomObservations: [AtomObservation]) -> CombineObservable<AtomObservation> in
+//            .flatMap { (atomObservations: [AtomObservation]) -> AnyPublisher<AtomObservation, Never> in
 //                return CombineObservable.from(atomObservations)
 //            }
         combineMigrationInProgress()
@@ -125,7 +125,7 @@ internal extension DefaultRPCClient {
         notification: RPCNotification,
         subscriberId: SubscriberId,
         responseType: NotificationResponse.Type
-    ) -> CombineObservable<NotificationResponse> where NotificationResponse: Decodable {
+    ) -> AnyPublisher<NotificationResponse, Never> where NotificationResponse: Decodable {
         
         return channel.observeNotification(notification, subscriberId: subscriberId)
     }

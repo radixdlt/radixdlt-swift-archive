@@ -41,17 +41,17 @@ public extension FetchAtomsEpic {
         
 //        var disposableMap: [UUID: CombineDisposable] = [:]
 //
-//        let fetch: CombineObservable<NodeAction> = actions
+//        let fetch: AnyPublisher<NodeAction, Never> = actions
 //            .compactMap(typeAs: FindANodeResultAction.self)
 //            .filter { $0.request is FetchAtomsActionRequest }
-//            .flatMap { [unowned self] (nodeFound: FindANodeResultAction) -> CombineObservable<NodeAction> in
+//            .flatMap { [unowned self] (nodeFound: FindANodeResultAction) -> AnyPublisher<NodeAction, Never> in
 //
 //                let node = nodeFound.node
 //                let fetchAtomsActionRequest = castOrKill(instance: nodeFound.request, toType: FetchAtomsActionRequest.self)
 //                let uuid = fetchAtomsActionRequest.uuid
 //
 //                var fetchDisposable: CombineDisposable?
-//                let atomsObs = CombineObservable<NodeAction>.create { observer in
+//                let atomsObs = AnyPublisher<NodeAction, Never>.create { observer in
 //                    fetchCombineDisposable = self.fetchAtoms(from: node, request: fetchAtomsActionRequest).subscribe(observer)
 //                    return CombineDisposables.create()
 //                }
@@ -61,7 +61,7 @@ public extension FetchAtomsEpic {
 //                    .do(onSubscribe: { disposableMap[uuid] = fetchDisposable })
 //        }
 //
-//        let cancelFetch: CombineObservable<NodeAction> = actions
+//        let cancelFetch: AnyPublisher<NodeAction, Never> = actions
 //            .compactMap(typeAs: FetchAtomsActionCancel.self)
 //            .do(onNext: { disposableMap.removeValue(forKey: $0.uuid)?.dispose() })
 //            .ignoreElementsObservable().map { $0 }
@@ -73,7 +73,7 @@ public extension FetchAtomsEpic {
 }
 
 //private extension FetchAtomsEpic {
-//    func fetchAtoms(from node: Node, request: FetchAtomsActionRequest) -> CombineObservable<NodeAction> {
+//    func fetchAtoms(from node: Node, request: FetchAtomsActionRequest) -> AnyPublisher<NodeAction, Never> {
 //        let webSocketToNode = webSockets.webSocket(to: node, shouldConnect: false)
 //        let rpcClient = DefaultRPCClient(channel: webSocketToNode)
 //        let uuid = request.uuid
@@ -99,7 +99,7 @@ public extension FetchAtomsEpic {
 //        }.do(onDispose: { [unowned self] in
 //            rpcClient.cancelAtomsSubscription(subscriberId: subscriberIdFromUuid)
 //                .andThen(
-//                    CombineObservable<Int>.timer(delayFromCancelObservationOfAtomStatusToClosingWebsocket, scheduler: MainScheduler.instance).mapToVoid()
+//                    AnyPublisher<Int, Never>.timer(delayFromCancelObservationOfAtomStatusToClosingWebsocket, scheduler: MainScheduler.instance).mapToVoid()
 //                        .flatMapCompletableVoid {
 //                            self.close(webSocketToNode: webSocketToNode, useDelay: false)
 //                            return Completable.completed()

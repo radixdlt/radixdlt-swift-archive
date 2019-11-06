@@ -35,7 +35,7 @@ public extension DefaultAtomToTokenTransferMapper {
     
     typealias SpecificExecutedAction = TransferTokensAction
     
-    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[TransferTokensAction]> {
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[TransferTokensAction], Never> {
         var transferredTokens = [TransferTokensAction]()
         
         for particleGroup in atom {

@@ -42,32 +42,32 @@ public extension DiscoverNodesEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-//        let getUniverseConfigsOfSeedNodes: CombineObservable<NodeAction> = actions
+//        let getUniverseConfigsOfSeedNodes: AnyPublisher<NodeAction, Never> = actions
 //            .compactMap(typeAs: DiscoverMoreNodesAction.self)
 //            .flatMap { [unowned self] _ in self.seedNodes }
 //            .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }
 //            .catchError { .just(DiscoverMoreNodesActionError(reason: $0)) }
 //
 //        // TODO Store universe configs in a Node Table instead of filter out Node in FindANodeEpic
-//        let seedNodesHavingMismatchingUniverse: CombineObservable<NodeAction> = actions
+//        let seedNodesHavingMismatchingUniverse: AnyPublisher<NodeAction, Never> = actions
 //            .compactMap(typeAs: GetUniverseConfigActionResult.self)
 //            .filter { [unowned self] in $0.result != self.universeConfig }
 //            .map { [unowned self] in NodeUniverseMismatch(node: $0.node, expectedConfig: self.universeConfig, actualConfig: $0.result) }
 //
-//        let connectedSeedNodes: CombineObservable<Node> = actions
+//        let connectedSeedNodes: AnyPublisher<Node, Never> = actions
 //            .compactMap(typeAs: GetUniverseConfigActionResult.self)
 //            .filter { [unowned self] in $0.result == self.universeConfig }
 //            .map { $0.node }
 //            .publish()
 //            .autoConnect(numberOfSubscribers: 3)
 //
-//        let addSeedNodes: CombineObservable<NodeAction> = connectedSeedNodes.map { AddNodeAction(node: $0) }
-//        let addSeedNodesInfo: CombineObservable<NodeAction> = connectedSeedNodes.map { GetNodeInfoActionRequest(node: $0) }
-//        let addSeedNodeSiblings: CombineObservable<NodeAction> = connectedSeedNodes.map { GetLivePeersActionRequest(node: $0) }
+//        let addSeedNodes: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { AddNodeAction(node: $0) }
+//        let addSeedNodesInfo: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetNodeInfoActionRequest(node: $0) }
+//        let addSeedNodeSiblings: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetLivePeersActionRequest(node: $0) }
 //
-//        let addNodes: CombineObservable<NodeAction> = actions
+//        let addNodes: AnyPublisher<NodeAction, Never> = actions
 //            .compactMap(typeAs: GetLivePeersActionResult.self)
-//            .flatMap { (livePeersResult: GetLivePeersActionResult) -> CombineObservable<NodeAction> in
+//            .flatMap { (livePeersResult: GetLivePeersActionResult) -> AnyPublisher<NodeAction, Never> in
 //                return CombineObservable.combineLatest(
 //                    Just(livePeersResult.result),
 //                    CombineObservable.concat(networkState.firstOrError().eraseToAnyPublisher(), CombineObservable.never())
@@ -84,8 +84,8 @@ public extension DiscoverNodesEpic {
 //                            else { return nil }
 //                        return AddNodeAction(node: nodeFromInfo, nodeInfo: nodeInfo)
 //                        }.asSet.asArray /* removing duplicates */
-//                    }.flatMap { (addNodeActionList: [AddNodeAction]) -> CombineObservable<NodeAction> in
-//                        return CombineObservable<NodeAction>.from(addNodeActionList)
+//                    }.flatMap { (addNodeActionList: [AddNodeAction]) -> AnyPublisher<NodeAction, Never> in
+//                        return AnyPublisher<NodeAction, Never>.from(addNodeActionList)
 //                }
 //        }
 //

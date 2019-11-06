@@ -42,7 +42,7 @@ public final class DefaultTransactionSubscriber: TransactionSubscriber {
 public extension DefaultTransactionSubscriber {
     convenience init(
         atomStore: AtomStore,
-        activeAccount: CombineObservable<Account>
+        activeAccount: AnyPublisher<Account, Never>
     ) {
         self.init(
             atomStore: atomStore,
@@ -54,7 +54,7 @@ public extension DefaultTransactionSubscriber {
 // MARK: TransactionSubscriber
 public extension DefaultTransactionSubscriber {
     
-    func observeTransactions(at address: Address) -> CombineObservable<ExecutedTransaction> {
+    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, Never> {
 //        return atomStore.atomObservations(of: address)
 //            .filterMap { (atomObservation: AtomObservation) -> FilterMap<Atom> in
 //                guard case .store(let atom, _, _) = atomObservation else { return .ignore }
@@ -68,7 +68,7 @@ public extension DefaultTransactionSubscriber {
 
 // MARK: AtomToTransactionMapper
 public extension DefaultTransactionSubscriber {
-    func transactionFromAtom(_ atom: Atom) -> CombineObservable<ExecutedTransaction> {
+    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, Never> {
         return atomToTransactionMapper.transactionFromAtom(atom)
     }
 }

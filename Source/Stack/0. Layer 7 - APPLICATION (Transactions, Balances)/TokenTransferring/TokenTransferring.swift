@@ -29,7 +29,7 @@ import Combine
 public protocol TokenTransferring: ActiveAccountOwner {
 
     func transfer(tokens: TransferTokensAction) -> ResultOfUserAction
-    func observeTokenTransfers(toOrFrom address: Address) -> CombineObservable<TransferTokensAction>
+    func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, Never>
 }
 
 public extension TokenTransferring {
@@ -122,7 +122,7 @@ public extension TokenTransferring {
     /// of executed Token Transfers, either by you or someone else, the latter
     /// returns a stream of `ExecutedTransaction`, which is a container of UserActions
     /// submitted in a single Atom at some earlier point in time
-    func observeMyTokenTransfers() -> CombineObservable<TransferTokensAction> {
+    func observeMyTokenTransfers() -> AnyPublisher<TransferTokensAction, Never> {
         return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
     }
 }

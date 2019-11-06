@@ -30,16 +30,16 @@ public protocol AtomToSendMessageActionMapper: AtomToSpecificExecutedActionMappe
     Error == DecryptMessageFromAtomMapperError {}
 
 public final class DefaultAtomToSendMessageActionMapper: AtomToSendMessageActionMapper {
-    private let activeAccount: CombineObservable<Account>
+    private let activeAccount: AnyPublisher<Account, Never>
     public init(
-        activeAccount: CombineObservable<Account>
+        activeAccount: AnyPublisher<Account, Never>
     ) {
         self.activeAccount = activeAccount
     }
 }
 
 public extension DefaultAtomToSendMessageActionMapper {
-    func mapAtomToActions(_ atom: Atom) -> CombineObservable<[SendMessageAction]> {
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[SendMessageAction], Never> {
         guard atom.containsAnyMessageParticle() else {
             return Just([]).eraseToAnyPublisher()
         }

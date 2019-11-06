@@ -27,7 +27,7 @@ import Combine
 
 // MARK: TransactionSubscriber
 public protocol TransactionSubscriber: AtomToTransactionMapper {
-    func observeTransactions(at address: Address) -> CombineObservable<ExecutedTransaction>
+    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, Never>
 }
 
 public extension TransactionSubscriber {
@@ -75,7 +75,7 @@ public extension TransactionSubscriber where Self: ActiveAccountOwner {
     /// Do not confuse this with `observeMyTokenTransfers`, this returns a stream of `ExecutedTransaction`, which is
     /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
     /// of executed Token Transfers, either by you or someone else.
-    func observeMyTransactions() -> CombineObservable<ExecutedTransaction> {
+    func observeMyTransactions() -> AnyPublisher<ExecutedTransaction, Never> {
         return observeTransactions(at: addressOfActiveAccount)
     }
     
@@ -83,7 +83,7 @@ public extension TransactionSubscriber where Self: ActiveAccountOwner {
     /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
     /// of executed Token Transfers, either by you or someone else.
     /// Boolean `OR` of `actionTypes`
-    func observeMyTransactions(containingActionOfAnyType actionTypes: [UserAction.Type]) -> CombineObservable<ExecutedTransaction> {
+    func observeMyTransactions(containingActionOfAnyType actionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, Never> {
         return observeTransactions(at: addressOfActiveAccount, containingActionOfAnyType: actionTypes)
     }
     
@@ -91,11 +91,11 @@ public extension TransactionSubscriber where Self: ActiveAccountOwner {
     /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
     /// of executed Token Transfers, either by you or someone else.
     /// Boolean `AND` of `requiredActionTypes`
-    func observeMyTransactions(containingActionsOfAllTypes requiredActionTypes: [UserAction.Type]) -> CombineObservable<ExecutedTransaction> {
+    func observeMyTransactions(containingActionsOfAllTypes requiredActionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, Never> {
         return observeTransactions(at: addressOfActiveAccount, containingActionsOfAllTypes: requiredActionTypes)
     }
     
-    func observeMyActions<Action>(ofType actionType: Action.Type) -> CombineObservable<Action> where Action: UserAction {
+    func observeMyActions<Action>(ofType actionType: Action.Type) -> AnyPublisher<Action, Never> where Action: UserAction {
         return observeActions(ofType: actionType, at: addressOfActiveAccount)
     }
 }

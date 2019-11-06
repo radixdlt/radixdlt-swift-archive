@@ -35,7 +35,7 @@ public protocol RadixUniverse {
 }
 
 public extension RadixUniverse {
-    var connectedNodes: CombineObservable<[RadixNodeState]> { networkController.connectedNodes }
+    var connectedNodes: AnyPublisher<[RadixNodeState], Never> { networkController.connectedNodes }
 }
 
 // MARK: - RadixUniverse

@@ -43,7 +43,7 @@ public extension SubmitAtomEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-//        let foundNode: CombineObservable<NodeAction> = actions
+//        let foundNode: AnyPublisher<NodeAction, Never> = actions
 //            .compactMap(typeAs: FindANodeResultAction.self)
 //            .filter { $0.request is SubmitAtomActionRequest }
 //            .map {
@@ -51,7 +51,7 @@ public extension SubmitAtomEpic {
 //                return SubmitAtomActionSend(request: request, node: $0.node)
 //        }
 //
-//        let submitToNode: CombineObservable<NodeAction> = actions
+//        let submitToNode: AnyPublisher<NodeAction, Never> = actions
 //            .compactMap(typeAs: SubmitAtomActionSend.self)
 //            .flatMap { [unowned self] in
 //                self.waitForConnection(toNode: $0.node)
@@ -68,18 +68,18 @@ public extension SubmitAtomEpic {
 
 private extension SubmitAtomEpic {
 
-    func submitAtom(sendAction: SubmitAtomActionSend, toNode node: Node) -> CombineObservable<NodeAction> {
+    func submitAtom(sendAction: SubmitAtomActionSend, toNode node: Node) -> AnyPublisher<NodeAction, Never> {
 //        let webSocketToNode = webSockets.webSocket(to: node, shouldConnect: false)
 //        let rpcClient =  DefaultRPCClient(channel: webSocketToNode)
 //        let subscriberId = SubscriberId(uuid: UUID())
 //        let atom = sendAction.atom
 //
-//        return CombineObservable<NodeAction>.create { observer in
+//        return AnyPublisher<NodeAction, Never>.create { observer in
 //            var disposables = [CombineDisposable]()
 //
 //            let pushAtomAndObserveItsStatusCombineDisposable = rpcClient
 //                .observeAtomStatusNotifications(subscriberId: subscriberId)
-//                .flatMap { statusEvent -> CombineObservable<NodeAction> in
+//                .flatMap { statusEvent -> AnyPublisher<NodeAction, Never> in
 //                    let statusAction = SubmitAtomActionStatus(sendAction: sendAction, node: node, statusEvent: statusEvent)
 //
 //                    if statusEvent == .stored || !sendAction.isCompletingOnStoreOnly {
@@ -123,7 +123,7 @@ private extension SubmitAtomEpic {
 //            rpcClient
 //                .closeAtomStatusNotifications(subscriberId: subscriberId)
 //                .andThen(
-//                    CombineObservable<Int>.timer(delayFromCancelObservationOfAtomStatusToClosingWebsocket, scheduler: MainScheduler.instance).mapToVoid()
+//                    AnyPublisher<Int, Never>.timer(delayFromCancelObservationOfAtomStatusToClosingWebsocket, scheduler: MainScheduler.instance).mapToVoid()
 //                        .flatMapCompletableVoid {
 //                            self.close(webSocketToNode: webSocketToNode, useDelay: false)
 //                            return Completable.completed()
