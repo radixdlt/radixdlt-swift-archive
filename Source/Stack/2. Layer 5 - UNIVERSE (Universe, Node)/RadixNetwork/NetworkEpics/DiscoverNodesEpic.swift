@@ -35,70 +35,90 @@ public final class DiscoverNodesEpic: RadixNetworkEpic {
     }
 }
 
+public extension Publishers {
+    /// The `ImmortalNever` publisher takes a generic type for `Output`, but will never output any element and will never finish.
+    /// The purpose of the generic `Output` type is to be able to perform concatenation/merging operations with other publishers,
+    /// such  as `append` which requires the type of `Output` to be equal
+    final class ImmortalNever<NeverOutput>: Publisher {}
+}
+
+// MARK: Publisher
+public extension Publishers.ImmortalNever {
+    typealias Output = NeverOutput
+    typealias Failure = Never
+        
+    func receive<S>(subscriber: S) where S: Subscriber, Failure == S.Failure, Output == S.Input {
+        fatalError("what to do?")
+    }
+}
+
 public extension DiscoverNodesEpic {
+    
+    // swiftlint:disable function_body_length
     
     func handle(
         actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-//        let getUniverseConfigsOfSeedNodes: AnyPublisher<NodeAction, Never> = actions
-//            .compactMap(typeAs: DiscoverMoreNodesAction.self)
-//            .flatMap { [unowned self] _ in self.seedNodes }
-//            .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }
+        let getUniverseConfigsOfSeedNodes: AnyPublisher<NodeAction, Never> = nodeActionPublisher
+            .compactMap(typeAs: DiscoverMoreNodesAction.self)
+            .flatMap { [unowned self] _ in self.seedNodes }^
+            .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }^
+        // TODO Combine change epics `actions: AnyPublisher<NodeAction, Never>` to `AnyPublisher<NodeAction, NodeActionsError>`
 //            .catchError { .just(DiscoverMoreNodesActionError(reason: $0)) }
-//
-//        // TODO Store universe configs in a Node Table instead of filter out Node in FindANodeEpic
-//        let seedNodesHavingMismatchingUniverse: AnyPublisher<NodeAction, Never> = actions
-//            .compactMap(typeAs: GetUniverseConfigActionResult.self)
-//            .filter { [unowned self] in $0.result != self.universeConfig }
-//            .map { [unowned self] in NodeUniverseMismatch(node: $0.node, expectedConfig: self.universeConfig, actualConfig: $0.result) }
-//
-//        let connectedSeedNodes: AnyPublisher<Node, Never> = actions
-//            .compactMap(typeAs: GetUniverseConfigActionResult.self)
-//            .filter { [unowned self] in $0.result == self.universeConfig }
-//            .map { $0.node }
-//            .publish()
-//            .autoConnect(numberOfSubscribers: 3)
-//
-//        let addSeedNodes: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { AddNodeAction(node: $0) }
-//        let addSeedNodesInfo: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetNodeInfoActionRequest(node: $0) }
-//        let addSeedNodeSiblings: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetLivePeersActionRequest(node: $0) }
-//
-//        let addNodes: AnyPublisher<NodeAction, Never> = actions
-//            .compactMap(typeAs: GetLivePeersActionResult.self)
-//            .flatMap { (livePeersResult: GetLivePeersActionResult) -> AnyPublisher<NodeAction, Never> in
-//                return CombineObservable.combineLatest(
-//                    Just(livePeersResult.result),
-//                    CombineObservable.concat(networkState.firstOrError().eraseToAnyPublisher(), CombineObservable.never())
-//                ) { (nodeInfos, state) in
-//
-//                    return nodeInfos.compactMap { (nodeInfo: NodeInfo) -> AddNodeAction? in
-//                        guard
-//                            let nodeFromInfo = try? Node(
-//                                ensureDomainNotNil: nodeInfo.host?.domain,
-//                                port: livePeersResult.node.host.port,
-//                                isUsingSSL: livePeersResult.node.isUsingSSL
-//                            ),
-//                            !state.nodes.containsValue(forKey: nodeFromInfo)
-//                            else { return nil }
-//                        return AddNodeAction(node: nodeFromInfo, nodeInfo: nodeInfo)
-//                        }.asSet.asArray /* removing duplicates */
-//                    }.flatMap { (addNodeActionList: [AddNodeAction]) -> AnyPublisher<NodeAction, Never> in
-//                        return AnyPublisher<NodeAction, Never>.from(addNodeActionList)
-//                }
-//        }
-//
-//        return CombineObservable.merge([
-//            addSeedNodes,
-//            addSeedNodesInfo,
-//            addSeedNodeSiblings,
-//            addNodes,
-//            getUniverseConfigsOfSeedNodes,
-//            seedNodesHavingMismatchingUniverse
-//        ])
-//
-        combineMigrationInProgress()
+
+        // TODO Store universe configs in a Node Table instead of filter out Node in FindANodeEpic
+        let seedNodesHavingMismatchingUniverse: AnyPublisher<NodeAction, Never> = nodeActionPublisher
+            .compactMap(typeAs: GetUniverseConfigActionResult.self)
+            .filter { [unowned self] in $0.result != self.universeConfig }^
+            .map { [unowned self] in NodeUniverseMismatch(node: $0.node, expectedConfig: self.universeConfig, actualConfig: $0.result) }^
+
+        let connectedSeedNodes: AnyPublisher<Node, Never> = nodeActionPublisher
+            .compactMap(typeAs: GetUniverseConfigActionResult.self)
+            .filter { [unowned self] in $0.result == self.universeConfig }
+            .map { $0.node }
+            .makeConnectable().autoconnect()^  // .autoConnect(numberOfSubscribers: 3)
+
+        let addSeedNodes: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { AddNodeAction(node: $0) }^
+        let addSeedNodesInfo: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetNodeInfoActionRequest(node: $0) }^
+        let addSeedNodeSiblings: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetLivePeersActionRequest(node: $0) }^
+
+        let addNodes: AnyPublisher<NodeAction, Never> = nodeActionPublisher
+            .compactMap(typeAs: GetLivePeersActionResult.self)
+            .flatMap { (livePeersResult: GetLivePeersActionResult) -> AnyPublisher<NodeAction, Never> in
+                return Just(livePeersResult.result).combineLatest(
+                    networkStatePublisher.first()^.append(Publishers.ImmortalNever<RadixNetworkState>())
+                ) { (nodeInfos, state) in
+
+                    return nodeInfos.compactMap { (nodeInfo: NodeInfo) -> AddNodeAction? in
+                        guard
+                            let nodeFromInfo = try? Node(
+                                ensureDomainNotNil: nodeInfo.host?.domain,
+                                port: livePeersResult.node.host.port,
+                                isUsingSSL: livePeersResult.node.isUsingSSL
+                            ),
+                            !state.nodes.containsValue(forKey: nodeFromInfo)
+                            else { return nil }
+                        return AddNodeAction(node: nodeFromInfo, nodeInfo: nodeInfo)
+                        }.asSet.asArray /* removing duplicates */
+                }^
+                .flatMap { (addNodeActionList: [AddNodeAction]) -> AnyPublisher<NodeAction, Never> in
+                    Just(addNodeActionList).flattenSequence()
+                }^
+            }^
+
+        return Publishers.MergeMany([
+            addSeedNodes,
+            addSeedNodesInfo,
+            addSeedNodeSiblings,
+            addNodes,
+            getUniverseConfigsOfSeedNodes,
+            seedNodesHavingMismatchingUniverse
+        ])^
+
     }
+    
+    // swiftlint:enable function_body_length
     
 }
