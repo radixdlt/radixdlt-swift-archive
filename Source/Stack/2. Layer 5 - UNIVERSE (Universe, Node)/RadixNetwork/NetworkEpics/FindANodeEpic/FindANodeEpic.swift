@@ -119,8 +119,8 @@ public extension FindANodeEpic {
                 // Stream of new actions to find a new node
                 let findConnectionActionsStream: AnyPublisher<NodeAction, Never> = connectedNodes
                     .filter { $0.isEmpty }^
-                    .first()^
-                    .flatMap { _ in
+                    .first().ignoreOutput()
+                    .andThen(
                         Timer.publish(every: self.waitForConnectionDurationInSeconds, on: .current, in: .default)
                             .autoconnect()^
                             .map { _ -> [NodeAction] in
@@ -130,7 +130,7 @@ public extension FindANodeEpic {
                         .removeDuplicates(by: {
                             $0.sameTypeOfActionAndSameNodeAs(other: $1)
                         })
-                    }^
+                    )
                     .prefix(untilOutputFrom: selectedNode)^
                     
                     // 🐉 HERE BE DRAGONS 🐉

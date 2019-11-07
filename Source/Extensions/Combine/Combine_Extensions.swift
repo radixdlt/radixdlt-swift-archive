@@ -50,6 +50,20 @@ public extension Publisher {
     }
 }
 
+// MARK: andThen
+protocol BaseForAndThen {}
+extension Publishers.IgnoreOutput: BaseForAndThen {}
+extension Combine.Future: BaseForAndThen {}
+
+extension Publisher where Self: BaseForAndThen, Self.Failure == Never {
+    func andThen<Then>(_ thenPublisher: Then) -> AnyPublisher<Then.Output, Never> where Then: Publisher, Then.Failure == Failure {
+        return
+            flatMap { _ in Empty<Then.Output, Never>(completeImmediately: true) } // same as `init()`
+                .append(thenPublisher)
+                .eraseToAnyPublisher()
+    }
+}
+
 // MARK: Output: OptionalType
 public extension Publisher where Output: OptionalType {
     

@@ -111,8 +111,7 @@ public extension WebSocketToNode {
         return webSocketStatus.filter { $0.isConnected }
             .first()
             .ignoreOutput()
-            .flatMap { _ in Just(node) }
-            .eraseToAnyPublisher()
+            .andThen(Just(node))
     }
 }
 
