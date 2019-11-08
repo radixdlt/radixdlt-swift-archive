@@ -24,37 +24,25 @@
 
 import Foundation
 
-public final class DetermineIfPeerIsSuitable {
+public struct DetermineIfPeerIsSuitable {
     public typealias IsPeerSuitable = (RadixNodeState, Shards) -> Bool
-    private let _isPeerSuitable: IsPeerSuitable
-    public init(
-        isPeerSuitable: @escaping IsPeerSuitable) {
-        self._isPeerSuitable = isPeerSuitable
-    }
-}
-
-public extension DetermineIfPeerIsSuitable {
-    func isPeer(
-        withState nodeState: RadixNodeState,
-        shards: Shards//, universeConfig: UniverseConfig)
-    ) -> Bool {
-        _isPeerSuitable(nodeState, shards)
-    }
+    public let isPeerSuitable: IsPeerSuitable
 }
 
 public extension DetermineIfPeerIsSuitable {
     
-    static func ifShardSpaceIntersectsWithShards(andInSameUniverseAs expectedUniverseConfig: UniverseConfig) -> DetermineIfPeerIsSuitable {
+    static func ifShardSpaceIntersectsWithShards(
+        isUniverseSuitable: DetermineIfUniverseIsSuitable
+    ) -> Self {
+        
         return Self {
             guard let universeConfig = $0.universeConfig else { return false }
             guard let shardSpace = $0.shardSpace else { return false }
             
             let shardMatch = shardSpace.intersectsWithShards($1)
-            let universeMatch = universeConfig == expectedUniverseConfig
+            let universeMatch = isUniverseSuitable.isUniverseSuitable(universeConfig)
             
             return shardMatch && universeMatch
         }
     }
-    
-//    static let `default`: DetermineIfPeerIsSuitable = .ifSameUniverseAndShardSpaceIntersectsWithShards
 }

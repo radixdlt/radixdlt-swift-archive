@@ -27,11 +27,20 @@ import Combine
 
 public final class DiscoverNodesEpic: RadixNetworkEpic {
     private let seedNodes: AnyPublisher<Node, Never>
-    private let universeConfig: UniverseConfig
+    private let isUniverseSuitable: DetermineIfUniverseIsSuitable
     
-    public init(seedNodes: AnyPublisher<Node, Never>, universeConfig: UniverseConfig) {
+    public init(
+        seedNodes: AnyPublisher<Node, Never>,
+        isUniverseSuitable: DetermineIfUniverseIsSuitable
+    ) {
         self.seedNodes = seedNodes
-        self.universeConfig = universeConfig
+        self.isUniverseSuitable = isUniverseSuitable
+    }
+}
+
+extension Array where Element: Hashable {
+    func removeDuplicates() -> [Element] {
+        OrderedSet<Element>(array: self).contents
     }
 }
 
@@ -44,6 +53,10 @@ public extension DiscoverNodesEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
+        func isSuitableUniverseBasedOn(config universeConfig: UniverseConfig) -> Bool {
+            isUniverseSuitable.isUniverseSuitable(universeConfig)
+        }
+        
         let getUniverseConfigsOfSeedNodes: AnyPublisher<NodeAction, Never> = nodeActionPublisher
             .compactMap(typeAs: DiscoverMoreNodesAction.self)
             .flatMap { [unowned self] _ in self.seedNodes }^
@@ -51,15 +64,14 @@ public extension DiscoverNodesEpic {
         // TODO Combine change epics `actions: AnyPublisher<NodeAction, Never>` to `AnyPublisher<NodeAction, NodeActionsError>`
 //            .catchError { .just(DiscoverMoreNodesActionError(reason: $0)) }
 
-        // TODO Store universe configs in a Node Table instead of filter out Node in FindANodeEpic
         let seedNodesHavingMismatchingUniverse: AnyPublisher<NodeAction, Never> = nodeActionPublisher
             .compactMap(typeAs: GetUniverseConfigActionResult.self)
-            .filter { [unowned self] in $0.result != self.universeConfig }^
-            .map { [unowned self] in NodeUniverseMismatch(node: $0.node, expectedConfig: self.universeConfig, actualConfig: $0.result) }^
+            .filter { !isSuitableUniverseBasedOn(config: $0.result) }^
+            .map { NodeUniverseMismatch(getUniverseConfigActionResult: $0) }^
 
         let connectedSeedNodes: AnyPublisher<Node, Never> = nodeActionPublisher
             .compactMap(typeAs: GetUniverseConfigActionResult.self)
-            .filter { [unowned self] in $0.result == self.universeConfig }
+            .filter { isSuitableUniverseBasedOn(config: $0.result) }
             .map { $0.node }
             .makeConnectable().autoconnect()^  // .autoConnect(numberOfSubscribers: 3)
 
@@ -72,27 +84,21 @@ public extension DiscoverNodesEpic {
             .flatMap { (livePeersResult: GetLivePeersActionResult) -> AnyPublisher<NodeAction, Never> in
                 return Just(livePeersResult.result).combineLatest(
                     networkStatePublisher
-                        .first()^
-                        .append(
-                            Empty<RadixNetworkState, Never>(completeImmediately: false)
-                        )
                 ) { (nodeInfos, state) in
 
-                    return nodeInfos.compactMap { (nodeInfo: NodeInfo) -> AddNodeAction? in
+                    return nodeInfos.removeDuplicates().compactMap { (nodeInfo: NodeInfo) -> AddNodeAction? in
                         guard
                             let nodeFromInfo = try? Node(
                                 ensureDomainNotNil: nodeInfo.host?.domain,
-                                port: livePeersResult.node.host.port,
+                                port: nodeInfo.host!.port,
                                 isUsingSSL: livePeersResult.node.isUsingSSL
                             ),
                             !state.nodes.containsValue(forKey: nodeFromInfo)
                             else { return nil }
                         return AddNodeAction(node: nodeFromInfo, nodeInfo: nodeInfo)
-                        }.asSet.asArray /* removing duplicates */
-                }^
-                .flatMap { (addNodeActionList: [AddNodeAction]) -> AnyPublisher<NodeAction, Never> in
-                    Just(addNodeActionList).flattenSequence()
-                }^
+                        }
+                        .map { $0 as NodeAction } /* `AddNodeAction` -> `NodeAction` */
+                    }^.flattenSequence()
             }^
 
         return Publishers.MergeMany([

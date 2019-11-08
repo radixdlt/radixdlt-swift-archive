@@ -57,7 +57,7 @@ public extension DiscoveryMode {
     static func byDiscovery(config: UniverseConfig, seedNodes: AnyPublisher<Node, Never>) -> DiscoveryMode {
         return .byDiscoveryEpics(
             NonEmptyArray([
-                DiscoverNodesEpic(seedNodes: seedNodes, universeConfig: config)
+                DiscoverNodesEpic(seedNodes: seedNodes, isUniverseSuitable: .ifEqual(to: config))
             ])
         )
     }

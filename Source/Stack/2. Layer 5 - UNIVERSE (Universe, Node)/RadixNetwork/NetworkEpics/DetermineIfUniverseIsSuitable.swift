@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,13 +24,15 @@
 
 import Foundation
 
-public struct NodeUniverseMismatch: NodeAction {
-    public let node: Node
-    public let incompatibleUniverseConfig: UniverseConfig
+public struct DetermineIfUniverseIsSuitable {
+    public typealias IsUniverseSuitable = (UniverseConfig) -> Bool
+    public let isUniverseSuitable: IsUniverseSuitable
 }
 
-extension NodeUniverseMismatch {
-    init(getUniverseConfigActionResult actionResult: GetUniverseConfigActionResult) {
-        self.init(node: actionResult.node, incompatibleUniverseConfig: actionResult.result)
+public extension DetermineIfUniverseIsSuitable {
+    
+    static func ifEqual(to expected: UniverseConfig) -> Self {
+        Self { $0 == expected }
     }
 }
+

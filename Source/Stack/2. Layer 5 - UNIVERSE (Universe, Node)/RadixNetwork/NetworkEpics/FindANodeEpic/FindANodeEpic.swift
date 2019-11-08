@@ -24,7 +24,6 @@
 
 import Foundation
 import Combine
-import Entwine
 
 // swiftlint:disable all
 
@@ -91,7 +90,7 @@ public extension FindANodeEpic {
             .combineLatest(
                 networkStatePublisher.prepend(RadixNetworkState.empty)
             )
-            .flatMap { [unowned isPeerSuitable, peerSelector] tuple -> AnyPublisher<NodeAction, Never> in
+            .flatMap { [unowned self] tuple -> AnyPublisher<NodeAction, Never> in
                  
                 let (findANodeRequestAction, networkState) = tuple
                 
@@ -99,7 +98,7 @@ public extension FindANodeEpic {
                 
                 func getConnectedNodes(networkState: RadixNetworkState) -> [RadixNodeState] {
                     return networkState.connectedNodes(where: {
-                        isPeerSuitable.isPeer(withState: $0, shards: shardsOfRequest)
+                        self.isPeerSuitable.isPeerSuitable($0, shardsOfRequest)
                     })
                 }
                 
@@ -113,7 +112,7 @@ public extension FindANodeEpic {
                 let selectedNode: AnyPublisher<NodeAction, Never> = connectedNodes
                     .compactMap { nodeStates in try? NonEmptySet(array: nodeStates.map { $0.node }) }^
                     .first()^
-                    .map { peerSelector.selectPeer($0) }^
+                    .map { self.peerSelector.selectPeer($0) }^
                     .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) as NodeAction }^
                 
                 // Stream of new actions to find a new node
@@ -135,7 +134,7 @@ public extension FindANodeEpic {
                     
                     // 🐉 HERE BE DRAGONS 🐉
                     // For some strange reason this `flatMap { Just($0) }`
-                    // ( or `handleEvents(receiveOutput:{_ in /*do nothing*/})` )
+                    // ( or `handleEvents(receiveOutput:{_ in /* do nothing */ })` )
                     //makes the code work
                     // without it we get nasty crashes in unit tests. Hopefully in Xcode 11.2+
                     // get get better crash reports telling us why it crashes. I've tried
@@ -176,18 +175,18 @@ internal extension FindANodeEpic {
         func discoverMore() -> [NodeAction] { [DiscoverMoreNodesAction()] }
 
         func isSuitablePeer(_ nodeState: RadixNodeState) -> Bool {
-            isPeerSuitable.isPeer(withState: nodeState, shards: shardsOfRequest)
+            isPeerSuitable.isPeerSuitable(nodeState, shardsOfRequest)
         }
 
 
-        // We only care about nodes with ws status `.disconnected`, because these are the nodes we know of, that we potentially might wanna connect to (if suitable), otherwise we need to find more candidates
+        // We only care about nodes with webSocket status `.disconnected`, because
+        // these are the nodes we know of, that we potentially might wanna connect
+        // to (if suitable), otherwise we need to find more candidates
         let disconnectedNodes = networkState.disconnectedNodes
 
         if disconnectedNodes.isEmpty {
             return discoverMore()
         }
-
-        assert(disconnectedNodes.isEmpty == false)
 
         if let disconnectedSuitablePeers = try? NonEmptySet(array: disconnectedNodes.filter { isSuitablePeer($0) }.map { $0.node }) {
             let selectedPeer = peerSelector.selectPeer(disconnectedSuitablePeers)

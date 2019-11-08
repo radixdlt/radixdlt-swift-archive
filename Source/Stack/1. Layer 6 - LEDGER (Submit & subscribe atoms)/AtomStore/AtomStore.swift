@@ -145,7 +145,7 @@ public extension InMemoryAtomStore {
             })
         }
         .map { $0.key }
-            .asSet.asArray // remove any duplicates
+            .removeDuplicates() // remove any duplicates
             .upParticles()
     }
     

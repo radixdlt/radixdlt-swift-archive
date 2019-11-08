@@ -46,7 +46,6 @@
 		E60554452305529600528510 /* Identity+Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60554442305529600528510 /* Identity+Account.swift */; };
 		E6055447230553C700528510 /* Test+Convenience+RadixApplicationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6055446230553C700528510 /* Test+Convenience+RadixApplicationClient.swift */; };
 		E6055449230553E600528510 /* Test+Convenience+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6055448230553E600528510 /* Test+Convenience+Models.swift */; };
-		E605544B23058A6600528510 /* OrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605544A23058A6600528510 /* OrderedSet.swift */; };
 		E605544D23058AA100528510 /* ParticleSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605544C23058AA100528510 /* ParticleSet.swift */; };
 		E605A6DE2345D72C00E47257 /* UnsignedAmountType+FromOtherswift.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605A6DD2345D72C00E47257 /* UnsignedAmountType+FromOtherswift.swift */; };
 		E605A6E42345DC1C00E47257 /* UInt256Bound.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605A6E32345DC1C00E47257 /* UInt256Bound.swift */; };
@@ -374,6 +373,10 @@
 		E6D4B36922400F41004FC83A /* SetAlgebra+Intersecting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D4B36822400F41004FC83A /* SetAlgebra+Intersecting.swift */; };
 		E6DC275F22C3FDFB0049BB3C /* TokenDefinitionsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DC275E22C3FDFB0049BB3C /* TokenDefinitionsState.swift */; };
 		E6DC276522C4C7650049BB3C /* TokenReferenceBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DC276422C4C7650049BB3C /* TokenReferenceBalance.swift */; };
+		E6E0BFB92375899400B946A7 /* DiscoverNodesEpicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E0BFB82375899400B946A7 /* DiscoverNodesEpicTests.swift */; };
+		E6E0BFBB23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E0BFBA23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift */; };
+		E6E0BFBD2375AE6F00B946A7 /* OrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605544A23058A6600528510 /* OrderedSet.swift */; };
+		E6E0BFC02375BFA100B946A7 /* NetworkEpicTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E0BFBF2375BFA100B946A7 /* NetworkEpicTestCase.swift */; };
 		E6E279212271CD1C0067D46E /* ECIES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278762271CD1C0067D46E /* ECIES.swift */; };
 		E6E279222271CD1C0067D46E /* SecureGenerateBytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278782271CD1C0067D46E /* SecureGenerateBytes.swift */; };
 		E6E279232271CD1C0067D46E /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278792271CD1C0067D46E /* Status.swift */; };
@@ -958,6 +961,9 @@
 		E6DC275E22C3FDFB0049BB3C /* TokenDefinitionsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDefinitionsState.swift; sourceTree = "<group>"; };
 		E6DC276422C4C7650049BB3C /* TokenReferenceBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReferenceBalance.swift; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E6E0BFB82375899400B946A7 /* DiscoverNodesEpicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverNodesEpicTests.swift; sourceTree = "<group>"; };
+		E6E0BFBA23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineIfUniverseIsSuitable.swift; sourceTree = "<group>"; };
+		E6E0BFBF2375BFA100B946A7 /* NetworkEpicTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkEpicTestCase.swift; sourceTree = "<group>"; };
 		E6E278762271CD1C0067D46E /* ECIES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIES.swift; sourceTree = "<group>"; };
 		E6E278782271CD1C0067D46E /* SecureGenerateBytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureGenerateBytes.swift; sourceTree = "<group>"; };
 		E6E278792271CD1C0067D46E /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
@@ -2702,7 +2708,7 @@
 		E6BACE812350E859006D97C6 /* NEW */ = {
 			isa = PBXGroup;
 			children = (
-				E620CA9923686B6A00EB3EC3 /* FindANodeEpicTests */,
+				E6E0BFBE2375BF8E00B946A7 /* NetworkEpicTests */,
 			);
 			path = NEW;
 			sourceTree = "<group>";
@@ -2762,6 +2768,7 @@
 				E606FC4C22CB5E3500A7E52E /* FetchAtomsEpic.swift */,
 				E606FC2122CA577F00A7E52E /* DiscoverNodesEpic.swift */,
 				E6CB4B2C22C5100800B7382A /* RadixNetworkEpic.swift */,
+				E6E0BFBA23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift */,
 			);
 			path = NetworkEpics;
 			sourceTree = "<group>";
@@ -2774,7 +2781,6 @@
 				E6CEE70A21F5AE5A00D745EC /* Crypto */,
 				E6474ABC2266140E009C4FDC /* IsConnectedToLocalhost.swift */,
 				E6055446230553C700528510 /* Test+Convenience+RadixApplicationClient.swift */,
-				E605544A23058A6600528510 /* OrderedSet.swift */,
 				E605544C23058AA100528510 /* ParticleSet.swift */,
 			);
 			path = Convenience;
@@ -2891,6 +2897,24 @@
 				E6D325B721EF35AD00851F4E /* Secp256k1RFC6979Tests.swift */,
 			);
 			path = Signatures;
+			sourceTree = "<group>";
+		};
+		E6E0BFB72375896D00B946A7 /* DiscoverNodesEpicTests */ = {
+			isa = PBXGroup;
+			children = (
+				E6E0BFB82375899400B946A7 /* DiscoverNodesEpicTests.swift */,
+			);
+			path = DiscoverNodesEpicTests;
+			sourceTree = "<group>";
+		};
+		E6E0BFBE2375BF8E00B946A7 /* NetworkEpicTests */ = {
+			isa = PBXGroup;
+			children = (
+				E6E0BFB72375896D00B946A7 /* DiscoverNodesEpicTests */,
+				E620CA9923686B6A00EB3EC3 /* FindANodeEpicTests */,
+				E6E0BFBF2375BFA100B946A7 /* NetworkEpicTestCase.swift */,
+			);
+			path = NetworkEpicTests;
 			sourceTree = "<group>";
 		};
 		E6E278732271CD1C0067D46E /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */ = {
@@ -3200,6 +3224,7 @@
 				E6E278D62271CD1C0067D46E /* DictionaryConvertible */,
 				E6E278DB2271CD1C0067D46E /* ArrayConvertible */,
 				E6FF7E49229C1F1900BC22EA /* NonEmptySet.swift */,
+				E605544A23058A6600528510 /* OrderedSet.swift */,
 				E606FC3E22CB4D3600A7E52E /* NonEmptyArray.swift */,
 			);
 			path = Collections;
@@ -3888,6 +3913,7 @@
 				E6474AFB226795D6009C4FDC /* AtomContainer.swift in Sources */,
 				E627801F2341F546008F2857 /* Decimal_Extension.swift in Sources */,
 				E6CB4B4122C633F600B7382A /* AtomStatus.swift in Sources */,
+				E6E0BFBD2375AE6F00B946A7 /* OrderedSet.swift in Sources */,
 				E689DBB1225F8FA900340CF3 /* RESTClient.swift in Sources */,
 				E60553FE2301A48500528510 /* SpunParticles+Filtering.swift in Sources */,
 				E640F638225DFC3D00855256 /* PublicKeyOwner.swift in Sources */,
@@ -4165,6 +4191,7 @@
 				E6E279392271CD1C0067D46E /* PublicKey+ECEIS+Encrypt.swift in Sources */,
 				E605A6E62345DC8600E47257 /* UInt256NonZeroBound.swift in Sources */,
 				E63E4FBC23671BE200B90CF7 /* EXPERIMENTAL_Combine+Pipe.swift in Sources */,
+				E6E0BFBB23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift in Sources */,
 				E6ABA76D22C3593B00536DC7 /* InMemoryAtomStoreReducer.swift in Sources */,
 				E6F5483F22771E5200EE6311 /* UserAction.swift in Sources */,
 				E69918A022F0982400AF130F /* Collection_Extensions.swift in Sources */,
@@ -4220,7 +4247,6 @@
 				E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */,
 				E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */,
 				E6E9D2F123746B22003753B4 /* PrefixUntilCompletionFrom.swift in Sources */,
-				E605544B23058A6600528510 /* OrderedSet.swift in Sources */,
 				E6055449230553E600528510 /* Test+Convenience+Models.swift in Sources */,
 				E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */,
 				E6BACE842350E87E006D97C6 /* FindANodeEpicTests.swift in Sources */,
@@ -4228,6 +4254,7 @@
 				E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */,
 				E67A8CC5235635AB00206E33 /* ProofOfWorkTests.swift in Sources */,
 				E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */,
+				E6E0BFB92375899400B946A7 /* DiscoverNodesEpicTests.swift in Sources */,
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
 				E68DE4A42352344700F1E7A0 /* PublisherPipeOperatorTests.swift in Sources */,
@@ -4240,6 +4267,7 @@
 				E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */,
 				E6E27A552271EEE20067D46E /* XCTestCase_Extensions.swift in Sources */,
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
+				E6E0BFC02375BFA100B946A7 /* NetworkEpicTestCase.swift in Sources */,
 				E67A8CC6235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */,
 				E605544D23058AA100528510 /* ParticleSet.swift in Sources */,
 				E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */,

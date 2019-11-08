@@ -24,26 +24,18 @@
 
 import Foundation
 
-public final class RadixPeerSelector {
+public struct RadixPeerSelector {
     // Swift 5.2: Change to `callAsFunction`:
     // https://github.com/apple/swift-evolution/blob/master/proposals/0253-callable.md
     public typealias PeerSelector = (NonEmptySet<Node>) -> Node
     public let selectPeer: PeerSelector
-    
-    init(selectPeer: @escaping PeerSelector) {
-        self.selectPeer = selectPeer
-    }
 }
 
 public extension RadixPeerSelector {
     
-    static var `default`: RadixPeerSelector { .random }
+    static let `default` = Self.random
     
-    static var random: RadixPeerSelector {
-        .init { $0.randomElement() }
-    }
-    
-    static var first: RadixPeerSelector {
-        .init { $0.first }
-    }
+    static let random = Self { $0.randomElement() }
+
+    static let first = Self { $0.first }
 }
