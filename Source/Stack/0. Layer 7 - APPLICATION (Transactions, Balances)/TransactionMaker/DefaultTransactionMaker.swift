@@ -111,8 +111,7 @@ public extension DefaultTransactionMaker {
 
 private extension DefaultTransactionMaker {
     
-    // TODO: Precision should return `Single`?
-    func addFee(to atom: Atom) -> AnyPublisher<AtomWithFee, Never> {
+    func addFee(to atom: Atom) -> Single<AtomWithFee, Never> {
 //        return activeAccount.flatMapToSingle { [unowned self] in
 //            self.feeMapper.feeBasedOn(
 //                atom: atom,
@@ -123,8 +122,7 @@ private extension DefaultTransactionMaker {
         combineMigrationInProgress()
     }
     
-    // TODO: Precision should return `Single`?
-    func sign(atom: AnyPublisher<UnsignedAtom, Never>) -> AnyPublisher<SignedAtom, Never> {
+    func sign(atom: AnyPublisher<UnsignedAtom, Never>) -> Single<SignedAtom, Never> {
 //        return activeAccount.flatMapToSingle { account in
 //            if account.privateKey == nil, case .throwErrorDirectly = self.strategyNoSigningKeyIsPresent {
 //                return AnyPublisher.error(SigningError.noSigningKeyPresentButWasExpectedToBe)
@@ -136,9 +134,8 @@ private extension DefaultTransactionMaker {
         combineMigrationInProgress()
     }
     
-    // TODO: Precision should return `Single`?
     func createAtomSubmission(
-        atom atomSingle: AnyPublisher<SignedAtom, Never>,
+        atom atomSingle: Single<SignedAtom, Never>,
         completeOnAtomStoredOnly: Bool,
         originNode: Node?
         ) -> ResultOfUserAction {
@@ -179,8 +176,7 @@ private extension DefaultTransactionMaker {
         }.eraseToAnyPublisher()
     }
     
-    // TODO: Precision should return `Single`?
-    func buildAtomFrom(transaction: Transaction) throws -> AnyPublisher<UnsignedAtom, Never> {
+    func buildAtomFrom(transaction: Transaction) throws -> Single<UnsignedAtom, Never> {
 //        return addressOfActiveAccount.flatMapToSingle { [unowned self] in
 //            let atom = try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: $0)
 //            return self.addFee(to: atom).map {

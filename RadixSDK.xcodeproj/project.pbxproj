@@ -498,6 +498,8 @@
 		E6E279A12271CD1C0067D46E /* Throwing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E279202271CD1C0067D46E /* Throwing.swift */; };
 		E6E27A552271EEE20067D46E /* XCTestCase_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E27A542271EEE20067D46E /* XCTestCase_Extensions.swift */; };
 		E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E27A562271EF2B0067D46E /* CustomAssert.swift */; };
+		E6E9D2F123746B22003753B4 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E9D2F023746B22003753B4 /* PrefixUntilCompletionFrom.swift */; };
+		E6E9D2F323747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E9D2F223747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift */; };
 		E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2B21F7CE9C00654105 /* Node.swift */; };
 		E6ED1A3821F87C1800654105 /* RadixSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3721F87C1800654105 /* RadixSystem.swift */; };
 		E6ED1A4021F8836300654105 /* UniverseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3F21F8836300654105 /* UniverseConfig.swift */; };
@@ -1080,6 +1082,8 @@
 		E6E279202271CD1C0067D46E /* Throwing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Throwing.swift; sourceTree = "<group>"; };
 		E6E27A542271EEE20067D46E /* XCTestCase_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCase_Extensions.swift; sourceTree = "<group>"; };
 		E6E27A562271EF2B0067D46E /* CustomAssert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAssert.swift; sourceTree = "<group>"; };
+		E6E9D2F023746B22003753B4 /* PrefixUntilCompletionFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixUntilCompletionFrom.swift; sourceTree = "<group>"; };
+		E6E9D2F223747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combine_PrefixUntilOutputOrCompletionFrom.swift; sourceTree = "<group>"; };
 		E6ED1A2B21F7CE9C00654105 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		E6ED1A3721F87C1800654105 /* RadixSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixSystem.swift; sourceTree = "<group>"; };
 		E6ED1A3F21F8836300654105 /* UniverseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniverseConfig.swift; sourceTree = "<group>"; };
@@ -1567,6 +1571,7 @@
 		E620AB5521E7874300B36EC2 /* TestCases */ = {
 			isa = PBXGroup;
 			children = (
+				E6E9D2EE23746AFD003753B4 /* TestOfExtensions */,
 				E67A8CC12356357500206E33 /* MIGRATED */,
 				E6BACE812350E859006D97C6 /* NEW */,
 				E631DAAB21F24D570063F632 /* ThirdParty */,
@@ -1615,6 +1620,7 @@
 			children = (
 				E620CA9723682F0800EB3EC3 /* Combine+Debug.swift */,
 				E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */,
+				E6E9D2F223747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift */,
 			);
 			path = Combine;
 			sourceTree = "<group>";
@@ -3398,6 +3404,22 @@
 			path = XCTestCase;
 			sourceTree = "<group>";
 		};
+		E6E9D2EE23746AFD003753B4 /* TestOfExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				E6E9D2EF23746B0A003753B4 /* CombineExtensionTests */,
+			);
+			path = TestOfExtensions;
+			sourceTree = "<group>";
+		};
+		E6E9D2EF23746B0A003753B4 /* CombineExtensionTests */ = {
+			isa = PBXGroup;
+			children = (
+				E6E9D2F023746B22003753B4 /* PrefixUntilCompletionFrom.swift */,
+			);
+			path = CombineExtensionTests;
+			sourceTree = "<group>";
+		};
 		E6ED1A4A21F8ACA300654105 /* Numbers */ = {
 			isa = PBXGroup;
 			children = (
@@ -3778,6 +3800,7 @@
 				E62EFDE3224A4D6F00B6DAD6 /* WebSocketToNode.swift in Sources */,
 				E689DBB6225F954800340CF3 /* NodeNetworkDetails.swift in Sources */,
 				E6FCB67022F3078200ECC01B /* SubmitAtomActionSend.swift in Sources */,
+				E6E9D2F323747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift in Sources */,
 				E606FC2822CB462100A7E52E /* ConnectWebSocketAction.swift in Sources */,
 				E626E1F422B400030046D2AC /* AtomToExecutedActionsMapper.swift in Sources */,
 				E6E2793B2271CD1C0067D46E /* PrivateKey.swift in Sources */,
@@ -4196,6 +4219,7 @@
 				E62F35372273378300B6779A /* DecodingError+ConvenienceInit.swift in Sources */,
 				E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */,
 				E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */,
+				E6E9D2F123746B22003753B4 /* PrefixUntilCompletionFrom.swift in Sources */,
 				E605544B23058A6600528510 /* OrderedSet.swift in Sources */,
 				E6055449230553E600528510 /* Test+Convenience+Models.swift in Sources */,
 				E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */,

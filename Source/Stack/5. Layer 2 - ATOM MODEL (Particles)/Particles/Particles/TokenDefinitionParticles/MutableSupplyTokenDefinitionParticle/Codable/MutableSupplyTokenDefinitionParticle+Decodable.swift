@@ -39,7 +39,6 @@ public extension MutableSupplyTokenDefinitionParticle {
         granularity = try container.decode(Granularity.self, forKey: .granularity)
         permissions = try container.decode(TokenPermissions.self, forKey: .permissions)
         iconUrl = URL(string: try container.decodeIfPresent(StringValue.self, forKey: .iconUrl)?.value)
-        
     }
 }
 

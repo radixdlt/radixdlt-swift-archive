@@ -99,9 +99,6 @@
 		48AA4B9B230C50CF0016F57F /* RestoreAccountChooseLanguageScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AA4B9A230C50CF0016F57F /* RestoreAccountChooseLanguageScreen.swift */; };
 		48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */; };
 		48ACA682230AF85C00BF0029 /* KeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ACA681230AF85C00BF0029 /* KeyValueStore.swift */; };
-		48AF8725231C209400EF3D1F /* RxSwift.Observable_as_Combine.Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF8724231C209400EF3D1F /* RxSwift.Observable_as_Combine.Publisher.swift */; };
-		48AF8727231C20C100EF3D1F /* RxSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF8726231C20C100EF3D1F /* RxSubscription.swift */; };
-		48AF8729231C20F600EF3D1F /* Subscriber+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48AF8728231C20F600EF3D1F /* Subscriber+Rx.swift */; };
 		48B561EB231ABEFB001B8E74 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561EA231ABEFB001B8E74 /* AppState.swift */; };
 		48B561ED231AE176001B8E74 /* RootContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561EC231AE176001B8E74 /* RootContent.swift */; };
 		48B561F0231AE1A1001B8E74 /* AppState+Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B561EF231AE1A1001B8E74 /* AppState+Update.swift */; };
@@ -280,9 +277,6 @@
 		48AA4B9A230C50CF0016F57F /* RestoreAccountChooseLanguageScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreAccountChooseLanguageScreen.swift; sourceTree = "<group>"; };
 		48ACA67E230AF79500BF0029 /* GetStartedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetStartedScreen.swift; sourceTree = "<group>"; };
 		48ACA681230AF85C00BF0029 /* KeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueStore.swift; sourceTree = "<group>"; };
-		48AF8724231C209400EF3D1F /* RxSwift.Observable_as_Combine.Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxSwift.Observable_as_Combine.Publisher.swift; sourceTree = "<group>"; };
-		48AF8726231C20C100EF3D1F /* RxSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxSubscription.swift; sourceTree = "<group>"; };
-		48AF8728231C20F600EF3D1F /* Subscriber+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Subscriber+Rx.swift"; sourceTree = "<group>"; };
 		48B561EA231ABEFB001B8E74 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		48B561EC231AE176001B8E74 /* RootContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootContent.swift; sourceTree = "<group>"; };
 		48B561EF231AE1A1001B8E74 /* AppState+Update.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppState+Update.swift"; sourceTree = "<group>"; };
@@ -737,16 +731,6 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
-		48AF8723231C206400EF3D1F /* RxSwift+Combine */ = {
-			isa = PBXGroup;
-			children = (
-				48AF8724231C209400EF3D1F /* RxSwift.Observable_as_Combine.Publisher.swift */,
-				48AF8726231C20C100EF3D1F /* RxSubscription.swift */,
-				48AF8728231C20F600EF3D1F /* Subscriber+Rx.swift */,
-			);
-			path = "RxSwift+Combine";
-			sourceTree = "<group>";
-		};
 		48B2A7AD231973AE00B4096C /* AppState */ = {
 			isa = PBXGroup;
 			children = (
@@ -822,7 +806,6 @@
 		48E58F23230E83EC00E3CC86 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				48AF8723231C206400EF3D1F /* RxSwift+Combine */,
 				4802E4652312A96E007EC847 /* RadixSDK */,
 				48E58F24230E83F500E3CC86 /* SwiftUI+Extensions */,
 				48596A342316BBD3005C1804 /* UIKit+Extensions */,
@@ -1143,16 +1126,13 @@
 				484DACB0231D89AD00CD4E5D /* MnemonicInput.swift in Sources */,
 				486D86F1230D6A81006A967A /* WebView.swift in Sources */,
 				E6741C5023476C91008AD736 /* DismissKeyboard.swift in Sources */,
-				48AF8727231C20C100EF3D1F /* RxSubscription.swift in Sources */,
 				4809255A230AC4240056DB28 /* WelcomeScreen.swift in Sources */,
 				48B561F6231AE6FB001B8E74 /* AppState+Update+AppShould.swift in Sources */,
 				48092559230AC4240056DB28 /* AppDelegate.swift in Sources */,
 				48A9600D230EFDD30074AC26 /* MainScreen.swift in Sources */,
 				48BE0835231526D6008435F5 /* MnemonicWord.swift in Sources */,
 				48ACA67F230AF79500BF0029 /* GetStartedScreen.swift in Sources */,
-				48AF8725231C209400EF3D1F /* RxSwift.Observable_as_Combine.Publisher.swift in Sources */,
 				48AA4B99230C50B20016F57F /* ReceiveTransactionScreen.swift in Sources */,
-				48AF8729231C20F600EF3D1F /* Subscriber+Rx.swift in Sources */,
 				4809255B230AC4240056DB28 /* SceneDelegate.swift in Sources */,
 				48B561FC231BFC0A001B8E74 /* SendScreen.swift in Sources */,
 				48596A3E2316D034005C1804 /* KeyValueStoring+ValueRetrieval.swift in Sources */,

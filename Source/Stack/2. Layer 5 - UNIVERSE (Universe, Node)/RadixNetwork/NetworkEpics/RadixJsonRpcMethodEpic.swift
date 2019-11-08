@@ -37,7 +37,6 @@ where
     
     // swiftlint:enable colon opening_brace
 
-    // TODO: Precision should return `Single`?
     public typealias MethodCall = (RPCClient, Request) -> Single<RpcMethodResult, Never>
     
     public let webSockets: WebSocketsEpic.WebSockets

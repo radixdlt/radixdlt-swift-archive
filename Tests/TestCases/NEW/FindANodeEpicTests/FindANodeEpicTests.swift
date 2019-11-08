@@ -75,52 +75,6 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         XCTAssertNotNil(cancellable)
     }
     
-    
-    func test_that_we_do_nothing_when_we_have_many_pending_connections() {
-        let findMeSomeNodeRequest = FindMeSomeNodeRequest(shards: .init(single: 1))
-        
-        let waitForConnectionDurationInSeconds: TimeInterval = 0.1
-        
-        let findANodeEpic = FindANodeEpic(
-            determineIfPeerIsSuitable: .allPeersAreSuitable,
-            radixPeerSelector: .first,
-            waitForConnectionDurationInSeconds: waitForConnectionDurationInSeconds
-        )
-        
-        var returnValues = [NodeAction]()
-        let expectation = XCTestExpectation(description: self.debugDescription)
-        
-        let actionsSubject = PassthroughSubject<NodeAction, Never>()
-        let networkStateSubject = PassthroughSubject<RadixNetworkState, Never>()
-        
-        let cancellable = findANodeEpic.handle(
-            actions: actionsSubject.eraseToAnyPublisher(),
-            networkState: networkStateSubject.eraseToAnyPublisher()
-            ).print("✅")
-//            .receive(on: RunLoop.main)
-            .sink(
-                receiveCompletion: { _ in expectation.fulfill() },
-                receiveValue: { returnValues.append($0) }
-        )
-        
-        networkStateSubject.send([
-            RadixNodeState(node: node1, webSocketStatus: .connecting),
-            RadixNodeState(node: node2, webSocketStatus: .connecting),
-        ])
-        actionsSubject.send(findMeSomeNodeRequest)
-        
-        actionsSubject.send(completion: .finished)
-        networkStateSubject.send(completion: .finished)
-        
-        print("💡 Wait")
-        wait(for: [expectation], timeout: waitForConnectionDurationInSeconds)
-        print("💡 Waiting finished")
-        
-        XCTAssertEqual(returnValues.count, 0)
-        XCTAssertNotNil(cancellable)
-    }
-    
-    
     func test_that_when_network_is_empty_we_wanna_discover_more_nodes() {
         
         let findMeSomeNodeRequest = FindMeSomeNodeRequest(shards: .init(single: 1))
@@ -138,11 +92,11 @@ class FindANodeEpicTests: FindANodeEpicTestCases {
         let expectation = XCTestExpectation(description: self.debugDescription)
         
         let actionsSubject = PassthroughSubject<NodeAction, Never>()
+        let networkStateSubject = PassthroughSubject<RadixNetworkState, Never>()
         
         let cancellable = findANodeEpic.handle(
             actions: actionsSubject.eraseToAnyPublisher(),
-            // we start with a default output (value) of the network state publisher inside implementation, so even if we use `Empty()` publisher here (not outputting any value), we expect the epic to emit a value.
-            networkState: Empty().eraseToAnyPublisher()
+            networkState: networkStateSubject.eraseToAnyPublisher()
             )
             .receive(on: RunLoop.main)
             .first() // Only care about first

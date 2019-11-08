@@ -154,9 +154,12 @@ public extension FindANodeEpic {
                             .map { _ in CloseWebSocketAction(node: node) }^
                     }^
                 
+                    
                 return findConnectionActionsStream
-                    .append(selectedNode)^
-                    .merge(with: cleanupConnections)^
+                    .append(selectedNode)
+                    .merge(with: cleanupConnections)
+                        .eraseToAnyPublisher()
+                    
         }^
     }
 }

@@ -27,7 +27,6 @@ import Foundation
 // MARK: - Decodable
 public extension FixedSupplyTokenDefinitionParticle {
     init(from decoder: Decoder) throws {
-        
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         name = try container.decode(Name.self, forKey: .name)

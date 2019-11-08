@@ -30,7 +30,7 @@ import Combine
 internal extension Publisher {
     
     func debug(
-        events: Publishers.EventsToDebug = .output,
+        events: Publishers.TriggeringEventOptions = .output,
         _ prefix: String? = nil,
         
         _ line: Int = #line,
@@ -61,16 +61,16 @@ internal extension Publisher {
 
 extension Publishers {
     
-    struct EventsToDebug: OptionSet {
+    struct TriggeringEventOptions: OptionSet {
         let rawValue: Int
         
-        static let cancel       = EventsToDebug(rawValue: 1 << 0)
-        static let completion   = EventsToDebug(rawValue: 1 << 1)
-        static let output       = EventsToDebug(rawValue: 1 << 2)
-        static let request      = EventsToDebug(rawValue: 1 << 3)
-        static let subscription = EventsToDebug(rawValue: 1 << 4)
+        static let cancel       = Self(rawValue: 1 << 0)
+        static let completion   = Self(rawValue: 1 << 1)
+        static let output       = Self(rawValue: 1 << 2)
+        static let request      = Self(rawValue: 1 << 3)
+        static let subscription = Self(rawValue: 1 << 4)
         
-        static let all: EventsToDebug = [.cancel, .completion, .output, .request, .subscription]
+        static let all: Self = [.cancel, .completion, .output, .request, .subscription]
     }
     
     enum Event {

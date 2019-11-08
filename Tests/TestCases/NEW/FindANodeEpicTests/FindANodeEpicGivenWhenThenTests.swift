@@ -32,14 +32,7 @@ class FindANodeEpicGivenWhenThenTests: FindANodeEpicTestCases {
     typealias Given = FindANodeEpic
 
     // MARK: Test Cases
-    func test_that_when_network_is_empty_we_wanna_discover_more_nodes() {
-        
-        given { dependency in
-            when_network_is_empty(given: dependency) { then, nodeActions in
-                then.a_single_DiscoverMoreNodesAction_can_be_found_in(the: nodeActions)
-            }
-        }
-    }
+   
     
     func test_that_we_do_nothing_when_we_have_many_pending_connections() {
         

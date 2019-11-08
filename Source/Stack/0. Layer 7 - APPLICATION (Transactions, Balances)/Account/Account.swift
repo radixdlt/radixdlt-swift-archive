@@ -45,7 +45,7 @@ public extension Account {
         }
     }
     
-    var privateKeyForSigning: AnyPublisher<PrivateKey, Never> { // Single?
+    var privateKeyForSigning: Single<PrivateKey, Never> {
         if let privateKey = privateKey {
             return Just(privateKey).eraseToAnyPublisher()
         } else {
@@ -62,8 +62,7 @@ public extension Account {
 
 public extension Account {
     
-    // TODO: Precision should return `Single`?
-    func requestSignableKeyFromUser(matchingPublicKey: PublicKey) -> AnyPublisher<PrivateKey, Never> {
+    func requestSignableKeyFromUser(matchingPublicKey: PublicKey) -> Single<PrivateKey, Never> {
         implementMe()
     }
 }
