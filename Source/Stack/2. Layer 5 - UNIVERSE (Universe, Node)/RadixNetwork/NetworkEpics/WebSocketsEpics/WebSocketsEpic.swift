@@ -48,18 +48,18 @@ public extension WebSocketsEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-        //        let webSockets = WebSockets()
-        //        return CombineObservable.merge(
-        //            epicFromWebsockets
-        //                .map { [unowned self] epicFromWebSocket in
-        //                    let newEpic = epicFromWebSocket(webSockets)
-        //                    self._retainingVariableEpics.append(newEpic)
-        //                    return newEpic
-        //                }
-        //                .map { (newlyCreatedEpic: NetworkWebsocketEpic) -> AnyPublisher<NodeAction, Never> in
-        //                    return newlyCreatedEpic.handle(actions: actions, networkState: networkState)
-        //                }
-        //        )
-        combineMigrationInProgress()
+        let webSockets = DefaultWebSocketsManager()
+        return Publishers.MergeMany(
+            epicFromWebsockets
+                .map { [unowned self] epicFromWebSocket in
+                    let newEpic = epicFromWebSocket(webSockets)
+                    self._retainingVariableEpics.append(newEpic)
+                    return newEpic
+            }
+            .map { (newlyCreatedEpic: RadixNetworkWebSocketsEpic) -> AnyPublisher<NodeAction, Never> in
+                return newlyCreatedEpic.handle(actions: nodeActionPublisher, networkState: networkStatePublisher)
+            }
+        )
+        .eraseToAnyPublisher()
     }
 }
