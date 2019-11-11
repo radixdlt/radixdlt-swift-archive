@@ -27,11 +27,11 @@ import Combine
 
 // MARK: NetworkWebsocketEpic
 public protocol NetworkWebsocketEpic: RadixNetworkEpic {
-    var webSockets: WebSocketsEpic.WebSockets { get }
-    init(webSockets: WebSocketsEpic.WebSockets)
+    var webSockets: WebSocketsManager { get }
+    init(webSockets: WebSocketsManager)
 }
 public extension NetworkWebsocketEpic {
-    init(webSockets: WebSocketsEpic.WebSockets) {
+    init(webSockets: WebSocketsManager) {
         abstract() // TODO delete this initializer, improve the use of this protocol
     }
 }
@@ -39,18 +39,18 @@ public extension NetworkWebsocketEpic {
 public extension NetworkWebsocketEpic {
     
     func openWebSocketAndAwaitConnection(toNode node: Node) -> Single<WebSocketToNode, Never> {
-        let webSocketToNode = webSockets.newDisconnectedWebsocket(to: node)
-        return webSocketToNode.connectAndNotifyWhenConnected().map { _ in webSocketToNode }
-            .eraseToAnyPublisher()
+        combineMigrationInProgress() // replace with `WebSocketConnector`
     }
     
-    func close(webSocketToNode: WebSocketToNode, useDelay: Bool = false) {
-        let delay: DispatchTimeInterval? = useDelay ? delayFromCancelObservationOfAtomStatusToClosingWebsocket : nil
-        webSockets.ifNoOneListensCloseAndRemove(webSocket: webSocketToNode, afterDelay: delay)
-    }
+//    func close(webSocketToNode: WebSocketToNode, useDelay: Bool = false) {
+////        let delay: DispatchTimeInterval? = useDelay ? delayFromCancelObservationOfAtomStatusToClosingWebsocket : nil
+////        webSockets.ifNoOneListensCloseAndRemove(webSocket: webSocketToNode, afterDelay: delay)
+//        combineMigrationInProgress() // replace with `WebSocketCloser`
+//    }
     
-    func closeWebsocketTo(node: Node, useDelay: Bool = false) {
-        let delay: DispatchTimeInterval? = useDelay ? delayFromCancelObservationOfAtomStatusToClosingWebsocket : nil
-        webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: node, afterDelay: delay)
-    }
+//    func closeWebsocketTo(node: Node, useDelay: Bool = false) {
+////        let delay: DispatchTimeInterval? = useDelay ? delayFromCancelObservationOfAtomStatusToClosingWebsocket : nil
+////        webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: node, afterDelay: delay)
+//        combineMigrationInProgress() // replace with `WebSocketCloser`
+//    }
 }

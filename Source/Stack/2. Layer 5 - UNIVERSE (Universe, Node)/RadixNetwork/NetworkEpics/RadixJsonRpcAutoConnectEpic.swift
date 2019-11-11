@@ -26,11 +26,11 @@ import Foundation
 import Combine
 
 public final class RadixJsonRpcAutoConnectEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsEpic.WebSockets
+    public let webSockets: WebSocketsManager
     
     private var cancellables = Set<AnyCancellable>()
     
-    public init(webSockets: WebSocketsEpic.WebSockets) {
+    public init(webSockets: WebSocketsManager) {
         self.webSockets = webSockets
     }
 }

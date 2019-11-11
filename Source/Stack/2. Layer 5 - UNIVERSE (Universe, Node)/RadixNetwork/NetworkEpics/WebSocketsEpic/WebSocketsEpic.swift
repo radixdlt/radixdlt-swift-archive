@@ -27,8 +27,9 @@ import Combine
 
 // MARK: WebSocketsEpic
 public final class WebSocketsEpic: RadixNetworkEpic {
-    public typealias EpicFromWebSocket = (WebSockets) -> NetworkWebsocketEpic
+    public typealias EpicFromWebSocket = (WebSocketsManager) -> NetworkWebsocketEpic
     public typealias EpicsFromWebSockets = [EpicFromWebSocket]
+    
     private let epicFromWebsockets: EpicsFromWebSockets
     
     private var _retainingVariableEpics = [NetworkWebsocketEpic]()

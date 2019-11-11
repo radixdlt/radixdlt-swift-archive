@@ -26,9 +26,6 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-private let node1 = makeNode()
-private let node2 = makeNode()
-
 class DiscoverNodesEpicTests: NetworkEpicTestCase {
     
 

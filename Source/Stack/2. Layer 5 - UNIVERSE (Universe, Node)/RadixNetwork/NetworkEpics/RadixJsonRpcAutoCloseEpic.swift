@@ -26,14 +26,14 @@ import Foundation
 import Combine
 
 public final class RadixJsonRpcAutoCloseEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsEpic.WebSockets
+    public let webSockets: WebSocketsManager
     
     private var cancellables = Set<AnyCancellable>()
     
     private let backgroundQueue = DispatchQueue(label: "com.radixdlt.network.epics.jsonrpc.autoclose")
     
     public init(
-        webSockets: WebSocketsEpic.WebSockets
+        webSockets: WebSocketsManager
     ) {
         self.webSockets = webSockets
     }
@@ -49,7 +49,7 @@ public extension RadixJsonRpcAutoCloseEpic {
             .filter { $0 is BaseJsonRpcResultAction }^
             .delay(for: .seconds(5), scheduler: backgroundQueue)^
             .handleEvents(
-                receiveOutput: { [unowned webSockets] nodeAction in webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeAction.node) }
+                receiveOutput: { [unowned webSockets] nodeAction in webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeAction.node, afterDelay: nil) }
             )^
             .dropAll()^
         

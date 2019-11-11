@@ -25,20 +25,28 @@
 import Foundation
 import Combine
 
-// MARK: WebSockets
-public extension WebSocketsEpic {
-    final class WebSockets {
-        
-        private let newSocketsToNodeSubject: PassthroughSubject<WebSocketToNode, Never>
-        
-        private var webSockets = [Node: WebSocketToNode]()
-        fileprivate init() {
-            self.newSocketsToNodeSubject = PassthroughSubject()
-        }
+public protocol WebSocketsManager: AnyObject {
+    func getNewSocketsToNode() -> AnyPublisher<WebSocketToNode, Never>
+    func newDisconnectedWebsocket(to node: Node) -> WebSocketToNode
+
+    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode)
+    func ifNoOneListensCloseAndRemoveWebsocket(toNode node: Node, afterDelay delay: DispatchTimeInterval?)
+    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode, afterDelay delay: DispatchTimeInterval?)
+    
+}
+
+// MARK: DefaultWebSocketsManager
+public final class DefaultWebSocketsManager: WebSocketsManager {
+    
+    private let newSocketsToNodeSubject: PassthroughSubject<WebSocketToNode, Never>
+    private var webSockets = [Node: WebSocketToNode]()
+    
+    internal init() {
+        self.newSocketsToNodeSubject = PassthroughSubject()
     }
 }
 
-internal extension WebSocketsEpic.WebSockets {
+public extension DefaultWebSocketsManager {
     
     func getNewSocketsToNode() -> AnyPublisher<WebSocketToNode, Never> {
         return newSocketsToNodeSubject.eraseToAnyPublisher()
@@ -51,6 +59,11 @@ internal extension WebSocketsEpic.WebSockets {
             self.newSocketsToNodeSubject.send(newSocket)
             return newSocket
         }
+    }
+    
+    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode) {
+        guard webSocket.closeIfNoOneListens() else { return }
+        webSockets.removeValue(forKey: webSocket.node)
     }
     
     func ifNoOneListensCloseAndRemoveWebsocket(toNode node: Node, afterDelay delay: DispatchTimeInterval? = nil) {
@@ -68,8 +81,4 @@ internal extension WebSocketsEpic.WebSockets {
         }
     }
     
-    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode) {
-        guard webSocket.closeIfNoOneListens() else { return }
-        webSockets.removeValue(forKey: webSocket.node)
-    }
 }

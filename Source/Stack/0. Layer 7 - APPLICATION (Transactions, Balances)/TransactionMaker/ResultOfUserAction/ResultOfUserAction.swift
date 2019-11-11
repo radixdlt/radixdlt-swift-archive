@@ -85,7 +85,7 @@ public extension ResultOfUserAction {
         case .failedToStageAction(let stageActionError):
             throw stageActionError
 
-        case .pendingSending(let cachedAtom, _, _):
+        case .pendingSending:
             
 //            return try cachedAtom.toBlocking(timeout: timeout)
 //                .single()

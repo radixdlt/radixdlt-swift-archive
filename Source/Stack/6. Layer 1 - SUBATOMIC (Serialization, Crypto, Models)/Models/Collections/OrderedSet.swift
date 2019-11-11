@@ -24,25 +24,7 @@
 
 import Foundation
 
-public protocol OrderedSetType: RandomAccessCollection, Equatable where Element: Hashable {
-    init()
-    init(array: [Element])
-    init(set: Set<Element>)
-    init(single: Element)
-    
-    /// Returns the contents of the set as an array.
-    var contents: [Element] { get }
-    
-    mutating func append(_ newElement: Element, replaceIfPresent: Bool) -> (inserted: Bool, memberAfterInsert: Element)
-    
-    func contains(_ member: Element) -> Bool
-}
-
-public extension OrderedSetType {
-    init(single: Element) {
-        self.init(array: [single])
-    }
-}
+// swiftlint:disable colon opening_brace
 
 /// An ordered set is an ordered collection of instances of `Element` in which
 /// uniqueness of the objects is guaranteed.
@@ -52,12 +34,13 @@ public extension OrderedSetType {
 /// [1]: https://github.com/apple/swift-package-manager/blob/master/Sources/Basic/OrderedSet.swift
 ///
 public struct OrderedSet<Element>:
-    OrderedSetType,
+    RandomAccessCollection, Equatable,
     ExpressibleByArrayLiteral,
     CustomStringConvertible
     where
     Element: Hashable
 {
+    // swiftlint:enable colon opening_brace
     
     private var array: [Element]
     private var set: Set<Element>
@@ -66,6 +49,12 @@ public struct OrderedSet<Element>:
     public init() {
         self.array = []
         self.set = Set()
+    }
+}
+
+public extension OrderedSet {
+    init(single: Element) {
+        self.init(array: [single])
     }
 }
 
@@ -120,7 +109,6 @@ public extension OrderedSet {
     var contents: [Element] { return array }
 }
 
-
 // MARK: Mutating functions
 public extension OrderedSet {
     
@@ -171,7 +159,7 @@ public extension OrderedSet {
 
 // MARK: ExpressibleByArrayLiteral
 public extension OrderedSet {
-    /// Create an instance initialized with `elements`.
+    /// Create an instance initialised with `elements`.
     ///
     /// If an element occurs more than once in `element`, only the first one
     /// will be included.
@@ -179,7 +167,6 @@ public extension OrderedSet {
         self.init(array: elements)
     }
 }
-
 
 // MARK: CustomStringConvertible
 public extension OrderedSet {
@@ -205,11 +192,3 @@ public func == <T>(lhs: OrderedSet<T>, rhs: OrderedSet<T>) -> Bool {
 
 // MARK: OrderedSet + Hashable
 extension OrderedSet: Hashable where Element: Hashable { }
-
-// MARK: OrderSet Contains
-public extension OrderedSetType where Element: OrderedSetType {
-    func contains(permutationElement: Element.Element) -> Bool {
-        return contents.first(where: { $0.contains(permutationElement) })?.isEmpty == false
-    }
-    
-}

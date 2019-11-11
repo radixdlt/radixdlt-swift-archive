@@ -26,11 +26,11 @@ import Foundation
 import Combine
 
 public final class ConnectWebSocketEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsEpic.WebSockets
+    public let webSockets: WebSocketsManager
     
     private var cancellables = Set<AnyCancellable>()
     
-    public init(webSockets: WebSocketsEpic.WebSockets) {
+    public init(webSockets: WebSocketsManager) {
         self.webSockets = webSockets
     }
 }
@@ -57,7 +57,7 @@ public extension ConnectWebSocketEpic {
             .filter { $0 is CloseWebSocketAction }^
             .handleEvents(
                 receiveOutput: { [unowned webSockets] closeWebSocketAction in
-                    webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: closeWebSocketAction.node)
+                    webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: closeWebSocketAction.node, afterDelay: nil)
                 }
             )^
             .dropAll()^

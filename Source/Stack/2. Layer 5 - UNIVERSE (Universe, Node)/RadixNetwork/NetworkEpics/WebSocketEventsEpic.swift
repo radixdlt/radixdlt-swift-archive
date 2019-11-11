@@ -27,8 +27,8 @@ import Combine
 
 // TODO: this should not be an epic
 public final class WebSocketEventsEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsEpic.WebSockets
-    public init(webSockets: WebSocketsEpic.WebSockets) {
+    public let webSockets: WebSocketsManager
+    public init(webSockets: WebSocketsManager) {
         self.webSockets = webSockets
     }
 }

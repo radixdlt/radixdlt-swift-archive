@@ -38,12 +38,6 @@ public final class DiscoverNodesEpic: RadixNetworkEpic {
     }
 }
 
-extension Array where Element: Hashable {
-    func removeDuplicates() -> [Element] {
-        OrderedSet<Element>(array: self).contents
-    }
-}
-
 public extension DiscoverNodesEpic {
     
     // swiftlint:disable function_body_length

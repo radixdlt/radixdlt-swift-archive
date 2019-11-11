@@ -31,6 +31,10 @@ public extension Sequence where Element: Hashable {
 }
 
 public extension Array where Element: Hashable {
+    func removeDuplicates() -> [Element] {
+        OrderedSet<Element>(array: self).contents
+    }
+
     enum ArrayToSetError: Swift.Error {
         case arrayContainedDuplicates
     }

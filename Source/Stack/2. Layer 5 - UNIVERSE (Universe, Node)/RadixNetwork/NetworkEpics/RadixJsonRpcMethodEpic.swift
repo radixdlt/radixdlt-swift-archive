@@ -39,11 +39,11 @@ where
 
     public typealias MethodCall = (RPCClient, Request) -> Single<RpcMethodResult, Never>
     
-    public let webSockets: WebSocketsEpic.WebSockets
+    public let webSockets: WebSocketsManager
     private let methodCall: MethodCall
     
     private init(
-        webSockets: WebSocketsEpic.WebSockets,
+        webSockets: WebSocketsManager,
         methodCall: @escaping MethodCall
     ) {
         self.webSockets = webSockets
@@ -74,7 +74,7 @@ public extension RadixJsonRpcMethodEpic {
 // MARK: Instances
 public extension RadixJsonRpcMethodEpic {
     
-    static func createGetLivePeersEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
+    static func createGetLivePeersEpic(webSockets: WebSocketsManager) -> NetworkWebsocketEpic {
         
         return RadixJsonRpcMethodEpic<GetLivePeersActionRequest, GetLivePeersActionResult>(
             webSockets: webSockets
@@ -85,7 +85,7 @@ public extension RadixJsonRpcMethodEpic {
         }
     }
     
-    static func createGetNodeInfoEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
+    static func createGetNodeInfoEpic(webSockets: WebSocketsManager) -> NetworkWebsocketEpic {
         RadixJsonRpcMethodEpic<GetNodeInfoActionRequest, GetNodeInfoActionResult>(
             webSockets: webSockets
         ) { rpcClient, action in
@@ -95,7 +95,7 @@ public extension RadixJsonRpcMethodEpic {
         }
     }
     
-    static func createUniverseConfigEpic(webSockets: WebSocketsEpic.WebSockets) -> NetworkWebsocketEpic {
+    static func createUniverseConfigEpic(webSockets: WebSocketsManager) -> NetworkWebsocketEpic {
         
         return RadixJsonRpcMethodEpic<GetUniverseConfigActionRequest, GetUniverseConfigActionResult>(
             webSockets: webSockets

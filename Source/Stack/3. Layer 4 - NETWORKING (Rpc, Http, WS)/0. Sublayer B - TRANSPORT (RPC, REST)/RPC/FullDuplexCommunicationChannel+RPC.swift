@@ -41,10 +41,12 @@ extension FullDuplexCommunicationChannel {
     
     func observeNotification<Model>(_ notification: RPCNotification, subscriberId: SubscriberId) -> AnyPublisher<Model, Never> where Model: Decodable {
         
-//        return resultForMessage(parseMode: .parseAsNotification(notification, subscriberId: subscriberId)).map {
-//            try $0.get().model
-//        }
-        combineMigrationInProgress()
+        resultForMessage(
+            parseMode: .parseAsNotification(notification, subscriberId: subscriberId)
+        )
+            // swiftlint:disable:next force_try
+            .map { try! $0.get().model } // TODO Combine: change to `tryMap` and propagate error
+            .eraseToAnyPublisher()
     }
 }
 
@@ -59,46 +61,48 @@ private extension FullDuplexCommunicationChannel {
         parseMode: ParseJsonRpcResponseMode
     ) -> AnyPublisher<RPCResult<Model>, Never> where Model: Decodable {
        
-        combineMigrationInProgress()
-//        return messages
-//            .map { $0.toData() }
-//            .filter {
-//                guard
-//                    let jsonObj = try? JSONSerialization.jsonObject(with: $0, options: []) as? JSON
-//                    else {
-//                       incorrectImplementation("not json!")
-//                }
-//                
-//                switch parseMode {
-//                case .parseAsNotification(let expectedNotification, let expectedSubscriberId):
-//                    guard
-//                        let notificationMethodFromResponseAsString = jsonObj[RPCResponseLookingLikeRequestCodingKeys.method.rawValue] as? String,
-//                        let notificationMethodFromResponse = RPCNotification(rawValue: notificationMethodFromResponseAsString),
-//                        notificationMethodFromResponse == expectedNotification,
-//                        let subscriberIdWrapperJson = jsonObj[RPCResponseLookingLikeRequestCodingKeys.params.rawValue] as? JSON,
-//                        let subscriberIdFromResponseAsString = subscriberIdWrapperJson["subscriberId"] as? String,
-//                        case let subscriberIdFromResponse = SubscriberId(validated: subscriberIdFromResponseAsString),
-//                        subscriberIdFromResponse == expectedSubscriberId
-//                    else {
-//                        return false
-//                    }
-//                    return true
-//                    
-//                case .responseOnRequest(let rpcRequestId):
-//                    guard
-//                        let requestIdFromResponse = jsonObj[RPCResponseResultWithRequestIdCodingKeys.id.rawValue] as? String,
-//                        requestIdFromResponse == rpcRequestId
-//                        else {
-//                            return false
-//                            
-//                    }
-//                    return true
-//                }
-//            }
-//    .eraseToAnyPublisher()
-        
-//            .map { try JSONDecoder().decode(RPCResult<Model>.self, from: $0) }
+        return messages
+            .map { $0.toData() }
+            .filter { self.filterOutRelevant(data: $0, parseMode: parseMode) }
+            .decode(type: RPCResult<Model>.self, decoder: JSONDecoder())
+            .mapError { fatalError("TODO Combine - handle error: \($0)") }
+            .eraseToAnyPublisher()
+            
 //            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
 //            .subscribeOn(MainScheduler.instance)
+    }
+    
+    func filterOutRelevant(data: Data, parseMode: ParseJsonRpcResponseMode) -> Bool {
+        guard
+            let jsonObj = try? JSONSerialization.jsonObject(with: data, options: []) as? JSON
+            else {
+                incorrectImplementation("not json!")
+        }
+        
+        switch parseMode {
+        case .parseAsNotification(let expectedNotification, let expectedSubscriberId):
+            guard
+                let notificationMethodFromResponseAsString = jsonObj[RPCResponseLookingLikeRequestCodingKeys.method.rawValue] as? String,
+                let notificationMethodFromResponse = RPCNotification(rawValue: notificationMethodFromResponseAsString),
+                notificationMethodFromResponse == expectedNotification,
+                let subscriberIdWrapperJson = jsonObj[RPCResponseLookingLikeRequestCodingKeys.params.rawValue] as? JSON,
+                let subscriberIdFromResponseAsString = subscriberIdWrapperJson["subscriberId"] as? String,
+                case let subscriberIdFromResponse = SubscriberId(validated: subscriberIdFromResponseAsString),
+                subscriberIdFromResponse == expectedSubscriberId
+                else {
+                    return false
+            }
+            return true
+            
+        case .responseOnRequest(let rpcRequestId):
+            guard
+                let requestIdFromResponse = jsonObj[RPCResponseResultWithRequestIdCodingKeys.id.rawValue] as? String,
+                requestIdFromResponse == rpcRequestId
+                else {
+                    return false
+                    
+            }
+            return true
+        }
     }
 }

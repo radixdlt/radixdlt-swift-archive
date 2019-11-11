@@ -62,8 +62,8 @@ public struct FetchAtomsActionRequest: FetchAtomsAction, FindANodeRequestAction 
     }
 }
 
-public struct FetchAtomsActionSubscribe: FetchAtomsAction {
-    public let address: Address
-    public let node: Node
-    public let uuid: UUID
-}
+//public struct FetchAtomsActionSubscribe: FetchAtomsAction {
+//    public let address: Address
+//    public let node: Node
+//    public let uuid: UUID
+//}

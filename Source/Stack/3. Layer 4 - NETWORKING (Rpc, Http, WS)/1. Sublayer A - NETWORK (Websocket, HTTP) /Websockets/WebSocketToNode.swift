@@ -55,19 +55,16 @@ public final class WebSocketToNode:
     private var queuedOutgoingMessages = [String]()
     private var cancellables = Set<AnyCancellable>()
     
-    public init(node: Node) {
+    // `internal` only for test purposes, otherwise `private`
+    internal init(node: Node, webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>) {
         
-        let webSocketStatusSubject = CurrentValueSubject<WebSocketStatus, Never>(.disconnected)
-        
-        //        stateSubject.filter { $0 == .failed }
-        //            .debounce(RxTimeInterval.seconds(60), scheduler: MainScheduler.instance)
-        //            .subscribe(
-        //                onNext: { _ in stateSubject.send(.disconnected) },
-        //                onError: { _ in stateSubject.send(.disconnected) }
-        //        ).store(in: &cancellables)
-        
-        logBroken()
-        
+        webSocketStatusSubject.filter { $0 == .failed }
+            .debounce(for: 60, scheduler: RunLoop.main)
+            .sink(
+                receiveCompletion: { _ in webSocketStatusSubject.send(.disconnected) },
+                receiveValue: { _ in webSocketStatusSubject.send(.disconnected) }
+            ).store(in: &cancellables)
+         
         self.webSocketStatusSubject = webSocketStatusSubject
         self.node = node
         
@@ -78,6 +75,12 @@ public final class WebSocketToNode:
     
     deinit {
         closeDisregardingListeners()
+    }
+}
+
+public extension WebSocketToNode {
+    convenience init(node: Node) {
+        self.init(node: node, webSocketStatusSubject: .init(.disconnected))
     }
 }
 
@@ -99,7 +102,7 @@ public extension WebSocketToNode {
     }
     
     @discardableResult
-    func connectAndNotifyWhenConnected() -> Single<Node, Never> {
+    func connectAndNotifyWhenConnected() -> Future<WebSocketToNode, Never> {
         switch webSocketStatusSubject.value {
         case .disconnected, .failed:
             webSocketStatusSubject.send(.connecting)
@@ -107,11 +110,21 @@ public extension WebSocketToNode {
         case .closing, .connecting, .connected: break
         }
         
-        let node = self.node
-        return webSocketStatus.filter { $0.isConnected }
-            .first()
-            .ignoreOutput()
-            .andThen(Just(node))
+        return Future<WebSocketToNode, Never> { [unowned self] promise in
+            self.webSocketStatus.filter { $0.isConnected }
+                .first()
+                .ignoreOutput()
+                .sink(
+                    receiveCompletion: { _ in promise(.success(self)) },
+                    receiveValue: { _ in }
+                )
+                .store(in: &self.cancellables)
+        }
+        
+//        return webSocketStatus.filter { $0.isConnected }
+//            .first()
+//            .ignoreOutput()
+//            .andThen(Just(node))
     }
 }
 

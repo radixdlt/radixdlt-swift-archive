@@ -111,7 +111,6 @@
 		E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9D23687C6300EB3EC3 /* TestCase.swift */; };
 		E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */; };
 		E620CAA72369BD0500EB3EC3 /* WebSocketsEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAA62369BD0500EB3EC3 /* WebSocketsEpic.swift */; };
-		E620CAA92369BD1C00EB3EC3 /* WebSocketsEpic+WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAA82369BD1C00EB3EC3 /* WebSocketsEpic+WebSockets.swift */; };
 		E620CAAC2369BE9000EB3EC3 /* Combine_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */; };
 		E621BE832298394D00E97542 /* AtomIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E621BE822298394D00E97542 /* AtomIdentifier.swift */; };
 		E626E1DC22B3F9AB0046D2AC /* AtomPuller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E626E1DB22B3F9AB0046D2AC /* AtomPuller.swift */; };
@@ -278,6 +277,7 @@
 		E68DFA2E22FC50F40050F69E /* UniqueMaking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA2D22FC50F40050F69E /* UniqueMaking.swift */; };
 		E68DFA3222FC64140050F69E /* ExecutedTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA3122FC64140050F69E /* ExecutedTransaction.swift */; };
 		E68DFA3422FC64290050F69E /* TransactionConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA3322FC64290050F69E /* TransactionConvertible.swift */; };
+		E694E44F237738AE00ECF6DE /* WebSocketsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E694E44E237738AE00ECF6DE /* WebSocketsManager.swift */; };
 		E694FDA023460555009C6B8E /* UnsignedAmount+BinaryInteger+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = E694FD9F23460555009C6B8E /* UnsignedAmount+BinaryInteger+Init.swift */; };
 		E696AAD0226DE6F700D19ED6 /* TokenTransferring.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AACF226DE6F700D19ED6 /* TokenTransferring.swift */; };
 		E696AAD3226DE84100D19ED6 /* AccountBalancing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */; };
@@ -377,6 +377,7 @@
 		E6E0BFBB23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E0BFBA23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift */; };
 		E6E0BFBD2375AE6F00B946A7 /* OrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605544A23058A6600528510 /* OrderedSet.swift */; };
 		E6E0BFC02375BFA100B946A7 /* NetworkEpicTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E0BFBF2375BFA100B946A7 /* NetworkEpicTestCase.swift */; };
+		E6E0BFC32375C2C800B946A7 /* FetchAtomsEpicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E0BFC22375C2C800B946A7 /* FetchAtomsEpicTests.swift */; };
 		E6E279212271CD1C0067D46E /* ECIES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278762271CD1C0067D46E /* ECIES.swift */; };
 		E6E279222271CD1C0067D46E /* SecureGenerateBytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278782271CD1C0067D46E /* SecureGenerateBytes.swift */; };
 		E6E279232271CD1C0067D46E /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278792271CD1C0067D46E /* Status.swift */; };
@@ -702,7 +703,6 @@
 		E620CA9D23687C6300EB3EC3 /* TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase.swift; sourceTree = "<group>"; };
 		E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase_Extensions.swift; sourceTree = "<group>"; };
 		E620CAA62369BD0500EB3EC3 /* WebSocketsEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketsEpic.swift; sourceTree = "<group>"; };
-		E620CAA82369BD1C00EB3EC3 /* WebSocketsEpic+WebSockets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WebSocketsEpic+WebSockets.swift"; sourceTree = "<group>"; };
 		E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combine_Extensions.swift; sourceTree = "<group>"; };
 		E621BE822298394D00E97542 /* AtomIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomIdentifier.swift; sourceTree = "<group>"; };
 		E626E1DB22B3F9AB0046D2AC /* AtomPuller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomPuller.swift; sourceTree = "<group>"; };
@@ -865,6 +865,7 @@
 		E68DFA2D22FC50F40050F69E /* UniqueMaking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueMaking.swift; sourceTree = "<group>"; };
 		E68DFA3122FC64140050F69E /* ExecutedTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutedTransaction.swift; sourceTree = "<group>"; };
 		E68DFA3322FC64290050F69E /* TransactionConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionConvertible.swift; sourceTree = "<group>"; };
+		E694E44E237738AE00ECF6DE /* WebSocketsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketsManager.swift; sourceTree = "<group>"; };
 		E694FD9F23460555009C6B8E /* UnsignedAmount+BinaryInteger+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnsignedAmount+BinaryInteger+Init.swift"; sourceTree = "<group>"; };
 		E696AACF226DE6F700D19ED6 /* TokenTransferring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenTransferring.swift; sourceTree = "<group>"; };
 		E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountBalancing.swift; sourceTree = "<group>"; };
@@ -964,6 +965,7 @@
 		E6E0BFB82375899400B946A7 /* DiscoverNodesEpicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverNodesEpicTests.swift; sourceTree = "<group>"; };
 		E6E0BFBA23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineIfUniverseIsSuitable.swift; sourceTree = "<group>"; };
 		E6E0BFBF2375BFA100B946A7 /* NetworkEpicTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkEpicTestCase.swift; sourceTree = "<group>"; };
+		E6E0BFC22375C2C800B946A7 /* FetchAtomsEpicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAtomsEpicTests.swift; sourceTree = "<group>"; };
 		E6E278762271CD1C0067D46E /* ECIES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIES.swift; sourceTree = "<group>"; };
 		E6E278782271CD1C0067D46E /* SecureGenerateBytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureGenerateBytes.swift; sourceTree = "<group>"; };
 		E6E278792271CD1C0067D46E /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
@@ -1616,7 +1618,7 @@
 			isa = PBXGroup;
 			children = (
 				E620CAA62369BD0500EB3EC3 /* WebSocketsEpic.swift */,
-				E620CAA82369BD1C00EB3EC3 /* WebSocketsEpic+WebSockets.swift */,
+				E694E44E237738AE00ECF6DE /* WebSocketsManager.swift */,
 			);
 			path = WebSocketsEpic;
 			sourceTree = "<group>";
@@ -2910,11 +2912,20 @@
 		E6E0BFBE2375BF8E00B946A7 /* NetworkEpicTests */ = {
 			isa = PBXGroup;
 			children = (
+				E6E0BFC12375C29C00B946A7 /* FetchAtomsEpicTests */,
 				E6E0BFB72375896D00B946A7 /* DiscoverNodesEpicTests */,
 				E620CA9923686B6A00EB3EC3 /* FindANodeEpicTests */,
 				E6E0BFBF2375BFA100B946A7 /* NetworkEpicTestCase.swift */,
 			);
 			path = NetworkEpicTests;
+			sourceTree = "<group>";
+		};
+		E6E0BFC12375C29C00B946A7 /* FetchAtomsEpicTests */ = {
+			isa = PBXGroup;
+			children = (
+				E6E0BFC22375C2C800B946A7 /* FetchAtomsEpicTests.swift */,
+			);
+			path = FetchAtomsEpicTests;
 			sourceTree = "<group>";
 		};
 		E6E278732271CD1C0067D46E /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */ = {
@@ -4070,6 +4081,7 @@
 				E689DBA6225F882800340CF3 /* UniverseConfigRequesting.swift in Sources */,
 				E6725655228B441A004631F1 /* RPCErrorCode.swift in Sources */,
 				E68727FE2343BC6400FF4FCE /* Locale+DecimalSeparator.swift in Sources */,
+				E694E44F237738AE00ECF6DE /* WebSocketsManager.swift in Sources */,
 				E63BD45B23450E12007C753A /* UnsignedAmountType+BinaryInteger.swift in Sources */,
 				E63BD46623453693007C753A /* UnsignedAmountType+Arithmetic.swift in Sources */,
 				E6F5484722771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift in Sources */,
@@ -4204,7 +4216,6 @@
 				E6E279402271CD1C0067D46E /* SHA256TwiceHasher.swift in Sources */,
 				E6E2798B2271CD1C0067D46E /* StringConversionMode.swift in Sources */,
 				E6E279442271CD1C0067D46E /* StringValue.swift in Sources */,
-				E620CAA92369BD1C00EB3EC3 /* WebSocketsEpic+WebSockets.swift in Sources */,
 				E626E1FE22B41A7B0046D2AC /* AtomToTokenTransferMapper.swift in Sources */,
 				E6E2792D2271CD1C0067D46E /* Signer.swift in Sources */,
 				E6A507E6224E20AB00128123 /* RPCResposeResultConvertible.swift in Sources */,
@@ -4264,6 +4275,7 @@
 				E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */,
 				E6A643122244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift in Sources */,
 				E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */,
+				E6E0BFC32375C2C800B946A7 /* FetchAtomsEpicTests.swift in Sources */,
 				E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */,
 				E6E27A552271EEE20067D46E /* XCTestCase_Extensions.swift in Sources */,
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
@@ -4435,7 +4447,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=200 -Xfrontend -warn-long-function-bodies=200 -Onone";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=1000 -Xfrontend -warn-long-function-bodies=1000 -Onone";
 				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.sdk;
 				PRODUCT_NAME = RadixSDK;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -4473,7 +4485,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=200 -Xfrontend -warn-long-function-bodies=200";
+				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=1000 -Xfrontend -warn-long-function-bodies=1000";
 				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.sdk;
 				PRODUCT_NAME = RadixSDK;
 				PROVISIONING_PROFILE_SPECIFIER = "";

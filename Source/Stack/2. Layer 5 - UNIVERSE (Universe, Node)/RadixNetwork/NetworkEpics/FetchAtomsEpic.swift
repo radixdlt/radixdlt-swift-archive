@@ -25,11 +25,66 @@
 import Foundation
 import Combine
 
+public struct WebSocketConnector {
+    public typealias NewClosedWebSocketConnectionToNode = (Node) -> WebSocketToNode
+    public let newClosedWebSocketConnectionToNode: NewClosedWebSocketConnectionToNode
+}
+
+public extension WebSocketConnector {
+    static func byWebSockets(manager webSocketsManager: WebSocketsManager) -> Self {
+        Self { nodeToConnectTo in
+            webSocketsManager.newDisconnectedWebsocket(to: nodeToConnectTo)
+        }
+    }
+}
+
+public struct WebSocketCloser {
+    public typealias CloseWebSocketTo = (Node) -> Void
+    public let closeWebSocketToNode: CloseWebSocketTo
+}
+
+public extension WebSocketCloser {
+    static func byWebSockets(manager webSocketsManager: WebSocketsManager) -> Self {
+        Self { nodeConnectionToClose in
+            webSocketsManager.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeConnectionToClose, afterDelay: nil)
+        }
+    }
+}
+
 public final class FetchAtomsEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsEpic.WebSockets
+    
+    public var webSockets: WebSocketsManager { fatalError("Remove property `webSockets: WebSocketsManager` from Protocol `NetworkWebsocketEpic` ") }
     private var cancellables = Set<AnyCancellable>()
-    public init(webSockets: WebSocketsEpic.WebSockets) {
-        self.webSockets = webSockets
+//    private var cancellablesMap: [UUID: Cancellable] = [:]
+    //    private let webSocketConnectionEstablisher: WebSocketConnectionEstablisher
+    private let webSocketConnector: WebSocketConnector
+    private let webSocketCloser: WebSocketCloser
+    private let makeAtomsObserver: (FullDuplexCommunicationChannel) -> AtomsByAddressSubscribing
+    private let makeAtomsObservationCanceller: (FullDuplexCommunicationChannel) -> AtomSubscriptionCancelling
+    
+    public init(
+        //        webSockets webSocketsManager: WebSocketsManager,
+        //        webSocketConnectionEstablisher: WebSocketConnectionEstablisher?
+        webSocketConnector: WebSocketConnector,
+        webSocketCloser: WebSocketCloser,
+        makeAtomsObserver: @escaping (FullDuplexCommunicationChannel) -> AtomsByAddressSubscribing = DefaultRPCClient.init,
+        makeAtomsObservationCanceller: @escaping (FullDuplexCommunicationChannel) -> AtomSubscriptionCancelling = DefaultRPCClient.init
+    ) {
+        //        self.webSockets = webSocketsManager
+        //        self.webSocketConnectionEstablisher = webSocketConnectionEstablisher ?? WebSocketConnectionEstablisher.byWebSockets(manager: webSocketsManager)
+        self.webSocketConnector = webSocketConnector
+        self.webSocketCloser = webSocketCloser
+        self.makeAtomsObserver = makeAtomsObserver
+        self.makeAtomsObservationCanceller = makeAtomsObservationCanceller
+    }
+}
+
+public extension FetchAtomsEpic {
+    convenience init(webSockets webSocketsManager: WebSocketsManager) {
+        self.init(
+            webSocketConnector: .byWebSockets(manager: webSocketsManager),
+            webSocketCloser: .byWebSockets(manager: webSocketsManager)
+        )
     }
 }
 
@@ -39,75 +94,67 @@ public extension FetchAtomsEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-//        var disposableMap: [UUID: CombineDisposable] = [:]
-//
-//        let fetch: AnyPublisher<NodeAction, Never> = actions
-//            .compactMap(typeAs: FindANodeResultAction.self)
-//            .filter { $0.request is FetchAtomsActionRequest }
-//            .flatMap { [unowned self] (nodeFound: FindANodeResultAction) -> AnyPublisher<NodeAction, Never> in
-//
-//                let node = nodeFound.node
-//                let fetchAtomsActionRequest = castOrKill(instance: nodeFound.request, toType: FetchAtomsActionRequest.self)
-//                let uuid = fetchAtomsActionRequest.uuid
-//
-//                var fetchDisposable: CombineDisposable?
-//                let atomsObs = AnyPublisher<NodeAction, Never>.create { observer in
-//                    fetchCombineDisposable = self.fetchAtoms(from: node, request: fetchAtomsActionRequest).subscribe(observer)
-//                    return CombineDisposables.create()
-//                }
-//
-//                return self.waitForConnection(toNode: node)
-//                    .andThen(atomsObs)
-//                    .do(onSubscribe: { disposableMap[uuid] = fetchDisposable })
-//        }
-//
-//        let cancelFetch: AnyPublisher<NodeAction, Never> = actions
-//            .compactMap(typeAs: FetchAtomsActionCancel.self)
-//            .do(onNext: { disposableMap.removeValue(forKey: $0.uuid)?.dispose() })
-//            .ignoreElementsObservable().map { $0 }
-//
-//        return CombineObservable.merge(cancelFetch, fetch)
+        let fetch = nodeActionPublisher
+            .compactMap(typeAs: FindANodeResultAction.self)
+            .filter { $0.request is FetchAtomsActionRequest }
+            .flatMap { [unowned self] (nodeFound: FindANodeResultAction) -> AnyPublisher<NodeAction, Never> in
+                
+                let node = nodeFound.node
+                let fetchAtomsActionRequest = castOrKill(instance: nodeFound.request, toType: FetchAtomsActionRequest.self)
+                
+                //                return self.webSocketConnectionEstablisher .openWebSocketAndAwaitConnection(node)
+                //                    .first().ignoreOutput()
+                return self.webSocketConnector.newClosedWebSocketConnectionToNode(node)
+                    .connectAndNotifyWhenConnected()
+                    .flatMap { webSocketToNode in
+                        self.fetchAtoms(
+                            from: webSocketToNode,
+                            request: fetchAtomsActionRequest
+                        )
+                    }^
+            }
         
-        combineMigrationInProgress()
+        let cancelFetch = nodeActionPublisher
+            .compactMap(typeAs: FetchAtomsActionCancel.self)
+//            .handleEvents(receiveOutput: {
+//                self.cancellablesMap.removeValue(forKey: $0.uuid)?.cancel()
+//            })
+            .ignoreOutput(mapToType: NodeAction.self)
+        
+        return cancelFetch.merge(with: fetch)^
+        
     }
 }
 
-//private extension FetchAtomsEpic {
-//    func fetchAtoms(from node: Node, request: FetchAtomsActionRequest) -> AnyPublisher<NodeAction, Never> {
-//        let webSocketToNode = webSockets.webSocket(to: node, shouldConnect: false)
-//        let rpcClient = DefaultRPCClient(channel: webSocketToNode)
-//        let uuid = request.uuid
-//        let subscriberIdFromUuid = SubscriberId(uuid: uuid)
-//        let address = request.address
-//
-//        return CombineObservable.create { observer in
-//
-//            observer.send(FetchAtomsActionSubscribe(address: address, node: node, uuid: uuid))
-//
-//            var disposables = [CombineDisposable]()
-//
-//            let atomObservationsCombineDisposable = rpcClient.observeAtoms(subscriberId: subscriberIdFromUuid)
-//                .map { observation in FetchAtomsActionObservation(address: address, node: node, atomObservation: observation, uuid: uuid) }
-//                .subscribe(observer)
-//
-//            disposables.append(atomObservationsCombineDisposable)
-//
-//            let sendAtomsSubscribeDisposable = rpcClient.sendAtomsSubscribe(to: address, subscriberId: subscriberIdFromUuid).subscribe()
-//
-//            disposables.append(sendAtomsSubscribeDisposable)
-//            return CombineDisposables.create(disposables)
-//        }.do(onDispose: { [unowned self] in
-//            rpcClient.cancelAtomsSubscription(subscriberId: subscriberIdFromUuid)
-//                .andThen(
-//                    AnyPublisher<Int, Never>.timer(delayFromCancelObservationOfAtomStatusToClosingWebsocket, scheduler: MainScheduler.instance).mapToVoid()
-//                        .flatMapCompletableVoid {
-//                            self.close(webSocketToNode: webSocketToNode, useDelay: false)
-//                            return Completable.completed()
-//                    }
-//                ).catchError { errorToSupress in
-//                    log.error("Supressing error: \(errorToSupress)")
-//                    return Completable.completed()
-//                }.subscribe().disposed(by: self.disposeBag)
-//        })
-//    }
-//}
+private extension FetchAtomsEpic {
+    func fetchAtoms(from webSocketToNode: WebSocketToNode, request: FetchAtomsActionRequest) -> AnyPublisher<NodeAction, Never> {
+        //        let webSocketToNode = webSockets.newDisconnectedWebsocket(to: node)
+        let node = webSocketToNode.node
+        let rpcAtomsObserver = makeAtomsObserver(webSocketToNode) // DefaultRPCClient(channel: webSocketToNode)
+        let rpcAtomsObservingCanceller = makeAtomsObservationCanceller(webSocketToNode)
+        let uuid = request.uuid
+        let subscriberIdFromUuid = SubscriberId(uuid: uuid)
+        let address = request.address
+        
+        let atomsObservation: AnyPublisher<NodeAction, Never> = rpcAtomsObserver.observeAtoms(subscriberId: subscriberIdFromUuid)
+            .map { observation in
+                FetchAtomsActionObservation(address: address, node: node, atomObservation: observation, uuid: uuid) as NodeAction
+            }^
+        
+        func cleanUp() {
+            rpcAtomsObservingCanceller.cancelAtomsSubscription(subscriberId: subscriberIdFromUuid)
+                .ignoreOutput()
+                .andThen(Just(self.webSocketCloser.closeWebSocketToNode(node)))
+                .sink { _ in }
+                .store(in: &cancellables)
+        }
+        
+        return
+            rpcAtomsObserver.sendAtomsSubscribe(to: address, subscriberId: subscriberIdFromUuid)
+                .ignoreOutput(mapToType: NodeAction.self)
+                .append(atomsObservation)
+                .handleEvents(receiveCompletion: { _ in cleanUp() }, receiveCancel: { cleanUp() })
+                .eraseToAnyPublisher()
+    }
+}
+

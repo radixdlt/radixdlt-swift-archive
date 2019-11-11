@@ -38,17 +38,22 @@ public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
 // MARK: - Observing RPC Responses
 public extension DefaultRPCClient {
     func observeAtoms(subscriberId: SubscriberId) -> AnyPublisher<AtomObservation, Never> {
-//        return observe(notification: .subscribeUpdate, subscriberId: subscriberId, responseType: AtomSubscriptionUpdate.self)
-//            .map { $0.toAtomObservation() }
-//            .flatMap { (atomObservations: [AtomObservation]) -> AnyPublisher<AtomObservation, Never> in
-//                return CombineObservable.from(atomObservations)
-//            }
-        combineMigrationInProgress()
+        observe(
+            notification: .subscribeUpdate,
+            subscriberId: subscriberId,
+            responseType: AtomSubscriptionUpdate.self
+        )
+            .map { $0.toAtomObservation() }
+            .flattenSequence()
     }
     
     func observeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<AtomStatusEvent, Never> {
-        return self.observe(notification: .observeAtomStatusNotifications, subscriberId: subscriberId, responseType: AtomStatusEvent.self)
-       
+        observe(
+            notification: .observeAtomStatusNotifications,
+            subscriberId: subscriberId,
+            responseType: AtomStatusEvent.self
+        )
+        
     }
 }
 
@@ -108,16 +113,16 @@ public extension DefaultRPCClient {
 internal extension DefaultRPCClient {
     
     func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> Single<ResultFromResponse, Never> where ResultFromResponse: Decodable {
-//        return make(request: rootRequest, responseType: ResultFromResponse.self)
+        //        return make(request: rootRequest, responseType: ResultFromResponse.self)
         combineMigrationInProgress()
     }
-
+    
     func makeCompletableMapError<ErrorToMapTo>(
         request rootRequest: RPCRootRequest,
         errorMapper: @escaping (RPCError) -> (ErrorToMapTo)
     ) -> Completable where ErrorToMapTo: ErrorMappedFromRPCError {
         
-//        return make(request: rootRequest, responseType: ResponseOnFireAndForgetRequest.self, errorMapper: errorMapper).asCompletable()
+        //        return make(request: rootRequest, responseType: ResponseOnFireAndForgetRequest.self, errorMapper: errorMapper).asCompletable()
         combineMigrationInProgress()
     }
     
@@ -147,17 +152,21 @@ internal extension DefaultRPCClient {
         where
         ResultFromResponse: Decodable,
         MapToError: ErrorMappedFromRPCError {
-        
-//        return makeRequestMapToResponseOrError(request: rootRequest, responseType: responseType).map {
-//            do {
-//                return try $0.get().model
-//            } catch let rpcError as RPCError {
-//                if let errorMapper = errorMapper {
-//                    throw errorMapper(rpcError)
-//                } else { throw rpcError }
-//            } catch { unexpectedlyMissedToCatch(error: error) }
-//        }
-            combineMigrationInProgress()
+            
+            return makeRequestMapToResponseOrError(
+                request: rootRequest,
+                responseType: responseType
+            )
+                .map { (result: RPCResult<ResultFromResponse>) -> ResultFromResponse in
+                do {
+                    return try result.get().model
+                } catch let rpcError as RPCError {
+                    if let errorMapper = errorMapper {
+                        fatalError("TODO Combine, handle error: \(errorMapper(rpcError))")
+                    } else { fatalError("TODO Combine handle error: \(rpcError)") }
+                } catch { unexpectedlyMissedToCatch(error: error) }
+            }.eraseToAnyPublisher()
+           
     }
     
     func sendStartSubscription(request: RPCRootRequest) -> Completable {
@@ -177,38 +186,32 @@ private extension DefaultRPCClient {
         responseType: Model.Type
     ) -> Single<RPCResult<Model>, Never> where Model: Decodable {
         
-//        let rpcRequest = RPCRequest(rootRequest: rootRequest)
+        let rpcRequest = RPCRequest(rootRequest: rootRequest)
         
-//        let message = rpcRequest.jsonString
-//        let requestId = rpcRequest.requestUuid
+        let message = rpcRequest.jsonString
+        let requestId = rpcRequest.requestUuid
         
-//        return channel.responseOrErrorForMessage(requestId: requestId).take(1).asSingle()
-//            .do(onSubscribed: {
-//                self.channel.sendMessage(message)
-//            })
-        
-        combineMigrationInProgress()
+        return channel.responseOrErrorForMessage(requestId: requestId)
+            .first()
+            .handleEvents(
+                receiveSubscription: { _ in
+                    self.channel.sendMessage(message)
+                }
+            )
+        .eraseToAnyPublisher()        
     }
     
     func sendStartOrCancelSubscription(request: RPCRootRequest, mode: SubscriptionMode) -> Completable {
-        combineMigrationInProgress()
-//        return Completable.create { [unowned self] completable in
-//            let singleCombineDisposable = self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
-//                .subscribe(
-//                    onSuccess: { rpcResponseAboutSubscriptionChange in
-//                        if rpcResponseAboutSubscriptionChange.success {
-//                            completable(.completed)
-//                        } else {
-//                            completable(.error(RPCClientError(subscriptionMode: mode)))
-//                        }
-//                },
-//                    onError: {
-//                        // change to `completable(.error($0))`?
-//                        unexpectedlyMissedToCatch(error: $0)
-//                }
-//            )
-//            return CombineDisposables.create([singleCombineDisposable])
-//        }
+        
+        self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
+            .filter {
+                guard $0.success else {
+                    fatalError("TODO Combine handle failed to subscribe, throw `RPCClientError:subscriptionMode`, and deal with error flow")
+                }
+                return true
+        }
+        .first().ignoreOutput()
+        .eraseToAnyPublisher()
     }
 }
 
