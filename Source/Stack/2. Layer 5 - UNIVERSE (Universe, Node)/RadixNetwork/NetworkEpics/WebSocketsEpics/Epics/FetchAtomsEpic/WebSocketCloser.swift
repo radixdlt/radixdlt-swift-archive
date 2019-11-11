@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,40 +24,15 @@
 
 import Foundation
 
-public protocol FetchAtomsAction: NodeAction {
-    var address: Address { get }
-    var uuid: UUID { get }
+public struct WebSocketCloser {
+    public typealias CloseWebSocketTo = (Node) -> Void
+    public let closeWebSocketToNode: CloseWebSocketTo
 }
 
-public struct FetchAtomsActionCancel: FetchAtomsAction {
-    public let address: Address
-    public let uuid: UUID
-    private init(address: Address, uuid: UUID = .init()) {
-        self.address = address
-        self.uuid = uuid
-    }
-    public init(request: FetchAtomsActionRequest) {
-        self.init(address: request.address, uuid: request.uuid)
-    }
-}
-
-public struct FetchAtomsActionObservation: FetchAtomsAction {
-    public let address: Address
-    public let node: Node
-    public let atomObservation: AtomObservation
-    public let uuid: UUID
-}
-
-public struct FetchAtomsActionRequest: FetchAtomsAction, FindANodeRequestAction {
-    public let address: Address
-    public let uuid: UUID
-    
-    public init(address: Address, uuid: UUID = .init()) {
-        self.address = address
-        self.uuid = uuid
-    }
-    
-    public var shards: Shards {
-        return Shards(single: address.shard)
+public extension WebSocketCloser {
+    static func byWebSockets(manager webSocketsManager: WebSocketsManager) -> Self {
+        Self { nodeConnectionToClose in
+            webSocketsManager.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeConnectionToClose, afterDelay: nil)
+        }
     }
 }

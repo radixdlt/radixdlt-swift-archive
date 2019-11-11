@@ -25,16 +25,6 @@
 import Foundation
 import Combine
 
-public protocol WebSocketsManager: AnyObject {
-    func getNewSocketsToNode() -> AnyPublisher<WebSocketToNode, Never>
-    func newDisconnectedWebsocket(to node: Node) -> WebSocketToNode
-
-    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode)
-    func ifNoOneListensCloseAndRemoveWebsocket(toNode node: Node, afterDelay delay: DispatchTimeInterval?)
-    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode, afterDelay delay: DispatchTimeInterval?)
-    
-}
-
 // MARK: DefaultWebSocketsManager
 public final class DefaultWebSocketsManager: WebSocketsManager {
     

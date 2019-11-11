@@ -29,24 +29,24 @@ import Combine
 
 /// A multipurpose RadixNetworkEpic wrapping JSON-RPC API calls
 public final class RadixJsonRpcMethodEpic<Request, RpcMethodResult>:
-    NetworkWebsocketEpic
-where
+    RadixNetworkWebSocketsEpic
+    where
     Request: JsonRpcMethodNodeAction,
     RpcMethodResult: JsonRpcResultAction
 {
     
     // swiftlint:enable colon opening_brace
-
+    
     public typealias MethodCall = (RPCClient, Request) -> Single<RpcMethodResult, Never>
     
-    public let webSockets: WebSocketsManager
+    private let webSocketConnector: WebSocketConnector
     private let methodCall: MethodCall
     
     private init(
-        webSockets: WebSocketsManager,
+        webSocketConnector: WebSocketConnector,
         methodCall: @escaping MethodCall
     ) {
-        self.webSockets = webSockets
+        self.webSocketConnector = webSocketConnector
         self.methodCall = methodCall
     }
 }
@@ -61,12 +61,13 @@ public extension RadixJsonRpcMethodEpic {
         return nodeActionPublisher
             .compactMap(typeAs: Request.self)
             .flatMap { [unowned self] rpcMethod in
-                return self.openWebSocketAndAwaitConnection(toNode: rpcMethod.node)
+                return self.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethod.node)
+                    .connectAndNotifyWhenConnected()
                     .map { DefaultRPCClient(channel: $0) }
                     .flatMap { rpcClient in
                         return self.methodCall(rpcClient, rpcMethod)
-                    }
-            }
+                }
+        }
         .map { $0 as NodeAction }^
     }
 }
@@ -74,20 +75,28 @@ public extension RadixJsonRpcMethodEpic {
 // MARK: Instances
 public extension RadixJsonRpcMethodEpic {
     
-    static func createGetLivePeersEpic(webSockets: WebSocketsManager) -> NetworkWebsocketEpic {
+    static func createGetLivePeersEpic(webSockets webSocketsManager: WebSocketsManager) -> RadixNetworkWebSocketsEpic {
+        createGetLivePeersEpic(webSocketConnector: .byWebSockets(manager: webSocketsManager))
+    }
+    
+    static func createGetLivePeersEpic(webSocketConnector: WebSocketConnector) -> RadixNetworkWebSocketsEpic {
         
-        return RadixJsonRpcMethodEpic<GetLivePeersActionRequest, GetLivePeersActionResult>(
-            webSockets: webSockets
+        RadixJsonRpcMethodEpic<GetLivePeersActionRequest, GetLivePeersActionResult>(
+            webSocketConnector: webSocketConnector
         ) { rpcClient, action in
-            rpcClient.getLivePeers(
-            ).map { GetLivePeersActionResult(node: action.node, result: $0) }
+            rpcClient.getLivePeers()
+                .map { GetLivePeersActionResult(node: action.node, result: $0) }
                 .eraseToAnyPublisher()
         }
     }
     
-    static func createGetNodeInfoEpic(webSockets: WebSocketsManager) -> NetworkWebsocketEpic {
+    static func createGetNodeInfoEpic(webSockets webSocketsManager: WebSocketsManager) -> RadixNetworkWebSocketsEpic {
+        createGetNodeInfoEpic(webSocketConnector: .byWebSockets(manager: webSocketsManager))
+    }
+    
+    static func createGetNodeInfoEpic(webSocketConnector: WebSocketConnector) -> RadixNetworkWebSocketsEpic {
         RadixJsonRpcMethodEpic<GetNodeInfoActionRequest, GetNodeInfoActionResult>(
-            webSockets: webSockets
+            webSocketConnector: webSocketConnector
         ) { rpcClient, action in
             rpcClient.getInfo()
                 .map { GetNodeInfoActionResult(node: action.node, result: $0) }
@@ -95,15 +104,19 @@ public extension RadixJsonRpcMethodEpic {
         }
     }
     
-    static func createUniverseConfigEpic(webSockets: WebSocketsManager) -> NetworkWebsocketEpic {
+    static func createUniverseConfigEpic(webSockets webSocketsManager: WebSocketsManager) -> RadixNetworkWebSocketsEpic {
+        createUniverseConfigEpic(webSocketConnector: .byWebSockets(manager: webSocketsManager))
+    }
+    
+    static func createUniverseConfigEpic(webSocketConnector: WebSocketConnector) -> RadixNetworkWebSocketsEpic {
         
-        return RadixJsonRpcMethodEpic<GetUniverseConfigActionRequest, GetUniverseConfigActionResult>(
-            webSockets: webSockets
+        RadixJsonRpcMethodEpic<GetUniverseConfigActionRequest, GetUniverseConfigActionResult>(
+            webSocketConnector: webSocketConnector
         ) { rpcClient, action in
             rpcClient.getUniverseConfig()
                 .map { GetUniverseConfigActionResult(node: action.node, result: $0) }
                 .eraseToAnyPublisher()
         }
-
+        
     }
 }

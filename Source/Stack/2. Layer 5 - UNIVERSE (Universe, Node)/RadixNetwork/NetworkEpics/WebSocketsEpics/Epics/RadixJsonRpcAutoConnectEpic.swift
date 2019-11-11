@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,43 +25,35 @@
 import Foundation
 import Combine
 
-public final class ConnectWebSocketEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsManager
+public final class RadixJsonRpcAutoConnectEpic: RadixNetworkWebSocketsEpic {
+   
+    private let webSocketConnector: WebSocketConnector
     
-    private var cancellables = Set<AnyCancellable>()
-    
-    public init(webSockets: WebSocketsManager) {
-        self.webSockets = webSockets
+    public init(webSocketConnector: WebSocketConnector) {
+        self.webSocketConnector = webSocketConnector
     }
 }
 
-public extension ConnectWebSocketEpic {
+public extension RadixJsonRpcAutoConnectEpic {
+    convenience init(webSockets webSocketsManager: WebSocketsManager) {
+        self.init(webSocketConnector: .byWebSockets(manager: webSocketsManager))
+    }
+}
+
+public extension RadixJsonRpcAutoConnectEpic {
     
     func handle(
         actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
         networkState _: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
+
+        nodeActionPublisher
+            .filter { $0 is JsonRpcMethodNodeAction }^
+            .flatMap { [unowned self] rpcMethodAction -> AnyPublisher<NodeAction, Never> in
+                self.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethodAction.node)
+                    .connectAndNotifyWhenConnected()
+                    .ignoreOutput(mapToType: NodeAction.self)
+            }^
         
-        let onConnect: AnyPublisher<NodeAction, Never> = nodeActionPublisher
-            .filter { $0 is ConnectWebSocketAction }^
-            .handleEvents(
-                receiveOutput: { [unowned webSockets] connectWebSocketAction in
-                    webSockets.newDisconnectedWebsocket(
-                        to: connectWebSocketAction.node
-                    ).connectAndNotifyWhenConnected()
-                }
-            )^
-            .dropAll()^
-
-        let onClose: AnyPublisher<NodeAction, Never> = nodeActionPublisher
-            .filter { $0 is CloseWebSocketAction }^
-            .handleEvents(
-                receiveOutput: { [unowned webSockets] closeWebSocketAction in
-                    webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: closeWebSocketAction.node, afterDelay: nil)
-                }
-            )^
-            .dropAll()^
-
-        return onConnect.merge(with: onClose)^
     }
 }

@@ -23,41 +23,36 @@
 //
 
 import Foundation
+import Combine
 
-public protocol FetchAtomsAction: NodeAction {
-    var address: Address { get }
-    var uuid: UUID { get }
-}
-
-public struct FetchAtomsActionCancel: FetchAtomsAction {
-    public let address: Address
-    public let uuid: UUID
-    private init(address: Address, uuid: UUID = .init()) {
-        self.address = address
-        self.uuid = uuid
-    }
-    public init(request: FetchAtomsActionRequest) {
-        self.init(address: request.address, uuid: request.uuid)
-    }
-}
-
-public struct FetchAtomsActionObservation: FetchAtomsAction {
-    public let address: Address
-    public let node: Node
-    public let atomObservation: AtomObservation
-    public let uuid: UUID
-}
-
-public struct FetchAtomsActionRequest: FetchAtomsAction, FindANodeRequestAction {
-    public let address: Address
-    public let uuid: UUID
+// TODO: this should not be an epic
+public final class WebSocketEventsEpic: RadixNetworkWebSocketsEpic {
     
-    public init(address: Address, uuid: UUID = .init()) {
-        self.address = address
-        self.uuid = uuid
-    }
+    private let newSocketsPublisher: AnyPublisher<WebSocketToNode, Never>
     
-    public var shards: Shards {
-        return Shards(single: address.shard)
+    public init(newSocketsPublisher: AnyPublisher<WebSocketToNode, Never>) {
+        self.newSocketsPublisher = newSocketsPublisher
     }
 }
+
+public extension WebSocketEventsEpic {
+    convenience init(webSockets webSocketsManager: WebSocketsManager) {
+        self.init(newSocketsPublisher: webSocketsManager.getNewSocketsToNode())
+    }
+}
+public extension WebSocketEventsEpic {
+    
+    // TODO neither `actions` nor `networkState` is used, thus this should not be an epic
+    func handle(
+        actions _: AnyPublisher<NodeAction, Never>,
+        networkState _: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
+        
+        return newSocketsPublisher.flatMap { webSocketToNode in
+            webSocketToNode.webSocketStatus.map { webSocketStatus in
+                WebSocketEvent(node: webSocketToNode.node, webSocketStatus: webSocketStatus)
+            }
+        }.eraseToAnyPublisher()
+    }
+}
+

@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,27 +25,12 @@
 import Foundation
 import Combine
 
-// TODO: this should not be an epic
-public final class WebSocketEventsEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsManager
-    public init(webSockets: WebSocketsManager) {
-        self.webSockets = webSockets
-    }
-}
+public protocol WebSocketsManager: AnyObject {
+    func getNewSocketsToNode() -> AnyPublisher<WebSocketToNode, Never>
+    func newDisconnectedWebsocket(to node: Node) -> WebSocketToNode
 
-public extension WebSocketEventsEpic {
+    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode)
+    func ifNoOneListensCloseAndRemoveWebsocket(toNode node: Node, afterDelay delay: DispatchTimeInterval?)
+    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode, afterDelay delay: DispatchTimeInterval?)
     
-    // TODO neither `actions` nor `networkState` is used, thus this should not be an epic
-    func handle(
-        actions _: AnyPublisher<NodeAction, Never>,
-        networkState _: AnyPublisher<RadixNetworkState, Never>
-    ) -> AnyPublisher<NodeAction, Never> {
-        
-        return webSockets.getNewSocketsToNode().flatMap { webSocketToNode in
-            webSocketToNode.webSocketStatus.map { webSocketStatus in
-                WebSocketEvent(node: webSocketToNode.node, webSocketStatus: webSocketStatus)
-            }
-        }.eraseToAnyPublisher()
-    }
 }
-

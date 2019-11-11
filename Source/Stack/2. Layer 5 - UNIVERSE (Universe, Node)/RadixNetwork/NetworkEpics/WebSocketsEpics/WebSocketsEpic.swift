@@ -25,14 +25,17 @@
 import Foundation
 import Combine
 
+// Marker protocol
+public protocol RadixNetworkWebSocketsEpic: RadixNetworkEpic {}
+
 // MARK: WebSocketsEpic
 public final class WebSocketsEpic: RadixNetworkEpic {
-    public typealias EpicFromWebSocket = (WebSocketsManager) -> NetworkWebsocketEpic
+    public typealias EpicFromWebSocket = (WebSocketsManager) -> RadixNetworkWebSocketsEpic
     public typealias EpicsFromWebSockets = [EpicFromWebSocket]
     
     private let epicFromWebsockets: EpicsFromWebSockets
     
-    private var _retainingVariableEpics = [NetworkWebsocketEpic]()
+    private var _retainingVariableEpics = [RadixNetworkWebSocketsEpic]()
     
     public init(epicFromWebsockets: EpicsFromWebSockets) {
         self.epicFromWebsockets = epicFromWebsockets

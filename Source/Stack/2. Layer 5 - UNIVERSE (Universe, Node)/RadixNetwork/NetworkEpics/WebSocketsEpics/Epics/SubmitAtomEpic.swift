@@ -27,7 +27,7 @@ import Combine
 
 let delayFromCancelObservationOfAtomStatusToClosingWebsocket = DispatchTimeInterval.seconds(5)
 
-public final class SubmitAtomEpic: NetworkWebsocketEpic {
+public final class SubmitAtomEpic: RadixNetworkWebSocketsEpic {
     
     public let webSockets: WebSocketsManager
     private var cancellables = Set<AnyCancellable>()

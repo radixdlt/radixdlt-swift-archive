@@ -120,11 +120,6 @@ public extension WebSocketToNode {
                 )
                 .store(in: &self.cancellables)
         }
-        
-//        return webSocketStatus.filter { $0.isConnected }
-//            .first()
-//            .ignoreOutput()
-//            .andThen(Just(node))
     }
 }
 

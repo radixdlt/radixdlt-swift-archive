@@ -23,31 +23,16 @@
 //
 
 import Foundation
-import Combine
 
-public final class RadixJsonRpcAutoConnectEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsManager
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    public init(webSockets: WebSocketsManager) {
-        self.webSockets = webSockets
-    }
+public struct WebSocketConnector {
+    public typealias NewClosedWebSocketConnectionToNode = (Node) -> WebSocketToNode
+    public let newClosedWebSocketConnectionToNode: NewClosedWebSocketConnectionToNode
 }
 
-public extension RadixJsonRpcAutoConnectEpic {
-    
-    func handle(
-        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
-        networkState _: AnyPublisher<RadixNetworkState, Never>
-    ) -> AnyPublisher<NodeAction, Never> {
-
-        nodeActionPublisher
-            .filter { $0 is JsonRpcMethodNodeAction }^
-            .flatMap { [unowned self] rpcMethodAction -> AnyPublisher<NodeAction, Never> in
-                self.openWebSocketAndAwaitConnection(toNode: rpcMethodAction.node)
-                    .ignoreOutput(mapToType: NodeAction.self)
-            }^
-        
+public extension WebSocketConnector {
+    static func byWebSockets(manager webSocketsManager: WebSocketsManager) -> Self {
+        Self { nodeToConnectTo in
+            webSocketsManager.newDisconnectedWebsocket(to: nodeToConnectTo)
+        }
     }
 }

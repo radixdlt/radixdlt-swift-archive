@@ -25,19 +25,23 @@
 import Foundation
 import Combine
 
-public final class RadixJsonRpcAutoCloseEpic: NetworkWebsocketEpic {
-    public let webSockets: WebSocketsManager
+public final class RadixJsonRpcAutoCloseEpic: RadixNetworkWebSocketsEpic {
     
-    private var cancellables = Set<AnyCancellable>()
+    private let webSocketCloser: WebSocketCloser
     
     private let backgroundQueue = DispatchQueue(label: "com.radixdlt.network.epics.jsonrpc.autoclose")
     
-    public init(
-        webSockets: WebSocketsManager
-    ) {
-        self.webSockets = webSockets
+    public init(webSocketCloser: WebSocketCloser) {
+        self.webSocketCloser = webSocketCloser
     }
 }
+
+public extension RadixJsonRpcAutoCloseEpic {
+    convenience init(webSockets webSocketsManager: WebSocketsManager) {
+        self.init(webSocketCloser: .byWebSockets(manager: webSocketsManager))
+    }
+}
+
 public extension RadixJsonRpcAutoCloseEpic {
 
     func handle(
@@ -49,7 +53,9 @@ public extension RadixJsonRpcAutoCloseEpic {
             .filter { $0 is BaseJsonRpcResultAction }^
             .delay(for: .seconds(5), scheduler: backgroundQueue)^
             .handleEvents(
-                receiveOutput: { [unowned webSockets] nodeAction in webSockets.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeAction.node, afterDelay: nil) }
+                receiveOutput: { [unowned self] nodeAction in
+                    self.webSocketCloser.closeWebSocketToNode(nodeAction.node)
+                }
             )^
             .dropAll()^
         
