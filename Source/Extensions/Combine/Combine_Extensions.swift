@@ -81,3 +81,16 @@ public extension Publisher where Output: Sequence, Failure == Never {
             .eraseToAnyPublisher()
     }
 }
+
+public extension Publisher {
+    func crashOnFailure(
+        prefix: String = "TODO Combine, handle error",
+        
+        _ function: String = #function,
+        _ file: String = #file,
+        _ line: Int = #line
+    ) -> AnyPublisher<Output, Never> {
+        assertNoFailure("\(prefix) - line: \(line), in function: \(function), in file: \(file)")
+            .eraseToAnyPublisher()
+    }
+}

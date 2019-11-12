@@ -53,7 +53,7 @@ public final class WebSocketToNode:
     private let receivedMessagesSubject = PassthroughSubject<String, Never>()
     
     private var queuedOutgoingMessages = [String]()
-    public var cancellables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
     private var numberOfSubscriptions: Int = 0
     
     // `internal` only for test purposes, otherwise `private`
@@ -120,21 +120,6 @@ public extension WebSocketToNode {
                 .sink { promise(.success(self)) }
                 .store(in: &self.cancellables)
         }
-    }
-}
-extension Publishers {
-    enum NumberOfSubscribersUpdate: Int, Equatable {
-        case increased
-        case decreased
-    }
-}
-extension Publisher {
-    func trackNumberOfSubscribers(_ numberOfSubscriptionsChangedHandler: @escaping (Publishers.NumberOfSubscribersUpdate) -> Void) -> AnyPublisher<Output, Failure> {
-        return self.handleEvents(
-            receiveSubscription: { _ in numberOfSubscriptionsChangedHandler(.increased) },
-            receiveCompletion: { _ in numberOfSubscriptionsChangedHandler(.decreased) },
-            receiveCancel: { numberOfSubscriptionsChangedHandler(.decreased) }
-        ).eraseToAnyPublisher()
     }
 }
 

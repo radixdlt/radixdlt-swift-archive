@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,8 +25,23 @@
 import Foundation
 import Combine
 
-/// A channel open for communication in both directions, e.g. WebSockets
-public protocol FullDuplexCommunicationChannel: AnyObject {
-    func sendMessage(_ message: String)
-    var messages: AnyPublisher<String, Never> { get }
+extension Publishers {
+    enum NumberOfSubscribersUpdate: Int, Equatable {
+        case increased
+        case decreased
+    }
 }
+
+extension Publisher {
+    func trackNumberOfSubscribers(
+        _ numberOfSubscriptionsChangedHandler: @escaping (Publishers.NumberOfSubscribersUpdate) -> Void
+    ) -> AnyPublisher<Output, Failure> {
+       
+        handleEvents(
+            receiveSubscription: { _ in numberOfSubscriptionsChangedHandler(.increased) },
+            receiveCompletion: { _ in numberOfSubscriptionsChangedHandler(.decreased) },
+            receiveCancel: { numberOfSubscriptionsChangedHandler(.decreased) }
+        ).eraseToAnyPublisher()
+    }
+}
+

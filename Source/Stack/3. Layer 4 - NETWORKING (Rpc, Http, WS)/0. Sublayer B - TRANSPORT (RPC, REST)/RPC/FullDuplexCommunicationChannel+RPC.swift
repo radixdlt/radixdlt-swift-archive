@@ -27,7 +27,7 @@ import Combine
 
 extension FullDuplexCommunicationChannel {
     
-    func responseOrErrorForMessage<Model>(requestId: String) -> Future<Model, RPCError> where Model: Decodable {
+    func responseOrErrorForMessage<Model>(requestId: String) -> AnyPublisher<Model, RPCError> where Model: Decodable {
         return resultForMessage(parseMode: .responseOnRequest(withId: requestId))
     }
     
@@ -52,28 +52,18 @@ private extension FullDuplexCommunicationChannel {
 
     func resultForMessage<Model>(
         parseMode: ParseJsonRpcResponseMode
-    ) -> Future<Model, RPCError> where Model: Decodable {
-        return Future<Model, RPCError> { [unowned self] promise in
-            self.messages
-                .map { $0.toData() }
-                .filter { self.filterOutRelevant(data: $0, parseMode: parseMode) }
-                .decode(type: Result<Model, RPCError>.self, decoder: JSONDecoder())
-                .eraseToAnyPublisher()
-            .sink(
-                receiveCompletion: { completion in },
-                receiveValue: { result in
-                    switch result {
-                    case .failure(let error):
-                        promise(.failure(error))
-                    case .success(let model):
-                        promise(.success(model))
-                    }
-                }
-            ).store(in: &self.cancellables)
-    
-            //            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            //            .subscribeOn(MainScheduler.instance)
-        }
+    ) -> AnyPublisher<Model, RPCError> where Model: Decodable {
+        return messages
+            .map { $0.toData() }
+            .filter { self.filterOutRelevant(data: $0, parseMode: parseMode) }
+            .decode(type: Result<Model, RPCError>.self, decoder: JSONDecoder())
+            .mapError { castOrKill(instance: $0, toType: DecodingError.self) }
+            .mapError { RPCError(rpcError: .metaError($0)) }
+            .flatMapResult()
+            .eraseToAnyPublisher()
+        
+        //            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+        //            .subscribeOn(MainScheduler.instance)
     }
     
     func filterOutRelevant(data: Data, parseMode: ParseJsonRpcResponseMode) -> Bool {

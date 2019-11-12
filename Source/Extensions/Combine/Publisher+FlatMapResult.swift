@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,8 +25,26 @@
 import Foundation
 import Combine
 
-/// A channel open for communication in both directions, e.g. WebSockets
-public protocol FullDuplexCommunicationChannel: AnyObject {
-    func sendMessage(_ message: String)
-    var messages: AnyPublisher<String, Never> { get }
+public protocol ResultType {
+    associatedtype Success
+    associatedtype Failure: Swift.Error
+}
+
+extension Result: ResultType {}
+
+public extension Publisher where Output: ResultType {
+    func flatMapResult() -> AnyPublisher<Output.Success, Output.Failure> {
+        self
+            .map {  castOrKill(instance: $0, toType: Result<Output.Success, Output.Failure>.self)  }
+            .tryMap { result throws -> Output.Success in
+                switch result {
+                case .success(let output):
+                    return output
+                case .failure(let error):
+                    throw error
+                }
+        }
+        .mapError { castOrKill(instance: $0, toType: Output.Failure.self) }
+        .eraseToAnyPublisher()
+    }
 }

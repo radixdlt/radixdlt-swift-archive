@@ -58,12 +58,6 @@ public extension DefaultRPCClient {
 }
 
 // MARK: - Make RPC Requests
-public extension Publisher {
-    func crashOnFailure(prefix: String = "TODO Combine, handle error") -> AnyPublisher<Output, Never> {
-        assertNoFailure(prefix)
-            .eraseToAnyPublisher()
-    }
-}
 
 // MARK: - Single's
 public extension DefaultRPCClient {
@@ -186,9 +180,8 @@ private extension DefaultRPCClient {
                     fatalError("TODO Combine handle failed to subscribe, throw `RPCClientError:subscriptionMode`, and deal with error flow")
                 }
                 return true
-        }.catch { rpcError -> AnyPublisher<RPCSubscriptionStartOrCancel, Never> in
-            fatalError("TODO Combine rpcError: \(rpcError)")
         }
+        .crashOnFailure()
         .first()
         .ignoreOutput()
         .eraseToAnyPublisher()

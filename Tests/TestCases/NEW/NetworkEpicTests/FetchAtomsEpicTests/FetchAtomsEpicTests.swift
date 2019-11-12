@@ -61,7 +61,8 @@ class FetchAtomsEpicTests: NetworkEpicTestCase {
         
         let expectedNumberOfOutput = 1
         
-        XCTAssertFalse(atomsObserver.sendAtomsSubscribe_method_has_been_called)
+        XCTAssertEqual(atomsObserver.sendAtomsSubscribe_method_call_count, 0)
+        XCTAssertEqual(atomsObserver.observeAtoms_method_call_count, 0)
         XCTAssertNil(retainSocket)
         XCTAssertNil(nodeForWhichWebSocketConnectionWasClosed)
         
@@ -76,7 +77,8 @@ class FetchAtomsEpicTests: NetworkEpicTestCase {
             
             outputtedNodeActionsHandler: { producedOutput in
                 XCTAssertEqual(producedOutput.count, expectedNumberOfOutput)
-                XCTAssertTrue(atomsObserver.sendAtomsSubscribe_method_has_been_called)
+                XCTAssertEqual(atomsObserver.sendAtomsSubscribe_method_call_count, 1)
+                XCTAssertEqual(atomsObserver.observeAtoms_method_call_count, 1)
                 do {
                     let wsToNode = try XCTUnwrap(retainSocket)
                     XCTAssertEqual(wsToNode.node, node)
@@ -99,7 +101,8 @@ class FetchAtomsEpicTests: NetworkEpicTestCase {
 }
 
 final class AtomsSubscriber: AtomsByAddressSubscribing {
-    var sendAtomsSubscribe_method_has_been_called = false
+    var sendAtomsSubscribe_method_call_count = 0
+    var observeAtoms_method_call_count = 0
     
     private let observeAtomsSubject: PassthroughSubject<AtomObservation, Never>
     init(observeAtomsSubject: PassthroughSubject<AtomObservation, Never>) {
@@ -107,20 +110,21 @@ final class AtomsSubscriber: AtomsByAddressSubscribing {
     }
     
     func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable {
-        sendAtomsSubscribe_method_has_been_called = true
+        sendAtomsSubscribe_method_call_count += 1
         return  Empty<Never, Never>(completeImmediately: true).eraseToAnyPublisher()
     }
     
     func observeAtoms(subscriberId: SubscriberId) -> AnyPublisher<AtomObservation, Never> {
+        observeAtoms_method_call_count += 1
         return observeAtomsSubject.eraseToAnyPublisher()
     }
     
 }
 
 final class AtomsCanceller: AtomSubscriptionCancelling {
-    var cancelAtomsSubscription_method_has_been_called = false
+    var cancelAtomsSubscription_method_call_count = 0
     func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable {
-        cancelAtomsSubscription_method_has_been_called = true
+        cancelAtomsSubscription_method_call_count += 1
         return  Empty<Never, Never>(completeImmediately: true).eraseToAnyPublisher()
     }
 }

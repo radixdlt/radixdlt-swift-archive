@@ -304,6 +304,10 @@
 		E69E754D22AA32BA00AC631B /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E754C22AA32BA00AC631B /* ApplicationState.swift */; };
 		E69E755322AA338600AC631B /* ProofOfWorkWorking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E755222AA338600AC631B /* ProofOfWorkWorking.swift */; };
 		E69E755522AA33A400AC631B /* DefaultProofOfWorkWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E755422AA33A400AC631B /* DefaultProofOfWorkWorker.swift */; };
+		E6A1A678237B1BB800F58483 /* Publisher+FlatMapResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A1A677237B1BB800F58483 /* Publisher+FlatMapResult.swift */; };
+		E6A1A67A237B1BF900F58483 /* PublisherFlatMapResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A1A679237B1BF900F58483 /* PublisherFlatMapResultTests.swift */; };
+		E6A1A67C237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A1A67B237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift */; };
+		E6A1A67E237B2C9500F58483 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A1A67D237B2C9500F58483 /* PublisherTrackNumberOfSubscribersTest.swift */; };
 		E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB8B221C0717006C5CA8 /* DateFormatter_Extension.swift */; };
 		E6A4ABC6221EDD4A006C5CA8 /* BigUInt_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABC5221EDD4A006C5CA8 /* BigUInt_Extension.swift */; };
 		E6A507D5224E14D500128123 /* AtomSubscriptionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507D4224E14D500128123 /* AtomSubscriptionRequest.swift */; };
@@ -900,6 +904,10 @@
 		E69E754C22AA32BA00AC631B /* ApplicationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationState.swift; sourceTree = "<group>"; };
 		E69E755222AA338600AC631B /* ProofOfWorkWorking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProofOfWorkWorking.swift; sourceTree = "<group>"; };
 		E69E755422AA33A400AC631B /* DefaultProofOfWorkWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProofOfWorkWorker.swift; sourceTree = "<group>"; };
+		E6A1A677237B1BB800F58483 /* Publisher+FlatMapResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+FlatMapResult.swift"; sourceTree = "<group>"; };
+		E6A1A679237B1BF900F58483 /* PublisherFlatMapResultTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherFlatMapResultTests.swift; sourceTree = "<group>"; };
+		E6A1A67B237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+TrackNumberOfSubscribers.swift"; sourceTree = "<group>"; };
+		E6A1A67D237B2C9500F58483 /* PublisherTrackNumberOfSubscribersTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherTrackNumberOfSubscribersTest.swift; sourceTree = "<group>"; };
 		E6A4AB8B221C0717006C5CA8 /* DateFormatter_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter_Extension.swift; sourceTree = "<group>"; };
 		E6A4ABB9221EA120006C5CA8 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		E6A4ABBA221EA120006C5CA8 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
@@ -1637,7 +1645,9 @@
 				E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */,
 				E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */,
 				E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */,
+				E6A1A67B237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift */,
 				E67E3E792379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift */,
+				E6A1A677237B1BB800F58483 /* Publisher+FlatMapResult.swift */,
 			);
 			path = Combine;
 			sourceTree = "<group>";
@@ -3507,7 +3517,9 @@
 			isa = PBXGroup;
 			children = (
 				E6E9D2F023746B22003753B4 /* PrefixUntilCompletionFrom.swift */,
+				E6A1A679237B1BF900F58483 /* PublisherFlatMapResultTests.swift */,
 				E6198E7B237AE42400F8205D /* PrefixWhileTests.swift */,
+				E6A1A67D237B2C9500F58483 /* PublisherTrackNumberOfSubscribersTest.swift */,
 			);
 			path = CombineExtensionTests;
 			sourceTree = "<group>";
@@ -4168,6 +4180,7 @@
 				E68BD81D229ECCCE00FCE4D3 /* SendMessageActionToParticleGroupsMapper.swift in Sources */,
 				E605A6F12345DD6D00E47257 /* UnsignedAmountType+MinMax.swift in Sources */,
 				E6F5484222771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift in Sources */,
+				E6A1A67C237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift in Sources */,
 				E6E279692271CD1C0067D46E /* DictionaryConvertibleMutable.swift in Sources */,
 				E606FC3D22CB46D300A7E52E /* KeyValueTuple.swift in Sources */,
 				E6CABA1722D4C6A400B6D00C /* AnyParticle.swift in Sources */,
@@ -4282,6 +4295,7 @@
 				E6E2792D2271CD1C0067D46E /* Signer.swift in Sources */,
 				E6A507E6224E20AB00128123 /* RPCResposeResultConvertible.swift in Sources */,
 				E605541E2304170D00528510 /* SendMessageAction+Init+Data.swift in Sources */,
+				E6A1A678237B1BB800F58483 /* Publisher+FlatMapResult.swift in Sources */,
 				E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */,
 				48A33DF923085ABD00626090 /* CryptoKitSha256TwiceHasher.swift in Sources */,
 				E62EFDCC2249378300B6DAD6 /* HTTPClient.swift in Sources */,
@@ -4327,12 +4341,14 @@
 				E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */,
 				E67A8CC5235635AB00206E33 /* ProofOfWorkTests.swift in Sources */,
 				E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */,
+				E6A1A67E237B2C9500F58483 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E6E0BFB92375899400B946A7 /* DiscoverNodesEpicTests.swift in Sources */,
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
 				E68DE4A42352344700F1E7A0 /* PublisherPipeOperatorTests.swift in Sources */,
 				E62F35302273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E6055447230553C700528510 /* Test+Convenience+RadixApplicationClient.swift in Sources */,
+				E6A1A67A237B1BF900F58483 /* PublisherFlatMapResultTests.swift in Sources */,
 				E60554452305529600528510 /* Identity+Account.swift in Sources */,
 				E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */,
 				E6A643122244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift in Sources */,

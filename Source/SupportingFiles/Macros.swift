@@ -107,8 +107,9 @@ internal func typeErasureExpected<T>(
     _ file: String = #file,
     _ line: Int = #line
 ) -> Never {
+    let incorrectTypeString = String(describing: Mirror(reflecting: incorrectTypeOfThisInstance).subjectType)
     incorrectImplementation(
-        "Expected \(incorrectTypeOfThisInstance) to be of type `\(expectedType)`",
+        "Expected variable '\(incorrectTypeOfThisInstance)' (type: '\(incorrectTypeString)') to be of type `\(expectedType)`",
         file, line
     )
 }
