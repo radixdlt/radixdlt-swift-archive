@@ -53,7 +53,8 @@ public final class WebSocketToNode:
     private let receivedMessagesSubject = PassthroughSubject<String, Never>()
     
     private var queuedOutgoingMessages = [String]()
-    private var cancellables = Set<AnyCancellable>()
+    public var cancellables = Set<AnyCancellable>()
+    private var numberOfSubscriptions: Int = 0
     
     // `internal` only for test purposes, otherwise `private`
     internal init(node: Node, webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>) {
@@ -94,11 +95,13 @@ public extension WebSocketToNode {
     /// Close the webSocket only if no it has no observers, returns `true` if it was able to close, otherwise `false`.
     @discardableResult
     func closeIfNoOneListens() -> Bool {
-        //        guard !receivedMessagesSubject.hasObservers else { return false }
-        //        closeDisregardingListeners()
-        //        return true
-        
-        combineMigrationInProgress()
+        guard numberOfSubscriptions == 0 else {
+            assert(numberOfSubscriptions > 0, "numberOfSubscriptions is negative")
+            print("👂 did not close websocket to node: \(node), because it still has #\(numberOfSubscriptions) subscribers.")
+            return false
+        }
+        closeDisregardingListeners()
+        return true
     }
     
     @discardableResult
@@ -114,12 +117,24 @@ public extension WebSocketToNode {
             self.webSocketStatus.filter { $0.isConnected }
                 .first()
                 .ignoreOutput()
-                .sink(
-                    receiveCompletion: { _ in promise(.success(self)) },
-                    receiveValue: { _ in }
-                )
+                .sink { promise(.success(self)) }
                 .store(in: &self.cancellables)
         }
+    }
+}
+extension Publishers {
+    enum NumberOfSubscribersUpdate: Int, Equatable {
+        case increased
+        case decreased
+    }
+}
+extension Publisher {
+    func trackNumberOfSubscribers(_ numberOfSubscriptionsChangedHandler: @escaping (Publishers.NumberOfSubscribersUpdate) -> Void) -> AnyPublisher<Output, Failure> {
+        return self.handleEvents(
+            receiveSubscription: { _ in numberOfSubscriptionsChangedHandler(.increased) },
+            receiveCompletion: { _ in numberOfSubscriptionsChangedHandler(.decreased) },
+            receiveCancel: { numberOfSubscriptionsChangedHandler(.decreased) }
+        ).eraseToAnyPublisher()
     }
 }
 
@@ -127,7 +142,13 @@ public extension WebSocketToNode {
 public extension WebSocketToNode {
     /// Messages received over webSockets, required by `FullDuplexCommunicationChannel`
     var messages: AnyPublisher<String, Never> {
-        receivedMessagesSubject.eraseToAnyPublisher()
+        receivedMessagesSubject.trackNumberOfSubscribers { [unowned self] update in
+            switch update {
+            case .increased: self.numberOfSubscriptions += 1
+            case .decreased: self.numberOfSubscriptions -= 1
+            }
+            
+        }
     }
     
     func sendMessage(_ message: String) {

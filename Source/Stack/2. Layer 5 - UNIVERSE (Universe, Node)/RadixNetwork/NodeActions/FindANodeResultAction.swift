@@ -24,18 +24,13 @@
 
 import Foundation
 
-public struct WebSocketCloser {
-    public typealias CloseWebSocketTo = (Node) -> Void
-    public let closeWebSocketToNode: CloseWebSocketTo
-}
-
-public extension WebSocketCloser {
+/// The result of a `FindANodeRequestAction` action
+public struct FindANodeResultAction: NodeAction {
     
-    static let closeWebSocketsDelayInSeconds: Int = 5
+    /// The found / selected node
+    public let node: Node
     
-    static func byWebSockets(manager webSocketsManager: WebSocketsManager, closeWebSocketDelay: DispatchTimeInterval = .seconds(WebSocketCloser.closeWebSocketsDelayInSeconds)) -> Self {
-        Self { nodeConnectionToClose in
-            webSocketsManager.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeConnectionToClose, afterDelay: closeWebSocketDelay)
-        }
-    }
+    /// The original request
+    public let request: FindANodeRequestAction
+    
 }

@@ -61,7 +61,6 @@ class FetchAtomsEpicTests: NetworkEpicTestCase {
         
         let expectedNumberOfOutput = 1
         
-        XCTAssertFalse(atomsObserver.observeAtoms_method_has_been_called)
         XCTAssertFalse(atomsObserver.sendAtomsSubscribe_method_has_been_called)
         XCTAssertNil(retainSocket)
         XCTAssertNil(nodeForWhichWebSocketConnectionWasClosed)
@@ -77,7 +76,6 @@ class FetchAtomsEpicTests: NetworkEpicTestCase {
             
             outputtedNodeActionsHandler: { producedOutput in
                 XCTAssertEqual(producedOutput.count, expectedNumberOfOutput)
-                XCTAssertTrue(atomsObserver.observeAtoms_method_has_been_called)
                 XCTAssertTrue(atomsObserver.sendAtomsSubscribe_method_has_been_called)
                 do {
                     let wsToNode = try XCTUnwrap(retainSocket)
@@ -102,7 +100,6 @@ class FetchAtomsEpicTests: NetworkEpicTestCase {
 
 final class AtomsSubscriber: AtomsByAddressSubscribing {
     var sendAtomsSubscribe_method_has_been_called = false
-    var observeAtoms_method_has_been_called = false
     
     private let observeAtomsSubject: PassthroughSubject<AtomObservation, Never>
     init(observeAtomsSubject: PassthroughSubject<AtomObservation, Never>) {
@@ -115,7 +112,6 @@ final class AtomsSubscriber: AtomsByAddressSubscribing {
     }
     
     func observeAtoms(subscriberId: SubscriberId) -> AnyPublisher<AtomObservation, Never> {
-        observeAtoms_method_has_been_called = true
         return observeAtomsSubject.eraseToAnyPublisher()
     }
     
@@ -146,34 +142,3 @@ extension WebSocketCloser {
         }
     }
 }
-
-
-//extension WebSocketConnectionEstablisher {
-//    static func byWebSockets(manager webSocketsManager: WebSocketsManager) -> Self {
-//        return Self { node in}
-//    }
-//}
-
-// MARK: Mock
-//extension WebSocketsManager {
-//    func getNewSocketsToNode() -> AnyPublisher<WebSocketToNode, Never> {
-//        abstract()
-//    }
-//
-//    func newDisconnectedWebsocket(to node: Node) -> WebSocketToNode {
-//        abstract()
-//    }
-//
-//    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode) {
-//        abstract()
-//    }
-//
-//    func ifNoOneListensCloseAndRemoveWebsocket(toNode node: Node, afterDelay delay: DispatchTimeInterval?) {
-//        abstract()
-//    }
-//
-//    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode, afterDelay delay: DispatchTimeInterval?) {
-//        abstract()
-//    }
-//
-//}

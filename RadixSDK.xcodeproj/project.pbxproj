@@ -102,11 +102,13 @@
 		E61989CD2371FBE50092259A /* RadixJsonRpcAutoCloseEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61989CC2371FBE50092259A /* RadixJsonRpcAutoCloseEpic.swift */; };
 		E61989CF2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61989CE2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift */; };
 		E61989D12372C9670092259A /* DefaultRadixNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61989D02372C9670092259A /* DefaultRadixNetwork.swift */; };
+		E6198E7A237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */; };
+		E6198E7C237AE42400F8205D /* PrefixWhileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6198E7B237AE42400F8205D /* PrefixWhileTests.swift */; };
 		E61EB9A222D86F56007826D3 /* Supply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A122D86F56007826D3 /* Supply.swift */; };
 		E61EB9A422D87130007826D3 /* SupplyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A322D87130007826D3 /* SupplyType.swift */; };
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */; };
-		E620CA9823682F0800EB3EC3 /* Combine+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9723682F0800EB3EC3 /* Combine+Debug.swift */; };
+		E620CA9823682F0800EB3EC3 /* Publisher+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9723682F0800EB3EC3 /* Publisher+Debug.swift */; };
 		E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9D23687C6300EB3EC3 /* TestCase.swift */; };
 		E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */; };
 		E620CAAC2369BE9000EB3EC3 /* Combine_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */; };
@@ -243,6 +245,10 @@
 		E67A8CC5235635AB00206E33 /* ProofOfWorkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A8CC3235635AB00206E33 /* ProofOfWorkTests.swift */; };
 		E67A8CC6235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A8CC4235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift */; };
 		E67E3E71237965E200A33DBA /* WebSocketsEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E70237965E200A33DBA /* WebSocketsEpic.swift */; };
+		E67E3E742379890100A33DBA /* SubmitAtomEpicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E732379890100A33DBA /* SubmitAtomEpicTests.swift */; };
+		E67E3E7623798ACE00A33DBA /* FindANodeRequestAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E7523798ACE00A33DBA /* FindANodeRequestAction.swift */; };
+		E67E3E7823798ADE00A33DBA /* FindANodeResultAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E7723798ADE00A33DBA /* FindANodeResultAction.swift */; };
+		E67E3E7A2379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E792379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift */; };
 		E685BBB922BA5F5800563B1A /* SwiftCBOR.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E685BBBA22BA5F5800563B1A /* CryptoSwift.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E685BBBB22BA5F5800563B1A /* BigInt.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -505,7 +511,7 @@
 		E6E27A552271EEE20067D46E /* XCTestCase_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E27A542271EEE20067D46E /* XCTestCase_Extensions.swift */; };
 		E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E27A562271EF2B0067D46E /* CustomAssert.swift */; };
 		E6E9D2F123746B22003753B4 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E9D2F023746B22003753B4 /* PrefixUntilCompletionFrom.swift */; };
-		E6E9D2F323747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E9D2F223747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift */; };
+		E6E9D2F323747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */; };
 		E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A2B21F7CE9C00654105 /* Node.swift */; };
 		E6ED1A3821F87C1800654105 /* RadixSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3721F87C1800654105 /* RadixSystem.swift */; };
 		E6ED1A4021F8836300654105 /* UniverseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A3F21F8836300654105 /* UniverseConfig.swift */; };
@@ -693,13 +699,15 @@
 		E61989CC2371FBE50092259A /* RadixJsonRpcAutoCloseEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJsonRpcAutoCloseEpic.swift; sourceTree = "<group>"; };
 		E61989CE2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJsonRpcAutoConnectEpic.swift; sourceTree = "<group>"; };
 		E61989D02372C9670092259A /* DefaultRadixNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRadixNetwork.swift; sourceTree = "<group>"; };
+		E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+PrefixWhile+IncludeLast.swift"; sourceTree = "<group>"; };
+		E6198E7B237AE42400F8205D /* PrefixWhileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixWhileTests.swift; sourceTree = "<group>"; };
 		E61EB9A122D86F56007826D3 /* Supply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supply.swift; sourceTree = "<group>"; };
 		E61EB9A322D87130007826D3 /* SupplyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyType.swift; sourceTree = "<group>"; };
 		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
 		E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RadixSDK-Info.plist"; sourceTree = "<group>"; };
 		E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RadixSDKTests-Info.plist"; sourceTree = "<group>"; };
 		E620AB5821E7874300B36EC2 /* PrivateKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateKeyTests.swift; sourceTree = "<group>"; };
-		E620CA9723682F0800EB3EC3 /* Combine+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Combine+Debug.swift"; sourceTree = "<group>"; };
+		E620CA9723682F0800EB3EC3 /* Publisher+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Debug.swift"; sourceTree = "<group>"; };
 		E620CA9B23686B8F00EB3EC3 /* FindANodeEpicGivenWhenThenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindANodeEpicGivenWhenThenTests.swift; sourceTree = "<group>"; };
 		E620CA9D23687C6300EB3EC3 /* TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase.swift; sourceTree = "<group>"; };
 		E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase_Extensions.swift; sourceTree = "<group>"; };
@@ -837,6 +845,10 @@
 		E67A8CC3235635AB00206E33 /* ProofOfWorkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProofOfWorkTests.swift; sourceTree = "<group>"; };
 		E67A8CC4235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberOfLeadingZeroBitsInDataTests.swift; sourceTree = "<group>"; };
 		E67E3E70237965E200A33DBA /* WebSocketsEpic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketsEpic.swift; sourceTree = "<group>"; };
+		E67E3E732379890100A33DBA /* SubmitAtomEpicTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitAtomEpicTests.swift; sourceTree = "<group>"; };
+		E67E3E7523798ACE00A33DBA /* FindANodeRequestAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindANodeRequestAction.swift; sourceTree = "<group>"; };
+		E67E3E7723798ADE00A33DBA /* FindANodeResultAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindANodeResultAction.swift; sourceTree = "<group>"; };
+		E67E3E792379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Sink_Extensionss.swift"; sourceTree = "<group>"; };
 		E68727FD2343BC6400FF4FCE /* Locale+DecimalSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Locale+DecimalSeparator.swift"; sourceTree = "<group>"; };
 		E689DB76225F227800340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PrivateKey+ExpressilbleByIntegerLiteral.swift"; sourceTree = "<group>"; };
 		E689DB7C225F61BF00340CF3 /* DefaultHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultHTTPClient.swift; sourceTree = "<group>"; };
@@ -1095,7 +1107,7 @@
 		E6E27A542271EEE20067D46E /* XCTestCase_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCase_Extensions.swift; sourceTree = "<group>"; };
 		E6E27A562271EF2B0067D46E /* CustomAssert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAssert.swift; sourceTree = "<group>"; };
 		E6E9D2F023746B22003753B4 /* PrefixUntilCompletionFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefixUntilCompletionFrom.swift; sourceTree = "<group>"; };
-		E6E9D2F223747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combine_PrefixUntilOutputOrCompletionFrom.swift; sourceTree = "<group>"; };
+		E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+PrefixUntil_OutputOrCompletionFrom.swift"; sourceTree = "<group>"; };
 		E6ED1A2B21F7CE9C00654105 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		E6ED1A3721F87C1800654105 /* RadixSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixSystem.swift; sourceTree = "<group>"; };
 		E6ED1A3F21F8836300654105 /* UniverseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniverseConfig.swift; sourceTree = "<group>"; };
@@ -1621,9 +1633,11 @@
 		E620CAAA2369BE8500EB3EC3 /* Combine */ = {
 			isa = PBXGroup;
 			children = (
-				E620CA9723682F0800EB3EC3 /* Combine+Debug.swift */,
+				E620CA9723682F0800EB3EC3 /* Publisher+Debug.swift */,
 				E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */,
-				E6E9D2F223747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift */,
+				E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */,
+				E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */,
+				E67E3E792379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift */,
 			);
 			path = Combine;
 			sourceTree = "<group>";
@@ -2138,6 +2152,14 @@
 				E67A8CC4235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift */,
 			);
 			path = ProofOfWork;
+			sourceTree = "<group>";
+		};
+		E67E3E72237988AA00A33DBA /* SubmitAtomEpicTests */ = {
+			isa = PBXGroup;
+			children = (
+				E67E3E732379890100A33DBA /* SubmitAtomEpicTests.swift */,
+			);
+			path = SubmitAtomEpicTests;
 			sourceTree = "<group>";
 		};
 		E689DB7F225F644D00340CF3 /* Universe */ = {
@@ -2741,6 +2763,8 @@
 			isa = PBXGroup;
 			children = (
 				E6ABA77022C3595900536DC7 /* FetchAtomsAction */,
+				E67E3E7523798ACE00A33DBA /* FindANodeRequestAction.swift */,
+				E67E3E7723798ADE00A33DBA /* FindANodeResultAction.swift */,
 			);
 			path = NodeActions;
 			sourceTree = "<group>";
@@ -2942,6 +2966,7 @@
 		E6E0BFBE2375BF8E00B946A7 /* NetworkEpicTests */ = {
 			isa = PBXGroup;
 			children = (
+				E67E3E72237988AA00A33DBA /* SubmitAtomEpicTests */,
 				E6E0BFC12375C29C00B946A7 /* FetchAtomsEpicTests */,
 				E6E0BFB72375896D00B946A7 /* DiscoverNodesEpicTests */,
 				E620CA9923686B6A00EB3EC3 /* FindANodeEpicTests */,
@@ -3482,6 +3507,7 @@
 			isa = PBXGroup;
 			children = (
 				E6E9D2F023746B22003753B4 /* PrefixUntilCompletionFrom.swift */,
+				E6198E7B237AE42400F8205D /* PrefixWhileTests.swift */,
 			);
 			path = CombineExtensionTests;
 			sourceTree = "<group>";
@@ -3866,7 +3892,7 @@
 				E62EFDE3224A4D6F00B6DAD6 /* WebSocketToNode.swift in Sources */,
 				E689DBB6225F954800340CF3 /* NodeNetworkDetails.swift in Sources */,
 				E6FCB67022F3078200ECC01B /* SubmitAtomActionSend.swift in Sources */,
-				E6E9D2F323747960003753B4 /* Combine_PrefixUntilOutputOrCompletionFrom.swift in Sources */,
+				E6E9D2F323747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift in Sources */,
 				E694E45623795E4400ECF6DE /* WebSocketConnector.swift in Sources */,
 				E606FC2822CB462100A7E52E /* ConnectWebSocketAction.swift in Sources */,
 				E626E1F422B400030046D2AC /* AtomToExecutedActionsMapper.swift in Sources */,
@@ -3915,7 +3941,7 @@
 				E6474AEA22664056009C4FDC /* FullDuplexCommunicationChannel+RPC.swift in Sources */,
 				E6E279822271CD1C0067D46E /* MetaData.swift in Sources */,
 				E654778B22BFB3C500D968BD /* UniverseBootstrap.swift in Sources */,
-				E620CA9823682F0800EB3EC3 /* Combine+Debug.swift in Sources */,
+				E620CA9823682F0800EB3EC3 /* Publisher+Debug.swift in Sources */,
 				E63B206F22FD648600D6FF79 /* Particles+Filtering.swift in Sources */,
 				E6474AC122661483009C4FDC /* FormattedURL.swift in Sources */,
 				E605543E23054A7000528510 /* DefaultTransactionMaker.swift in Sources */,
@@ -4031,6 +4057,7 @@
 				E605A6E42345DC1C00E47257 /* UInt256Bound.swift in Sources */,
 				E694E45423795E3100ECF6DE /* WebSocketCloser.swift in Sources */,
 				E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */,
+				E67E3E7823798ADE00A33DBA /* FindANodeResultAction.swift in Sources */,
 				E689DBA2225F87F200340CF3 /* NodeInfoRequesting.swift in Sources */,
 				E67E3E71237965E200A33DBA /* WebSocketsEpic.swift in Sources */,
 				E6E279932271CD1C0067D46E /* UpperBound.swift in Sources */,
@@ -4060,6 +4087,7 @@
 				E637564E22B7E3B700C4F9A2 /* RadixNetworkController.swift in Sources */,
 				E62EFDE1224A4D4600B6DAD6 /* FullDuplexCommunicationChannel.swift in Sources */,
 				E6E279262271CD1C0067D46E /* DER.swift in Sources */,
+				E67E3E7A2379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift in Sources */,
 				E605A6EF2345DD3800E47257 /* NonNegativeAmount.swift in Sources */,
 				E6E279572271CD1C0067D46E /* AnyEncodableKeyValuesProcessing.swift in Sources */,
 				E6E2793F2271CD1C0067D46E /* Sha256Hasher.swift in Sources */,
@@ -4197,6 +4225,7 @@
 				E6E279882271CD1C0067D46E /* Symbol.swift in Sources */,
 				E6025404225CC413004B2F94 /* UniverseConfig+Presets.swift in Sources */,
 				E626E20422B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift in Sources */,
+				E67E3E7623798ACE00A33DBA /* FindANodeRequestAction.swift in Sources */,
 				E63BD463234535EF007C753A /* UnsignedAmountType.swift in Sources */,
 				E60554012301BB2B00528510 /* AtomToBurnTokenMapper.swift in Sources */,
 				E6E2798A2271CD1C0067D46E /* DataConvertible+Concatenation+Operators.swift in Sources */,
@@ -4212,6 +4241,7 @@
 				E606F13F23016AE1004D4D3D /* UniquelyIdentifiedActionError.swift in Sources */,
 				E6E2798D2271CD1C0067D46E /* DataConvertible+StringConversion.swift in Sources */,
 				E63B207222FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift in Sources */,
+				E6198E7A237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift in Sources */,
 				E6474AF22267931A009C4FDC /* ErrorMappedFromRPCError.swift in Sources */,
 				E606FC3822CB468300A7E52E /* GetUniverseConfigActionResult.swift in Sources */,
 				E6E279682271CD1C0067D46E /* DictionaryConvertible.swift in Sources */,
@@ -4309,6 +4339,8 @@
 				E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */,
 				E6E0BFC32375C2C800B946A7 /* FetchAtomsEpicTests.swift in Sources */,
 				E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */,
+				E67E3E742379890100A33DBA /* SubmitAtomEpicTests.swift in Sources */,
+				E6198E7C237AE42400F8205D /* PrefixWhileTests.swift in Sources */,
 				E6E27A552271EEE20067D46E /* XCTestCase_Extensions.swift in Sources */,
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
 				E6E0BFC02375BFA100B946A7 /* NetworkEpicTestCase.swift in Sources */,

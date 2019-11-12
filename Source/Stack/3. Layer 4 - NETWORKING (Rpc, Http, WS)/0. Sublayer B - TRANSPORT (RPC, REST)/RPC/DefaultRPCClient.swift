@@ -58,31 +58,43 @@ public extension DefaultRPCClient {
 }
 
 // MARK: - Make RPC Requests
+public extension Publisher {
+    func crashOnFailure(prefix: String = "TODO Combine, handle error") -> AnyPublisher<Output, Never> {
+        assertNoFailure(prefix)
+            .eraseToAnyPublisher()
+    }
+}
 
 // MARK: - Single's
 public extension DefaultRPCClient {
     
     func getNetworkInfo() -> Single<RadixSystem, Never> {
         return make(request: .getNetworkInfo)
+            .crashOnFailure()
     }
     
     func getLivePeers() -> Single<[NodeInfo], Never> {
         return make(request: .getLivePeers)
+        .crashOnFailure()
     }
     
     func getUniverseConfig() -> Single<UniverseConfig, Never> {
         return make(request: .getUniverse)
+        .crashOnFailure()
     }
     
     func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> Single<AtomStatus, Never> {
         return make(request: .getAtomStatus(atomIdentifier: atomIdentifier))
+        .crashOnFailure()
     }
 }
 
 // MARK: - Completable
 public extension DefaultRPCClient {
-    func pushAtom(_ atom: SignedAtom) -> Completable {
-        return makeCompletableMapError(request: .submitAtom(atom: atom)) { SubmitAtomError(rpcError: $0) }
+    func pushAtom(_ atom: SignedAtom) -> AnyPublisher<Never, SubmitAtomError> {
+        makeFireForget(request: .submitAtom(atom: atom))
+            .mapError { SubmitAtomError(rpcError: $0) }
+            .eraseToAnyPublisher()
     }
 }
 
@@ -112,18 +124,37 @@ public extension DefaultRPCClient {
 // MARK: Internal
 internal extension DefaultRPCClient {
     
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> Single<ResultFromResponse, Never> where ResultFromResponse: Decodable {
-        //        return make(request: rootRequest, responseType: ResultFromResponse.self)
-        combineMigrationInProgress()
+    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> Single<ResultFromResponse, RPCError> where ResultFromResponse: Decodable {
+        make(request: rootRequest, responseType: ResultFromResponse.self)
     }
     
-    func makeCompletableMapError<ErrorToMapTo>(
+    func makeFireForget(request rootRequest: RPCRootRequest) -> Single<Never, RPCError> {
+        return make(
+            request: rootRequest,
+            responseType: ResponseOnFireAndForgetRequest.self
+        ).ignoreOutput().eraseToAnyPublisher()
+    }
+    
+    func make<ResultFromResponse>(
         request rootRequest: RPCRootRequest,
-        errorMapper: @escaping (RPCError) -> (ErrorToMapTo)
-    ) -> Completable where ErrorToMapTo: ErrorMappedFromRPCError {
+        responseType: ResultFromResponse.Type
+    ) -> Single<ResultFromResponse, RPCError>
+        where
+        ResultFromResponse: Decodable {
+
+        let rpcRequest = RPCRequest(rootRequest: rootRequest)
         
-        //        return make(request: rootRequest, responseType: ResponseOnFireAndForgetRequest.self, errorMapper: errorMapper).asCompletable()
-        combineMigrationInProgress()
+        let message = rpcRequest.jsonString
+        let requestId = rpcRequest.requestUuid
+        
+        return channel.responseOrErrorForMessage(requestId: requestId)
+            .first()
+            .handleEvents(
+                receiveSubscription: { _ in
+                    self.channel.sendMessage(message)
+            }
+        )
+            .eraseToAnyPublisher()
     }
     
     func observe<NotificationResponse>(
@@ -132,41 +163,7 @@ internal extension DefaultRPCClient {
         responseType: NotificationResponse.Type
     ) -> AnyPublisher<NotificationResponse, Never> where NotificationResponse: Decodable {
         
-        return channel.observeNotification(notification, subscriberId: subscriberId)
-    }
-    
-    func make<ResultFromResponse>(
-        request rootRequest: RPCRootRequest,
-        responseType: ResultFromResponse.Type
-    ) -> Single<ResultFromResponse, Never> where ResultFromResponse: Decodable {
-        
-        let noMapper: ((RPCError) -> RPCError)? = nil
-        return make(request: rootRequest, responseType: responseType, errorMapper: noMapper)
-    }
-    
-    func make<ResultFromResponse, MapToError>(
-        request rootRequest: RPCRootRequest,
-        responseType: ResultFromResponse.Type,
-        errorMapper: ((RPCError) -> MapToError)?
-    ) -> Single<ResultFromResponse, Never>
-        where
-        ResultFromResponse: Decodable,
-        MapToError: ErrorMappedFromRPCError {
-            
-            return makeRequestMapToResponseOrError(
-                request: rootRequest,
-                responseType: responseType
-            )
-                .map { (result: RPCResult<ResultFromResponse>) -> ResultFromResponse in
-                do {
-                    return try result.get().model
-                } catch let rpcError as RPCError {
-                    if let errorMapper = errorMapper {
-                        fatalError("TODO Combine, handle error: \(errorMapper(rpcError))")
-                    } else { fatalError("TODO Combine handle error: \(rpcError)") }
-                } catch { unexpectedlyMissedToCatch(error: error) }
-            }.eraseToAnyPublisher()
-           
+        channel.observeNotification(notification, subscriberId: subscriberId)
     }
     
     func sendStartSubscription(request: RPCRootRequest) -> Completable {
@@ -181,36 +178,19 @@ internal extension DefaultRPCClient {
 // MARK: - Private
 private extension DefaultRPCClient {
     
-    func makeRequestMapToResponseOrError<Model>(
-        request rootRequest: RPCRootRequest,
-        responseType: Model.Type
-    ) -> Single<RPCResult<Model>, Never> where Model: Decodable {
-        
-        let rpcRequest = RPCRequest(rootRequest: rootRequest)
-        
-        let message = rpcRequest.jsonString
-        let requestId = rpcRequest.requestUuid
-        
-        return channel.responseOrErrorForMessage(requestId: requestId)
-            .first()
-            .handleEvents(
-                receiveSubscription: { _ in
-                    self.channel.sendMessage(message)
-                }
-            )
-        .eraseToAnyPublisher()        
-    }
-    
     func sendStartOrCancelSubscription(request: RPCRootRequest, mode: SubscriptionMode) -> Completable {
         
         self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
-            .filter {
-                guard $0.success else {
+            .filter { rpcSubscriptionStartOrCancel in
+                guard rpcSubscriptionStartOrCancel.success else {
                     fatalError("TODO Combine handle failed to subscribe, throw `RPCClientError:subscriptionMode`, and deal with error flow")
                 }
                 return true
+        }.catch { rpcError -> AnyPublisher<RPCSubscriptionStartOrCancel, Never> in
+            fatalError("TODO Combine rpcError: \(rpcError)")
         }
-        .first().ignoreOutput()
+        .first()
+        .ignoreOutput()
         .eraseToAnyPublisher()
     }
 }

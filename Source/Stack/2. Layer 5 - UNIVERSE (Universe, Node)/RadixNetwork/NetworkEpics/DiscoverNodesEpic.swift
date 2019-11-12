@@ -47,6 +47,8 @@ public extension DiscoverNodesEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
+        // swiftlint:enable function_body_length
+        
         func isSuitableUniverseBasedOn(config universeConfig: UniverseConfig) -> Bool {
             isUniverseSuitable.isUniverseSuitable(universeConfig)
         }
@@ -106,6 +108,5 @@ public extension DiscoverNodesEpic {
 
     }
     
-    // swiftlint:enable function_body_length
     
 }

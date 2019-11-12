@@ -23,19 +23,36 @@
 //
 
 import Foundation
+import Combine
 
-public struct WebSocketCloser {
-    public typealias CloseWebSocketTo = (Node) -> Void
-    public let closeWebSocketToNode: CloseWebSocketTo
+/// Behavior for the `prefixWhile(_ behavior:predicate:)` operator, inspired by [RxSwift][github_rxswift]
+///
+/// [github_rxswift]: https://github.com/ReactiveX/RxSwift/blob/master/RxSwift/Observables/TakeUntil.swift#L43-50
+public enum PrefixWhileBehavior: Int, Equatable {
+    /// Include the last value (output) matching the predicate.
+    case inclusive
+    
+    /// Exclude the last value (output) matching the predicate.
+    case exclusive
 }
 
-public extension WebSocketCloser {
-    
-    static let closeWebSocketsDelayInSeconds: Int = 5
-    
-    static func byWebSockets(manager webSocketsManager: WebSocketsManager, closeWebSocketDelay: DispatchTimeInterval = .seconds(WebSocketCloser.closeWebSocketsDelayInSeconds)) -> Self {
-        Self { nodeConnectionToClose in
-            webSocketsManager.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeConnectionToClose, afterDelay: closeWebSocketDelay)
+/* Internal for test purposes only, otherwise `private`. */
+internal extension Publisher where Failure == Never {
+    func prefixWhile(
+        behaviour: PrefixWhileBehavior = .inclusive,
+        conditionIsTrue predicate: @escaping (Output) -> Bool
+    ) -> AnyPublisher<Output, Failure> {
+        
+        let fulfillingPredicate =  self.prefix(while: predicate).eraseToAnyPublisher()
+        
+        guard behaviour == .inclusive else {
+            // Fallback to Combine's bundled operator
+            return fulfillingPredicate
         }
+
+        let completionTriggeringValue = self.filter { !predicate($0) }.first()
+        
+        return fulfillingPredicate.merge(with: completionTriggeringValue).eraseToAnyPublisher()
+        
     }
 }

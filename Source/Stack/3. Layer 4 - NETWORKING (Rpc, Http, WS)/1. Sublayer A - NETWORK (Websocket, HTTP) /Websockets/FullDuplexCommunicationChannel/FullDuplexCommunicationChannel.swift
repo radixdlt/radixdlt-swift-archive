@@ -26,7 +26,8 @@ import Foundation
 import Combine
 
 /// A channel open for communication in both directions, e.g. WebSockets
-public protocol FullDuplexCommunicationChannel {
+public protocol FullDuplexCommunicationChannel: AnyObject {
+    var cancellables: Set<AnyCancellable> { get set }
     func sendMessage(_ message: String)
     var messages: AnyPublisher<String, Never> { get }
 }

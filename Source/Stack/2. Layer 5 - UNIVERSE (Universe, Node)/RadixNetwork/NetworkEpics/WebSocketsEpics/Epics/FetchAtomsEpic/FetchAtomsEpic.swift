@@ -31,7 +31,6 @@ public final class FetchAtomsEpic: RadixNetworkWebSocketsEpic {
     private let webSocketConnector: WebSocketConnector
     private let webSocketCloser: WebSocketCloser
     
-    // MARK: Factory
     private let makeAtomsObserver: (FullDuplexCommunicationChannel) -> AtomsByAddressSubscribing
     private let makeAtomsObservationCanceller: (FullDuplexCommunicationChannel) -> AtomSubscriptionCancelling
     
@@ -115,12 +114,13 @@ private extension FetchAtomsEpic {
                 FetchAtomsActionObservation(address: address, node: node, atomObservation: observation, uuid: uuid)
             }
             .map { $0 as NodeAction }^
-            
+
         func cleanUp() {
             rpcAtomsObservingCanceller.cancelAtomsSubscription(subscriberId: subscriberIdFromUuid)
                 .ignoreOutput()
-                .andThen(Just(self.webSocketCloser.closeWebSocketToNode(node)))
-                .sink { _ in }
+                .sink { [unowned self] in
+                    self.webSocketCloser.closeWebSocketToNode(node)
+                }
                 .store(in: &cancellables)
         }
         

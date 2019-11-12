@@ -27,26 +27,19 @@ import Combine
 
 extension FullDuplexCommunicationChannel {
     
-    func responseForMessage<Model>(requestId: String) -> AnyPublisher<Model, Never> where Model: Decodable {
-        
-//        return responseOrErrorForMessage(requestId: requestId).map {
-//            try $0.get().model
-//        }
-        combineMigrationInProgress()
-    }
-    
-    func responseOrErrorForMessage<Model>(requestId: String) -> AnyPublisher<RPCResult<Model>, Never> where Model: Decodable {
+    func responseOrErrorForMessage<Model>(requestId: String) -> Future<Model, RPCError> where Model: Decodable {
         return resultForMessage(parseMode: .responseOnRequest(withId: requestId))
     }
     
     func observeNotification<Model>(_ notification: RPCNotification, subscriberId: SubscriberId) -> AnyPublisher<Model, Never> where Model: Decodable {
-        
-        resultForMessage(
-            parseMode: .parseAsNotification(notification, subscriberId: subscriberId)
-        )
-            // swiftlint:disable:next force_try
-            .map { try! $0.get().model } // TODO Combine: change to `tryMap` and propagate error
-            .eraseToAnyPublisher()
+        return Publishers.Merge(
+            Empty<Model, Never>.init(completeImmediately: false), // never complete
+            self.resultForMessage(
+                parseMode: .parseAsNotification(notification, subscriberId: subscriberId)
+            ).catch { (rpcError: RPCError) -> AnyPublisher<Model, Never> in
+                fatalError("TODO Combine handle rpcError: \(rpcError)")
+            }
+        ).eraseToAnyPublisher()
     }
 }
 
@@ -59,17 +52,28 @@ private extension FullDuplexCommunicationChannel {
 
     func resultForMessage<Model>(
         parseMode: ParseJsonRpcResponseMode
-    ) -> AnyPublisher<RPCResult<Model>, Never> where Model: Decodable {
-       
-        return messages
-            .map { $0.toData() }
-            .filter { self.filterOutRelevant(data: $0, parseMode: parseMode) }
-            .decode(type: RPCResult<Model>.self, decoder: JSONDecoder())
-            .mapError { fatalError("TODO Combine - handle error: \($0)") }
-            .eraseToAnyPublisher()
-            
-//            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-//            .subscribeOn(MainScheduler.instance)
+    ) -> Future<Model, RPCError> where Model: Decodable {
+        return Future<Model, RPCError> { [unowned self] promise in
+            self.messages
+                .map { $0.toData() }
+                .filter { self.filterOutRelevant(data: $0, parseMode: parseMode) }
+                .decode(type: Result<Model, RPCError>.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+            .sink(
+                receiveCompletion: { completion in },
+                receiveValue: { result in
+                    switch result {
+                    case .failure(let error):
+                        promise(.failure(error))
+                    case .success(let model):
+                        promise(.success(model))
+                    }
+                }
+            ).store(in: &self.cancellables)
+    
+            //            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            //            .subscribeOn(MainScheduler.instance)
+        }
     }
     
     func filterOutRelevant(data: Data, parseMode: ParseJsonRpcResponseMode) -> Bool {

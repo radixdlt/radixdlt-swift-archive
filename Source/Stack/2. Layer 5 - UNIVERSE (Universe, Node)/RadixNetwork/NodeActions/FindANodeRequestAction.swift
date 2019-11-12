@@ -24,18 +24,8 @@
 
 import Foundation
 
-public struct WebSocketCloser {
-    public typealias CloseWebSocketTo = (Node) -> Void
-    public let closeWebSocketToNode: CloseWebSocketTo
-}
-
-public extension WebSocketCloser {
-    
-    static let closeWebSocketsDelayInSeconds: Int = 5
-    
-    static func byWebSockets(manager webSocketsManager: WebSocketsManager, closeWebSocketDelay: DispatchTimeInterval = .seconds(WebSocketCloser.closeWebSocketsDelayInSeconds)) -> Self {
-        Self { nodeConnectionToClose in
-            webSocketsManager.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeConnectionToClose, afterDelay: closeWebSocketDelay)
-        }
-    }
+///  A dispatch action request for a connected node with some given shards
+public protocol FindANodeRequestAction: NodeAction {
+    /// A shard space which must be intersected with a node's shard space to be selected, shards which can be picked amongst to find a matching supporting node
+    var shards: Shards { get }
 }

@@ -24,8 +24,6 @@
 
 import Foundation
 
-internal typealias RPCResult<Model: Decodable> = Swift.Result<RPCResponse<Model>, RPCError>
-
 extension Result: Decodable where Success: Decodable, Failure == RPCError {
     
     enum CodingKeys: String, CodingKey {

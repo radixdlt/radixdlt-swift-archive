@@ -51,7 +51,7 @@ public extension Publisher {
 }
 
 // MARK: andThen
-protocol BaseForAndThen {}
+public protocol BaseForAndThen {}
 extension Publishers.IgnoreOutput: BaseForAndThen {}
 extension Combine.Future: BaseForAndThen {}
 
@@ -79,43 +79,5 @@ public extension Publisher where Output: Sequence, Failure == Never {
     func flattenSequence() -> AnyPublisher<Output.Element, Never> {
         map { $0.publisher }.switchToLatest()
             .eraseToAnyPublisher()
-    }
-}
-
-// MARK: Output == Never
-public extension Publisher where Output == Never {
-    func sink(receiveCompletion completionHandler: @escaping (Subscribers.Completion<Failure>) -> Void) -> Cancellable {
-        return sink(
-            receiveCompletion: { completionHandler($0) },
-            receiveValue: { _ in /* Doing nothing with `Never` output */ }
-        )
-    }
-}
-
-public extension Publisher where Output == Never, Failure == Never {
-    func sink(receiveFinished finishHandler: @escaping () -> Void) -> Cancellable {
-        return sink(
-            receiveCompletion: { completion in
-                switch completion {
-                case .finished: finishHandler()
-                case .failure: incorrectImplementation("Should never fail, `Failure` == `Never`")
-                }
-        }
-        )
-    }
-}
-
-// MARK: Output == Void
-public extension Publisher where Output == Void, Failure == Never {
-    func sink(receiveFinished finishHandler: @escaping () -> Void) -> Cancellable {
-        return sink(
-            receiveCompletion: { completion in
-                switch completion {
-                case .finished: finishHandler()
-                case .failure: incorrectImplementation("Should never fail, `Failure` == `Never`")
-                }
-        },
-            receiveValue: { _ in /* Doing nothing with `Void` output */ }
-        )
     }
 }
