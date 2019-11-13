@@ -80,15 +80,14 @@ class FetchAtomsEpicTests: NetworkEpicTestCase {
                 XCTAssertEqual(atomsObserver.sendAtomsSubscribe_method_call_count, 1)
                 XCTAssertEqual(atomsObserver.observeAtoms_method_call_count, 1)
                 do {
-                    let wsToNode = try XCTUnwrap(retainSocket)
-                    XCTAssertEqual(wsToNode.node, node)
+                    let webSocketToNode = try XCTUnwrap(retainSocket)
+                    XCTAssertEqual(webSocketToNode.node, node)
 
                     let closedWSNode = try XCTUnwrap(nodeForWhichWebSocketConnectionWasClosed)
                     XCTAssertEqual(closedWSNode, node)
                 } catch { return XCTFail("Expected not nil") }
                 
-                XCTAssertType(of: producedOutput[0], is: FetchAtomsActionObservation.self)
-                let fetchAtomsActionObservation = castOrKill(instance: producedOutput[0], toType: FetchAtomsActionObservation.self)
+                let fetchAtomsActionObservation: FetchAtomsActionObservation! = XCTAssertType(of: producedOutput[0])
                 XCTAssertEqual(fetchAtomsActionObservation.node, node)
                 XCTAssertEqual(fetchAtomsActionObservation.address, address)
                 XCTAssertEqual(fetchAtomsActionObservation.address, fetchAtomsActionRequest.address)

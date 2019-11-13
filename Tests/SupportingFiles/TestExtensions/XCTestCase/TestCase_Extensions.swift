@@ -28,15 +28,16 @@ import XCTest
 extension TestCase {
     
     /// Since `Foobar.Type` does not conform to `Equatable`, even if `Foobar` conforms to `Equatable`, we are unable to write `XCTAssertEquals(type(of: foo), Foobar.self)`, this assert method fixes that.
+    @discardableResult
     func XCTAssertType<Actual, Expected>(
         of actual: Actual,
         is expectedType: Expected.Type,
         
         _ filePath: String = #file,
         line: UInt = #line
-    ) {
+    ) -> Expected! {
         
-        if let _ = actual as? Expected { return /* success */  }
+        if let expected = actual as? Expected { return expected /* success */  }
         let actualType = Mirror(reflecting: actual).subjectType
         
         
@@ -47,6 +48,15 @@ extension TestCase {
             atLine: line,
             expected: false
         )
+        return nil
     }
     
+    @discardableResult
+    func XCTAssertType<Actual, Expected>(
+        of actual: Actual,
+        _ filePath: String = #file,
+        line: UInt = #line
+    ) -> Expected! {
+        return XCTAssertType(of: actual, is: Expected.self, filePath, line: line)
+    }
 }

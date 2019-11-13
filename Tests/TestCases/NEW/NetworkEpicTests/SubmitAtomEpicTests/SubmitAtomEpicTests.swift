@@ -54,12 +54,8 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
             
             outputtedSubmitAtomAction: { submitAtomActions in
                 XCTAssertType(of: submitAtomActions[0], is: SubmitAtomActionSend.self)
-                
-                guard let submitAtomActionStatus = submitAtomActions[1] as? SubmitAtomActionStatus else {
-                    return XCTFail("Expected SubmitAtomActionStatus")
-                }
+                let submitAtomActionStatus: SubmitAtomActionStatus! = XCTAssertType(of: submitAtomActions[1])
                 XCTAssertEqual(submitAtomActionStatus.statusEvent, .stored)
-                
                 XCTAssertType(of: submitAtomActions[2], is: SubmitAtomActionCompleted.self)
             }
         )
@@ -82,14 +78,37 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
             },
             
             outputtedSubmitAtomAction: { submitAtomActions in
-                
-                guard let submitAtomActionStatus = submitAtomActions[0] as? SubmitAtomActionStatus else {
-                    return XCTFail("Expected SubmitAtomActionStatus")
-                }
+                let submitAtomActionStatus: SubmitAtomActionStatus! = XCTAssertType(of: submitAtomActions[0])
                 XCTAssertEqual(submitAtomActionStatus.statusEvent, .stored)
-                
                 XCTAssertType(of: submitAtomActions[1], is: SubmitAtomActionCompleted.self)
             }
+        )
+    }
+    
+    func test_that_atom_submission_when_specifying_origin_node_and_never_getting_stored_completes_when___isCompletingOnStoreOnly___is___false() {
+        let atom = SignedAtom.irrelevant
+        let originNode: Node = node2
+        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: false)
+        
+        let atomStatusNotStoredPendingVerification = AtomStatusEvent.notStored(reason: .init(atomStatus: .pendingDependencyVerification, dataAsJsonString: ""))
+        
+        doTestSubmitAtomEpic(
+            submitAtomAction: submitAtomActionSend,
+            expectedNumberOfOutput: 2,
+            node: originNode,
+            
+            input: { _, actionsSubject, atomStatusNotificationSubject in
+                actionsSubject.send(submitAtomActionSend)
+                
+                atomStatusNotificationSubject.send(atomStatusNotStoredPendingVerification)
+        },
+            
+            outputtedSubmitAtomAction: { submitAtomActions in
+                let submitAtomActionStatus: SubmitAtomActionStatus! = XCTAssertType(of: submitAtomActions[0])
+                XCTAssertEqual(submitAtomActionStatus.statusEvent, atomStatusNotStoredPendingVerification)
+                
+                XCTAssertType(of: submitAtomActions[1], is: SubmitAtomActionCompleted.self)
+        }
         )
     }
     
@@ -114,6 +133,34 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
                 let completed = castOrKill(instance: submitAtomActions[0], toType: SubmitAtomActionCompleted.self)
                 XCTAssertEqual(completed.result, .failure(.timeout))
             }
+        )
+    }
+    
+    func test_that_atom_submission_when_specifying_origin_node_and_never_getting_stored_timesout_when___isCompletingOnStoreOnly___is___true() {
+        let atom = SignedAtom.irrelevant
+        let originNode: Node = node2
+        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: true)
+        
+        let atomStatusNotStoredPendingVerification = AtomStatusEvent.notStored(reason: .init(atomStatus: .pendingDependencyVerification, dataAsJsonString: ""))
+        
+        doTestSubmitAtomEpic(
+            submitAtomAction: submitAtomActionSend,
+            expectedNumberOfOutput: 2,
+            node: originNode,
+            epicSubmissionMaxDuration: 1,
+            
+            input: { _, actionsSubject, atomStatusNotificationSubject in
+                actionsSubject.send(submitAtomActionSend)
+                
+                atomStatusNotificationSubject.send(atomStatusNotStoredPendingVerification)
+        },
+            
+            outputtedSubmitAtomAction: { submitAtomActions in
+                let submitAtomActionStatus: SubmitAtomActionStatus! = XCTAssertType(of: submitAtomActions[0])
+                XCTAssertEqual(submitAtomActionStatus.statusEvent, atomStatusNotStoredPendingVerification)
+                let completed: SubmitAtomActionCompleted! = XCTAssertType(of: submitAtomActions[1])
+                XCTAssertEqual(completed.result, .failure(.timeout))
+        }
         )
     }
 }
