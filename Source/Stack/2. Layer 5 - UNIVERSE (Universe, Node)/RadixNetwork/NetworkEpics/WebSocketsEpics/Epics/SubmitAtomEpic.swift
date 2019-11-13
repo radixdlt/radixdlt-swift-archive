@@ -54,7 +54,7 @@ public final class SubmitAtomEpic: RadixNetworkWebSocketsEpic {
         
         makeAtomStatusObservationCanceller: @escaping (FullDuplexCommunicationChannel) -> AtomStatusObservationCancelling = DefaultRPCClient.init,
         
-        submissionTimeoutInSeconds: DispatchQueue.SchedulerTimeType.Stride = .seconds(30)
+        submissionTimeoutInSeconds overridingSubmissionTimeoutInSeconds: Int? = nil
     ) {
         self.webSocketConnector = webSocketConnector
         self.webSocketCloser = webSocketCloser
@@ -62,11 +62,14 @@ public final class SubmitAtomEpic: RadixNetworkWebSocketsEpic {
         self.makeAtomStatusObservationRequesting = makeAtomStatusObservationRequesting
         self.makeAtomSubmitting = makeAtomSubmitting
         self.makeAtomStatusObservationCanceller = makeAtomStatusObservationCanceller
-        self.submissionTimeoutInSeconds = submissionTimeoutInSeconds
+        self.submissionTimeoutInSeconds = DispatchQueue.SchedulerTimeType.Stride.seconds(overridingSubmissionTimeoutInSeconds ?? Self.defaultSubmissionTimeoutInSeconds)
     }
 }
 
 public extension SubmitAtomEpic {
+    
+    static let defaultSubmissionTimeoutInSeconds: Int = 30
+    
     convenience init(webSockets webSocketsManager: WebSocketsManager) {
         self.init(
             webSocketConnector: .byWebSockets(manager: webSocketsManager),
@@ -139,7 +142,7 @@ private extension SubmitAtomEpic {
                 if statusEvent == .stored || !sendAction.isCompletingOnStoreOnly {
                     return Publishers.Sequence<[NodeAction], Never>(sequence: [
                         statusAction,
-                        SubmitAtomActionCompleted(sendAction: sendAction, node: node)
+                        SubmitAtomActionCompleted.success(sendAction: sendAction, node: node)
                         ]
                     ).eraseToAnyPublisher()
                 } else {
@@ -167,7 +170,7 @@ private extension SubmitAtomEpic {
                                     )
                                     
                                     submitAtomActionSubject.send(
-                                        SubmitAtomActionCompleted(sendAction: sendAction, node: node)
+                                        SubmitAtomActionCompleted.success(sendAction: sendAction, node: node)
                                     )
                                     return Empty<NodeAction, Never>(completeImmediately: true)
                                 }
@@ -180,9 +183,18 @@ private extension SubmitAtomEpic {
             )^
             .share() // Important: this makes sure that the publisher returned by `observeAtomStatusNotifications` does not result in two subscriptions, but one shared. Without this `sendGetAtomStatusNotifications` and thus `pushAtom` gets called twice. There might be some better solution to this, but for now it works.
             .merge(with: submitAtomActionSubject.map { $0 as NodeAction })^
-            .timeout(submissionTimeoutInSeconds, scheduler: backgroundQueue)
+            .setFailureType(to: Publishers.TimeoutError.self)
+            .timeout(submissionTimeoutInSeconds, scheduler: backgroundQueue) { Publishers.TimeoutError.publisherTimeout }
+            .replaceError(with: SubmitAtomActionCompleted.failed(sendAction: sendAction, node: node, error: .timeout))
+            .eraseToAnyPublisher()
             .prefixWhile { $0 is SubmitAtomActionCompleted == false }
         
     }
     
+}
+
+public extension Publishers {
+    enum TimeoutError: Int, Swift.Error, Equatable {
+        case publisherTimeout
+    }
 }

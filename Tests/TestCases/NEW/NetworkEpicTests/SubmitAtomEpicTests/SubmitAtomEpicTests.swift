@@ -29,10 +29,121 @@ import Combine
 
 class SubmitAtomEpicTests: NetworkEpicTestCase {
     
-    
     func test_that_atom_submission_without_specifying_originnode_completes_when_atom_gets_stored() {
+        let atom = SignedAtom.irrelevant
+        let submitAtomActionRequest = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: true)
         
-        let node = node1
+        doTestSubmitAtomEpic(
+            submitAtomAction: submitAtomActionRequest,
+            expectedNumberOfOutput: 3,
+            
+            input: { node, actionsSubject, _ in
+                actionsSubject.send(FindANodeResultAction(node: node, request: submitAtomActionRequest))
+            },
+            
+            emulateRadixNetworkController: { outputtedNodeAction, nodeActionsSubject, atomStatusNotificationSubject in
+                if let submitAtomActionSend = outputtedNodeAction as? SubmitAtomActionSend {
+                    nodeActionsSubject.send(submitAtomActionSend)
+                    atomStatusNotificationSubject.send(.stored)
+                }
+                
+                if let submitAtomActionStatus = outputtedNodeAction as? SubmitAtomActionStatus {
+                    nodeActionsSubject.send(submitAtomActionStatus)
+                }
+            },
+            
+            outputtedSubmitAtomAction: { submitAtomActions in
+                XCTAssertType(of: submitAtomActions[0], is: SubmitAtomActionSend.self)
+                
+                guard let submitAtomActionStatus = submitAtomActions[1] as? SubmitAtomActionStatus else {
+                    return XCTFail("Expected SubmitAtomActionStatus")
+                }
+                XCTAssertEqual(submitAtomActionStatus.statusEvent, .stored)
+                
+                XCTAssertType(of: submitAtomActions[2], is: SubmitAtomActionCompleted.self)
+            }
+        )
+        
+    }
+    
+    func test_that_atom_submission_when_specifying_origin_node_completes_when_atom_gets_stored() {
+        let atom = SignedAtom.irrelevant
+        let originNode: Node = node2
+        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: true)
+        
+        doTestSubmitAtomEpic(
+            submitAtomAction: submitAtomActionSend,
+            expectedNumberOfOutput: 2,
+            node: originNode,
+            
+            input: { _, actionsSubject, atomStatusNotificationSubject in
+                actionsSubject.send(submitAtomActionSend)
+                atomStatusNotificationSubject.send(.stored)
+            },
+            
+            outputtedSubmitAtomAction: { submitAtomActions in
+                
+                guard let submitAtomActionStatus = submitAtomActions[0] as? SubmitAtomActionStatus else {
+                    return XCTFail("Expected SubmitAtomActionStatus")
+                }
+                XCTAssertEqual(submitAtomActionStatus.statusEvent, .stored)
+                
+                XCTAssertType(of: submitAtomActions[1], is: SubmitAtomActionCompleted.self)
+            }
+        )
+    }
+    
+    func test_timeout() {
+        
+        let atom = SignedAtom.irrelevant
+        let originNode: Node = node2
+        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: true)
+        
+        doTestSubmitAtomEpic(
+            submitAtomAction: submitAtomActionSend,
+            expectedNumberOfOutput: 1,
+            node: originNode,
+            epicSubmissionMaxDuration: 1,
+            
+            input: { _, actionsSubject, atomStatusNotificationSubject in
+                actionsSubject.send(submitAtomActionSend)
+            },
+            
+            outputtedSubmitAtomAction: { submitAtomActions in
+                XCTAssertType(of: submitAtomActions[0], is: SubmitAtomActionCompleted.self)
+                let completed = castOrKill(instance: submitAtomActions[0], toType: SubmitAtomActionCompleted.self)
+                XCTAssertEqual(completed.result, .failure(.timeout))
+            }
+        )
+    }
+}
+
+private extension SubmitAtomEpicTests {
+    func doTestSubmitAtomEpic(
+        submitAtomAction submitAtomActionInitial: SubmitAtomAction,
+        expectedNumberOfOutput: Int,
+        node specifiedNode: Node? = nil,
+        epicSubmissionMaxDuration: Int? = nil,
+        
+        line: UInt = #line,
+        
+        input: @escaping (
+        _ node: Node,
+        _ nodeActionsSubject: PassthroughSubject<NodeAction, Never>,
+         _ atomStatusNotificationSubject: PassthroughSubject<AtomStatusEvent, Never>
+        ) -> Void,
+        
+        emulateRadixNetworkController: ((
+        _ reactingToOutputtedNodeAction: NodeAction,
+        _ nodeActionsSubject: PassthroughSubject<NodeAction, Never>,
+        _ atomStatusNotificationSubject: PassthroughSubject<AtomStatusEvent, Never>
+        ) -> Void)? = nil,
+        
+        outputtedSubmitAtomAction: ([SubmitAtomAction]) -> Void
+        
+    ) {
+        
+        let node: Node = specifiedNode ?? node1
         
         let webSocketStatusSubject = CurrentValueSubject<WebSocketStatus, Never>(.connected)
         
@@ -53,94 +164,68 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
             makeAtomStatusObserving: { _ in atomStatusObserving },
             makeAtomStatusObservationRequesting: { _ in atomStatusObservationRequesting },
             makeAtomSubmitting: { _ in atomSubmitter },
-            makeAtomStatusObservationCanceller: { _ in atomStatusObservationCanceller }
+            makeAtomStatusObservationCanceller: { _ in atomStatusObservationCanceller },
+            submissionTimeoutInSeconds: epicSubmissionMaxDuration
         )
         
-        // Not specifying specific origin node (which would have used `SubmitAtomActionSend`), this should trigger a `FindANodeResultAction` where `request` ==  `SubmitAtomActionRequest` flow.
-        let atom = SignedAtom.irrelevant
-        let submitAtomActionRequest = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: true)
-        let submitUUID = submitAtomActionRequest.uuid
-        let findANodeResultAction = FindANodeResultAction(node: node, request: submitAtomActionRequest)
+        XCTAssertEqual(atomStatusObservationRequesting.sendGetAtomStatusNotifications_method_call_count, 0, line: line)
+        XCTAssertEqual(atomStatusObservationCanceller.closeAtomStatusNotifications_method_call_count, 0, line: line)
+        XCTAssertEqual(atomStatusObserving.observeAtomStatusNotifications_method_call_count, 0, line: line)
+        XCTAssertEqual(atomSubmitter.pushAtom_method_call_count, 0, line: line)
         
-        let expectedNumberOfOutput = 3
+        XCTAssertNil(retainSocket, line: line)
+        XCTAssertNil(nodeForWhichWebSocketConnectionWasClosed, line: line)
         
-        XCTAssertEqual(atomStatusObservationRequesting.sendGetAtomStatusNotifications_method_call_count, 0)
-        XCTAssertEqual(atomStatusObservationCanceller.closeAtomStatusNotifications_method_call_count, 0)
-        XCTAssertEqual(atomStatusObserving.observeAtomStatusNotifications_method_call_count, 0)
-        XCTAssertEqual(atomSubmitter.pushAtom_method_call_count, 0)
+        let overridingTimeoutIfPresent: TimeInterval? = epicSubmissionMaxDuration.map { TimeInterval.init($0 * 2) } ?? nil
         
-        XCTAssertNil(retainSocket)
-        XCTAssertNil(nodeForWhichWebSocketConnectionWasClosed)
-        
-        func emulateRadixNetworkController(
-            reactingTo outputtedNodeAction: NodeAction,
-            _ nodeActionsSubject: PassthroughSubject<NodeAction, Never>
-        ) {
-            if let submitAtomActionSend = outputtedNodeAction as? SubmitAtomActionSend {
-                nodeActionsSubject.send(submitAtomActionSend)
-                atomStatusNotificationSubject.send(.stored)
-            }
-            
-            if let submitAtomActionStatus = outputtedNodeAction as? SubmitAtomActionStatus {
-                nodeActionsSubject.send(submitAtomActionStatus)
-                
-            }
+        if let epicSubmissionMaxDuration = epicSubmissionMaxDuration {
+            XCTAssertEqual(overridingTimeoutIfPresent!, TimeInterval(2*epicSubmissionMaxDuration))
         }
         
         doTest(
             epic: epic,
+            timeout: overridingTimeoutIfPresent,
             resultingPublisherTransformation: { actionSubject, _, output in
                 output
                     .receive(on: RunLoop.main)
                     .handleEvents(
-                    receiveOutput: {
-                        emulateRadixNetworkController(reactingTo: $0, actionSubject)
+                        receiveOutput: {
+                            emulateRadixNetworkController?($0, actionSubject, atomStatusNotificationSubject)
                     }
                 )
                     .prefix(expectedNumberOfOutput)^
         },
-            input: { actionsSubject, _ in
-                
-                actionsSubject.send(findANodeResultAction)
-            },
+            input: { actionSubject, _ in input(node, actionSubject, atomStatusNotificationSubject) },
             
             outputtedNodeActionsHandler: { producedActions in
                 let submitAtomActions = producedActions.compactMap { $0 as? SubmitAtomAction }
-                XCTAssertEqual(submitAtomActions.count, expectedNumberOfOutput)
+                XCTAssertEqual(submitAtomActions.count, expectedNumberOfOutput, line: line)
+                
+                let atom = submitAtomActionInitial.atom.wrappedAtom.wrappedAtom
                 
                 for submitAtomAction in submitAtomActions {
-                    XCTAssertEqual(submitAtomAction.atom.wrappedAtom.wrappedAtom, atom.wrappedAtom.wrappedAtom)
-                    XCTAssertEqual(submitAtomAction.node, node)
-                    XCTAssertEqual(submitAtomAction.uuid, submitUUID)
+                    XCTAssertEqual(submitAtomAction.atom.wrappedAtom.wrappedAtom, atom, line: line)
+                    XCTAssertEqual(submitAtomAction.node, node, line: line)
+                    XCTAssertEqual(submitAtomAction.uuid, submitAtomActionInitial.uuid, line: line)
                 }
                 
-                XCTAssertType(of: submitAtomActions[0], is: SubmitAtomActionSend.self)
-                
-                guard let submitAtomActionStatus = submitAtomActions[1] as? SubmitAtomActionStatus else {
-                    return XCTFail("Expected SubmitAtomActionStatus")
-                }
-                XCTAssertEqual(submitAtomActionStatus.statusEvent, .stored)
-                
-                XCTAssertType(of: submitAtomActions[2], is: SubmitAtomActionCompleted.self)
+                outputtedSubmitAtomAction(submitAtomActions)
                 
                 // Assure correctness of "inner" functions/publishers
-                XCTAssertEqual(atomStatusObservationCanceller.closeAtomStatusNotifications_method_call_count, 1)
-                XCTAssertEqual(atomStatusObserving.observeAtomStatusNotifications_method_call_count, 1)
+                XCTAssertEqual(atomStatusObservationCanceller.closeAtomStatusNotifications_method_call_count, 1, line: line)
+                XCTAssertEqual(atomStatusObserving.observeAtomStatusNotifications_method_call_count, 1, line: line)
+                XCTAssertEqual(atomStatusObservationRequesting.sendGetAtomStatusNotifications_method_call_count, 1, line: line)
+                XCTAssertEqual(atomSubmitter.pushAtom_method_call_count, 1, line: line)
                 
-                XCTAssertEqual(atomStatusObservationRequesting.sendGetAtomStatusNotifications_method_call_count, 1)
-                XCTAssertEqual(atomSubmitter.pushAtom_method_call_count, 1)
-
                 do {
-                    let wsToNode = try XCTUnwrap(retainSocket)
-                    XCTAssertEqual(wsToNode.node, node)
-
+                    let webSocketToNode = try XCTUnwrap(retainSocket)
+                    XCTAssertEqual(webSocketToNode.node, node, line: line)
+                    
                     let closedWSNode = try XCTUnwrap(nodeForWhichWebSocketConnectionWasClosed)
-                    XCTAssertEqual(closedWSNode, node)
+                    XCTAssertEqual(closedWSNode, node, line: line)
                 } catch { return XCTFail("Expected not nil") }
                 
-                
-                
-            }
+        }
         )
     }
 }

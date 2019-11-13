@@ -37,7 +37,7 @@ class NetworkEpicTestCase: TestCase {
         
         line: UInt = #line,
         
-        timeout: TimeInterval = 0.5,
+        timeout: TimeInterval? = nil, // = 0.5,
         
         expectedNumberOfOutput: Int,
         
@@ -65,7 +65,7 @@ class NetworkEpicTestCase: TestCase {
         
         line: UInt = #line,
         
-        timeout: TimeInterval = 0.5,
+        timeout: TimeInterval? = nil,// = 0.5,
         
         resultingPublisherTransformation: (
         _ inputNodeActionSubject: PassthroughSubject<NodeAction, Never>,
@@ -102,7 +102,7 @@ class NetworkEpicTestCase: TestCase {
         
         input(actionsSubject, networkStateSubject)
         
-        wait(for: [expectation], timeout: timeout)
+        wait(for: [expectation], timeout: timeout ?? 0.5)
         
         outputtedNodeActionsHandler(receivedValues)
         

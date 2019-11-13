@@ -25,20 +25,42 @@
 import Foundation
 
 public struct SubmitAtomActionCompleted: SubmitAtomAction {
+    
     public let atom: SignedAtom
     public let node: Node
     public let uuid: UUID
+    public let result: SubmissionResult
+    
     private init(
         atom: SignedAtom,
         node: Node,
-        uuid: UUID
-        ) {
+        uuid: UUID,
+        result: SubmissionResult
+    ) {
         self.atom = atom
         self.node = node
         self.uuid = uuid
+        self.result = result
+    }
+}
+
+public extension SubmitAtomActionCompleted {
+    
+    static func success(sendAction: SubmitAtomActionSend, node: Node) -> Self {
+        Self(atom: sendAction.atom, node: node, uuid: sendAction.uuid, result: .success)
     }
     
-    public init(sendAction: SubmitAtomActionSend, node: Node) {
-        self.init(atom: sendAction.atom, node: node, uuid: sendAction.uuid)
+    static func failed(sendAction: SubmitAtomActionSend, node: Node, error: Error) -> Self {
+        Self(atom: sendAction.atom, node: node, uuid: sendAction.uuid, result: .failure(error))
+    }
+}
+
+public extension SubmitAtomActionCompleted {
+    enum Error: Int, Swift.Error, Equatable {
+        case timeout
+    }
+    enum SubmissionResult: Equatable {
+        case success
+        case failure(Error)
     }
 }
