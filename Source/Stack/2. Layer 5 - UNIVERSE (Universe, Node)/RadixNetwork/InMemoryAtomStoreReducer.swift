@@ -52,7 +52,7 @@ public extension InMemoryAtomStoreReducer {
                         atomStore.store(atomObservation: atomObservation, address: addressInAtom, notifyListenerMode: .notifyOnAtomUpdateAndSync)
                     }
                     store(atomObservation: .stored(atom.wrappedAtom.wrappedAtom, isSoft: true))
-                    store(atomObservation: .head())
+                    store(atomObservation: .headNow())
                 }
             }
         }

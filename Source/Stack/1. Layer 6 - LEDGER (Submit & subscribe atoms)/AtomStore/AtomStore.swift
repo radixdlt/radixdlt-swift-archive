@@ -26,6 +26,13 @@ import Foundation
 import Combine
 import Entwine
 
+extension ReplaySubject {
+    static func unlimitedBufferSize() -> ReplaySubject<Output, Failure> {
+        // TODO Combine TODO Entwine change arbitrarily chosen `maxBufferSize`
+        return ReplaySubject<Output, Failure>(maxBufferSize: 10_000)
+    }
+}
+
 public protocol AtomStore {
     
     /// Interface for propagating when the current store
@@ -55,16 +62,12 @@ public final class InMemoryAtomStore: AtomStore {
     
     private var synced              = [Address: Bool]()
 
-    private var atomUpdateListeners: ListenerOf<AtomObservation>
-    private var syncListeners: ListenerOf<Date>
+    private var atomUpdateListeners: ListenerOf<AtomObservation> = .init()
+    private var syncListeners: ListenerOf<Date> = .init()
     
     public init(
-        genesisAtoms: [Atom] = [],
-        atomUpdateListeners: ListenerOf<AtomObservation> = .init(),
-        syncListeners: ListenerOf<Date> = .init()
+        genesisAtoms: [Atom] = []
     ) {
-        self.atomUpdateListeners = atomUpdateListeners
-        self.syncListeners = syncListeners
         
         // Store genesis atoms
         genesisAtoms.forEach { atom in
@@ -73,12 +76,12 @@ public final class InMemoryAtomStore: AtomStore {
                 self.store(
                     atomObservation: atomObservation,
                     address: $0,
-                    // TODO change `notifyListenerMode` to `.dontNotify`?
+                    // TODO change `notifyListenerMode` to `.donʼtNotify`?
                     notifyListenerMode: .notifyOnAtomUpdateAndSync
                 )
             }
             atom.allAddresses.forEach {
-                self.store(atomObservation: AtomObservation.head(), address: $0, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+                self.store(atomObservation: AtomObservation.headNow(), address: $0, notifyListenerMode: .notifyOnAtomUpdateAndSync)
             }
         }
     }
@@ -94,38 +97,37 @@ public extension InMemoryAtomStore {
 public extension InMemoryAtomStore {
     
     func onSync(address: Address) -> AnyPublisher<Date, Never> {
-//        if let existingListenerAtAddress = syncListeners.listener(of: address) {
-//            return existingListenerAtAddress.eraseToAnyPublisher()
-//        } else {
-//            let newListener = ReplaySubject<Date>.createUnbounded()
-//            syncListeners.addListener(newListener, of: address)
-//            defer {
-//                if synced.valueForKey(key: address, ifAbsent: { false }) {
-//                    newListener.send(Date())
-//                }
-//            }
-//            return newListener.eraseToAnyPublisher()
-//        }
-        combineMigrationInProgress()
+        if let existingListenerAtAddress = syncListeners.listener(of: address) {
+            return existingListenerAtAddress.eraseToAnyPublisher()
+        } else {
+            let newListener = ReplaySubject<Date, Never>.unlimitedBufferSize()
+            syncListeners.addListener(newListener, of: address)
+            defer {
+                if synced.valueForKey(key: address, ifAbsent: { false }) {
+                    newListener.send(Date())
+                }
+            }
+            return newListener.eraseToAnyPublisher()
+        }
     }
     
     func atomObservations(of address: Address) -> AnyPublisher<AtomObservation, Never> {
         
-//        if let existingListenerAtAddress = atomUpdateListeners.listener(of: address) {
-//            return existingListenerAtAddress.eraseToAnyPublisher()
-//        } else {
-//            let newListener = ReplaySubject<AtomObservation>.createUnbounded()
-//            atomUpdateListeners.addListener(newListener, of: address)
-//            // Replay history
-//            atoms.filter {
-//                $0.value.isStore && $0.key.allAddresses.contains(address)
-//            }.compactMap {
-//                $0.value
-//            }.forEach { newListener.send($0) }
-//            return newListener.eraseToAnyPublisher()
-//        }
-
-        combineMigrationInProgress()
+        if let existingListenerAtAddress = atomUpdateListeners.listener(of: address) {
+            return existingListenerAtAddress.eraseToAnyPublisher()
+        } else {
+            let newListener = ReplaySubject<AtomObservation, Never>.unlimitedBufferSize()
+            atomUpdateListeners.addListener(newListener, of: address)
+            
+            // Replay history
+            atoms.filter {
+                $0.value.isStore && $0.key.allAddresses.contains(address)
+            }.compactMap {
+                $0.value
+            }.forEach { newListener.send($0) }
+            
+            return newListener.eraseToAnyPublisher()
+        }
     }
     
     func upParticles(at address: Address) -> [AnyUpParticle] {
@@ -151,6 +153,11 @@ public extension InMemoryAtomStore {
     
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {
+        if let atom = atomObservation.atom, let currentAtomObservation = atoms[atom], atomObservation.ignoringDateIsEqual(to: currentAtomObservation) {
+            print("⚠️ Ignored atom observation, already existing")
+            return
+        }
+        
         let areAtomsInSync = atomObservation.isHead
         synced[address] = areAtomsInSync
         defer {
@@ -194,6 +201,7 @@ public extension InMemoryAtomStore {
             // Only update if type changes
             includeAtom = (!atomObservation.isSoft || currentAtomObservation.isSoft) && !atomObservation.isSameType(as: currentAtomObservation)
             isSoftToHard = currentAtomObservation.isSoft && !atomObservation.isSoft
+            
         } else {
             includeAtom = atomObservation.isStore
             isSoftToHard = false

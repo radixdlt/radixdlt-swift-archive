@@ -222,6 +222,8 @@
 		E64BFF8D2268985800501726 /* ResourceIdentifierParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF8C2268985800501726 /* ResourceIdentifierParticle.swift */; };
 		E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF932269B96A00501726 /* Optional+Debug.swift */; };
 		E6506907237D806C00AB420D /* AtomPullerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506906237D806C00AB420D /* AtomPullerTests.swift */; };
+		E650690A237D947F00AB420D /* AtomStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506909237D947F00AB420D /* AtomStoreTests.swift */; };
+		E650690C237DA84100AB420D /* AtomNotificationModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650690B237DA84100AB420D /* AtomNotificationModeTests.swift */; };
 		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
@@ -830,6 +832,8 @@
 		E64BFF8C2268985800501726 /* ResourceIdentifierParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceIdentifierParticle.swift; sourceTree = "<group>"; };
 		E64BFF932269B96A00501726 /* Optional+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Debug.swift"; sourceTree = "<group>"; };
 		E6506906237D806C00AB420D /* AtomPullerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomPullerTests.swift; sourceTree = "<group>"; };
+		E6506909237D947F00AB420D /* AtomStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStoreTests.swift; sourceTree = "<group>"; };
+		E650690B237DA84100AB420D /* AtomNotificationModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomNotificationModeTests.swift; sourceTree = "<group>"; };
 		E6533FDF22BA63620068B07D /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		E6533FE222BA638B0068B07D /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		E654778822BFB3B700D968BD /* BootstrapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootstrapConfig.swift; sourceTree = "<group>"; };
@@ -2025,6 +2029,15 @@
 			path = AtomPullerTests;
 			sourceTree = "<group>";
 		};
+		E6506908237D946300AB420D /* AtomStore */ = {
+			isa = PBXGroup;
+			children = (
+				E6506909237D947F00AB420D /* AtomStoreTests.swift */,
+				E650690B237DA84100AB420D /* AtomNotificationModeTests.swift */,
+			);
+			path = AtomStore;
+			sourceTree = "<group>";
+		};
 		E6550EE6224BBD9100160267 /* Node */ = {
 			isa = PBXGroup;
 			children = (
@@ -2802,6 +2815,7 @@
 		E6BACE812350E859006D97C6 /* NEW */ = {
 			isa = PBXGroup;
 			children = (
+				E6506908237D946300AB420D /* AtomStore */,
 				E6506905237D805A00AB420D /* AtomPullerTests */,
 				E69A8A78237C410500AC4A0E /* HTTPClientTests */,
 				E6E0BFBE2375BF8E00B946A7 /* NetworkEpicTests */,
@@ -4353,6 +4367,7 @@
 			files = (
 				E6D325B921EF35DA00851F4E /* Secp256k1RFC6979Tests.swift in Sources */,
 				E62F35372273378300B6779A /* DecodingError+ConvenienceInit.swift in Sources */,
+				E650690C237DA84100AB420D /* AtomNotificationModeTests.swift in Sources */,
 				E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */,
 				E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */,
 				E6E9D2F123746B22003753B4 /* PrefixUntilCompletionFrom.swift in Sources */,
@@ -4373,6 +4388,7 @@
 				E6055447230553C700528510 /* Test+Convenience+RadixApplicationClient.swift in Sources */,
 				E6A1A67A237B1BF900F58483 /* PublisherFlatMapResultTests.swift in Sources */,
 				E60554452305529600528510 /* Identity+Account.swift in Sources */,
+				E650690A237D947F00AB420D /* AtomStoreTests.swift in Sources */,
 				E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */,
 				E6A643122244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift in Sources */,
 				E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */,
@@ -4532,6 +4548,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
+				DEAD_CODE_STRIPPING = NO;
 				"DEBUG_INFORMATION_FORMAT[sdk=iphoneos*]" = "dwarf-with-dsym";
 				"DEBUG_INFORMATION_FORMAT[sdk=iphonesimulator*]" = dwarf;
 				DEFINES_MODULE = YES;
@@ -4572,6 +4589,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
+				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -4609,6 +4627,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Manual;
+				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4635,6 +4654,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Manual;
+				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -351,12 +351,15 @@ extension AtomWithFee {
 
 extension Atom {
     static var irrelevant: Self {
-        
-        let particle = ResourceIdentifierParticle(resourceIdentifier: .irrelevant)
+        withDestinationAddress(.irrelevant)
+    }
+    
+    static func withDestinationAddress(_ address: Address, date: Date = .init()) -> Self {
+        let particle = ResourceIdentifierParticle(resourceIdentifier: .withAddress(address))
         let particleGroup = try! ParticleGroup(spunParticles: particle.withSpin(.up))
         
         return Atom(
-            metaData: .timeNow,
+            metaData: .timestamp(date),
             particleGroups: [particleGroup]
         )
     }
@@ -375,5 +378,9 @@ extension EUID {
 }
 
 extension ResourceIdentifier {
-    static let irrelevant: Self = "/\(Address.irrelevant)/\(String.irrelevant)"
+    static let irrelevant: Self = .withAddress(.irrelevant)
+    
+    static func withAddress(_ address: Address) -> Self {
+        "/\(address)/\(String.irrelevant)"
+    }
 }

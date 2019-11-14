@@ -72,7 +72,7 @@ class FetchAtomsEpicTests: NetworkEpicTestCase {
             input: { actionsSubject, networkStateSubject in
                 actionsSubject.send(findANodeResultAction)
                 webSocketStatusSubject.send(.connected)
-                observeAtomsSubject.send(.head())
+                observeAtomsSubject.send(.headNow())
             },
             
             outputtedNodeActionsHandler: { producedOutput in

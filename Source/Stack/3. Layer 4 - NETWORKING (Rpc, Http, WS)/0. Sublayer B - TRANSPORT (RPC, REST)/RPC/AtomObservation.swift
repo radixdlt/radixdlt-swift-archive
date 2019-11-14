@@ -67,8 +67,8 @@ public extension AtomObservation {
         return .delete(atom: atom, soft: isSoft, receivedAt: receivedAt)
     }
     
-    static func head(receivedAtDate receivedAt: Date = Date()) -> AtomObservation {
-        return .head(receivedAt: receivedAt)
+    static func headNow() -> AtomObservation {
+        .head(receivedAt: Date())
     }
     
     init(_ atomEvent: AtomEvent) {
@@ -124,6 +124,16 @@ public extension AtomObservation {
             
         case (.delete, .delete): return true
         case (.delete, _): return false
+        }
+    }
+    
+    func ignoringDateIsEqual(to other: Self) -> Bool {
+        guard isSameType(as: other) else { return false }
+        switch (self.atom, other.atom) {
+        case (.some(let selfAtom), .some(let otherAtom)):
+            return selfAtom == otherAtom
+        case (nil, nil): return true
+        default: return false
         }
     }
 }
