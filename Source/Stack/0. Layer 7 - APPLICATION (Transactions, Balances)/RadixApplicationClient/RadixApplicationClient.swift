@@ -269,10 +269,11 @@ public extension RadixApplicationClient {
     var addressOfActiveAccount: Address { snapshotActiveAccount.addressFromMagic(magic) }
 
     func observeAddressOfActiveAccount() -> AnyPublisher<Address, Never> {
-        let magic = self.magic
-        return identity.activeAccountObservable.map { newActiveAccount in
-            return newActiveAccount.addressFromMagic(magic)
-        }.eraseToAnyPublisher()
+        identity.activeAccountObservable
+            .map { newActiveAccount in
+                newActiveAccount.addressFromMagic(self.magic)
+            }
+            .eraseToAnyPublisher()
     }
 
     func observeActiveAccount() -> AnyPublisher<Account, Never> {
@@ -291,7 +292,7 @@ public extension RadixApplicationClient {
     
     @discardableResult
     func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
-        return identity.selectAccount(accountSelector)
+        identity.selectAccount(accountSelector)
     }
 
     func changeAccount(to selectedAccount: Account) {
@@ -303,11 +304,11 @@ public extension RadixApplicationClient {
     }
     
     func pull(address: Address) -> Cancellable {
-        return atomPuller.pull(address: address).sink(receiveValue: { _ in })
+        atomPuller.pull(address: address)
     }
     
     func pull() -> Cancellable {
-        return pull(address: addressOfActiveAccount)
+        pull(address: addressOfActiveAccount)
     }
 
     var snapshotActiveAccount: Account {

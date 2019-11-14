@@ -36,12 +36,19 @@ extension Address {
     static var irrelevant: Address {
         return Address(magic: .irrelevant, publicKey: .irrelevant)
     }
+    
+    static func irrelevant(index: Int) -> Address {
+        let privateKeyScalar: PrivateKey.Scalar = PrivateKey.Scalar(exactly: index)!
+        let privateKey: PrivateKey = try! .init(scalar: privateKeyScalar)
+        return Address(magic: .irrelevant, publicKey: PublicKey(private: privateKey))
+    }
 }
 
 extension PublicKey {
     static var irrelevant: PublicKey {
         return PublicKey(private: PrivateKey())
     }
+    
 }
 
 extension Magic {

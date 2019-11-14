@@ -26,45 +26,64 @@ import Foundation
 import Combine
 
 public protocol AtomPuller {
-    func pull(address: Address) -> AnyPublisher<Any, Never>
+    func pull(address: Address) -> Cancellable
+}
+
+public struct NodeActionsDispatcher {
+    public typealias DispatchNodeAction = (NodeAction) -> Void
+    public let dispatchNodeAction: DispatchNodeAction
+}
+
+public extension NodeActionsDispatcher {
+    static func usingNetworkController(_ networkController: RadixNetworkController) -> Self {
+        Self { nodeAction in
+            networkController.dispatch(nodeAction: nodeAction)
+        }
+    }
 }
 
 public final class DefaultAtomPuller: AtomPuller {
     
-    private var requestCache = RequestCache()
+    // TODO: change from `var` to `let`, when Swift bug SE-11783 has been fixed: https://bugs.swift.org/browse/SR-11783
+    private var requestCache: RequestCache
     
-    private let networkController: RadixNetworkController
-    public init(networkController: RadixNetworkController) {
-        self.networkController = networkController
+    private let nodeActionsDispatcher: NodeActionsDispatcher
+    
+    public init(
+        requestCache: RequestCache = [:],
+        nodeActionsDispatcher: NodeActionsDispatcher
+    ) {
+        self.requestCache = requestCache
+        self.nodeActionsDispatcher = nodeActionsDispatcher
     }
 }
 
 public extension DefaultAtomPuller {
-    func pull(address: Address) -> AnyPublisher<Any, Never> {
-        
-//        return requestCache.valueForKey(key: address) {
-//            let fetchAtomsRequest = FetchAtomsActionRequest(address: address)
-//            return CombineObservable.create { [weak self] observer in
-//                guard let `self` = self else {
-//                    observer.onCompleted()
-//                    return CombineDisposables.create()
-//                }
-//                self.networkController.dispatch(nodeAction: fetchAtomsRequest)
-//
-//                return CombineDisposables.create {
-//                    let cancelRequest = FetchAtomsActionCancel(request: fetchAtomsRequest)
-//                    self.networkController.dispatch(nodeAction: cancelRequest)
-//                }
-//            }
-//            }.map { $0 }.eraseToAnyPublisher()
-        combineMigrationInProgress()
+    convenience init(networkController: RadixNetworkController) {
+        self.init(nodeActionsDispatcher: .usingNetworkController(networkController))
     }
 }
 
-internal extension DefaultAtomPuller {
-    struct RequestCache: DictionaryConvertibleMutable, ExpressibleByDictionaryLiteral {
+public extension DefaultAtomPuller {
+    func pull(address: Address) -> Cancellable {
+        
+        return requestCache.valueForKey(key: address) {
+            let fetchAtomsRequest = FetchAtomsActionRequest(address: address)
+            self.nodeActionsDispatcher.dispatchNodeAction(fetchAtomsRequest)
+            
+            return AnyCancellable {
+                let cancelRequest = FetchAtomsActionCancel(request: fetchAtomsRequest)
+                self.nodeActionsDispatcher.dispatchNodeAction(cancelRequest)
+            }
+            
+        }
+    }
+}
+
+public extension DefaultAtomPuller {
+    final class RequestCache: DictionaryConvertibleMutable, ExpressibleByDictionaryLiteral {
         public typealias Key = Address
-        public typealias Value = AnyPublisher<FetchAtomsAction, Never>
+        public typealias Value = Cancellable
         public typealias Map = [Key: Value]
         public var dictionary: Map
         public init(dictionary: Map) {

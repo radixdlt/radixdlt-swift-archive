@@ -26,18 +26,21 @@ import Foundation
 import Combine
 
 public protocol AtomSigning {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom, Never>
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom, SigningError>
 }
 
 // MARK: - Default Implementation
 public extension AtomSigning where Self: SigningRequesting, Self: PublicKeyOwner {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom, Never> {
-//        let signatureId = publicKey.hashEUID
-//        return privateKeyForSigning.map {
-//            try Signer.sign(unsignedAtom, privateKey: $0)
-//        }.map {
-//            unsignedAtom.signed(signature: $0, signatureId: signatureId)
-//        }
-        combineMigrationInProgress()
+    
+    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom, SigningError> {
+        privateKeyForSigning.tryMap {
+            try Signer.sign(unsignedAtom, privateKey: $0)
+        }
+        .tryMap {
+            unsignedAtom.signed(signature: $0, signatureId: self.publicKey.hashEUID)
+        }
+        .mapError { castOrKill(instance: $0, toType: SigningError.self) }
+        .first()
+        .eraseToAnyPublisher()
     }
 }

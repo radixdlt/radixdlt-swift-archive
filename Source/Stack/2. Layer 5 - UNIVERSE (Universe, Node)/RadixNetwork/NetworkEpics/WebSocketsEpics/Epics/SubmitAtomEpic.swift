@@ -181,7 +181,14 @@ private extension SubmitAtomEpic {
                 receiveCompletion: { _ in cleanUp() },
                 receiveCancel: { cleanUp() }
             )^
-            .share() // Important: this makes sure that the publisher returned by `observeAtomStatusNotifications` does not result in two subscriptions, but one shared. Without this `sendGetAtomStatusNotifications` and thus `pushAtom` gets called twice. There might be some better solution to this, but for now it works.
+            
+            // Important: this makes sure that the publisher returned by
+            // `observeAtomStatusNotifications` does not result in two subscriptions,
+            // but one shared. Without this `sendGetAtomStatusNotifications` and
+            // thus `pushAtom` gets called twice. There might be some better
+            // solution to this, but for now it works.
+            .share()
+            
             .merge(with: submitAtomActionSubject.map { $0 as NodeAction })^
             .setFailureType(to: Publishers.TimeoutError.self)
             .timeout(submissionTimeoutInSeconds, scheduler: backgroundQueue) { Publishers.TimeoutError.publisherTimeout }

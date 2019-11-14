@@ -33,7 +33,3 @@ public typealias Completable = AnyPublisher<Never, Never>
 internal func combineMigrationInProgress() -> Never {
     fatalError("Migration from RxSwift to Combine in progress")
 }
-
-func logBroken(_ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-    log.error("BROKEN 💔: Code commented out, behaviour is unknown, line #\(line), in func: \(function), in file: \(file)")
-}
