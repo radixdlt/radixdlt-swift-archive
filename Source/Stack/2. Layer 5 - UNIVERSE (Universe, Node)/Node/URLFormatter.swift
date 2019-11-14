@@ -31,7 +31,7 @@ public extension URLFormatter {
 
     static func format(
         host hostConvertible: HostConvertible,
-        `protocol`: CommuncationProtocol,
+        `protocol`: CommunicationProtocol,
         appendPath: Bool = true,
         useSSL: Bool = true
     ) throws -> FormattedURL {
@@ -61,7 +61,7 @@ public extension URLFormatter {
 }
 
 public extension URLFormatter {
-    static func localhost(`protocol`: CommuncationProtocol) -> FormattedURL {
+    static func localhost(`protocol`: CommunicationProtocol) -> FormattedURL {
         do {
             return try URLFormatter.format(host: Host.local(port: 8080), protocol: `protocol`, useSSL: false)
         } catch {
@@ -86,7 +86,7 @@ extension URLFormatter {
     
     /// An IP address consists of `{ 0...255 }` x 4, thus all fitting inside `UInt8`
     /// If `string` passed contains slashes, it is not ONLY a host, but also contains path
-    /// components, thus failign this check.
+    /// components, thus failing this check.
     static func onlyHost(string: String) -> Bool {
         if string == .localhost { return true }
         if string.contains("/") { return false }
@@ -115,15 +115,15 @@ public extension URLFormatter {
 }
 
 public extension URLFormatter {
-    enum CommuncationProtocol: Equatable, Hashable {
+    enum CommunicationProtocol: Equatable, Hashable {
         case webSockets
         case hypertext
     }
 }
 
-public extension URLFormatter.CommuncationProtocol {
+public extension URLFormatter.CommunicationProtocol {
     
-    static func == (lhs: URLFormatter.CommuncationProtocol, rhs: URLFormatter.CommuncationProtocol) -> Bool {
+    static func == (lhs: URLFormatter.CommunicationProtocol, rhs: URLFormatter.CommunicationProtocol) -> Bool {
         switch (lhs, rhs) {
         case (.hypertext, .hypertext): return true
         case (.webSockets, .webSockets): return true
@@ -132,7 +132,7 @@ public extension URLFormatter.CommuncationProtocol {
     }
 }
 
-private extension URLFormatter.CommuncationProtocol {
+private extension URLFormatter.CommunicationProtocol {
     
     func scheme(useSSL: Bool = true) -> String {
         func secureIfNeeded(_ string: String) -> String {

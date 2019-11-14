@@ -352,8 +352,7 @@ extension AtomWithFee {
 extension Atom {
     static var irrelevant: Self {
         
-        let rri: ResourceIdentifier = "/\(Address.irrelevant)/\(String.irrelevant)"
-        let particle = ResourceIdentifierParticle(resourceIdentifier: rri)
+        let particle = ResourceIdentifierParticle(resourceIdentifier: .irrelevant)
         let particleGroup = try! ParticleGroup(spunParticles: particle.withSpin(.up))
         
         return Atom(
@@ -373,4 +372,8 @@ extension EUID {
     static var irrelevant: Self {
         try! EUID(int: 1)
     }
+}
+
+extension ResourceIdentifier {
+    static let irrelevant: Self = "/\(Address.irrelevant)/\(String.irrelevant)"
 }

@@ -26,18 +26,25 @@ import Foundation
 import Combine
 
 public protocol HTTPClient {
+    func perform(absoluteUrlRequest: URLRequest) -> AnyPublisher<Data, HTTPClientError.NetworkingError>
+    func performRequest(pathRelativeToBase path: String) -> AnyPublisher<Data, HTTPClientError.NetworkingError>
+    func fetch<D>(urlRequest: URLRequest, decodeAs: D.Type) -> AnyPublisher<D, HTTPClientError> where D: Decodable
     
-    func request<D>(router: Router, decodeAs type: D.Type) -> Single<D, Never> where D: Decodable
-    
-    func loadContent(of page: String) -> Single<String, Never>
 }
 
 public extension HTTPClient {
-    func request<D>(router: Router) -> Single<D, Never> where D: Decodable {
+    
+    func request<D>(router: Router, decodeAs _: D.Type) -> AnyPublisher<D, HTTPClientError> where D: Decodable {
+        // swiftlint:disable:next force_try
+        let urlRequest = try! router.asURLRequest()
+        return fetch(urlRequest: urlRequest, decodeAs: D.self)
+    }
+  
+    func request<D>(router: Router) -> AnyPublisher<D, HTTPClientError> where D: Decodable {
         return request(router: router, decodeAs: D.self)
     }
     
-    func request<D>(_ nodeRouter: NodeRouter) -> Single<D, Never> where D: Decodable {
+    func request<D>(_ nodeRouter: NodeRouter) -> AnyPublisher<D, HTTPClientError> where D: Decodable {
         return request(router: nodeRouter, decodeAs: D.self)
     }
 }

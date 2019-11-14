@@ -29,6 +29,7 @@ public extension NodeNetworkDetailsRequesting where Self: HTTPClientOwner {
     
     func networkDetails() -> Single<NodeNetworkDetails, Never> {
         return httpClient.request(.network)
+            .crashOnFailure()
     }
 }
 
@@ -36,6 +37,7 @@ public extension LivePeersRequesting where Self: HTTPClientOwner {
     
     func getLivePeers() -> Single<[NodeInfo], Never> {
         return httpClient.request(.getLivePeers)
+            .crashOnFailure()
     }
 }
 
@@ -43,5 +45,6 @@ public extension UniverseConfigRequesting where Self: HTTPClientOwner {
     
     func getUniverseConfig() -> Single<UniverseConfig, Never> {
         return httpClient.request(.getUniverseConfig)
+            .crashOnFailure()
     }
 }
