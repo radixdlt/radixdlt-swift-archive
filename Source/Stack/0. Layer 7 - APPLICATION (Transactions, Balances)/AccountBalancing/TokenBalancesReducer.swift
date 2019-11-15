@@ -57,8 +57,8 @@ public extension TokenBalancesReducer {
             ]
             
             // MARK: TokenBalanceReferencesState --{trigger}--> TokenBalances
-            let tokenBalancesTriggeredByBalanceUpdate: AnyPublisher<TokenBalances, Never> = balanceReferencesStatePublisher
-                .flatMap { (tokenBalanceReferencesState: TokenBalanceReferencesState) -> AnyPublisher<TokenBalances, Never> in
+            let tokenBalancesTriggeredByBalanceUpdate = balanceReferencesStatePublisher
+                .flatMap { (tokenBalanceReferencesState: TokenBalanceReferencesState) in
                     Publishers.Sequence<[TokenReferenceBalance], Never>(
                         sequence: tokenBalanceReferencesState.tokenReferenceBalances
                     )
@@ -80,17 +80,15 @@ public extension TokenBalancesReducer {
                             .crashOnFailure()
                     }
                     .collect(tokenBalanceReferencesState.tokenReferenceBalances.count)
-                    .eraseToAnyPublisher()
-                    .map { (tokenBalances: [TokenBalance]) -> TokenBalances in
-                        TokenBalances(balances: tokenBalances)
+                    .tryMap { (tokenBalances: [TokenBalance]) -> TokenBalances in
+                        try TokenBalances(balances: tokenBalances)
                     }
-                    .eraseToAnyPublisher()
+                    .crashOnFailure()
             }
-            .eraseToAnyPublisher()
             
             // MARK: TokenDefinitionsState --{trigger}--> TokenBalances
-            let tokenBalancesTriggeredByTokenStateUpdate: AnyPublisher<TokenBalances, Never> = tokenDefinitionPublishersMap[address]!
-                .flatMap { (tokenDefinitionsState: TokenDefinitionsState) -> AnyPublisher<TokenBalances, Never> in
+            let tokenBalancesTriggeredByTokenStateUpdate = tokenDefinitionPublishersMap[address]!
+                .flatMap { (tokenDefinitionsState: TokenDefinitionsState) in
                     
                     Publishers.Sequence<[TokenDefinition], Never>(
                         sequence: tokenDefinitionsState.tokenDefinitions
@@ -106,19 +104,17 @@ public extension TokenBalancesReducer {
                         )
                     }
                     .compactMap { $0 }
-                    .map { (tokenBalance: TokenBalance) -> TokenBalances in
-                        TokenBalances(balances: [tokenBalance])
+                    .tryMap { (tokenBalance: TokenBalance) -> TokenBalances in
+                        try TokenBalances(balances: [tokenBalance])
                     }
-                    .eraseToAnyPublisher()
+                    .crashOnFailure()
             }
-            .eraseToAnyPublisher()
             
             return tokenBalancesTriggeredByBalanceUpdate
-                // TODO Combine: use `scan` instead of `merge` + `removeDuplicates`?
                 .merge(with: tokenBalancesTriggeredByTokenStateUpdate)
-                .removeDuplicates()
+                .tryScan(TokenBalances.empty, { try $0.merging(with: $1) })
+                 .crashOnFailure()
                 .eraseToAnyPublisher()
-            
         }
         
     }

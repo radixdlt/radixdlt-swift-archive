@@ -227,6 +227,7 @@
 		E650690E237E8E5D00AB420D /* InMemoryAtomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650690D237E8E5D00AB420D /* InMemoryAtomStore.swift */; };
 		E6506912237EC3D200AB420D /* TokenBalancesReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506911237EC3D200AB420D /* TokenBalancesReducerTests.swift */; };
 		E6506914237EE47000AB420D /* TokenBalancesReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506913237EE47000AB420D /* TokenBalancesReducer.swift */; };
+		E6506916237F017100AB420D /* TokenBalancesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506915237F017100AB420D /* TokenBalancesTests.swift */; };
 		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
@@ -840,6 +841,7 @@
 		E650690D237E8E5D00AB420D /* InMemoryAtomStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryAtomStore.swift; sourceTree = "<group>"; };
 		E6506911237EC3D200AB420D /* TokenBalancesReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalancesReducerTests.swift; sourceTree = "<group>"; };
 		E6506913237EE47000AB420D /* TokenBalancesReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalancesReducer.swift; sourceTree = "<group>"; };
+		E6506915237F017100AB420D /* TokenBalancesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalancesTests.swift; sourceTree = "<group>"; };
 		E6533FDF22BA63620068B07D /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		E6533FE222BA638B0068B07D /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		E654778822BFB3B700D968BD /* BootstrapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootstrapConfig.swift; sourceTree = "<group>"; };
@@ -2057,6 +2059,7 @@
 			isa = PBXGroup;
 			children = (
 				E6506911237EC3D200AB420D /* TokenBalancesReducerTests.swift */,
+				E6506915237F017100AB420D /* TokenBalancesTests.swift */,
 			);
 			path = TokenBalancesReducer;
 			sourceTree = "<group>";
@@ -4410,6 +4413,7 @@
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
 				E6506907237D806C00AB420D /* AtomPullerTests.swift in Sources */,
+				E6506916237F017100AB420D /* TokenBalancesTests.swift in Sources */,
 				E68DE4A42352344700F1E7A0 /* PublisherPipeOperatorTests.swift in Sources */,
 				E62F35302273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E6055447230553C700528510 /* Test+Convenience+RadixApplicationClient.swift in Sources */,

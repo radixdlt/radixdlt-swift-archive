@@ -184,6 +184,70 @@ class TokenBalancesReducerTests: TestCase {
         )
     }
     
+    
+    func test_balance_of_two_tokens_in_different_balance_updates() throws {
+        
+        let address = Address.irrelevant
+        
+        let rriFoo = ResourceIdentifier(address: address, name: "FOO")
+        let tokenFoo = TokenDefinition(rri: rriFoo)
+        let amountFoo: NonNegativeAmount = 5
+        let supplyFoo: Supply = 100
+        
+        let rriBar = ResourceIdentifier(address: address, name: "BAR")
+        let tokenBar = TokenDefinition(rri: rriBar)
+        let amountBar: NonNegativeAmount = 42
+        let supplyBar: Supply = 321
+        
+        try doTest(
+            address: address,
+            expectedNumberOfOutputs: 2,
+            input: { balanceStateSubject, tokensStateSubject in
+                balanceStateSubject.send([
+                    rriFoo: TokenReferenceBalance(tokenResourceIdentifier: rriFoo, amount: amountFoo, owner: address)
+                    ]
+                )
+                
+                balanceStateSubject.send([
+                    rriBar: TokenReferenceBalance(tokenResourceIdentifier: rriBar, amount: amountBar, owner: address)
+                ])
+                
+                tokensStateSubject.send([
+                    rriFoo: TokenDefinitionsState.Value.full(TokenState(token: tokenFoo, supply: supplyFoo)),
+                    rriBar: TokenDefinitionsState.Value.full(TokenState(token: tokenBar, supply: supplyBar))
+                ])
+        },
+            
+            assertCorrectnessOfOutput: { output in
+                
+                let firstTokenBalances = output[0]
+                XCTAssertEqual(firstTokenBalances.balancePerToken.count, 1)
+                
+                let firstTokenBalanceFoo = try XCTUnwrap(firstTokenBalances.balance(ofToken: rriFoo))
+                XCTAssertEqual(firstTokenBalanceFoo.token.tokenDefinitionReference, rriFoo)
+                XCTAssertEqual(firstTokenBalanceFoo.owner, address)
+                XCTAssertEqual(firstTokenBalanceFoo.token.supply, supplyFoo)
+                XCTAssertEqual(firstTokenBalanceFoo.amount, amountFoo)
+                
+                
+                let secondTokenBalances = output[1]
+                XCTAssertEqual(secondTokenBalances.balancePerToken.count, 2)
+                
+                let secondTokenBalanceFoo = try XCTUnwrap(secondTokenBalances.balance(ofToken: rriFoo))
+                XCTAssertEqual(secondTokenBalanceFoo.token.tokenDefinitionReference, rriFoo)
+                XCTAssertEqual(secondTokenBalanceFoo.owner, address)
+                XCTAssertEqual(secondTokenBalanceFoo.token.supply, supplyFoo)
+                XCTAssertEqual(secondTokenBalanceFoo.amount, amountFoo)
+                
+                let secondTokenBalanceBar = try XCTUnwrap(secondTokenBalances.balance(ofToken: rriBar))
+                XCTAssertEqual(secondTokenBalanceBar.token.tokenDefinitionReference, rriBar)
+                XCTAssertEqual(secondTokenBalanceBar.owner, address)
+                XCTAssertEqual(secondTokenBalanceBar.token.supply, supplyBar)
+                XCTAssertEqual(secondTokenBalanceBar.amount, amountBar)
+        }
+        )
+    }
+    
 }
 
 private extension TokenBalancesReducerTests {
