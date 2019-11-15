@@ -55,14 +55,15 @@ public extension DefaultTransactionSubscriber {
 public extension DefaultTransactionSubscriber {
     
     func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, Never> {
-//        return atomStore.atomObservations(of: address)
-//            .filterMap { (atomObservation: AtomObservation) -> FilterMap<Atom> in
-//                guard case .store(let atom, _, _) = atomObservation else { return .ignore }
-//                return .map(atom)
-//            }.flatMap { [unowned self] in
-//                return self.atomToTransactionMapper.transactionFromAtom($0)
-//        }
-        combineMigrationInProgress()
+        atomStore.atomObservations(of: address)
+            .compactMap { (atomObservation: AtomObservation) -> Atom? in
+                guard case .store(let atom, _, _) = atomObservation else { return nil }
+                return atom
+            }
+            .flatMap { [unowned self] in
+                self.atomToTransactionMapper.transactionFromAtom($0)
+            }
+            .eraseToAnyPublisher()
     }
 }
 
