@@ -33,15 +33,6 @@ private let address: Address = .irrelevant
 
 final class AtomStoreTests: TestCase {
     
-    // TODO move out to separate test
-    func test_atoms_equal() {
-        let address: Address = .irrelevant
-        let date = Date()
-        let atom1 = Atom.withDestinationAddress(address, date: date)
-        let atom2 = Atom.withDestinationAddress(address, date: date)
-        XCTAssertEqual(atom1, atom2)
-    }
-    
     func test_not_nil() {
         let atomStore = InMemoryAtomStore()
         XCTAssertNotNil(atomStore)
@@ -93,6 +84,326 @@ final class AtomStoreTests: TestCase {
         )
     }
     
+    func test_when_subscribed_before_an_atom_is_stored_on_a_different_address__then_the_atom_should_not_be_observed() {
+        let store = InMemoryAtomStore()
+        
+        var outputtedObservations = [AtomObservation]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+
+        let address: Address = .irrelevant(index: 1)
+        let cancellable = store.atomObservations(of: address)
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedObservations.append($0) }
+            )
+        let differentAddress: Address = .irrelevant(index: 2)
+        store.store(atomObservation: AtomObservation.headNow(), address: differentAddress, notifyListenerMode: .notifyOnAtomUpdate)
+        expectation.fulfill()
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertTrue(outputtedObservations.isEmpty)
+        XCTAssertNotNil(cancellable)
+    }
+    
+    func test_when_subscribed_before_an_atom_is_stored_on_same_address__then_the_atom_should_be_observed() {
+        let store = InMemoryAtomStore()
+        
+        var outputtedObservations = [AtomObservation]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        let address: Address = .irrelevant(index: 1)
+        let cancellable = store.atomObservations(of: address)
+            .first()
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedObservations.append($0) }
+        )
+        store.store(atomObservation: AtomObservation.headNow(), address: address, notifyListenerMode: .notifyOnAtomUpdate)
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertEqual(outputtedObservations.count, 1)
+        XCTAssertNotNil(cancellable)
+    }
+    
+  
+    // MARK: Replay
+    func test_when_subscribed_after_an_atom_is_stored_on_a_DIFFERENT_address__then_the_atom_should_NOT_be_observed_replay_of_1() {
+        let store = InMemoryAtomStore()
+        
+        var outputtedObservations = [AtomObservation]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        let address: Address = .irrelevant(index: 1)
+        let differentAddress: Address = .irrelevant(index: 2)
+        store.store(atomObservation: AtomObservation.headNow(), address: differentAddress, notifyListenerMode: .notifyOnAtomUpdate)
+        let cancellable = store.atomObservations(of: address)
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedObservations.append($0) }
+        )
+        expectation.fulfill()
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertTrue(outputtedObservations.isEmpty)
+        XCTAssertNotNil(cancellable)
+    }
+    
+    func test_when_subscribed_after_genesis_atoms_are_stored_on_same_address__then_the_atom_should_be_observed_replay_of_many() {
+        let address: Address = .irrelevant
+        let atomCount = 10
+        let genesisAtoms = Array<Int>(0..<atomCount).map { Atom.withDestinationAddress(address, date: Date().advanced(by: TimeInterval($0))) }
+        XCTAssertEqual(genesisAtoms.count, atomCount)
+        let atomStore = InMemoryAtomStore(genesisAtoms: genesisAtoms)
+        let publisher = atomStore.atomObservations(of: address)
+        
+        var outputtedObservations = [AtomObservation]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        let cancellable = publisher
+            .prefix(atomCount)
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedObservations.append($0) }
+        )
+        
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertEqual(outputtedObservations.count, atomCount)
+        XCTAssertNotNil(cancellable)
+    }
+    
+    
+    func test_when_subscribed_after_an_atom_is_stored_on_same_address__then_the_atom_should_be_observed_replay_of_many() {
+        let address: Address = .irrelevant
+      
+        let atomStore = InMemoryAtomStore()
+        let publisher = atomStore.atomObservations(of: address)
+        
+        var outputtedObservations = [AtomObservation]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        let atomCount = 10
+        let atoms = Array<Int>(0..<atomCount).map { Atom.withDestinationAddress(address, date: Date().advanced(by: TimeInterval($0))) }
+        XCTAssertEqual(atoms.count, atomCount)
+        for atom in atoms {
+            atomStore.store(atomObservation: .stored(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        }
+        
+        let cancellable = publisher
+            .prefix(atomCount)
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedObservations.append($0) }
+        )
+        
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertEqual(outputtedObservations.count, atomCount)
+        XCTAssertNotNil(cancellable)
+    }
+    
+    func test_when_receiving_atom_deletes_for_atoms_which_have_not_been_seen__store_should_not_propagate_delete_event() {
+        let atomStore = InMemoryAtomStore()
+        
+        let address: Address = .irrelevant
+        
+        let atom: Atom = .withDestinationAddress(address)
+        let observationDelete = AtomObservation.deleted(atom)
+        XCTAssertFalse(observationDelete.isSoft)
+
+        let observationStore = AtomObservation.stored(atom)
+        XCTAssertFalse(observationStore.isSoft)
+        
+        atomStore.store(atomObservation: observationDelete, address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        atomStore.store(atomObservation: observationStore, address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        
+        var outputtedObservations = [AtomObservation]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        let cancellable = atomStore.atomObservations(of: address)
+            .first()
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedObservations.append($0) }
+        )
+        
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertEqual(outputtedObservations.count, 1)
+        let observationFetched: AtomObservation! = XCTAssertType(of: outputtedObservations[0])
+        XCTAssertEqual(observationFetched, observationStore)
+        XCTAssertNotNil(cancellable)
+    }
+    
+    func test_when_receiving_atom_store_then_delete_then_store_for_an_atom_then_subscribe__store_should_propagate_one_store_event() {
+        let atomStore = InMemoryAtomStore()
+        
+        let address: Address = .irrelevant
+        
+        let atom: Atom = .withDestinationAddress(address)
+        let observationDelete = AtomObservation.deleted(atom)
+        XCTAssertFalse(observationDelete.isSoft)
+        
+        let observationStore = AtomObservation.stored(atom)
+        XCTAssertFalse(observationStore.isSoft)
+        
+        atomStore.store(atomObservation: observationStore, address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        atomStore.store(atomObservation: observationDelete, address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        atomStore.store(atomObservation: observationStore, address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        
+        var outputtedObservations = [AtomObservation]()
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        let cancellable = atomStore.atomObservations(of: address)
+            .first()
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedObservations.append($0) }
+        )
+        
+        wait(for: [expectation], timeout: 0.1)
+        XCTAssertEqual(outputtedObservations.count, 1)
+        let observationFetched: AtomObservation! = XCTAssertType(of: outputtedObservations[0])
+        XCTAssertEqual(observationFetched, observationStore)
+        XCTAssertNotNil(cancellable)
+    }
+    
+    func test_when_getting_up_particles_with_an_empty_store__store_should_return_an_empty_stream() {
+        let atomStore = InMemoryAtomStore()
+        let upParticles = atomStore.upParticles(at: .irrelevant)
+        XCTAssertTrue(upParticles.isEmpty)
+    }
+    
+    func test_when_getting_up_particles_from_store_with_an_atom_with_no_particles__store_should_return_an_empty_stream() {
+        let atomStore = InMemoryAtomStore()
+        let atom = Atom(metaData: .timeNow)
+        let address = Address.irrelevant
+        atomStore.store(atomObservation: .stored(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        let upParticles = atomStore.upParticles(at: address)
+        XCTAssertTrue(upParticles.isEmpty)
+    }
+    
+    func test_when_getting_up_particles_from_store_with_an_atom_with_one_up_particle__store_should_return_that_particle() {
+        let atomStore = InMemoryAtomStore()
+        let address = Address.irrelevant
+        let rri: ResourceIdentifier = "/\(address)/FOOBAR"
+        let rriParticle =  ResourceIdentifierParticle(resourceIdentifier: rri)
+        let spunUpRRIParticle = rriParticle.withSpin(.up)
+        let particleGroup = try!  spunUpRRIParticle.wrapInGroup()
+        let atom = Atom(metaData: .timeNow, particleGroups: [particleGroup])
+        atomStore.store(atomObservation: .stored(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        let upParticles = atomStore.upParticles(at: address)
+        XCTAssertEqual(upParticles.count, 1)
+        guard let fetchedRRIParticle = upParticles[0].someParticle as? ResourceIdentifierParticle else {
+            return XCTFail("Wrong type")
+        }
+        XCTAssertEqual(rriParticle, fetchedRRIParticle)
+    }
+    
+    func test_when_getting_up_particles_from_store_with_an_atom_with_one_down_particle__store_should_return_an_empty_stream() {
+        let atomStore = InMemoryAtomStore()
+        let address = Address.irrelevant
+        let rri: ResourceIdentifier = "/\(address)/FOOBAR"
+        let rriParticle =  ResourceIdentifierParticle(resourceIdentifier: rri)
+        let particleGroup = try! rriParticle.withSpin(.down).wrapInGroup()
+        let atom = Atom(metaData: .timeNow, particleGroups: [particleGroup])
+        atomStore.store(atomObservation: .stored(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        let upParticles = atomStore.upParticles(at: address)
+        XCTAssertTrue(upParticles.isEmpty)
+    }
+    
+    func test_when_getting_up_particles_from_store_with_an_atom_with_one_up_particle_then_deleted__store_should_return_an_empty_stream() {
+        let atomStore = InMemoryAtomStore()
+        let address = Address.irrelevant
+        let rri: ResourceIdentifier = "/\(address)/FOOBAR"
+        let rriParticle =  ResourceIdentifierParticle(resourceIdentifier: rri)
+        let spunUpRRIParticle = rriParticle.withSpin(.up)
+        let particleGroup = try!  spunUpRRIParticle.wrapInGroup()
+        let atom = Atom(metaData: .timeNow, particleGroups: [particleGroup])
+        atomStore.store(atomObservation: .stored(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        atomStore.store(atomObservation: .deleted(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        let upParticles = atomStore.upParticles(at: address)
+        XCTAssertTrue(upParticles.isEmpty)
+    }
+    
+    func test_when_getting_up_particles_from_store_with_dependent_deletes__store_should_return_an_empty_stream() {
+        let atomStore = InMemoryAtomStore()
+        let someAddress = Address.irrelevant
+        let particle0 =  ResourceIdentifierParticle(resourceIdentifier: "/\(someAddress)/FOO")
+
+        let atom0 = Atom(
+            metaData: .timeNow,
+            particleGroups: [try! ParticleGroup(spunParticles: [particle0.withSpin(.up)], metaData: .timeNow)]
+        )
+        
+        XCTAssertEqual(atomStore.upParticles(at: someAddress).count, 0)
+        atomStore.store(atomObservation: .stored(atom0), address: someAddress, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        XCTAssertEqual(atomStore.upParticles(at: someAddress).count, 1)
+        
+        let particle1 =  ResourceIdentifierParticle(resourceIdentifier: "/\(someAddress)/BAR")
+        let particle2 =  ResourceIdentifierParticle(resourceIdentifier: "/\(someAddress)/BUZ")
+        
+        let atom1 = Atom(
+            metaData: .timeNow,
+            particleGroups: [
+                try! ParticleGroup(
+                    spunParticles: [
+                        particle0.withSpin(.down),
+                        particle1.withSpin(.up),
+                        particle2.withSpin(.up)
+                    ],
+                    metaData: .timeNow)
+            ]
+        )
+        
+        atomStore.store(atomObservation: .stored(atom1), address: someAddress, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        XCTAssertEqual(atomStore.upParticles(at: someAddress).count, 2)
+        atomStore.store(atomObservation: .deleted(atom0), address: someAddress, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+
+        XCTAssertEqual(atomStore.upParticles(at: someAddress).count, 0)
+    }
+    
+    func test_when_getting_up_particles_from_store_where_collision_occurred_on_soft_state__store_should_return_winner_particle() {
+        let atomStore = InMemoryAtomStore()
+        let someAddress = Address.irrelevant
+        
+        
+        let particle0 =  ResourceIdentifierParticle(resourceIdentifier: "/\(someAddress)/FOO")
+        let particle1 =  ResourceIdentifierParticle(resourceIdentifier: "/\(someAddress)/BAR")
+        
+        let timeNow = Date()
+        
+        let atom0 = Atom(
+            metaData: .timestamp(timeNow.advanced(by: 0)),
+            particleGroups: [
+                try! ParticleGroup(
+                    spunParticles: [
+                        particle0.withSpin(.down),
+                        particle1.withSpin(.up) // <- Particle1️⃣
+                    ],
+                    metaData: .timeNow)
+            ]
+        )
+
+        atomStore.store(atomObservation: AtomObservation.stored(atom0, isSoft: true), address: someAddress, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+
+        let particle2 =  ResourceIdentifierParticle(resourceIdentifier: "/\(someAddress)/BUZ")
+       
+        let atom1 = Atom(
+            metaData: .timestamp(timeNow.advanced(by: 1)),
+            particleGroups: [
+                try! ParticleGroup(
+                    spunParticles: [
+                        particle0.withSpin(.down),
+                        particle2.withSpin(.up) // <- Particle2️⃣
+                    ],
+                    metaData: .timeNow)
+            ]
+        )
+        
+        atomStore.store(atomObservation: .stored(atom1), address: someAddress, notifyListenerMode: .notifyOnAtomUpdateAndSync)
+        
+        let upParticles = atomStore.upParticles(at: someAddress)
+        XCTAssertEqual(upParticles.count, 1)
+        guard let fetchedRRIParticle = upParticles[0].someParticle as? ResourceIdentifierParticle else {
+            return XCTFail("Wrong type")
+        }
+        XCTAssertEqual(fetchedRRIParticle, particle2) // <- Particle2️⃣
+    }
 }
 
 extension Array where Element == Atom {

@@ -381,6 +381,6 @@ extension ResourceIdentifier {
     static let irrelevant: Self = .withAddress(.irrelevant)
     
     static func withAddress(_ address: Address) -> Self {
-        "/\(address)/\(String.irrelevant)"
+        "/\(address)/\(UUID().uuidString.suffix(5))"
     }
 }
