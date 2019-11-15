@@ -44,14 +44,18 @@ public extension DefaultAtomToSendMessageActionMapper {
             return Just([]).eraseToAnyPublisher()
         }
         
-//        return activeAccount.flatMap {
-//            $0.privateKeyForSigning
-//        }.map {
-//            try EncryptedMessageContext(atom: atom).decryptMessageIfNeeded(key: $0)
-//        }.map {
-//            [$0]
-//        }
-        incorrectImplementation()
+        return activeAccount.flatMap {
+            $0.privateKeyForSigning
+        }.map { // TODO Combine: replace with `tryMap` and propagate errors
+            do {
+                return try EncryptedMessageContext(atom: atom).decryptMessageIfNeeded(key: $0)
+            } catch {
+                unexpectedlyMissedToCatch(error: error)
+            }
+        }.map {
+            [$0]
+        }
+        .eraseToAnyPublisher()
     }
 }
 

@@ -228,6 +228,7 @@
 		E6506912237EC3D200AB420D /* TokenBalancesReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506911237EC3D200AB420D /* TokenBalancesReducerTests.swift */; };
 		E6506914237EE47000AB420D /* TokenBalancesReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506913237EE47000AB420D /* TokenBalancesReducer.swift */; };
 		E6506916237F017100AB420D /* TokenBalancesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506915237F017100AB420D /* TokenBalancesTests.swift */; };
+		E6506918237F3CF100AB420D /* DefaultAtomToTransactionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506917237F3CF100AB420D /* DefaultAtomToTransactionMapperTests.swift */; };
 		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
@@ -842,6 +843,7 @@
 		E6506911237EC3D200AB420D /* TokenBalancesReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalancesReducerTests.swift; sourceTree = "<group>"; };
 		E6506913237EE47000AB420D /* TokenBalancesReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalancesReducer.swift; sourceTree = "<group>"; };
 		E6506915237F017100AB420D /* TokenBalancesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalancesTests.swift; sourceTree = "<group>"; };
+		E6506917237F3CF100AB420D /* DefaultAtomToTransactionMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAtomToTransactionMapperTests.swift; sourceTree = "<group>"; };
 		E6533FDF22BA63620068B07D /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		E6533FE222BA638B0068B07D /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		E654778822BFB3B700D968BD /* BootstrapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootstrapConfig.swift; sourceTree = "<group>"; };
@@ -2847,6 +2849,7 @@
 				E6506905237D805A00AB420D /* AtomPullerTests */,
 				E69A8A78237C410500AC4A0E /* HTTPClientTests */,
 				E6E0BFBE2375BF8E00B946A7 /* NetworkEpicTests */,
+				E6506917237F3CF100AB420D /* DefaultAtomToTransactionMapperTests.swift */,
 			);
 			path = NEW;
 			sourceTree = "<group>";
@@ -4432,6 +4435,7 @@
 				E6E27A552271EEE20067D46E /* XCTestCase_Extensions.swift in Sources */,
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
 				E6E0BFC02375BFA100B946A7 /* NetworkEpicTestCase.swift in Sources */,
+				E6506918237F3CF100AB420D /* DefaultAtomToTransactionMapperTests.swift in Sources */,
 				E67A8CC6235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */,
 				E605544D23058AA100528510 /* ParticleSet.swift in Sources */,
 				E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */,

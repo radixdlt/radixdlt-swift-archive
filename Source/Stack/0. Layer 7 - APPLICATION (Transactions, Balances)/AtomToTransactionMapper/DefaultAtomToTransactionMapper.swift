@@ -44,14 +44,16 @@ public extension DefaultAtomToTransactionMapper {
 public extension DefaultAtomToTransactionMapper {
     
     func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, Never> {
-//        return CombineObservable.combineLatest(
-//            atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
-//        ) { $0.flatMap { $0 } }
-//            .map { optionalActions in return optionalActions.compactMap { $0 } }
-//            .map { ExecutedTransaction(atom: atom, actions: $0) }
-        combineMigrationInProgress()
+        Publishers.MergeMany(
+            atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
+        )
+        .collect(atomToExecutedActionMappers.count)
+            .map { matrix in matrix.flatMap { $0 } }
+            .map {
+                ExecutedTransaction(atom: atom, actions: $0)
+            }
+            .eraseToAnyPublisher()
     }
-    
 }
 
 // MARK: - Default mappers

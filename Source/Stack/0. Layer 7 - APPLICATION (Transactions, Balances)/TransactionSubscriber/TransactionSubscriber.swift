@@ -62,10 +62,13 @@ public extension TransactionSubscriber {
         at address: Address
     ) -> AnyPublisher<Action, Never> where Action: UserAction {
         
-//        observeTransactions(at: address)
-//            .flatMap { CombineObservable.from($0.actions(ofType: actionType)) }
-//        .eraseToAnyPublisher()
-        combineMigrationInProgress()
+        observeTransactions(at: address)
+            .flatMap { executedTransaction -> AnyPublisher<Action, Never> in
+                let executedActions = executedTransaction.actions(ofType: actionType)
+                return Publishers.Sequence(sequence: executedActions)
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
     }
     
 }
