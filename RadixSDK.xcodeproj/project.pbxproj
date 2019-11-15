@@ -226,6 +226,7 @@
 		E650690C237DA84100AB420D /* AtomNotificationModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650690B237DA84100AB420D /* AtomNotificationModeTests.swift */; };
 		E650690E237E8E5D00AB420D /* InMemoryAtomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650690D237E8E5D00AB420D /* InMemoryAtomStore.swift */; };
 		E6506912237EC3D200AB420D /* TokenBalancesReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506911237EC3D200AB420D /* TokenBalancesReducerTests.swift */; };
+		E6506914237EE47000AB420D /* TokenBalancesReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506913237EE47000AB420D /* TokenBalancesReducer.swift */; };
 		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
@@ -838,6 +839,7 @@
 		E650690B237DA84100AB420D /* AtomNotificationModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomNotificationModeTests.swift; sourceTree = "<group>"; };
 		E650690D237E8E5D00AB420D /* InMemoryAtomStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryAtomStore.swift; sourceTree = "<group>"; };
 		E6506911237EC3D200AB420D /* TokenBalancesReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalancesReducerTests.swift; sourceTree = "<group>"; };
+		E6506913237EE47000AB420D /* TokenBalancesReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalancesReducer.swift; sourceTree = "<group>"; };
 		E6533FDF22BA63620068B07D /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		E6533FE222BA638B0068B07D /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		E654778822BFB3B700D968BD /* BootstrapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootstrapConfig.swift; sourceTree = "<group>"; };
@@ -2665,6 +2667,7 @@
 				E626E1E522B3FB530046D2AC /* TokenBalance.swift */,
 				E626E1E922B3FBBE0046D2AC /* TokenBalances.swift */,
 				E696AAD2226DE84100D19ED6 /* AccountBalancing.swift */,
+				E6506913237EE47000AB420D /* TokenBalancesReducer.swift */,
 			);
 			path = AccountBalancing;
 			sourceTree = "<group>";
@@ -4263,6 +4266,7 @@
 				E6E279862271CD1C0067D46E /* ChronoMetaData.swift in Sources */,
 				E640F63F225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift in Sources */,
 				E626E1EA22B3FBBE0046D2AC /* TokenBalances.swift in Sources */,
+				E6506914237EE47000AB420D /* TokenBalancesReducer.swift in Sources */,
 				E6E279352271CD1C0067D46E /* Mnemonic+Error.swift in Sources */,
 				E689DBBB225F96CB00340CF3 /* NodeNetworkDetailsRequesting.swift in Sources */,
 				E6E279232271CD1C0067D46E /* Status.swift in Sources */,

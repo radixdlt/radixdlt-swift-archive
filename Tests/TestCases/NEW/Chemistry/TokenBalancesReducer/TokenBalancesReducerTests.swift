@@ -28,7 +28,7 @@ import Combine
 
 class TokenBalancesReducerTests: TestCase {
     
-    func test_balance_of_single_token() throws {
+    func test_balance_of_single_token_balance_then_token_state() throws {
         
         let address = Address.irrelevant
         let rriFoo = ResourceIdentifier(address: address, name: "FOO")
@@ -55,6 +55,83 @@ class TokenBalancesReducerTests: TestCase {
             XCTAssertEqual(tokenBalance.token.supply, supplyFoo)
             XCTAssertEqual(tokenBalance.amount, amountFoo)
         }
+    }
+    
+    func test_balance_of_single_token_token_state_then_balance() throws {
+        
+        let address = Address.irrelevant
+        let rriFoo = ResourceIdentifier(address: address, name: "FOO")
+        let tokenFoo = TokenDefinition(rri: rriFoo)
+        
+        let amountFoo: NonNegativeAmount = 5
+        let supplyFoo: Supply = 100
+        
+        try doTestSingle(
+            address: address,
+            
+            input: { balanceStateSubject, tokensStateSubject in
+                
+                tokensStateSubject.send([
+                    rriFoo: TokenDefinitionsState.Value.full(TokenState(token: tokenFoo, supply: supplyFoo))
+                ])
+                
+                balanceStateSubject.send([
+                    rriFoo: TokenReferenceBalance(tokenResourceIdentifier: rriFoo, amount: amountFoo, owner: address)
+                ])
+            
+        }
+        ) { tokenBalance in
+            XCTAssertEqual(tokenBalance.token.tokenDefinitionReference, rriFoo)
+            XCTAssertEqual(tokenBalance.owner, address)
+            XCTAssertEqual(tokenBalance.token.supply, supplyFoo)
+            XCTAssertEqual(tokenBalance.amount, amountFoo)
+        }
+    }
+    
+    
+    func test_two_balance_updates_of_single_token() throws {
+        
+        let address = Address.irrelevant
+        let symbol: Symbol = "FOO"
+        let rri = ResourceIdentifier(address: address, symbol: symbol)
+        let token = TokenDefinition(rri: rri)
+        
+        let supply: Supply = 100
+        
+        try doTest(
+            address: address,
+            expectedNumberOfOutputs: 2,
+            input: { balanceStateSubject, tokensStateSubject in
+                balanceStateSubject.send([
+                    rri: TokenReferenceBalance(tokenResourceIdentifier: rri, amount: 42, owner: address)
+                ])
+                
+                tokensStateSubject.send([
+                    rri: TokenDefinitionsState.Value.full(TokenState(token: token, supply: supply))
+                ])
+                
+                balanceStateSubject.send([
+                    rri: TokenReferenceBalance(tokenResourceIdentifier: rri, amount: 237, owner: address)
+                ])
+        },
+            
+            assertCorrectnessOfOutput: { output in
+                
+                let firstTokenBalances = output[0]
+                var tokenBalance = try XCTUnwrap(firstTokenBalances.balance(ofToken: rri))
+                XCTAssertEqual(tokenBalance.token.tokenDefinitionReference, rri)
+                XCTAssertEqual(tokenBalance.owner, address)
+                XCTAssertEqual(tokenBalance.token.supply, supply)
+                XCTAssertEqual(tokenBalance.amount, 42)
+                
+                let secondTokenBalances = output[1]
+                tokenBalance = try XCTUnwrap(secondTokenBalances.balance(ofToken: rri))
+                XCTAssertEqual(tokenBalance.token.tokenDefinitionReference, rri)
+                XCTAssertEqual(tokenBalance.owner, address)
+                XCTAssertEqual(tokenBalance.token.supply, supply)
+                XCTAssertEqual(tokenBalance.amount, 237)
+        }
+        )
     }
     
     
