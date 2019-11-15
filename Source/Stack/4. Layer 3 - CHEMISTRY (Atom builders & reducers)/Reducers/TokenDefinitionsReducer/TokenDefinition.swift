@@ -55,6 +55,10 @@ public struct TokenDefinition: TokenConvertible, Hashable {
         self.iconUrl = iconUrl
         self.tokenPermissions = tokenPermissions
         self.supply = supply
+        
+        if tokenSupplyType == .fixed && supply == Supply.zero {
+            incorrectImplementation("Fixed supply of zero is not allowed")
+        }
     }
 }
 

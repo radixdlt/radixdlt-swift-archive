@@ -27,7 +27,7 @@ import Combine
 
 // MARK: - RadixApplicationClient
 
- // swiftlint:disable opening_brace colon
+// swiftlint:disable opening_brace colon
 
 public final class RadixApplicationClient:
     AccountBalancing,
@@ -49,7 +49,7 @@ public final class RadixApplicationClient:
     // swiftlint:enable opening_brace colon
     
     // MARK: - Stored properties
-
+    
     /// The chosen Radix universe, a network of nodes running a specific version of the Radix Node Runner software
     public let universe: RadixUniverse
     
@@ -64,7 +64,7 @@ public final class RadixApplicationClient:
     
     /// A subscriber of executed transactions at a given address
     private let transactionSubscriber: TransactionSubscriber
-
+    
     private var cancellables = Set<AnyCancellable>()
     
     public init(
@@ -193,22 +193,90 @@ public extension RadixApplicationClient {
 }
 
 // MARK: AccountBalancing
+public struct TokenBalancesReducer {
+    public typealias TokenBalancesOfAddress = (Address) -> AnyPublisher<TokenBalances, Never>
+    public let tokenBalancesOfAddress: TokenBalancesOfAddress
+    init(tokenBalancesOfAddress: @escaping TokenBalancesOfAddress) {
+        self.tokenBalancesOfAddress = tokenBalancesOfAddress
+    }
+}
+
+public extension TokenBalancesReducer {
+    
+    static func usingApplicationClient(_ app: RadixApplicationClient) -> Self {
+        Self(
+            makeBalanceReferencesStatePublisher: { [unowned app] in app.observeBalanceReferences(at: $0) },
+            makeTokenDefinitionsPublisher: { [unowned app] in app.observeTokenDefinitions(at: $0) }
+        )
+    }
+    
+    init(
+        makeBalanceReferencesStatePublisher: @escaping (Address) -> AnyPublisher<TokenBalanceReferencesState, Never>,
+        makeTokenDefinitionsPublisher: @escaping (Address) -> AnyPublisher<TokenDefinitionsState, Never>
+    ) {
+        self.init { address in
+
+            return makeBalanceReferencesStatePublisher(address)
+                .flatMap { state -> AnyPublisher<TokenBalances, Never> in
+                    Publishers.Sequence<[TokenReferenceBalance], Never>(sequence: state.tokenReferenceBalances)
+                        .flatMap { tokenReferenceBalance -> AnyPublisher<TokenBalance, Never> in
+                            makeTokenDefinitionsPublisher(tokenReferenceBalance.tokenResourceIdentifier.address)
+                                .tryMap { tokenDefinitionState -> TokenBalance in
+                                    
+                                    guard
+                                        case let rri = tokenReferenceBalance.tokenResourceIdentifier,
+                                        let tokenDefinition = tokenDefinitionState.tokenDefinition(identifier: rri)
+                                        else { incorrectImplementation("Expected token definition") }
+                                    
+                                    return try TokenBalance(tokenDefinition: tokenDefinition, tokenReferenceBalance: tokenReferenceBalance)
+                            }
+                            .crashOnFailure()
+                    }
+                    .collect(state.tokenReferenceBalances.count)
+                    .eraseToAnyPublisher()
+                    .map { (tokenBalances: [TokenBalance]) -> TokenBalances in
+                        TokenBalances(balances: tokenBalances)
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+        }
+    }
+    
+}
+
 public extension RadixApplicationClient {
     
-    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, Never> {
-//        return observeBalanceReferences(at: owner.address).flatMap {
-//            CombineObservable.combineLatest($0.dictionary.values
-//                .map { tokenReferenceBalance -> AnyPublisher<TokenBalance, Never> in
-//                    let rriOfToken = tokenReferenceBalance.tokenResourceIdentifier
-//                    return self.observeTokenDefinitions(at: rriOfToken.address).map { tokenDefinitionState -> TokenBalance in
+//    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, Never> {
 //
-//                        guard let tokenDefinition = tokenDefinitionState.tokenDefinition(identifier: rriOfToken) else { incorrectImplementation("Expected token definition") }
+//        self.observeBalanceReferences(at: owner.address)
+//            .flatMap { state -> AnyPublisher<TokenBalances, Never> in
+//                Publishers.Sequence<[TokenReferenceBalance], Never>(sequence: state.tokenReferenceBalances)
+//                    .flatMap { [unowned self] tokenReferenceBalance -> AnyPublisher<TokenBalance, Never> in
+//                        self.observeTokenDefinitions(at: tokenReferenceBalance.tokenResourceIdentifier.address)
+//                            .tryMap { tokenDefinitionState -> TokenBalance in
 //
-//                        return try TokenBalance(tokenDefinition: tokenDefinition, tokenReferenceBalance: tokenReferenceBalance)
+//                                guard
+//                                    case let rri = tokenReferenceBalance.tokenResourceIdentifier,
+//                                    let tokenDefinition = tokenDefinitionState.tokenDefinition(identifier: rri)
+//                                    else { incorrectImplementation("Expected token definition") }
+//
+//                                return try TokenBalance(tokenDefinition: tokenDefinition, tokenReferenceBalance: tokenReferenceBalance)
+//                        }
+//                        .crashOnFailure()
 //                    }
-//            }) { $0 }
-//            }.map { TokenBalances(balances: $0) }.eraseToAnyPublisher()
-        combineMigrationInProgress()
+//                    .collect(state.tokenReferenceBalances.count)
+//                    .eraseToAnyPublisher()
+//                    .map { (tokenBalances: [TokenBalance]) -> TokenBalances in
+//                        TokenBalances(balances: tokenBalances)
+//                    }
+//                    .eraseToAnyPublisher()
+//        }
+//        .eraseToAnyPublisher()
+//    }
+    
+    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, Never> {
+        TokenBalancesReducer.usingApplicationClient(self).tokenBalancesOfAddress(owner.address)
     }
 }
 
@@ -220,7 +288,7 @@ public extension RadixApplicationClient {
         at address: Address
     ) -> AnyPublisher<State, Never>
         where State: ApplicationState {
-        return stateSubscriber.observeState(ofType: stateType, at: address)
+            return stateSubscriber.observeState(ofType: stateType, at: address)
     }
 }
 
@@ -241,14 +309,14 @@ public extension RadixApplicationClient {
         let address = identifier.address
         return observeTokenDefinitions(at: address).map {
             $0.tokenDefinition(identifier: identifier)
-            }.replaceNilWithEmpty()
+        }.replaceNilWithEmpty()
     }
     
     func observeTokenState(identifier: ResourceIdentifier) -> AnyPublisher<TokenState, Never> {
         let address = identifier.address
         return observeTokenDefinitions(at: address).map {
             $0.tokenState(identifier: identifier)
-            }.replaceNilWithEmpty()
+        }.replaceNilWithEmpty()
     }
 }
 
@@ -267,15 +335,15 @@ public extension RadixApplicationClient {
 // MARK: ActiveAccountOwner
 public extension RadixApplicationClient {
     var addressOfActiveAccount: Address { snapshotActiveAccount.addressFromMagic(magic) }
-
+    
     func observeAddressOfActiveAccount() -> AnyPublisher<Address, Never> {
         identity.activeAccountObservable
             .map { newActiveAccount in
                 newActiveAccount.addressFromMagic(self.magic)
-            }
-            .eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
     }
-
+    
     func observeActiveAccount() -> AnyPublisher<Account, Never> {
         identity.activeAccountObservable
     }
@@ -287,18 +355,18 @@ public extension RadixApplicationClient {
     var universeConfig: UniverseConfig { universe.config }
     
     var nativeTokenDefinition: TokenDefinition { universe.nativeTokenDefinition }
- 
+    
     var nativeTokenIdentifier: ResourceIdentifier { nativeTokenDefinition.tokenDefinitionReference }
     
     @discardableResult
     func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
         identity.selectAccount(accountSelector)
     }
-
+    
     func changeAccount(to selectedAccount: Account) {
         identity.changeAccount(to: selectedAccount)
     }
-
+    
     func addAccount(_ newAccount: Account) {
         identity.addAccount(newAccount)
     }
@@ -310,7 +378,7 @@ public extension RadixApplicationClient {
     func pull() -> Cancellable {
         pull(address: addressOfActiveAccount)
     }
-
+    
     var snapshotActiveAccount: Account {
         identity.snapshotActiveAccount
     }
