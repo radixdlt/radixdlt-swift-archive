@@ -38,7 +38,9 @@ public struct MessageParticle:
     ParticleConvertible,
     RadixModelTypeStaticSpecifying,
     Accountable,
-    RadixCodable {
+    RadixCodable,
+    Equatable
+{
 // swiftlint:enable colon
     
     public static let serializer = RadixModelType.messageParticle

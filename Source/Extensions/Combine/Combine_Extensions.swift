@@ -90,7 +90,15 @@ public extension Publisher {
         _ file: String = #file,
         _ line: Int = #line
     ) -> AnyPublisher<Output, Never> {
-        assertNoFailure("\(prefix) - line: \(line), in function: \(function), in file: \(file)")
-            .eraseToAnyPublisher()
+        
+        let message = "\(prefix) - line: \(line), in function: \(function), in file: \(file)"
+       
+        return self.tryCatch { error -> AnyPublisher<Output, Failure> in
+            Swift.print(message)
+            unexpectedlyMissedToCatch(error: error)
+            return self.eraseToAnyPublisher()
+        }
+        .assertNoFailure(message)
+        .eraseToAnyPublisher()
     }
 }

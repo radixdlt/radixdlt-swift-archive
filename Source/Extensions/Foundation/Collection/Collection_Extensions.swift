@@ -49,3 +49,21 @@ internal extension Collection {
         return .many(head: firstElement, tail: tail)
     }
 }
+
+internal enum OneTwoAndMany<Element> {
+    case one(single: Element)
+    case two(first: Element, secondAndLast: Element)
+    case many(head: Element, tail: [Element])
+}
+
+extension Collection where Self: NonEmptyCollection {
+    var countedElementsOneTwoAndMany: OneTwoAndMany<Element> {
+        guard count > 1 else { return .one(single: first) }
+        
+        if count == 2 {
+            return .two(first: first, secondAndLast: last)
+        } else {
+            return .many(head: first, tail: [Element](self.dropFirst()))
+        }
+    }
+}

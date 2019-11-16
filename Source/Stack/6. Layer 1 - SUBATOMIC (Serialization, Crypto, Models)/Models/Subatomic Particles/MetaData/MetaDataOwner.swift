@@ -39,19 +39,21 @@ extension ParticleGroup: MetaDataOwner {}
 
 public extension Array where Element: MetaDataOwner {
     
-    func firstWhere(metaDatavalue value: MetaData.Value, forKey key: MetaDataKey, condition equality: (MetaData.Value?, MetaData.Value) -> Bool) -> Element? {
+    func firstWhere(metaDataValue value: MetaData.Value, forKey key: MetaDataKey, condition equality: (MetaData.Value?, MetaData.Value) -> Bool) -> Element? {
         return first(where: { equality($0.metaData.valueFor(key: key), value) })
     }
     
+    /// First where value for key *not* equals specified unwanted value
     func firstWhereMetaDataValueFor(key: MetaDataKey, notEquals value: MetaData.Value) -> Element? {
-        return firstWhere(metaDatavalue: value, forKey: key, condition: { $0 != $1 })
+        return firstWhere(metaDataValue: value, forKey: key, condition: { $0 != $1 })
     }
     
+    /// First where value for key equals specified value
     func firstWhereMetaDataValueFor(key: MetaDataKey, equals value: MetaData.Value) -> Element? {
-        return firstWhere(metaDatavalue: value, forKey: key, condition: { $0 == $1 })
+        return firstWhere(metaDataValue: value, forKey: key, condition: { $0 == $1 })
     }
     
-    func firstWhere(metaDatavalue value: MetaDataCommonValue, forKey key: MetaDataKey, condition equality: @escaping (MetaDataCommonValue, MetaDataCommonValue) -> Bool) -> Element? {
+    func firstWhere(metaDataValue value: MetaDataCommonValue, forKey key: MetaDataKey, condition equality: @escaping (MetaDataCommonValue, MetaDataCommonValue) -> Bool) -> Element? {
         
         let mappedEquality: ((MetaData.Value?, MetaData.Value) -> Bool) = {
             guard let lhsUnmapped = $0, case let rhsUnmapped = $1 else { return false }
@@ -61,14 +63,14 @@ public extension Array where Element: MetaDataOwner {
             return equality(lhs, rhs)
         }
         
-        return firstWhere(metaDatavalue: value.rawValue, forKey: key, condition: mappedEquality)
+        return firstWhere(metaDataValue: value.rawValue, forKey: key, condition: mappedEquality)
     }
     
     func firstWhereMetaDataValueFor(key: MetaDataKey, notEquals value: MetaDataCommonValue) -> Element? {
-        return firstWhere(metaDatavalue: value, forKey: key, condition: { $0 != $1 })
+        return firstWhere(metaDataValue: value, forKey: key, condition: { $0 != $1 })
     }
     
     func firstWhereMetaDataValueFor(key: MetaDataKey, equals value: MetaDataCommonValue) -> Element? {
-        return firstWhere(metaDatavalue: value, forKey: key, condition: { $0 == $1 })
+        return firstWhere(metaDataValue: value, forKey: key, condition: { $0 == $1 })
     }
 }
