@@ -171,18 +171,22 @@ private extension DefaultTransactionMaker {
     }
     
     var addressOfActiveAccount: AnyPublisher<Address, Never> {
-        return activeAccount.map { [unowned self] in
+        activeAccount.map { [unowned self] in
             self.addressOf(account: $0)
         }.eraseToAnyPublisher()
     }
     
     func buildAtomFrom(transaction: Transaction) throws -> Single<UnsignedAtom, Never> {
-//        return addressOfActiveAccount.flatMapToSingle { [unowned self] in
-//            let atom = try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: $0)
-//            return self.addFee(to: atom).map {
-//                try UnsignedAtom(atomWithPow: $0)
-//            }
-//        }
-        combineMigrationInProgress()
+        addressOfActiveAccount.tryMap { [unowned self] address in
+            try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: address)
+        }
+        .crashOnFailure()
+        .flatMap { [unowned self] atom in
+            return self.addFee(to: atom)
+        }
+        .tryMap { atomWithFee in
+            try UnsignedAtom(atomWithPow: atomWithFee)
+        }
+        .crashOnFailure()
     }
 }
