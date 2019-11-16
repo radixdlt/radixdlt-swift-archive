@@ -404,6 +404,143 @@ final class AtomStoreTests: TestCase {
         }
         XCTAssertEqual(fetchedRRIParticle, particle2) // <- Particle2️⃣
     }
+
+    func test___onSync___when_subscribed_before_a_head_is_stored_on_same_address_using_listener_mode___notifyOnSync___then_a_date_should_be_observed() {
+        let atomStore = InMemoryAtomStore()
+        
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        var outputtedValues = [Date]()
+        
+        let expectedNumberOfOutputtedValues = 1
+        
+        let cancellable = atomStore.onSync(address: address)
+            .prefix(expectedNumberOfOutputtedValues)
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedValues.append($0) }
+            )
+        
+        let date1 = Date(timeIntervalSinceNow: -10_000)
+        let milliseconds10Ago: TimeInterval = -0.01
+        XCTAssertGreaterThanOrEqual(abs(date1.timeIntervalSinceNow), abs(milliseconds10Ago))
+        
+        atomStore.store(atomObservation: .head(receivedAt: date1), address: address, notifyListenerMode: .notifyOnSync)
+        
+        wait(for: [expectation], timeout: 0.1)
+        
+        XCTAssertEqual(outputtedValues.count, expectedNumberOfOutputtedValues)
+        XCTAssertNotEqual(outputtedValues[0], date1, "The date of the sync should not be the same as the date of the AtomObservation")
+        XCTAssertGreaterThanOrEqual(outputtedValues[0].timeIntervalSinceNow, milliseconds10Ago) // max 10 ms ago
+        
+        XCTAssertNotNil(cancellable)
+    }
+    
+    func test___onSync___when_subscribed_after_a_head_is_stored_on_same_address_using_listener_mode___notifyOnSync___then_a_date_should_be_observed() {
+        
+        let atomStore = InMemoryAtomStore()
+        
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        var outputtedValues = [Date]()
+        let expectedNumberOfOutputtedValues = 1
+        
+        let date1 = Date(timeIntervalSinceNow: -10_000)
+        atomStore.store(atomObservation: .head(receivedAt: date1), address: address, notifyListenerMode: .notifyOnSync)
+        
+        let cancellable = atomStore.onSync(address: address)
+            .prefix(expectedNumberOfOutputtedValues)
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedValues.append($0) }
+        )
+        
+        let milliseconds10Ago: TimeInterval = -0.01
+        XCTAssertGreaterThanOrEqual(abs(date1.timeIntervalSinceNow), abs(milliseconds10Ago))
+        
+        wait(for: [expectation], timeout: 0.1)
+        
+        XCTAssertEqual(outputtedValues.count, expectedNumberOfOutputtedValues)
+        XCTAssertNotEqual(outputtedValues[0], date1, "The date of the sync should not be the same as the date of the AtomObservation")
+        XCTAssertGreaterThanOrEqual(outputtedValues[0].timeIntervalSinceNow, milliseconds10Ago) // max 10 ms ago
+        
+        XCTAssertNotNil(cancellable)
+    }
+    
+    func test___onSync___when_subscribed_before_a_head_is_stored_on_same_address_using_listener_mode___donʼtNotify___then_a_date_should_be_observed() {
+        
+        let atomStore = InMemoryAtomStore()
+        
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        var outputtedValues = [Date]()
+        
+        let cancellable = atomStore.onSync(address: address)
+            .first()
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedValues.append($0) }
+            )
+        
+        
+        atomStore.store(atomObservation: .headNow(), address: address, notifyListenerMode: .donʼtNotify)
+        expectation.fulfill()
+        
+        wait(for: [expectation], timeout: 0.1)
+        
+        XCTAssertEqual(outputtedValues.count, 0)
+        XCTAssertNotNil(cancellable)
+    }
+   
+    func test___onSync___when_subscribed_before_a_head_is_stored_on_different_address_we_dont_get_notified() {
+        
+        let atomStore = InMemoryAtomStore()
+        let alice: Address = .irrelevant(index: 1)
+        let bob: Address = .irrelevant(index: 2)
+        
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        var outputtedValues = [Date]()
+        
+        let cancellable = atomStore.onSync(address: alice)
+            .first()
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedValues.append($0) }
+            )
+        
+        
+        atomStore.store(atomObservation: .headNow(), address: bob, notifyListenerMode: .notifyOnSync)
+        expectation.fulfill()
+        
+        wait(for: [expectation], timeout: 0.1)
+        
+        XCTAssertEqual(outputtedValues.count, 0)
+        XCTAssertNotNil(cancellable)
+    }
+    
+    func test___onSync___when_subscribed_after_a_head_is_stored_on_different_address_we_dont_get_notified() {
+        
+        let atomStore = InMemoryAtomStore()
+        let alice: Address = .irrelevant(index: 1)
+        let bob: Address = .irrelevant(index: 2)
+        
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        var outputtedValues = [Date]()
+        
+        atomStore.store(atomObservation: .headNow(), address: bob, notifyListenerMode: .notifyOnSync)
+
+        let cancellable = atomStore.onSync(address: alice)
+            .first()
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedValues.append($0) }
+        )
+        
+        expectation.fulfill()
+        
+        wait(for: [expectation], timeout: 0.1)
+        
+        XCTAssertEqual(outputtedValues.count, 0)
+        XCTAssertNotNil(cancellable)
+    }
 }
 
 extension Array where Element == Atom {

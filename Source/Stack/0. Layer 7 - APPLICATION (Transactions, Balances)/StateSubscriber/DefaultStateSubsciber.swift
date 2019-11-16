@@ -33,7 +33,7 @@ public final class DefaultStateSubscriber: StateSubscriber {
     public init(
         atomStore: AtomStore,
         particlesToStateReducer: ParticlesToStateReducer = DefaultParticlesToStateReducer.init()
-        ) {
+    ) {
         self.atomStore = atomStore
         self.particlesToStateReducer = particlesToStateReducer
     }
@@ -46,14 +46,14 @@ public extension DefaultStateSubscriber {
         at address: Address
     ) -> AnyPublisher<State, Never> where State: ApplicationState {
         
-//        return atomStore.onSync(address: address)
-//            .map { [unowned self] date in
-//                let upParticles = self.atomStore.upParticles(at: address)
-//                let reducedState = try self.particlesToStateReducer.reduce(upParticles: upParticles, to: stateType)
-//                return reducedState
-//        }
-        
-        combineMigrationInProgress()
+        return atomStore.onSync(address: address)
+            .mapToVoid()
+            .tryMap { [unowned self] in
+                let upParticles = self.atomStore.upParticles(at: address)
+                let reducedState = try self.particlesToStateReducer.reduce(upParticles: upParticles, to: stateType)
+                return reducedState
+            }
+            .crashOnFailure()
     }
 }
 

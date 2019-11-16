@@ -48,6 +48,11 @@ public extension Publisher {
     func compactMap<T>(typeAs _: T.Type) -> AnyPublisher<T, Failure> {
         compactMap { $0 as? T }.eraseToAnyPublisher()
     }
+    
+    func mapToVoid() -> AnyPublisher<Void, Failure> {
+        map { _ in Void() }.eraseToAnyPublisher()
+    }
+
 }
 
 // MARK: andThen
@@ -90,15 +95,12 @@ public extension Publisher {
         _ file: String = #file,
         _ line: Int = #line
     ) -> AnyPublisher<Output, Never> {
-        
-        let message = "\(prefix) - line: \(line), in function: \(function), in file: \(file)"
        
         return self.tryCatch { error -> AnyPublisher<Output, Failure> in
-            Swift.print(message)
+            Swift.print("\(prefix) - line: \(line), in function: \(function), in file: \(file)")
             unexpectedlyMissedToCatch(error: error)
-            return self.eraseToAnyPublisher()
         }
-        .assertNoFailure(message)
+        .assertNoFailure()
         .eraseToAnyPublisher()
     }
 }
