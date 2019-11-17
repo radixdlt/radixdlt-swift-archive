@@ -23,13 +23,23 @@
 //
 
 import Foundation
-import Combine
 
-// swiftlint:disable all
+public enum HTTPClientError: Swift.Error, Equatable {
+    indirect case networkingError(NetworkingError)
+    indirect case serializationError(SerializationError)
+}
 
-// Replaced: `RxSwift.Observable`
-public typealias Completable = AnyPublisher<Never, Never>
-
-internal func combineMigrationInProgress() -> Never {
-    fatalError("Migration from RxSwift to Combine in progress")
+public extension HTTPClientError {
+    enum NetworkingError: Swift.Error, Equatable {
+        case urlError(URLError)
+        case invalidServerResponse(URLResponse)
+        case invalidServerStatusCode(Int)
+        
+    }
+    
+    enum SerializationError: Swift.Error, Equatable {
+        case decodingError(DecodingError)
+        case inputDataNilOrZeroLength
+        case stringSerializationFailed(encoding: String.Encoding)
+    }
 }

@@ -24,7 +24,7 @@
 
 import Foundation
 
-// swiftlint:disable colon
+// swiftlint:disable colon opening_brace
 
 /// A way of sending, receiving and storing data from a verified source via a Message Particle type. Message Particle instances may contain arbitrary byte data with arbitrary string-based key-value metadata.
 ///
@@ -41,7 +41,7 @@ public struct MessageParticle:
     RadixCodable,
     Equatable
 {
-// swiftlint:enable colon
+// swiftlint:enable colon opening_brace
     
     public static let serializer = RadixModelType.messageParticle
     

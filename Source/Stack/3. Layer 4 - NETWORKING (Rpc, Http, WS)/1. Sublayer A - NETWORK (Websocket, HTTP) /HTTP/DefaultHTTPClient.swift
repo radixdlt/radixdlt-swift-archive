@@ -25,111 +25,25 @@
 import Foundation
 import Combine
 
-public protocol URLConvertible {
-    var url: URL { get }
-}
-extension URL: URLConvertible {
-    public var url: URL { return self }
-}
-
-public enum HTTPClientError: Swift.Error, Equatable {
-    indirect case networkingError(NetworkingError)
-    indirect case serializationError(SerializationError)
-}
-
-public extension HTTPClientError {
-    enum NetworkingError: Swift.Error, Equatable {
-        case urlError(URLError)
-        case invalidServerResponse(URLResponse)
-        case invalidServerStatusCode(Int)
-        
-    }
-    
-    enum SerializationError: Swift.Error, Equatable {
-        case decodingError(DecodingError)
-        case inputDataNilOrZeroLength
-        case stringSerializationFailed(encoding: String.Encoding)
-    }
-}
-
-public struct DataFetcher {
-    
-    public typealias DataFromRequest = (URLRequest) -> AnyPublisher<Data, HTTPClientError.NetworkingError>
-    let dataFromRequest: DataFromRequest
-}
-
-public extension DataFetcher {
-    
-    static func urlResponse(_ dataAndUrlResponsePublisher: @escaping (URLRequest) -> AnyPublisher<(data: Data, response: URLResponse), URLError>) -> Self {
-        Self { request in
-            dataAndUrlResponsePublisher(request)
-                .mapError { HTTPClientError.NetworkingError.urlError($0) }
-                .tryMap { data, response -> Data in
-                    guard let httpResponse = response as? HTTPURLResponse else {
-                        throw HTTPClientError.NetworkingError.invalidServerResponse(response)
-                    }
-                    guard case 200...299 = httpResponse.statusCode else {
-                        throw HTTPClientError.NetworkingError.invalidServerStatusCode(httpResponse.statusCode)
-                    }
-                    return data
-            }
-            .mapError { castOrKill(instance: $0, toType: HTTPClientError.NetworkingError.self) }
-            .eraseToAnyPublisher()
-            
-        }
-    }
-    
-    static func usingURLSession(_ urlSession: URLSession = .shared) -> Self {
-        return Self.urlResponse { urlSession.dataTaskPublisher(for: $0).eraseToAnyPublisher() }
-    }
-    
-//    static func usingURLSession(_ urlSession: URLSession = .shared) -> Self {
-//        Self { request in
-//             urlSession.dataTaskPublisher(for: request)
-//                .mapError { HTTPClientError.NetworkingError.urlError($0) }
-//                .tryMap { data, response -> Data in
-//                    guard let httpResponse = response as? HTTPURLResponse else {
-//                        throw HTTPClientError.NetworkingError.invalidServerResponse(response)
-//                    }
-//                    guard httpResponse.statusCode == 200 else {
-//                        throw HTTPClientError.NetworkingError.invalidServerStatusCode(httpResponse.statusCode)
-//                    }
-//                    return data
-//             }
-//             .mapError { castOrKill(instance: $0, toType: HTTPClientError.NetworkingError.self) }
-//                .eraseToAnyPublisher()
-//
-//        }
-//    }
-}
-
 public final class DefaultHTTPClient: HTTPClient, Throwing {
     public typealias Error = HTTPClientError
-    
-//    private let urlSession: URLSession
 
     // Internal for testing only
     public let baseUrl: URL
     private let jsonDecoder: JSONDecoder
     private var cancellables = Set<AnyCancellable>()
     
-//    public typealias ResponseFromRequest = (URLRequest) -> AnyPublisher<(data: Data, response: URLResponse), URLError>
-//    private let responseFromRequest: ResponseFromRequest
     private let dataFetcher: DataFetcher
     
     public init(
         baseURL baseURLConvertible: URLConvertible,
-//        urlSession: URLSession = .shared,
         dataFetcher: DataFetcher = .usingURLSession(),
         jsonDecoder: JSONDecoder = .init()
     ) {
         self.baseUrl = baseURLConvertible.url
-//        self.urlSession = urlSession
-//        self.responseFromRequest = responseFromRequest
         self.dataFetcher = dataFetcher
         self.jsonDecoder = jsonDecoder
     }
-    
 }
 
 public extension DefaultHTTPClient {
@@ -138,32 +52,7 @@ public extension DefaultHTTPClient {
     }
 }
 
-// MARK: - HTTPClient
-public extension DefaultHTTPClient {
- 
-    func loadContent(of page: String) -> AnyPublisher<String, Error> {
-//        let url = URL(string: page)!
-//        let urlRequest = URLRequest(url: url)
-//
-//        return Combine.Deferred { [unowned urlSession] in
-//            return Future<String, Error> { promise in
-//                urlSession.responseStringPublisher(for: urlRequest)
-//                    .sink(
-//                        receiveCompletion: { completion in
-//                            guard case .failure(let error) = completion else { return }
-//                            promise(.failure(error))
-//                    },
-//                        receiveValue: { string in
-//                            promise(.success(string))
-//                    }
-//                ).store(in: &self.cancellables)
-//            }
-//
-//        }.eraseToAnyPublisher()
-        combineMigrationInProgress()
-    }
-}
-
+// MARK: HTTPClient
 public extension DefaultHTTPClient {
     
     func perform(absoluteUrlRequest urlRequest: URLRequest) -> AnyPublisher<Data, HTTPClientError.NetworkingError> {
@@ -197,64 +86,4 @@ public extension DefaultHTTPClient {
             .eraseToAnyPublisher()
     }
     
-}
-
-public extension URLSession {
-    func responseStringPublisher(for urlRequest: URLRequest, encoding: String.Encoding? = nil) -> AnyPublisher<String, HTTPClientError> {
-        dataTaskPublisher(for: urlRequest)
-            .mapError { HTTPClientError.networkingError(.urlError($0)) }
-            .tryMap { data, response throws -> String in
-                
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    throw HTTPClientError.networkingError(.invalidServerResponse(response))
-                }
-                
-                guard !data.isEmpty else {
-                    guard emptyResponseAllowed(forRequest: urlRequest, response: httpResponse) else {
-                        throw HTTPClientError.serializationError(.inputDataNilOrZeroLength)
-                    }
-                    return ""
-                }
-                
-                var convertedEncoding = encoding
-                
-                if let encodingName = httpResponse.textEncodingName as CFString?, convertedEncoding == nil {
-                    let ianaCharSet = CFStringConvertIANACharSetNameToEncoding(encodingName)
-                    let nsStringEncoding = CFStringConvertEncodingToNSStringEncoding(ianaCharSet)
-                    convertedEncoding = String.Encoding(rawValue: nsStringEncoding)
-                }
-                
-                let actualEncoding = convertedEncoding ?? .isoLatin1
-                
-                guard let string = String(data: data, encoding: actualEncoding) else {
-                    throw HTTPClientError.serializationError(.stringSerializationFailed(encoding: actualEncoding))
-                }
-                
-                return string
-            }
-            .mapError { castOrKill(instance: $0, toType: HTTPClientError.self) }
-            .eraseToAnyPublisher()
-    }
-}
-
-private func requestAllowsEmptyResponseData(
-    _ request: URLRequest?,
-    emptyRequestMethods: Set<HTTPMethod> = [.head]
-) -> Bool? {
-    return request.flatMap { $0.httpMethod }
-        .flatMap(HTTPMethod.init)
-        .map { emptyRequestMethods.contains($0) }
-}
-
-private func emptyResponseAllowed(forRequest request: URLRequest?, response: HTTPURLResponse?) -> Bool {
-    return (requestAllowsEmptyResponseData(request) == true) || (responseAllowsEmptyResponseData(response) == true)
-}
-
-/// - Parameter emptyResponseCodes: HTTP response codes for which empty response bodies are considered appropriate. `[204, 205]` by default.
-private func responseAllowsEmptyResponseData(
-    _ response: HTTPURLResponse?,
-    emptyResponseCodes: Set<Int> = [204, 205]
-) -> Bool? {
-    return response.flatMap { $0.statusCode }
-        .map { emptyResponseCodes.contains($0) }
 }

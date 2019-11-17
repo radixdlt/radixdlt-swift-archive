@@ -23,33 +23,11 @@
 //
 
 import Foundation
-@testable import RadixSDK
-import Combine
 
-struct HardCodedAtomStore: AtomStore {
-    private let upParticles: [AnyUpParticle]
-    init(upParticles particles: [SpunParticleContainer] = []) {
-        self.upParticles = particles.compactMap { try? AnyUpParticle(spunParticle: $0) }
-    }
+public protocol URLConvertible {
+    var url: URL { get }
 }
 
-extension HardCodedAtomStore {
-
-    func onSync(address: Address) -> AnyPublisher<Date, Never> {
-//        return CombineObservable.just
-        combineMigrationInProgress()
-    }
-
-    func atomObservations(of address: Address) -> AnyPublisher<AtomObservation, Never> {
-//         return .empty()
-        combineMigrationInProgress()
-    }
-
-    func upParticles(at address: Address) -> [AnyUpParticle] {
-        return upParticles
-    }
-
-    func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {
-        abstract()
-    }
+extension URL: URLConvertible {
+    public var url: URL { return self }
 }

@@ -112,26 +112,34 @@ public extension DefaultTransactionMaker {
 private extension DefaultTransactionMaker {
     
     func addFee(to atom: Atom) -> Single<AtomWithFee, Never> {
-//        return activeAccount.flatMapToSingle { [unowned self] in
-//            self.feeMapper.feeBasedOn(
-//                atom: atom,
-//                universeConfig: self.universeConfig,
-//                key: $0.publicKey
-//            )
-//        }
-        combineMigrationInProgress()
+        activeAccount.flatMap { [unowned self] in
+            self.feeMapper.feeBasedOn(
+                atom: atom,
+                universeConfig: self.universeConfig,
+                key: $0.publicKey
+            )
+            .crashOnFailure()
+        }
+        .eraseToAnyPublisher()
     }
     
-    func sign(atom: AnyPublisher<UnsignedAtom, Never>) -> Single<SignedAtom, Never> {
-//        return activeAccount.flatMapToSingle { account in
-//            if account.privateKey == nil, case .throwErrorDirectly = self.strategyNoSigningKeyIsPresent {
-//                return AnyPublisher.error(SigningError.noSigningKeyPresentButWasExpectedToBe)
-//            }
-//            return atom.flatMap {
-//                try account.sign(atom: $0)
-//            }
-//        }
-        combineMigrationInProgress()
+    func sign(atom atomPublisher: AnyPublisher<UnsignedAtom, Never>) -> Single<SignedAtom, Never> {
+        return atomPublisher
+            .withLatest(from: activeAccount) { (atom: $0, account: $1) }
+            .tryFilter {
+                if $0.account.privateKey == nil, case .throwErrorDirectly = self.strategyNoSigningKeyIsPresent {
+                    throw SigningError.noSigningKeyPresentButWasExpectedToBe
+                }
+                return true
+            }
+            .crashOnFailure()
+            .flatMap { atomAndAccount -> Single<SignedAtom, Never> in
+                let (atom, account) = atomAndAccount
+               
+                return account.sign(atom: atom)
+                    .crashOnFailure()
+            }
+        .eraseToAnyPublisher()
     }
     
     func createAtomSubmission(
@@ -140,34 +148,37 @@ private extension DefaultTransactionMaker {
         originNode: Node?
         ) -> ResultOfUserAction {
         
-//        let cachedAtom = atomSingle.cache()
-//        let updates = cachedAtom
-//            .flatMapObservable { [unowned self] (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
-//                let initialAction: SubmitAtomAction
-//
-//                if let originNode = originNode {
-//                    initialAction = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
-//                } else {
-//                    initialAction = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
-//                }
-//
-//                let status: AnyPublisher<SubmitAtomAction, Never> = self.radixNetworkController
-//                    .getActions()
-//                    .compactMap(typeAs: SubmitAtomAction.self)
-//                    .filter { $0.uuid == initialAction.uuid }
-//                    .takeWhile { !$0.isCompleted }
-//
-//                self.radixNetworkController.dispatch(nodeAction: initialAction)
-//                return status
-//            }.share(replay: 1, scope: .forever)
-//
-//        let result = ResultOfUserAction(updates: updates, cachedAtom: cachedAtom) { [unowned self] in
-//            // CombineDisposable from calling `connect`
-//            $0.disposed(by: self.disposeBag)
-//        }
-//
-//        return result
-        combineMigrationInProgress()
+        let cachedAtom = atomSingle.share()
+        
+        let submitAtomStatusUpdatesPublisher = cachedAtom
+            .flatMap { [unowned self] (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
+                let initialAction: SubmitAtomAction
+
+                if let originNode = originNode {
+                    initialAction = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
+                } else {
+                    initialAction = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
+                }
+
+                let status: AnyPublisher<SubmitAtomAction, Never> = self.radixNetworkController
+                    .getActions()
+                    .compactMap(typeAs: SubmitAtomAction.self)
+                    .filter { $0.uuid == initialAction.uuid }
+                    .prefix(while: { !$0.isCompleted })
+                    .eraseToAnyPublisher()
+
+                self.radixNetworkController.dispatch(nodeAction: initialAction)
+                return status
+            }
+        .share()
+        .eraseToAnyPublisher()
+
+        let result = ResultOfUserAction(
+            submitAtomStatusUpdatesPublisher: submitAtomStatusUpdatesPublisher,
+            cachedAtom: cachedAtom.eraseToAnyPublisher()
+        )
+
+        return result
     }
     
     var addressOfActiveAccount: AnyPublisher<Address, Never> {
