@@ -232,6 +232,9 @@
 		E6506921238162B800AB420D /* DataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506920238162B800AB420D /* DataFetcher.swift */; };
 		E6506923238162CE00AB420D /* HTTPClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506922238162CE00AB420D /* HTTPClientError.swift */; };
 		E6506925238162DF00AB420D /* URLConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506924238162DF00AB420D /* URLConvertible.swift */; };
+		E650692E2381653900AB420D /* ProofOfWorkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650692B2381653900AB420D /* ProofOfWorkTests.swift */; };
+		E650692F2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650692C2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift */; };
+		E65069302381655400AB420D /* CreateTokenActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65069292381653900AB420D /* CreateTokenActionTests.swift */; };
 		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
@@ -253,8 +256,6 @@
 		E6725657228B4426004631F1 /* SubscriptionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6725656228B4426004631F1 /* SubscriptionError.swift */; };
 		E6725658228C107B004631F1 /* DecodingError+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62F35342273376D00B6779A /* DecodingError+Equatable.swift */; };
 		E67A715421FBC65800F4B2D0 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A715321FBC65800F4B2D0 /* String+Extensions.swift */; };
-		E67A8CC5235635AB00206E33 /* ProofOfWorkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A8CC3235635AB00206E33 /* ProofOfWorkTests.swift */; };
-		E67A8CC6235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67A8CC4235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift */; };
 		E67E3E71237965E200A33DBA /* WebSocketsEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E70237965E200A33DBA /* WebSocketsEpic.swift */; };
 		E67E3E742379890100A33DBA /* SubmitAtomEpicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E732379890100A33DBA /* SubmitAtomEpicTests.swift */; };
 		E67E3E7623798ACE00A33DBA /* FindANodeRequestAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E7523798ACE00A33DBA /* FindANodeRequestAction.swift */; };
@@ -847,6 +848,9 @@
 		E6506920238162B800AB420D /* DataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetcher.swift; sourceTree = "<group>"; };
 		E6506922238162CE00AB420D /* HTTPClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientError.swift; sourceTree = "<group>"; };
 		E6506924238162DF00AB420D /* URLConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConvertible.swift; sourceTree = "<group>"; };
+		E65069292381653900AB420D /* CreateTokenActionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTokenActionTests.swift; sourceTree = "<group>"; };
+		E650692B2381653900AB420D /* ProofOfWorkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProofOfWorkTests.swift; sourceTree = "<group>"; };
+		E650692C2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberOfLeadingZeroBitsInDataTests.swift; sourceTree = "<group>"; };
 		E6533FDF22BA63620068B07D /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		E6533FE222BA638B0068B07D /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		E654778822BFB3B700D968BD /* BootstrapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootstrapConfig.swift; sourceTree = "<group>"; };
@@ -866,8 +870,6 @@
 		E6725654228B441A004631F1 /* RPCErrorCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCErrorCode.swift; sourceTree = "<group>"; };
 		E6725656228B4426004631F1 /* SubscriptionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionError.swift; sourceTree = "<group>"; };
 		E67A715321FBC65800F4B2D0 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
-		E67A8CC3235635AB00206E33 /* ProofOfWorkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProofOfWorkTests.swift; sourceTree = "<group>"; };
-		E67A8CC4235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberOfLeadingZeroBitsInDataTests.swift; sourceTree = "<group>"; };
 		E67E3E70237965E200A33DBA /* WebSocketsEpic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketsEpic.swift; sourceTree = "<group>"; };
 		E67E3E732379890100A33DBA /* SubmitAtomEpicTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitAtomEpicTests.swift; sourceTree = "<group>"; };
 		E67E3E7523798ACE00A33DBA /* FindANodeRequestAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindANodeRequestAction.swift; sourceTree = "<group>"; };
@@ -2075,6 +2077,40 @@
 			path = DefaultAtomToTransactionMapperTests;
 			sourceTree = "<group>";
 		};
+		E65069262381653900AB420D /* Offline */ = {
+			isa = PBXGroup;
+			children = (
+				E65069272381653900AB420D /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */,
+			);
+			path = Offline;
+			sourceTree = "<group>";
+		};
+		E65069272381653900AB420D /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */ = {
+			isa = PBXGroup;
+			children = (
+				E65069282381653900AB420D /* Actions */,
+				E650692A2381653900AB420D /* ProofOfWork */,
+			);
+			path = "4. Layer 3 - CHEMISTRY (Atom builders & reducers)";
+			sourceTree = "<group>";
+		};
+		E65069282381653900AB420D /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				E65069292381653900AB420D /* CreateTokenActionTests.swift */,
+			);
+			path = Actions;
+			sourceTree = "<group>";
+		};
+		E650692A2381653900AB420D /* ProofOfWork */ = {
+			isa = PBXGroup;
+			children = (
+				E650692B2381653900AB420D /* ProofOfWorkTests.swift */,
+				E650692C2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift */,
+			);
+			path = ProofOfWork;
+			sourceTree = "<group>";
+		};
 		E6550EE6224BBD9100160267 /* Node */ = {
 			isa = PBXGroup;
 			children = (
@@ -2212,18 +2248,9 @@
 		E67A8CC12356357500206E33 /* MIGRATED */ = {
 			isa = PBXGroup;
 			children = (
-				E67A8CC2235635AB00206E33 /* ProofOfWork */,
+				E65069262381653900AB420D /* Offline */,
 			);
 			path = MIGRATED;
-			sourceTree = "<group>";
-		};
-		E67A8CC2235635AB00206E33 /* ProofOfWork */ = {
-			isa = PBXGroup;
-			children = (
-				E67A8CC3235635AB00206E33 /* ProofOfWorkTests.swift */,
-				E67A8CC4235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift */,
-			);
-			path = ProofOfWork;
 			sourceTree = "<group>";
 		};
 		E67E3E72237988AA00A33DBA /* SubmitAtomEpicTests */ = {
@@ -4410,6 +4437,7 @@
 				E6D325B921EF35DA00851F4E /* Secp256k1RFC6979Tests.swift in Sources */,
 				E62F35372273378300B6779A /* DecodingError+ConvenienceInit.swift in Sources */,
 				E650690C237DA84100AB420D /* AtomNotificationModeTests.swift in Sources */,
+				E650692F2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */,
 				E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */,
 				E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */,
 				E6E9D2F123746B22003753B4 /* PrefixUntilCompletionFrom.swift in Sources */,
@@ -4417,10 +4445,10 @@
 				E620AB5921E7877A00B36EC2 /* PrivateKeyTests.swift in Sources */,
 				E6BACE842350E87E006D97C6 /* FindANodeEpicTests.swift in Sources */,
 				E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */,
-				E67A8CC5235635AB00206E33 /* ProofOfWorkTests.swift in Sources */,
 				E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */,
 				E6A1A67E237B2C9500F58483 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E6E0BFB92375899400B946A7 /* DiscoverNodesEpicTests.swift in Sources */,
+				E650692E2381653900AB420D /* ProofOfWorkTests.swift in Sources */,
 				E650691B237FF2B800AB420D /* DefaultAtomToTransactionMapperTests.swift in Sources */,
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
@@ -4439,12 +4467,12 @@
 				E6506912237EC3D200AB420D /* TokenBalancesReducerTests.swift in Sources */,
 				E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */,
 				E67E3E742379890100A33DBA /* SubmitAtomEpicTests.swift in Sources */,
+				E65069302381655400AB420D /* CreateTokenActionTests.swift in Sources */,
 				E6198E7C237AE42400F8205D /* PrefixWhileTests.swift in Sources */,
 				E6E27A552271EEE20067D46E /* XCTestCase_Extensions.swift in Sources */,
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
 				E6E0BFC02375BFA100B946A7 /* NetworkEpicTestCase.swift in Sources */,
 				E6506918237F3CF100AB420D /* DefaultAtomToTransactionMapperCreateTokenFromGenesisAtomTests.swift in Sources */,
-				E67A8CC6235635AB00206E33 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */,
 				E605544D23058AA100528510 /* ParticleSet.swift in Sources */,
 				E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */,
 				480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */,
