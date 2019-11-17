@@ -236,6 +236,7 @@
 		E650692F2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650692C2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift */; };
 		E65069302381655400AB420D /* CreateTokenActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65069292381653900AB420D /* CreateTokenActionTests.swift */; };
 		E6506934238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506932238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift */; };
+		E650693623816A0500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506933238165B500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift */; };
 		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
@@ -4466,6 +4467,7 @@
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E6506934238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
+				E650693623816A0500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift in Sources */,
 				E6506907237D806C00AB420D /* AtomPullerTests.swift in Sources */,
 				E6506916237F017100AB420D /* TokenBalancesTests.swift in Sources */,
 				E62F35302273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
