@@ -24,19 +24,18 @@
 
 import XCTest
 @testable import RadixSDK
-import RxSwift
 import Combine
 
-class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
+class SendMessageActionToParticleGroupsMapperTests: TestCase {
     
     private lazy var alice  = AccountWithAddress()
     private lazy var bob    = AccountWithAddress()
     private lazy var clara  = AccountWithAddress()
     private lazy var diana  = AccountWithAddress()
     
-    func testEncryptAndDecryptMessage() {
-
-
+    func testEncryptAndDecryptMessage() throws {
+        
+        
         XCTAssertAllInequal(alice, bob, clara, diana)
         
         let message = "Hey Bob, this is your friend Alice, Clara should also be able to read this."
@@ -47,7 +46,7 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         let particleGroupsForMessage = try! mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address)
         
         let mockedTimestamp = TimeConverter.dateFrom(millisecondsSince1970: 123456789)
-
+        
         let atom = Atom(
             metaData: ChronoMetaData.timestamp(mockedTimestamp),
             particleGroups: particleGroupsForMessage
@@ -66,12 +65,14 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
                 XCTAssertEqual(decryptedMessage.payload.toString(), message)
             }
         }
-
-        func ensureEliglbeReaderCanDecrypt(_ account: AccountOwner) {
-            
+        
+        func ensureEligibleReaderCanDecrypt(_ account: AccountOwner) {
             do {
-                let decryptedMessage = try decryptMessage(in: atom, account: account)
-                  doTestResult(decryptedMessage, expectedEncryptionState: .decrypted)
+                try decryptMessage(in: atom, account: account) {
+                    let decryptedMessage = try XCTUnwrap($0)
+                    doTestResult(decryptedMessage, expectedEncryptionState: .decrypted)
+                }
+                
             } catch {
                 XCTFail("Eligible reader: \(account), should have been able to decrypt message, unexpected error: \(error)")
             }
@@ -79,19 +80,23 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         
         let readers = [alice, bob, clara]
         readers.forEach {
-            ensureEliglbeReaderCanDecrypt($0.account)
+            ensureEligibleReaderCanDecrypt($0.account)
         }
         
+        
         do {
-            let dianasFeableAttemptToIntercept = try decryptMessage(in: atom, account: diana)
-            doTestResult(dianasFeableAttemptToIntercept, expectedEncryptionState: .cannotDecrypt(error: ECIES.DecryptionError.keyMismatch))
+            try decryptMessage(in: atom, account: diana) {
+                let dianasFeableAttemptToIntercept = try XCTUnwrap($0)
+                doTestResult(dianasFeableAttemptToIntercept, expectedEncryptionState: .cannotDecrypt(error: ECIES.DecryptionError.keyMismatch))
+            }
+            
         } catch {
             XCTFail("Even though Diana should not be able to read the clear text message, she should still be able to reduce a SentMessage from an Atom, having still encrypted payload")
         }
     }
     
-    func testThatOnlySenderAndRecipientCanDecryptMessageByDefault() {
-
+    func testThatOnlySenderAndRecipientCanDecryptMessageByDefault() throws {
+        
         
         XCTAssertAllInequal(alice, bob, clara)
         
@@ -100,36 +105,43 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
         let atom = try! mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address).wrapInAtom()
-
-        func ensureCanBeDecrypted(by account: AccountOwner) {
-            XCTAssertNotThrows(
-                try decryptMessage(in: atom, account: account)
-            ) { decryptedMessage in
+        
+        func ensureCanBeDecrypted(by account: AccountOwner) throws {
+            //            XCTAssertNotThrows(
+            //                try decryptMessage(in: atom, account: account)
+            //            ) { decryptedMessage in
+            //                XCTAssertEqual(decryptedMessage.decryptionContext, .decrypted)
+            //                XCTAssertEqual(decryptedMessage.payload.toString(), message)
+            //            }
+            
+            try decryptMessage(in: atom, account: account) {
+                let decryptedMessage = try XCTUnwrap($0)
                 XCTAssertEqual(decryptedMessage.decryptionContext, .decrypted)
                 XCTAssertEqual(decryptedMessage.payload.toString(), message)
             }
         }
         
-        ensureCanBeDecrypted(by: alice)
-        ensureCanBeDecrypted(by: bob)
+        try ensureCanBeDecrypted(by: alice)
+        try ensureCanBeDecrypted(by: bob)
         
-        XCTAssertNotThrows(
-            try decryptMessage(in: atom, account: clara)
-        ) { decryptedMessage in
+        try decryptMessage(in: atom, account: clara) {
+            let decryptedMessage = try XCTUnwrap($0)
+            
             XCTAssertEqual(
                 decryptedMessage.decryptionContext,
-                .cannotDecrypt(error: .keyMismatch))
+                .cannotDecrypt(error: .keyMismatch)
+            )
         }
     }
     
     func testMessagesAreEncryptedByDefault() {
-
+        
         let sendMessageAction = SendMessageAction(text: "Super secret message", from: alice, to: bob)
         XCTAssertTrue(sendMessageAction.shouldBeEncrypted)
     }
     
-    func testNonEncryptedMessage() {
-       
+    func testNonEncryptedMessage() throws {
+        
         XCTAssertAllInequal(alice, bob, clara)
         
         let message = "Hey Bob, this is your friend Alice, this message is not encrypted."
@@ -140,35 +152,57 @@ class SendMessageActionToParticleGroupsMapperTests: XCTestCase {
         let atom = try! mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address).wrapInAtom()
         
         let atomToDecryptedMessagesMapper = DefaultAtomToSendMessageActionMapper(
-            activeAccount: .just(alice.account)
+            activeAccount: Just(alice.account).eraseToAnyPublisher()
         )
         
-        func ensureNonEncryptedMessageCanBeRead(by account: AccountOwner) {
-            XCTAssertNotThrows(
-                try decryptMessage(in: atom, account: account)
-            ) { decryptedMessage in
+        func ensureNonEncryptedMessageCanBeRead(by account: AccountOwner) throws {
+            try decryptMessage(in: atom, account: account) {
+                let decryptedMessage = try XCTUnwrap($0)
                 XCTAssertEqual(decryptedMessage.decryptionContext, .wasNotEncrypted)
                 XCTAssertEqual(decryptedMessage.payload.toString(), message)
             }
         }
         
-        ensureNonEncryptedMessageCanBeRead(by: alice)
-        ensureNonEncryptedMessageCanBeRead(by: bob)
-        ensureNonEncryptedMessageCanBeRead(by: clara)
+        try ensureNonEncryptedMessageCanBeRead(by: alice)
+        try ensureNonEncryptedMessageCanBeRead(by: bob)
+        try ensureNonEncryptedMessageCanBeRead(by: clara)
     }
     
 }
 
-func decryptMessage(in atom: Atom, account accountOwner: AccountOwner) throws -> SendMessageAction  {
-    guard let decryptedMessages = DefaultAtomToSendMessageActionMapper(
-        activeAccount: .just(accountOwner.account)
-    ).mapAtomToActions(atom).blockingTakeFirst(),
-        let decryptedMessage = decryptedMessages.first
-    else {
-        throw DecryptMessageErrorInTest.unknownError
+extension TestCase {
+    func decryptMessage(
+        in atom: Atom,
+        account accountOwner: AccountOwner,
+        decrypted: (SendMessageAction?) throws -> Void
+    ) throws {
+        
+        let expectation = XCTestExpectation(description: self.debugDescription)
+        
+        let publisher = DefaultAtomToSendMessageActionMapper(
+            activeAccount: Just(accountOwner.account).eraseToAnyPublisher()
+        )
+            .mapAtomToActions(atom)
+        
+        var outputtedValues = [SendMessageAction]()
+        
+        let cancellable = publisher
+            .first()
+            .sink(
+                receiveCompletion: { _ in expectation.fulfill() },
+                receiveValue: { outputtedValues.append(contentsOf: $0) }
+        )
+        
+        //        let decryptedMessage = decryptedMessages.first
+        //    else {
+        //        throw DecryptMessageErrorInTest.unknownError
+        //    }
+        
+        wait(for: [expectation], timeout: 0.1)
+        
+        XCTAssertNotNil(cancellable)
+        try decrypted(outputtedValues.first)
     }
-
-    return decryptedMessage
 }
 
 enum DecryptMessageErrorInTest: Swift.Error, Equatable {
@@ -202,7 +236,7 @@ private struct AccountWithAddress: SigningRequesting, AddressConvertible, Equata
     }
 }
 extension AccountWithAddress {
-    var privateKeyForSigning: CombineSingle<PrivateKey> {
+    var privateKeyForSigning: AnyPublisher<PrivateKey, Never> {
         return account.privateKeyForSigning
     }
 }

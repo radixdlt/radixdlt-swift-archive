@@ -235,6 +235,7 @@
 		E650692E2381653900AB420D /* ProofOfWorkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650692B2381653900AB420D /* ProofOfWorkTests.swift */; };
 		E650692F2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650692C2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift */; };
 		E65069302381655400AB420D /* CreateTokenActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65069292381653900AB420D /* CreateTokenActionTests.swift */; };
+		E6506934238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506932238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift */; };
 		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
@@ -851,6 +852,8 @@
 		E65069292381653900AB420D /* CreateTokenActionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTokenActionTests.swift; sourceTree = "<group>"; };
 		E650692B2381653900AB420D /* ProofOfWorkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProofOfWorkTests.swift; sourceTree = "<group>"; };
 		E650692C2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberOfLeadingZeroBitsInDataTests.swift; sourceTree = "<group>"; };
+		E6506932238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageActionToParticleGroupsMapperTests.swift; sourceTree = "<group>"; };
+		E6506933238165B500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTokenActionToParticleGroupsMapperTests.swift; sourceTree = "<group>"; };
 		E6533FDF22BA63620068B07D /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		E6533FE222BA638B0068B07D /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		E654778822BFB3B700D968BD /* BootstrapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootstrapConfig.swift; sourceTree = "<group>"; };
@@ -2088,6 +2091,7 @@
 		E65069272381653900AB420D /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */ = {
 			isa = PBXGroup;
 			children = (
+				E6506931238165B500AB420D /* ActionToParticleGroupsMapper */,
 				E65069282381653900AB420D /* Actions */,
 				E650692A2381653900AB420D /* ProofOfWork */,
 			);
@@ -2109,6 +2113,15 @@
 				E650692C2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift */,
 			);
 			path = ProofOfWork;
+			sourceTree = "<group>";
+		};
+		E6506931238165B500AB420D /* ActionToParticleGroupsMapper */ = {
+			isa = PBXGroup;
+			children = (
+				E6506932238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift */,
+				E6506933238165B500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift */,
+			);
+			path = ActionToParticleGroupsMapper;
 			sourceTree = "<group>";
 		};
 		E6550EE6224BBD9100160267 /* Node */ = {
@@ -4451,6 +4464,7 @@
 				E650692E2381653900AB420D /* ProofOfWorkTests.swift in Sources */,
 				E650691B237FF2B800AB420D /* DefaultAtomToTransactionMapperTests.swift in Sources */,
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
+				E6506934238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
 				E6506907237D806C00AB420D /* AtomPullerTests.swift in Sources */,
 				E6506916237F017100AB420D /* TokenBalancesTests.swift in Sources */,
