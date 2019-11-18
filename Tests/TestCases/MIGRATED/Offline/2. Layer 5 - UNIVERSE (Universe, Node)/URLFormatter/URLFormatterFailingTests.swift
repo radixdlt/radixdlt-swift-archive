@@ -25,7 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class URLFormatterIncorrectUrlsTests: XCTestCase {
+class URLFormatterIncorrectUrlsTests: TestCase {
 
     func testUInt8OverflowInIpAddress() {
         // GIVEN

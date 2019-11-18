@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class URLFormatterTests: XCTestCase {
+class URLFormatterTests: TestCase {
 
     func testCorrectHttpsUrl() {
         let host = "0.0.0.0"
@@ -41,16 +41,6 @@ class URLFormatterTests: XCTestCase {
             XCTFail("Failed to create url, error: \(error)")
         }
     }
-
-//    func testHttpClientFromLocalhost() {
-//        let client: DefaultHTTPClient = .localhost
-//        XCTAssertEqual(client.baseUrl.absoluteString, "http://localhost:8080/api")
-//    }
-//
-//    func testRestClientFromLocalhost() {
-//        let client: DefaultRESTClient = .localhost
-//        XCTAssertEqual((client.httpClient as! DefaultHTTPClient).baseUrl.absoluteString, "http://localhost:8080/api")
-//    }
 
     func testLocalhost() {
         let host: String = .localhost
@@ -83,7 +73,7 @@ class URLFormatterTests: XCTestCase {
     func testCorrectWssUrl() {
         let host = "127.0.0.1"
         do {
-            let formattedUrl = try URLFormatter.format(host: Host(domain: host, port: 65000), protocol: .websockets)
+            let formattedUrl = try URLFormatter.format(host: Host(domain: host, port: 65000), protocol: .webSockets)
             let url = formattedUrl.url
             XCTAssertEqual(url.host, host)
             XCTAssertEqual(url.port, 65000)
@@ -97,7 +87,7 @@ class URLFormatterTests: XCTestCase {
     func testCorrectWsUrl() {
         let host = "1.255.255.1"
         do {
-            let formattedUrl = try URLFormatter.format(host: Host(domain: host, port: 1), protocol: .websockets, useSSL: false)
+            let formattedUrl = try URLFormatter.format(host: Host(domain: host, port: 1), protocol: .webSockets, useSSL: false)
             let url = formattedUrl.url
             XCTAssertEqual(url.host, host)
             XCTAssertEqual(url.port, 1)
