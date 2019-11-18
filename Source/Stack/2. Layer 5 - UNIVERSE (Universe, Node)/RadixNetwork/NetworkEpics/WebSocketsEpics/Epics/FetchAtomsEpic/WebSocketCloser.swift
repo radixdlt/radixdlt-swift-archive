@@ -34,7 +34,7 @@ public extension WebSocketCloser {
     static let closeWebSocketsDelayInSeconds: Int = 5
     
     static func byWebSockets(manager webSocketsManager: WebSocketsManager, closeWebSocketDelay: DispatchTimeInterval = .seconds(WebSocketCloser.closeWebSocketsDelayInSeconds)) -> Self {
-        Self { nodeConnectionToClose in
+        Self { [unowned webSocketsManager] nodeConnectionToClose in
             webSocketsManager.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeConnectionToClose, afterDelay: closeWebSocketDelay)
         }
     }

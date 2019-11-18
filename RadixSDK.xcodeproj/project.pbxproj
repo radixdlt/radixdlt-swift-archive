@@ -99,6 +99,7 @@
 		E600FC5E23831AC0007B7596 /* TokenBalancesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FC0023831ABF007B7596 /* TokenBalancesTests.swift */; };
 		E600FC5F23831AC0007B7596 /* TokenBalanceReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FC0123831ABF007B7596 /* TokenBalanceReducerTests.swift */; };
 		E600FC6023831AC0007B7596 /* TokenBalancesReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FC0223831ABF007B7596 /* TokenBalancesReducerTests.swift */; };
+		E600FC692383219E007B7596 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB8F23831ABF007B7596 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */; };
 		E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3342242410700A81412 /* UnsignedAtom.swift */; };
 		E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33B22428C7F00A81412 /* SignedAtom.swift */; };
 		E60253FF225CA1C2004B2F94 /* UnallocatedTokensParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */; };
@@ -4957,6 +4958,7 @@
 				E600FC0D23831ABF007B7596 /* AtomStoreTests.swift in Sources */,
 				E6D325B921EF35DA00851F4E /* Secp256k1RFC6979Tests.swift in Sources */,
 				E600FC3723831ABF007B7596 /* DSONEncodingExampleMapTests.swift in Sources */,
+				E600FC692383219E007B7596 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */,
 				E600FC5023831AC0007B7596 /* HTTPClientTests.swift in Sources */,
 				E600FC1423831ABF007B7596 /* FindANodeEpicTests.swift in Sources */,
 				E62F35372273378300B6779A /* DecodingError+ConvenienceInit.swift in Sources */,

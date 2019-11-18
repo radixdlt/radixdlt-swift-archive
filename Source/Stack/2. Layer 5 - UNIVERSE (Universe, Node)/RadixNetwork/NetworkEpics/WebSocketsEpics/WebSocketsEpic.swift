@@ -35,7 +35,7 @@ public final class WebSocketsEpic: RadixNetworkEpic {
     
     private let epicFromWebsockets: EpicsFromWebSockets
     
-    private var _retainingVariableEpics = [RadixNetworkWebSocketsEpic]()
+    private let webSockets = DefaultWebSocketsManager()
     
     public init(epicFromWebsockets: EpicsFromWebSockets) {
         self.epicFromWebsockets = epicFromWebsockets
@@ -48,12 +48,10 @@ public extension WebSocketsEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-        let webSockets = DefaultWebSocketsManager()
         return Publishers.MergeMany(
             epicFromWebsockets
-                .map { [unowned self] epicFromWebSocket in
+                .map { [unowned webSockets] epicFromWebSocket in
                     let newEpic = epicFromWebSocket(webSockets)
-                    self._retainingVariableEpics.append(newEpic)
                     return newEpic
             }
             .map { (newlyCreatedEpic: RadixNetworkWebSocketsEpic) -> AnyPublisher<NodeAction, Never> in

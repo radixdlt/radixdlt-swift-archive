@@ -24,15 +24,18 @@
 
 import Foundation
 
-public struct WebSocketConnector {
+public final class WebSocketConnector {
     public typealias NewClosedWebSocketConnectionToNode = (Node) -> WebSocketToNode
     public let newClosedWebSocketConnectionToNode: NewClosedWebSocketConnectionToNode
+    public init(_ newClosedWebSocketConnectionToNode: @escaping NewClosedWebSocketConnectionToNode) {
+        self.newClosedWebSocketConnectionToNode = newClosedWebSocketConnectionToNode
+    }
 }
 
 public extension WebSocketConnector {
-    static func byWebSockets(manager webSocketsManager: WebSocketsManager) -> Self {
-        Self { nodeToConnectTo in
-            webSocketsManager.newDisconnectedWebsocket(to: nodeToConnectTo)
+    static func byWebSockets(manager webSocketsManager: WebSocketsManager) -> WebSocketConnector {
+        Self { [unowned webSocketsManager] nodeToConnectTo in
+            return webSocketsManager.newDisconnectedWebsocket(to: nodeToConnectTo)
         }
     }
 }

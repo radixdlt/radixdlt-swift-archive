@@ -113,7 +113,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
                     networkStateSubject.send(completion: .failure(error))
                 }
             },
-            receiveValue: { [unowned self] in self.dispatch(nodeAction: $0) }
+            receiveValue: { [weak self] in self?.dispatch(nodeAction: $0) }
         ).store(in: &cancellables)
         
         connectableReducedNodeActions.connect().store(in: &cancellables)
