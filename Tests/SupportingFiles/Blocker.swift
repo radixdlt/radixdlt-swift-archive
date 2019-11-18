@@ -83,9 +83,9 @@ final class Blocker<Output, Failure> where Failure: Swift.Error {
     // Cancellable which is not used for now, but holds the subscription to the publisher
     private var cancellable: Cancellable?
     
-    private init<P>(
+    fileprivate init<P>(
         _ publisherToBlock: P,
-        sliceOutput: SpecifyNumberOfExpectedOutputtedValues<P>// = { SliceOfOutput(from: $0.first()) }
+        sliceOutput: SpecifyNumberOfExpectedOutputtedValues<P>
     )
         where P: Publisher,
         P.Output == Output,
@@ -170,5 +170,44 @@ extension Blocker {
         P.Failure == Failure
     {
         self.init(publisher) { SliceOfOutput(from: $0.prefix(specifiedNumberOfOutputtedValues)) }
+    }
+}
+
+extension Publisher where Self: SliceOfOutputPublisher {
+    private func asBlocker() -> Blocker<Output, Failure> {
+        Blocker(self) { SliceOfOutput(from: $0) }
+    }
+    
+    func toBlocking(timeout: DispatchTimeInterval = .enoughForPOW) -> Result<[Output], Blocker<Output, Failure>.Error> {
+        let blocker = asBlocker()
+        return blocker.blocking(timeout: timeout)
+    }
+}
+
+
+extension Publisher where Output: Sequence, Failure == Never {
+   
+    func toBlockingFirst(
+        timeout: DispatchTimeInterval = .enoughForPOW
+    ) -> Result<Output.Element, Blocker<Output.Element, Failure>.Error> {
+
+        let blocker = Blocker(self.flattenSequence()) {
+            SliceOfOutput<Output.Element, Failure>(
+                from: $0.first()
+            )
+        }
+
+        return blocker.blocking(timeout: timeout).flatMap { outputs in
+            guard let firstOutput = outputs.first else {
+                return Result<Output.Element, Blocker<Output.Element, Failure>.Error>.failure(.notEnoughValuesPublished(requested: 1, butOnlyGot: 0, specifically: []))
+            }
+            return  Result<Output.Element, Blocker<Output.Element, Failure>.Error>.success(firstOutput)
+        }
+    }
+    
+    func toBlockingGetFirst(
+        timeout: DispatchTimeInterval = .enoughForPOW
+    ) throws -> Output.Element {
+        try toBlockingFirst(timeout: timeout).get()
     }
 }

@@ -51,15 +51,14 @@ class AtomToTransferMapperTests: TestCase {
         )
         
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
-        
-        let blocker = Blocker.first(of: atomToTransferMapper.mapAtomToActions(atom).flattenSequence())
-        let transfers = try blocker.blocking().get()
-        
-        XCTAssertEqual(transfers.count, 1)
-        XCTAssertEqual(transfers[0].amount, 14)
-        XCTAssertEqual(transfers[0].attachedMessage(), "Taxi")
-        XCTAssertEqual(transfers[0].sender, alice)
-        XCTAssertEqual(transfers[0].recipient, bob)
+        let actionsPublisher = atomToTransferMapper.mapAtomToActions(atom)
+
+        let transfer = try actionsPublisher.toBlockingGetFirst()
+
+        XCTAssertEqual(transfer.amount, 14)
+        XCTAssertEqual(transfer.attachedMessage(), "Taxi")
+        XCTAssertEqual(transfer.sender, alice)
+        XCTAssertEqual(transfer.recipient, bob)
         
     }
     
@@ -84,14 +83,12 @@ class AtomToTransferMapperTests: TestCase {
         
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
         
+        let actionsPublisher = atomToTransferMapper.mapAtomToActions(atom)
+        let transfer = try actionsPublisher.toBlockingGetFirst()
         
-        let blocker = Blocker.first(of: atomToTransferMapper.mapAtomToActions(atom).flattenSequence())
-        let transfers = try blocker.blocking().get()
-
-        XCTAssertEqual(transfers.count, 1)
-        XCTAssertEqual(transfers[0].amount, 100)
-        XCTAssertEqual(transfers[0].attachedMessage(), "Taxi")
-        XCTAssertEqual(transfers[0].sender, alice)
-        XCTAssertEqual(transfers[0].recipient, bob)
+        XCTAssertEqual(transfer.amount, 100)
+        XCTAssertEqual(transfer.attachedMessage(), "Taxi")
+        XCTAssertEqual(transfer.sender, alice)
+        XCTAssertEqual(transfer.recipient, bob)
     }
 }
