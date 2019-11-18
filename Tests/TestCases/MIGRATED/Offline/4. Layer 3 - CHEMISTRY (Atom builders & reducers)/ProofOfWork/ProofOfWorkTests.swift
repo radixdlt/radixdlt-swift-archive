@@ -27,8 +27,12 @@ import Foundation
 import XCTest
 import Combine
 
+private let timeoutInSecondsEnoughForPOW: Int = 10
 extension TimeInterval {
-    static var enoughForPOW: Self { 10 }
+    static var enoughForPOW: Self { .init(timeoutInSecondsEnoughForPOW) }
+}
+extension DispatchTimeInterval {
+    static var enoughForPOW: Self { .seconds(timeoutInSecondsEnoughForPOW) }
 }
 
 class ProofOfWorkTest: XCTestCase {

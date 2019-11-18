@@ -237,6 +237,7 @@
 		E65069302381655400AB420D /* CreateTokenActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65069292381653900AB420D /* CreateTokenActionTests.swift */; };
 		E6506934238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506932238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift */; };
 		E650693623816A0500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506933238165B500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift */; };
+		E650693D2382D2ED00AB420D /* Blocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650693C2382D2ED00AB420D /* Blocker.swift */; };
 		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
@@ -370,6 +371,8 @@
 		E6B349CD233E05110007D5AD /* Denomination.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B349CC233E05110007D5AD /* Denomination.swift */; };
 		E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BACE7F2350E1FF006D97C6 /* ErrorAutoEquatable.swift */; };
 		E6BACE842350E87E006D97C6 /* FindANodeEpicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BACE832350E87E006D97C6 /* FindANodeEpicTests.swift */; };
+		E6BF7CDF2382D62F002D1535 /* AtomToTransferMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650693823816A4300AB420D /* AtomToTransferMapperTests.swift */; };
+		E6BF7CE22382DC2E002D1535 /* HardCodedAtomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF7CE02382DC2C002D1535 /* HardCodedAtomStore.swift */; };
 		E6CABA0922D4BC6300B6D00C /* SigningError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0822D4BC6300B6D00C /* SigningError.swift */; };
 		E6CABA0F22D4C35500B6D00C /* ResponseOnFireAndForgetRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA0E22D4C35500B6D00C /* ResponseOnFireAndForgetRequest.swift */; };
 		E6CABA1122D4C36300B6D00C /* RPCClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CABA1022D4C36300B6D00C /* RPCClientError.swift */; };
@@ -855,6 +858,8 @@
 		E650692C2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberOfLeadingZeroBitsInDataTests.swift; sourceTree = "<group>"; };
 		E6506932238165B500AB420D /* SendMessageActionToParticleGroupsMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageActionToParticleGroupsMapperTests.swift; sourceTree = "<group>"; };
 		E6506933238165B500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTokenActionToParticleGroupsMapperTests.swift; sourceTree = "<group>"; };
+		E650693823816A4300AB420D /* AtomToTransferMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomToTransferMapperTests.swift; sourceTree = "<group>"; };
+		E650693C2382D2ED00AB420D /* Blocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blocker.swift; sourceTree = "<group>"; };
 		E6533FDF22BA63620068B07D /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		E6533FE222BA638B0068B07D /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		E654778822BFB3B700D968BD /* BootstrapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootstrapConfig.swift; sourceTree = "<group>"; };
@@ -983,6 +988,7 @@
 		E6B349CC233E05110007D5AD /* Denomination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Denomination.swift; sourceTree = "<group>"; };
 		E6BACE7F2350E1FF006D97C6 /* ErrorAutoEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorAutoEquatable.swift; sourceTree = "<group>"; };
 		E6BACE832350E87E006D97C6 /* FindANodeEpicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindANodeEpicTests.swift; sourceTree = "<group>"; };
+		E6BF7CE02382DC2C002D1535 /* HardCodedAtomStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardCodedAtomStore.swift; sourceTree = "<group>"; };
 		E6CABA0822D4BC6300B6D00C /* SigningError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigningError.swift; sourceTree = "<group>"; };
 		E6CABA0E22D4C35500B6D00C /* ResponseOnFireAndForgetRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseOnFireAndForgetRequest.swift; sourceTree = "<group>"; };
 		E6CABA1022D4C36300B6D00C /* RPCClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCClientError.swift; sourceTree = "<group>"; };
@@ -1617,6 +1623,7 @@
 				E6D325AA21EE377500851F4E /* TestExtensions */,
 				E620AB5421E7874300B36EC2 /* RadixSDKTests-Info.plist */,
 				E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */,
+				E650693C2382D2ED00AB420D /* Blocker.swift */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -1793,6 +1800,7 @@
 			isa = PBXGroup;
 			children = (
 				480484172333BCEC0085225F /* IndependentTransactionToAtomMapper.swift */,
+				E6BF7CE02382DC2C002D1535 /* HardCodedAtomStore.swift */,
 			);
 			path = Mappers;
 			sourceTree = "<group>";
@@ -2092,6 +2100,7 @@
 		E65069272381653900AB420D /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */ = {
 			isa = PBXGroup;
 			children = (
+				E650693723816A4300AB420D /* AtomToExecutedActionMapper */,
 				E6506931238165B500AB420D /* ActionToParticleGroupsMapper */,
 				E65069282381653900AB420D /* Actions */,
 				E650692A2381653900AB420D /* ProofOfWork */,
@@ -2123,6 +2132,14 @@
 				E6506933238165B500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift */,
 			);
 			path = ActionToParticleGroupsMapper;
+			sourceTree = "<group>";
+		};
+		E650693723816A4300AB420D /* AtomToExecutedActionMapper */ = {
+			isa = PBXGroup;
+			children = (
+				E650693823816A4300AB420D /* AtomToTransferMapperTests.swift */,
+			);
+			path = AtomToExecutedActionMapper;
 			sourceTree = "<group>";
 		};
 		E6550EE6224BBD9100160267 /* Node */ = {
@@ -4460,6 +4477,7 @@
 				E6BACE842350E87E006D97C6 /* FindANodeEpicTests.swift in Sources */,
 				E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */,
 				E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */,
+				E650693D2382D2ED00AB420D /* Blocker.swift in Sources */,
 				E6A1A67E237B2C9500F58483 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E6E0BFB92375899400B946A7 /* DiscoverNodesEpicTests.swift in Sources */,
 				E650692E2381653900AB420D /* ProofOfWorkTests.swift in Sources */,
@@ -4473,6 +4491,7 @@
 				E62F35302273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E6055447230553C700528510 /* Test+Convenience+RadixApplicationClient.swift in Sources */,
 				E6A1A67A237B1BF900F58483 /* PublisherFlatMapResultTests.swift in Sources */,
+				E6BF7CDF2382D62F002D1535 /* AtomToTransferMapperTests.swift in Sources */,
 				E60554452305529600528510 /* Identity+Account.swift in Sources */,
 				E650690A237D947F00AB420D /* AtomStoreTests.swift in Sources */,
 				E6A6430E2244D86F00CD4BFC /* PointMultiplicationTests.swift in Sources */,
@@ -4493,6 +4512,7 @@
 				E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */,
 				480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
+				E6BF7CE22382DC2E002D1535 /* HardCodedAtomStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
