@@ -72,6 +72,10 @@
 		E600FB5F238315C3007B7596 /* AddressTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB27238315C3007B7596 /* AddressTests.swift */; };
 		E600FB60238315C3007B7596 /* DecimalStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB29238315C3007B7596 /* DecimalStringTests.swift */; };
 		E600FB61238315C3007B7596 /* Base58Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB2B238315C3007B7596 /* Base58Tests.swift */; };
+		E600FB6823831694007B7596 /* SwiftHashesAreDeterministicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB6323831694007B7596 /* SwiftHashesAreDeterministicTests.swift */; };
+		E600FB6923831694007B7596 /* MagicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB6423831694007B7596 /* MagicTests.swift */; };
+		E600FB6A23831694007B7596 /* ShardRangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB6623831694007B7596 /* ShardRangeTests.swift */; };
+		E600FB6B23831694007B7596 /* ShardSpaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB6723831694007B7596 /* ShardSpaceTests.swift */; };
 		E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3342242410700A81412 /* UnsignedAtom.swift */; };
 		E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33B22428C7F00A81412 /* SignedAtom.swift */; };
 		E60253FF225CA1C2004B2F94 /* UnallocatedTokensParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */; };
@@ -743,6 +747,10 @@
 		E600FB27238315C3007B7596 /* AddressTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressTests.swift; sourceTree = "<group>"; };
 		E600FB29238315C3007B7596 /* DecimalStringTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecimalStringTests.swift; sourceTree = "<group>"; };
 		E600FB2B238315C3007B7596 /* Base58Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base58Tests.swift; sourceTree = "<group>"; };
+		E600FB6323831694007B7596 /* SwiftHashesAreDeterministicTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftHashesAreDeterministicTests.swift; sourceTree = "<group>"; };
+		E600FB6423831694007B7596 /* MagicTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagicTests.swift; sourceTree = "<group>"; };
+		E600FB6623831694007B7596 /* ShardRangeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShardRangeTests.swift; sourceTree = "<group>"; };
+		E600FB6723831694007B7596 /* ShardSpaceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShardSpaceTests.swift; sourceTree = "<group>"; };
 		E601D3342242410700A81412 /* UnsignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsignedAtom.swift; sourceTree = "<group>"; };
 		E601D33B22428C7F00A81412 /* SignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAtom.swift; sourceTree = "<group>"; };
 		E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnallocatedTokensParticle.swift; sourceTree = "<group>"; };
@@ -1657,6 +1665,25 @@
 			path = Base58;
 			sourceTree = "<group>";
 		};
+		E600FB6223831694007B7596 /* 5. Layer 2 - ATOM MODEL (Particles) */ = {
+			isa = PBXGroup;
+			children = (
+				E600FB6323831694007B7596 /* SwiftHashesAreDeterministicTests.swift */,
+				E600FB6423831694007B7596 /* MagicTests.swift */,
+				E600FB6523831694007B7596 /* Shard */,
+			);
+			path = "5. Layer 2 - ATOM MODEL (Particles)";
+			sourceTree = "<group>";
+		};
+		E600FB6523831694007B7596 /* Shard */ = {
+			isa = PBXGroup;
+			children = (
+				E600FB6623831694007B7596 /* ShardRangeTests.swift */,
+				E600FB6723831694007B7596 /* ShardSpaceTests.swift */,
+			);
+			path = Shard;
+			sourceTree = "<group>";
+		};
 		E6025400225CC3CD004B2F94 /* UniverseConfig */ = {
 			isa = PBXGroup;
 			children = (
@@ -2514,6 +2541,7 @@
 		E65069262381653900AB420D /* Offline */ = {
 			isa = PBXGroup;
 			children = (
+				E600FB6223831694007B7596 /* 5. Layer 2 - ATOM MODEL (Particles) */,
 				E600FAD7238315C3007B7596 /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */,
 				E65069272381653900AB420D /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */,
 			);
@@ -4894,6 +4922,7 @@
 				E650690C237DA84100AB420D /* AtomNotificationModeTests.swift in Sources */,
 				E600FB44238315C3007B7596 /* AtomJsonDeserializationInvalidJsonKeyTests.swift in Sources */,
 				E600FB3F238315C3007B7596 /* GranularityNegativeTests.swift in Sources */,
+				E600FB6B23831694007B7596 /* ShardSpaceTests.swift in Sources */,
 				E650692F2381653900AB420D /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */,
 				E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */,
 				E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */,
@@ -4908,6 +4937,7 @@
 				E600FB30238315C3007B7596 /* HmacTest.swift in Sources */,
 				E6BACE842350E87E006D97C6 /* FindANodeEpicTests.swift in Sources */,
 				E600FB3E238315C3007B7596 /* TokenPermissionBadValueTests.swift in Sources */,
+				E600FB6823831694007B7596 /* SwiftHashesAreDeterministicTests.swift in Sources */,
 				E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */,
 				E600FB5E238315C3007B7596 /* AtomIdentifierTests.swift in Sources */,
 				E600FB5D238315C3007B7596 /* EUIDTests.swift in Sources */,
@@ -4931,6 +4961,7 @@
 				E600FB33238315C3007B7596 /* AtomJsonSerializationTwoParticleGroupsTests.swift in Sources */,
 				E600FB46238315C3007B7596 /* AtomJsonDeserializationUnallocatedTokenBadValuesTests.swift in Sources */,
 				E69E753F22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
+				E600FB6A23831694007B7596 /* ShardRangeTests.swift in Sources */,
 				E650693623816A0500AB420D /* CreateTokenActionToParticleGroupsMapperTests.swift in Sources */,
 				E600FB55238315C3007B7596 /* TokenUnitConversionTests.swift in Sources */,
 				E600FB39238315C3007B7596 /* QuestionMarkInSymbolTests.swift in Sources */,
@@ -4985,6 +5016,7 @@
 				E6506918237F3CF100AB420D /* DefaultAtomToTransactionMapperCreateTokenFromGenesisAtomTests.swift in Sources */,
 				E600FB59238315C3007B7596 /* GranularityTests.swift in Sources */,
 				E605544D23058AA100528510 /* ParticleSet.swift in Sources */,
+				E600FB6923831694007B7596 /* MagicTests.swift in Sources */,
 				E600FB38238315C3007B7596 /* TooShortNameTests.swift in Sources */,
 				E600FB4A238315C3007B7596 /* DSONEncodingIntArrayTests.swift in Sources */,
 				E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */,

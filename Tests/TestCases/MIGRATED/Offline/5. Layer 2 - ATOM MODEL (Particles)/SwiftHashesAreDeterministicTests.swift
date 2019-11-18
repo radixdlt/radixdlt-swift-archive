@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,42 +22,21 @@
 // SOFTWARE.
 //
 
-
-import XCTest
+import Foundation
 @testable import RadixSDK
+import XCTest
 
-class ShardRangeTests: XCTestCase {
+class SwiftHashTests: TestCase {
     
-    func testOkRange() {
-        XCTAssertNoThrow(
-            try ShardRange(
-                lower: 1,
-                upper: 3
-            )
-        )
+    // This Swift library has opted in for deterministic hashing using `SWIFT_DETERMINISTIC_HASHING` flag, as suggested by:
+    // https://github.com/apple/swift-evolution/blob/master/proposals/0206-hashable-enhancements.md#effect-on-abi-stability
+    func testHashString() {
+        XCTAssertEqual("Hello Hash".hashValue, -5126095785992718058)
     }
     
-    func testOutOfRange() {
-        XCTAssertThrowsSpecificError(
-            try ShardRange(
-                lower: 3,
-                upper: 1
-            ),
-            ShardRange.Error.upperMustBeGreaterThanLower
-        )
-    }
-    
-    func testSpan() {
-        func doTest(lower: Shard, upper: Shard, expectedStride: Shard) {
-            do {
-                let range = try ShardRange(lower: lower, upper: upper)
-                XCTAssertEqual(range.stride, expectedStride)
-            } catch {
-                XCTFail("bad range")
-            }
-        }
-        doTest(lower: 0, upper: 1, expectedStride: 1)
-        doTest(lower: 0, upper: 2, expectedStride: 2)
-        doTest(lower: 1, upper: 5, expectedStride: 4)
+    func testHashOfRRI() {
+        let address: Address = "JGdYaT8VUbafwXEBSoxfitXmHvg2Xq1BhvNVi3Cxd8mNp4LazBk"
+        let rri: ResourceIdentifier = "/\(address)/STABLE"
+        XCTAssertEqual(rri.hashValue, -9191205457814054942)
     }
 }

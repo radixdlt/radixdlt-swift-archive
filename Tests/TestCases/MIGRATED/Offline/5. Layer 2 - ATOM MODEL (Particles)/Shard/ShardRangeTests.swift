@@ -22,37 +22,42 @@
 // SOFTWARE.
 //
 
+
 import XCTest
 @testable import RadixSDK
 
-class ShardSpaceTests: XCTestCase {
+class ShardRangeTests: TestCase {
     
-    private let irrelevant: Shard = 3
-    
-    func testWithinRange() {
-        
+    func testOkRange() {
         XCTAssertNoThrow(
-            try ShardSpace(
-                range: try ShardRange(
-                    lower: -(1 << 20),
-                    upper: 1 << 20
-                ),
-                anchor: irrelevant
+            try ShardRange(
+                lower: 1,
+                upper: 3
             )
         )
     }
     
     func testOutOfRange() {
-        
-        let badRange = try! ShardRange(
-            lower: -(1 << 60),
-            upper: 1 << 60
-        )
-        
         XCTAssertThrowsSpecificError(
-            try ShardSpace(range: badRange, anchor: irrelevant),
-            ShardSpace.Error.spanOfRangeTooBig(expectedAtMost: ShardSpace.shardChunkRangeSpan, butGot: badRange.stride)
+            try ShardRange(
+                lower: 3,
+                upper: 1
+            ),
+            ShardRange.Error.upperMustBeGreaterThanLower
         )
-        
+    }
+    
+    func testSpan() {
+        func doTest(lower: Shard, upper: Shard, expectedStride: Shard) {
+            do {
+                let range = try ShardRange(lower: lower, upper: upper)
+                XCTAssertEqual(range.stride, expectedStride)
+            } catch {
+                XCTFail("bad range")
+            }
+        }
+        doTest(lower: 0, upper: 1, expectedStride: 1)
+        doTest(lower: 0, upper: 2, expectedStride: 2)
+        doTest(lower: 1, upper: 5, expectedStride: 4)
     }
 }

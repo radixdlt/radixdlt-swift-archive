@@ -1,6 +1,6 @@
 //
 // MIT License
-//
+// 
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,21 +22,37 @@
 // SOFTWARE.
 //
 
-import Foundation
-@testable import RadixSDK
 import XCTest
+@testable import RadixSDK
 
-class SwiftHashTests: XCTestCase {
+class ShardSpaceTests: TestCase {
     
-    // This Swift library has opted in for deterministic hashing using `SWIFT_DETERMINISTIC_HASHING` flag, as suggested by:
-    // https://github.com/apple/swift-evolution/blob/master/proposals/0206-hashable-enhancements.md#effect-on-abi-stability
-    func testHashString() {
-        XCTAssertEqual("Hello Hash".hashValue, -5126095785992718058)
+    private let irrelevant: Shard = 3
+    
+    func testWithinRange() {
+        
+        XCTAssertNoThrow(
+            try ShardSpace(
+                range: try ShardRange(
+                    lower: -(1 << 20),
+                    upper: 1 << 20
+                ),
+                anchor: irrelevant
+            )
+        )
     }
     
-    func testHashOfRRI() {
-        let address: Address = "JGdYaT8VUbafwXEBSoxfitXmHvg2Xq1BhvNVi3Cxd8mNp4LazBk"
-        let rri: ResourceIdentifier = "/\(address)/STABLE"
-        XCTAssertEqual(rri.hashValue, -9191205457814054942)
+    func testOutOfRange() {
+        
+        let badRange = try! ShardRange(
+            lower: -(1 << 60),
+            upper: 1 << 60
+        )
+        
+        XCTAssertThrowsSpecificError(
+            try ShardSpace(range: badRange, anchor: irrelevant),
+            ShardSpace.Error.spanOfRangeTooBig(expectedAtMost: ShardSpace.shardChunkRangeSpan, butGot: badRange.stride)
+        )
+        
     }
 }

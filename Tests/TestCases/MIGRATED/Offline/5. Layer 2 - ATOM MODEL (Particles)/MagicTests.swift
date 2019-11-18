@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class MagicTest: XCTestCase {
+class MagicTest: TestCase {
     func testMagicEndianess() {
 
         func doTest(magic: Magic, expectedHex: String) {
