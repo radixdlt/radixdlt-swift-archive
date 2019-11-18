@@ -223,10 +223,10 @@ private extension SubmitAtomEpicTests {
         XCTAssertNil(retainSocket, line: line)
         XCTAssertNil(nodeForWhichWebSocketConnectionWasClosed, line: line)
         
-        let overridingTimeoutIfPresent: TimeInterval? = epicSubmissionMaxDuration.map { TimeInterval.init($0 * 2) } ?? nil
+        let overridingTimeoutIfPresent: TimeInterval = epicSubmissionMaxDuration.map { TimeInterval.init($0 * 2) } ?? TimeInterval.defaultNetworkEpicTimeout
         
         if let epicSubmissionMaxDuration = epicSubmissionMaxDuration {
-            XCTAssertEqual(overridingTimeoutIfPresent!, TimeInterval(2*epicSubmissionMaxDuration))
+            XCTAssertEqual(overridingTimeoutIfPresent, TimeInterval(2*epicSubmissionMaxDuration))
         }
         
         doTest(

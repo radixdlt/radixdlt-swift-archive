@@ -27,17 +27,18 @@ import Foundation
 import XCTest
 import Combine
 
+extension TimeInterval {
+    static let defaultNetworkEpicTimeout = 0.5
+}
+
 class NetworkEpicTestCase: TestCase {
     
-    let node1 = makeNode()
-    let node2 = makeNode()
-    
-    func doTest<Epic>(
+        func doTest<Epic>(
         epic: Epic,
         
         line: UInt = #line,
         
-        timeout: TimeInterval? = nil, // = 0.5,
+        timeout: TimeInterval = .defaultNetworkEpicTimeout,
         
         expectedNumberOfOutput: Int,
         
@@ -65,7 +66,7 @@ class NetworkEpicTestCase: TestCase {
         
         line: UInt = #line,
         
-        timeout: TimeInterval? = nil,// = 0.5,
+        timeout: TimeInterval = .defaultNetworkEpicTimeout,
         
         resultingPublisherTransformation: (
         _ inputNodeActionSubject: PassthroughSubject<NodeAction, Never>,
@@ -102,7 +103,7 @@ class NetworkEpicTestCase: TestCase {
         
         input(actionsSubject, networkStateSubject)
         
-        wait(for: [expectation], timeout: timeout ?? 0.5)
+        wait(for: [expectation], timeout: timeout)
         
         outputtedNodeActionsHandler(receivedValues)
         
