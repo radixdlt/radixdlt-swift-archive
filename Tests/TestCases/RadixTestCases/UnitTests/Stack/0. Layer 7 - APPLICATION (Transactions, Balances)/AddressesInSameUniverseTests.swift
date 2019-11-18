@@ -84,7 +84,7 @@ class AddressesInSameUniverseTests: TestCase {
 
 extension Address {
     static var randomUniverse: Address {
-        let magicInRandomUnivserse = Magic(integerLiteral: Int32.random(in: Int32.min...Int32.max))
-        return Address(magic: magicInRandomUnivserse, publicKey: .irrelevant)
+        let magicInRandomUniverse = Magic(integerLiteral: Int32.random(in: Int32.min...Int32.max))
+        return Address(magic: magicInRandomUniverse, publicKey: .irrelevant)
     }
 }
