@@ -78,6 +78,9 @@
 		E600FB6B23831694007B7596 /* ShardSpaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB6723831694007B7596 /* ShardSpaceTests.swift */; };
 		E600FB702383171F007B7596 /* URLFormatterFailingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB6E2383171F007B7596 /* URLFormatterFailingTests.swift */; };
 		E600FB712383171F007B7596 /* URLFormatterSuccessfulTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB6F2383171F007B7596 /* URLFormatterSuccessfulTests.swift */; };
+		E600FB77238317AE007B7596 /* AddressesInSameUniverseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB74238317AE007B7596 /* AddressesInSameUniverseTests.swift */; };
+		E600FB78238317AE007B7596 /* BurnMintTransactionOfflineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB75238317AE007B7596 /* BurnMintTransactionOfflineTests.swift */; };
+		E600FB79238317AE007B7596 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FB76238317AE007B7596 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */; };
 		E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3342242410700A81412 /* UnsignedAtom.swift */; };
 		E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33B22428C7F00A81412 /* SignedAtom.swift */; };
 		E60253FF225CA1C2004B2F94 /* UnallocatedTokensParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */; };
@@ -755,6 +758,9 @@
 		E600FB6723831694007B7596 /* ShardSpaceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShardSpaceTests.swift; sourceTree = "<group>"; };
 		E600FB6E2383171F007B7596 /* URLFormatterFailingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLFormatterFailingTests.swift; sourceTree = "<group>"; };
 		E600FB6F2383171F007B7596 /* URLFormatterSuccessfulTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLFormatterSuccessfulTests.swift; sourceTree = "<group>"; };
+		E600FB74238317AE007B7596 /* AddressesInSameUniverseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddressesInSameUniverseTests.swift; path = OfflineTests/AddressesInSameUniverseTests.swift; sourceTree = "<group>"; };
+		E600FB75238317AE007B7596 /* BurnMintTransactionOfflineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BurnMintTransactionOfflineTests.swift; path = OfflineTests/BurnMintTransactionOfflineTests.swift; sourceTree = "<group>"; };
+		E600FB76238317AE007B7596 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BalanceOfNativeTokenFromGenesisAtomsTests.swift; path = OfflineTests/BalanceOfNativeTokenFromGenesisAtomsTests.swift; sourceTree = "<group>"; };
 		E601D3342242410700A81412 /* UnsignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsignedAtom.swift; sourceTree = "<group>"; };
 		E601D33B22428C7F00A81412 /* SignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAtom.swift; sourceTree = "<group>"; };
 		E60253FE225CA1C2004B2F94 /* UnallocatedTokensParticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnallocatedTokensParticle.swift; sourceTree = "<group>"; };
@@ -1705,6 +1711,16 @@
 			path = URLFormatter;
 			sourceTree = "<group>";
 		};
+		E600FB72238317AE007B7596 /* 0. Layer 7 - APPLICATION (Transactions, Balances) */ = {
+			isa = PBXGroup;
+			children = (
+				E600FB74238317AE007B7596 /* AddressesInSameUniverseTests.swift */,
+				E600FB75238317AE007B7596 /* BurnMintTransactionOfflineTests.swift */,
+				E600FB76238317AE007B7596 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */,
+			);
+			path = "0. Layer 7 - APPLICATION (Transactions, Balances)";
+			sourceTree = "<group>";
+		};
 		E6025400225CC3CD004B2F94 /* UniverseConfig */ = {
 			isa = PBXGroup;
 			children = (
@@ -2562,6 +2578,7 @@
 		E65069262381653900AB420D /* Offline */ = {
 			isa = PBXGroup;
 			children = (
+				E600FB72238317AE007B7596 /* 0. Layer 7 - APPLICATION (Transactions, Balances) */,
 				E600FB6C2383171F007B7596 /* 2. Layer 5 - UNIVERSE (Universe, Node) */,
 				E65069272381653900AB420D /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */,
 				E600FB6223831694007B7596 /* 5. Layer 2 - ATOM MODEL (Particles) */,
@@ -4950,6 +4967,8 @@
 				E600FB712383171F007B7596 /* URLFormatterSuccessfulTests.swift in Sources */,
 				E6E27A572271EF2B0067D46E /* CustomAssert.swift in Sources */,
 				E600FB2E238315C3007B7596 /* ECIESDecryptMessageTests.swift in Sources */,
+				E600FB78238317AE007B7596 /* BurnMintTransactionOfflineTests.swift in Sources */,
+				E600FB79238317AE007B7596 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */,
 				E600FB53238315C3007B7596 /* TrivialAtomToDsonTests.swift in Sources */,
 				E6E9D2F123746B22003753B4 /* PrefixUntilCompletionFrom.swift in Sources */,
 				E600FB4D238315C3007B7596 /* CBOREncodingPrimitivesIntTests.swift in Sources */,
@@ -5014,6 +5033,7 @@
 				E600FB4F238315C3007B7596 /* CBOREncodingPrimitivesBoolTests.swift in Sources */,
 				E600FB5C238315C3007B7596 /* AmountAndGranularityTests.swift in Sources */,
 				E600FB60238315C3007B7596 /* DecimalStringTests.swift in Sources */,
+				E600FB77238317AE007B7596 /* AddressesInSameUniverseTests.swift in Sources */,
 				E6A643122244EDC100CD4BFC /* DecodePointFromPublicKeyTests.swift in Sources */,
 				E600FB4E238315C3007B7596 /* CBOREncodingPrimitivesStringTests.swift in Sources */,
 				E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */,

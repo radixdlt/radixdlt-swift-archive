@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,17 +24,23 @@
 
 import XCTest
 @testable import RadixSDK
-import RxSwift
-import Combine
 
-class BalanceOfNativeTokenFromGenesisAtomsTests: XCTestCase {
-    
-    func testFetchAtomsAtGenesisAddress() {
-        let disposeBag = DisposeBag()
-        let application = RadixApplicationClient.localhostAliceSingleNodeApp
-        let address: Address = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
-        application.pull(address: address).disposed(by: disposeBag)
-        guard let xrdBalance = application.balanceOfNativeTokensOrZero(ownedBy: address).blockingTakeFirst(timeout: 4) else { return }
-        XCTAssertEqual(xrdBalance.amount, "1000000000000000000000000000")
+class BurnMintTransactionOfflineTests: TestCase {
+
+
+    func testBurnMintMultipleTimes() {
+        let alice = Address.irrelevant
+        let rri = ResourceIdentifier(address: alice, name: .irrelevant)
+
+        let transaction = Transaction(TokenContext(rri: rri, actor: alice)) {
+            Mint(amount: 2)
+            Burn(amount: 1)
+            Mint(amount: 3)
+            Burn(amount: 2)
+        }
+
+        XCTAssertEqual(transaction.actions(ofType: MintTokensAction.self).count, 2)
+        XCTAssertEqual(transaction.actions(ofType: BurnTokensAction.self).count, 2)
     }
+
 }

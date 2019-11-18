@@ -25,7 +25,7 @@
 import XCTest
 @testable import RadixSDK
 
-class AddressesInSameUniverseTests: XCTestCase {
+class AddressesInSameUniverseTests: TestCase {
 
 
     private var addressUniverse1 = Address.randomUniverse

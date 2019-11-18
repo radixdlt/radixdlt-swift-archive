@@ -184,7 +184,6 @@ extension Publisher where Self: SliceOfOutputPublisher {
     }
 }
 
-
 extension Publisher where Output: Sequence, Failure == Never {
    
     func toBlockingFirst(
@@ -209,5 +208,23 @@ extension Publisher where Output: Sequence, Failure == Never {
         timeout: DispatchTimeInterval = .enoughForPOW
     ) throws -> Output.Element {
         try toBlockingFirst(timeout: timeout).get()
+    }
+}
+
+extension Publisher {
+        
+    func toBlockingGetFirst(
+        timeout: DispatchTimeInterval = .enoughForPOW
+    ) throws -> Output {
+        try self
+            .first()
+            .toBlocking(timeout: timeout)
+            .flatMap { outputs in
+                guard let firstOutput = outputs.first else {
+                    return Result<Output, Blocker<Output, Failure>.Error>.failure(.notEnoughValuesPublished(requested: 1, butOnlyGot: 0, specifically: []))
+                }
+                return  Result<Output, Blocker<Output, Failure>.Error>.success(firstOutput)
+        }
+        .get()
     }
 }
