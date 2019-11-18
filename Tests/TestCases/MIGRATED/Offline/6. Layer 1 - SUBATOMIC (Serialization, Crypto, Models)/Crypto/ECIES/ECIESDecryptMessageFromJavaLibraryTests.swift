@@ -26,7 +26,7 @@ import Foundation
 import XCTest
 @testable import RadixSDK
 
-class ECIESDecryptMessageFromJavaLibraryTests: XCTestCase {
+class ECIESDecryptMessageFromJavaLibraryTests: TestCase {
     func testDecryptMessage() {
         // GIVEN
         // The message "Hello Radix", ECIES encrypted by the Java library using the PrivateKey: 1

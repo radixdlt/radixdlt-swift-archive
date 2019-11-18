@@ -27,12 +27,7 @@ import Foundation
 import BigInt
 import XCTest
 
-class BigUnsignedIntTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-    }
+class BigUnsignedIntTests: TestCase {
     
     func testUint256() {
         let table = [

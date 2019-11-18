@@ -25,7 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class UniverseConfigBetanetJSONDecodingTest: XCTestCase {
+class UniverseConfigBetanetJSONDecodingTest: TestCase {
     
     func testLocalnetConfigHashIdMatchesBundled() {
         let config: UniverseConfig = .localnet

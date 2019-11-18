@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class DSONEncodingIntArrayTests: XCTestCase {
+class DSONEncodingIntArrayTests: TestCase {
     
     func testDsonEncodingOfArray() {
         let intArray: [Int] = [1, 2, 3, 4]

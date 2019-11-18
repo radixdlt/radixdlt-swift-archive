@@ -27,7 +27,7 @@ import Foundation
 import XCTest
 
 
-class DsonEncodingTokenDefinitionParticleTests: XCTestCase {
+class DsonEncodingTokenDefinitionParticleTests: TestCase {
 
     func testDsonEncodingOfTokenDefinitionParticle() {
         

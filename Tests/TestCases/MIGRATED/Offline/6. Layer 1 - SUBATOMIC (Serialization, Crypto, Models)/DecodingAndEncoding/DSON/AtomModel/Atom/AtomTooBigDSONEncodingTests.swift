@@ -25,7 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class AtomTooBigDSONEncodingTests: XCTestCase {
+class AtomTooBigDSONEncodingTests: TestCase {
     
     func testDsonEncodingAtomTooBig() {
         // GIVEN

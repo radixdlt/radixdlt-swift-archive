@@ -25,7 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class AddressChecksumTests: XCTestCase {
+class AddressChecksumTests: TestCase {
     
     func testAddressChecksum() {
         

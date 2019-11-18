@@ -26,7 +26,7 @@
 import XCTest
 
 
-class CBOREncodingPrimitivesIntTests: XCTestCase {
+class CBOREncodingPrimitivesIntTests: TestCase {
     
     func testCBOREncodingPositiveInt() {
         XCTAssertEqual(10.cborEncodedHexString(), "0a")

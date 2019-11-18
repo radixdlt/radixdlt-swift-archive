@@ -25,7 +25,7 @@
 import XCTest
 @testable import RadixSDK
 
-class SignatureLengthTests: XCTestCase {
+class SignatureLengthTests: TestCase {
 
     
     func testLengthOfSignatureIs64BytesEvenForLowValueR() {

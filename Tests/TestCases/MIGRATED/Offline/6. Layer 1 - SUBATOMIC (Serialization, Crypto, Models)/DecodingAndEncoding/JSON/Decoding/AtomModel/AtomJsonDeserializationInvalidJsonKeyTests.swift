@@ -25,7 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class AtomJsonDeserializationInvalidJsonKeyTests: XCTestCase {
+class AtomJsonDeserializationInvalidJsonKeyTests: TestCase {
     
     func testJsonDecodingIncorrectJsonKey() {
         // GIVEN

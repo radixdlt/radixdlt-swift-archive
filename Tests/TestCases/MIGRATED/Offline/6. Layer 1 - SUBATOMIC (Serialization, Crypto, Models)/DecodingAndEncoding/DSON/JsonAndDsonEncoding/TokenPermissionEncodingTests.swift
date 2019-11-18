@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class TokenPermissionEncodingTests: XCTestCase {
+class TokenPermissionEncodingTests: TestCase {
 
     
     func testJsonEncodedIsPrefixed() {

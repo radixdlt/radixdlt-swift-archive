@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class TestOptionSetRemoving: XCTestCase {
+class TestOptionSetRemoving: TestCase {
     func testRemoving() {
         var outputAll = DSONOutput.all
         XCTAssertTrue(outputAll.contains(.wire))

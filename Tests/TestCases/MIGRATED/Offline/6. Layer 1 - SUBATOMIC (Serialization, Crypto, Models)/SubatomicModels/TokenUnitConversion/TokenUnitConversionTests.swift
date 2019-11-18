@@ -26,13 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class TokenUnitConversionTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = true
-    }
-    
+class TokenUnitConversionTests: TestCase {
     
     func testDecimalLotsOfZeros() throws {
         let lhs = try PositiveAmount(

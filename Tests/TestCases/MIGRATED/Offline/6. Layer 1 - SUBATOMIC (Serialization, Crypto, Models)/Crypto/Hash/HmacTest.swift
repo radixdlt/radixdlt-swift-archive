@@ -26,7 +26,7 @@ import Foundation
 import XCTest
 @testable import RadixSDK
 
-class ECIESHmacCalculationTests: XCTestCase {
+class ECIESHmacCalculationTests: TestCase {
     
     func testHmacCalc() {
         let bytes16: HexString = "1234567890ABCDEF1234567890ABCDEF"

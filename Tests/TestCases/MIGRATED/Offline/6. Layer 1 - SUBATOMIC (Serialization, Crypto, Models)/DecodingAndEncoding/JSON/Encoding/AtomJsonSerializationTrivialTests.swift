@@ -25,7 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class AtomJsonSerializationTrivialTests: XCTestCase {
+class AtomJsonSerializationTrivialTests: TestCase {
     
     func testJsonEncodingAndDecodingResultsInTheSameTrivialAtom() {
 

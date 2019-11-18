@@ -26,7 +26,7 @@ import Foundation
 import XCTest
 @testable import RadixSDK
 
-class ECIESEncryptionAndDecryptionTests: XCTestCase {
+class ECIESEncryptionAndDecryptionTests: TestCase {
     
     func testAliceCanDecryptMessageMeantForHerEncryptedByBob() {
         struct Bob: PublicKeyOwner {

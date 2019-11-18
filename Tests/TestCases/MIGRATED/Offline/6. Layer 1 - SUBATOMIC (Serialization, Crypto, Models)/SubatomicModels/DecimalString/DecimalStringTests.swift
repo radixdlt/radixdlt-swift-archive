@@ -25,7 +25,7 @@
 import XCTest
 @testable import RadixSDK
 
-class DecimalStringTests: XCTestCase {
+class DecimalStringTests: TestCase {
 
     func testDecimalString() {
         XCTAssertNoThrow(try DecimalString(string: "1234567890"))

@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class AmountAndGranularityTests: XCTestCase {
+class AmountAndGranularityTests: TestCase {
     
     private let granularityOfOne: Granularity = 1
     private let granularityOfTwo: Granularity = 2

@@ -27,7 +27,7 @@
 import XCTest
 
 
-class DSONEncodingAddressHolderTests: XCTestCase {
+class DSONEncodingAddressHolderTests: TestCase {
 
     struct AddressHolder: RadixCodable {
         public let address: Address

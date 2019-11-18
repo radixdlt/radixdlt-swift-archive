@@ -25,7 +25,7 @@
 import XCTest
 @testable import RadixSDK
 
-class HashTests: XCTestCase {
+class HashTests: TestCase {
 
     func testSha256Twice() {
         let data = "Hello Radix".toData()

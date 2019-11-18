@@ -27,7 +27,7 @@ import XCTest
 
 @testable import RadixSDK
 
-class SuperscriptTests: XCTestCase {
+class SuperscriptTests: TestCase {
     func testPositiveIntegersSuperscript() {
         XCTAssertEqual(0.superscriptString(), "⁰")
         XCTAssertEqual(1.superscriptString(), "¹")

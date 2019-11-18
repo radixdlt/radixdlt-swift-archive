@@ -26,7 +26,7 @@ import Foundation
 import XCTest
 @testable import RadixSDK
 
-class ECIESDecryptMessageTests: XCTestCase {
+class ECIESDecryptMessageTests: TestCase {
     
     /// This message was pasted into the Java library to ensure that the Java library can decrypt messages encrypted by this Swift library
     /// this is important because byte order seems to differ for integers (length of cipherText encoded as 4 bytes seems to differ.)

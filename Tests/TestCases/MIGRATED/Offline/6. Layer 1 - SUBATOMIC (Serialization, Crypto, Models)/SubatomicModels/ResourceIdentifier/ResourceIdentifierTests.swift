@@ -25,7 +25,7 @@
 import XCTest
 @testable import RadixSDK
 
-class ResourceIdentifierTests: XCTestCase {
+class ResourceIdentifierTests: TestCase {
     
     func testResourceIdentifierString() {
         // GIVEN

@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class NonNegativeAmountTests: XCTestCase {
+class NonNegativeAmountTests: TestCase {
     
     func testNonNegativeAmount256BitMaxValue() {
         XCTAssertEqual(NonNegativeAmount.max.hex, String(repeating: "f", count: 64))

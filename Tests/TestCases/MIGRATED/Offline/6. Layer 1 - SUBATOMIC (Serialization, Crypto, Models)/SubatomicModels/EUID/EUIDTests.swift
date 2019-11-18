@@ -25,12 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class EUIDTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-    }
+class EUIDTests: TestCase {
     
     func testEUIDFrom16Bytes() {
         XCTAssertNotThrowsAndEqual(

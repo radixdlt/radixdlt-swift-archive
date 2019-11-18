@@ -25,7 +25,7 @@
 import XCTest
 @testable import RadixSDK
 
-class Base58Tests: XCTestCase {
+class Base58Tests: TestCase {
 
     func testBase58ToHexString() {
         let data = Base58String(validated: "JHd1zCEKkXMhwz7GgSuENRrcFpPKveWugkFCn4u1NCqfc629zH6").asData

@@ -25,7 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class CBOREncodingPrimitivesStringTests: XCTestCase {
+class CBOREncodingPrimitivesStringTests: TestCase {
     
     func testCborEncodingOfString() {
         XCTAssertEqual(

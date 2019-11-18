@@ -26,7 +26,7 @@
 import XCTest
 
 /// DSON encoding of example map from: https://radixdlt.atlassian.net/wiki/spaces/AM/pages/56557727/DSON+Encoding
-class DSONEncodingExampleMapTests: XCTestCase {
+class DSONEncodingExampleMapTests: TestCase {
     
     func testDsonEncodingOfSimpleMap() {
         // GIVEN

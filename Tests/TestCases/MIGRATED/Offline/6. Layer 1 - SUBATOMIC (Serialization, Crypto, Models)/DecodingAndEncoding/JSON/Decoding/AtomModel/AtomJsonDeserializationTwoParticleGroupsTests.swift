@@ -25,7 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class AtomJsonDeserializationTwoParticleGroupsTests: XCTestCase {
+class AtomJsonDeserializationTwoParticleGroupsTests: TestCase {
         
     func testJsonDecodingAtomWithTwoParticleGroups() {
         // GIVEN

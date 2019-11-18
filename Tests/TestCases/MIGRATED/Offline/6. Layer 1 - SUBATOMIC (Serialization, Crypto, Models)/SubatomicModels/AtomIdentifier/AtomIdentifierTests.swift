@@ -25,17 +25,13 @@
 import XCTest
 @testable import RadixSDK
 
-class AtomIdentifierTests: XCTestCase {
-    
-//    let alice = RadixIdentity(privateKey: 1)
-//    let bob = RadixIdentity(privateKey: 2)
+class AtomIdentifierTests: TestCase {
     
     let alice = Address(privateKey: 1)
     let bob = Address(privateKey: 2)
     
     override func setUp() {
         super.setUp()
-        continueAfterFailure = false
         
         XCTAssertEqual(alice, "JF5FTU5wdsKNp4qcuFJ1aD9enPQMocJLCqvHE2ZPDjUNag8MKun")
         XCTAssertEqual(alice.hashEUID, "b1cd0a4eb6d1cea5eb288fb4474ac403")

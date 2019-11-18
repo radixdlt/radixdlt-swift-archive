@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class GranularityTests: XCTestCase {
+class GranularityTests: TestCase {
     
     func testThatCannotCreateZeroGranularity() {
         XCTAssertThrowsSpecificError(try Granularity(magnitude: 0), AmountError.valueTooSmall)

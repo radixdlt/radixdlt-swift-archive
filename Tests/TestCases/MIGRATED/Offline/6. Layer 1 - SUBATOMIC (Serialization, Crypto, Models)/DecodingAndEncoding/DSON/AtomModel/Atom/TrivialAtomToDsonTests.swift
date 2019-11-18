@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class AtomToDsonTests: XCTestCase {
+class AtomToDsonTests: TestCase {
     func testDsonEncodingOfAtom() {
         // GIVEN
         // An atom containing just timestamp

@@ -25,7 +25,7 @@
 @testable import RadixSDK
 import XCTest
 
-class AtomJsonSerializationTwoParticleGroupsTests: XCTestCase {
+class AtomJsonSerializationTwoParticleGroupsTests: TestCase {
     
     func testJsonEncodingOfAtomWithTwoParticleGroups() {
         guard let jsonString = jsonStringOrFail(atom) else { return }

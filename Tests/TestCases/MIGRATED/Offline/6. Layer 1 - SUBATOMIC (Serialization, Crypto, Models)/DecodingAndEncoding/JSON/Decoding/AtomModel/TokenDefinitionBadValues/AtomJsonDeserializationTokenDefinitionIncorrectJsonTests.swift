@@ -27,7 +27,7 @@ import XCTest
 
 private let debugPrintJson = false
 
-class AtomJsonDeserializationChangeJson: XCTestCase {
+class AtomJsonDeserializationChangeJson: TestCase {
     
     func jsonString() -> String {
         return tokenDefintionJson
