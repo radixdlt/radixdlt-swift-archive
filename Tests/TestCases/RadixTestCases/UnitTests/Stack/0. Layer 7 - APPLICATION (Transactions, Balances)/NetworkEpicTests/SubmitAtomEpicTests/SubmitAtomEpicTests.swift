@@ -64,7 +64,7 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
     
     func test_that_atom_submission_when_specifying_origin_node_completes_when_atom_gets_stored() {
         let atom = SignedAtom.irrelevant
-        let originNode: Node = node2
+        let originNode: Node = makeNode()
         let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: true)
         
         doTestSubmitAtomEpic(
@@ -87,7 +87,7 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
     
     func test_that_atom_submission_when_specifying_origin_node_and_never_getting_stored_completes_when___isCompletingOnStoreOnly___is___false() {
         let atom = SignedAtom.irrelevant
-        let originNode: Node = node2
+        let originNode: Node = makeNode(index: 8)
         let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: false)
         
         let atomStatusNotStoredPendingVerification = AtomStatusEvent.notStored(reason: .init(atomStatus: .pendingDependencyVerification, dataAsJsonString: ""))
@@ -115,7 +115,7 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
     func test_timeout() {
         
         let atom = SignedAtom.irrelevant
-        let originNode: Node = node2
+        let originNode: Node = makeNode()
         let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: true)
         
         doTestSubmitAtomEpic(
@@ -138,7 +138,7 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
     
     func test_that_atom_submission_when_specifying_origin_node_and_never_getting_stored_timesout_when___isCompletingOnStoreOnly___is___true() {
         let atom = SignedAtom.irrelevant
-        let originNode: Node = node2
+        let originNode: Node = makeNode()
         let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: true)
         
         let atomStatusNotStoredPendingVerification = AtomStatusEvent.notStored(reason: .init(atomStatus: .pendingDependencyVerification, dataAsJsonString: ""))
@@ -190,7 +190,7 @@ private extension SubmitAtomEpicTests {
         
     ) {
         
-        let node: Node = specifiedNode ?? node1
+        let node: Node = specifiedNode ?? makeNode()
         
         let webSocketStatusSubject = CurrentValueSubject<WebSocketStatus, Never>(.connected)
         

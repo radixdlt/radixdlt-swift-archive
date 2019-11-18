@@ -30,7 +30,7 @@ import Combine
 class FindANodeEpicTests: NetworkEpicTestCase {
     
     func test_that_an_already_connected_and_suitable_node_is_identified() {
-        
+           let node1 = makeNode()
         let findANodeEpic = FindANodeEpic(
             determineIfPeerIsSuitable: .allPeersAreSuitable,
             radixPeerSelector: .first,
@@ -82,7 +82,7 @@ class FindANodeEpicTests: NetworkEpicTestCase {
             radixPeerSelector: .first,
             waitForConnectionDurationInSeconds: 0.1
         )
-        let node = node1
+        let node = makeNode()
         let expectedNumberOfOutput = 2
         
         doTest(
@@ -106,7 +106,7 @@ class FindANodeEpicTests: NetworkEpicTestCase {
             radixPeerSelector: .first,
             waitForConnectionDurationInSeconds: 0.1
         )
-        let node = node1
+        let node = makeNode()
         let expectedNumberOfOutput = 1
         
         doTest(
@@ -125,8 +125,8 @@ class FindANodeEpicTests: NetworkEpicTestCase {
     
     func test_that_we_wanna_disconnect_from_a_slow_node_and_connect_to_another_one() {
         
-        let slowNode = node1
-        let fastNode = node2
+        let slowNode = makeNode(index: 1)
+        let fastNode = makeNode(index: 2)
         
         let findANodeEpic = FindANodeEpic(
             determineIfPeerIsSuitable: .allPeersAreSuitable,
@@ -202,8 +202,8 @@ class FindANodeEpicTests: NetworkEpicTestCase {
     
     
     func test_that_when_first_node_fails__then_second_node_should_connect() {
-        let failingNode = node1
-        let goodNode = node2
+        let failingNode = makeNode(index: 1)
+        let goodNode = makeNode(index: 2)
         
         let findANodeEpic = FindANodeEpic(
             determineIfPeerIsSuitable: .allPeersAreSuitable,
@@ -318,10 +318,9 @@ extension Shards {
     static var irrelevant: Self { .init(single: .irrelevant) }
 }
 
-var nextNode: UInt8 = 1
-func makeNode() -> Node {
-    defer { nextNode += 1 }
-    return try! Node(domain: "1.1.1.\(nextNode)", port: 1, isUsingSSL: false)
+func makeNode(index specifiedIndex: UInt8? = nil) -> Node {
+    let index: UInt8 = specifiedIndex ?? UInt8.random(in: 100...255)
+    return try! Node(domain: "1.1.1.\(index)", port: 1, isUsingSSL: false)
 }
 
 extension DetermineIfMoreInfoAboutNodeIsNeeded {

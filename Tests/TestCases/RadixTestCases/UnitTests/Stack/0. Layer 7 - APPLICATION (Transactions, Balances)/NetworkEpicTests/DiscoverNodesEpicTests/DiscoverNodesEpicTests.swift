@@ -31,7 +31,7 @@ class DiscoverNodesEpicTests: NetworkEpicTestCase {
 
     func test_that_when_seeds_return_a_non_matching_universe__a_node_mismatch_universe_event_should_be_emitted() {
         
-        let node = node1
+        let node = makeNode()
         
         let epic = DiscoverNodesEpic(
             seedNodes: Just(node)^,
@@ -58,7 +58,7 @@ class DiscoverNodesEpicTests: NetworkEpicTestCase {
     }
     
     func test_that_when_live_peers_result_is_observed__add_node_events_should_be_emitted() {
-        let node = node1
+        let node = makeNode()
         
         let epic = DiscoverNodesEpic(
             seedNodes: Just(node)^,

@@ -32,7 +32,7 @@ class FetchAtomsEpicTests: NetworkEpicTestCase {
     
     func test_that_we_start_observing_atoms_given_a_FindANodeResultAction() {
         
-        let node = node1
+        let node = makeNode()
         let address: Address = .irrelevant
         
         
