@@ -29,7 +29,7 @@ private extension Supply {
     static let hundred: Supply = 10
 }
 
-class TokenDefinitionsStateReducerTests: XCTestCase {
+class TokenDefinitionsStateReducerTests: TestCase {
 
     func testTokenWithNoMint() {
         let tokenDefinitionParticle = makeMutableSupplyTokenDefinitionParticle(tokenPermissions: [.mint: .all])

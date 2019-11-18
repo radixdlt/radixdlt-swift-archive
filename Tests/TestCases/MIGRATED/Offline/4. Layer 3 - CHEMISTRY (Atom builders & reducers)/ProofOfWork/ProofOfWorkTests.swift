@@ -35,7 +35,7 @@ extension DispatchTimeInterval {
     static var enoughForPOW: Self { .seconds(timeoutInSecondsEnoughForPOW) }
 }
 
-class ProofOfWorkTest: XCTestCase {
+class ProofOfWorkTest: TestCase {
     
     private let magic: Magic = 12345
     private let seed: HexString = "deadbeef00000000deadbeef00000000deadbeef00000000deadbeef00000000"
@@ -63,17 +63,6 @@ class ProofOfWorkTest: XCTestCase {
     }
     
     func test14LeadingZeroRx() {
-//        let powWorker = DefaultProofOfWorkWorker(targetNumberOfLeadingZeros: 14)
-
-//        guard let pow = doPow(
-//            worker: powWorker,
-//            seed: seed.asData,
-//            magic: magic,
-//            timeout: 0.5
-//        ) else { return XCTFail("timeout") }
-//
-//        XCTAssertEqual(pow.nonce, 9255)
-        
         doTest(
             zeros: 14,
             expectedNonce: 9255
@@ -128,39 +117,6 @@ private extension ProofOfWorkTest {
         
     }
 }
-
-//extension XCTestCase {
-//
-//    func doPow(
-//        worker: DefaultProofOfWorkWorker,
-//        atom: Atom,
-//        magic: Magic,
-//        timeout: TimeInterval? = .enoughForPOW,
-//        _ function: String = #function, _ file: String = #file, _ line: Int = #line
-//        ) -> ProofOfWork? {
-//        return doPow(
-//            worker: worker,
-//            seed: atom.radixHash.asData,
-//            magic: magic,
-//            timeout: timeout, function, file, line
-//        )
-//    }
-//
-//    func doPow(
-//        worker: DefaultProofOfWorkWorker,
-//        seed: Data,
-//        magic: Magic,
-//        timeout: TimeInterval? = nil,
-//        _ function: String = #function, _ file: String = #file, _ line: Int = #line
-//        ) -> ProofOfWork? {
-//
-//        return worker.work(
-//            seed: seed,
-//            magic: magic
-//        )
-//    }
-//}
-
 
 private typealias Vector = (expectedResultingNonce: Nonce, seed: HexString, magic: Magic, zeros: ProofOfWork.NumberOfLeadingZeros)
 private let vectorsForHighNonce: [Vector] = [

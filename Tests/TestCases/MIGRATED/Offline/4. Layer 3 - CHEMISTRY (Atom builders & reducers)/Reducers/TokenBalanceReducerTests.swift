@@ -22,16 +22,10 @@
 // SOFTWARE.
 //
 
-import Foundation
-@testable import RadixSDK
 import XCTest
-import RxTest
-import RxBlocking
-import RxSwift
-import Combine
+@testable import RadixSDK
 
-
-class TokenBalanceReducerTests: XCTestCase {
+class TokenBalanceReducerTests: TestCase {
     
     func testSimpleBalance() {
         let reducer = TokenBalanceReferencesReducer()

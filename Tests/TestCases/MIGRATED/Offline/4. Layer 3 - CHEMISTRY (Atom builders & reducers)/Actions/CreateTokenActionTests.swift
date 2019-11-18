@@ -26,7 +26,7 @@ import XCTest
 @testable import RadixSDK
 
 
-class CreateTokenActionTests: XCTestCase {
+class CreateTokenActionTests: TestCase {
     
     func testAssertThatInitialSupplyMustMatchGranularity() {
         

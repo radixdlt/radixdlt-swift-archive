@@ -25,7 +25,7 @@
 import XCTest
 @testable import RadixSDK
 
-class NumberOfLeadingZeroBitsInDataTests: XCTestCase {
+class NumberOfLeadingZeroBitsInDataTests: TestCase {
 
     func testCountNumberOfLeadingZeroBitsInData() {
         func doTest(data: DataConvertible, expectZeroCount: Int) {
