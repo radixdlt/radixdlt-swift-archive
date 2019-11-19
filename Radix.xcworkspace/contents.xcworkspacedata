@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:fastlane">
+   </FileRef>
+   <FileRef
       location = "group:ExampleWallet/ExampleWallet.xcodeproj">
    </FileRef>
    <FileRef
