@@ -25,15 +25,11 @@
 import Foundation
 import XCTest
 
-class LocalhostNodeTest: XCTestCase {
+class LocalhostNodeTest: TestCase {
 
     override func invokeTest() {
         guard isConnectedToLocalhost() else { return }
         super.invokeTest()
     }
-    
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-    }
+
 }

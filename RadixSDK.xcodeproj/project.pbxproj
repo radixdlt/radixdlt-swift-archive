@@ -319,6 +319,7 @@
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */; };
+		E66DC5082383692B00267ECF /* PutIniqueActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FC0423831ABF007B7596 /* PutIniqueActionTests.swift */; };
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
 		E67129A322C2289C004F6D0A /* Consumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A222C2289C004F6D0A /* Consumer.swift */; };
 		E67129A522C228AE004F6D0A /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A422C228AE004F6D0A /* Reducer.swift */; };
@@ -4978,6 +4979,7 @@
 				E600FC4B23831AC0007B7596 /* AddressTests.swift in Sources */,
 				E600FC4223831ABF007B7596 /* Int+SuperscriptTests.swift in Sources */,
 				E600FC2223831ABF007B7596 /* AddressInvalidChecksumTests.swift in Sources */,
+				E66DC5082383692B00267ECF /* PutIniqueActionTests.swift in Sources */,
 				E600FC2023831ABF007B7596 /* AtomJsonDeserializationTwoParticleGroupsTests.swift in Sources */,
 				E600FC1E23831ABF007B7596 /* AtomJsonSerializationTrivialTests.swift in Sources */,
 				E6E9D2F123746B22003753B4 /* PrefixUntilCompletionFrom.swift in Sources */,

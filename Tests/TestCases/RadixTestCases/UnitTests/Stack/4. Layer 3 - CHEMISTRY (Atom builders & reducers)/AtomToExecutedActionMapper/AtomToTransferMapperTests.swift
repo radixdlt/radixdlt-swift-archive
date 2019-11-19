@@ -53,7 +53,7 @@ class AtomToTransferMapperTests: TestCase {
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
         let actionsPublisher = atomToTransferMapper.mapAtomToActions(atom)
 
-        let transfer = try actionsPublisher.toBlockingGetFirst()
+        let transfer = try actionsPublisher.blockingListOutputFirst()
 
         XCTAssertEqual(transfer.amount, 14)
         XCTAssertEqual(transfer.attachedMessage(), "Taxi")
@@ -84,7 +84,7 @@ class AtomToTransferMapperTests: TestCase {
         let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
         
         let actionsPublisher = atomToTransferMapper.mapAtomToActions(atom)
-        let transfer = try actionsPublisher.toBlockingGetFirst()
+        let transfer = try actionsPublisher.blockingListOutputFirst()
         
         XCTAssertEqual(transfer.amount, 100)
         XCTAssertEqual(transfer.attachedMessage(), "Taxi")

@@ -65,12 +65,28 @@ extension Publishers.Output: SliceOfOutputPublisher {
     var sizeOfSlice: Int { range.count }
 }
 
-final class Blocker<Output, Failure> where Failure: Swift.Error {
-    enum Error: Swift.Error {
-        case timedOut(after: DispatchTimeInterval, outputUntilTimeout: [Output])
-        case notEnoughValuesPublished(requested: Int, butOnlyGot: Int, specifically: [Output])
-        case publisherError(Failure)
+extension Publishers.IgnoreOutput: SliceOfOutputPublisher {
+    var sizeOfSlice: Int { 0 }
+}
+
+protocol BlockerErrorConvertible: Swift.Error {
+    static func gotZeroValues(butRequested: Int) -> Self
+}
+
+enum BlockerError<Output, Failure>: BlockerErrorConvertible where Failure: Swift.Error {
+    case timedOut(after: DispatchTimeInterval, outputUntilTimeout: [Output])
+    case notEnoughValuesPublished(requested: Int, butOnlyGot: Int, specifically: [Output])
+    case publisherError(Failure)
+}
+extension BlockerError {
+    static func gotZeroValues(butRequested requested: Int) -> Self {
+        return Self.notEnoughValuesPublished(requested: requested, butOnlyGot: 0, specifically: [])
     }
+}
+
+final class Blocker<Output, Failure> where Failure: Swift.Error {
+    
+    typealias Error = BlockerError<Output, Failure>
     
     private let publisherToBlock: AnyPublisher<Output, Error>
     
@@ -103,7 +119,7 @@ final class Blocker<Output, Failure> where Failure: Swift.Error {
 }
 
 extension Blocker {
-    func blockingWasSuccessful(timeout: DispatchTimeInterval = .enoughForPOW, handleFailure: ((Error) -> Void)? = nil) -> Bool {
+    func blockingWasSuccessful(timeout: DispatchTimeInterval = .ms100, handleFailure: ((Error) -> Void)? = nil) -> Bool {
         let blockingResult = blocking(timeout: timeout)
         switch blockingResult {
         case .failure(let error):
@@ -113,7 +129,7 @@ extension Blocker {
         }
     }
     
-    func blocking(timeout: DispatchTimeInterval = .enoughForPOW) -> Result<[Output], Error> {
+    func blocking(timeout: DispatchTimeInterval = .ms100) -> Result<[Output], Error> {
         
         var outputs = [Output]()
         
@@ -174,20 +190,22 @@ extension Blocker {
 }
 
 extension Publisher where Self: SliceOfOutputPublisher {
-    private func asBlocker() -> Blocker<Output, Failure> {
+    fileprivate func asBlocker() -> Blocker<Output, Failure> {
         Blocker(self) { SliceOfOutput(from: $0) }
     }
     
-    func toBlocking(timeout: DispatchTimeInterval = .enoughForPOW) -> Result<[Output], Blocker<Output, Failure>.Error> {
+    func blockingResult(timeout: DispatchTimeInterval = .ms100) -> Result<[Output], Blocker<Output, Failure>.Error> {
         let blocker = asBlocker()
         return blocker.blocking(timeout: timeout)
     }
 }
 
+typealias BlockingResult<Output, Failure> = Result<Output, BlockerError<Output, Failure>> where Failure: Swift.Error
+
 extension Publisher where Output: Sequence, Failure == Never {
    
-    func toBlockingFirst(
-        timeout: DispatchTimeInterval = .enoughForPOW
+    func blockingListResultFirst(
+        timeout: DispatchTimeInterval = .ms100
     ) -> Result<Output.Element, Blocker<Output.Element, Failure>.Error> {
 
         let blocker = Blocker(self.flattenSequence()) {
@@ -196,35 +214,66 @@ extension Publisher where Output: Sequence, Failure == Never {
             )
         }
 
-        return blocker.blocking(timeout: timeout).flatMap { outputs in
-            guard let firstOutput = outputs.first else {
-                return Result<Output.Element, Blocker<Output.Element, Failure>.Error>.failure(.notEnoughValuesPublished(requested: 1, butOnlyGot: 0, specifically: []))
-            }
-            return  Result<Output.Element, Blocker<Output.Element, Failure>.Error>.success(firstOutput)
-        }
+        return blocker.blocking(timeout: timeout)
+            .flatMapFirst()
     }
     
-    func toBlockingGetFirst(
-        timeout: DispatchTimeInterval = .enoughForPOW
+    func blockingListOutputFirst(
+        timeout: DispatchTimeInterval = .ms100
     ) throws -> Output.Element {
-        try toBlockingFirst(timeout: timeout).get()
+        try blockingListResultFirst(timeout: timeout).get()
     }
 }
 
 extension Publisher {
         
-    func toBlockingGetFirst(
-        timeout: DispatchTimeInterval = .enoughForPOW
+    func blockingOutputFirst(
+        timeout: DispatchTimeInterval = .ms100
     ) throws -> Output {
         try self
             .first()
-            .toBlocking(timeout: timeout)
-            .flatMap { outputs in
-                guard let firstOutput = outputs.first else {
-                    return Result<Output, Blocker<Output, Failure>.Error>.failure(.notEnoughValuesPublished(requested: 1, butOnlyGot: 0, specifically: []))
-                }
-                return  Result<Output, Blocker<Output, Failure>.Error>.success(firstOutput)
-        }
+            .blockingResult(timeout: timeout)
+            .flatMapFirst()
         .get()
     }
+}
+
+
+private extension Result where Success: Sequence, Failure: BlockerErrorConvertible {
+    func flatMapFirst() -> Result<Success.Element, Failure> {
+        return self.flatMap { (successSequence: Success) -> Result<Success.Element, Failure> in
+            let outputs = [Success.Element](successSequence)
+            guard let firstOutput = outputs.first else {
+                return Result<Success.Element, Failure>.failure(Failure.gotZeroValues(butRequested: 1))
+            }
+            return Result<Success.Element, Failure>.success(firstOutput)
+        }
+    }
+}
+
+
+extension Publishers.IgnoreOutput where Failure == Never {
+    func blockingResult(timeout: DispatchTimeInterval = .ms100) -> Result<Void, Blocker<Output, Failure>.Error> {
+        let blocker = asBlocker()
+        return blocker.blocking(timeout: timeout).flatMap { outputs in
+            guard outputs.isEmpty else {
+                fatalError("Expected zero outputs")
+            }
+            return .success(void)
+        }
+    }
+    
+    func blockingWasSuccessful(timeout: DispatchTimeInterval = .ms100) -> Bool {
+        do {
+            let _ = try blockingResult(timeout: timeout).get()
+            return true
+        } catch {
+            Swift.print("Igonored error: \(error)")
+            return false
+        }
+    }
+}
+
+extension DispatchTimeInterval {
+    static var ms100: Self { .milliseconds(100) }
 }
