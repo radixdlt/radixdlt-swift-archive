@@ -321,7 +321,6 @@
 		E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */; };
 		E66DC5082383692B00267ECF /* PutIniqueActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E600FC0423831ABF007B7596 /* PutIniqueActionTests.swift */; };
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
-		E67129A322C2289C004F6D0A /* Consumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A222C2289C004F6D0A /* Consumer.swift */; };
 		E67129A522C228AE004F6D0A /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A422C228AE004F6D0A /* Reducer.swift */; };
 		E6725638228AB284004631F1 /* MockedNetworkDetailsRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672562D228AB284004631F1 /* MockedNetworkDetailsRequester.swift */; };
 		E672564B228AEBE0004631F1 /* TokenCreating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672564A228AEBE0004631F1 /* TokenCreating.swift */; };
@@ -1012,7 +1011,6 @@
 		E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+AsArray.swift"; sourceTree = "<group>"; };
 		E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalhostNodeTest.swift; sourceTree = "<group>"; };
 		E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStatusChecking.swift; sourceTree = "<group>"; };
-		E67129A222C2289C004F6D0A /* Consumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consumer.swift; sourceTree = "<group>"; };
 		E67129A422C228AE004F6D0A /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
 		E672562D228AB284004631F1 /* MockedNetworkDetailsRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedNetworkDetailsRequester.swift; sourceTree = "<group>"; };
 		E6725631228AB284004631F1 /* MockedHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockedHTTPClient.swift; sourceTree = "<group>"; };
@@ -2471,7 +2469,6 @@
 				E6ABA76E22C3594C00536DC7 /* RadixNetwork.swift */,
 				E61989D02372C9670092259A /* DefaultRadixNetwork.swift */,
 				E6ABA77122C3595E00536DC7 /* NodeActions */,
-				E67129A222C2289C004F6D0A /* Consumer.swift */,
 				E67129A422C228AE004F6D0A /* Reducer.swift */,
 			);
 			path = RadixNetwork;
@@ -4816,7 +4813,6 @@
 				E6A50889224E713F00128123 /* Atom.swift in Sources */,
 				E6296C8D229455CB00753FD5 /* StringAnyDictionary+Decodable.swift in Sources */,
 				E626E1DC22B3F9AB0046D2AC /* AtomPuller.swift in Sources */,
-				E67129A322C2289C004F6D0A /* Consumer.swift in Sources */,
 				E6E279252271CD1C0067D46E /* Signable.swift in Sources */,
 				E6E279862271CD1C0067D46E /* ChronoMetaData.swift in Sources */,
 				E640F63F225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift in Sources */,
@@ -5110,6 +5106,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -5175,6 +5172,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -5204,7 +5202,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
-				DEAD_CODE_STRIPPING = NO;
 				"DEBUG_INFORMATION_FORMAT[sdk=iphoneos*]" = "dwarf-with-dsym";
 				"DEBUG_INFORMATION_FORMAT[sdk=iphonesimulator*]" = dwarf;
 				DEFINES_MODULE = YES;
@@ -5245,7 +5242,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
-				DEAD_CODE_STRIPPING = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -5283,7 +5279,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Manual;
-				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5310,7 +5305,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Manual;
-				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
