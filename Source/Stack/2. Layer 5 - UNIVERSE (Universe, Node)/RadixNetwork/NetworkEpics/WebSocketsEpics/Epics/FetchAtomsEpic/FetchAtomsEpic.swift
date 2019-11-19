@@ -70,16 +70,16 @@ public extension FetchAtomsEpic {
             .compactMap(typeAs: FindANodeResultAction.self)
             .filter { $0.request is FetchAtomsActionRequest }
             .flatMap { [weak self] (nodeFound: FindANodeResultAction) -> AnyPublisher<NodeAction, Never> in
-                guard let self = self else {
+                guard let selfNonWeak = self else {
                     return Empty<NodeAction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
                 let node = nodeFound.node
                 let fetchAtomsActionRequest = castOrKill(instance: nodeFound.request, toType: FetchAtomsActionRequest.self)
                 
-                return self.webSocketConnector.newClosedWebSocketConnectionToNode(node)
+                return selfNonWeak.webSocketConnector.newClosedWebSocketConnectionToNode(node)
                     .connectAndNotifyWhenConnected()
                     .flatMap { webSocketToNode in
-                        self.fetchAtoms(
+                        selfNonWeak.fetchAtoms(
                             from: webSocketToNode,
                             request: fetchAtomsActionRequest
                         )

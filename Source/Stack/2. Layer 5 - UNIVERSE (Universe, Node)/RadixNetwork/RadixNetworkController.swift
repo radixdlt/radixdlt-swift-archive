@@ -25,7 +25,7 @@
 import Foundation
 import Combine
 
-public protocol RadixNetworkController {
+public protocol RadixNetworkController: AnyObject {
     func dispatch(nodeAction: NodeAction)
     func getActions() -> AnyPublisher<NodeAction, Never>
 

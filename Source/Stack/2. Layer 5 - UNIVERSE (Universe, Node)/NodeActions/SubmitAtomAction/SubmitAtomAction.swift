@@ -32,7 +32,7 @@ public protocol SubmitAtomAction: NodeAction, CustomDebugStringConvertible {
 public extension SubmitAtomAction {
     var debugDescription: String {
         return """
-        \(type(of: self))(atomWithAid: \(atom.shortAid), node: \(node), uuid: \(uuid.uuidString.suffix(4)))
+        \(type(of: self))(atomWithAid: \(atom.shortAid), uuid: \(uuid.uuidString.suffix(4)))
         """
     }
 }

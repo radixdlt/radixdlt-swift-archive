@@ -96,14 +96,14 @@ public extension SubmitAtomEpic {
         let submitToNode = nodeActionPublisher
             .compactMap(typeAs: SubmitAtomActionSend.self)
             .flatMap { [weak self] submitAtomAction ->  AnyPublisher<NodeAction, Never> in
-                guard let self = self else {
+                guard let selfNonWeak = self else {
                     return Empty<NodeAction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
                 let node = submitAtomAction.node
-                return self.webSocketConnector.newClosedWebSocketConnectionToNode(node)
+                return selfNonWeak.webSocketConnector.newClosedWebSocketConnectionToNode(node)
                     .connectAndNotifyWhenConnected()
                     .andThen(
-                        self.submitAtom(sendAction: submitAtomAction, toNode: node)
+                        selfNonWeak.submitAtom(sendAction: submitAtomAction, toNode: node)
                 )
             }^
         

@@ -207,7 +207,7 @@ private extension RPCRequest {
             let data = try RadixJSONEncoder().encode(self)
             return String(data: data)
         } catch {
-            incorrectImplementation("Should be able to encode `self` to JSON string")
+            incorrectImplementation("Should be able to encode 'self' to JSON string")
         }
     }
 }

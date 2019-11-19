@@ -50,10 +50,10 @@ public extension RadixJsonRpcAutoConnectEpic {
         nodeActionPublisher
             .filter { $0 is JsonRpcMethodNodeAction }^
             .flatMap { [weak self] rpcMethodAction -> AnyPublisher<NodeAction, Never> in
-                guard let self = self else {
+                guard let selfNonWeak = self else {
                     return Empty<NodeAction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
-                return self.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethodAction.node)
+                return selfNonWeak.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethodAction.node)
                     .connectAndNotifyWhenConnected()
                     .ignoreOutput(mapToType: NodeAction.self)
             }^

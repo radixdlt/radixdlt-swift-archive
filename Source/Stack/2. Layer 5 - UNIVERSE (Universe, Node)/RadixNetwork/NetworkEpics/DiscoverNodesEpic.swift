@@ -49,17 +49,13 @@ public extension DiscoverNodesEpic {
         
         // swiftlint:enable function_body_length
         
-        func isSuitableUniverseBasedOn(config universeConfig: UniverseConfig) -> Bool {
-            isUniverseSuitable.isUniverseSuitable(universeConfig)
-        }
-        
         let getUniverseConfigsOfSeedNodes: AnyPublisher<NodeAction, Never> = nodeActionPublisher
             .compactMap(typeAs: DiscoverMoreNodesAction.self)
             .flatMap { [weak self] _ -> AnyPublisher<Node, Never> in
-                guard let self = self else {
+                guard let selfNonWeak = self else {
                     return Empty<Node, Never>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
-                return self.seedNodes
+                return selfNonWeak.seedNodes
             }^
             .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }^
         // TODO Combine change epics `actions: AnyPublisher<NodeAction, Never>` to `AnyPublisher<NodeAction, NodeActionsError>`
@@ -67,12 +63,16 @@ public extension DiscoverNodesEpic {
 
         let seedNodesHavingMismatchingUniverse: AnyPublisher<NodeAction, Never> = nodeActionPublisher
             .compactMap(typeAs: GetUniverseConfigActionResult.self)
-            .filter { !isSuitableUniverseBasedOn(config: $0.result) }^
+            .filter { [weak self] in
+                return self?.isUniverseSuitable.isUniverseSuitable($0.result) == false
+            }^
             .map { NodeUniverseMismatch(getUniverseConfigActionResult: $0) }^
 
         let connectedSeedNodes: AnyPublisher<Node, Never> = nodeActionPublisher
             .compactMap(typeAs: GetUniverseConfigActionResult.self)
-            .filter { isSuitableUniverseBasedOn(config: $0.result) }
+            .filter { [weak self] in
+                return self?.isUniverseSuitable.isUniverseSuitable($0.result) == true
+            }^
             .map { $0.node }
             .makeConnectable().autoconnect()^  // .autoConnect(numberOfSubscribers: 3)
 

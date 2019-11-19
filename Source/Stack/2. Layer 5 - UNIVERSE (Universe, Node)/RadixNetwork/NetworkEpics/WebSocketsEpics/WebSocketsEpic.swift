@@ -30,15 +30,18 @@ public protocol RadixNetworkWebSocketsEpic: RadixNetworkEpic {}
 
 // MARK: WebSocketsEpic
 public final class WebSocketsEpic: RadixNetworkEpic {
-    public typealias EpicFromWebSocket = (WebSocketsManager) -> RadixNetworkWebSocketsEpic
-    public typealias EpicsFromWebSockets = [EpicFromWebSocket]
+    public typealias MakeEpic = (WebSocketsManager) -> RadixNetworkWebSocketsEpic
+    public typealias MakerOfEpics = [MakeEpic]
     
-    private let epicFromWebsockets: EpicsFromWebSockets
+    private let makerOfEpics: MakerOfEpics
     
     private var webSockets = DefaultWebSocketsManager()
     
-    public init(epicFromWebsockets: EpicsFromWebSockets) {
-        self.epicFromWebsockets = epicFromWebsockets
+    private var epics = [RadixNetworkWebSocketsEpic]()
+    
+    public init(epicFromWebsockets: MakerOfEpics) {
+        self.makerOfEpics = epicFromWebsockets
+    }
     }
 }
 
@@ -49,12 +52,13 @@ public extension WebSocketsEpic {
     ) -> AnyPublisher<NodeAction, Never> {
         
         return Publishers.MergeMany(
-            epicFromWebsockets
+            makerOfEpics
                 // We use capture list and make `self.webSockets` `unowned` so that any epic using it *cannot* be retaining it.
                 // We don't want to do `weak webSockets` and then return `RadixNetworkWebSocketsEpic?.none`, because we would
                 // still be passing a non explicitly stated `unowned` reference to the `RadixNetworkWebSocketsEpic` epics
-                .map { [unowned webSockets] epicFromWebSocket in
+                .map { [weak self, unowned webSockets] epicFromWebSocket in
                     let newEpic = epicFromWebSocket(webSockets)
+                    self?.epics.append(newEpic)
                     return newEpic
                 }
                 .map { (newlyCreatedEpic: RadixNetworkWebSocketsEpic) -> AnyPublisher<NodeAction, Never> in

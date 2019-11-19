@@ -61,14 +61,14 @@ public extension RadixJsonRpcMethodEpic {
         return nodeActionPublisher
             .compactMap(typeAs: Request.self)
             .flatMap { [weak self] rpcMethod -> AnyPublisher<RpcMethodResult, Never> in
-                guard let self = self else {
+                guard let selfNonWeak = self else {
                     return Empty<RpcMethodResult, Never>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
-                return self.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethod.node)
+                return selfNonWeak.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethod.node)
                     .connectAndNotifyWhenConnected()
                     .map { DefaultRPCClient(channel: $0) }
                     .flatMap { rpcClient in
-                        return self.methodCall(rpcClient, rpcMethod)
+                        return selfNonWeak.methodCall(rpcClient, rpcMethod)
                 }.eraseToAnyPublisher()
         }
         .map { $0 as NodeAction }^

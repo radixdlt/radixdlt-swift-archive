@@ -29,14 +29,17 @@ public protocol AtomPuller {
     func pull(address: Address) -> Cancellable
 }
 
-public struct NodeActionsDispatcher {
+public final class NodeActionsDispatcher {
     public typealias DispatchNodeAction = (NodeAction) -> Void
     public let dispatchNodeAction: DispatchNodeAction
+    init(dispatchNodeAction: @escaping DispatchNodeAction) {
+        self.dispatchNodeAction = dispatchNodeAction
+    }
 }
 
 public extension NodeActionsDispatcher {
     static func usingNetworkController(_ networkController: RadixNetworkController) -> Self {
-        Self { nodeAction in
+        Self { [unowned networkController] nodeAction in
             networkController.dispatch(nodeAction: nodeAction)
         }
     }

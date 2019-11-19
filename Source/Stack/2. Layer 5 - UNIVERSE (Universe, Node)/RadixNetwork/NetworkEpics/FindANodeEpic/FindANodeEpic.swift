@@ -92,7 +92,7 @@ public extension FindANodeEpic {
             )
             .flatMap { [weak self] tuple -> AnyPublisher<NodeAction, Never> in
                 
-                guard let self = self else {
+                guard let selfNonWeak = self else {
                     return Empty<NodeAction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
                  
@@ -102,7 +102,7 @@ public extension FindANodeEpic {
                 
                 func getConnectedNodes(networkState: RadixNetworkState) -> [RadixNodeState] {
                     return networkState.connectedNodes(where: {
-                        self.isPeerSuitable.isPeerSuitable($0, shardsOfRequest)
+                        selfNonWeak.isPeerSuitable.isPeerSuitable($0, shardsOfRequest)
                     })
                 }
                 
@@ -116,7 +116,7 @@ public extension FindANodeEpic {
                 let selectedNode: AnyPublisher<NodeAction, Never> = connectedNodes
                     .compactMap { nodeStates in try? NonEmptySet(array: nodeStates.map { $0.node }) }^
                     .first()^
-                    .map { self.peerSelector.selectPeer($0) }^
+                    .map { selfNonWeak.peerSelector.selectPeer($0) }^
                     .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) as NodeAction }^
                 
                 // Stream of new actions to find a new node
@@ -124,10 +124,10 @@ public extension FindANodeEpic {
                     .filter { $0.isEmpty }^
                     .first().ignoreOutput()
                     .andThen(
-                        Timer.publish(every: self.waitForConnectionDurationInSeconds, on: .current, in: .default)
+                        Timer.publish(every: selfNonWeak.waitForConnectionDurationInSeconds, on: .current, in: .default)
                             .autoconnect()^
                             .map { _ -> [NodeAction] in
-                                self.findAndConnectToSuitablePeer(shards: shardsOfRequest, networkState: networkState)
+                                selfNonWeak.findAndConnectToSuitablePeer(shards: shardsOfRequest, networkState: networkState)
                             }
                             .flattenSequence()
                         .removeDuplicates(by: {
