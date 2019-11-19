@@ -629,6 +629,8 @@
 		E6FCB67722F3081800ECC01B /* AtomNotStoredReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB67622F3081800ECC01B /* AtomNotStoredReason.swift */; };
 		E6FCB67922F3082400ECC01B /* AtomStatusNotStored.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB67822F3082400ECC01B /* AtomStatusNotStored.swift */; };
 		E6FCB67B22F308A700ECC01B /* DiscoverMoreNodesActionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB67A22F308A700ECC01B /* DiscoverMoreNodesActionError.swift */; };
+		E6FED1F723841B1A00F7B424 /* NodeActionsDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FED1F623841B1A00F7B424 /* NodeActionsDispatcher.swift */; };
+		E6FED1F923841B2C00F7B424 /* DefaultAtomPuller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FED1F823841B2C00F7B424 /* DefaultAtomPuller.swift */; };
 		E6FF7E48229C1D1C00BC22EA /* Shards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF7E47229C1D1C00BC22EA /* Shards.swift */; };
 		E6FF7E4A229C1F1900BC22EA /* NonEmptySet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF7E49229C1F1900BC22EA /* NonEmptySet.swift */; };
 		E6FF7E4C229C4E8100BC22EA /* Array+AppendingElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF7E4B229C4E8100BC22EA /* Array+AppendingElement.swift */; };
@@ -1315,6 +1317,8 @@
 		E6FCB67622F3081800ECC01B /* AtomNotStoredReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomNotStoredReason.swift; sourceTree = "<group>"; };
 		E6FCB67822F3082400ECC01B /* AtomStatusNotStored.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStatusNotStored.swift; sourceTree = "<group>"; };
 		E6FCB67A22F308A700ECC01B /* DiscoverMoreNodesActionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMoreNodesActionError.swift; sourceTree = "<group>"; };
+		E6FED1F623841B1A00F7B424 /* NodeActionsDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeActionsDispatcher.swift; sourceTree = "<group>"; };
+		E6FED1F823841B2C00F7B424 /* DefaultAtomPuller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAtomPuller.swift; sourceTree = "<group>"; };
 		E6FF7E47229C1D1C00BC22EA /* Shards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shards.swift; sourceTree = "<group>"; };
 		E6FF7E49229C1F1900BC22EA /* NonEmptySet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonEmptySet.swift; sourceTree = "<group>"; };
 		E6FF7E4B229C4E8100BC22EA /* Array+AppendingElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+AppendingElement.swift"; sourceTree = "<group>"; };
@@ -2453,6 +2457,8 @@
 				E650690D237E8E5D00AB420D /* InMemoryAtomStore.swift */,
 				E626E1E322B3FA3A0046D2AC /* AtomNotificationMode.swift */,
 				E626E1DB22B3F9AB0046D2AC /* AtomPuller.swift */,
+				E6FED1F623841B1A00F7B424 /* NodeActionsDispatcher.swift */,
+				E6FED1F823841B2C00F7B424 /* DefaultAtomPuller.swift */,
 			);
 			path = AtomStore;
 			sourceTree = "<group>";
@@ -4853,6 +4859,7 @@
 				E69E752722A1903600AC631B /* AtomToSendMessageActionMapper.swift in Sources */,
 				E6E279882271CD1C0067D46E /* Symbol.swift in Sources */,
 				E6025404225CC413004B2F94 /* UniverseConfig+Presets.swift in Sources */,
+				E6FED1F723841B1A00F7B424 /* NodeActionsDispatcher.swift in Sources */,
 				E626E20422B41B820046D2AC /* AnyStatefulActionToParticleGroupsMapper.swift in Sources */,
 				E67E3E7623798ACE00A33DBA /* FindANodeRequestAction.swift in Sources */,
 				E63BD463234535EF007C753A /* UnsignedAmountType.swift in Sources */,
@@ -4867,6 +4874,7 @@
 				E69E753222A1B9CD00AC631B /* MessageSending.swift in Sources */,
 				E606F14123016F60004D4D3D /* DefaultBurnTokensActionToParticleGroupsMapper.swift in Sources */,
 				E6A508A3224E713F00128123 /* TransferrableTokensParticle.swift in Sources */,
+				E6FED1F923841B2C00F7B424 /* DefaultAtomPuller.swift in Sources */,
 				E606F13F23016AE1004D4D3D /* UniquelyIdentifiedActionError.swift in Sources */,
 				E6E2798D2271CD1C0067D46E /* DataConvertible+StringConversion.swift in Sources */,
 				E63B207222FD7AB700D6FF79 /* AtomToUniqueIdMapper.swift in Sources */,

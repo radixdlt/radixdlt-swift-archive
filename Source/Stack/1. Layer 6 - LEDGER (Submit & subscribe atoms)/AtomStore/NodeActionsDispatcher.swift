@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,8 +23,21 @@
 //
 
 import Foundation
-import Combine
 
-public protocol AtomPuller {
-    func pull(address: Address) -> Cancellable
+public final class NodeActionsDispatcher {
+    
+    public typealias DispatchNodeAction = (NodeAction) -> Void
+    public let dispatchNodeAction: DispatchNodeAction
+    
+    init(dispatchNodeAction: @escaping DispatchNodeAction) {
+        self.dispatchNodeAction = dispatchNodeAction
+    }
+}
+
+public extension NodeActionsDispatcher {
+    static func usingNetworkController(_ networkController: RadixNetworkController) -> Self {
+        Self { [unowned networkController] nodeAction in
+            networkController.dispatch(nodeAction: nodeAction)
+        }
+    }
 }
