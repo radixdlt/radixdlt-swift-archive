@@ -1,0 +1,29 @@
+language: objective-c
+os: osx
+osx_image: xcode11.2
+
+cache:
+  directories:
+    - Carthage
+    - $HOME/Library/Caches/Homebrew
+
+install:
+  - brew update
+  - gem uninstall fastlane --force
+  - gem install fastlane
+  - which fastlane || true
+  - if brew list | grep -q carthage; then
+      echo Carthage installed. Proceed without installing;
+      carthage version;
+    else
+      echo Carthage not installed. Installing using homebrew;
+      brew install carthage;
+    fi
+  - brew upgrade swiftlint || true
+
+jobs:
+  include:
+    - stage: Caches bootstrap
+      script: travis_wait 600 carthage bootstrap --platform iOS --cache-builds
+    - stage: run unit tests
+      script: fastlane unitTests
