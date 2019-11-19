@@ -89,8 +89,8 @@ class DiscoverNodesEpicTests: NetworkEpicTestCase {
 }
 
 extension DetermineIfUniverseIsSuitable {
-    static let alwaysMismatch = Self { _ in false }
-    static let alwaysMatch = Self { _ in true }
+    static let alwaysMismatch = DetermineIfUniverseIsSuitable { _ in false }
+    static let alwaysMatch = DetermineIfUniverseIsSuitable { _ in true }
 }
 
 extension UniverseConfig {

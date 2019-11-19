@@ -24,18 +24,21 @@
 
 import Foundation
 
-public struct DetermineIfPeerIsSuitable {
+public final class DetermineIfPeerIsSuitable {
     public typealias IsPeerSuitable = (RadixNodeState, Shards) -> Bool
     public let isPeerSuitable: IsPeerSuitable
+    public init(isPeerSuitable: @escaping IsPeerSuitable) {
+        self.isPeerSuitable = isPeerSuitable
+    }
 }
 
 public extension DetermineIfPeerIsSuitable {
     
     static func ifShardSpaceIntersectsWithShards(
         isUniverseSuitable: DetermineIfUniverseIsSuitable
-    ) -> Self {
+    ) -> DetermineIfPeerIsSuitable {
         
-        return Self {
+        return DetermineIfPeerIsSuitable { [unowned isUniverseSuitable] in
             guard let universeConfig = $0.universeConfig else { return false }
             guard let shardSpace = $0.shardSpace else { return false }
             

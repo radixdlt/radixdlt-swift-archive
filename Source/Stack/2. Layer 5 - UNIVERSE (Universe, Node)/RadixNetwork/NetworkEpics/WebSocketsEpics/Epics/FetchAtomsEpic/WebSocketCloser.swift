@@ -24,17 +24,23 @@
 
 import Foundation
 
-public struct WebSocketCloser {
+public final class WebSocketCloser {
     public typealias CloseWebSocketTo = (Node) -> Void
     public let closeWebSocketToNode: CloseWebSocketTo
+    public init(closeWebSocketToNode: @escaping CloseWebSocketTo) {
+        self.closeWebSocketToNode = closeWebSocketToNode
+    }
 }
 
 public extension WebSocketCloser {
     
     static let closeWebSocketsDelayInSeconds: Int = 5
     
-    static func byWebSockets(manager webSocketsManager: WebSocketsManager, closeWebSocketDelay: DispatchTimeInterval = .seconds(WebSocketCloser.closeWebSocketsDelayInSeconds)) -> Self {
-        Self { [weak webSocketsManager] nodeConnectionToClose in
+    static func byWebSockets(
+        manager webSocketsManager: WebSocketsManager,
+        closeWebSocketDelay: DispatchTimeInterval = .seconds(WebSocketCloser.closeWebSocketsDelayInSeconds)
+    ) -> WebSocketCloser {
+        WebSocketCloser { [weak webSocketsManager] nodeConnectionToClose in
             guard let webSocketsManager = webSocketsManager else { return }
             webSocketsManager.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeConnectionToClose, afterDelay: closeWebSocketDelay)
         }

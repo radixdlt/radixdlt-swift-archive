@@ -283,11 +283,11 @@ struct FindMeSomeNodeRequest: FindANodeRequestAction {
 }
 
 public extension DetermineIfPeerIsSuitable {
-    static var allPeersAreSuitable: Self { return Self { _, _ in true } }
-    static var allPeersAreUnsuitable: Self { return Self { _, _ in false } }
+    static var allPeersAreSuitable: DetermineIfPeerIsSuitable { return DetermineIfPeerIsSuitable { _, _ in true } }
+    static var allPeersAreUnsuitable: DetermineIfPeerIsSuitable { return DetermineIfPeerIsSuitable { _, _ in false } }
     
-    static var ifShardSpaceIsKnownDisregardingItsValue: Self {
-        return Self { nodeState, _ in nodeState.shardSpace != nil }
+    static var ifShardSpaceIsKnownDisregardingItsValue: DetermineIfPeerIsSuitable {
+        return DetermineIfPeerIsSuitable { nodeState, _ in nodeState.shardSpace != nil }
     }
 }
 
@@ -295,7 +295,7 @@ public extension DetermineIfPeerIsSuitable {
 public extension RadixPeerSelector {
     
     
-    static func prefer(order: [Node]) -> Self {
+    static func prefer(order: [Node]) -> RadixPeerSelector {
         return RadixPeerSelector { nodes in
             
             for preferredNode in order {
@@ -325,7 +325,7 @@ func makeNode(index specifiedIndex: UInt8? = nil) -> Node {
 
 extension DetermineIfMoreInfoAboutNodeIsNeeded {
     static var neverAskForMoreInfo: DetermineIfMoreInfoAboutNodeIsNeeded {
-        return Self { _ in false }
+        return DetermineIfMoreInfoAboutNodeIsNeeded { _ in false }
     }
     
 }

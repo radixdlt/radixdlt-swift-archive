@@ -55,7 +55,7 @@ public extension RadixJsonRpcMethodEpic {
     
     func handle(
         actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
-        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
+        networkState _: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
         return nodeActionPublisher

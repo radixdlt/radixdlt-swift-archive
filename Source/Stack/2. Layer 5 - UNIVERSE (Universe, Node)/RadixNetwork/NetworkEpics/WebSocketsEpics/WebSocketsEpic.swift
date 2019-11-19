@@ -42,7 +42,6 @@ public final class WebSocketsEpic: RadixNetworkEpic {
     public init(epicFromWebsockets: MakerOfEpics) {
         self.makerOfEpics = epicFromWebsockets
     }
-    }
 }
 
 public extension WebSocketsEpic {

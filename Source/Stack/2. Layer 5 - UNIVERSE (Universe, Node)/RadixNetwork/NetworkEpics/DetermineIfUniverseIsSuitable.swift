@@ -24,15 +24,18 @@
 
 import Foundation
 
-public struct DetermineIfUniverseIsSuitable {
+public final class DetermineIfUniverseIsSuitable {
     public typealias IsUniverseSuitable = (UniverseConfig) -> Bool
     public let isUniverseSuitable: IsUniverseSuitable
+    public init(isUniverseSuitable: @escaping IsUniverseSuitable) {
+        self.isUniverseSuitable = isUniverseSuitable
+    }
 }
 
 public extension DetermineIfUniverseIsSuitable {
     
-    static func ifEqual(to expected: UniverseConfig) -> Self {
-        Self { $0 == expected }
+    static func ifEqual(to expected: UniverseConfig) -> DetermineIfUniverseIsSuitable {
+        DetermineIfUniverseIsSuitable { $0 == expected }
     }
 }
 

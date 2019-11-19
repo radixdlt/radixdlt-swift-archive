@@ -56,10 +56,11 @@ private extension FullDuplexCommunicationChannel {
         return messages
             .map { $0.toData() }
             .filter { self.filterOutRelevant(data: $0, parseMode: parseMode) }
-            .decode(type: Result<Model, RPCError>.self, decoder: JSONDecoder())
+            .decode(type: Result<RPCResponse<Model>, RPCError>.self, decoder: JSONDecoder())
             .mapError { castOrKill(instance: $0, toType: DecodingError.self) }
             .mapError { RPCError(rpcError: .metaError($0)) }
             .flatMapResult()
+            .map { $0.model }
             .eraseToAnyPublisher()
         
         //            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
