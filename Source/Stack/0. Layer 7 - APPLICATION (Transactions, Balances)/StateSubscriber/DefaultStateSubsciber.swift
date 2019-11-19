@@ -48,7 +48,11 @@ public extension DefaultStateSubscriber {
         
         return atomStore.onSync(address: address)
             .mapToVoid()
-            .tryMap { [unowned self] in
+            .tryMap { [weak self] _ -> State in
+                guard let self = self else {
+                    // TODO Combine replace fatalError with error
+                    fatalError("Self is nil")
+                }
                 let upParticles = self.atomStore.upParticles(at: address)
                 let reducedState = try self.particlesToStateReducer.reduce(upParticles: upParticles, to: stateType)
                 return reducedState

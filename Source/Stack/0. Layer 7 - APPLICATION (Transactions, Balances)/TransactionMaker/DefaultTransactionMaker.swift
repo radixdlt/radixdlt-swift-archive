@@ -112,11 +112,14 @@ public extension DefaultTransactionMaker {
 private extension DefaultTransactionMaker {
     
     func addFee(to atom: Atom) -> Single<AtomWithFee, Never> {
-        activeAccount.flatMap { [unowned self] in
-            self.feeMapper.feeBasedOn(
+        return activeAccount.flatMap { [weak self] account -> AnyPublisher<AtomWithFee, Never> in
+            guard let self = self else {
+                return Empty<AtomWithFee, Never>(completeImmediately: true).eraseToAnyPublisher()
+            }
+            return self.feeMapper.feeBasedOn(
                 atom: atom,
                 universeConfig: self.universeConfig,
-                key: $0.publicKey
+                key: account.publicKey
             )
             .crashOnFailure()
         }
@@ -151,7 +154,12 @@ private extension DefaultTransactionMaker {
         let cachedAtom = atomSingle.share()
         
         let submitAtomStatusUpdatesPublisher = cachedAtom
-            .flatMap { [unowned self] (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
+            .flatMap { [weak self] (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
+                
+                guard let self = self else {
+                    return Empty<SubmitAtomAction, Never>(completeImmediately: true).eraseToAnyPublisher()
+                }
+                
                 let initialAction: SubmitAtomAction
 
                 if let originNode = originNode {
@@ -182,18 +190,28 @@ private extension DefaultTransactionMaker {
     }
     
     var addressOfActiveAccount: AnyPublisher<Address, Never> {
-        activeAccount.map { [unowned self] in
-            self.addressOf(account: $0)
-        }.eraseToAnyPublisher()
+        return activeAccount.compactMap { [weak self] account -> Address? in
+            guard let self = self else { return nil }
+            return self.addressOf(account: account)
+        }
+        .eraseToAnyPublisher()
     }
     
     func buildAtomFrom(transaction: Transaction) throws -> Single<UnsignedAtom, Never> {
-        addressOfActiveAccount.tryMap { [unowned self] address in
-            try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: address)
+        addressOfActiveAccount.tryMap { [weak self] address -> Atom in
+            guard let self = self else {
+                // TODO Combine: Replace fatalError with error
+                fatalError("Self is nil")
+            }
+            return try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: address)
         }
         .crashOnFailure()
-        .flatMap { [unowned self] atom in
-            return self.addFee(to: atom)
+        .flatMap { [weak self] atom -> AnyPublisher<AtomWithFee, Never> in
+            guard let self = self else {
+                // TODO Combine: Replace empty with error
+                return Empty<AtomWithFee, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+            }
+            return self.addFee(to: atom).eraseToAnyPublisher()
         }
         .tryMap { atomWithFee in
             try UnsignedAtom(atomWithPow: atomWithFee)

@@ -56,9 +56,16 @@ public extension DefaultHTTPClient {
 public extension DefaultHTTPClient {
     
     func perform(absoluteUrlRequest urlRequest: URLRequest) -> AnyPublisher<Data, HTTPClientError.NetworkingError> {
-        return Combine.Deferred { [unowned self] in
-            return Future<Data, HTTPClientError.NetworkingError> { promise in
+        return Combine.Deferred {
+            return Future<Data, HTTPClientError.NetworkingError> { [weak self] promise in
+                
+                guard let self = self else {
+                    promise(.failure(.clientWasDeinitialized))
+                    return
+                }
+                
                 self.dataFetcher.dataFromRequest(urlRequest)
+                    
                 .sink(
                     receiveCompletion: { completion in
                         guard case .failure(let error) = completion else { return }

@@ -34,7 +34,11 @@ public final class WebSocketConnector {
 
 public extension WebSocketConnector {
     static func byWebSockets(manager webSocketsManager: WebSocketsManager) -> WebSocketConnector {
-        Self { [unowned webSocketsManager] nodeToConnectTo in
+        Self { [weak webSocketsManager] nodeToConnectTo in
+            guard let webSocketsManager = webSocketsManager else {
+                // TODO fix hack
+                return WebSocketToNode(node: nodeToConnectTo)
+            }
             return webSocketsManager.newDisconnectedWebsocket(to: nodeToConnectTo)
         }
     }

@@ -90,7 +90,11 @@ public extension FindANodeEpic {
             .combineLatest(
                 networkStatePublisher.prepend(RadixNetworkState.empty)
             )
-            .flatMap { [unowned self] tuple -> AnyPublisher<NodeAction, Never> in
+            .flatMap { [weak self] tuple -> AnyPublisher<NodeAction, Never> in
+                
+                guard let self = self else {
+                    return Empty<NodeAction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                }
                  
                 let (findANodeRequestAction, networkState) = tuple
                 

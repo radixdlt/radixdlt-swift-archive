@@ -34,7 +34,7 @@ public extension HTTPClientError {
         case urlError(URLError)
         case invalidServerResponse(URLResponse)
         case invalidServerStatusCode(Int)
-        
+        case clientWasDeinitialized
     }
     
     enum SerializationError: Swift.Error, Equatable {

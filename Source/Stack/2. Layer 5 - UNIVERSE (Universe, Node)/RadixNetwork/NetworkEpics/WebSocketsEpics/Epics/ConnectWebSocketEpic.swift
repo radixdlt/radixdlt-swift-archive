@@ -59,8 +59,9 @@ public extension ConnectWebSocketEpic {
             .filter { $0 is ConnectWebSocketAction }^
             // TODO Combine investigate if we really should use `handleEvents` instead of `flatMap`?
             .handleEvents(
-                receiveOutput: { [unowned self] connectWebSocketAction in
-                    self.self.webSocketConnector
+                receiveOutput: { [weak self] connectWebSocketAction in
+                    
+                    self?.webSocketConnector
                         .newClosedWebSocketConnectionToNode(connectWebSocketAction.node)
                         .connectAndNotifyWhenConnected()
                 }
@@ -70,8 +71,8 @@ public extension ConnectWebSocketEpic {
         let onClose: AnyPublisher<NodeAction, Never> = nodeActionPublisher
             .filter { $0 is CloseWebSocketAction }^
             .handleEvents(
-                receiveOutput: { [unowned self] closeWebSocketAction in
-                    self.webSocketCloser.closeWebSocketToNode(closeWebSocketAction.node)
+                receiveOutput: { [weak self] closeWebSocketAction in
+                    self?.webSocketCloser.closeWebSocketToNode(closeWebSocketAction.node)
                 }
             )^
             .dropAll()^

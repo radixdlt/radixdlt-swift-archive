@@ -113,7 +113,11 @@ public extension WebSocketToNode {
         case .closing, .connecting, .connected: break
         }
         
-        return Future<WebSocketToNode, Never> { [unowned self] promise in
+        return Future<WebSocketToNode, Never> { [weak self] promise in
+            guard let self = self else {
+                // TODO Combine replace fatalError with error
+                fatalError("Self nil, replace this fatalError with an Error")
+            }
             self.webSocketStatus.filter { $0.isConnected }
                 .first()
                 .ignoreOutput()
@@ -127,10 +131,10 @@ public extension WebSocketToNode {
 public extension WebSocketToNode {
     /// Messages received over webSockets, required by `FullDuplexCommunicationChannel`
     var messages: AnyPublisher<String, Never> {
-        receivedMessagesSubject.trackNumberOfSubscribers { [unowned self] update in
+        receivedMessagesSubject.trackNumberOfSubscribers { [weak self] update in
             switch update {
-            case .increased: self.numberOfSubscriptions += 1
-            case .decreased: self.numberOfSubscriptions -= 1
+            case .increased: self?.numberOfSubscriptions += 1
+            case .decreased: self?.numberOfSubscriptions -= 1
             }
             
         }

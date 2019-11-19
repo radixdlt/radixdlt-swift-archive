@@ -40,9 +40,13 @@ public extension HTTPPageLoader {
         let url = URL(string: page)!
         let urlRequest = URLRequest(url: url)
         
-        return Combine.Deferred { [unowned urlSession] in
-            return Future<String, Error> { promise in
-                urlSession.responseStringPublisher(for: urlRequest)
+        return Combine.Deferred {
+            return Future<String, Error> { [weak self] promise in
+                guard let self = self else {
+                    promise(.failure(HTTPClientError.networkingError(.clientWasDeinitialized)))
+                    return
+                }
+                self.urlSession.responseStringPublisher(for: urlRequest)
                     .sink(
                         receiveCompletion: { completion in
                             guard case .failure(let error) = completion else { return }

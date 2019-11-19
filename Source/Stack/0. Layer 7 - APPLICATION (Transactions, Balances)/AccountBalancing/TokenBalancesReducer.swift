@@ -123,8 +123,19 @@ public extension TokenBalancesReducer {
 public extension TokenBalancesReducer {
     static func usingApplicationClient(_ app: RadixApplicationClient) -> Self {
         Self(
-            makeBalanceReferencesStatePublisher: { [unowned app] in app.observeBalanceReferences(at: $0) },
-            makeTokenDefinitionsPublisher: { [unowned app] in app.observeTokenDefinitions(at: $0) }
+            makeBalanceReferencesStatePublisher: { [weak app] in
+                guard let app = app else {
+                    return Empty<TokenBalanceReferencesState, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                }
+                return app.observeBalanceReferences(at: $0)
+                
+            },
+            makeTokenDefinitionsPublisher: { [weak app] in
+                guard let app = app else {
+                    return Empty<TokenDefinitionsState, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                }
+                return app.observeTokenDefinitions(at: $0)
+            }
         )
     }
     

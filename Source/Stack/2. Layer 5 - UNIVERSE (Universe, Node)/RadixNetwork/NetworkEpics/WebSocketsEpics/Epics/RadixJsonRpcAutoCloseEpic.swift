@@ -53,8 +53,8 @@ public extension RadixJsonRpcAutoCloseEpic {
             .filter { $0 is BaseJsonRpcResultAction }^
             .delay(for: closeWebSocketsDelay, scheduler: backgroundQueue)^
             .handleEvents(
-                receiveOutput: { [unowned self] nodeAction in
-                    self.webSocketCloser.closeWebSocketToNode(nodeAction.node)
+                receiveOutput: { [weak self] nodeAction in
+                    self?.webSocketCloser.closeWebSocketToNode(nodeAction.node)
                 }
             )^
             .dropAll()^

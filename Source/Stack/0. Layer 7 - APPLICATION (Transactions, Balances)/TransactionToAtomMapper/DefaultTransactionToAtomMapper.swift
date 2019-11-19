@@ -70,7 +70,8 @@ public extension DefaultTransactionToAtomMapper {
         let temporaryStore = TemporaryLocalAtomStore(
             actionMappers: actionMappers,
             addressOfActiveAccount: addressOfActiveAccount
-        ) { [unowned self] in
+        ) { [weak self] in
+            guard let self = self else { return [] }
             return self.atomStore.upParticles(at: $0)
         }
 

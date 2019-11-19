@@ -69,8 +69,10 @@ public extension FetchAtomsEpic {
         let fetch = nodeActionPublisher
             .compactMap(typeAs: FindANodeResultAction.self)
             .filter { $0.request is FetchAtomsActionRequest }
-            .flatMap { [unowned self] (nodeFound: FindANodeResultAction) -> AnyPublisher<NodeAction, Never> in
-                
+            .flatMap { [weak self] (nodeFound: FindANodeResultAction) -> AnyPublisher<NodeAction, Never> in
+                guard let self = self else {
+                    return Empty<NodeAction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                }
                 let node = nodeFound.node
                 let fetchAtomsActionRequest = castOrKill(instance: nodeFound.request, toType: FetchAtomsActionRequest.self)
                 
@@ -118,8 +120,8 @@ private extension FetchAtomsEpic {
         func cleanUp() {
             rpcAtomsObservingCanceller.cancelAtomsSubscription(subscriberId: subscriberIdFromUuid)
                 .ignoreOutput()
-                .sink { [unowned self] in
-                    self.webSocketCloser.closeWebSocketToNode(node)
+                .sink { [weak self] in
+                    self?.webSocketCloser.closeWebSocketToNode(node)
                 }
                 .store(in: &cancellables)
         }

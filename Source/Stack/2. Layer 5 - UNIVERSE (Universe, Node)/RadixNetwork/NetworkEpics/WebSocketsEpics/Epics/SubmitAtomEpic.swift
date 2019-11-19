@@ -95,7 +95,10 @@ public extension SubmitAtomEpic {
 
         let submitToNode = nodeActionPublisher
             .compactMap(typeAs: SubmitAtomActionSend.self)
-            .flatMap { [unowned self] submitAtomAction ->  AnyPublisher<NodeAction, Never> in
+            .flatMap { [weak self] submitAtomAction ->  AnyPublisher<NodeAction, Never> in
+                guard let self = self else {
+                    return Empty<NodeAction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                }
                 let node = submitAtomAction.node
                 return self.webSocketConnector.newClosedWebSocketConnectionToNode(node)
                     .connectAndNotifyWhenConnected()
@@ -129,8 +132,8 @@ private extension SubmitAtomEpic {
             atomStatusSubscriptionCanceller
                 .closeAtomStatusNotifications(subscriberId: subscriberId)
                 .ignoreOutput()
-                .sink { [unowned self] in
-                    self.webSocketCloser.closeWebSocketToNode(node)
+                .sink { [weak self] in
+                    self?.webSocketCloser.closeWebSocketToNode(node)
             }
             .store(in: &cancellables)
         }

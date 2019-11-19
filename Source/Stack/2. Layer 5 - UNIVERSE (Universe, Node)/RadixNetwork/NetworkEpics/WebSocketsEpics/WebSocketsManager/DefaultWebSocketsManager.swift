@@ -44,9 +44,9 @@ public extension DefaultWebSocketsManager {
     
     @discardableResult
     func newDisconnectedWebsocket(to node: Node) -> WebSocketToNode {
-        return webSockets.valueForKey(key: node) { [unowned self] in
+        return webSockets.valueForKey(key: node) { [weak newSocketsToNodeSubject] in
             let newSocket = WebSocketToNode(node: node)
-            self.newSocketsToNodeSubject.send(newSocket)
+            newSocketsToNodeSubject?.send(newSocket)
             return newSocket
         }
     }
@@ -63,8 +63,8 @@ public extension DefaultWebSocketsManager {
     
     func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode, afterDelay delay: DispatchTimeInterval?) {
         if let delay = delay {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay) { [unowned self] in
-                self.ifNoOneListensCloseAndRemove(webSocket: webSocket)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay) { [weak self] in
+                self?.ifNoOneListensCloseAndRemove(webSocket: webSocket)
             }
         } else {
             ifNoOneListensCloseAndRemove(webSocket: webSocket)

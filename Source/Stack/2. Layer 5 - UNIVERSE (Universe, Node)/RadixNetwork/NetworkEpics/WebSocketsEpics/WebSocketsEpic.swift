@@ -35,7 +35,7 @@ public final class WebSocketsEpic: RadixNetworkEpic {
     
     private let epicFromWebsockets: EpicsFromWebSockets
     
-    private let webSockets = DefaultWebSocketsManager()
+    private var webSockets = DefaultWebSocketsManager()
     
     public init(epicFromWebsockets: EpicsFromWebSockets) {
         self.epicFromWebsockets = epicFromWebsockets
@@ -50,13 +50,16 @@ public extension WebSocketsEpic {
         
         return Publishers.MergeMany(
             epicFromWebsockets
+                // We use capture list and make `self.webSockets` `unowned` so that any epic using it *cannot* be retaining it.
+                // We don't want to do `weak webSockets` and then return `RadixNetworkWebSocketsEpic?.none`, because we would
+                // still be passing a non explicitly stated `unowned` reference to the `RadixNetworkWebSocketsEpic` epics
                 .map { [unowned webSockets] epicFromWebSocket in
                     let newEpic = epicFromWebSocket(webSockets)
                     return newEpic
-            }
-            .map { (newlyCreatedEpic: RadixNetworkWebSocketsEpic) -> AnyPublisher<NodeAction, Never> in
-                return newlyCreatedEpic.handle(actions: nodeActionPublisher, networkState: networkStatePublisher)
-            }
+                }
+                .map { (newlyCreatedEpic: RadixNetworkWebSocketsEpic) -> AnyPublisher<NodeAction, Never> in
+                    return newlyCreatedEpic.handle(actions: nodeActionPublisher, networkState: networkStatePublisher)
+                }
         )
         .eraseToAnyPublisher()
     }

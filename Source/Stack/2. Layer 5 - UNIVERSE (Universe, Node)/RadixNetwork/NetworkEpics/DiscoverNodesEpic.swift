@@ -55,7 +55,12 @@ public extension DiscoverNodesEpic {
         
         let getUniverseConfigsOfSeedNodes: AnyPublisher<NodeAction, Never> = nodeActionPublisher
             .compactMap(typeAs: DiscoverMoreNodesAction.self)
-            .flatMap { [unowned self] _ in self.seedNodes }^
+            .flatMap { [weak self] _ -> AnyPublisher<Node, Never> in
+                guard let self = self else {
+                    return Empty<Node, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                }
+                return self.seedNodes
+            }^
             .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }^
         // TODO Combine change epics `actions: AnyPublisher<NodeAction, Never>` to `AnyPublisher<NodeAction, NodeActionsError>`
 //            .catchError { .just(DiscoverMoreNodesActionError(reason: $0)) }

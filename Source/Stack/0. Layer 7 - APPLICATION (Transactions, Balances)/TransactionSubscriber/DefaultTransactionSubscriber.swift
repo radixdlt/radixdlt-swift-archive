@@ -60,8 +60,11 @@ public extension DefaultTransactionSubscriber {
                 guard case .store(let atom, _, _) = atomObservation else { return nil }
                 return atom
             }
-            .flatMap { [unowned self] in
-                self.atomToTransactionMapper.transactionFromAtom($0)
+            .flatMap { [weak self] atom -> AnyPublisher<ExecutedTransaction, Never> in
+                guard let self = self else {
+                    return Empty<ExecutedTransaction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                }
+                return self.atomToTransactionMapper.transactionFromAtom(atom)
             }
             .eraseToAnyPublisher()
     }
