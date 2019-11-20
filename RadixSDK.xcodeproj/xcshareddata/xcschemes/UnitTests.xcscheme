@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "1120"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
+         <TestableReference
+            skipped = "NO"
+            testExecutionOrdering = "random"
+            useTestSelectionWhitelist = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E645E73621E7827D00532ACD"
+               BuildableName = "RadixSDK iOS Tests.xctest"
+               BlueprintName = "RadixSDK iOS Tests"
+               ReferencedContainer = "container:RadixSDK.xcodeproj">
+            </BuildableReference>
+            <SelectedTests>
+               <Test
+                  Identifier = "AddressChecksumTests/testAddressChecksum()">
+               </Test>
+               <Test
+                  Identifier = "AddressChecksumTests/testHashIdOfAddress()">
+               </Test>
+               <Test
+                  Identifier = "AddressChecksumTests/testInSameUniverse()">
+               </Test>
+               <Test
+                  Identifier = "AddressInvalidChecksumTests/testJsonDecodingAddressInvalidChecksum()">
+               </Test>
+               <Test
+                  Identifier = "AddressesInSameUniverseTests/testDifferentUniverseAddressInDifferentParticleGroups()">
+               </Test>
+               <Test
+                  Identifier = "AddressesInSameUniverseTests/testDifferentUniverseAddressInSameParticleGroup()">
+               </Test>
+               <Test
+                  Identifier = "AddressesInSameUniverseTests/testTransactionSendMessageWrongUniverse()">
+               </Test>
+               <Test
+                  Identifier = "AmountAndGranularityTests/testGranularityOfOneNonNegativeAmount()">
+               </Test>
+               <Test
+                  Identifier = "AmountAndGranularityTests/testGranularityOfOnePositiveAmount()">
+               </Test>
+               <Test
+                  Identifier = "AmountAndGranularityTests/testGranularityOfThreePositiveAmount()">
+               </Test>
+               <Test
+                  Identifier = "AmountAndGranularityTests/testGranularityOfTwoNonNegativeAmount()">
+               </Test>
+               <Test
+                  Identifier = "AtomIdentifierTests/testAtomIdentifierForAtomFromCreateTokenAction()">
+               </Test>
+               <Test
+                  Identifier = "AtomIdentifierTests/testEndianessNegativeShards()">
+               </Test>
+               <Test
+                  Identifier = "AtomIdentifierTests/testMixedNegative()">
+               </Test>
+               <Test
+                  Identifier = "AtomIdentifierTests/testOneShardManyHashes()">
+               </Test>
+               <Test
+                  Identifier = "AtomIdentifierTests/testTwoShards()">
+               </Test>
+               <Test
+                  Identifier = "AtomJsonDeserializationInvalidJsonKeyTests/testJsonDecodingIncorrectJsonKey()">
+               </Test>
+               <Test
+                  Identifier = "AtomJsonDeserializationInvalidSerializerValueTests/testJsonDecodingOfAtomSerializerIncorrect()">
+               </Test>
+               <Test
+                  Identifier = "AtomJsonDeserializationTrivialTests/testJsonDecodingTrivialAtom()">
+               </Test>
+               <Test
+                  Identifier = "AtomJsonDeserializationTwoParticleGroupsTests/testJsonDecodingAtomWithTwoParticleGroups()">
+               </Test>
+               <Test
+                  Identifier = "AtomJsonSerializationTrivialTests/testJsonEncodingAndDecodingResultsInTheSameTrivialAtom()">
+               </Test>
+               <Test
+                  Identifier = "AtomJsonSerializationTwoParticleGroupsTests/testJsonEncodingOfAtomWithTwoParticleGroups()">
+               </Test>
+               <Test
+                  Identifier = "AtomNotificationModeTests/test_shouldNotifyOnAtomUpdate_and_shouldNotifyOnSync()">
+               </Test>
+               <Test
+                  Identifier = "AtomPullerTests/test_DefaultAtomPuller()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test___onSync___when_subscribed_after_a_head_is_stored_on_different_address_we_dont_get_notified()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test___onSync___when_subscribed_after_a_head_is_stored_on_same_address_using_listener_mode___notifyOnSync___then_a_date_should_be_observed()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test___onSync___when_subscribed_before_a_head_is_stored_on_different_address_we_dont_get_notified()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test___onSync___when_subscribed_before_a_head_is_stored_on_same_address_using_listener_mode___don&#x2bc;tNotify___then_a_date_should_be_observed()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test___onSync___when_subscribed_before_a_head_is_stored_on_same_address_using_listener_mode___notifyOnSync___then_a_date_should_be_observed()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_not_nil()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_that_when_atom_store_contains_an_atom_and_we_store_same_atom_it_does_not_get_stored_and_we_do_not_get_any_notification()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_that_when_atom_store_is_empty_and_we_store_NONsoft_atom_we_get_notified_using_listener_mode___notifyOnAtomUpdate()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_that_when_atom_store_is_empty_and_we_store_NONsoft_atom_we_get_notified_using_listener_mode___notifyOnAtomUpdateAndSync()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_that_when_atom_store_is_empty_and_we_store_an___AtomObservation__head___we_do_NOT_get_notified_using_listener_mode___don&#x2bc;tNotify()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_that_when_atom_store_is_empty_and_we_store_an___AtomObservation__head___we_get_notified_using_listener_mode___notifyOnAtomUpdate()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_that_when_atom_store_is_empty_and_we_store_an___AtomObservation__head___we_get_notified_using_listener_mode___notifyOnAtomUpdateAndSync()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_that_when_atom_store_is_empty_and_we_store_soft_atom_we_get_notified_using_listener_mode___notifyOnAtomUpdate()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_that_when_atom_store_is_empty_and_we_store_soft_atom_we_get_notified_using_listener_mode___notifyOnAtomUpdateAndSync()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_getting_up_particles_from_store_where_collision_occurred_on_soft_state__store_should_return_winner_particle()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_getting_up_particles_from_store_with_an_atom_with_no_particles__store_should_return_an_empty_stream()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_getting_up_particles_from_store_with_an_atom_with_one_down_particle__store_should_return_an_empty_stream()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_getting_up_particles_from_store_with_an_atom_with_one_up_particle__store_should_return_that_particle()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_getting_up_particles_from_store_with_an_atom_with_one_up_particle_then_deleted__store_should_return_an_empty_stream()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_getting_up_particles_from_store_with_dependent_deletes__store_should_return_an_empty_stream()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_getting_up_particles_with_an_empty_store__store_should_return_an_empty_stream()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_receiving_atom_deletes_for_atoms_which_have_not_been_seen__store_should_not_propagate_delete_event()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_receiving_atom_store_then_delete_then_store_for_an_atom_then_subscribe__store_should_propagate_one_store_event()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_subscribed_after_an_atom_is_stored_on_a_DIFFERENT_address__then_the_atom_should_NOT_be_observed_replay_of_1()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_subscribed_after_an_atom_is_stored_on_same_address__then_the_atom_should_be_observed_replay_of_many()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_subscribed_after_genesis_atoms_are_stored_on_same_address__then_the_atom_should_be_observed_replay_of_many()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_subscribed_before_an_atom_is_stored_on_a_different_address__then_the_atom_should_not_be_observed()">
+               </Test>
+               <Test
+                  Identifier = "AtomStoreTests/test_when_subscribed_before_an_atom_is_stored_on_same_address__then_the_atom_should_be_observed()">
+               </Test>
+               <Test
+                  Identifier = "AtomToDsonTests/testDsonEncodingOfAtom()">
+               </Test>
+               <Test
+                  Identifier = "AtomToTransferMapperTests/testAtomToTransferWithReturn()">
+               </Test>
+               <Test
+                  Identifier = "AtomToTransferMapperTests/testAtomToTransferWithoutReturn()">
+               </Test>
+               <Test
+                  Identifier = "AtomTooBigDSONEncodingTests/testDsonEncodingAtomTooBig()">
+               </Test>
+               <Test
+                  Identifier = "BadRRITests/testJsonDecodingRRIBad()">
+               </Test>
+               <Test
+                  Identifier = "BalanceOfNativeTokenFromGenesisAtomsTests/testFetchAtomsAtGenesisAddress()">
+               </Test>
+               <Test
+                  Identifier = "Base58Tests/testBase58ToHexString()">
+               </Test>
+               <Test
+                  Identifier = "BigUnsignedIntTests/testUint256()">
+               </Test>
+               <Test
+                  Identifier = "BurnMintTransactionOfflineTests/testBurnMintMultipleTimes()">
+               </Test>
+               <Test
+                  Identifier = "CBOREncodingPrimitivesBoolTests/testCborEncodingBoolFalse()">
+               </Test>
+               <Test
+                  Identifier = "CBOREncodingPrimitivesBoolTests/testCborEncodingBoolTrue()">
+               </Test>
+               <Test
+                  Identifier = "CBOREncodingPrimitivesIntTests/testCBOREncodingNegativeInt()">
+               </Test>
+               <Test
+                  Identifier = "CBOREncodingPrimitivesIntTests/testCBOREncodingPositiveInt()">
+               </Test>
+               <Test
+                  Identifier = "CBOREncodingPrimitivesStringTests/testCborEncodingOfString()">
+               </Test>
+               <Test
+                  Identifier = "CreateTokenActionTests/testAssertThatInitialSupplyMustMatchGranularity()">
+               </Test>
+               <Test
+                  Identifier = "CreateTokenActionToParticleGroupsMapperTests/testAssert100SubtractedFromMaxSupplyIsCorrectValue()">
+               </Test>
+               <Test
+                  Identifier = "CreateTokenActionToParticleGroupsMapperTests/testAssertMaxSupplySubtractedFromMaxIsZero()">
+               </Test>
+               <Test
+                  Identifier = "CreateTokenActionToParticleGroupsMapperTests/testMutableSupplyTokenCreationWithoutInitialSupply()">
+               </Test>
+               <Test
+                  Identifier = "CreateTokenActionToParticleGroupsMapperTests/testTokenCreationWithInitialSupplyAll()">
+               </Test>
+               <Test
+                  Identifier = "CreateTokenActionToParticleGroupsMapperTests/testTokenCreationWithInitialSupplyPartial()">
+               </Test>
+               <Test
+                  Identifier = "DSONEncodingAddressHolderTests/testDsonEncodingOfAddressHolder()">
+               </Test>
+               <Test
+                  Identifier = "DSONEncodingExampleMapTests/testDsonEncodingOfSimpleMap()">
+               </Test>
+               <Test
+                  Identifier = "DSONEncodingIntArrayTests/testDsonEncodingOfArray()">
+               </Test>
+               <Test
+                  Identifier = "DecimalStringTests/testDecimalString()">
+               </Test>
+               <Test
+                  Identifier = "DecodePointTests/testPointDecoding()">
+               </Test>
+               <Test
+                  Identifier = "DefaultAtomToTransactionMapperCreateTokenFromGenesisAtomTests/testTransactionWithSingleCreateTokenActionWithoutInitialSupply()">
+               </Test>
+               <Test
+                  Identifier = "DefaultAtomToTransactionMapperMessageAndPutUniqueActionTests/testUniqueIdAndMessagePArticle()">
+               </Test>
+               <Test
+                  Identifier = "DiscoverNodesEpicTests/test_that_when_live_peers_result_is_observed__add_node_events_should_be_emitted()">
+               </Test>
+               <Test
+                  Identifier = "DiscoverNodesEpicTests/test_that_when_seeds_return_a_non_matching_universe__a_node_mismatch_universe_event_should_be_emitted()">
+               </Test>
+               <Test
+                  Identifier = "DsonEncodingTokenDefinitionParticleTests/testDsonEncodingOfTokenDefinitionParticle()">
+               </Test>
+               <Test
+                  Identifier = "ECIESDecryptMessageFromJavaLibraryTests/testDecryptMessage()">
+               </Test>
+               <Test
+                  Identifier = "ECIESDecryptMessageTests/testEncryptThenDecrypt()">
+               </Test>
+               <Test
+                  Identifier = "ECIESEncryptionAndDecryptionTests/testAliceCanDecryptMessageMeantForHerEncryptedByBob()">
+               </Test>
+               <Test
+                  Identifier = "ECIESEncryptionAndDecryptionTests/testAliceCannotDecryptMessagesMeantForBobAndViceVersa()">
+               </Test>
+               <Test
+                  Identifier = "ECIESHmacCalculationTests/testHmacCalc()">
+               </Test>
+               <Test
+                  Identifier = "EUIDTests/testEUIDFrom15BytesThrowsError()">
+               </Test>
+               <Test
+                  Identifier = "EUIDTests/testEUIDFrom16Bytes()">
+               </Test>
+               <Test
+                  Identifier = "EUIDTests/testEUIDFrom16BytesThrowsError()">
+               </Test>
+               <Test
+                  Identifier = "EUIDTests/testMinus1()">
+               </Test>
+               <Test
+                  Identifier = "EUIDTests/testMinus2()">
+               </Test>
+               <Test
+                  Identifier = "EUIDTests/testMinus3()">
+               </Test>
+               <Test
+                  Identifier = "EUIDTests/testShard()">
+               </Test>
+               <Test
+                  Identifier = "EUIDTests/testThatEuidLenghtIs16Bytes()">
+               </Test>
+               <Test
+                  Identifier = "FetchAtomsEpicTests/test_that_we_start_observing_atoms_given_a_FindANodeResultAction()">
+               </Test>
+               <Test
+                  Identifier = "FindANodeEpicTests/test_that_an_already_connected_and_suitable_node_is_identified()">
+               </Test>
+               <Test
+                  Identifier = "FindANodeEpicTests/test_that_we_wanna_connect_to_a_disconnected_suitable_node_()">
+               </Test>
+               <Test
+                  Identifier = "FindANodeEpicTests/test_that_we_wanna_disconnect_from_a_slow_node_and_connect_to_another_one()">
+               </Test>
+               <Test
+                  Identifier = "FindANodeEpicTests/test_that_we_wanna_get_more_info_about_disconnected_peers_we_dont_have_all_info_about()">
+               </Test>
+               <Test
+                  Identifier = "FindANodeEpicTests/test_that_when_first_node_fails__then_second_node_should_connect()">
+               </Test>
+               <Test
+                  Identifier = "FindANodeEpicTests/test_that_when_network_is_empty_we_wanna_discover_more_nodes()">
+               </Test>
+               <Test
+                  Identifier = "GranularityNegativeTests/testJsonDecodingGranularityNegative()">
+               </Test>
+               <Test
+                  Identifier = "GranularityTests/testAssertTooLargeThrowsError()">
+               </Test>
+               <Test
+                  Identifier = "GranularityTests/testDsonEncodeGranularityBig()">
+               </Test>
+               <Test
+                  Identifier = "GranularityTests/testDsonEncodeGranularityOfOne()">
+               </Test>
+               <Test
+                  Identifier = "GranularityTests/testGranularityToHex()">
+               </Test>
+               <Test
+                  Identifier = "GranularityTests/testThatCannotCreateZeroGranularity()">
+               </Test>
+               <Test
+                  Identifier = "HTTPClientTests/test_data_as_model_bad_json()">
+               </Test>
+               <Test
+                  Identifier = "HTTPClientTests/test_data_as_model_success()">
+               </Test>
+               <Test
+                  Identifier = "HTTPClientTests/test_data_through()">
+               </Test>
+               <Test
+                  Identifier = "HTTPClientTests/test_url_error()">
+               </Test>
+               <Test
+                  Identifier = "HTTPClientTests/test_url_response_not_httpurlresponse()">
+               </Test>
+               <Test
+                  Identifier = "HTTPClientTests/test_url_response_with_status_code_200_through_299()">
+               </Test>
+               <Test
+                  Identifier = "HTTPClientTests/test_url_response_with_status_code_not_in_2XY()">
+               </Test>
+               <Test
+                  Identifier = "HashTests/testEuidLengthIsAlways16()">
+               </Test>
+               <Test
+                  Identifier = "HashTests/testSha256Twice()">
+               </Test>
+               <Test
+                  Identifier = "IncorrectSpinValueTests/testDsonDecodingSpinValueInvalid()">
+               </Test>
+               <Test
+                  Identifier = "MagicTest/testDson()">
+               </Test>
+               <Test
+                  Identifier = "MagicTest/testMagicEndianess()">
+               </Test>
+               <Test
+                  Identifier = "NegativeAmountTests/testJsonDecodingUnallocatedTokensParticleNegativeAmount()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testIncorrectIP()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testLoadNodesMockedBadJson()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testLoadNodesMockedGoodJson()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testLocalHost()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testNodeFinder()">
+               </Test>
+               <Test
+                  Identifier = "NodeDiscoveryTests/testNodeFinderBadURL()">
+               </Test>
+               <Test
+                  Identifier = "NonBase58AddressTests/testJsonDecodingInvalidBase58InAddress()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testAdd()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testAddInout()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testAddInoutZero()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testAddZero()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testBinaryIntegerProtocolMethods()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testGreaterThanZeroLiteral()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testMultiply()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testMultiplyInout()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testMultiplyInoutZero()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testMultiplyZero()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testNonNegativeAmount256BitMaxValue()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testSubtract()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testSubtractInout()">
+               </Test>
+               <Test
+                  Identifier = "NonNegativeAmountTests/testSubtractZero()">
+               </Test>
+               <Test
+                  Identifier = "NumberOfLeadingZeroBitsInDataTests/testCountNumberOfLeadingZeroBitsInData()">
+               </Test>
+               <Test
+                  Identifier = "PointMultiplicationTests/testPointMultiplication()">
+               </Test>
+               <Test
+                  Identifier = "PositiveAmountTests/testAdd()">
+               </Test>
+               <Test
+                  Identifier = "PositiveAmountTests/testAddInout()">
+               </Test>
+               <Test
+                  Identifier = "PositiveAmountTests/testMultiply()">
+               </Test>
+               <Test
+                  Identifier = "PositiveAmountTests/testMultiplyInout()">
+               </Test>
+               <Test
+                  Identifier = "PositiveAmountTests/testPositiveAmount256BitMaxValue()">
+               </Test>
+               <Test
+                  Identifier = "PositiveAmountTests/testSubtract()">
+               </Test>
+               <Test
+                  Identifier = "PositiveAmountTests/testSubtractInout()">
+               </Test>
+               <Test
+                  Identifier = "PrefixUntilCompletionFromTests/test_that_publisher___prefix_untilCompletionFrom___completes_when_received_finish()">
+               </Test>
+               <Test
+                  Identifier = "PrefixUntilCompletionFromTests/test_that_publisher___prefix_untilEventFrom___outut_completes_when_received_output()">
+               </Test>
+               <Test
+                  Identifier = "PrefixUntilCompletionFromTests/test_that_publisher___prefix_untilFailureFrom___completes_when_received_output()">
+               </Test>
+               <Test
+                  Identifier = "PrefixUntilCompletionFromTests/test_that_publisher___prefix_untilOutputFrom___completes_when_received_output()">
+               </Test>
+               <Test
+                  Identifier = "PrefixUntilCompletionFromTests/test_that_publisher___prefix_untilOutputOrCompletionFrom___completes_when_received_failure()">
+               </Test>
+               <Test
+                  Identifier = "PrefixUntilCompletionFromTests/test_that_publisher___prefix_untilOutputOrCompletionFrom___completes_when_received_finish()">
+               </Test>
+               <Test
+                  Identifier = "PrefixUntilCompletionFromTests/test_that_publisher___prefix_untilOutputOrCompletionFrom___completes_when_received_output()">
+               </Test>
+               <Test
+                  Identifier = "PrefixUntilCompletionFromTests/test_that_publisher___prefix_untilOutputOrFinishFrom___completes_when_received_finish()">
+               </Test>
+               <Test
+                  Identifier = "PrefixUntilCompletionFromTests/test_that_publisher___prefix_untilOutputOrFinishFrom___completes_when_received_output()">
+               </Test>
+               <Test
+                  Identifier = "PrefixWhileTests/test_prefix_while_exclusive()">
+               </Test>
+               <Test
+                  Identifier = "PrefixWhileTests/test_prefix_while_inclusive()">
+               </Test>
+               <Test
+                  Identifier = "PrivateKeyTests/testBitcoinKitGenerate12Mneominic()">
+               </Test>
+               <Test
+                  Identifier = "PrivateKeyTests/testBitcoinKitPerformanceOfRestorationUsingMnemonic24Words()">
+               </Test>
+               <Test
+                  Identifier = "PrivateKeyTests/testBitcoinKitPerformanceOfSignAndVerify()">
+               </Test>
+               <Test
+                  Identifier = "PrivateKeyTests/testMnemonicGeneratorThat12WordsResultsIn12Words()">
+               </Test>
+               <Test
+                  Identifier = "PrivateKeyTests/testSeeds()">
+               </Test>
+               <Test
+                  Identifier = "ProofOfWorkTest/test10LeadingZeros()">
+               </Test>
+               <Test
+                  Identifier = "ProofOfWorkTest/test12LeadingZeros()">
+               </Test>
+               <Test
+                  Identifier = "ProofOfWorkTest/test14LeadingZeroRx()">
+               </Test>
+               <Test
+                  Identifier = "ProofOfWorkTest/test14LeadingZeros()">
+               </Test>
+               <Test
+                  Identifier = "ProofOfWorkTest/test1LeadingZero()">
+               </Test>
+               <Test
+                  Identifier = "ProofOfWorkTest/test4LeadingZeros()">
+               </Test>
+               <Test
+                  Identifier = "PublisherFlatMapResultTests/test_flatMapResult_success_completion_failure()">
+               </Test>
+               <Test
+                  Identifier = "PublisherFlatMapResultTests/test_flatMapResult_success_failure()">
+               </Test>
+               <Test
+                  Identifier = "PublisherFlatMapResultTests/test_flatMapResult_success_twice()">
+               </Test>
+               <Test
+                  Identifier = "PublisherTrackNumberOfSubscribersTest/test_four_subscribers_complete_by_error()">
+               </Test>
+               <Test
+                  Identifier = "PublisherTrackNumberOfSubscribersTest/test_four_subscribers_complete_by_finish()">
+               </Test>
+               <Test
+                  Identifier = "QuestionMarkInSymbolTests/testJsonDecodingSymbolBadChars()">
+               </Test>
+               <Test
+                  Identifier = "ResourceIdentifierTests/testResourceIdentifierString()">
+               </Test>
+               <Test
+                  Identifier = "Secp256k1RFC6979Tests/testSecp256k1Vector1()">
+               </Test>
+               <Test
+                  Identifier = "Secp256k1RFC6979Tests/testSecp256k1Vector2()">
+               </Test>
+               <Test
+                  Identifier = "Secp256k1RFC6979Tests/testSecp256k1Vector3()">
+               </Test>
+               <Test
+                  Identifier = "Secp256k1RFC6979Tests/testSecp256k1Vector4()">
+               </Test>
+               <Test
+                  Identifier = "Secp256k1RFC6979Tests/testSecp256k1Vector5()">
+               </Test>
+               <Test
+                  Identifier = "Secp256k1RFC6979Tests/testSecp256k1Vector6()">
+               </Test>
+               <Test
+                  Identifier = "SendMessageActionToParticleGroupsMapperTests/testEncryptAndDecryptMessage()">
+               </Test>
+               <Test
+                  Identifier = "SendMessageActionToParticleGroupsMapperTests/testMessagesAreEncryptedByDefault()">
+               </Test>
+               <Test
+                  Identifier = "SendMessageActionToParticleGroupsMapperTests/testNonEncryptedMessage()">
+               </Test>
+               <Test
+                  Identifier = "SendMessageActionToParticleGroupsMapperTests/testThatOnlySenderAndRecipientCanDecryptMessageByDefault()">
+               </Test>
+               <Test
+                  Identifier = "ShardRangeTests/testOkRange()">
+               </Test>
+               <Test
+                  Identifier = "ShardRangeTests/testOutOfRange()">
+               </Test>
+               <Test
+                  Identifier = "ShardRangeTests/testSpan()">
+               </Test>
+               <Test
+                  Identifier = "ShardSpaceTests/testOutOfRange()">
+               </Test>
+               <Test
+                  Identifier = "ShardSpaceTests/testWithinRange()">
+               </Test>
+               <Test
+                  Identifier = "SignatureLengthTests/testLengthOfSignatureIs64BytesEvenForLowValueR()">
+               </Test>
+               <Test
+                  Identifier = "SubmitAtomEpicTests/test_that_atom_submission_when_specifying_origin_node_and_never_getting_stored_completes_when___isCompletingOnStoreOnly___is___false()">
+               </Test>
+               <Test
+                  Identifier = "SubmitAtomEpicTests/test_that_atom_submission_when_specifying_origin_node_and_never_getting_stored_timesout_when___isCompletingOnStoreOnly___is___true()">
+               </Test>
+               <Test
+                  Identifier = "SubmitAtomEpicTests/test_that_atom_submission_when_specifying_origin_node_completes_when_atom_gets_stored()">
+               </Test>
+               <Test
+                  Identifier = "SubmitAtomEpicTests/test_that_atom_submission_without_specifying_originnode_completes_when_atom_gets_stored()">
+               </Test>
+               <Test
+                  Identifier = "SubmitAtomEpicTests/test_timeout()">
+               </Test>
+               <Test
+                  Identifier = "SuperscriptTests/testNegativeIntegersSuperscript()">
+               </Test>
+               <Test
+                  Identifier = "SuperscriptTests/testPositiveIntegersSuperscript()">
+               </Test>
+               <Test
+                  Identifier = "SwiftHashTests/testHashOfRRI()">
+               </Test>
+               <Test
+                  Identifier = "SwiftHashTests/testHashString()">
+               </Test>
+               <Test
+                  Identifier = "TestOptionSetRemoving/testAllButHash()">
+               </Test>
+               <Test
+                  Identifier = "TestOptionSetRemoving/testAllRemoveHash()">
+               </Test>
+               <Test
+                  Identifier = "TestOptionSetRemoving/testRawValues()">
+               </Test>
+               <Test
+                  Identifier = "TestOptionSetRemoving/testRemoving()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalanceReducerTests/testMultipleMintedTokens()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalanceReducerTests/testSimpleBalance()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesReducerTests/test_balance_of_single_token_balance_then_token_state()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesReducerTests/test_balance_of_single_token_token_state_then_balance()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesReducerTests/test_balance_of_two_tokens_in_different_balance_updates()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesReducerTests/test_balance_of_two_tokens_in_same_tokenBalances()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesReducerTests/test_two_balance_updates_of_single_token()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesTests/testAssertThatNoErorrIsThrownWhenTwoDifferentVersionsOfTokenDefinitionIsMerged()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesTests/testAssertThrowingErrorWhenListOfTokenBalanceContainingDuplicates()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesTests/testAssertThrowingWhenDifferentOwnersOfSameTokenBeingMerged()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesTests/testMergeDuplicateAssertKeepNew()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesTests/testMergeDuplicateAssertKeepNewAliceOfTokenSheHasNotCreated()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesTests/testMergeNoDuplicates()">
+               </Test>
+               <Test
+                  Identifier = "TokenBalancesTests/testMergeNoDuplicatesAliceOfTokenSheHasNotCreated()">
+               </Test>
+               <Test
+                  Identifier = "TokenDefinitionsStateReducerTests/testFixedTokenWithNoMint()">
+               </Test>
+               <Test
+                  Identifier = "TokenDefinitionsStateReducerTests/testTokenWithMint()">
+               </Test>
+               <Test
+                  Identifier = "TokenDefinitionsStateReducerTests/testTokenWithNoMint()">
+               </Test>
+               <Test
+                  Identifier = "TokenPermissionBadValueTests/testJsonDecodingTokenDefinitionParticleBadPermissionsValue()">
+               </Test>
+               <Test
+                  Identifier = "TokenPermissionEncodingTests/testDsonEncodedIsNotPrefixed()">
+               </Test>
+               <Test
+                  Identifier = "TokenPermissionEncodingTests/testJsonEncodedIsPrefixed()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/test1Eminus72baseE54()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testBigInAttoEqBigInAtto()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testBigInExaEqBigInExa()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testDecimalLotsOfDigits()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testDecimalLotsOfZeros()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testDecimalLotsOfZeros60()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testDenominatorContent()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testExaToAtto35Decimals()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testExaToAtto36Decimals()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testFromWhole()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testThatUsingDecimalStringForAttoResultsInErrorThrown()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testThatUsingDoubleForAttoResultsInErrorThrown()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testTokenAmountComparableGreaterThan()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testTokenAmountComparableLessThan()">
+               </Test>
+               <Test
+                  Identifier = "TokenUnitConversionTests/testTooManyDecimalThrows()">
+               </Test>
+               <Test
+                  Identifier = "TooLongAddressTests/testJsonDecodingTokenDefinitionParticleAddressTooLong()">
+               </Test>
+               <Test
+                  Identifier = "TooLongDescriptionTests/testJsonDecodingDescriptionTooLong()">
+               </Test>
+               <Test
+                  Identifier = "TooLongNameTests/testJsonDecodingNameTooLong()">
+               </Test>
+               <Test
+                  Identifier = "TooLongSymbolTests/testJsonDecodingSymbolTooLong()">
+               </Test>
+               <Test
+                  Identifier = "TooShortAddressTests/testJsonDecodingAddressTooShort()">
+               </Test>
+               <Test
+                  Identifier = "TooShortDescriptionTests/testJsonDecodingDescriptionTooShort()">
+               </Test>
+               <Test
+                  Identifier = "TooShortNameTests/testJsonDecodingNameTooShort()">
+               </Test>
+               <Test
+                  Identifier = "URLFormatterIncorrectUrlsTests/testAddressContainingPath()">
+               </Test>
+               <Test
+                  Identifier = "URLFormatterIncorrectUrlsTests/testFailingURLFormatting3()">
+               </Test>
+               <Test
+                  Identifier = "URLFormatterIncorrectUrlsTests/testUInt8OverflowInIpAddress()">
+               </Test>
+               <Test
+                  Identifier = "URLFormatterTests/testCorrectHttpUrl()">
+               </Test>
+               <Test
+                  Identifier = "URLFormatterTests/testCorrectHttpsUrl()">
+               </Test>
+               <Test
+                  Identifier = "URLFormatterTests/testCorrectWsUrl()">
+               </Test>
+               <Test
+                  Identifier = "URLFormatterTests/testCorrectWssUrl()">
+               </Test>
+               <Test
+                  Identifier = "URLFormatterTests/testLocalhost()">
+               </Test>
+               <Test
+                  Identifier = "UniverseConfigBetanetJSONDecodingTest/testLocalnetConfigHashIdMatchesBundled()">
+               </Test>
+               <Test
+                  Identifier = "UniverseConfigBetanetJSONDecodingTest/testMessageParticle()">
+               </Test>
+               <Test
+                  Identifier = "UniverseConfigBetanetJSONDecodingTest/testRriParticle()">
+               </Test>
+               <Test
+                  Identifier = "UniverseConfigBetanetJSONDecodingTest/testTokenDefinitionParticle()">
+               </Test>
+               <Test
+                  Identifier = "UniverseConfigBetanetJSONDecodingTest/testTransferrableTokensParticle()">
+               </Test>
+            </SelectedTests>
+         </TestableReference>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "SWIFT_DETERMINISTIC_HASHING"
+            value = "1"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Release"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Release"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>
