@@ -28,7 +28,7 @@ import Combine
 public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
     
     /// The channel this JSON RPC client uses for messaging
-    public let channel: FullDuplexCommunicationChannel
+    public unowned let channel: FullDuplexCommunicationChannel
     
     public init(channel: FullDuplexCommunicationChannel) {
         self.channel = channel

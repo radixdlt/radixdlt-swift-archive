@@ -24,38 +24,79 @@
 
 import Foundation
 
-public struct URLFormatter {}
+// MARK: - FormattedURL
+
+// swiftlint:disable colon opening_brace
+
+/// Sometimes life isn't easy... For whatever reason as of fall 2019 Swift foundation type `URL` does NOT
+/// retain port specified using initializer `init?(string: String)`, but if constructed using
+/// URLComponents it does. So this a URL which has port information, constructed using the `URLFormatter`
+/// helper.
+///
+/// See Also:
+/// - `URLFormatter`
+///
+public struct FormattedURL:
+    URLConvertible,
+    CustomStringConvertible,
+    Hashable
+{
+    // swiftlint:enable colon opening_brace
+    
+    public let url: URL
+    
+    // Important to make this initializer (file)private, and that this type (`FormattedURL`)
+    // is declared inside the same file as `URLFormatter`, enforcing that this type never
+    // gets instantiated outside of the context of the formatter.
+    fileprivate init(url: URL) {
+        self.url = url
+    }
+}
+
+public extension FormattedURL {
+    var description: String {
+        url.absoluteString
+    }
+}
+
+// MARK: - URLFormatter
+
+/// A non-initializable type with static helper functions to format a URL to persist
+/// its port information. Resulting in a `FormattedURL`.
+///
+/// See Also:
+/// - `FormattedURL`
+///
+public enum URLFormatter {}
 
 // MARK: - Public
 public extension URLFormatter {
-
+    
     static func format(
-        host hostConvertible: HostConvertible,
+        host hostStruct: Host,
         `protocol`: CommunicationProtocol,
-        appendPath: Bool = true,
         useSSL: Bool = true
     ) throws -> FormattedURL {
         
-        if hostConvertible.isLocal && useSSL {
+        let hostString: String = try validating(isOnlyHost: hostStruct.domain)
+        
+        if  hostString.isLocalhost && useSSL {
             throw Error.sslIsUnsupportedForLocalhost
         }
         
         var urlComponents = URLComponents()
-        urlComponents.host = try validating(isOnlyHost: hostConvertible.domain)
-        if appendPath {
-            urlComponents.path = `protocol`.path
-        }
-        urlComponents.port = Int(hostConvertible.port.port)
-        urlComponents.scheme = `protocol`.scheme(useSSL: useSSL)
 
+        urlComponents.host = hostString
+        urlComponents.path = `protocol`.path
+        urlComponents.port = Int(hostStruct.port.port)
+        urlComponents.scheme = `protocol`.scheme(useSSL: useSSL)
+        
         guard let formattedUrl = urlComponents.url else {
             throw `protocol`.failedToCreateUrl(from: urlComponents.description)
         }
+        
         return FormattedURL(
-            url: formattedUrl,
-            domain: hostConvertible.domain,
-            port: hostConvertible.port,
-            isUsingSSL: useSSL
+            url: formattedUrl
         )
     }
 }
@@ -67,10 +108,6 @@ public extension URLFormatter {
         } catch {
             incorrectImplementation("Failed to create localhost client, error: \(error)")
         }
-    }
-    
-    static var localhostWebsocket: FormattedURL {
-        return URLFormatter.localhost(protocol: .webSockets)
     }
 }
 
@@ -88,10 +125,10 @@ extension URLFormatter {
     /// If `string` passed contains slashes, it is not ONLY a host, but also contains path
     /// components, thus failing this check.
     static func onlyHost(string: String) -> Bool {
-        if string == .localhost { return true }
+        if string.isLocalhost { return true }
         if string.contains("/") { return false }
         let components = string.components(separatedBy: ".")
-
+        
         let integers = components.compactMap({ Int($0) })
         let uint8s = components.compactMap({ UInt8($0) })
         
@@ -188,5 +225,9 @@ private extension URL {
 }
 
 extension String {
-    static let localhost = "localhost"
+    static let localhostLetters = "localhost"
+    static let localhostNumbers = "127.0.0.1"
+    var isLocalhost: Bool {
+        self == String.localhostLetters || self.starts(with: "127")
+    }
 }

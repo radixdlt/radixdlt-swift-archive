@@ -40,7 +40,7 @@ public struct ShardRange:
     
     public typealias Bound = Shard
     
-    private let range: Range<Bound>
+    internal let range: Range<Bound>
     
     public init(range: Range<Bound>) {
         self.range = range

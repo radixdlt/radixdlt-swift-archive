@@ -28,6 +28,7 @@ import Foundation
 
 /// Immutable state at a certain point in time of a RadixNode (`Node`)
 public struct RadixNodeState:
+    Throwing,
     Equatable,
     CustomDebugStringConvertible,
     Identifiable
@@ -43,11 +44,22 @@ public struct RadixNodeState:
         webSocketStatus: WebSocketStatus,
         nodeInfo: NodeInfo? = nil,
         universeConfig: UniverseConfig? = nil
-    ) {
+    ) throws {
+        if let hostOfNodeInfo = nodeInfo?.host {
+            if hostOfNodeInfo != node.host {
+                throw Error.hostOfNodeInfoDifferentThanHostOfNode(hostOfNodeInfo: hostOfNodeInfo, hostOfNode: node.host)
+            }
+        }
         self.node = node
         self.webSocketStatus = webSocketStatus
         self.nodeInfo = nodeInfo
         self.universeConfig = universeConfig
+    }
+}
+
+public extension RadixNodeState {
+    enum Error: Swift.Error, Equatable {
+        case hostOfNodeInfoDifferentThanHostOfNode(hostOfNodeInfo: Host, hostOfNode: Host)
     }
 }
 
@@ -82,9 +94,9 @@ internal extension RadixNodeState {
         webSocketStatus newWSStatus: WebSocketStatus,
         nodeInfo newNodeInfo: NodeInfo? = nil,
         universeConfig newUniverseConfig: UniverseConfig? = nil
-    ) -> RadixNodeState {
+    ) throws -> RadixNodeState {
         
-        return RadixNodeState(
+        return try RadixNodeState(
             node: node,
             webSocketStatus: newWSStatus,
             nodeInfo: newNodeInfo ?? self.nodeInfo,

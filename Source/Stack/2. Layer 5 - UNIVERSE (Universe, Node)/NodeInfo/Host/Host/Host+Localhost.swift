@@ -27,13 +27,9 @@ import Foundation
 public extension Host {
     static func local(port: Port = .localhost) -> Host {
         do {
-            return try Host(domain: .localhost, port: port)
+            return try Host(domain: .localhostLetters, port: port)
         } catch {
             incorrectImplementation("Failed to create localhost, error: \(error)")
         }
-    }
-    
-    var isLocal: Bool {
-        return domain == String.localhost
     }
 }

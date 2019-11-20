@@ -71,10 +71,15 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
                 receiveOutput: { action in
                     let currentNetworkState = networkStateSubject.value
                     
-                    let nextNetworkState = network.reduce(
-                        state: currentNetworkState,
-                        action: action
-                    )
+                    let nextNetworkState: RadixNetworkState
+                    do {
+                        nextNetworkState = try network.reduce(
+                            state: currentNetworkState,
+                            action: action
+                        )
+                    } catch {
+                        fatalError("Unexpected error thrown from reduction of network state: \(error)")
+                    }
                     
                     nodeActionReducers.forEach {
                         $0.reduce(action: action)

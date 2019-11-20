@@ -34,23 +34,22 @@ public final class DefaultRadixNetwork: RadixNetwork {
 
 public extension DefaultRadixNetwork {
     
-    func reduce(state: RadixNetworkState, action nodeAction: NodeAction) -> RadixNetworkState {
+    func reduce(state: RadixNetworkState, action nodeAction: NodeAction) throws -> RadixNetworkState {
         guard let action = nodeAction as? RadixNetworkNodeAction else { return state }
         let node = action.node
         log.verbose("Reducing network, action: \(action), from state: \(state.debugDescription)")
-        
+
         if let nodeInfoResult = action as? GetNodeInfoActionResult {
-            return state.insertingMergeIfNeeded(for: node, nodeInfo: nodeInfoResult.result)
+            return try state.insertingMergeIfNeeded(for: node, nodeInfo: nodeInfoResult.result)
         } else if let universeConfigResult = action as? GetUniverseConfigActionResult {
-            return state.insertingMergeIfNeeded(for: node, universeConfig: universeConfigResult.result)
+            return try state.insertingMergeIfNeeded(for: node, universeConfig: universeConfigResult.result)
         } else if let addNodeAction = action as? AddNodeAction {
-            return state.insertingMergeIfNeeded(for: node, webSocketStatusValue: .new(.disconnected), nodeInfo: addNodeAction.nodeInfo)
+            return try state.insertingMergeIfNeeded(for: node, webSocketStatusValue: .new(.disconnected), nodeInfo: addNodeAction.nodeInfo)
         } else if let webSocketEvent = action as? WebSocketEvent {
-            return state.insertingMergeIfNeeded(for: node, webSocketStatusValue: .new(webSocketEvent.webSocketStatus))
+            return try state.insertingMergeIfNeeded(for: node, webSocketStatusValue: .new(webSocketEvent.webSocketStatus))
         } else {
             fatalError("missed something?")
         }
-        
     }
 }
 

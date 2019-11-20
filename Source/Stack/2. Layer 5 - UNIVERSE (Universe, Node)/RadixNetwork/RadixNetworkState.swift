@@ -61,19 +61,20 @@ public extension RadixNetworkState {
 }
 
 internal extension RadixNetworkState {
+    
     func insertingMergeIfNeeded(
         for node: Node,
         webSocketStatusValue: ExistingOrNewValue<WebSocketStatus> = .existingElseCrash,
         nodeInfo newNodeInfo: NodeInfo? = nil,
         universeConfig newUniverseConfig: UniverseConfig? = nil
-    ) -> RadixNetworkState {
+    ) throws -> RadixNetworkState {
         let newNodeState: RadixNodeState
         let maybeCurrentState = nodes.valueFor(key: node)
         let newWSStatus = webSocketStatusValue.getValue(existing: maybeCurrentState?.webSocketStatus)
         if let currentState = maybeCurrentState {
-            newNodeState = currentState.merging(webSocketStatus: newWSStatus, nodeInfo: newNodeInfo, universeConfig: newUniverseConfig)
+            newNodeState = try currentState.merging(webSocketStatus: newWSStatus, nodeInfo: newNodeInfo, universeConfig: newUniverseConfig)
         } else {
-            newNodeState = RadixNodeState(node: node, webSocketStatus: newWSStatus, nodeInfo: newNodeInfo, universeConfig: newUniverseConfig)
+            newNodeState = try RadixNodeState(node: node, webSocketStatus: newWSStatus, nodeInfo: newNodeInfo, universeConfig: newUniverseConfig)
         }
         return RadixNetworkState(nodes: self.nodes.inserting(value: newNodeState, forKey: node))
     }

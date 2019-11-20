@@ -123,6 +123,21 @@ public extension DefaultRadixUniverse {
 
 private extension RadixNetworkState {
     init(nodesDisconnectFromWS nodes: [Node]) {
-        self.init(nodeStates: nodes.map { .init(node: $0, webSocketStatus: .disconnected) })
+        self.init(nodeStates: nodes.map { RadixNodeState.disconnected(from: $0) })
+    }
+}
+
+extension RadixNodeState {
+    
+    static func of(node: Node, webSocketStatus: WebSocketStatus) -> Self {
+        do {
+            return try Self(node: node, webSocketStatus: webSocketStatus)
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
+    }
+    
+    static func disconnected(from node: Node) -> Self {
+        of(node: node, webSocketStatus: .disconnected)
     }
 }

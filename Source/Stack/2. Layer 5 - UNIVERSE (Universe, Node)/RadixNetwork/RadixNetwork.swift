@@ -26,5 +26,5 @@ import Foundation
 
 public protocol RadixNetwork {
     var state: RadixNetworkState { get }
-    func reduce(state: RadixNetworkState, action: NodeAction) -> RadixNetworkState
+    func reduce(state: RadixNetworkState, action: NodeAction) throws -> RadixNetworkState
 }
