@@ -38,12 +38,15 @@ public extension DetermineIfPeerIsSuitable {
         isUniverseSuitable: DetermineIfUniverseIsSuitable
     ) -> DetermineIfPeerIsSuitable {
         
-        return DetermineIfPeerIsSuitable { [unowned isUniverseSuitable] in
+        return DetermineIfPeerIsSuitable { [weak isUniverseSuitable] in
+            guard let isUniverseSuitableNonWeak = isUniverseSuitable else {
+                return false
+            }
             guard let universeConfig = $0.universeConfig else { return false }
             guard let shardSpace = $0.shardSpace else { return false }
             
             let shardMatch = shardSpace.intersectsWithShards($1)
-            let universeMatch = isUniverseSuitable.isUniverseSuitable(universeConfig)
+            let universeMatch = isUniverseSuitableNonWeak.isUniverseSuitable(universeConfig)
             
             return shardMatch && universeMatch
         }
