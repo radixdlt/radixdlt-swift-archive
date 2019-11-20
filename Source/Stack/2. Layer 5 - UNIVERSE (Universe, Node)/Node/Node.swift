@@ -66,7 +66,7 @@ public extension Node {
 public extension Node {
     var debugDescription: String {
         return """
-        Node(\(webSocketsUrl.domain))
+        Node(\(webSocketsUrl.domain):\(host.port))
         """
     }
 }

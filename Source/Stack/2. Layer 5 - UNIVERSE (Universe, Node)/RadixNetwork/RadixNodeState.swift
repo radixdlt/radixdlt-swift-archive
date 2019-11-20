@@ -55,7 +55,7 @@ public extension RadixNodeState {
     func debugDescriptionIncludeNode(_ includeNode: Bool) -> String {
         
         return """
-        \(includeNode.ifTrue { "\(node.debugDescription)" }), webSocketStatus: \(webSocketStatus)
+        \(includeNode.ifTrue { "\(node.debugDescription)" }), hasNodeInfo: \(nodeInfo != nil), hasUniverseConfig: \(universeConfig != nil), webSocketStatus: \(webSocketStatus)
         """
     }
     

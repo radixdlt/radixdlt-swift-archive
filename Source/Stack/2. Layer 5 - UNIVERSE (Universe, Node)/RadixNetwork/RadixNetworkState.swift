@@ -112,7 +112,7 @@ public extension RadixNetworkState {
         }.joined(separator: ", ")
         
         return """
-            RadixNetworkState(\(mapDescription))
+        NetworkState(\(mapDescription))
         """
     }
 }
