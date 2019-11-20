@@ -54,8 +54,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E645E73621E7827D00532ACD"
-               BuildableName = "RadixSDK iOS Tests.xctest"
-               BlueprintName = "RadixSDK iOS Tests"
+               BuildableName = "RadixSDK iOS Unit Tests.xctest"
+               BlueprintName = "RadixSDK iOS Unit Tests"
                ReferencedContainer = "container:RadixSDK.xcodeproj">
             </BuildableReference>
             <SkippedTests>
