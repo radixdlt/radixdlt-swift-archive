@@ -69,7 +69,7 @@ public extension RadixJsonRpcMethodEpic {
                 }
                 return selfNonWeak.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethod.node)
                     .connectAndNotifyWhenConnected()
-                    .map { selfNonWeak.rpcClientFromWebSocket.rpcClientForWebSocket($0) } // DefaultRPCClient(channel: $0) }
+                    .map { selfNonWeak.rpcClientFromWebSocket.rpcClientForWebSocket($0) }
                     .flatMap { rpcClient in
                         return selfNonWeak.methodCall(rpcClient, rpcMethod)
                 }.eraseToAnyPublisher()
