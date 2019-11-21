@@ -57,15 +57,15 @@ public extension UniverseBootstrap {
     static var localhostTwoNodes: UniverseBootstrap {
         return UniverseBootstrap(
             config: .localnet,
-            originNode: .localhostWebsocket(port: 8080),
-            nodes: .localhostWebsocket(port: 8081)
+            originNode: .localhost(port: 8080),
+            nodes: .localhost(port: 8081)
         )
     }
     
     static var localhostSingleNode: UniverseBootstrap {
         return UniverseBootstrap(
             config: .localnet,
-            originNode: .localhostWebsocket(port: 8080)
+            originNode: .localhost(port: 8080)
         )
     }
     
@@ -79,8 +79,8 @@ public extension UniverseBootstrap {
 //    }
 }
 
-private extension Node {
-    static func localhostWebsocket(port: Port) -> Node {
+internal extension Node {
+    static func localhost(port: Port) -> Node {
         do {
             return try Node(host: Host.local(port: port), isUsingSSL: false)
         } catch { incorrectImplementation("should be able to create localhost node") }

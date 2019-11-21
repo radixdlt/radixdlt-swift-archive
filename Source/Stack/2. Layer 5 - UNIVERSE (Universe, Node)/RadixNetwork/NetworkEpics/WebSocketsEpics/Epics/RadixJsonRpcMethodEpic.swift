@@ -40,13 +40,16 @@ public final class RadixJsonRpcMethodEpic<Request, RpcMethodResult>:
     public typealias MethodCall = (RPCClient, Request) -> Single<RpcMethodResult, Never>
     
     private let webSocketConnector: WebSocketConnector
+    private let rpcClientFromWebSocket: RPCClientFromWebSocket
     private let methodCall: MethodCall
     
     private init(
         webSocketConnector: WebSocketConnector,
+        rpcClientFromWebSocket: RPCClientFromWebSocket = .default,
         methodCall: @escaping MethodCall
     ) {
         self.webSocketConnector = webSocketConnector
+        self.rpcClientFromWebSocket = rpcClientFromWebSocket
         self.methodCall = methodCall
     }
 }
@@ -66,7 +69,7 @@ public extension RadixJsonRpcMethodEpic {
                 }
                 return selfNonWeak.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethod.node)
                     .connectAndNotifyWhenConnected()
-                    .map { DefaultRPCClient(channel: $0) }
+                    .map { selfNonWeak.rpcClientFromWebSocket.rpcClientForWebSocket($0) } // DefaultRPCClient(channel: $0) }
                     .flatMap { rpcClient in
                         return selfNonWeak.methodCall(rpcClient, rpcMethod)
                 }.eraseToAnyPublisher()

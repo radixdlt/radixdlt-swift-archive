@@ -28,3 +28,7 @@ public protocol RadixNetwork {
     var state: RadixNetworkState { get }
     func reduce(state: RadixNetworkState, action: NodeAction) throws -> RadixNetworkState
 }
+
+public extension RadixNetwork {
+    var isEmpty: Bool { state.isEmpty }
+}

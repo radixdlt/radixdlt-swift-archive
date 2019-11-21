@@ -31,44 +31,63 @@ public final class DefaultWebSocketsManager: WebSocketsManager {
     private let newSocketsToNodeSubject: PassthroughSubject<WebSocketToNode, Never>
     private var webSockets = [Node: WebSocketToNode]()
     
-    internal init() {
+    public init() {
         self.newSocketsToNodeSubject = PassthroughSubject()
     }
 }
 
+// MARK: WebSocketsManager
 public extension DefaultWebSocketsManager {
     
-    func getNewSocketsToNode() -> AnyPublisher<WebSocketToNode, Never> {
-        return newSocketsToNodeSubject.eraseToAnyPublisher()
+    func observeNewSockets() -> AnyPublisher<WebSocketToNode, Never> {
+        newSocketsToNodeSubject.eraseToAnyPublisher()
     }
     
     @discardableResult
-    func newDisconnectedWebsocket(to node: Node) -> WebSocketToNode {
+    func newSockets(to node: Node) -> WebSocketToNode {
         return webSockets.valueForKey(key: node) { [weak newSocketsToNodeSubject] in
             let newSocket = WebSocketToNode(node: node)
             newSocketsToNodeSubject?.send(newSocket)
             return newSocket
         }
     }
+  
+    @discardableResult
+    func tryCloseSocketTo(node: Node, strategy: WebSocketClosingStrategy) -> CloseWebSocketResult {
+        guard let webSocket = webSockets[node] else {
+            return .didNotClose(reason: .foundNoSocketForNode(node))
+        }
+        return tryClose(socket: webSocket, strategy: strategy)
+    }
+}
+
+private extension DefaultWebSocketsManager {
+    @discardableResult
+    func tryClose(socket: WebSocketToNode, strategy: WebSocketClosingStrategy) -> CloseWebSocketResult {
+        let result = socket.close(strategy: strategy)
+        if result.didClose {
+            webSockets.removeValue(forKey: socket.node)
+        }
+        return result
+    }
+}
+
+public enum CloseWebSocketResult {
+    case closed
+    indirect case didNotClose(reason: Reason)
     
-    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode) {
-        guard webSocket.closeIfNoOneListens() else { return }
-        webSockets.removeValue(forKey: webSocket.node)
+}
+
+public extension CloseWebSocketResult {
+    enum Reason {
+        case isInUse
+        case foundNoSocketForNode(Node)
     }
     
-    func ifNoOneListensCloseAndRemoveWebsocket(toNode node: Node, afterDelay delay: DispatchTimeInterval? = nil) {
-        guard let webSocket = webSockets[node] else { return }
-        ifNoOneListensCloseAndRemove(webSocket: webSocket, afterDelay: delay)
-    }
-    
-    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode, afterDelay delay: DispatchTimeInterval?) {
-        if let delay = delay {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay) { [weak self] in
-                self?.ifNoOneListensCloseAndRemove(webSocket: webSocket)
-            }
-        } else {
-            ifNoOneListensCloseAndRemove(webSocket: webSocket)
+    var didClose: Bool {
+        switch self {
+        case .closed: return true
+        case .didNotClose: return false
         }
     }
-    
 }

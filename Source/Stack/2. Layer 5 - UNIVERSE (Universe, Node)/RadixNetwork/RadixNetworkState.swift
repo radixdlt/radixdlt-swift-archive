@@ -118,7 +118,12 @@ public extension RadixNetworkState {
     }
 }
 
+public extension RadixNetworkState {
+    var isEmpty: Bool { nodes.isEmpty }
+}
+
 // MARK: Preset
 public extension RadixNetworkState {
     static var empty: Self { .init() }
 }
+

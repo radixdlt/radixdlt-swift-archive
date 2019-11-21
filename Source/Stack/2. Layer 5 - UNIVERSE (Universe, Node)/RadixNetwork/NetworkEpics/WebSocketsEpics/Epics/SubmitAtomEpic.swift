@@ -193,7 +193,7 @@ private extension SubmitAtomEpic {
             
             .merge(with: submitAtomActionSubject.map { $0 as NodeAction })^
             .setFailureType(to: Publishers.TimeoutError.self)
-            .timeout(submissionTimeoutInSeconds, scheduler: DefaultRadixNetworkController.mainThreadScheduler) { Publishers.TimeoutError.publisherTimeout }
+            .timeout(submissionTimeoutInSeconds, scheduler: RadixSchedulers.mainThreadScheduler) { Publishers.TimeoutError.publisherTimeout }
             .replaceError(with: SubmitAtomActionCompleted.failed(sendAction: sendAction, node: node, error: .timeout))
             .eraseToAnyPublisher()
             .prefixWhile { $0 is SubmitAtomActionCompleted == false }

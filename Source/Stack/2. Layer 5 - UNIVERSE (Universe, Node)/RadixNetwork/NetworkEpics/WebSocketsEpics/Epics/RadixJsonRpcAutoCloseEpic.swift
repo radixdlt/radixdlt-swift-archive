@@ -29,8 +29,6 @@ public final class RadixJsonRpcAutoCloseEpic: RadixNetworkWebSocketsEpic {
     
     private let webSocketCloser: WebSocketCloser
     
-    private let backgroundQueue = DispatchQueue(label: "com.radixdlt.RadixJsonRpcAutoCloseEpic")
-    
     public init(webSocketCloser: WebSocketCloser) {
         self.webSocketCloser = webSocketCloser
     }
@@ -51,7 +49,7 @@ public extension RadixJsonRpcAutoCloseEpic {
 
         nodeActionPublisher
             .filter { $0 is BaseJsonRpcResultAction }^
-            .delay(for: closeWebSocketsDelay, scheduler: backgroundQueue)^
+            .delay(for: WebSocketCloser.delay, on: .mainThread)
             .handleEvents(
                 receiveOutput: { [weak self] nodeAction in
                     self?.webSocketCloser.closeWebSocketToNode(nodeAction.node)
@@ -59,16 +57,5 @@ public extension RadixJsonRpcAutoCloseEpic {
             )^
             .dropAll()^
         
-    }
-}
-
-private extension RadixJsonRpcAutoCloseEpic {
-    
-    var closeWebSocketsDelay: DispatchQueue.SchedulerTimeType.Stride {
-        closeWebSocketsDelayFor(scheduler: backgroundQueue)
-    }
-    
-    func closeWebSocketsDelayFor<S, T>(scheduler: S) -> T where S: Scheduler, T == S.SchedulerTimeType.Stride {
-        return T.seconds(WebSocketCloser.closeWebSocketsDelayInSeconds)
     }
 }

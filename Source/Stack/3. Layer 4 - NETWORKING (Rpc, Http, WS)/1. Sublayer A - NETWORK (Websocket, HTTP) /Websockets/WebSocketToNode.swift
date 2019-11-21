@@ -60,7 +60,7 @@ public final class WebSocketToNode:
     internal init(node: Node, webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>) {
         
         webSocketStatusSubject.filter { $0 == .failed }
-            .debounce(for: 60, scheduler: DefaultRadixNetworkController.mainThreadScheduler)
+            .debounce(for: 60, scheduler: RadixSchedulers.mainThreadScheduler)
             .sink(
                 receiveCompletion: { _ in webSocketStatusSubject.send(.disconnected) },
                 receiveValue: { _ in webSocketStatusSubject.send(.disconnected) }
@@ -85,6 +85,11 @@ public extension WebSocketToNode {
     }
 }
 
+public enum WebSocketClosingStrategy: Int, Equatable {
+    case ifInUseSkipClosing
+    case closeDisregardingIfSocketHasListeners
+}
+
 // MARK: Public
 public extension WebSocketToNode {
     
@@ -92,16 +97,15 @@ public extension WebSocketToNode {
         webSocketStatusSubject.eraseToAnyPublisher()
     }
     
-    /// Close the webSocket only if no it has no observers, returns `true` if it was able to close, otherwise `false`.
     @discardableResult
-    func closeIfNoOneListens() -> Bool {
-        guard numberOfSubscriptions == 0 else {
-            assert(numberOfSubscriptions > 0, "numberOfSubscriptions is negative")
+    func close(strategy: WebSocketClosingStrategy = .ifInUseSkipClosing) -> CloseWebSocketResult {
+        if strategy == .ifInUseSkipClosing && numberOfSubscriptions == 0 {
             print("👂 did not close websocket to node: \(node), because it still has #\(numberOfSubscriptions) subscribers.")
-            return false
+            return .didNotClose(reason: .isInUse)
         }
+        assert(strategy == .closeDisregardingIfSocketHasListeners, "Forgot to handle new case of close strategy")
         closeDisregardingListeners()
-        return true
+        return .closed
     }
     
     @discardableResult

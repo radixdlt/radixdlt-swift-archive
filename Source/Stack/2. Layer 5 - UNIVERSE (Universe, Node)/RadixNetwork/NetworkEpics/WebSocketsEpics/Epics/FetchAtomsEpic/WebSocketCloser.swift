@@ -34,15 +34,15 @@ public final class WebSocketCloser {
 
 public extension WebSocketCloser {
     
-    static let closeWebSocketsDelayInSeconds: Int = 5
+    static let delay: DispatchTimeInterval = .seconds(5)
     
     static func byWebSockets(
-        manager webSocketsManager: WebSocketsManager,
-        closeWebSocketDelay: DispatchTimeInterval = .seconds(WebSocketCloser.closeWebSocketsDelayInSeconds)
+        manager webSocketsManager: WebSocketsManager
     ) -> WebSocketCloser {
-        WebSocketCloser { [weak webSocketsManager] nodeConnectionToClose in
+        
+        WebSocketCloser { [weak webSocketsManager] node in
             guard let webSocketsManager = webSocketsManager else { return }
-            webSocketsManager.ifNoOneListensCloseAndRemoveWebsocket(toNode: nodeConnectionToClose, afterDelay: closeWebSocketDelay)
+            webSocketsManager.tryCloseSocketTo(node: node, strategy: .ifInUseSkipClosing)
         }
     }
 }

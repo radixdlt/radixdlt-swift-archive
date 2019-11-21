@@ -42,13 +42,11 @@ public extension RadixNetworkController {
 }
 
 public final class DefaultRadixNetworkController: RadixNetworkController {
-    internal static let backgroundScheduler = DispatchQueue.global(qos: .utility)
-    internal static let mainThreadScheduler = RunLoop.main
     
-    // MARK: Private Properties
     private let networkStateSubject: CurrentValueSubject<RadixNetworkState, Never>
-    private let nodeActionSubject: PassthroughSubject<NodeAction, Never>
     private let reducedNodeActions: AnyPublisher<NodeAction, Never>
+    // Only internal so that we can read values in tests
+    internal let nodeActionSubject: PassthroughSubject<NodeAction, Never>
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -59,13 +57,16 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
     
     /// Initialises and **starts** the controller of the Radix Network (collection of Radix Nodes).
     public init(
-        network: RadixNetwork = DefaultRadixNetwork.init(),
-        initialNetworkState: RadixNetworkState = RadixNetworkState(),
+        network: RadixNetwork,
         epics: [RadixNetworkEpic],
         nodeActionReducers: [SomeReducer<NodeAction>]
-    ) {
+    ) throws {
         
-        let networkStateSubject = CurrentValueSubject<RadixNetworkState, Never>(initialNetworkState)
+        if network.isEmpty {
+            throw Error.initialNetworkStateMustContainAtLeastOneNode
+        }
+        
+        let networkStateSubject = CurrentValueSubject<RadixNetworkState, Never>(network.state)
         let nodeActionSubject = PassthroughSubject<NodeAction, Never>()
 
         let connectableReducedNodeActions = nodeActionSubject
@@ -92,8 +93,8 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
                     }
                 }
             )
-            .subscribe(on: DefaultRadixNetworkController.backgroundScheduler)
-            .receive(on: DefaultRadixNetworkController.mainThreadScheduler)
+            .subscribe(on: RadixSchedulers.backgroundScheduler)
+            .receive(on: RadixSchedulers.mainThreadScheduler)
             .makeConnectable()
         
         defer {
@@ -115,8 +116,8 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
                 networkState: networkState
             )
             // Dispatch work to be done on background thread.
-            .subscribe(on: DefaultRadixNetworkController.backgroundScheduler)
-            .receive(on: DefaultRadixNetworkController.mainThreadScheduler)
+            .subscribe(on: RadixSchedulers.backgroundScheduler)
+            .receive(on: RadixSchedulers.mainThreadScheduler)
             .eraseToAnyPublisher()
         }
 
@@ -124,7 +125,7 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
             .sink(
                 receiveCompletion: { completion in
                     switch completion {
-                    case .finished: incorrectImplementation("Received unexpected `finish`, the epics should never finish")
+                    case .finished: break
                     case .failure(let error):
                         // TODO Combine change `Failure` type of `networkStateSubject` to some new
                         // Error type for RadixNetworkEpics...
@@ -139,6 +140,12 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
     }
     // swiftlint:enable function_body_length
 
+}
+
+public extension DefaultRadixNetworkController {
+    enum Error: Int, Swift.Error, Equatable {
+        case initialNetworkStateMustContainAtLeastOneNode
+    }
 }
 
 public extension DefaultRadixNetworkController {

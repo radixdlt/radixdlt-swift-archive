@@ -57,23 +57,32 @@ public final class DefaultRadixUniverse: RadixUniverse {
 }
 
 public extension DefaultRadixUniverse {
-
-    convenience init(config: UniverseConfig, discoveryMode: DiscoveryMode) throws {
-       let atomStore = InMemoryAtomStore(genesisAtoms: config.genesis.atoms)
-
-        let discoveryEpics: [RadixNetworkEpic]
-        let initialNetworkOfNodes: Set<Node>
+    
+    static func makeNetworkEpics(
+        discoveryMode: DiscoveryMode,
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
+    ) -> [RadixNetworkEpic] {
+        return makeNetworkEpics(
+            discoveryEpics: discoveryMode.radixNetworkEpics,
+            determineIfPeerIsSuitable: determineIfPeerIsSuitable
+        )
+    }
+    
+    static func makeNetworkEpics(
+        discoveryEpics: [RadixNetworkEpic],
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
+    ) -> [RadixNetworkEpic] {
+        var networkEpics = makeNetworkEpics(determineIfPeerIsSuitable: determineIfPeerIsSuitable)
+        networkEpics.append(contentsOf: discoveryEpics)
+        return networkEpics
+    }
+    
+    static func makeNetworkEpics(
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
+    ) -> [RadixNetworkEpic] {
         
-        switch discoveryMode {
-        case .byDiscoveryEpics(let discoveryEpicsFromMode):
-            discoveryEpics = discoveryEpicsFromMode.elements
-            initialNetworkOfNodes = Set()
-        case .byInitialNetworkOfNodes(let initialNetworkOfNodesFromMode):
-            discoveryEpics = []
-            initialNetworkOfNodes = initialNetworkOfNodesFromMode.asSet
-        }
-        var networkEpics: [RadixNetworkEpic] = [
-            WebSocketsEpic.init(epicFromWebsockets: [
+        return [
+            WebSocketsEpic.init(epicFromWebsocketMakers: [
                 WebSocketEventsEpic.init(webSockets:),
                 ConnectWebSocketEpic.init(webSockets:),
                 SubmitAtomEpic.init(webSockets:),
@@ -85,15 +94,23 @@ public extension DefaultRadixUniverse {
                 RadixJsonRpcAutoCloseEpic.init(webSockets:)
             ]),
             FindANodeEpic(
-                determineIfPeerIsSuitable: .ifShardSpaceIntersectsWithShards(isUniverseSuitable: .ifEqual(to: config))
+                determineIfPeerIsSuitable: determineIfPeerIsSuitable
             )
         ]
+    }
+
+    convenience init(config: UniverseConfig, discoveryMode: DiscoveryMode) throws {
+       let atomStore = InMemoryAtomStore(genesisAtoms: config.genesis.atoms)
+
+        let initialNetworkOfNodes = discoveryMode.initialNetworkOfNodes
+     
+        let networkEpics = DefaultRadixUniverse.makeNetworkEpics(
+            discoveryMode: discoveryMode,
+            determineIfPeerIsSuitable: .ifShardSpaceIntersectsWithShards(isUniverseSuitable: .ifEqual(to: config))
+        )
         
-        networkEpics.append(contentsOf: discoveryEpics)
-        
-        let networkController = DefaultRadixNetworkController(
-            network: DefaultRadixNetwork(),
-            initialNetworkState: RadixNetworkState(nodesDisconnectFromWS: initialNetworkOfNodes.asArray),
+        let networkController = try DefaultRadixNetworkController(
+            network: DefaultRadixNetwork(state: RadixNetworkState(nodesDisconnectFromWS: initialNetworkOfNodes.contents)),
             epics: networkEpics,
             nodeActionReducers: [SomeReducer(InMemoryAtomStoreReducer(atomStore: atomStore))]
         )

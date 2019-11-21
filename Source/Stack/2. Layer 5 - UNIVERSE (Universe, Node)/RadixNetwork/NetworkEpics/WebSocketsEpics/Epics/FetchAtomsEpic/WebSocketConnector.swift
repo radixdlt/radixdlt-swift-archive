@@ -34,12 +34,11 @@ public final class WebSocketConnector {
 
 public extension WebSocketConnector {
     static func byWebSockets(manager webSocketsManager: WebSocketsManager) -> WebSocketConnector {
-        Self { [weak webSocketsManager] nodeToConnectTo in
+        Self { [weak webSocketsManager] node in
             guard let webSocketsManager = webSocketsManager else {
-                // TODO fix hack
-                return WebSocketToNode(node: nodeToConnectTo)
+                fatalError("This type should have been deinit before manager...")
             }
-            return webSocketsManager.newDisconnectedWebsocket(to: nodeToConnectTo)
+            return webSocketsManager.newSockets(to: node)
         }
     }
 }

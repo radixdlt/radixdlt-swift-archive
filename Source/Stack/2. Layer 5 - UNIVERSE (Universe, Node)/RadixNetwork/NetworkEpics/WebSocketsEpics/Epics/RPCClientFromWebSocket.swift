@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,38 +23,18 @@
 //
 
 import Foundation
-import Combine
 
-// TODO: this should not be an epic
-public final class WebSocketEventsEpic: RadixNetworkWebSocketsEpic {
+public final class RPCClientFromWebSocket {
+    public typealias RPCClientForWebSocket = (FullDuplexCommunicationChannel) -> RPCClient
+   
+    public let rpcClientForWebSocket: RPCClientForWebSocket
     
-    private let newSocketsPublisher: AnyPublisher<WebSocketToNode, Never>
-    
-    public init(newSocketsPublisher: AnyPublisher<WebSocketToNode, Never>) {
-        self.newSocketsPublisher = newSocketsPublisher
+    public init(rpcClientForWebSocket: @escaping RPCClientForWebSocket) {
+        self.rpcClientForWebSocket = rpcClientForWebSocket
     }
+    
 }
 
-public extension WebSocketEventsEpic {
-    convenience init(webSockets webSocketsManager: WebSocketsManager) {
-        self.init(
-            newSocketsPublisher: webSocketsManager.observeNewSockets()
-        )
-    }
+public extension RPCClientFromWebSocket {
+    static let `default` = RPCClientFromWebSocket { DefaultRPCClient(channel: $0) }
 }
-public extension WebSocketEventsEpic {
-    
-    // TODO neither `actions` nor `networkState` is used, thus this should not be an epic
-    func handle(
-        actions _: AnyPublisher<NodeAction, Never>,
-        networkState _: AnyPublisher<RadixNetworkState, Never>
-    ) -> AnyPublisher<NodeAction, Never> {
-        
-        return newSocketsPublisher.flatMap { webSocketToNode in
-            webSocketToNode.webSocketStatus.map { webSocketStatus in
-                WebSocketEvent(node: webSocketToNode.node, webSocketStatus: webSocketStatus)
-            }
-        }.eraseToAnyPublisher()
-    }
-}
-

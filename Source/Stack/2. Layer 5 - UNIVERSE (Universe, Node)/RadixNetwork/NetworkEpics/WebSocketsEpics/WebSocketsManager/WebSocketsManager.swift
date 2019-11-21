@@ -26,11 +26,19 @@ import Foundation
 import Combine
 
 public protocol WebSocketsManager: AnyObject {
-    func getNewSocketsToNode() -> AnyPublisher<WebSocketToNode, Never>
-    func newDisconnectedWebsocket(to node: Node) -> WebSocketToNode
-
-    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode)
-    func ifNoOneListensCloseAndRemoveWebsocket(toNode node: Node, afterDelay delay: DispatchTimeInterval?)
-    func ifNoOneListensCloseAndRemove(webSocket: WebSocketToNode, afterDelay delay: DispatchTimeInterval?)
     
+    /// Creates a `disconnected` web socket, you need to connect to it manually. Also
+    /// observe that you *should* notify subscribers (having called `observeNewSockets()`)
+    /// about this new socket.
+    @discardableResult
+    func newSockets(to node: Node) -> WebSocketToNode
+    
+    /// Try to close any web socket to the node using the provided closing strategy
+    @discardableResult
+    func tryCloseSocketTo(node: Node, strategy: WebSocketClosingStrategy) -> CloseWebSocketResult
+    
+    /// Subscribe to this publisher to get notified about newly created sockets
+    func observeNewSockets() -> AnyPublisher<WebSocketToNode, Never>
+
 }
+

@@ -112,6 +112,11 @@ public extension OrderedSet {
 // MARK: Mutating functions
 public extension OrderedSet {
     
+    /// Adds elements of `array` to the ordered set.
+    mutating func append(contentsOf array: [Element], replaceIfPresent: Bool = false) {
+        array.forEach { append($0, replaceIfPresent: replaceIfPresent) }
+    }
+    
     /// Adds an element to the ordered set.
     ///
     /// If it already contains the element, then the set is unchanged.

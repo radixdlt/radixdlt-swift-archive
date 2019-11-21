@@ -30,17 +30,20 @@ public protocol RadixNetworkWebSocketsEpic: RadixNetworkEpic {}
 
 // MARK: WebSocketsEpic
 public final class WebSocketsEpic: RadixNetworkEpic {
-    public typealias MakeEpic = (WebSocketsManager) -> RadixNetworkWebSocketsEpic
-    public typealias MakerOfEpics = [MakeEpic]
     
-    private let makerOfEpics: MakerOfEpics
+    private let webSocketsManager: WebSocketsManager
     
-    private var webSockets = DefaultWebSocketsManager()
+    // Internal for test purposes
+    internal var epics = [RadixNetworkWebSocketsEpic]()
     
-    private var epics = [RadixNetworkWebSocketsEpic]()
-    
-    public init(epicFromWebsockets: MakerOfEpics) {
-        self.makerOfEpics = epicFromWebsockets
+    public init(
+        webSocketsManager: WebSocketsManager = DefaultWebSocketsManager(),
+        epicFromWebsocketMakers: [(WebSocketsManager) -> RadixNetworkWebSocketsEpic]
+    ) {
+        self.epics = epicFromWebsocketMakers.map { makeEpic in
+            makeEpic(webSocketsManager)
+        }
+        self.webSocketsManager = webSocketsManager
     }
 }
 
@@ -50,19 +53,10 @@ public extension WebSocketsEpic {
         networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
     ) -> AnyPublisher<NodeAction, Never> {
         
-        return Publishers.MergeMany(
-            makerOfEpics
-                // We use capture list and make `self.webSockets` `unowned` so that any epic using it *cannot* be retaining it.
-                // We don't want to do `weak webSockets` and then return `RadixNetworkWebSocketsEpic?.none`, because we would
-                // still be passing a non explicitly stated `unowned` reference to the `RadixNetworkWebSocketsEpic` epics
-                .map { [weak self, unowned webSockets] epicFromWebSocket in
-                    let newEpic = epicFromWebSocket(webSockets)
-                    self?.epics.append(newEpic)
-                    return newEpic
-                }
-                .map { (newlyCreatedEpic: RadixNetworkWebSocketsEpic) -> AnyPublisher<NodeAction, Never> in
-                    return newlyCreatedEpic.handle(actions: nodeActionPublisher, networkState: networkStatePublisher)
-                }
+        Publishers.MergeMany(
+            epics.map { epic -> AnyPublisher<NodeAction, Never> in
+                epic.handle(actions: nodeActionPublisher, networkState: networkStatePublisher)
+            }
         )
         .eraseToAnyPublisher()
     }
