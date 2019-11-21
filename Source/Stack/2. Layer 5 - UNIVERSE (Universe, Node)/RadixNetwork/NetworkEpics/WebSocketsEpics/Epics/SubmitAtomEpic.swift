@@ -39,8 +39,7 @@ public final class SubmitAtomEpic: RadixNetworkWebSocketsEpic {
     // MARK: Non-injected properties
     private var cancellables = Set<AnyCancellable>()
     
-    private let backgroundQueue = DispatchQueue(label: "com.radixdlt.SubmitAtomEpic")
-    private let submissionTimeoutInSeconds: DispatchQueue.SchedulerTimeType.Stride
+    private let submissionTimeoutInSeconds: RunLoop.SchedulerTimeType.Stride
     
     public init(
         webSocketConnector: WebSocketConnector,
@@ -62,7 +61,7 @@ public final class SubmitAtomEpic: RadixNetworkWebSocketsEpic {
         self.makeAtomStatusObservationRequesting = makeAtomStatusObservationRequesting
         self.makeAtomSubmitting = makeAtomSubmitting
         self.makeAtomStatusObservationCanceller = makeAtomStatusObservationCanceller
-        self.submissionTimeoutInSeconds = DispatchQueue.SchedulerTimeType.Stride.seconds(overridingSubmissionTimeoutInSeconds ?? Self.defaultSubmissionTimeoutInSeconds)
+        self.submissionTimeoutInSeconds = RunLoop.SchedulerTimeType.Stride.seconds(overridingSubmissionTimeoutInSeconds ?? Self.defaultSubmissionTimeoutInSeconds)
     }
 }
 
@@ -194,7 +193,7 @@ private extension SubmitAtomEpic {
             
             .merge(with: submitAtomActionSubject.map { $0 as NodeAction })^
             .setFailureType(to: Publishers.TimeoutError.self)
-            .timeout(submissionTimeoutInSeconds, scheduler: backgroundQueue) { Publishers.TimeoutError.publisherTimeout }
+            .timeout(submissionTimeoutInSeconds, scheduler: DefaultRadixNetworkController.mainThreadScheduler) { Publishers.TimeoutError.publisherTimeout }
             .replaceError(with: SubmitAtomActionCompleted.failed(sendAction: sendAction, node: node, error: .timeout))
             .eraseToAnyPublisher()
             .prefixWhile { $0 is SubmitAtomActionCompleted == false }

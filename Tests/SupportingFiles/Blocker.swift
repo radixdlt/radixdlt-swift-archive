@@ -27,6 +27,15 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
+private let timeoutInSecondsEnoughForPOW: Int = 10
+extension TimeInterval {
+    static var enoughForPOW: Self { .init(timeoutInSecondsEnoughForPOW) }
+}
+extension DispatchTimeInterval {
+    static var enoughForPOW: Self { .seconds(timeoutInSecondsEnoughForPOW) }
+}
+
+
 protocol SliceOfOutputPublisher {
     var sizeOfSlice: Int { get }
 }

@@ -60,7 +60,7 @@ public final class WebSocketToNode:
     internal init(node: Node, webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>) {
         
         webSocketStatusSubject.filter { $0 == .failed }
-            .debounce(for: 60, scheduler: RunLoop.main)
+            .debounce(for: 60, scheduler: DefaultRadixNetworkController.mainThreadScheduler)
             .sink(
                 receiveCompletion: { _ in webSocketStatusSubject.send(.disconnected) },
                 receiveValue: { _ in webSocketStatusSubject.send(.disconnected) }

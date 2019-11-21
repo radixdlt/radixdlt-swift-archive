@@ -42,6 +42,8 @@ public extension RadixNetworkController {
 }
 
 public final class DefaultRadixNetworkController: RadixNetworkController {
+    internal static let backgroundScheduler = DispatchQueue.global(qos: .utility)
+    internal static let mainThreadScheduler = RunLoop.main
     
     // MARK: Private Properties
     private let networkStateSubject: CurrentValueSubject<RadixNetworkState, Never>
@@ -90,7 +92,13 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
                     }
                 }
             )
+            .subscribe(on: DefaultRadixNetworkController.backgroundScheduler)
+            .receive(on: DefaultRadixNetworkController.mainThreadScheduler)
             .makeConnectable()
+        
+        defer {
+            connectableReducedNodeActions.connect().store(in: &cancellables)
+        }
 
         let networkState = networkStateSubject.eraseToAnyPublisher()
 
@@ -106,22 +114,27 @@ public final class DefaultRadixNetworkController: RadixNetworkController {
                 actions: connectableReducedNodeActions.eraseToAnyPublisher(),
                 networkState: networkState
             )
+            // Dispatch work to be done on background thread.
+            .subscribe(on: DefaultRadixNetworkController.backgroundScheduler)
+            .receive(on: DefaultRadixNetworkController.mainThreadScheduler)
+            .eraseToAnyPublisher()
         }
 
-        Publishers.MergeMany(updates).sink(
-            receiveCompletion: { completion in
-                switch completion {
-                case .finished: incorrectImplementation("Received unexpected `finish`, the epics should never finish")
-                case .failure(let error):
-                    // TODO Combine change `Failure` type of `networkStateSubject` to some new
-                    // Error type for RadixNetworkEpics...
-                    networkStateSubject.send(completion: .failure(error))
-                }
-            },
-            receiveValue: { [weak self] in self?.dispatch(nodeAction: $0) }
-        ).store(in: &cancellables)
-        
-        connectableReducedNodeActions.connect().store(in: &cancellables)
+        Publishers.MergeMany(updates)
+            .sink(
+                receiveCompletion: { completion in
+                    switch completion {
+                    case .finished: incorrectImplementation("Received unexpected `finish`, the epics should never finish")
+                    case .failure(let error):
+                        // TODO Combine change `Failure` type of `networkStateSubject` to some new
+                        // Error type for RadixNetworkEpics...
+                        networkStateSubject.send(completion: .failure(error))
+                    }
+                },
+                
+                receiveValue: { [weak self] in self?.dispatch(nodeAction: $0) }
+            )
+            .store(in: &cancellables)
         
     }
     // swiftlint:enable function_body_length
