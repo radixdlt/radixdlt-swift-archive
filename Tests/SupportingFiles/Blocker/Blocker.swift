@@ -66,18 +66,18 @@ extension Publishers.First: SliceOfOutputPublisher {
 }
 
 
-//extension Publishers.Last: SliceOfOutputPublisher {
-//    var sizeOfSlice: Int { 1 }
-//}
+extension Publishers.Last: SliceOfOutputPublisher {
+    var sizeOfSlice: Int { 1 }
+}
 
 // "Prefix"
 extension Publishers.Output: SliceOfOutputPublisher {
     var sizeOfSlice: Int { range.count }
 }
 
-//extension Publishers.IgnoreOutput: SliceOfOutputPublisher {
-//    var sizeOfSlice: Int { 0 }
-//}
+extension Publishers.IgnoreOutput: SliceOfOutputPublisher {
+    var sizeOfSlice: Int { 0 }
+}
 
 
 protocol BlockerErrorConvertible: Swift.Error {
@@ -241,16 +241,6 @@ extension Blocker {
     
 }
 
-//extension Blocker where Output == Never, Failure == Never {
-//    static func completion<P>(of publisher: P) -> Blocker
-//        where P: Publisher,
-//        P.Output == Never,
-//        P.Failure == Never
-//    {
-//        self.init(publisher) { SliceOfOutput(from: $0.ignoreOutput()) }
-//    }
-//}
-
 extension Publisher where Self: SliceOfOutputPublisher {
     fileprivate func asBlocker() -> Blocker<Output, Failure> {
         Blocker(self) { SliceOfOutput(from: $0) }
@@ -341,34 +331,6 @@ private extension Result where Success: Sequence, Failure: BlockerErrorConvertib
         }
     }
 }
-
-
-//extension Publisher where Output == Never, Failure == Never {
-//    func blockingResult(
-//        timeout: DispatchTimeInterval = .ms100,
-//        retainBlocker: (AnyBlocker) -> Void
-//    ) -> Result<Void, Blocker<Output, Failure>.Error> {
-//
-//        let blocker = self.ignoreOutput().asBlocker()
-//        retainBlocker(blocker)
-//        return blocker.blocking(timeout: timeout).flatMap { outputs in
-//            guard outputs.isEmpty else {
-//                fatalError("Expected zero outputs")
-//            }
-//            return .success(void)
-//        }
-//    }
-//
-//    func blockingWasSuccessful(timeout: DispatchTimeInterval = .ms100, retainBlocker: (AnyBlocker) -> Void) -> Bool {
-//        do {
-//            let _ = try blockingResult(timeout: timeout, retainBlocker: retainBlocker).get()
-//            return true
-//        } catch {
-//            Swift.print("Ignored error: \(error)")
-//            return false
-//        }
-//    }
-//}
 
 extension DispatchTimeInterval {
     static var ms100: Self { .milliseconds(100) }

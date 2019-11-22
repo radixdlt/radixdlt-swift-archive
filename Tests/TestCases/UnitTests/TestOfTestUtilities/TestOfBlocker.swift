@@ -80,11 +80,21 @@ final class TestOfBlocker: TestCase {
         }
     }
     
-    func testOfIgnoringOutputPublisherShort() {
+    func testOfIgnoringOutputPublisherFirst() {
         let publisher = Timer.publish(every: .ms50, on: RunLoop.main, in: .common)
             .autoconnect()
             .receive(on: RunLoop.main)
             .first()
+        
+        XCTAssertTrue(publisher.blockingIgnoreOutputSuccess())
+    }
+    
+    func testOfIgnoringOutputPublisherIgnoreOutput() {
+        let publisher = Timer.publish(every: .ms50, on: RunLoop.main, in: .common)
+            .autoconnect()
+            .receive(on: RunLoop.main)
+            .first()
+            .ignoreOutput()
         
         XCTAssertTrue(publisher.blockingIgnoreOutputSuccess())
     }
