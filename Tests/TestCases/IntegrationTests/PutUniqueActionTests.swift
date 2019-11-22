@@ -50,23 +50,26 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
 
         // WHEN: Alice sends a `Transaction` containing a `UniqueId` with the string `"foobar"`
         let transaction = Transaction {
-            PutUniqueIdAction(uniqueMaker: alice, string: String.randomSuitableForSymbol)
+            PutUniqueIdAction(uniqueMaker: alice, string: "foobar")
         }
         let resultOfPutUniqueAction = application.send(transaction: transaction)
         
         XCTAssertTrue(resultOfPutUniqueAction.blockingWasSuccessful())
         
         
-        
-//        guard let executedTransaction: ExecutedTransaction = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingTakeFirst(timeout: 1) else { return }
-//
-//        let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
-//
-//        XCTAssertEqual(putUniqueActions.count, 1)
-//        let putUniqueAction = putUniqueActions[0]
-//
-//        // THEN: AND we can read out the `UniqueId` string `"foobar"`
-//        XCTAssertEqual(putUniqueAction.string, "foobar")
+        let executedTransaction = try application.observeTransactions(
+            at: alice,
+            containingActionOfAnyType: [PutUniqueIdAction.self]
+        )
+        .blockingOutputFirst(timeout: .enoughForPOW)
+
+        let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
+
+        XCTAssertEqual(putUniqueActions.count, 1)
+        let putUniqueAction = putUniqueActions[0]
+
+        // THEN: AND we can read out the `UniqueId` string `"foobar"`
+        XCTAssertEqual(putUniqueAction.string, "foobar")
     }
     
     /*
