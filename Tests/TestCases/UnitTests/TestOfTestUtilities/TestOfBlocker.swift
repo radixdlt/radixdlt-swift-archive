@@ -42,7 +42,7 @@ final class TestOfBlocker: TestCase {
     func testOfUInt8PublisherOperatorFirst() {
         let intPublisher: AnyPublisher<UInt8, Never> = Timer.publish(every: .ms50, on: RunLoop.main, in: .common)
             .autoconnect()
-            .map { _ in Swift.print("✅"); return UInt8.random() }
+            .map { _ in return UInt8.random() }
             .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
         
@@ -55,7 +55,7 @@ final class TestOfBlocker: TestCase {
     func testOfIntPublisherOutputFirst() throws {
         let intPublisher: AnyPublisher<Int, Never> = Timer.publish(every: .ms50, on: RunLoop.main, in: .common)
             .autoconnect()
-            .map { _ in Swift.print("✅"); return Int(42) }
+            .map { _ in return Int(42) }
             .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
         

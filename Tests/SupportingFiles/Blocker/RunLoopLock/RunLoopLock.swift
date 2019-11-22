@@ -71,7 +71,6 @@ final class RunLoopLock {
             case .stopped:
                 return
             case .timedOut:
-                print("⚠️⏱ timeout")
                 throw RunLoopError.timeout
             default:
                 return

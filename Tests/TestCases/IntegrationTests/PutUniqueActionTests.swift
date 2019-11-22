@@ -54,15 +54,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         }
         let resultOfPutUniqueAction = application.send(transaction: transaction)
         
-        let publisher = resultOfPutUniqueAction
-            .toCompletable()
-            .receive(on: RunLoop.main)
-            .ignoreOutput()
-        
-         XCTAssertTrue(publisher.blockingIgnoreOutputSuccess(timeout: .enoughForPOW))
-
-        
-        
+        XCTAssertTrue(resultOfPutUniqueAction.blockingWasSuccessful())
         
         
         

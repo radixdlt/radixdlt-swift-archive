@@ -111,13 +111,7 @@ final class Blocker<Output, Failure> where Failure: Swift.Error {
     
     // Cancellable which is not used for now, but holds the subscription to the publisher
     private var cancellables = Set<AnyCancellable>()
-    
-    var result: Result<[Output], Error>?
-    
-    deinit {
-        print("☣️ Blocker deinit")
-    }
-    
+  
     fileprivate init<P>(
         publisherToBlock: P,
         specifiedNumberOfOutputtedValues: Int
@@ -205,8 +199,6 @@ extension Blocker {
                 )
             }
         }
-        print("☑️ blocker done, result: \(result)")
-        self.result = result
         return result
     }
     

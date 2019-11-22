@@ -509,6 +509,8 @@
 		E6DC276522C4C7650049BB3C /* TokenReferenceBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DC276422C4C7650049BB3C /* TokenReferenceBalance.swift */; };
 		E6E0BFBB23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E0BFBA23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift */; };
 		E6E0BFBD2375AE6F00B946A7 /* OrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605544A23058A6600528510 /* OrderedSet.swift */; };
+		E6E12EEA238842330021B35B /* ResultOfUserAction+Blocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E12EE9238842330021B35B /* ResultOfUserAction+Blocking.swift */; };
+		E6E12EEB238842330021B35B /* ResultOfUserAction+Blocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E12EE9238842330021B35B /* ResultOfUserAction+Blocking.swift */; };
 		E6E279212271CD1C0067D46E /* ECIES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278762271CD1C0067D46E /* ECIES.swift */; };
 		E6E279222271CD1C0067D46E /* SecureGenerateBytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278782271CD1C0067D46E /* SecureGenerateBytes.swift */; };
 		E6E279232271CD1C0067D46E /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278792271CD1C0067D46E /* Status.swift */; };
@@ -1211,6 +1213,7 @@
 		E6DC276422C4C7650049BB3C /* TokenReferenceBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReferenceBalance.swift; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6E0BFBA23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineIfUniverseIsSuitable.swift; sourceTree = "<group>"; };
+		E6E12EE9238842330021B35B /* ResultOfUserAction+Blocking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResultOfUserAction+Blocking.swift"; sourceTree = "<group>"; };
 		E6E278762271CD1C0067D46E /* ECIES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIES.swift; sourceTree = "<group>"; };
 		E6E278782271CD1C0067D46E /* SecureGenerateBytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureGenerateBytes.swift; sourceTree = "<group>"; };
 		E6E278792271CD1C0067D46E /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
@@ -2993,6 +2996,7 @@
 			children = (
 				E6E27A532271EED60067D46E /* XCTestCase */,
 				E6A4ABBD221EBA9A006C5CA8 /* Foundation */,
+				E6E12EE9238842330021B35B /* ResultOfUserAction+Blocking.swift */,
 			);
 			path = TestExtensions;
 			sourceTree = "<group>";
@@ -5011,6 +5015,7 @@
 				E6D7A3782385980700950312 /* AtomJsonDeserializationTwoParticleGroupsTests.swift in Sources */,
 				E6D7A3AE2385980700950312 /* HTTPClientTests.swift in Sources */,
 				E6D7A3BF2385980700950312 /* Secp256k1RFC6979Tests.swift in Sources */,
+				E6E12EEA238842330021B35B /* ResultOfUserAction+Blocking.swift in Sources */,
 				E6D7A3C52385980800950312 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E6D7A3822385980700950312 /* TokenPermissionBadValueTests.swift in Sources */,
 				E6D7A3C32385980700950312 /* PrefixWhileTests.swift in Sources */,
@@ -5118,6 +5123,7 @@
 				E6D7A281238596F200950312 /* Identity+Account.swift in Sources */,
 				E6D7A28D238596F200950312 /* LocalhostNodeTest.swift in Sources */,
 				E6D7A295238596F200950312 /* XCTestCase_Extensions.swift in Sources */,
+				E6E12EEB238842330021B35B /* ResultOfUserAction+Blocking.swift in Sources */,
 				E66D79F723880FFB009B07D9 /* RunLoopLock.swift in Sources */,
 				E6D7A29A238596F200950312 /* TestableConvenienceInitializers.swift in Sources */,
 				E6D7A29B238596F200950312 /* ParticleSet.swift in Sources */,
