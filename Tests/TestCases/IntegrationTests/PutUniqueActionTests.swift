@@ -72,8 +72,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         XCTAssertEqual(putUniqueAction.string, "foobar")
     }
     
-    /*
-    func testSendTransactionWithTwoUniqueIds() {
+    func testSendTransactionWithTwoUniqueIds() throws {
         
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
@@ -89,7 +88,11 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
                 .blockingWasSuccessful(timeout: .enoughForPOW)
         )
         
-        guard let executedTransaction: ExecutedTransaction = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingTakeFirst(timeout: 1) else { return }
+        let executedTransaction: ExecutedTransaction = try application.observeTransactions(
+            at: alice,
+            containingActionOfAnyType: [PutUniqueIdAction.self]
+        )
+            .blockingOutputFirst(timeout: .enoughForPOW)
         
         let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
         
@@ -100,6 +103,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         XCTAssertEqual(putUniqueActions[1].string, "bar")
     }
     
+    /*
     func testFailPuttingTwoEqualUniqueIdInOneTransaction() {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
