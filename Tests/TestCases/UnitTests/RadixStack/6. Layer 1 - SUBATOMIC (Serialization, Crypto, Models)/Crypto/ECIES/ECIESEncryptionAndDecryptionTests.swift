@@ -38,7 +38,7 @@ class ECIESEncryptionAndDecryptionTests: TestCase {
         }
         
         // GIVEN
-        // Alice and Bob have a keypair each, and a plain text message
+        // Alice and Bob have a key pair each, and a plain text message
         let alice = KeyPair()
         let bob = Bob.receiving(alicePublicKey: alice.publicKey)
         let message = "Hello Radix"
@@ -60,7 +60,7 @@ class ECIESEncryptionAndDecryptionTests: TestCase {
     func testAliceCannotDecryptMessagesMeantForBobAndViceVersa() {
 
         // GIVEN
-        // Alice and Bob have a keypair each, and a plain text message
+        // Alice and Bob have a key pair each, and a plain text message
         let alice = KeyPair()
         let bob = KeyPair()
         let message = "Hello Radix"

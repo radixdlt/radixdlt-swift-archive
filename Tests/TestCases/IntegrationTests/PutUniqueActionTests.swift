@@ -50,22 +50,61 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
 
         // WHEN: Alice sends a `Transaction` containing a `UniqueId` with the string `"foobar"`
         let transaction = Transaction {
-            PutUniqueIdAction(uniqueMaker: alice, string: "foobar")
+            PutUniqueIdAction(uniqueMaker: alice, string: String.randomSuitableForSymbol)
         }
+        let resultOfPutUniqueAction = application.send(transaction: transaction)
+        
+//        let expectation = XCTestExpectation(description: self.debugDescription)
+//        let cancellableFromSink = publisher.sink(
+//            receiveCompletion: { _ in Swift.print("🔮 got completion"); expectation.fulfill() },
+//            receiveValue: { _ in Swift.print("🔮 got output"); expectation.fulfill() }
+//        )
+//
+//        wait(for: [expectation], timeout: .enoughForPOW)
+//        XCTAssertNotNil(cancellableFromSink)
+        let blocker = Blocker.ignoreOutput(of: resultOfPutUniqueAction
+            .toCompletable()
+//            .ignoreOutput()
+//            .receive(on: RunLoop.main)
+        )
+        
+        let resultOfBlocker = blocker.blocking(timeout: .enoughForPOW)
+        
+        switch resultOfBlocker {
+        case .failure(let error):
+            return XCTFail("failed with error: \(error)")
+        case .success:
+            XCTAssert(true)
+        }
+        
+//        XCTAssertTrue(blocker.blockingWasSuccessful(timeout: .enoughForPOW))
+        
+//        var anyBlocker: AnyBlocker?
+//
+//        // THEN: the Transaction is successfully sent
+//
+//            let wasSuccessful = publisher
+//                .blockingWasSuccessful(timeout: .enoughForPOW) { anyBlocker = $0 }
+//
+//        XCTAssertNotNil(anyBlocker)
+//        if let blocker = anyBlocker as? Blocker<Never, Never> {
+//            if let resultOfBlocker = blocker.result {
+//                switch resultOfBlocker {
+//                case .failure(let error):
+//                    return XCTFail("failed with error: \(error)")
+//                case .success:
+//                    XCTAssert(true)
+//                }
+//            } else {
+//                XCTFail("no result")
+//            }
+//        } else {
+//            XCTFail("wrong type")
+//        }
+//
+//
+//        XCTAssertTrue(wasSuccessful)
 
-
-        // THEN: the Transaction is successfully sent
-//        XCTAssertTrue(application.send(transaction: transaction).toCompletable().ignoreOutput().toBlockingSucceeded())
-
-        let publisher = application.send(transaction: transaction)
-        let expectation = XCTestExpectation.init(description: self.debugDescription)
-
-        let submitAtomCancellable = publisher.toCompletable()
-            .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { _ in expectation.fulfill() })
-
-        wait(for: [expectation], timeout: .enoughForPOW)
-        XCTAssertNotNil(submitAtomCancellable)
         
 //        guard let executedTransaction: ExecutedTransaction = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingTakeFirst(timeout: 1) else { return }
 //

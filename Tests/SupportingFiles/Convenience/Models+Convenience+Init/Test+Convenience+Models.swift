@@ -25,10 +25,15 @@
 import Foundation
 @testable import RadixSDK
 
+extension String {
+    static var randomSuitableForSymbol: String {
+        String(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(14))
+    }
+}
+
 extension Symbol {
     static var random: Symbol {
-        let randomSymbol = String(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(14))
-        return .init(validated: randomSymbol)
+        .init(validated: String.randomSuitableForSymbol)
     }
 }
 
