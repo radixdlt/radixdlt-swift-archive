@@ -44,36 +44,29 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobAccount)
     }
-    
-    func testSendTransactionWithSingleUniqueId() throws {
 
+    func testSendTransactionWithSingleUniqueId() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
-        
+
         // WHEN: Alice sends a `Transaction` containing a `UniqueId` with the string `"foobar"`
         let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "foobar")
         }
-        
-            
+
+
         // THEN: the Transaction is successfully sent
 //        XCTAssertTrue(application.send(transaction: transaction).toCompletable().ignoreOutput().toBlockingSucceeded())
-        
+
         let publisher = application.send(transaction: transaction)
         let expectation = XCTestExpectation.init(description: self.debugDescription)
-        
-//        let cancellable0 = publisher.toObservable()
-//            .receive(on: RunLoop.main)
-//            .sink(receiveValue: { print("✅⭐️ submitAtomAction: \($0)") })
-        
-        let cancellable = publisher.toCompletable()
+
+        let submitAtomCancellable = publisher.toCompletable()
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { _ in expectation.fulfill() })
-        
-        wait(for: [expectation], timeout: 7)
-        XCTAssertNotNil(cancellable)
-//        XCTAssertNotNil(cancellable0)
-        
 
+        wait(for: [expectation], timeout: .enoughForPOW)
+        XCTAssertNotNil(submitAtomCancellable)
+        
 //        guard let executedTransaction: ExecutedTransaction = application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self]).blockingTakeFirst(timeout: 1) else { return }
 //
 //        let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)

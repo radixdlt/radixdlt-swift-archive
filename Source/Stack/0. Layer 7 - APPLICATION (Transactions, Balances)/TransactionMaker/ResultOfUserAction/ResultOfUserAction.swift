@@ -47,8 +47,9 @@ public extension ResultOfUserAction {
         
         let completable: Completable = updates
             .compactMap(typeAs: SubmitAtomActionStatus.self)
-            .last()
+            .first() // last() <-- TODO Combine: We want the LAST element, but `last()` and `first()` has an important difference, `first()` finishes the publisher after first element, whereas `last` waits for publisher to finish, then returns the last element. We ought to change to be using `last` and making sure that the `updates` publisher finishes.
             .flatMap { submitAtomActionStatus -> AnyPublisher<Never, Never> in
+                
                 let statusEvent = submitAtomActionStatus.statusEvent
                 switch statusEvent {
                     
