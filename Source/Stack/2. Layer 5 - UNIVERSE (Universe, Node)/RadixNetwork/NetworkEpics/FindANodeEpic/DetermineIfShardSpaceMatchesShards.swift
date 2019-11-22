@@ -24,27 +24,21 @@
 
 import Foundation
 
-extension DispatchTimeInterval {
-    var asSeconds: TimeInterval? {
-        switch self {
-        case .seconds(let secondsAsInt):
-            return TimeInterval(secondsAsInt)
-        case .milliseconds(let milliSecondsAsInt):
-            return TimeInterval(milliSecondsAsInt) / 1_000
-        case .microseconds(let microSecondsAsInt):
-            return TimeInterval(microSecondsAsInt) / 1_000_000
-        case .nanoseconds(let nanoSecondsAsInt):
-            return TimeInterval(nanoSecondsAsInt) / 1_000_000_000
-        case .never: return nil
-        @unknown default:
-            incorrectImplementation("Have not yet handled new enum case: \(self)")
-        }
+public final class DetermineIfShardSpaceMatchesShards {
+    public typealias Match = (Shards, ShardSpace) -> Bool
+    private let match: Match
+    public init(match: @escaping Match) {
+        self.match = match
     }
 }
 
-private extension TimeInterval {
-    var asDispatchQueueSchedulerStrideSeconds: DispatchQueue.SchedulerTimeType.Stride {
-        let seconds = Int(self)
-        return DispatchQueue.SchedulerTimeType.Stride(.seconds(seconds))
+public extension DetermineIfShardSpaceMatchesShards {
+    func does(shards: Shards, matchSpace shardSpace: ShardSpace) -> Bool {
+        match(shards, shardSpace)
     }
+}
+
+public extension DetermineIfShardSpaceMatchesShards {
+    
+    static let `default` = DetermineIfShardSpaceMatchesShards { $1.intersectsWithAnyShard(in: $0) }
 }

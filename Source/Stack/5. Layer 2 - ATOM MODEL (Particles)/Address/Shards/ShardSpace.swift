@@ -57,10 +57,9 @@ public extension ShardSpace {
         return range.contains(remainder)
     }
     
-    func intersectsWithShards(_ shards: Shards) -> Bool {
+    func intersectsWithAnyShard(in shards: Shards) -> Bool {
         for shard in shards {
-            guard intersectsWithShard(shard) else { continue }
-            return true
+            if intersectsWithShard(shard) { return true }
         }
         return false
     }
@@ -89,7 +88,7 @@ public extension ShardSpace {
     static var shardChunkRangeSpanHalf: Int64 = -(Int64.min / numberOfShardChunks)
     static var shardChunkRange: ShardRange = {
         do {
-            return try ShardRange(lower: -shardChunkRangeSpanHalf, upper: shardChunkRangeSpanHalf - 1)
+            return try ShardRange(lower: -shardChunkRangeSpanHalf, upperExclusive: shardChunkRangeSpanHalf)
         } catch {
             incorrectImplementationShouldAlwaysBeAble(to: "Create Shard chunk range", error)
         }

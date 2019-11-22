@@ -32,16 +32,45 @@ class ShardRangeTests: TestCase {
         XCTAssertNoThrow(
             try ShardRange(
                 lower: 1,
-                upper: 3
+                upperInclusive: 3
             )
         )
     }
     
-    func testOutOfRange() {
+    func testOutOfRangeInclusive() {
         XCTAssertThrowsSpecificError(
             try ShardRange(
                 lower: 3,
-                upper: 1
+                upperInclusive: 1
+            ),
+            ShardRange.Error.upperMustBeGreaterThanLower
+        )
+    }
+    
+    func testOutOfRangeExclusive() {
+        XCTAssertThrowsSpecificError(
+            try ShardRange(
+                lower: 3,
+                upperInclusive: 1
+            ),
+            ShardRange.Error.upperMustBeGreaterThanLower
+        )
+    }
+    
+    func testInclusiveLowerUpperSameNoThrow() {
+        XCTAssertNoThrow(
+            try ShardRange(
+                lower: 2,
+                upperInclusive: 2
+            )
+        )
+    }
+    
+    func testOutOfRangeExclusiveLowerUpperSame() {
+        XCTAssertThrowsSpecificError(
+            try ShardRange(
+                lower: 2,
+                upperExclusive: 2
             ),
             ShardRange.Error.upperMustBeGreaterThanLower
         )
@@ -50,7 +79,7 @@ class ShardRangeTests: TestCase {
     func testSpan() {
         func doTest(lower: Shard, upper: Shard, expectedStride: Shard) {
             do {
-                let range = try ShardRange(lower: lower, upper: upper)
+                let range = try ShardRange(lower: lower, upperExclusive: upper)
                 XCTAssertEqual(range.stride, expectedStride)
             } catch {
                 XCTFail("bad range")

@@ -28,8 +28,8 @@ import XCTest
 
 class NodeInfoEquatableTests: TestCase {
 
-    private let system1_9 = try! RadixSystem(lower: 1, upper: 9)
-    private let system5_15 = try! RadixSystem(lower: 5, upper: 15)
+    private let system1_9 = try! RadixSystem(lower: 1, upperInclusive: 9)
+    private let system5_15 = try! RadixSystem(lower: 5, upperInclusive: 15)
     private let host42 = Host.local(port: 42)
     private let host237 = Host.local(port: 237)
 

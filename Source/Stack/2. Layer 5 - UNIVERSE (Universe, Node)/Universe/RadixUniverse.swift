@@ -106,7 +106,7 @@ public extension DefaultRadixUniverse {
      
         let networkEpics = DefaultRadixUniverse.makeNetworkEpics(
             discoveryMode: discoveryMode,
-            determineIfPeerIsSuitable: .ifShardSpaceIntersectsWithShards(isUniverseSuitable: .ifEqual(to: config))
+            determineIfPeerIsSuitable: .basedOn(ifUniverseIsSuitable: .ifEqual(to: config))
         )
         
         let networkController = try DefaultRadixNetworkController(

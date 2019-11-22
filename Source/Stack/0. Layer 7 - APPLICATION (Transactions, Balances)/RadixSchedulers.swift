@@ -84,3 +84,21 @@ internal extension Publisher {
         return RadixSchedulers.delay(publisher: self, for: delay, on: schedulerType)
     }
 }
+
+extension DispatchTimeInterval {
+    var asSeconds: TimeInterval? {
+        switch self {
+        case .seconds(let secondsAsInt):
+            return TimeInterval(secondsAsInt)
+        case .milliseconds(let milliSecondsAsInt):
+            return TimeInterval(milliSecondsAsInt) / 1_000
+        case .microseconds(let microSecondsAsInt):
+            return TimeInterval(microSecondsAsInt) / 1_000_000
+        case .nanoseconds(let nanoSecondsAsInt):
+            return TimeInterval(nanoSecondsAsInt) / 1_000_000_000
+        case .never: return nil
+        @unknown default:
+            incorrectImplementation("Have not yet handled new enum case: \(self)")
+        }
+    }
+}

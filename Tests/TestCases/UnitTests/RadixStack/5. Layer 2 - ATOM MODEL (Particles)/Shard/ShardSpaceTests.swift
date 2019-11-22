@@ -35,7 +35,7 @@ class ShardSpaceTests: TestCase {
             try ShardSpace(
                 range: try ShardRange(
                     lower: -(1 << 20),
-                    upper: 1 << 20
+                    upperInclusive: 1 << 20
                 ),
                 anchor: irrelevant
             )
@@ -46,7 +46,7 @@ class ShardSpaceTests: TestCase {
         
         let badRange = try! ShardRange(
             lower: -(1 << 60),
-            upper: 1 << 60
+            upperInclusive: 1 << 60
         )
         
         XCTAssertThrowsSpecificError(

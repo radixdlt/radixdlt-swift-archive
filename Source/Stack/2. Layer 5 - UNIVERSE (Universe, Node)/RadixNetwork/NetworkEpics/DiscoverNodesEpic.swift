@@ -64,14 +64,14 @@ public extension DiscoverNodesEpic {
         let seedNodesHavingMismatchingUniverse: AnyPublisher<NodeAction, Never> = nodeActionPublisher
             .compactMap(typeAs: GetUniverseConfigActionResult.self)
             .filter { [weak self] in
-                return self?.isUniverseSuitable.isUniverseSuitable($0.result) == false
+                return self?.isUniverseSuitable.isUniverseSuitableBasedOn(config: $0.result) == false
             }^
             .map { NodeUniverseMismatch(getUniverseConfigActionResult: $0) }^
 
         let connectedSeedNodes: AnyPublisher<Node, Never> = nodeActionPublisher
             .compactMap(typeAs: GetUniverseConfigActionResult.self)
             .filter { [weak self] in
-                return self?.isUniverseSuitable.isUniverseSuitable($0.result) == true
+                return self?.isUniverseSuitable.isUniverseSuitableBasedOn(config: $0.result) == true
             }^
             .map { $0.node }
             .makeConnectable().autoconnect()^  // .autoConnect(numberOfSubscribers: 3)

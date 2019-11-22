@@ -111,5 +111,5 @@ extension ShardSpace {
 }
 
 extension ShardRange {
-    static let irrelevant: Self =  try! Self(lower: 0, upper: 2)
+    static let irrelevant: Self =  try! Self(lower: 0, upperInclusive: 2)
 }

@@ -102,7 +102,7 @@ public extension FindANodeEpic {
                 
                 func getConnectedNodes(networkState: RadixNetworkState) -> [RadixNodeState] {
                     return networkState.connectedNodes(where: {
-                        selfNonWeak.isPeerSuitable.isPeerSuitable($0, shardsOfRequest)
+                        selfNonWeak.isPeerSuitable.isSuitablePeer(state: $0, shards: shardsOfRequest)
                     })
                 }
                 
@@ -179,7 +179,7 @@ internal extension FindANodeEpic {
         func discoverMore() -> [NodeAction] { [DiscoverMoreNodesAction()] }
 
         func isSuitablePeer(_ nodeState: RadixNodeState) -> Bool {
-            isPeerSuitable.isPeerSuitable(nodeState, shardsOfRequest)
+            isPeerSuitable.isSuitablePeer(state: nodeState, shards: shardsOfRequest)
         }
 
 

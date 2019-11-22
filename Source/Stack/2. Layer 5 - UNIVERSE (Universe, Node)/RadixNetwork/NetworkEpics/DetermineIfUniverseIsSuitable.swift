@@ -26,9 +26,15 @@ import Foundation
 
 public final class DetermineIfUniverseIsSuitable {
     public typealias IsUniverseSuitable = (UniverseConfig) -> Bool
-    public let isUniverseSuitable: IsUniverseSuitable
+    private let isUniverseSuitable: IsUniverseSuitable
     public init(isUniverseSuitable: @escaping IsUniverseSuitable) {
         self.isUniverseSuitable = isUniverseSuitable
+    }
+}
+
+public extension DetermineIfUniverseIsSuitable {
+    func isUniverseSuitableBasedOn(config: UniverseConfig) -> Bool {
+        isUniverseSuitable(config)
     }
 }
 

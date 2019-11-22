@@ -27,9 +27,9 @@ import XCTest
 
 class RadixSystemTests: TestCase {
     
-    private let systemShardRange01_09 = try! RadixSystem(lower: 1, upper: 9)
-    private let systemShardRange10_20 = try! RadixSystem(lower: 10, upper: 20)
-    private let systemShardRange5_15 = try! RadixSystem(lower: 5, upper: 15)
+    private let systemShardRange01_09 = try! RadixSystem(lower: 1, upperInclusive: 9)
+    private let systemShardRange10_20 = try! RadixSystem(lower: 10, upperInclusive: 20)
+    private let systemShardRange5_15 = try! RadixSystem(lower: 5, upperInclusive: 15)
 
     func testSameShardSpaceLowRangeEquals() {
         XCTAssertEqual(
@@ -82,14 +82,14 @@ internal extension ShardSpace {
         try self.init(range: range, anchor: range.range.lowerBound)
     }
     
-    init(lower: ShardRange.Bound, upper: ShardRange.Bound) throws {
-        try self.init(range: ShardRange(lower: lower, upper: upper))
+    init(lower: ShardRange.Bound, upperInclusive: ShardRange.Bound) throws {
+        try self.init(range: ShardRange(lower: lower, upperInclusive: upperInclusive))
     }
 }
 
 internal extension RadixSystem {
-    init(lower: ShardRange.Bound, upper: ShardRange.Bound) throws {
-        let shardSpace = try ShardSpace(lower: lower, upper: upper)
+    init(lower: ShardRange.Bound, upperInclusive: ShardRange.Bound) throws {
+        let shardSpace = try ShardSpace(lower: lower, upperInclusive: upperInclusive)
         self.init(shardSpace: shardSpace)
     }
 }

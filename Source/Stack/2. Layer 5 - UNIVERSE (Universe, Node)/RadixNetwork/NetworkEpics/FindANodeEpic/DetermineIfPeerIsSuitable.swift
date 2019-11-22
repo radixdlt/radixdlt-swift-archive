@@ -26,27 +26,34 @@ import Foundation
 
 public final class DetermineIfPeerIsSuitable {
     public typealias IsPeerSuitable = (RadixNodeState, Shards) -> Bool
-    public let isPeerSuitable: IsPeerSuitable
+    private let isPeerSuitable: IsPeerSuitable
     public init(isPeerSuitable: @escaping IsPeerSuitable) {
         self.isPeerSuitable = isPeerSuitable
     }
 }
 
 public extension DetermineIfPeerIsSuitable {
+    func isSuitablePeer(state: RadixNodeState, shards: Shards) -> Bool {
+        isPeerSuitable(state, shards)
+    }
+}
+
+public extension DetermineIfPeerIsSuitable {
     
-    static func ifShardSpaceIntersectsWithShards(
-        isUniverseSuitable: DetermineIfUniverseIsSuitable
+    static func basedOn(
+        ifUniverseIsSuitable isUniverseSuitable: DetermineIfUniverseIsSuitable,
+        ifShardsMatchesShardSpace: DetermineIfShardSpaceMatchesShards = .default
     ) -> DetermineIfPeerIsSuitable {
         
-        return DetermineIfPeerIsSuitable {
-            // We WANT to retain `isUniverseSuitable` here, because it is not retained
-            // elsewhere, thus we do NOT want to do `[weak isUniverseSuitable]`
+        return DetermineIfPeerIsSuitable { nodeState, shards in
+            // We WANT to retain `DetermineIfUniverseIsSuitable` and `DetermineIfShardSpaceMatchesShards`
+            // here, since they are not retained elsewhere, thus we do NOT use `weak`.
             
-            guard let universeConfig = $0.universeConfig else { return false }
-            guard let shardSpace = $0.shardSpace else { return false }
+            guard let universeConfig = nodeState.universeConfig else { return false }
+            guard let shardSpace = nodeState.shardSpace else { return false }
             
-            let shardMatch = shardSpace.intersectsWithShards($1)
-            let universeMatch = isUniverseSuitable.isUniverseSuitable(universeConfig)
+            let shardMatch = ifShardsMatchesShardSpace.does(shards: shards, matchSpace: shardSpace)
+            let universeMatch = isUniverseSuitable.isUniverseSuitableBasedOn(config: universeConfig)
             
             let isPeerSuitable = shardMatch && universeMatch
             return isPeerSuitable

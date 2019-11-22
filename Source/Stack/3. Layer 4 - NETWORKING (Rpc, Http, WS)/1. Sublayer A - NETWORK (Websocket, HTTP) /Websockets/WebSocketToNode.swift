@@ -103,7 +103,6 @@ public extension WebSocketToNode {
             print("👂 did not close websocket to node: \(node), because it still has #\(numberOfSubscriptions) subscribers.")
             return .didNotClose(reason: .isInUse)
         }
-        assert(strategy == .closeDisregardingIfSocketHasListeners, "Forgot to handle new case of close strategy")
         closeDisregardingListeners()
         return .closed
     }
