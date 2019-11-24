@@ -79,7 +79,6 @@ extension Publishers.IgnoreOutput: SliceOfOutputPublisher {
     var sizeOfSlice: Int { 0 }
 }
 
-
 protocol BlockerErrorConvertible: Swift.Error {
     static func gotZeroValues(butRequested: Int) -> Self
 }
@@ -89,6 +88,7 @@ enum BlockerError<Output, Failure>: BlockerErrorConvertible where Failure: Swift
     case notEnoughValuesPublished(requested: Int, butOnlyGot: Int, specifically: [Output])
     case publisherError(Failure)
 }
+
 extension BlockerError {
     static func gotZeroValues(butRequested requested: Int) -> Self {
         return Self.notEnoughValuesPublished(requested: requested, butOnlyGot: 0, specifically: [])
@@ -310,7 +310,6 @@ extension Publisher where Self: SliceOfOutputPublisher {
         return true
     }
 }
-
 
 private extension Result where Success: Sequence, Failure: BlockerErrorConvertible {
     func flatMapFirst() -> Result<Success.Element, Failure> {

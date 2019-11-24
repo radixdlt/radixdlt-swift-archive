@@ -50,7 +50,7 @@ extension RadixApplicationClient {
             granularity: granularity
         )
         
-        return (create(token: createTokenAction), createTokenAction.identifier)
+        return try! (create(token: createTokenAction), createTokenAction.identifier)
     }
     
     func createFixedSupplyToken(

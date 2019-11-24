@@ -36,11 +36,11 @@ final class RadixApplicationClient:
 { ... }
 
 protocol TokenCreating {
-    func create(token: CreateTokenAction) -> ResultOfUserAction
+    func create(token: CreateTokenAction) throws -> ResultOfUserAction
 }
 
 protocol TokenTransferring {
-    func transfer(tokens: TransferTokensAction) -> ResultOfUserAction
+    func transfer(tokens: TransferTokensAction) throws -> ResultOfUserAction
 }
 
 protocol AccountBalancing {
@@ -50,7 +50,7 @@ protocol AccountBalancing {
 }
 
 protocol MessageSending {
-    func sendMessage(_ message: SendMessageAction) -> ResultOfUserAction
+    func sendMessage(_ message: SendMessageAction) throws -> ResultOfUserAction
 }
 ```
 

@@ -52,7 +52,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "foobar")
         }
-        let resultOfPutUniqueAction = application.send(transaction: transaction)
+        let resultOfPutUniqueAction = try application.send(transaction: transaction)
         
         XCTAssertTrue(resultOfPutUniqueAction.blockingWasSuccessful())
         
@@ -83,7 +83,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         }
         
         XCTAssertTrue(
-            application.send(transaction: transaction)
+            try application.send(transaction: transaction)
                 // THEN: the Transaction is successfully sent
                 .blockingWasSuccessful(timeout: .enoughForPOW)
         )
@@ -103,8 +103,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         XCTAssertEqual(putUniqueActions[1].string, "bar")
     }
     
-    /*
-    func testFailPuttingTwoEqualUniqueIdInOneTransaction() {
+    func testFailPuttingTwoEqualUniqueIdInOneTransaction() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
         // WHEN: Alice sends a `Transaction` containing two UniqueId with with the same string
@@ -113,15 +112,18 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             PutUniqueIdAction(uniqueMaker: alice, string: "foo")
         }
         
-        let resultOfUniqueMaking = application.send(transaction: transaction)
+        let resultOfUniqueMaking = try application.send(transaction: transaction)
         
-        // THEN: an error `uniqueStringAlreadyUsed` is thrown
-        resultOfUniqueMaking.blockingAssertThrows(
-            error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
-        )
+//        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+
+//        XCTAssertThrowsSpecificError(
+//            try resultOfUniqueMaking.blockingRethrow(timeout: .enoughForPOW) { XCTFail("Should not have timed out \($0)") },
+//            PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
+//        )
     }
     
     
+    /*
     func testFailPuttingAnUniqueIdUsedInAPreviousTransaction() {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         

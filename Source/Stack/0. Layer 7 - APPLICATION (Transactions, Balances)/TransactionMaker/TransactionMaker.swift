@@ -26,21 +26,21 @@ import Foundation
 import Combine
 
 public protocol TransactionMaker: TransactionToAtomMapper {
-    func send(transaction: Transaction, toOriginNode: Node?) -> ResultOfUserAction
+    func send(transaction: Transaction, toOriginNode: Node?) throws -> ResultOfUserAction
 }
 
 public extension TransactionMaker {
     
-    func send(transaction: Transaction) -> ResultOfUserAction {
-        return send(transaction: transaction, toOriginNode: nil)
+    func send(transaction: Transaction) throws -> ResultOfUserAction {
+        try send(transaction: transaction, toOriginNode: nil)
     }
     
-    func execute(actions: [UserAction], originNode: Node? = nil) -> ResultOfUserAction {
+    func execute(actions: [UserAction], originNode: Node? = nil) throws -> ResultOfUserAction {
         let transaction = Transaction(actions: actions)
-        return send(transaction: transaction, toOriginNode: originNode)
+        return try send(transaction: transaction, toOriginNode: originNode)
     }
     
-    func execute(actions: UserAction..., originNode: Node? = nil) -> ResultOfUserAction {
-        return execute(actions: actions, originNode: originNode)
+    func execute(actions: UserAction..., originNode: Node? = nil) throws -> ResultOfUserAction {
+        try execute(actions: actions, originNode: originNode)
     }
 }

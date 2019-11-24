@@ -29,9 +29,28 @@ import Combine
 extension ResultOfUserAction {
 
     func blockingWasSuccessful(timeout: DispatchTimeInterval = .enoughForPOW) -> Bool {
-        toCompletable()
+        self.completable
             .receive(on: RunLoop.main)
             .ignoreOutput()
             .blockingIgnoreOutputSuccess(timeout: timeout)
     }
+    
+    func blocking(timeout: DispatchTimeInterval = .enoughForPOW) -> Result<NoOutput, BlockerError<NoOutput, Never>> {
+        self.completable
+            .receive(on: RunLoop.main)
+            .ignoreOutput()
+            .blockingIgnoreOutput(timeout: timeout)
+    }
+    
+    func blockingRethrow(
+        timeout: DispatchTimeInterval = .enoughForPOW,
+        makeTimeoutIntoTestFailure: @escaping (TimeoutError) -> Void
+    ) throws {
+//        try self.completable
+//            .blockingFirstErrorFromOutput(
+//                timeout: timeout,
+//                makeTimeoutIntoTestFailure: makeTimeoutIntoTestFailure
+//            )
+    }
 }
+

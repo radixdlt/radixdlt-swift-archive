@@ -88,7 +88,7 @@ public extension DefaultTransactionMaker {
 }
 
 public extension DefaultTransactionMaker {
-    func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+    func send(transaction: Transaction, toOriginNode originNode: Node?) throws -> ResultOfUserAction {
         
         do {
             
@@ -101,8 +101,8 @@ public extension DefaultTransactionMaker {
                 completeOnAtomStoredOnly: false,
                 originNode: originNode
             )
-        } catch let failedToStageAction as FailedToStageAction {
-            return ResultOfUserAction.failedToStageAction(failedToStageAction)
+        } catch let failedToStageAction as StageActionError {
+            throw failedToStageAction
         } catch {
             unexpectedlyMissedToCatch(error: error)
         }
@@ -149,7 +149,7 @@ private extension DefaultTransactionMaker {
         atom atomSingle: Single<SignedAtom, Never>,
         completeOnAtomStoredOnly: Bool,
         originNode: Node?
-        ) -> ResultOfUserAction {
+    ) -> ResultOfUserAction {
         
         let cachedAtom = atomSingle.share()
         

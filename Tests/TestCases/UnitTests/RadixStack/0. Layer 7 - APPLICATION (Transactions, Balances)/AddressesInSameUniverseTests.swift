@@ -69,7 +69,7 @@ class AddressesInSameUniverseTests: TestCase {
         
         XCTAssertThrowsError(try mapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressUniverse1), "foo") { anyError in
             guard
-                let failedToStageError = anyError as? FailedToStageAction,
+                let failedToStageError = anyError as? StageActionError,
                 let error = failedToStageError.error as? Addresses.Error
                 else { return XCTFail() }
             

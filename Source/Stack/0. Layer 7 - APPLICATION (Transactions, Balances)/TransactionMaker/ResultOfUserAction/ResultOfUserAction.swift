@@ -25,84 +25,36 @@
 import Foundation
 import Combine
 
-public enum ResultOfUserAction: Throwing {
+public final class ResultOfUserAction {
     
-    case pendingSending(
-        /// Ugly hack to retain this Publisher
-        cachedAtom: AnyPublisher<SignedAtom, Never>,
-        updates: AnyPublisher<SubmitAtomAction, Never>,
-        completable: Completable
-    )
-    
-    case failedToStageAction(FailedToStageAction)
-}
-
-// MARK: Convenience Init
-public extension ResultOfUserAction {
+    /// Ugly hack to retain this Publisher
+    private let cachedAtom: AnyPublisher<SignedAtom, Never>
+    let updates: AnyPublisher<SubmitAtomAction, Never>
+    let completable: AnyPublisher<Never, Never>
     
     init(
         submitAtomStatusUpdatesPublisher updates: AnyPublisher<SubmitAtomAction, Never>,
         cachedAtom: AnyPublisher<SignedAtom, Never>
     ) {
+        self.cachedAtom = cachedAtom
+        self.updates = updates
         
-        let completable: Completable = updates
+        
+        
+        self.completable = updates
             .compactMap(typeAs: SubmitAtomActionStatus.self)
-            .first() // last() <-- TODO Combine: We want the LAST element, but `last()` and `first()` has an important difference, `first()` finishes the publisher after first element, whereas `last` waits for publisher to finish, then returns the last element. We ought to change to be using `last` and making sure that the `updates` publisher finishes.
+            .first()
+            // SubmitAtomError
             .flatMap { submitAtomActionStatus -> AnyPublisher<Never, Never> in
-                
-                let statusEvent = submitAtomActionStatus.statusEvent
-                switch statusEvent {
-                    
+                switch submitAtomActionStatus.statusEvent {
                 case .stored:
-                    // Complete
-                    return Empty<Never, Never>(completeImmediately: true).eraseToAnyPublisher()
-                    
+                    return Empty(completeImmediately: true).eraseToAnyPublisher()
                 case .notStored(let reason):
-                    log.error("Not stored, reason: \(reason)")
-                    incorrectImplementation("TODO Combine migration, fix error handling here, Atom was not stored, reason: \(reason.error)")
+//                    return Just(<SubmitAtomError>(wrappedError: reason.error)).eraseToAnyPublisher()
+                    fatalError()
                 }
             }
-            .eraseToAnyPublisher()
-
-        self = .pendingSending(cachedAtom: cachedAtom, updates: updates, completable: completable)
-    }
-}
-
-// Throwing
-public extension ResultOfUserAction {
-    enum Error: Swift.Error {
-        case failedToStageAction(FailedToStageAction)
-        case failedToSubmitAtom(SubmitAtomError)
-    }
-}
-
-public struct FailedToStageAction: Swift.Error {
-    let error: Swift.Error
-    let userAction: UserAction
-}
-
-// MARK: RxBlocking
-public extension ResultOfUserAction {
-    func toObservable() -> AnyPublisher<SubmitAtomAction, Never> {
-        switch self {
-        case .pendingSending(_, let updates, _):
-            return updates
-        case .failedToStageAction(let failedAction):
-            return Fail<SubmitAtomAction, Error>.init(error: Error.failedToStageAction(failedAction))
-            .eraseToAnyPublisher()
-            .crashOnFailure()
-        }
-    }
-    
-    func toCompletable() -> Completable {
-        switch self {
-        case .pendingSending(_, _, let completable):
-            return completable
-        case .failedToStageAction(let failedAction):
-            return Fail<SubmitAtomAction, Error>.init(error: Error.failedToStageAction(failedAction))
-                .eraseToAnyPublisher()
-                .ignoreOutput()
-                .crashOnFailure()
-        }
+            
+        .eraseToAnyPublisher()
     }
 }

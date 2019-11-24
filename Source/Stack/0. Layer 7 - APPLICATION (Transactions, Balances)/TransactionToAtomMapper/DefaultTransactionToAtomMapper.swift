@@ -24,7 +24,7 @@
 
 import Foundation
 
-public final class DefaultTransactionToAtomMapper: TransactionToAtomMapper {
+public final class DefaultTransactionToAtomMapper: TransactionToAtomMapper, Throwing {
     
     private let atomStore: AtomStore
     
@@ -84,6 +84,16 @@ public extension DefaultTransactionToAtomMapper {
     }
 }
 
+// MARK: Throwing
+public struct StageActionError: Swift.Error {
+    let error: Swift.Error
+    let userAction: UserAction
+}
+
+public extension DefaultTransactionToAtomMapper {
+    typealias Error = StageActionError
+}
+
 // MARK: TemporaryLocalAtomStore
 private extension DefaultTransactionToAtomMapper {
     final class TemporaryLocalAtomStore {
@@ -116,7 +126,7 @@ extension DefaultTransactionToAtomMapper.TemporaryLocalAtomStore {
             do {
                 particleGroups = try particleGroupFromAction(action)
             } catch {
-                throw FailedToStageAction(error: error, userAction: action)
+                throw StageActionError(error: error, userAction: action)
             }
             
             accumulatedSpunParticles.append(contentsOf: particleGroups.spunParticles)

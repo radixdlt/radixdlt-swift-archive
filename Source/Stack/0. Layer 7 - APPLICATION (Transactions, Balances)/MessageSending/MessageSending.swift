@@ -32,7 +32,7 @@ import Combine
 public protocol MessageSending: ActiveAccountOwner {
     
     /// Sends a message
-    func send(message: SendMessageAction) -> ResultOfUserAction
+    func send(message: SendMessageAction) throws -> ResultOfUserAction
     func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, Never>
 }
 
@@ -41,11 +41,11 @@ public extension MessageSending {
         _ plainText: String,
         encoding: String.Encoding = .default,
         to recipient: AddressConvertible
-        ) -> ResultOfUserAction {
+        ) throws -> ResultOfUserAction {
         
         let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
         
-        return send(message: sendMessageAction)
+        return try send(message: sendMessageAction)
     }
     
     func sendEncryptedMessage(
@@ -53,7 +53,7 @@ public extension MessageSending {
         encoding: String.Encoding = .default,
         to recipient: AddressConvertible,
         canAlsoBeDecryptedBy extraDecryptors: [AddressConvertible]? = nil
-        ) -> ResultOfUserAction {
+        ) throws -> ResultOfUserAction {
         
         let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(
             and: extraDecryptors,
@@ -63,7 +63,7 @@ public extension MessageSending {
             encoding: encoding
         )
         
-        return send(message: sendMessageAction)
+        return try send(message: sendMessageAction)
     }
 }
 

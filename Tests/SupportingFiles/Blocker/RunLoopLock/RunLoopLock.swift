@@ -71,7 +71,7 @@ final class RunLoopLock {
             case .stopped:
                 return
             case .timedOut:
-                throw RunLoopError.timeout
+                throw TimeoutError()
             default:
                 return
             }
@@ -81,6 +81,4 @@ final class RunLoopLock {
     }
 }
 
-enum RunLoopError: Swift.Error {
-    case timeout
-}
+struct TimeoutError: Swift.Error {}
