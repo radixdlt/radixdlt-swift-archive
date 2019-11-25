@@ -1,9 +1,5 @@
 github "SwiftyBeaver/SwiftyBeaver"
 
-github "ReactiveX/RxSwift" "5.0.1"
-github "RxSwiftCommunity/RxSwiftExt" "5.0.0"
-github "RxSwiftCommunity/RxOptional" "4.0.0"
-
 github "Alamofire/Alamofire" "5.0.0-beta.3"
 github "daltoniam/Starscream" >= 3.0.2
 github "https://github.com/Sajjon/BitcoinKit.git" "fd73469592123b5b8704de05cbcf721db0331a20"
