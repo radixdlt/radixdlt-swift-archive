@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "Entwine",
-        "repositoryURL": "https://github.com/tcldr/Entwine",
-        "state": {
-          "branch": null,
-          "revision": "ce8de842f18a6b91795a970637d845b836c0ad92",
-          "version": "0.8.0"
-        }
-      },
-      {
         "package": "KeychainSwift",
         "repositoryURL": "https://github.com/evgenyneu/keychain-swift",
         "state": {

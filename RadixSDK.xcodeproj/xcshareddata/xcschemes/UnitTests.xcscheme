@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E645E72D21E7827D00532ACD"
-               BuildableName = "RadixSDK.framework"
-               BlueprintName = "RadixSDK iOS"
+               BlueprintIdentifier = "E6D7A22C238596F200950312"
+               BuildableName = "RadixSDK iOS Integration Tests.xctest"
+               BlueprintName = "RadixSDK iOS Integration Tests"
                ReferencedContainer = "container:RadixSDK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,9 +28,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E6D7A22C238596F200950312"
-               BuildableName = "RadixSDK iOS Integration Tests.xctest"
-               BlueprintName = "RadixSDK iOS Integration Tests"
+               BlueprintIdentifier = "E645E72D21E7827D00532ACD"
+               BuildableName = "RadixSDK.framework"
+               BlueprintName = "RadixSDK iOS"
                ReferencedContainer = "container:RadixSDK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

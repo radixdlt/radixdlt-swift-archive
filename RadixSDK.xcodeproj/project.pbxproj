@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -89,8 +89,6 @@
 		E60899952386EBB0001CA61C /* RPCClientFromWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60899942386EBB0001CA61C /* RPCClientFromWebSocket.swift */; };
 		E608999723870B5E001CA61C /* DetermineIfPeerIsSuitableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E608999623870B5E001CA61C /* DetermineIfPeerIsSuitableTests.swift */; };
 		E60899992387DD84001CA61C /* DetermineIfShardSpaceMatchesShards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60899982387DD84001CA61C /* DetermineIfShardSpaceMatchesShards.swift */; };
-		E60E0564236B005A000A10D6 /* EntwineTest in Frameworks */ = {isa = PBXBuildFile; productRef = E60E0563236B005A000A10D6 /* EntwineTest */; };
-		E60E0566236B005A000A10D6 /* Entwine in Frameworks */ = {isa = PBXBuildFile; productRef = E60E0565236B005A000A10D6 /* Entwine */; };
 		E60E0568236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60E0567236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift */; };
 		E612720A22F4298500DCF19C /* PositiveSupply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E612720922F4298500DCF19C /* PositiveSupply.swift */; };
 		E615C51322B790F100604E90 /* ParticleReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E615C51222B790F100604E90 /* ParticleReducer.swift */; };
@@ -643,6 +641,9 @@
 		E6ED1A5821F8E5A100654105 /* AtomSubmitting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A5721F8E5A100654105 /* AtomSubmitting.swift */; };
 		E6ED1A6521F8E69000654105 /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A6421F8E69000654105 /* NodeInfo.swift */; };
 		E6ED1A7821F8E78900654105 /* Optional+OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */; };
+		E6F471CC238BD73F00658449 /* Entwine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6F471CB238BD73F00658449 /* Entwine.framework */; };
+		E6F471CD238BD86900658449 /* Entwine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6F471CB238BD73F00658449 /* Entwine.framework */; };
+		E6F471CE238BD86E00658449 /* Entwine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6F471CB238BD73F00658449 /* Entwine.framework */; };
 		E6F5483D22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */; };
 		E6F5483F22771E5200EE6311 /* UserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5483E22771E5200EE6311 /* UserAction.swift */; };
 		E6F5484222771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484122771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift */; };
@@ -1346,6 +1347,8 @@
 		E6ED1A5721F8E5A100654105 /* AtomSubmitting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomSubmitting.swift; sourceTree = "<group>"; };
 		E6ED1A6421F8E69000654105 /* NodeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeInfo.swift; sourceTree = "<group>"; };
 		E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+OptionalType.swift"; sourceTree = "<group>"; };
+		E6F471C9238BD71700658449 /* Entwine.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Entwine.framework.dSYM; path = Carthage/Build112/iOS/Entwine.framework.dSYM; sourceTree = "<group>"; };
+		E6F471CB238BD73F00658449 /* Entwine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Entwine.framework; path = Carthage/Build112/iOS/Entwine.framework; sourceTree = "<group>"; };
 		E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatelessActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E6F5483E22771E5200EE6311 /* UserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAction.swift; sourceTree = "<group>"; };
 		E6F5484122771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTokenActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
@@ -1384,11 +1387,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */,
-				E60E0566236B005A000A10D6 /* Entwine in Frameworks */,
 				E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */,
 				E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */,
+				E6F471CC238BD73F00658449 /* Entwine.framework in Frameworks */,
 				E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */,
-				E60E0564236B005A000A10D6 /* EntwineTest in Frameworks */,
 				E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */,
 				E6CEE75421F78B1300D745EC /* SwiftCBOR.framework in Frameworks */,
 			);
@@ -1400,6 +1402,7 @@
 			files = (
 				E645E73821E7827D00532ACD /* RadixSDK.framework in Frameworks */,
 				E6FB03D721ECE4EC002CE331 /* BigInt.framework in Frameworks */,
+				E6F471CD238BD86900658449 /* Entwine.framework in Frameworks */,
 				E6FB03D821ECE4EC002CE331 /* BitcoinKit.framework in Frameworks */,
 				E6FB03D921ECE4EC002CE331 /* CryptoSwift.framework in Frameworks */,
 				E6A7479922CC914300DACEA0 /* Starscream.framework in Frameworks */,
@@ -1414,6 +1417,7 @@
 				E6D7A2A9238596F200950312 /* RadixSDK.framework in Frameworks */,
 				E6D7A2AA238596F200950312 /* BigInt.framework in Frameworks */,
 				E6D7A2AB238596F200950312 /* BitcoinKit.framework in Frameworks */,
+				E6F471CE238BD86E00658449 /* Entwine.framework in Frameworks */,
 				E6D7A2AC238596F200950312 /* CryptoSwift.framework in Frameworks */,
 				E6D7A2AD238596F200950312 /* Starscream.framework in Frameworks */,
 				E6D7A2AE238596F200950312 /* SwiftCBOR.framework in Frameworks */,
@@ -4188,6 +4192,8 @@
 		E6FB03C621EC95E8002CE331 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E6F471CB238BD73F00658449 /* Entwine.framework */,
+				E6F471C9238BD71700658449 /* Entwine.framework.dSYM */,
 				4809253B230AC2A80056DB28 /* SwiftUI-Wallet.xcodeproj */,
 				E606FC0E22C9F85B00A7E52E /* RxOptional.framework */,
 				E606FC0F22C9F85B00A7E52E /* RxRelay.framework */,
@@ -4313,8 +4319,6 @@
 			);
 			name = "RadixSDK iOS";
 			packageProductDependencies = (
-				E60E0563236B005A000A10D6 /* EntwineTest */,
-				E60E0565236B005A000A10D6 /* Entwine */,
 			);
 			productName = RadixDLTSDK;
 			productReference = E645E72E21E7827D00532ACD /* RadixSDK.framework */;
@@ -4386,7 +4390,6 @@
 			);
 			mainGroup = E645E72421E7827D00532ACD;
 			packageReferences = (
-				E60E0562236B005A000A10D6 /* XCRemoteSwiftPackageReference "Entwine" */,
 			);
 			productRefGroup = E645E72F21E7827D00532ACD /* Products */;
 			projectDirPath = "";
@@ -5292,6 +5295,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build112/iOS",
 				);
 				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -5330,6 +5334,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build112/iOS",
 				);
 				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -5363,6 +5368,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build112/iOS",
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKiOSUnitTests-Info.plist";
@@ -5389,6 +5395,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build112/iOS",
 				);
 				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKiOSUnitTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -5414,6 +5421,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build112/iOS",
 				);
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKiOSIntegrationTests-Info.plist";
@@ -5440,6 +5448,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build112/iOS",
 				);
 				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKiOSIntegrationTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -5496,30 +5505,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		E60E0562236B005A000A10D6 /* XCRemoteSwiftPackageReference "Entwine" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tcldr/Entwine";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.8.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		E60E0563236B005A000A10D6 /* EntwineTest */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E60E0562236B005A000A10D6 /* XCRemoteSwiftPackageReference "Entwine" */;
-			productName = EntwineTest;
-		};
-		E60E0565236B005A000A10D6 /* Entwine */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E60E0562236B005A000A10D6 /* XCRemoteSwiftPackageReference "Entwine" */;
-			productName = Entwine;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E645E72521E7827D00532ACD /* Project object */;
 }
