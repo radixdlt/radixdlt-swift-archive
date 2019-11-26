@@ -25,6 +25,17 @@
 import Foundation
 import XCTest
 
+private let timeoutInSecondsEnoughForPOW: Int = 10
+extension TimeInterval {
+    static var enoughForPOW: Self { .init(timeoutInSecondsEnoughForPOW) }
+    static var ms100: Self { .init(0.1) }
+}
+
+extension DispatchTimeInterval {
+    static var enoughForPOW: Self { .seconds(timeoutInSecondsEnoughForPOW) }
+    static var ms100: Self { .milliseconds(100) }
+}
+
 class TestCase: XCTestCase {
     
     override func setUp() {

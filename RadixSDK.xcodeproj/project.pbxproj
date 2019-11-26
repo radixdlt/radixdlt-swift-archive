@@ -102,6 +102,35 @@
 		E61989CF2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61989CE2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift */; };
 		E61989D12372C9670092259A /* DefaultRadixNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61989D02372C9670092259A /* DefaultRadixNetwork.swift */; };
 		E6198E7A237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */; };
+		E61E6BCF238C0C2A008C14B0 /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BC6238C0C2A008C14B0 /* Recorder.swift */; };
+		E61E6BD0238C0C2A008C14B0 /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BC6238C0C2A008C14B0 /* Recorder.swift */; };
+		E61E6BD1238C0C2A008C14B0 /* RecordingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BC7238C0C2A008C14B0 /* RecordingError.swift */; };
+		E61E6BD2238C0C2A008C14B0 /* RecordingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BC7238C0C2A008C14B0 /* RecordingError.swift */; };
+		E61E6BD3238C0C2A008C14B0 /* Finished.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BC9238C0C2A008C14B0 /* Finished.swift */; };
+		E61E6BD4238C0C2A008C14B0 /* Finished.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BC9238C0C2A008C14B0 /* Finished.swift */; };
+		E61E6BD5238C0C2A008C14B0 /* Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCA238C0C2A008C14B0 /* Recording.swift */; };
+		E61E6BD6238C0C2A008C14B0 /* Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCA238C0C2A008C14B0 /* Recording.swift */; };
+		E61E6BD7238C0C2A008C14B0 /* Prefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCB238C0C2A008C14B0 /* Prefix.swift */; };
+		E61E6BD8238C0C2A008C14B0 /* Prefix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCB238C0C2A008C14B0 /* Prefix.swift */; };
+		E61E6BD9238C0C2A008C14B0 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCC238C0C2A008C14B0 /* Map.swift */; };
+		E61E6BDA238C0C2A008C14B0 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCC238C0C2A008C14B0 /* Map.swift */; };
+		E61E6BDB238C0C2A008C14B0 /* Inverted.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCD238C0C2A008C14B0 /* Inverted.swift */; };
+		E61E6BDC238C0C2A008C14B0 /* Inverted.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCD238C0C2A008C14B0 /* Inverted.swift */; };
+		E61E6BDD238C0C2A008C14B0 /* PublisherExpectation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCE238C0C2A008C14B0 /* PublisherExpectation.swift */; };
+		E61E6BDE238C0C2A008C14B0 /* PublisherExpectation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BCE238C0C2A008C14B0 /* PublisherExpectation.swift */; };
+		E61E6BE0238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */; };
+		E61E6BE1238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */; };
+		E61E6BE4238C356D008C14B0 /* PrefixWhileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3612385980700950312 /* PrefixWhileTests.swift */; };
+		E61E6BE5238C356D008C14B0 /* PublisherFlatMapResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */; };
+		E61E6BE6238C356D008C14B0 /* TryFlatMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BE2238C3567008C14B0 /* TryFlatMapTests.swift */; };
+		E61E6BE7238C356D008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */; };
+		E61E6BE8238C356D008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */; };
+		E61E6BE9238C356E008C14B0 /* PrefixWhileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3612385980700950312 /* PrefixWhileTests.swift */; };
+		E61E6BEA238C356E008C14B0 /* PublisherFlatMapResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */; };
+		E61E6BEB238C356E008C14B0 /* TryFlatMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BE2238C3567008C14B0 /* TryFlatMapTests.swift */; };
+		E61E6BEC238C356E008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */; };
+		E61E6BED238C356E008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */; };
+		E61E6BEF238D1BDE008C14B0 /* Publisher+TryFlatMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BEE238D1BDE008C14B0 /* Publisher+TryFlatMap.swift */; };
 		E61EB9A222D86F56007826D3 /* Supply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A122D86F56007826D3 /* Supply.swift */; };
 		E61EB9A422D87130007826D3 /* SupplyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A322D87130007826D3 /* SupplyType.swift */; };
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -220,7 +249,6 @@
 		E6506921238162B800AB420D /* DataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506920238162B800AB420D /* DataFetcher.swift */; };
 		E6506923238162CE00AB420D /* HTTPClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506922238162CE00AB420D /* HTTPClientError.swift */; };
 		E6506925238162DF00AB420D /* URLConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506924238162DF00AB420D /* URLConvertible.swift */; };
-		E650693D2382D2ED00AB420D /* Blocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650693C2382D2ED00AB420D /* Blocker.swift */; };
 		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
@@ -230,11 +258,6 @@
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E6638CE723351C24004C9846 /* LocalhostNodeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */; };
-		E66D79F423880A42009B07D9 /* TestOfBlocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66D79F323880A42009B07D9 /* TestOfBlocker.swift */; };
-		E66D79F623880FFB009B07D9 /* RunLoopLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66D79F523880FFB009B07D9 /* RunLoopLock.swift */; };
-		E66D79F723880FFB009B07D9 /* RunLoopLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66D79F523880FFB009B07D9 /* RunLoopLock.swift */; };
-		E66D79FB23881035009B07D9 /* AtomicInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66D79FA23881035009B07D9 /* AtomicInt.swift */; };
-		E66D79FC23881035009B07D9 /* AtomicInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66D79FA23881035009B07D9 /* AtomicInt.swift */; };
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
 		E67129A522C228AE004F6D0A /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A422C228AE004F6D0A /* Reducer.swift */; };
 		E672564B228AEBE0004631F1 /* TokenCreating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E672564A228AEBE0004631F1 /* TokenCreating.swift */; };
@@ -383,7 +406,6 @@
 		E6D7A256238596F200950312 /* Test+Convenience+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6055448230553E600528510 /* Test+Convenience+Models.swift */; };
 		E6D7A25C238596F200950312 /* ErrorAutoEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BACE7F2350E1FF006D97C6 /* ErrorAutoEquatable.swift */; };
 		E6D7A262238596F200950312 /* TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9D23687C6300EB3EC3 /* TestCase.swift */; };
-		E6D7A265238596F200950312 /* Blocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650693C2382D2ED00AB420D /* Blocker.swift */; };
 		E6D7A26F238596F200950312 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB76225F227800340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift */; };
 		E6D7A271238596F200950312 /* Models+ExpressibleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E753E22A97BC600AC631B /* Models+ExpressibleByIntegerLiteral.swift */; };
 		E6D7A272238596F200950312 /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62F352F2273156200B6779A /* KeyPair+ExpressilbleByIntegerLiteral.swift */; };
@@ -499,16 +521,10 @@
 		E6D7A3C02385980700950312 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A35B2385980700950312 /* PrivateKeyTests.swift */; };
 		E6D7A3C12385980700950312 /* PointMultiplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A35D2385980700950312 /* PointMultiplicationTests.swift */; };
 		E6D7A3C22385980700950312 /* DecodePointFromPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A35E2385980700950312 /* DecodePointFromPublicKeyTests.swift */; };
-		E6D7A3C32385980700950312 /* PrefixWhileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3612385980700950312 /* PrefixWhileTests.swift */; };
-		E6D7A3C42385980700950312 /* PublisherFlatMapResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */; };
-		E6D7A3C52385980800950312 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */; };
-		E6D7A3C62385980800950312 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */; };
 		E6DC275F22C3FDFB0049BB3C /* TokenDefinitionsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DC275E22C3FDFB0049BB3C /* TokenDefinitionsState.swift */; };
 		E6DC276522C4C7650049BB3C /* TokenReferenceBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6DC276422C4C7650049BB3C /* TokenReferenceBalance.swift */; };
 		E6E0BFBB23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E0BFBA23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift */; };
 		E6E0BFBD2375AE6F00B946A7 /* OrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E605544A23058A6600528510 /* OrderedSet.swift */; };
-		E6E12EEA238842330021B35B /* ResultOfUserAction+Blocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E12EE9238842330021B35B /* ResultOfUserAction+Blocking.swift */; };
-		E6E12EEB238842330021B35B /* ResultOfUserAction+Blocking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E12EE9238842330021B35B /* ResultOfUserAction+Blocking.swift */; };
 		E6E279212271CD1C0067D46E /* ECIES.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278762271CD1C0067D46E /* ECIES.swift */; };
 		E6E279222271CD1C0067D46E /* SecureGenerateBytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278782271CD1C0067D46E /* SecureGenerateBytes.swift */; };
 		E6E279232271CD1C0067D46E /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278792271CD1C0067D46E /* Status.swift */; };
@@ -834,6 +850,17 @@
 		E61989CE2371FBFA0092259A /* RadixJsonRpcAutoConnectEpic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixJsonRpcAutoConnectEpic.swift; sourceTree = "<group>"; };
 		E61989D02372C9670092259A /* DefaultRadixNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRadixNetwork.swift; sourceTree = "<group>"; };
 		E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+PrefixWhile+IncludeLast.swift"; sourceTree = "<group>"; };
+		E61E6BC6238C0C2A008C14B0 /* Recorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
+		E61E6BC7238C0C2A008C14B0 /* RecordingError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingError.swift; sourceTree = "<group>"; };
+		E61E6BC9238C0C2A008C14B0 /* Finished.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Finished.swift; sourceTree = "<group>"; };
+		E61E6BCA238C0C2A008C14B0 /* Recording.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recording.swift; sourceTree = "<group>"; };
+		E61E6BCB238C0C2A008C14B0 /* Prefix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prefix.swift; sourceTree = "<group>"; };
+		E61E6BCC238C0C2A008C14B0 /* Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
+		E61E6BCD238C0C2A008C14B0 /* Inverted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inverted.swift; sourceTree = "<group>"; };
+		E61E6BCE238C0C2A008C14B0 /* PublisherExpectation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublisherExpectation.swift; sourceTree = "<group>"; };
+		E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recorder+Radix.swift"; sourceTree = "<group>"; };
+		E61E6BE2238C3567008C14B0 /* TryFlatMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFlatMapTests.swift; sourceTree = "<group>"; };
+		E61E6BEE238D1BDE008C14B0 /* Publisher+TryFlatMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+TryFlatMap.swift"; sourceTree = "<group>"; };
 		E61EB9A122D86F56007826D3 /* Supply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supply.swift; sourceTree = "<group>"; };
 		E61EB9A322D87130007826D3 /* SupplyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyType.swift; sourceTree = "<group>"; };
 		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
@@ -954,7 +981,6 @@
 		E6506920238162B800AB420D /* DataFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetcher.swift; sourceTree = "<group>"; };
 		E6506922238162CE00AB420D /* HTTPClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientError.swift; sourceTree = "<group>"; };
 		E6506924238162DF00AB420D /* URLConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConvertible.swift; sourceTree = "<group>"; };
-		E650693C2382D2ED00AB420D /* Blocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blocker.swift; sourceTree = "<group>"; };
 		E6533FDF22BA63620068B07D /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		E6533FE222BA638B0068B07D /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		E654778822BFB3B700D968BD /* BootstrapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootstrapConfig.swift; sourceTree = "<group>"; };
@@ -962,9 +988,6 @@
 		E6550EE4224BB02900160267 /* Int+DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataInitializable.swift"; sourceTree = "<group>"; };
 		E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+AsArray.swift"; sourceTree = "<group>"; };
 		E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalhostNodeTest.swift; sourceTree = "<group>"; };
-		E66D79F323880A42009B07D9 /* TestOfBlocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestOfBlocker.swift; sourceTree = "<group>"; };
-		E66D79F523880FFB009B07D9 /* RunLoopLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunLoopLock.swift; sourceTree = "<group>"; };
-		E66D79FA23881035009B07D9 /* AtomicInt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomicInt.swift; sourceTree = "<group>"; };
 		E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStatusChecking.swift; sourceTree = "<group>"; };
 		E67129A422C228AE004F6D0A /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
 		E672564A228AEBE0004631F1 /* TokenCreating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenCreating.swift; sourceTree = "<group>"; };
@@ -1214,7 +1237,6 @@
 		E6DC276422C4C7650049BB3C /* TokenReferenceBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReferenceBalance.swift; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6E0BFBA23758DF600B946A7 /* DetermineIfUniverseIsSuitable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetermineIfUniverseIsSuitable.swift; sourceTree = "<group>"; };
-		E6E12EE9238842330021B35B /* ResultOfUserAction+Blocking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResultOfUserAction+Blocking.swift"; sourceTree = "<group>"; };
 		E6E278762271CD1C0067D46E /* ECIES.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIES.swift; sourceTree = "<group>"; };
 		E6E278782271CD1C0067D46E /* SecureGenerateBytes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureGenerateBytes.swift; sourceTree = "<group>"; };
 		E6E278792271CD1C0067D46E /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
@@ -1774,6 +1796,30 @@
 			path = Supply;
 			sourceTree = "<group>";
 		};
+		E61E6BC5238C0C2A008C14B0 /* CombineExpectations */ = {
+			isa = PBXGroup;
+			children = (
+				E61E6BC6238C0C2A008C14B0 /* Recorder.swift */,
+				E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */,
+				E61E6BC7238C0C2A008C14B0 /* RecordingError.swift */,
+				E61E6BC8238C0C2A008C14B0 /* PublisherExpectations */,
+				E61E6BCE238C0C2A008C14B0 /* PublisherExpectation.swift */,
+			);
+			path = CombineExpectations;
+			sourceTree = "<group>";
+		};
+		E61E6BC8238C0C2A008C14B0 /* PublisherExpectations */ = {
+			isa = PBXGroup;
+			children = (
+				E61E6BC9238C0C2A008C14B0 /* Finished.swift */,
+				E61E6BCA238C0C2A008C14B0 /* Recording.swift */,
+				E61E6BCB238C0C2A008C14B0 /* Prefix.swift */,
+				E61E6BCC238C0C2A008C14B0 /* Map.swift */,
+				E61E6BCD238C0C2A008C14B0 /* Inverted.swift */,
+			);
+			path = PublisherExpectations;
+			sourceTree = "<group>";
+		};
 		E61EB99D22D86EC2007826D3 /* TokenDefinitionsReducer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1826,12 +1872,12 @@
 		E620AB5321E7874300B36EC2 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				E61E6BC5238C0C2A008C14B0 /* CombineExpectations */,
 				E6BACE7F2350E1FF006D97C6 /* ErrorAutoEquatable.swift */,
 				E6340C9022FC4E0B0044BA97 /* Mappers */,
 				E6CEE70921F5AE5300D745EC /* Convenience */,
 				E6D325AA21EE377500851F4E /* TestExtensions */,
 				E6638CE623351C24004C9846 /* LocalhostNodeTest.swift */,
-				E66D79F92388101F009B07D9 /* Blocker */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -1852,6 +1898,7 @@
 				E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */,
 				E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */,
 				E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */,
+				E61E6BEE238D1BDE008C14B0 /* Publisher+TryFlatMap.swift */,
 				E6A1A67B237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift */,
 				E67E3E792379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift */,
 				E6A1A677237B1BB800F58483 /* Publisher+FlatMapResult.swift */,
@@ -2208,32 +2255,6 @@
 				E689DBBC225F9B6700340CF3 /* URLFormatter.swift */,
 			);
 			path = Node;
-			sourceTree = "<group>";
-		};
-		E66D79F223880A24009B07D9 /* TestOfTestUtilities */ = {
-			isa = PBXGroup;
-			children = (
-				E66D79F323880A42009B07D9 /* TestOfBlocker.swift */,
-			);
-			path = TestOfTestUtilities;
-			sourceTree = "<group>";
-		};
-		E66D79F823881018009B07D9 /* RunLoopLock */ = {
-			isa = PBXGroup;
-			children = (
-				E66D79F523880FFB009B07D9 /* RunLoopLock.swift */,
-				E66D79FA23881035009B07D9 /* AtomicInt.swift */,
-			);
-			path = RunLoopLock;
-			sourceTree = "<group>";
-		};
-		E66D79F92388101F009B07D9 /* Blocker */ = {
-			isa = PBXGroup;
-			children = (
-				E650693C2382D2ED00AB420D /* Blocker.swift */,
-				E66D79F823881018009B07D9 /* RunLoopLock */,
-			);
-			path = Blocker;
 			sourceTree = "<group>";
 		};
 		E6725649228AEBC2004631F1 /* TokenCreating */ = {
@@ -3000,7 +3021,6 @@
 			children = (
 				E6E27A532271EED60067D46E /* XCTestCase */,
 				E6A4ABBD221EBA9A006C5CA8 /* Foundation */,
-				E6E12EE9238842330021B35B /* ResultOfUserAction+Blocking.swift */,
 			);
 			path = TestExtensions;
 			sourceTree = "<group>";
@@ -3059,7 +3079,6 @@
 		E6D7A2C72385980700950312 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
-				E66D79F223880A24009B07D9 /* TestOfTestUtilities */,
 				E6D7A2C82385980700950312 /* RadixStack */,
 				E6D7A3542385980700950312 /* ThirdParty */,
 				E6D7A35F2385980700950312 /* TestOfExtensions */,
@@ -3630,6 +3649,7 @@
 			children = (
 				E6D7A3612385980700950312 /* PrefixWhileTests.swift */,
 				E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */,
+				E61E6BE2238C3567008C14B0 /* TryFlatMapTests.swift */,
 				E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */,
 				E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */,
 			);
@@ -4546,6 +4566,7 @@
 				E64641ED22F3482700E05034 /* FixedSupplyTokenDefinitionParticle+Decodable.swift in Sources */,
 				E6E279612271CD1C0067D46E /* DSONEncodable.swift in Sources */,
 				E6E279552271CD1C0067D46E /* DSONOutput.swift in Sources */,
+				E61E6BEF238D1BDE008C14B0 /* Publisher+TryFlatMap.swift in Sources */,
 				E6E279602271CD1C0067D46E /* DSONPrefixSpecifying.swift in Sources */,
 				E6A508D6224FBCA600128123 /* AtomSubmitAndSubscribeRequest.swift in Sources */,
 				E67A715421FBC65800F4B2D0 /* String+Extensions.swift in Sources */,
@@ -4996,32 +5017,32 @@
 				E6D7A3AF2385980700950312 /* SwiftHashesAreDeterministicTests.swift in Sources */,
 				E6D7A38F2385980700950312 /* DSONEncodingExampleMapTests.swift in Sources */,
 				E6D7A3BD2385980700950312 /* TokenBalanceReducerTests.swift in Sources */,
-				E66D79F623880FFB009B07D9 /* RunLoopLock.swift in Sources */,
 				E6D7A3922385980700950312 /* CBOREncodingPrimitivesStringTests.swift in Sources */,
+				E61E6BCF238C0C2A008C14B0 /* Recorder.swift in Sources */,
 				E6D7A36A2385980700950312 /* DiscoverNodesEpicTests.swift in Sources */,
 				E6D7A3972385980700950312 /* TrivialAtomToDsonTests.swift in Sources */,
 				E6D7A3772385980700950312 /* AtomJsonSerializationTwoParticleGroupsTests.swift in Sources */,
 				E6D7A3862385980700950312 /* IncorrectSpinValueTests.swift in Sources */,
+				E61E6BD9238C0C2A008C14B0 /* Map.swift in Sources */,
 				E6D7A38D2385980700950312 /* UniverseConfigBetanetJSONDecodingTests.swift in Sources */,
+				E61E6BDB238C0C2A008C14B0 /* Inverted.swift in Sources */,
 				E6D7A3652385980700950312 /* AtomPullerTests.swift in Sources */,
 				E6D7A38C2385980700950312 /* AtomJsonDeserializationInvalidSerializerValueTests.swift in Sources */,
+				E61E6BE5238C356D008C14B0 /* PublisherFlatMapResultTests.swift in Sources */,
 				E6D7A39D2385980700950312 /* GranularityTests.swift in Sources */,
 				E62F35372273378300B6779A /* DecodingError+ConvenienceInit.swift in Sources */,
 				E6D7A3A42385980700950312 /* DecimalStringTests.swift in Sources */,
 				E6D7A3B62385980700950312 /* SendMessageActionToParticleGroupsMapperTests.swift in Sources */,
 				E6474ABD2266140E009C4FDC /* IsConnectedToLocalhost.swift in Sources */,
+				E61E6BD5238C0C2A008C14B0 /* Recording.swift in Sources */,
 				E6D7A3842385980700950312 /* NonBase58AddressTests.swift in Sources */,
 				E6D7A3942385980700950312 /* TestThatSignaturesOfAtomAreExcludedInDsonHashTests.swift in Sources */,
 				E6D7A3BE2385980700950312 /* TokenBalancesReducerTests.swift in Sources */,
 				E6D7A3B12385980700950312 /* ShardRangeTests.swift in Sources */,
-				E6D7A3C62385980800950312 /* PrefixUntilCompletionFrom.swift in Sources */,
 				E6D7A3782385980700950312 /* AtomJsonDeserializationTwoParticleGroupsTests.swift in Sources */,
 				E6D7A3AE2385980700950312 /* HTTPClientTests.swift in Sources */,
 				E6D7A3BF2385980700950312 /* Secp256k1RFC6979Tests.swift in Sources */,
-				E6E12EEA238842330021B35B /* ResultOfUserAction+Blocking.swift in Sources */,
-				E6D7A3C52385980800950312 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E6D7A3822385980700950312 /* TokenPermissionBadValueTests.swift in Sources */,
-				E6D7A3C32385980700950312 /* PrefixWhileTests.swift in Sources */,
 				E6055449230553E600528510 /* Test+Convenience+Models.swift in Sources */,
 				E6D7A3892385980700950312 /* BadRRITests.swift in Sources */,
 				E6D7A3B02385980700950312 /* MagicTests.swift in Sources */,
@@ -5030,11 +5051,13 @@
 				E6D7A3B52385980700950312 /* AtomToTransferMapperTests.swift in Sources */,
 				E6C8240B23869EF40037B336 /* NetworkControllerTests.swift in Sources */,
 				E6D7A38B2385980700950312 /* NegativeAmountTests.swift in Sources */,
+				E61E6BD7238C0C2A008C14B0 /* Prefix.swift in Sources */,
 				E6D7A39A2385980700950312 /* Int+SuperscriptTests.swift in Sources */,
 				E6D7A3732385980700950312 /* ECIESEncryptionAndDecryptionTests.swift in Sources */,
 				E6D7A3A62385980700950312 /* RadixSystemTests.swift in Sources */,
 				E6D7A3832385980700950312 /* GranularityNegativeTests.swift in Sources */,
 				E6D7A3912385980700950312 /* CBOREncodingPrimitivesIntTests.swift in Sources */,
+				E61E6BE8238C356D008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */,
 				E6D7A36C2385980700950312 /* FindANodeEpicTests.swift in Sources */,
 				E6D7A3A22385980700950312 /* AtomIdentifierTests.swift in Sources */,
 				E6D7A3722385980700950312 /* ECIESDecryptMessageTests.swift in Sources */,
@@ -5046,19 +5069,19 @@
 				E6D7A3802385980700950312 /* TooLongDescriptionTests.swift in Sources */,
 				E6D7A3AA2385980700950312 /* WebSocketStatusEquatableTests.swift in Sources */,
 				E6D7A3682385980700950312 /* FetchAtomsEpicTests.swift in Sources */,
+				E61E6BE6238C356D008C14B0 /* TryFlatMapTests.swift in Sources */,
 				E6D7A3A32385980700950312 /* AddressTests.swift in Sources */,
 				E6D7A3A12385980700950312 /* EUIDTests.swift in Sources */,
 				E6D7A3B92385980700950312 /* ProofOfWorkTests.swift in Sources */,
-				E66D79F423880A42009B07D9 /* TestOfBlocker.swift in Sources */,
 				E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */,
-				E650693D2382D2ED00AB420D /* Blocker.swift in Sources */,
 				E6D7A3962385980700950312 /* AtomTooBigDSONEncodingTests.swift in Sources */,
 				E6D7A3BC2385980700950312 /* TokenBalancesTests.swift in Sources */,
 				E6D7A3AB2385980700950312 /* FormattedURLTests.swift in Sources */,
 				E6D7A3A92385980700950312 /* HostTests.swift in Sources */,
 				E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
-				E66D79FB23881035009B07D9 /* AtomicInt.swift in Sources */,
+				E61E6BDD238C0C2A008C14B0 /* PublisherExpectation.swift in Sources */,
 				E6D7A37F2385980700950312 /* TooShortAddressTests.swift in Sources */,
+				E61E6BD1238C0C2A008C14B0 /* RecordingError.swift in Sources */,
 				E6D7A3902385980700950312 /* DSONEncodingAddressHolderTests.swift in Sources */,
 				E6D7A3672385980700950312 /* AtomNotificationModeTests.swift in Sources */,
 				E6D7A37E2385980700950312 /* TooLongSymbolTests.swift in Sources */,
@@ -5084,17 +5107,19 @@
 				E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */,
 				E6D7A3662385980700950312 /* AtomStoreTests.swift in Sources */,
 				E605544D23058AA100528510 /* ParticleSet.swift in Sources */,
-				E6D7A3C42385980700950312 /* PublisherFlatMapResultTests.swift in Sources */,
 				E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */,
 				E6D7A37D2385980700950312 /* QuestionMarkInSymbolTests.swift in Sources */,
 				E6D7A3852385980700950312 /* TooShortDescriptionTests.swift in Sources */,
+				E61E6BE0238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */,
 				480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
+				E61E6BE7238C356D008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E6D7A3BA2385980700950312 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */,
 				E6D7A37A2385980700950312 /* AddressInvalidChecksumTests.swift in Sources */,
 				E6D7A3702385980700950312 /* SignatureLengthTests.swift in Sources */,
 				E6D7A36F2385980700950312 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift in Sources */,
 				E6D7A36B2385980700950312 /* NetworkEpicTestCase.swift in Sources */,
+				E61E6BD3238C0C2A008C14B0 /* Finished.swift in Sources */,
 				E6D7A39C2385980700950312 /* ResourceIdentifierTests.swift in Sources */,
 				E6D7A3AD2385980700950312 /* NodeTests.swift in Sources */,
 				E6D7A3812385980700950312 /* TooLongNameTests.swift in Sources */,
@@ -5102,6 +5127,7 @@
 				E6D7A3792385980700950312 /* TooLongAddressTests.swift in Sources */,
 				E6BF7CE22382DC2E002D1535 /* HardCodedAtomStore.swift in Sources */,
 				E6D7A39E2385980700950312 /* NonNegativeAmountTests.swift in Sources */,
+				E61E6BE4238C356D008C14B0 /* PrefixWhileTests.swift in Sources */,
 				E6D7A3B82385980700950312 /* CreateTokenActionTests.swift in Sources */,
 				E6D7A3762385980700950312 /* AtomJsonSerializationTrivialTests.swift in Sources */,
 				E6D7A3A72385980700950312 /* UniverseConfigEquatableTests.swift in Sources */,
@@ -5113,24 +5139,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6D7A23F238596F200950312 /* DecodingError+ConvenienceInit.swift in Sources */,
+				E61E6BE9238C356E008C14B0 /* PrefixWhileTests.swift in Sources */,
 				E6D7A241238596F200950312 /* IsConnectedToLocalhost.swift in Sources */,
+				E61E6BDA238C0C2A008C14B0 /* Map.swift in Sources */,
 				E6D7A256238596F200950312 /* Test+Convenience+Models.swift in Sources */,
 				E6D7A25C238596F200950312 /* ErrorAutoEquatable.swift in Sources */,
+				E61E6BD4238C0C2A008C14B0 /* Finished.swift in Sources */,
+				E61E6BEB238C356E008C14B0 /* TryFlatMapTests.swift in Sources */,
 				E6D7A262238596F200950312 /* TestCase.swift in Sources */,
-				E6D7A265238596F200950312 /* Blocker.swift in Sources */,
 				E6D7A26F238596F200950312 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
+				E61E6BD6238C0C2A008C14B0 /* Recording.swift in Sources */,
+				E61E6BEA238C356E008C14B0 /* PublisherFlatMapResultTests.swift in Sources */,
 				E6D7A271238596F200950312 /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
+				E61E6BD8238C0C2A008C14B0 /* Prefix.swift in Sources */,
+				E61E6BDE238C0C2A008C14B0 /* PublisherExpectation.swift in Sources */,
+				E61E6BE1238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */,
 				E6D7A272238596F200950312 /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
+				E61E6BEC238C356E008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
+				E61E6BD2238C0C2A008C14B0 /* RecordingError.swift in Sources */,
 				E6D7A27A238596F200950312 /* Test+Convenience+RadixApplicationClient.swift in Sources */,
-				E66D79FC23881035009B07D9 /* AtomicInt.swift in Sources */,
+				E61E6BED238C356E008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */,
 				E6D7A281238596F200950312 /* Identity+Account.swift in Sources */,
 				E6D7A28D238596F200950312 /* LocalhostNodeTest.swift in Sources */,
 				E6D7A295238596F200950312 /* XCTestCase_Extensions.swift in Sources */,
-				E6E12EEB238842330021B35B /* ResultOfUserAction+Blocking.swift in Sources */,
-				E66D79F723880FFB009B07D9 /* RunLoopLock.swift in Sources */,
+				E61E6BD0238C0C2A008C14B0 /* Recorder.swift in Sources */,
 				E6D7A29A238596F200950312 /* TestableConvenienceInitializers.swift in Sources */,
 				E6D7A29B238596F200950312 /* ParticleSet.swift in Sources */,
 				E6D7A29D238596F200950312 /* TestCase_Extensions.swift in Sources */,
+				E61E6BDC238C0C2A008C14B0 /* Inverted.swift in Sources */,
 				E6D7A29E238596F200950312 /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6D7A2A2238596F200950312 /* Int+Extension.swift in Sources */,
 				E6D7A2A5238596F200950312 /* HardCodedAtomStore.swift in Sources */,

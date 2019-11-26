@@ -54,14 +54,18 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         }
         let resultOfPutUniqueAction = try application.send(transaction: transaction)
         
-        XCTAssertTrue(resultOfPutUniqueAction.blockingWasSuccessful())
+        let recorderCompletable = resultOfPutUniqueAction.completable.record()
+        try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
         
         
-        let executedTransaction = try application.observeTransactions(
+        let executedTransactionsPublisher = application.observeTransactions(
             at: alice,
             containingActionOfAnyType: [PutUniqueIdAction.self]
         )
-        .blockingOutputFirst(timeout: .enoughForPOW)
+        
+        let recorderTransactions = executedTransactionsPublisher.record()
+        
+        let executedTransaction: ExecutedTransaction = try wait(for: recorderTransactions.firstOrError, timeout: 1, description: "ExecutedTransactions")
 
         let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
 
@@ -73,53 +77,63 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
     }
     
     func testSendTransactionWithTwoUniqueIds() throws {
-        
+
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
-        
+
         // WHEN: Alice sends a `Transaction` containing two UniqueId with the string "foo" and "bar” respectively
         let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "foo")
             PutUniqueIdAction(uniqueMaker: alice, string: "bar")
         }
         
-        XCTAssertTrue(
-            try application.send(transaction: transaction)
-                // THEN: the Transaction is successfully sent
-                .blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        let resultOfPutUniqueActions = try application.send(transaction: transaction)
+        let recorderCompletable = resultOfPutUniqueActions.completable.record()
+        try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
         
-        let executedTransaction: ExecutedTransaction = try application.observeTransactions(
+        let executedTransactionsPublisher = application.observeTransactions(
             at: alice,
             containingActionOfAnyType: [PutUniqueIdAction.self]
         )
-            .blockingOutputFirst(timeout: .enoughForPOW)
+        
+        let recorderTransactions = executedTransactionsPublisher.record()
+        
+        let executedTransaction: ExecutedTransaction = try wait(for: recorderTransactions.firstOrError, timeout: 1, description: "ExecutedTransactions")
         
         let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
-        
+
         XCTAssertEqual(putUniqueActions.count, 2)
-        
+
         // THEN: AND we can read out the UniqueId strings "foo" and "bar”.
         XCTAssertEqual(putUniqueActions[0].string, "foo")
         XCTAssertEqual(putUniqueActions[1].string, "bar")
     }
-    
+
     func testFailPuttingTwoEqualUniqueIdInOneTransaction() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
-        
+
         // WHEN: Alice sends a `Transaction` containing two UniqueId with with the same string
         let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "foo")
             PutUniqueIdAction(uniqueMaker: alice, string: "foo")
         }
-        
-        let resultOfUniqueMaking = try application.send(transaction: transaction)
-        
+
+//        let resultOfPutUniqueActions = try application.send(transaction: transaction)
+//        
+//        let recorderCompletable = resultOfPutUniqueActions.completable.record()
+//        
 //        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+//        XCTAssertThrowsSpecificError(
+//            try wait(for: recorderCompletable.expectError(ofType: PutUniqueIdError.self), timeout: .enoughForPOW),
+//            PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
+//        )
+        
+
 
 //        XCTAssertThrowsSpecificError(
 //            try resultOfUniqueMaking.blockingRethrow(timeout: .enoughForPOW) { XCTFail("Should not have timed out \($0)") },
 //            PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
 //        )
+        
     }
     
     

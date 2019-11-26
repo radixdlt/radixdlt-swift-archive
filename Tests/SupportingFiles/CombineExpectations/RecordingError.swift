@@ -36,6 +36,12 @@ public enum RecordingError: Error {
     /// Can be thrown when waiting for `recorder.single`, when the publisher
     /// publishes more than one element.
     case moreThanOneElement
+    
+    // Can be thrown when expecting the publisher to complete with an error, but it completed with the wrong kind of error
+    case failedToMapErrorFromFailureToExpectedErrorType(expectedErrorType: Swift.Error.Type, butGotFailure: Swift.Error)
+
+    // Can be thrown when expecting the publisher to complete with an error, but it completed with a finish instead.
+    case expectedPublisherToFailButGotFinish(expectedErrorType: Swift.Error.Type)
 }
 
 extension RecordingError: LocalizedError {
@@ -47,6 +53,14 @@ extension RecordingError: LocalizedError {
             return "RecordingError.noElements"
         case .moreThanOneElement:
             return "RecordingError.moreThanOneElement"
+        case .failedToMapErrorFromFailureToExpectedErrorType(let expectedErrorType, let butGotFailure):
+            return "RecordingError.failedToMapErrorFromFailureToExpectedErrorType(from: '\(butGotFailure))', to expected type: '\(nameOf(type: expectedErrorType))')"
+        case .expectedPublisherToFailButGotFinish(let expectedErrorType):
+              return "RecordingError.expectedPublisherToFailButGotFinish(expectedErrorType: '\(nameOf(type: expectedErrorType))')"
         }
     }
+}
+
+private func nameOf<T>(type: T) -> String {
+    "\(Mirror(reflecting: type).subjectType)"
 }

@@ -33,9 +33,12 @@ class BalanceOfNativeTokenFromGenesisAtomsTests: TestCase {
         let address: Address = "JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor"
         let cancellable = application.pull(address: address)
         
-        let xrdBalance = try application
+        let xrdBalancePublisher = application
             .balanceOfNativeTokensOrZero(ownedBy: address)
-            .blockingOutputFirst(timeout: .enoughForPOW)
+        
+        let recorder = xrdBalancePublisher.record()
+        
+        let xrdBalance = try wait(for: recorder.firstOrError, timeout: .enoughForPOW, description: "Balance")
         
         XCTAssertEqual(xrdBalance.amount, "1000000000000000000000000000")
         XCTAssertNotNil(cancellable)

@@ -207,7 +207,7 @@ extension PublisherExpectations {
     /// The type of the publisher expectation returned by Recorder.first
     public typealias First<Input, Failure: Error> = Map<Prefix<Input, Failure>, Input?>
     
-    /// The type of the publisher expectation returned by Recorder.lastt
+    /// The type of the publisher expectation returned by Recorder.last
     public typealias Last<Input, Failure: Error> = Map<Elements<Input, Failure>, Input?>
     
     /// The type of the publisher expectation returned by Recorder.single
