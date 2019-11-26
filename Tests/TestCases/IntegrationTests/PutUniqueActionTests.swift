@@ -52,7 +52,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "foobar")
         }
-        let resultOfPutUniqueAction = try application.send(transaction: transaction)
+        let resultOfPutUniqueAction = application.send(transaction: transaction)
         
         let recorderCompletable = resultOfPutUniqueAction.completable.record()
         try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
@@ -86,7 +86,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             PutUniqueIdAction(uniqueMaker: alice, string: "bar")
         }
         
-        let resultOfPutUniqueActions = try application.send(transaction: transaction)
+        let resultOfPutUniqueActions = application.send(transaction: transaction)
         let recorderCompletable = resultOfPutUniqueActions.completable.record()
         try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
         

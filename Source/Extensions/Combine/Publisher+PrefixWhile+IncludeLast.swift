@@ -39,13 +39,13 @@ public enum PrefixWhileBehavior: Int, Equatable {
 /* Internal for test purposes only, otherwise `private`. */
 internal extension Publisher where Failure == Never {
     func prefixWhile(
-        behaviour: PrefixWhileBehavior = .inclusive,
+        behavior: PrefixWhileBehavior = .inclusive,
         conditionIsTrue predicate: @escaping (Output) -> Bool
     ) -> AnyPublisher<Output, Failure> {
         
         let fulfillingPredicate =  self.prefix(while: predicate).eraseToAnyPublisher()
         
-        guard behaviour == .inclusive else {
+        guard behavior == .inclusive else {
             // Fallback to Combine's bundled operator
             return fulfillingPredicate
         }

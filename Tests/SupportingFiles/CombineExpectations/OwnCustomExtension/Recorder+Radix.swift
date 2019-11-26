@@ -149,7 +149,7 @@ extension Recorder {
     }
     
     public func expectError<ExpectedError: Error & Equatable>(
-        ofType _: ExpectedError.Type,
+        ofType type: ExpectedError.Type,
         _ mapFailureToExpectedError: @escaping (Failure) throws -> ExpectedError = { failure in
             guard let expectedError = failure as? ExpectedError else {
                 throw RecordingError.failedToMapErrorFromFailureToExpectedErrorType(
@@ -163,7 +163,7 @@ extension Recorder {
         self.completion.map { completion throws -> ExpectedError in
             switch completion {
             case .finished:
-                throw RecordingError.expectedPublisherToFailButGotFinish(expectedErrorType: ExpectedError.self)
+                throw RecordingError.expectedPublisherToFailButGotFinish(expectedErrorType: type)
             case .failure(let failure):
                 return try mapFailureToExpectedError(failure)
             }

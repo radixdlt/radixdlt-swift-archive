@@ -87,7 +87,7 @@ public extension ProofOfWork {
 
 // MARK: - Error
 public extension ProofOfWork {
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case workInputIncorrectLengthOfSeed(expectedByteCountOf: Int, butGot: Int)
         case tooFewLeadingZeros(expectedAtLeast: UInt8, butGot: UInt8)
     }

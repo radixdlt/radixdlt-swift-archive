@@ -38,7 +38,7 @@ public extension Publisher {
     {
         // swiftlint:enable opening_brace
         let failureSubject = PassthroughSubject<T, Failure>()
-        
+    
         let flatMapped = self.flatMap(maxPublishers: maxPublishers) { (output: Self.Output) -> AnyPublisher<T, Failure> in
             
             do {
@@ -57,10 +57,19 @@ public extension Publisher {
                     .eraseToAnyPublisher()
             }
         }
+        // The previous `self.flatMap` filters out errors, we need to 'manually insert them again', doing
+        // so by using the subject.
+        .handleEvents(receiveCompletion: { completion in
+            switch completion {
+            case .finished:
+                failureSubject.send(completion: .finished)
+            case .failure(let error):
+                failureSubject.send(completion: .failure(error))
+            }
+        })
         
         return flatMapped
             .merge(with: failureSubject)
-            .prefix(untilCompletionFrom: self)
             .eraseToAnyPublisher()
     }
 }

@@ -93,11 +93,19 @@ internal extension DefaultProofOfWorkWorker {
 }
 
 extension DefaultProofOfWorkWorker: FeeMapper {}
+
 public extension DefaultProofOfWorkWorker {
-    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> AnyPublisher<AtomWithFee, AtomWithFee.Error> {
+    
+    func feeBasedOn(
+        atom: Atom,
+        universeConfig: UniverseConfig,
+        key: PublicKey
+    ) -> AnyPublisher<AtomWithFee, AtomWithFee.Error> {
+        
         return work(atom: atom, magic: universeConfig.magic).tryMap {
             try AtomWithFee(atomWithoutPow: atom, proofOfWork: $0)
         }
+        .mapError { castOrKill(instance: $0, toType: ProofOfWork.Error.self) }
         .mapError { AtomWithFee.Error.powError($0) }
         .eraseToAnyPublisher()
     }

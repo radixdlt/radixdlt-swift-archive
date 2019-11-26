@@ -30,7 +30,20 @@ import Combine
 
 final class TryFlatMapTests: TestCase {
         
-
+    func test_tryFlatMap_manual_send_failure() {
+        doTest(
+            produceOutput: { subject in
+                subject.send(completion: .failure(.hardcodedError))
+        },
+            
+            expectedOutput: { values, errors in
+                XCTAssertTrue(values.isEmpty)
+                XCTAssertEqual(errors.count, 1)
+                XCTAssertEqual(errors[0], NumberError.hardcodedError)
+        }
+        )
+    }
+  
     func test_tryFlatMap_single_output_short() {
         doTest(
             produceOutput: { subject in
@@ -147,6 +160,7 @@ private extension TryFlatMapTests {
         let positiveNumbersSubject = PassthroughSubject<Int, NumberError>()
         
         let positiveEvenNumberPublisher = positiveNumbersSubject.tryFlatMap { number -> AnyPublisher<Bool, NumberError> in
+            
             if number <= 0 {
                 throw NumberError.notPositive
             }
@@ -181,6 +195,7 @@ private extension TryFlatMapTests {
     enum NumberError: Int, Swift.Error, Equatable {
         case notPositive
         case notEven
+        case hardcodedError
     }
 
 }

@@ -37,7 +37,7 @@ final class PrefixWhileTests: TestCase {
         let publisher = PassthroughSubject<Int, Never>()
 
         let cancellable = publisher
-            .prefixWhile(behaviour: .exclusive) { $0 < 3 }
+            .prefixWhile(behavior: .exclusive) { $0 < 3 }
             .sink(
                 receiveCompletion: { _ in expectation.fulfill() },
                 receiveValue: { returnValues.append($0) }
@@ -63,7 +63,7 @@ final class PrefixWhileTests: TestCase {
         let publisher = PassthroughSubject<Int, Never>()
         
         let cancellable = publisher
-            .prefixWhile(behaviour: .inclusive) { $0 < 3 }
+            .prefixWhile(behavior: .inclusive) { $0 < 3 }
             .sink(
                 receiveCompletion: { _ in expectation.fulfill() },
                 receiveValue: { returnValues.append($0) }

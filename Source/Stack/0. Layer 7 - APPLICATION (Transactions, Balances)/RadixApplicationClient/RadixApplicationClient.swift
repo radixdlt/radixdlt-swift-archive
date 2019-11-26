@@ -118,8 +118,8 @@ public extension RadixApplicationClient {
 
 // MARK: TransactionMaker
 public extension RadixApplicationClient {
-    func send(transaction: Transaction, toOriginNode originNode: Node?) throws -> ResultOfUserAction {
-        try transactionMaker.send(transaction: transaction, toOriginNode: originNode)
+    func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+        transactionMaker.send(transaction: transaction, toOriginNode: originNode)
     }
 }
 
@@ -139,8 +139,8 @@ public extension RadixApplicationClient {
 
 // MARK: TokenCreating
 public extension RadixApplicationClient {
-    func create(token createTokenAction: CreateTokenAction) throws -> ResultOfUserAction {
-        try execute(actions: createTokenAction)
+    func create(token createTokenAction: CreateTokenAction) -> ResultOfUserAction {
+        execute(actions: createTokenAction)
     }
     
     /// Returns a hot observable of the latest state of token definitions at the user's address
@@ -151,22 +151,22 @@ public extension RadixApplicationClient {
 
 // MARK: TokenMinting
 public extension RadixApplicationClient {
-    func mintTokens(_ action: MintTokensAction) throws -> ResultOfUserAction {
-        try execute(actions: action)
+    func mintTokens(_ action: MintTokensAction) -> ResultOfUserAction {
+        execute(actions: action)
     }
 }
 
 // MARK: TokenBurning
 public extension RadixApplicationClient {
-    func burnTokens(_ action: BurnTokensAction) throws -> ResultOfUserAction {
-        try execute(actions: action)
+    func burnTokens(_ action: BurnTokensAction) -> ResultOfUserAction {
+        execute(actions: action)
     }
 }
 
 // MARK: TokenTransferring
 public extension RadixApplicationClient {
-    func transfer(tokens transferTokensAction: TransferTokensAction) throws -> ResultOfUserAction {
-        try execute(actions: transferTokensAction)
+    func transfer(tokens transferTokensAction: TransferTokensAction) -> ResultOfUserAction {
+        execute(actions: transferTokensAction)
     }
     
     func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, Never> {
@@ -176,8 +176,8 @@ public extension RadixApplicationClient {
 
 // MARK: MessageSending
 public extension RadixApplicationClient {
-    func send(message sendMessageAction: SendMessageAction) throws -> ResultOfUserAction {
-        try execute(actions: sendMessageAction)
+    func send(message sendMessageAction: SendMessageAction) -> ResultOfUserAction {
+        execute(actions: sendMessageAction)
     }
     
     func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, Never> {
@@ -187,8 +187,8 @@ public extension RadixApplicationClient {
 
 // MARK: UniqueMaking
 public extension RadixApplicationClient {
-    func putUniqueId(_ putUniqueAction: PutUniqueIdAction) throws -> ResultOfUserAction {
-        try execute(actions: putUniqueAction)
+    func putUniqueId(_ putUniqueAction: PutUniqueIdAction) -> ResultOfUserAction {
+        execute(actions: putUniqueAction)
     }
 }
 

@@ -42,7 +42,7 @@ public extension Publisher {
                 }
             },
             receiveValue: { value in
-                incorrectImplementation("Expected to never get any outputted value, but got: \(value). Did you intend to call `ignoreOutput()` before calling this method?")
+                incorrectImplementation("Expected to never get any outputted value, but got: \(value). Did you intend to call `ignoreOutput()` before calling this method? Publisher: \(self)")
             }
         )
     }

@@ -131,6 +131,9 @@
 		E61E6BEC238C356E008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */; };
 		E61E6BED238C356E008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */; };
 		E61E6BEF238D1BDE008C14B0 /* Publisher+TryFlatMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BEE238D1BDE008C14B0 /* Publisher+TryFlatMap.swift */; };
+		E61E6BF1238D3B0D008C14B0 /* Mirror+Compare.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BF0238D3B0D008C14B0 /* Mirror+Compare.swift */; };
+		E61E6BF6238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BF5238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift */; };
+		E61E6BF7238D4D53008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BF5238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift */; };
 		E61EB9A222D86F56007826D3 /* Supply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A122D86F56007826D3 /* Supply.swift */; };
 		E61EB9A422D87130007826D3 /* SupplyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A322D87130007826D3 /* SupplyType.swift */; };
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -861,6 +864,8 @@
 		E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recorder+Radix.swift"; sourceTree = "<group>"; };
 		E61E6BE2238C3567008C14B0 /* TryFlatMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFlatMapTests.swift; sourceTree = "<group>"; };
 		E61E6BEE238D1BDE008C14B0 /* Publisher+TryFlatMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+TryFlatMap.swift"; sourceTree = "<group>"; };
+		E61E6BF0238D3B0D008C14B0 /* Mirror+Compare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mirror+Compare.swift"; sourceTree = "<group>"; };
+		E61E6BF5238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineExpectationsCustomExtensionsTests.swift; sourceTree = "<group>"; };
 		E61EB9A122D86F56007826D3 /* Supply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supply.swift; sourceTree = "<group>"; };
 		E61EB9A322D87130007826D3 /* SupplyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyType.swift; sourceTree = "<group>"; };
 		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
@@ -1645,6 +1650,7 @@
 				E626E1FB22B41A4F0046D2AC /* FeeMapper.swift */,
 				E6340C8C22FC2D090044BA97 /* TransactionMaker.swift */,
 				E605543D23054A7000528510 /* DefaultTransactionMaker.swift */,
+				E61E6BF0238D3B0D008C14B0 /* Mirror+Compare.swift */,
 			);
 			path = TransactionMaker;
 			sourceTree = "<group>";
@@ -1799,11 +1805,8 @@
 		E61E6BC5238C0C2A008C14B0 /* CombineExpectations */ = {
 			isa = PBXGroup;
 			children = (
-				E61E6BC6238C0C2A008C14B0 /* Recorder.swift */,
-				E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */,
-				E61E6BC7238C0C2A008C14B0 /* RecordingError.swift */,
-				E61E6BC8238C0C2A008C14B0 /* PublisherExpectations */,
-				E61E6BCE238C0C2A008C14B0 /* PublisherExpectation.swift */,
+				E61E6BF3238D3CCE008C14B0 /* OwnCustomExtension */,
+				E61E6BF2238D3CC6008C14B0 /* CopiedFromGitHub */,
 			);
 			path = CombineExpectations;
 			sourceTree = "<group>";
@@ -1818,6 +1821,33 @@
 				E61E6BCD238C0C2A008C14B0 /* Inverted.swift */,
 			);
 			path = PublisherExpectations;
+			sourceTree = "<group>";
+		};
+		E61E6BF2238D3CC6008C14B0 /* CopiedFromGitHub */ = {
+			isa = PBXGroup;
+			children = (
+				E61E6BC6238C0C2A008C14B0 /* Recorder.swift */,
+				E61E6BC7238C0C2A008C14B0 /* RecordingError.swift */,
+				E61E6BC8238C0C2A008C14B0 /* PublisherExpectations */,
+				E61E6BCE238C0C2A008C14B0 /* PublisherExpectation.swift */,
+			);
+			path = CopiedFromGitHub;
+			sourceTree = "<group>";
+		};
+		E61E6BF3238D3CCE008C14B0 /* OwnCustomExtension */ = {
+			isa = PBXGroup;
+			children = (
+				E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */,
+			);
+			path = OwnCustomExtension;
+			sourceTree = "<group>";
+		};
+		E61E6BF4238D3D02008C14B0 /* CombineExpectations_Extensions_Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E61E6BF5238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift */,
+			);
+			path = CombineExpectations_Extensions_Tests;
 			sourceTree = "<group>";
 		};
 		E61EB99D22D86EC2007826D3 /* TokenDefinitionsReducer */ = {
@@ -3639,6 +3669,7 @@
 		E6D7A35F2385980700950312 /* TestOfExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				E61E6BF4238D3D02008C14B0 /* CombineExpectations_Extensions_Tests */,
 				E6D7A3602385980700950312 /* CombineExtensionTests */,
 			);
 			path = TestOfExtensions;
@@ -4996,6 +5027,7 @@
 				E6CABA1122D4C36300B6D00C /* RPCClientError.swift in Sources */,
 				E689DBA4225F881700340CF3 /* LivePeersRequesting.swift in Sources */,
 				E6ED1A4221F8872300654105 /* RadixUniverse.swift in Sources */,
+				E61E6BF1238D3B0D008C14B0 /* Mirror+Compare.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5027,6 +5059,7 @@
 				E6D7A38D2385980700950312 /* UniverseConfigBetanetJSONDecodingTests.swift in Sources */,
 				E61E6BDB238C0C2A008C14B0 /* Inverted.swift in Sources */,
 				E6D7A3652385980700950312 /* AtomPullerTests.swift in Sources */,
+				E61E6BF6238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */,
 				E6D7A38C2385980700950312 /* AtomJsonDeserializationInvalidSerializerValueTests.swift in Sources */,
 				E61E6BE5238C356D008C14B0 /* PublisherFlatMapResultTests.swift in Sources */,
 				E6D7A39D2385980700950312 /* GranularityTests.swift in Sources */,
@@ -5151,6 +5184,7 @@
 				E61E6BD6238C0C2A008C14B0 /* Recording.swift in Sources */,
 				E61E6BEA238C356E008C14B0 /* PublisherFlatMapResultTests.swift in Sources */,
 				E6D7A271238596F200950312 /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
+				E61E6BF7238D4D53008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */,
 				E61E6BD8238C0C2A008C14B0 /* Prefix.swift in Sources */,
 				E61E6BDE238C0C2A008C14B0 /* PublisherExpectation.swift in Sources */,
 				E61E6BE1238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */,

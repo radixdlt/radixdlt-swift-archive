@@ -52,8 +52,8 @@ public struct AtomWithFee:
 
 // MARK: - Throwing
 public extension AtomWithFee {
-    enum Error: Swift.Error {
-        case powError(Swift.Error) // in fact ProofOfWork.Error, but Combine fails to understand that from `.mapError`
+    enum Error: Swift.Error, Equatable {
+        case powError(ProofOfWork.Error)
         case atomAlreadyContainedPow(powNonce: String)
         case atomDoesNotContainPow
     }

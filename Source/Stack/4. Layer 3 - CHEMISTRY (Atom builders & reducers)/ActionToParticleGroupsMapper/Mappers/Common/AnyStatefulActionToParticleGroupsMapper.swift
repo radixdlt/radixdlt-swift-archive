@@ -77,7 +77,9 @@ public extension AnyStatefulActionToParticleGroupsMapper {
         self._matchesType = { return $0 == StatelessMapper.Action.self }
         
         self._requiredStateForAnAction = { _ in return [] }
-        self._particleGroupsForAnAction = { action, _, address in return try statelessMapper.particleGroupsForAnAction(action, addressOfActiveAccount: address) }
+        self._particleGroupsForAnAction = { action, _, address in
+            return try statelessMapper.particleGroupsForAnAction(action, addressOfActiveAccount: address)
+        }
         
     }
     
