@@ -55,8 +55,8 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         let resultOfPutUniqueAction = application.send(transaction: transaction)
         
         let recorderCompletable = resultOfPutUniqueAction.completion.record()
-        try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
         
+        try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
         
         let executedTransactionsPublisher = application.observeTransactions(
             at: alice,

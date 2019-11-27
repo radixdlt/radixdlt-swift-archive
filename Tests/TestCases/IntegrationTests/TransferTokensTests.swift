@@ -38,7 +38,6 @@ class TransferTokensTests: LocalhostNodeTest {
     
     override func setUp() {
         super.setUp()
-        continueAfterFailure = false
         
         aliceIdentity = AbstractIdentity()
         bobAccount = Account()
@@ -49,54 +48,59 @@ class TransferTokensTests: LocalhostNodeTest {
         carol = application.addressOf(account: carolAccount)
     }
 
-    /*
-    func testTransferTokenWithGranularityOf1() {
+    func testTransferTokenWithGranularityOf1() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         // WHEN: Alice transfer tokens she owns, to Bob
         let (tokenCreation, rri) = application.createToken(symbol: "AC", supply: .fixed(to: 30))
         
-        // createTokenAction(address: alice, supply: .fixed(to: 30))
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        let tokenCreationRecording = tokenCreation.completion.record()
         
-        guard let myTokenDef = application.observeTokenDefinition(identifier: rri).blockingTakeFirst() else { return }
+        try wait(for: tokenCreationRecording.finished, timeout: .enoughForPOW)
+        
+        let myTokenDefRecording = application.observeTokenDefinition(identifier: rri).record()
+        let myTokenDef = try wait(for: myTokenDefRecording.firstOrError, timeout: .enoughForPOW)
+        
         XCTAssertEqual(myTokenDef.symbol, "AC")
+        let myBalanceOrNilBeforeTxRecording = application.observeMyBalance(ofToken: rri).record()
+        let myBalanceOrNilBeforeTx = try wait(for: myBalanceOrNilBeforeTxRecording.firstOrError, timeout: .enoughForPOW)
         
-        guard let myBalanceOrNilBeforeTx = application.observeMyBalance(ofToken: rri).blockingTakeFirst() else { return }
-        guard let myBalanceBeforeTx = myBalanceOrNilBeforeTx else { return XCTFail("Expected non nil balance") }
+        let myBalanceBeforeTx = try XCTUnwrap(myBalanceOrNilBeforeTx)
         XCTAssertEqual(myBalanceBeforeTx.token.tokenDefinitionReference, rri)
         XCTAssertEqual(myBalanceBeforeTx.amount, 30)
         
         let attachedMessage = "For taxi fare"
         let transfer = application.transferTokens(identifier: rri, to: bob, amount: 10, message: attachedMessage)
         
+        let transferRecording = transfer.completion.record()
+        
         // THEN: I see that the transfer actions completes successfully
-        XCTAssertTrue(
-            transfer.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try wait(for: transferRecording.finished, timeout: .enoughForPOW)
 
-        guard let myBalanceOrNilAfterTx = application.observeMyBalance(ofToken: rri).blockingTakeLast() else { return }
-        guard let myBalanceAfterTx = myBalanceOrNilAfterTx else { return XCTFail("Expected non nil balance") }
+        let myBalanceOrNilAfterTxRecording = application.observeMyBalance(ofToken: rri).record()
+        let myBalanceOrNilAfterTx = try wait(for: myBalanceOrNilAfterTxRecording.firstOrError, timeout: .enoughForPOW)
+        
+        let myBalanceAfterTx = try XCTUnwrap(myBalanceOrNilAfterTx)
         XCTAssertEqual(myBalanceAfterTx.amount, 20)
         
-        guard let bobsBalanceOrNilAfterTx = application.observeBalance(ofToken: rri, ownedBy: bob).blockingTakeFirst() else { return }
-        guard let bobsBalanceAfterTx = bobsBalanceOrNilAfterTx else { return XCTFail("Expected non nil balance") }
+        let bobsBalanceOrNilAfterTxRecording = application.observeBalance(ofToken: rri, ownedBy: bob).record()
+        let bobsBalanceOrNilAfterTx = try wait(for: bobsBalanceOrNilAfterTxRecording.firstOrError, timeout: .enoughForPOW)
+        let bobsBalanceAfterTx = try XCTUnwrap(bobsBalanceOrNilAfterTx)
         XCTAssertEqual(bobsBalanceAfterTx.amount, 10)
         
-        guard let myTransfer = application.observeMyTokenTransfers().blockingTakeFirst() else { return }
+        let myTransferRecording = application.observeMyTokenTransfers().record()
+        let myTransfer = try wait(for: myTransferRecording.firstOrError, timeout: .enoughForPOW)
         XCTAssertEqual(myTransfer.sender, alice)
         XCTAssertEqual(myTransfer.recipient, bob)
         XCTAssertEqual(myTransfer.amount, 10)
-        guard let decodedAttachedMessage = myTransfer.attachedMessage() else { return XCTFail("Expected attachment") }
+        let decodedAttachedMessage = try XCTUnwrap(myTransfer.attachedMessage())
         XCTAssertEqual(decodedAttachedMessage, attachedMessage)
         
-        guard let bobTransfer = application.observeTokenTransfers(toOrFrom: bob).blockingTakeFirst() else { return }
+        let bobTransferRecording = application.observeTokenTransfers(toOrFrom: bob).record()
+        let bobTransfer = try wait(for: bobTransferRecording.firstOrError, timeout: .enoughForPOW)
         XCTAssertEqual(bobTransfer.sender, alice)
         XCTAssertEqual(bobTransfer.recipient, bob)
         XCTAssertEqual(bobTransfer.amount, 10)
     }
-    */
     
     func testTokenNotOwned() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
