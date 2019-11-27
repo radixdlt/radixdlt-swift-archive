@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,32 +24,22 @@
 
 import Foundation
 
-// swiftlint:disable opening_brace
+// swiftlint:disable colon opening_brace
 
-public protocol CreateTokenActionToParticleGroupsMapper: UniquelyIdentifiedUserActionToParticleGroupsMapper
+public protocol ActionToParticleGroupsMapper:
+    Throwing
     where
-    Action == CreateTokenAction,
-    SpecificActionError == CreateTokenError
-{}
+    Error == SpecificActionError
+{
+    // swiftlint:enable colon opening_brace
 
-// swiftlint:enable opening_brace
-
-public extension CreateTokenActionToParticleGroupsMapper {
-    func mapError(_ createTokenActionError: CreateTokenError, action createTokenAction: CreateTokenAction) -> ActionsToAtomError {
-        ActionsToAtomError.createTokenActionError(createTokenActionError, action: createTokenAction)
-    }
-}
-
-public enum CreateTokenError: UniqueActionErrorInitializable {
-    case uniqueActionError(UniquelyIdentifiedUserActionError)
-    
-    /// See `CreateTokenAction.InitialSupply.DerivedFromAtom.mutableSupply` for more info
-    case createTokenActionContainsDerivedSupplyWhichIsNotSupported
-}
-
-public extension CreateTokenError {
-    static func errorFrom(uniqueActionError: UniquelyIdentifiedUserActionError) -> CreateTokenError {
-        return .uniqueActionError(uniqueActionError)
-    }
+    associatedtype Action: UserAction & Equatable
+    associatedtype SpecificActionError
+    func mapError(_ error: SpecificActionError, action: Action) -> ActionsToAtomError
 
 }
+
+public extension ActionToParticleGroupsMapper where SpecificActionError == Never {
+    func mapError(_ error: Never, action: Action) -> ActionsToAtomError {}
+}
+

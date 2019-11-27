@@ -24,7 +24,19 @@
 
 import Foundation
 
-public struct SendMessageAction: UserAction {
+public protocol UserActionWithAddresses {
+    var addresses: Set<Address> { get }
+}
+
+// swiftlint:disable colon opening_brace
+
+public struct SendMessageAction:
+    UserAction,
+    UserActionWithAddresses,
+    Equatable
+{
+    // swiftlint:enable colon opening_brace
+
     public let sender: Address
     public let recipient: Address
     public let payload: Data
@@ -47,6 +59,13 @@ public struct SendMessageAction: UserAction {
 public extension SendMessageAction {
     var user: Address { return sender }
     var nameOfAction: UserActionName { return .sendMessage }
+}
+
+// MARK: UserActionWithAddresses
+public extension SendMessageAction {
+    var addresses: Set<Address> {
+        return Set([sender, recipient])
+    }
 }
 
 // MARK: `Designated` Initializers

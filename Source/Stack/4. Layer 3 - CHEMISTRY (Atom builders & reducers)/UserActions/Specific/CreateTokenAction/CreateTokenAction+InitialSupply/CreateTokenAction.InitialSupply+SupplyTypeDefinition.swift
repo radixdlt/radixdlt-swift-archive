@@ -25,7 +25,7 @@
 import Foundation
 
 public extension CreateTokenAction.InitialSupply {
-    enum SupplyTypeDefinition {
+    enum SupplyTypeDefinition: Equatable {
         case fixed(to: PositiveSupply)
         case mutable(initial: Supply?)
     }

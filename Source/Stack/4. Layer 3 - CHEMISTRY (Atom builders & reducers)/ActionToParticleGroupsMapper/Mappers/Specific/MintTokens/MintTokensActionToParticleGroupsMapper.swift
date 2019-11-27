@@ -24,9 +24,22 @@
 
 import Foundation
 
-public protocol MintTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action == MintTokensAction {}
+// swiftlint:disable opening_brace
+
+public protocol MintTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper
+    where
+    Action == MintTokensAction,
+    SpecificActionError == MintError
+{}
+
+// swiftlint:enable opening_brace
 
 public extension MintTokensActionToParticleGroupsMapper {
+    
+    func mapError(_ mintError: MintError, action mintTokensAction: MintTokensAction) -> ActionsToAtomError {
+        ActionsToAtomError.mintError(mintError, action: mintTokensAction)
+    }
+    
     func requiredState(for mintTokensAction: Action) -> [AnyShardedParticleStateId] {
         let tokenDefinitionAddress = mintTokensAction.tokenDefinitionReference.address
         return [
@@ -46,32 +59,43 @@ public extension MintTokensActionToParticleGroupsMapper {
     }
 }
 
-public final class DefaultMintTokensActionToParticleGroupsMapper: MintTokensActionToParticleGroupsMapper, Throwing {
-    
+public final class DefaultMintTokensActionToParticleGroupsMapper: MintTokensActionToParticleGroupsMapper {
     public init() {}
 }
-
 public extension DefaultMintTokensActionToParticleGroupsMapper {
-    
     typealias Action = MintTokensAction
+    typealias SpecificActionError = MintError
+}
+
+public extension MintTokensActionToParticleGroupsMapper {
     
-    func particleGroups(for action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
-        try validateInput(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+    func particleGroups(
+        for action: Action,
+        upParticles: [AnyUpParticle],
+        addressOfActiveAccount: Address
+    ) throws -> Throws<ParticleGroups, MintError> {
+        do {
+            try validateInput(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+            
+            let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
+                transitioner: { try TransferrableTokensParticle(unallocatedTokensParticle: $0, amount: $1, address: action.creditNewlyMintedTokensTo) },
+                transitionedCombiner: { $0 },
+                migrator: UnallocatedTokensParticle.init(unallocatedTokensParticle:amount:),
+                migratedCombiner: { $0 },
+                amountMapper: { NonNegativeAmount(other: $0.amount) }
+            )
+            
+            let spunParticles = try transitioner.particlesFrom(mint: action, upParticles: upParticles)
+            
+            let particleGroup = try ParticleGroup(spunParticles: spunParticles)
+            
+            return [particleGroup]
+        } catch let mintError as MintError {
+            throw mintError
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
         
-        let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
-            transitioner: { try TransferrableTokensParticle(unallocatedTokensParticle: $0, amount: $1, address: action.creditNewlyMintedTokensTo) },
-            transitionedCombiner: { $0 },
-            migrator: UnallocatedTokensParticle.init(unallocatedTokensParticle:amount:),
-            migratedCombiner: { $0 },
-            amountMapper: { NonNegativeAmount(other: $0.amount) }
-        )
-        
-        let spunParticles = try transitioner.particlesFrom(mint: action, upParticles: upParticles)
-
-        let particleGroup = try ParticleGroup(spunParticles: spunParticles)
-
-        return [particleGroup]
-
     }
     
     func validateInput(action mintAction: MintTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
@@ -106,11 +130,6 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
         
         // All is well.
     }
-}
-
-// MARK: - Throwing
-public extension DefaultMintTokensActionToParticleGroupsMapper {
-    typealias Error = MintError
 }
 
 public enum MintError: Swift.Error, Equatable {

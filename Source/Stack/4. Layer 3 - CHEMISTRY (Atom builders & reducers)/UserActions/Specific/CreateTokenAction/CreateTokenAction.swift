@@ -24,7 +24,17 @@
 
 import Foundation
 
-public struct CreateTokenAction: UniquelyIdentifiedUserAction, Throwing, TokenConvertible {
+// swiftlint:disable colon opening_brace
+
+public struct CreateTokenAction:
+    UniquelyIdentifiedUserAction,
+    UserActionWithAddresses,
+    Throwing,
+    TokenConvertible,
+    Equatable
+{
+    
+    // swiftlint:enable colon opening_brace
 
     public let creator: Address
     public let name: Name
@@ -100,6 +110,13 @@ internal extension CreateTokenAction {
 public extension CreateTokenAction {
     var user: Address { return creator }
     var nameOfAction: UserActionName { return .createToken }
+}
+
+// MARK: UserActionWithAddresses
+public extension CreateTokenAction {
+    var addresses: Set<Address> {
+        return Set([creator])
+    }
 }
 
 // MARK: - Throwing

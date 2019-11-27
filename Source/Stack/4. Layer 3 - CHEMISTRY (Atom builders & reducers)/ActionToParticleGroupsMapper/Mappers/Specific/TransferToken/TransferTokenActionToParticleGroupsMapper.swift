@@ -24,27 +24,49 @@
 
 import Foundation
 
-public protocol TransferTokensActionToParticleGroupsMapper: ConsumeTokenActionToParticleGroupsMapper, Throwing where Action == TransferTokensAction, Error == TransferError {}
+// swiftlint:disable opening_brace
+
+public protocol TransferTokensActionToParticleGroupsMapper: ConsumeTokenActionToParticleGroupsMapper
+    where
+    Action == TransferTokensAction,
+    SpecificActionError == TransferError
+{}
+
+// swiftlint:enable opening_brace
 
 // MARK: - TransferTokensActionToParticleGroupsMapper
 public extension TransferTokensActionToParticleGroupsMapper {
     
-    func particleGroups(for transfer: TransferTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
+    func mapError(_ transferError: TransferError, action transferTokensAction: TransferTokensAction) -> ActionsToAtomError {
+        ActionsToAtomError.transferError(transferError, action: transferTokensAction)
+    }
+    
+    func particleGroups(
+        for transfer: TransferTokensAction,
+        upParticles: [AnyUpParticle],
+        addressOfActiveAccount: Address
+    ) throws -> Throws<ParticleGroups, TransferError> {
         
-        try validateInputMappingConsumeTokensActionError(action: transfer, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
-        
-        let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, TransferrableTokensParticle>(
-            transitioner: { try TransferrableTokensParticle(transferrableTokensParticle: $0, amount: $1, address: transfer.recipient) },
-            transitionAndMigrateCombiner: TransferrableTokensParticle.reducing(particles:),
-            migrator: TransferrableTokensParticle.init(transferrableTokensParticle:amount:),
-            amountMapper: { NonNegativeAmount(subset: $0.amount) }
-        )
-        
-        let particles = try transitioner.particlesFrom(transfer: transfer, upParticles: upParticles)
-
-        let particleGroup = try ParticleGroup(spunParticles: particles, metaData: transfer.metaDataFromAttachmentOrEmpty)
-
-        return [particleGroup]
+        do {
+            try validateInputMappingConsumeTokensActionError(action: transfer, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+            
+            let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, TransferrableTokensParticle>(
+                transitioner: { try TransferrableTokensParticle(transferrableTokensParticle: $0, amount: $1, address: transfer.recipient) },
+                transitionAndMigrateCombiner: TransferrableTokensParticle.reducing(particles:),
+                migrator: TransferrableTokensParticle.init(transferrableTokensParticle:amount:),
+                amountMapper: { NonNegativeAmount(subset: $0.amount) }
+            )
+            
+            let particles = try transitioner.particlesFrom(transfer: transfer, upParticles: upParticles)
+            
+            let particleGroup = try ParticleGroup(spunParticles: particles, metaData: transfer.metaDataFromAttachmentOrEmpty)
+            
+            return [particleGroup]
+        } catch let transferError as TransferError {
+            throw transferError
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
     }
 }
 
@@ -61,6 +83,7 @@ public enum TransferError: ConsumeTokensActionErrorInitializable {
     case insufficientFunds(currentBalance: NonNegativeAmount, butTriedToTransfer: PositiveAmount)
     case consumeError(ConsumeTokensActionError)
 }
+
 public extension TransferError {
     static func errorFrom(consumeTokensActionError: ConsumeTokensActionError) -> TransferError {
         return .consumeError(consumeTokensActionError)

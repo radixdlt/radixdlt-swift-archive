@@ -30,17 +30,3 @@ public enum TransactionError: Swift.Error, Equatable {
     case signAtomError(SigningError)
     case submitAtomError(SubmitAtomError)
 }
-
-public extension TransactionError {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        switch (lhs, rhs) {
-        case (.actionsToAtomError(let lhsActionsToAtomError), .actionsToAtomError(let rhsActionsToAtomError)):
-            return lhsActionsToAtomError.isEqual(to: rhsActionsToAtomError)
-        case (.signAtomError(let lhsSigningError), .signAtomError(let rhsSigningError)):
-            return lhsSigningError == rhsSigningError
-        case (.submitAtomError(let lhsSubmitAtomError), .submitAtomError(let rhsSubmitAtomError)):
-            return lhsSubmitAtomError == rhsSubmitAtomError
-        default: return false
-        }
-    }
-}

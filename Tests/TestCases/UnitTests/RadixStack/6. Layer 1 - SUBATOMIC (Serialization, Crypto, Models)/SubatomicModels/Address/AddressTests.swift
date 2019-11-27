@@ -65,31 +65,4 @@ class AddressChecksumTests: TestCase {
             "Should equal the value from Java library"
         )
     }
-
-    func testInSameUniverse() {
-        func createAddresses(magic: Magic, count: Int = 4) -> [Address] {
-            var addresses = [Address]()
-            for _ in 0..<count {
-                addresses.append(
-                    Address(magic: magic, publicKey: PublicKey(private: PrivateKey.generateNew())))
-            }
-            return addresses
-        }
-
-        let address1to9 = createAddresses(magic: 123456789)
-        let address9to1 = createAddresses(magic: 987654321)
-        XCTAssertNoThrow(try Addresses.allInSameUniverse(address1to9))
-        XCTAssertNoThrow(try Addresses.allInSameUniverse(address9to1))
-
-        for magicInt in -10..<10 {
-            let magic = Magic(integerLiteral: Int32(magicInt))
-            for count in 0..<4 {
-                XCTAssertNoThrow(try Addresses.allInSameUniverse(createAddresses(magic: magic, count: count)))
-            }
-        }
-
-        let different: [Address] = [address1to9.first!, address9to1.first!, address9to1.last!]
-
-        XCTAssertThrowsSpecificError(try Addresses.allInSameUniverse(different), Addresses.Error.differentUniverses(addresses: Set(different)))
-    }
 }

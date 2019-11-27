@@ -24,7 +24,15 @@
 
 import Foundation
 
-public struct MintTokensAction: UserAction {
+// swiftlint:disable colon opening_brace
+
+public struct MintTokensAction:
+    UserAction,
+    UserActionWithAddresses,
+    Equatable
+{
+    // swiftlint:enable colon opening_brace
+    
     public let tokenDefinitionReference: ResourceIdentifier
     public let amount: PositiveAmount
     public let minter: Address
@@ -43,7 +51,15 @@ public struct MintTokensAction: UserAction {
     }
 }
 
+// MARK: UserAction
 public extension MintTokensAction {
     var user: Address { return minter }
     var nameOfAction: UserActionName { return .mintTokens }
+}
+
+// MARK: UserActionWithAddresses
+public extension MintTokensAction {
+    var addresses: Set<Address> {
+        return Set([minter, creditNewlyMintedTokensTo])
+    }
 }

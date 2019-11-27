@@ -28,22 +28,41 @@ public protocol BaseStatefulActionToParticleGroupsMapper {
     func requiredStateForAnAction(_ userAction: UserAction) -> [AnyShardedParticleStateId]
     
     // TODO replace`upParticles: [AnyUpParticle]` with `spunParticles: [AnySpunParticle]`, since for many Mappers we would like to look for RRIParticles with spin `.down` to see of an RRI is already in use
-    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups
+    func particleGroupsForAnAction(
+        _ userAction: UserAction,
+        upParticles: [AnyUpParticle],
+        addressOfActiveAccount: Address
+    ) throws -> Throws<ParticleGroups, ActionsToAtomError>
 }
 
-public protocol StatefulActionToParticleGroupsMapper: BaseStatefulActionToParticleGroupsMapper {
-    associatedtype Action: UserAction
+// swiftlint:disable colon opening_brace
+
+public protocol StatefulActionToParticleGroupsMapper:
+    ActionToParticleGroupsMapper,
+    BaseStatefulActionToParticleGroupsMapper
+{
+    // swiftlint:enable colon opening_brace
+
     func requiredState(for action: Action) -> [AnyShardedParticleStateId]
     func validateInput(action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws
-    func particleGroups(for action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups
+    func particleGroups(for action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> Throws<ParticleGroups, SpecificActionError>
 }
 
 public extension StatefulActionToParticleGroupsMapper {
-    func particleGroupsForAnAction(_ userAction: UserAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
+    
+    func particleGroupsForAnAction(
+        _ userAction: UserAction,
+        upParticles: [AnyUpParticle],
+        addressOfActiveAccount: Address
+    ) throws -> Throws<ParticleGroups, ActionsToAtomError> {
 
         // TODO throw error instead of fatalError?
         let action = castOrKill(instance: userAction, toType: Action.self)
-        return try particleGroups(for: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+        do {
+            return try particleGroups(for: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+        } catch let specificActionError as SpecificActionError {
+            throw mapError(specificActionError, action: action)
+        } catch { unexpectedlyMissedToCatch(error: error) }
     }
     
     func requiredStateForAnAction(_ userAction: UserAction) -> [AnyShardedParticleStateId] {

@@ -70,7 +70,7 @@ public extension SendMessageAction {
             from: sender,
             to: recipient,
             payload: payload,
-            encryption: .encryption(onlyDecryptableBy: onlyDecryptableBy)
+            encryption: .encryption(onlyDecryptableBy: onlyDecryptableBy.map { $0.address })
         )
     }
     

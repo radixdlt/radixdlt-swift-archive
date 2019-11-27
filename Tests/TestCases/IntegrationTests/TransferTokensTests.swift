@@ -26,8 +26,6 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-// MARK: ☢️ No Target Membership ☢️
-
 class TransferTokensTests: LocalhostNodeTest {
     
     private var aliceIdentity: AbstractIdentity!
@@ -50,7 +48,8 @@ class TransferTokensTests: LocalhostNodeTest {
         bob = application.addressOf(account: bobAccount)
         carol = application.addressOf(account: carolAccount)
     }
-    
+
+    /*
     func testTransferTokenWithGranularityOf1() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         // WHEN: Alice transfer tokens she owns, to Bob
@@ -97,21 +96,38 @@ class TransferTokensTests: LocalhostNodeTest {
         XCTAssertEqual(bobTransfer.recipient, bob)
         XCTAssertEqual(bobTransfer.amount, 10)
     }
+    */
     
-    func testTokenNotOwned() {
+    func testTokenNotOwned() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
 
         // WHEN: Alice tries to transfer tokens of some type she does not own, to Bob
         let amount: PositiveAmount = 10
         let unknownRRI = ResourceIdentifier(address: alice.address, name: "Unknown")
-        let transfer = application.transfer(tokens: TransferTokensAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: unknownRRI))
+        let transferAction = TransferTokensAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: unknownRRI)
+        let transfer = application.transfer(tokens: transferAction)
+        
+        let recorder = transfer.completion.record()
         
         // THEN:  I see that action fails with error `foundNoTokenDefinition`
-        transfer.blockingAssertThrows(
-            error: TransferError.consumeError(.unknownToken(identifier: unknownRRI))
+        let recordedThrownError: TransactionError = try wait(
+            for: recorder.expectError(),
+            timeout: .enoughForPOW,
+            description: "Using unknown RRI should throw error"
+        )
+      
+        XCTAssertEqual(
+            recordedThrownError,
+            .actionsToAtomError(
+                .transferError(
+                    .consumeError(.unknownToken(identifier: unknownRRI)),
+                    action: transferAction
+                )
+            )
         )
     }
     
+/*
     func testInsufficientFunds() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
       
@@ -196,5 +212,5 @@ class TransferTokensTests: LocalhostNodeTest {
             error: TransferError.consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol))
         )
     }
-    
+    */
 }

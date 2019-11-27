@@ -24,7 +24,15 @@
 
 import Foundation
 
-public protocol BurnTokensActionToParticleGroupsMapper: ConsumeTokenActionToParticleGroupsMapper, Throwing where Action == BurnTokensAction, Error == BurnError {}
+// swiftlint:disable opening_brace
+
+public protocol BurnTokensActionToParticleGroupsMapper: ConsumeTokenActionToParticleGroupsMapper
+    where
+    Action == BurnTokensAction,
+    SpecificActionError == BurnError
+{}
+
+// swiftlint:enable opening_brace
 
 public enum BurnError: ConsumeTokensActionErrorInitializable {
     
@@ -54,23 +62,37 @@ public extension BurnError {
     }
 }
 
-public extension DefaultBurnTokensActionToParticleGroupsMapper {
+public extension BurnTokensActionToParticleGroupsMapper {
+    
+    func mapError(_ error: BurnError, action burnTokensAction: BurnTokensAction) -> ActionsToAtomError {
+        ActionsToAtomError.burnTokensActionError(error, action: burnTokensAction)
+    }
    
-    func particleGroups(for action: BurnTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
-        try validateInputMappingConsumeTokensActionError(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
-        let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, UnallocatedTokensParticle>(
-            transitioner: UnallocatedTokensParticle.init(transferrableTokensParticle:amount:),
-            transitionedCombiner: { $0 },
-            migrator: TransferrableTokensParticle.init(transferrableTokensParticle:amount:),
-            migratedCombiner: TransferrableTokensParticle.reducing(particles:),
-            amountMapper: { NonNegativeAmount(subset: $0.amount) }
-        )
-        
-        let spunParticles = try transitioner.particlesFrom(burn: action, upParticles: upParticles)
-        
-        let particleGroup = try ParticleGroup(spunParticles: spunParticles)
-
-        return [particleGroup]
+    func particleGroups(
+        for action: BurnTokensAction,
+        upParticles: [AnyUpParticle],
+        addressOfActiveAccount: Address
+    ) throws -> Throws<ParticleGroups, BurnError> {
+        do {
+            try validateInputMappingConsumeTokensActionError(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+            let transitioner = FungibleParticleTransitioner<TransferrableTokensParticle, UnallocatedTokensParticle>(
+                transitioner: UnallocatedTokensParticle.init(transferrableTokensParticle:amount:),
+                transitionedCombiner: { $0 },
+                migrator: TransferrableTokensParticle.init(transferrableTokensParticle:amount:),
+                migratedCombiner: TransferrableTokensParticle.reducing(particles:),
+                amountMapper: { NonNegativeAmount(subset: $0.amount) }
+            )
+            
+            let spunParticles = try transitioner.particlesFrom(burn: action, upParticles: upParticles)
+            
+            let particleGroup = try ParticleGroup(spunParticles: spunParticles)
+            
+            return [particleGroup]
+        } catch let burnError as BurnError {
+            throw burnError
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
     }
     
     func validateConsumeTokenAction(

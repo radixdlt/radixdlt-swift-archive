@@ -78,6 +78,8 @@ public extension DefaultTransactionToAtomMapper {
         }
 
         do {
+            try transaction.addressesOfActionsAreInTheSameUniverseAs(activeAddress: addressOfActiveAccount)
+            
             let particleGroups = try temporaryStore.particleGroupsFromActions(transaction.actions)
             
             let atom = Atom(particleGroups: particleGroups)
@@ -124,14 +126,7 @@ extension DefaultTransactionToAtomMapper.TemporaryLocalAtomStore {
         var particleGroupsList = [ParticleGroup]()
         
         for action in userAction {
-            let particleGroups: ParticleGroups
-            
-            do {
-                particleGroups = try particleGroupFromAction(action)
-            } catch {
-                throw ActionsToAtomError(error: error, userAction: action)
-            }
-            
+            let particleGroups = try particleGroupFromAction(action)
             accumulatedSpunParticles.append(contentsOf: particleGroups.spunParticles)
             particleGroupsList.append(contentsOf: particleGroups)
         }

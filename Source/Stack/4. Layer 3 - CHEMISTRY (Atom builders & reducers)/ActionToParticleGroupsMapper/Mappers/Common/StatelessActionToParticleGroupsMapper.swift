@@ -28,8 +28,14 @@ public protocol BaseStatelessActionToParticleGroupsMapper {
      func particleGroupsForAnAction(_ userAction: UserAction, addressOfActiveAccount: Address) throws -> ParticleGroups
 }
 
-public protocol StatelessActionToParticleGroupsMapper: BaseStatelessActionToParticleGroupsMapper {
-    associatedtype Action: UserAction
+// swiftlint:disable colon opening_brace
+
+public protocol StatelessActionToParticleGroupsMapper:
+    ActionToParticleGroupsMapper,
+    BaseStatelessActionToParticleGroupsMapper
+{
+    // swiftlint:enable colon opening_brace
+
     func particleGroups(for action: Action, addressOfActiveAccount: Address) throws -> ParticleGroups
 }
 

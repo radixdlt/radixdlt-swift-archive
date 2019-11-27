@@ -215,6 +215,7 @@
 		E63E4FB623671B5000B90CF7 /* RadixPeerSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63E4FB523671B5000B90CF7 /* RadixPeerSelector.swift */; };
 		E63E4FB823671B9A00B90CF7 /* NetworkEpicsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63E4FB723671B9A00B90CF7 /* NetworkEpicsError.swift */; };
 		E63E4FBA23671BAC00B90CF7 /* EraseToAnyPublisherOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63E4FB923671BAC00B90CF7 /* EraseToAnyPublisherOperator.swift */; };
+		E63F0F0F238ED21D0066A8CB /* ActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63F0F0E238ED21D0066A8CB /* ActionToParticleGroupsMapper.swift */; };
 		E640F638225DFC3D00855256 /* PublicKeyOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F637225DFC3D00855256 /* PublicKeyOwner.swift */; };
 		E640F63C225E21E600855256 /* Int+BitsPerByte.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63B225E21E600855256 /* Int+BitsPerByte.swift */; };
 		E640F63F225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */; };
@@ -373,6 +374,7 @@
 		E6ABA77322C3596D00536DC7 /* FetchAtomsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ABA77222C3596D00536DC7 /* FetchAtomsAction.swift */; };
 		E6B349CD233E05110007D5AD /* Denomination.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B349CC233E05110007D5AD /* Denomination.swift */; };
 		E6B85A61238E8AF000E7640B /* ActionsToAtomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B85A60238E8AF000E7640B /* ActionsToAtomError.swift */; };
+		E6B85A63238EC35800E7640B /* TransferTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2B9238597FE00950312 /* TransferTokensTests.swift */; };
 		E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BACE7F2350E1FF006D97C6 /* ErrorAutoEquatable.swift */; };
 		E6BF7CE22382DC2E002D1535 /* HardCodedAtomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF7CE02382DC2C002D1535 /* HardCodedAtomStore.swift */; };
 		E6C8240B23869EF40037B336 /* NetworkControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C8240A23869EF40037B336 /* NetworkControllerTests.swift */; };
@@ -948,6 +950,7 @@
 		E63E4FB523671B5000B90CF7 /* RadixPeerSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixPeerSelector.swift; sourceTree = "<group>"; };
 		E63E4FB723671B9A00B90CF7 /* NetworkEpicsError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkEpicsError.swift; sourceTree = "<group>"; };
 		E63E4FB923671BAC00B90CF7 /* EraseToAnyPublisherOperator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraseToAnyPublisherOperator.swift; sourceTree = "<group>"; };
+		E63F0F0E238ED21D0066A8CB /* ActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E640F637225DFC3D00855256 /* PublicKeyOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyOwner.swift; sourceTree = "<group>"; };
 		E640F63B225E21E600855256 /* Int+BitsPerByte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+BitsPerByte.swift"; sourceTree = "<group>"; };
 		E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProofOfWork+NumberOfLeadingZeros.swift"; sourceTree = "<group>"; };
@@ -1766,6 +1769,7 @@
 				E606F13923016A94004D4D3D /* UniquelyIdentifiedActionToParticleGroupsMapper.swift */,
 				E606F14F230188F2004D4D3D /* ConsumeTokenActionToParticleGroupsMapper.swift */,
 				E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */,
+				E63F0F0E238ED21D0066A8CB /* ActionToParticleGroupsMapper.swift */,
 				E626E20122B41B750046D2AC /* AnyStatelessActionToParticleGroupsMapper.swift */,
 			);
 			path = Common;
@@ -4846,6 +4850,7 @@
 				E6ED1A3821F87C1800654105 /* RadixSystem.swift in Sources */,
 				E6A508A8224E713F00128123 /* AnySpunParticle.swift in Sources */,
 				E6E279802271CD1C0067D46E /* Name.swift in Sources */,
+				E63F0F0F238ED21D0066A8CB /* ActionToParticleGroupsMapper.swift in Sources */,
 				E6A6430B2244D38800CD4BFC /* BitcoinKit+ECMethods.swift in Sources */,
 				E6E279592271CD1C0067D46E /* CBORDataConvertible.swift in Sources */,
 				E64BFF8D2268985800501726 /* ResourceIdentifierParticle.swift in Sources */,
@@ -5188,6 +5193,7 @@
 				E61E6BEC238C356E008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E61E6BD2238C0C2A008C14B0 /* RecordingError.swift in Sources */,
 				E6D7A27A238596F200950312 /* Test+Convenience+RadixApplicationClient.swift in Sources */,
+				E6B85A63238EC35800E7640B /* TransferTokensTests.swift in Sources */,
 				E61E6BED238C356E008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */,
 				E6D7A281238596F200950312 /* Identity+Account.swift in Sources */,
 				E6D7A28D238596F200950312 /* LocalhostNodeTest.swift in Sources */,

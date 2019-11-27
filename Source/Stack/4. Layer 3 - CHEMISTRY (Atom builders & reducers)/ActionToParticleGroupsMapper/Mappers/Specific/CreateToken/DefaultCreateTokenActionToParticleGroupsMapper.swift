@@ -28,27 +28,43 @@ public final class DefaultCreateTokenActionToParticleGroupsMapper: CreateTokenAc
 
 public extension CreateTokenActionToParticleGroupsMapper {
     
-    func particleGroups(for action: CreateTokenAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
+    func particleGroups(
+        for action: CreateTokenAction,
+        upParticles: [AnyUpParticle],
+        addressOfActiveAccount: Address
+    ) throws -> Throws<ParticleGroups, CreateTokenError> {
         
-        try validateInputMappingUniqueActionError(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
-        
-        switch action.tokenSupplyType {
-        case .mutable: return try mutableSupplyTokenParticleGroups(for: action)
-        case .fixed: return try fixedSupplyTokenParticleGroups(for: action)
+        do {
+            try validateInputMappingUniqueActionError(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+            
+            switch action.tokenSupplyType {
+            case .mutable: return try mutableSupplyTokenParticleGroups(for: action)
+            case .fixed: return try fixedSupplyTokenParticleGroups(for: action)
+            }
+        } catch let createTokenError as CreateTokenError {
+            throw createTokenError
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
         }
     }
 }
 
 private extension CreateTokenActionToParticleGroupsMapper {
     
-    func initialSupplyDefinitionFrom(action: CreateTokenAction) throws -> CreateTokenAction.InitialSupply.SupplyTypeDefinition {
+    func initialSupplyDefinitionFrom(
+        action: CreateTokenAction
+    ) throws -> CreateTokenAction.InitialSupply.SupplyTypeDefinition {
+        
         guard let supplyDefinition = action.supplyDefinition else {
             throw Error.createTokenActionContainsDerivedSupplyWhichIsNotSupported
         }
         return supplyDefinition
     }
     
-    func mutableSupplyTokenParticleGroups(for action: CreateTokenAction) throws -> ParticleGroups {
+    func mutableSupplyTokenParticleGroups(
+        for action: CreateTokenAction
+    ) throws -> Throws<ParticleGroups, CreateTokenError> {
+       
         let initialSupplyDefinition = try initialSupplyDefinitionFrom(action: action)
         
         let mutableSupplyToken = try MutableSupplyTokenDefinitionParticle(createTokenAction: action)

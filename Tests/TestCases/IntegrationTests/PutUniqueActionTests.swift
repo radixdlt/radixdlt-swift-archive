@@ -133,7 +133,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         )
         
         let expectedError =  TransactionError.actionsToAtomError(
-            ActionsToAtomError(error: putUniqueIdError, userAction: putUniqueIdAction)
+            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
         )
         
         XCTAssertEqual(recordedThrownError, expectedError)
@@ -164,7 +164,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
         let expectedError =  TransactionError.actionsToAtomError(
-            ActionsToAtomError(error: putUniqueIdError, userAction: putUniqueIdAction)
+            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
         )
         
         XCTAssertEqual(recordedThrownError, expectedError)
@@ -189,14 +189,13 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         let recordedThrownError: TransactionError = try wait(
             for: recorder.expectError(),
             timeout: .enoughForPOW,
-            description: "Reusing same symbol should thro error"
+            description: "Reusing same symbol should throw error"
         )
         
+        let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
+        
         let expectedError =  TransactionError.actionsToAtomError(
-            ActionsToAtomError(
-                error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))),
-                userAction: putUniqueIdAction
-            )
+            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
         )
         
         XCTAssertEqual(recordedThrownError, expectedError)
@@ -223,11 +222,10 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             description: "Reusing same symbol should throw error"
         )
         
+        let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
+        
         let expectedError =  TransactionError.actionsToAtomError(
-            ActionsToAtomError(
-                error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))),
-                userAction: putUniqueIdAction
-            )
+            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
         )
         
         XCTAssertEqual(recordedThrownError, expectedError)
@@ -255,14 +253,16 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             description: "Using someone else's address should throw error"
         )
         
+        let putUniqueIdError = PutUniqueIdError.uniqueError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob))
+        
         let expectedError =  TransactionError.actionsToAtomError(
-            ActionsToAtomError(
-                error: PutUniqueIdError.uniqueError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)),
-                userAction: putUniqueIdAction
-            )
+            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
         )
         
         XCTAssertEqual(recordedThrownError, expectedError)
     }
 }
 
+//extension TestCase {
+//    func XCTAssertActionsToAtomError()
+//}

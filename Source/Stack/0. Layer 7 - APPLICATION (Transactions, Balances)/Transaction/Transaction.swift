@@ -51,6 +51,24 @@ public extension Transaction {
     }
 }
 
+public extension Transaction {
+    func addressesOfActionsAreInTheSameUniverseAs(activeAddress: Address) throws -> Throws<Void, ActionsToAtomError> {
+        do {
+            for action in actions {
+                if let actionWithAddresses = action as? UserActionWithAddresses {
+                    var addressesToCheck = actionWithAddresses.addresses
+                    addressesToCheck.insert(activeAddress)
+                    try Addresses.allInSameUniverse(addressesToCheck.asArray)
+                }
+            }
+        } catch let actionsToAtomError as ActionsToAtomError {
+            throw actionsToAtomError
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
+    }
+}
+
 // MARK: ArrayConvertible
 public extension Transaction {
     typealias Element = UserAction
