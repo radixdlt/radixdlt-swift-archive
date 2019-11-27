@@ -1131,7 +1131,6 @@
 		E6D4B36822400F41004FC83A /* SetAlgebra+Intersecting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SetAlgebra+Intersecting.swift"; sourceTree = "<group>"; };
 		E6D7A2B4238596F200950312 /* RadixSDK iOS Integration Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RadixSDK iOS Integration Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6D7A2B7238597FE00950312 /* PutUniqueActionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutUniqueActionTests.swift; sourceTree = "<group>"; };
-		E6D7A2B8238597FE00950312 /* GetTokenBalanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetTokenBalanceTests.swift; sourceTree = "<group>"; };
 		E6D7A2B9238597FE00950312 /* TransferTokensTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferTokensTests.swift; sourceTree = "<group>"; };
 		E6D7A2BA238597FE00950312 /* CreateTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTokenTests.swift; sourceTree = "<group>"; };
 		E6D7A2BB238597FE00950312 /* TransactionLocalhostNodeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionLocalhostNodeTests.swift; sourceTree = "<group>"; };
@@ -3095,7 +3094,6 @@
 			isa = PBXGroup;
 			children = (
 				E6D7A2B7238597FE00950312 /* PutUniqueActionTests.swift */,
-				E6D7A2B8238597FE00950312 /* GetTokenBalanceTests.swift */,
 				E6D7A2B9238597FE00950312 /* TransferTokensTests.swift */,
 				E6D7A2BA238597FE00950312 /* CreateTokenTests.swift */,
 				E6D7A2BB238597FE00950312 /* TransactionLocalhostNodeTests.swift */,
