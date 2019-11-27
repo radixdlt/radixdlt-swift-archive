@@ -59,7 +59,6 @@ public extension DefaultRPCClient {
 
 // MARK: - Make RPC Requests
 
-// MARK: - Single's
 public extension DefaultRPCClient {
     
     func getNetworkInfo() -> AnyPublisher<RadixSystem, DataFromNodeError> {
@@ -85,10 +84,7 @@ public extension DefaultRPCClient {
             .mapError { DataFromNodeError.rpcError($0) }
             .eraseToAnyPublisher()
     }
-}
 
-// MARK: - Completable
-public extension DefaultRPCClient {
     func pushAtom(_ atom: SignedAtom) -> AnyPublisher<Never, SubmitAtomError> {
         makeFireForget(request: .submitAtom(atom: atom))
             .mapError { SubmitAtomError(rpcError: $0) }
@@ -99,22 +95,22 @@ public extension DefaultRPCClient {
 // MARK: - Send Request for STARTING Subscribing To Some Notification
 public extension DefaultRPCClient {
     
-    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable {
+    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
         return sendStartSubscription(request: .subscribe(to: address, subscriberId: subscriberId))
     }
     
-    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> Completable {
+    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
         return sendStartSubscription(request: .getAtomStatusNotifications(atomIdentifier: atomIdentifier, subscriberId: subscriberId))
     }
 }
 
 // MARK: - Send Request for CLOSING Subscribing To Some Notification
 public extension DefaultRPCClient {
-    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> Completable {
+    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
         return sendCancelSubscription(request: .closeAtomStatusNotifications(subscriberId: subscriberId))
     }
     
-    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable {
+    func cancelAtomsSubscription(subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
         return sendCancelSubscription(request: .unsubscribe(subscriberId: subscriberId))
     }
 }
@@ -164,11 +160,11 @@ internal extension DefaultRPCClient {
         channel.observeNotification(notification, subscriberId: subscriberId)
     }
     
-    func sendStartSubscription(request: RPCRootRequest) -> Completable {
+    func sendStartSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
         return sendStartOrCancelSubscription(request: request, mode: .start)
     }
     
-    func sendCancelSubscription(request: RPCRootRequest) -> Completable {
+    func sendCancelSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
         return sendStartOrCancelSubscription(request: request, mode: .cancel)
     }
 }
@@ -176,7 +172,7 @@ internal extension DefaultRPCClient {
 // MARK: - Private
 private extension DefaultRPCClient {
     
-    func sendStartOrCancelSubscription(request: RPCRootRequest, mode: SubscriptionMode) -> Completable {
+    func sendStartOrCancelSubscription(request: RPCRootRequest, mode: SubscriptionMode) -> AnyPublisher<Never, Never> {
         
         self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
             .filter { rpcSubscriptionStartOrCancel in

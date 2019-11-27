@@ -108,7 +108,7 @@ final class AtomsSubscriber: AtomsByAddressSubscribing {
         self.observeAtomsSubject = observeAtomsSubject
     }
     
-    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable {
+    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
         sendAtomsSubscribe_method_call_count += 1
         return  Empty<Never, Never>(completeImmediately: true).eraseToAnyPublisher()
     }
@@ -122,7 +122,7 @@ final class AtomsSubscriber: AtomsByAddressSubscribing {
 
 final class AtomsCanceller: AtomSubscriptionCancelling {
     var cancelAtomsSubscription_method_call_count = 0
-    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable {
+    func cancelAtomsSubscription(subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
         cancelAtomsSubscription_method_call_count += 1
         return  Empty<Never, Never>(completeImmediately: true).eraseToAnyPublisher()
     }

@@ -24,7 +24,7 @@
 
 import Foundation
 
-/// Used in RPC for Completable requests, where we just care if the request did not result in error, but we don't care about anything else.
+/// Used in RPC for AnyPublisher<Never, Never> requests, where we just care if the request did not result in error, but we don't care about anything else.
 internal struct ResponseOnFireAndForgetRequest: Decodable {
     
     public init (from decoder: Decoder) throws {

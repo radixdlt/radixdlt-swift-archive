@@ -28,8 +28,6 @@ import Combine
 // MARK: Typealias
 public typealias Single<Output, Failure> = AnyPublisher<Output, Failure> where Failure: Swift.Error
 
-public typealias Completable = AnyPublisher<Never, Never>
-
 // MARK: Any
 public extension Publisher {
     

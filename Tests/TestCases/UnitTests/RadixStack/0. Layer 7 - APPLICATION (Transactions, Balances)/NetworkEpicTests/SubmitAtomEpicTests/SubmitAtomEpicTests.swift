@@ -296,7 +296,7 @@ final class AtomStatusObservationRequester: AtomStatusObservationRequesting {
     
     var sendGetAtomStatusNotifications_method_call_count = 0
     
-    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> Completable {
+    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
         sendGetAtomStatusNotifications_method_call_count += 1
         return Empty<Never, Never>(completeImmediately: true).eraseToAnyPublisher()
     }
@@ -316,7 +316,7 @@ final class AtomStatusObservationCanceller: AtomStatusObservationCancelling {
     
     var closeAtomStatusNotifications_method_call_count = 0
     
-    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> Completable {
+    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
         closeAtomStatusNotifications_method_call_count += 1
         return Empty<Never, Never>(completeImmediately: true).eraseToAnyPublisher()
     }
