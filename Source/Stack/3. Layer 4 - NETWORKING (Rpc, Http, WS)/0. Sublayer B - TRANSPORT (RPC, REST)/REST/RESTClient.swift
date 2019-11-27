@@ -38,8 +38,17 @@ public protocol RESTClient:
 
 public extension NodeNetworkDetailsRequesting where Self: RESTClient {
     
-    func getInfo() -> Single<NodeInfo, Never> {
-        networkDetails().map { $0.udp.first! }
-            .eraseToAnyPublisher()
+    func getInfo() -> AnyPublisher<NodeInfo, DataFromNodeError> {
+        networkDetails().map { (nodeNetworkDetails: NodeNetworkDetails) in
+        
+            let listOfPeersOverUDP = nodeNetworkDetails.udp
+            // TODO should we always pick 'first' peer? Or should we pick random?
+            guard let udpPeer = listOfPeersOverUDP.first else {
+                // TODO replace 'fatalError' with thrown and propagated error
+                fatalError("Peers UDP list is empty, which is bad. What to do?")
+            }
+            return udpPeer
+        }
+        .eraseToAnyPublisher()
     }
 }

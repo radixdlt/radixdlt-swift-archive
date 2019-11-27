@@ -26,25 +26,25 @@ import Foundation
 import Combine
 
 public protocol HTTPClient {
-    func perform(absoluteUrlRequest: URLRequest) -> AnyPublisher<Data, HTTPClientError.NetworkingError>
-    func performRequest(pathRelativeToBase path: String) -> AnyPublisher<Data, HTTPClientError.NetworkingError>
-    func fetch<D>(urlRequest: URLRequest, decodeAs: D.Type) -> AnyPublisher<D, HTTPClientError> where D: Decodable
+    func perform(absoluteUrlRequest: URLRequest) -> AnyPublisher<Data, HTTPError.NetworkingError>
+    func performRequest(pathRelativeToBase path: String) -> AnyPublisher<Data, HTTPError.NetworkingError>
+    func fetch<D>(urlRequest: URLRequest, decodeAs: D.Type) -> AnyPublisher<D, HTTPError> where D: Decodable
     
 }
 
 public extension HTTPClient {
     
-    func request<D>(router: Router, decodeAs _: D.Type) -> AnyPublisher<D, HTTPClientError> where D: Decodable {
+    func request<D>(router: Router, decodeAs _: D.Type) -> AnyPublisher<D, HTTPError> where D: Decodable {
         // swiftlint:disable:next force_try
         let urlRequest = try! router.asURLRequest()
         return fetch(urlRequest: urlRequest, decodeAs: D.self)
     }
   
-    func request<D>(router: Router) -> AnyPublisher<D, HTTPClientError> where D: Decodable {
+    func request<D>(router: Router) -> AnyPublisher<D, HTTPError> where D: Decodable {
         return request(router: router, decodeAs: D.self)
     }
     
-    func request<D>(_ nodeRouter: NodeRouter) -> AnyPublisher<D, HTTPClientError> where D: Decodable {
+    func request<D>(_ nodeRouter: NodeRouter) -> AnyPublisher<D, HTTPError> where D: Decodable {
         return request(router: nodeRouter, decodeAs: D.self)
     }
 }

@@ -27,24 +27,27 @@ import Combine
 
 public extension NodeNetworkDetailsRequesting where Self: HTTPClientOwner {
     
-    func networkDetails() -> Single<NodeNetworkDetails, Never> {
-        return httpClient.request(.network)
-            .crashOnFailure()
+    func networkDetails() -> AnyPublisher<NodeNetworkDetails, DataFromNodeError> {
+        httpClient.request(.network)
+            .mapError { DataFromNodeError.httpError($0) }
+            .eraseToAnyPublisher()
     }
 }
 
 public extension LivePeersRequesting where Self: HTTPClientOwner {
     
-    func getLivePeers() -> Single<[NodeInfo], Never> {
-        return httpClient.request(.getLivePeers)
-            .crashOnFailure()
+    func getLivePeers() -> AnyPublisher<[NodeInfo], DataFromNodeError> {
+        httpClient.request(.getLivePeers)
+            .mapError { DataFromNodeError.httpError($0) }
+            .eraseToAnyPublisher()
     }
 }
 
 public extension UniverseConfigRequesting where Self: HTTPClientOwner {
     
-    func getUniverseConfig() -> Single<UniverseConfig, Never> {
-        return httpClient.request(.getUniverseConfig)
-            .crashOnFailure()
+    func getUniverseConfig() -> AnyPublisher<UniverseConfig, DataFromNodeError> {
+        httpClient.request(.getUniverseConfig)
+            .mapError { DataFromNodeError.httpError($0) }
+            .eraseToAnyPublisher()
     }
 }

@@ -43,7 +43,7 @@ public extension HTTPPageLoader {
         return Combine.Deferred {
             return Future<String, Error> { [weak self] promise in
                 guard let self = self else {
-                    promise(.failure(HTTPClientError.networkingError(.clientWasDeinitialized)))
+                    promise(.failure(HTTPError.networkingError(.clientWasDeinitialized)))
                     return
                 }
                 self.urlSession.responseStringPublisher(for: urlRequest)
@@ -63,18 +63,18 @@ public extension HTTPPageLoader {
 }
 
 public extension URLSession {
-    func responseStringPublisher(for urlRequest: URLRequest, encoding: String.Encoding? = nil) -> AnyPublisher<String, HTTPClientError> {
+    func responseStringPublisher(for urlRequest: URLRequest, encoding: String.Encoding? = nil) -> AnyPublisher<String, HTTPError> {
         dataTaskPublisher(for: urlRequest)
-            .mapError { HTTPClientError.networkingError(.urlError($0)) }
+            .mapError { HTTPError.networkingError(.urlError($0)) }
             .tryMap { data, response throws -> String in
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    throw HTTPClientError.networkingError(.invalidServerResponse(response))
+                    throw HTTPError.networkingError(.invalidServerResponse(response))
                 }
                 
                 guard !data.isEmpty else {
                     guard emptyResponseAllowed(forRequest: urlRequest, response: httpResponse) else {
-                        throw HTTPClientError.serializationError(.inputDataNilOrZeroLength)
+                        throw HTTPError.serializationError(.inputDataNilOrZeroLength)
                     }
                     return ""
                 }
@@ -90,12 +90,12 @@ public extension URLSession {
                 let actualEncoding = convertedEncoding ?? .isoLatin1
                 
                 guard let string = String(data: data, encoding: actualEncoding) else {
-                    throw HTTPClientError.serializationError(.stringSerializationFailed(encoding: actualEncoding))
+                    throw HTTPError.serializationError(.stringSerializationFailed(encoding: actualEncoding))
                 }
                 
                 return string
         }
-        .mapError { castOrKill(instance: $0, toType: HTTPClientError.self) }
+        .mapError { castOrKill(instance: $0, toType: HTTPError.self) }
         .eraseToAnyPublisher()
     }
 }

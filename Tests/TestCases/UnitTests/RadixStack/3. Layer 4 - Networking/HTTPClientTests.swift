@@ -34,7 +34,7 @@ extension String: URLConvertible {
 final class HTTPClientTests: TestCase {
     func test_data_through() {
 
-        let subject = PassthroughSubject<Data, HTTPClientError.NetworkingError>()
+        let subject = PassthroughSubject<Data, HTTPError.NetworkingError>()
         
         let httpClient: HTTPClient = DefaultHTTPClient(
             baseURL: "http://127.0.0.1",
@@ -100,7 +100,7 @@ final class HTTPClientTests: TestCase {
             dataFetcher: .urlResponse { _ in urlResponseSubject.eraseToAnyPublisher() }
         )
         var outputtedValues = [Data]()
-        var networkingError: HTTPClientError.NetworkingError?
+        var networkingError: HTTPError.NetworkingError?
         let expectation = XCTestExpectation(description: self.debugDescription)
         
         let cancellable = httpClient.performRequest(pathRelativeToBase: .irrelevant)
@@ -126,7 +126,7 @@ final class HTTPClientTests: TestCase {
         XCTAssertTrue(outputtedValues.isEmpty)
         
         let error = try XCTUnwrap(networkingError)
-        XCTAssertEqual(error, HTTPClientError.NetworkingError.invalidServerStatusCode(300))
+        XCTAssertEqual(error, HTTPError.NetworkingError.invalidServerStatusCode(300))
         
         XCTAssertNotNil(cancellable)
     }
@@ -140,7 +140,7 @@ final class HTTPClientTests: TestCase {
             dataFetcher: .urlResponse { _ in urlResponseSubject.eraseToAnyPublisher() }
         )
         var outputtedValues = [Data]()
-        var networkingError: HTTPClientError.NetworkingError?
+        var networkingError: HTTPError.NetworkingError?
         let expectation = XCTestExpectation(description: self.debugDescription)
         
         let cancellable = httpClient.performRequest(pathRelativeToBase: .irrelevant)
@@ -164,7 +164,7 @@ final class HTTPClientTests: TestCase {
         XCTAssertTrue(outputtedValues.isEmpty)
         
         let error = try XCTUnwrap(networkingError)
-        XCTAssertEqual(error, HTTPClientError.NetworkingError.urlError(noInternetConnectionError))
+        XCTAssertEqual(error, HTTPError.NetworkingError.urlError(noInternetConnectionError))
         
         XCTAssertNotNil(cancellable)
     }
@@ -178,7 +178,7 @@ final class HTTPClientTests: TestCase {
             dataFetcher: .urlResponse { _ in urlResponseSubject.eraseToAnyPublisher() }
         )
         var outputtedValues = [Data]()
-        var networkingError: HTTPClientError.NetworkingError?
+        var networkingError: HTTPError.NetworkingError?
         let expectation = XCTestExpectation(description: self.debugDescription)
         
         let cancellable = httpClient.performRequest(pathRelativeToBase: .irrelevant)
@@ -204,14 +204,14 @@ final class HTTPClientTests: TestCase {
         XCTAssertTrue(outputtedValues.isEmpty)
         
         let error = try XCTUnwrap(networkingError)
-        XCTAssertEqual(error, HTTPClientError.NetworkingError.invalidServerResponse(urlResponse))
+        XCTAssertEqual(error, HTTPError.NetworkingError.invalidServerResponse(urlResponse))
         
         XCTAssertNotNil(cancellable)
     }
     
     func test_data_as_model_success() {
 
-        let subject = PassthroughSubject<Data, HTTPClientError.NetworkingError>()
+        let subject = PassthroughSubject<Data, HTTPError.NetworkingError>()
 
         let httpClient: HTTPClient = DefaultHTTPClient(
             baseURL: "http://127.0.0.1",
@@ -242,7 +242,7 @@ final class HTTPClientTests: TestCase {
     
     func test_data_as_model_bad_json() throws {
         
-        let subject = PassthroughSubject<Data, HTTPClientError.NetworkingError>()
+        let subject = PassthroughSubject<Data, HTTPError.NetworkingError>()
         
         let httpClient: HTTPClient = DefaultHTTPClient(
             baseURL: "http://127.0.0.1",
@@ -250,7 +250,7 @@ final class HTTPClientTests: TestCase {
         )
         var outputtedValues = [ResourceIdentifierParticle]()
         let expectation = XCTestExpectation(description: self.debugDescription)
-        var httpClientError: HTTPClientError?
+        var httpClientError: HTTPError?
         let cancellable = httpClient.fetch(
             urlRequest: URLRequest(url:  "http://127.0.0.1".url),
             decodeAs: ResourceIdentifierParticle.self
@@ -310,7 +310,7 @@ extension URLFormatter {
 
 public extension DataFetcher {
 
-    static func dataSubject(_ subject: PassthroughSubject<Data, HTTPClientError.NetworkingError>) -> Self {
+    static func dataSubject(_ subject: PassthroughSubject<Data, HTTPError.NetworkingError>) -> Self {
         Self { _ in
             subject.eraseToAnyPublisher()
         }

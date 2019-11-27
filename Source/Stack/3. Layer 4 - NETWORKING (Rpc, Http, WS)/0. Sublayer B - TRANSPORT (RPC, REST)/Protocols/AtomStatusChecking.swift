@@ -27,5 +27,5 @@ import Combine
 
 public protocol AtomStatusChecking {
     
-    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> Single<AtomStatus, Never>
+    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> AnyPublisher<AtomStatus, DataFromNodeError>
 }

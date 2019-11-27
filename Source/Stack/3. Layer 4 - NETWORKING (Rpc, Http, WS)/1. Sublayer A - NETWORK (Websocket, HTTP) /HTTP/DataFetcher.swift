@@ -27,7 +27,7 @@ import Combine
 
 public struct DataFetcher {
     
-    public typealias DataFromRequest = (URLRequest) -> AnyPublisher<Data, HTTPClientError.NetworkingError>
+    public typealias DataFromRequest = (URLRequest) -> AnyPublisher<Data, HTTPError.NetworkingError>
     let dataFromRequest: DataFromRequest
 }
 
@@ -36,17 +36,17 @@ public extension DataFetcher {
     static func urlResponse(_ dataAndUrlResponsePublisher: @escaping (URLRequest) -> AnyPublisher<(data: Data, response: URLResponse), URLError>) -> Self {
         Self { request in
             dataAndUrlResponsePublisher(request)
-                .mapError { HTTPClientError.NetworkingError.urlError($0) }
+                .mapError { HTTPError.NetworkingError.urlError($0) }
                 .tryMap { data, response -> Data in
                     guard let httpResponse = response as? HTTPURLResponse else {
-                        throw HTTPClientError.NetworkingError.invalidServerResponse(response)
+                        throw HTTPError.NetworkingError.invalidServerResponse(response)
                     }
                     guard case 200...299 = httpResponse.statusCode else {
-                        throw HTTPClientError.NetworkingError.invalidServerStatusCode(httpResponse.statusCode)
+                        throw HTTPError.NetworkingError.invalidServerStatusCode(httpResponse.statusCode)
                     }
                     return data
             }
-            .mapError { castOrKill(instance: $0, toType: HTTPClientError.NetworkingError.self) }
+            .mapError { castOrKill(instance: $0, toType: HTTPError.NetworkingError.self) }
             .eraseToAnyPublisher()
             
         }

@@ -26,7 +26,7 @@ import Foundation
 import Combine
 
 public final class DefaultHTTPClient: HTTPClient, Throwing {
-    public typealias Error = HTTPClientError
+    public typealias Error = HTTPError
 
     // Internal for testing only
     public let baseUrl: URL
@@ -55,9 +55,9 @@ public extension DefaultHTTPClient {
 // MARK: HTTPClient
 public extension DefaultHTTPClient {
     
-    func perform(absoluteUrlRequest urlRequest: URLRequest) -> AnyPublisher<Data, HTTPClientError.NetworkingError> {
+    func perform(absoluteUrlRequest urlRequest: URLRequest) -> AnyPublisher<Data, HTTPError.NetworkingError> {
         return Combine.Deferred {
-            return Future<Data, HTTPClientError.NetworkingError> { [weak self] promise in
+            return Future<Data, HTTPError.NetworkingError> { [weak self] promise in
                 
                 guard let self = self else {
                     promise(.failure(.clientWasDeinitialized))
@@ -79,13 +79,13 @@ public extension DefaultHTTPClient {
         }.eraseToAnyPublisher()
     }
     
-    func performRequest(pathRelativeToBase path: String) -> AnyPublisher<Data, HTTPClientError.NetworkingError> {
+    func performRequest(pathRelativeToBase path: String) -> AnyPublisher<Data, HTTPError.NetworkingError> {
         let url = URL(string: path, relativeTo: baseUrl)!
         let urlRequest = URLRequest(url: url)
         return perform(absoluteUrlRequest: urlRequest)
     }
     
-    func fetch<D>(urlRequest: URLRequest, decodeAs: D.Type) -> AnyPublisher<D, HTTPClientError> where D: Decodable {
+    func fetch<D>(urlRequest: URLRequest, decodeAs: D.Type) -> AnyPublisher<D, HTTPError> where D: Decodable {
         perform(absoluteUrlRequest: urlRequest)
             .decode(type: D.self, decoder: self.jsonDecoder)
             .mapError { castOrKill(instance: $0, toType: DecodingError.self) }

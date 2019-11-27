@@ -62,24 +62,28 @@ public extension DefaultRPCClient {
 // MARK: - Single's
 public extension DefaultRPCClient {
     
-    func getNetworkInfo() -> Single<RadixSystem, Never> {
+    func getNetworkInfo() -> AnyPublisher<RadixSystem, DataFromNodeError> {
         return make(request: .getNetworkInfo)
-            .crashOnFailure()
+            .mapError { DataFromNodeError.rpcError($0) }
+            .eraseToAnyPublisher()
     }
     
-    func getLivePeers() -> Single<[NodeInfo], Never> {
+    func getLivePeers() -> AnyPublisher<[NodeInfo], DataFromNodeError> {
         return make(request: .getLivePeers)
-        .crashOnFailure()
+            .mapError { DataFromNodeError.rpcError($0) }
+            .eraseToAnyPublisher()
     }
     
-    func getUniverseConfig() -> Single<UniverseConfig, Never> {
+    func getUniverseConfig() -> AnyPublisher<UniverseConfig, DataFromNodeError> {
         return make(request: .getUniverse)
-        .crashOnFailure()
+            .mapError { DataFromNodeError.rpcError($0) }
+            .eraseToAnyPublisher()
     }
     
-    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> Single<AtomStatus, Never> {
+    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> AnyPublisher<AtomStatus, DataFromNodeError> {
         return make(request: .getAtomStatus(atomIdentifier: atomIdentifier))
-        .crashOnFailure()
+            .mapError { DataFromNodeError.rpcError($0) }
+            .eraseToAnyPublisher()
     }
 }
 
@@ -180,11 +184,15 @@ private extension DefaultRPCClient {
                     fatalError("TODO Combine handle failed to subscribe, throw `RPCClientError:subscriptionMode`, and deal with error flow")
                 }
                 return true
-        }
-        .crashOnFailure()
-        .first()
-        .ignoreOutput()
-        .eraseToAnyPublisher()
+            }
+            .first()
+            .ignoreOutput()
+            .catch { (rpcError: RPCError) -> AnyPublisher<Never, Never> in
+                // TODO Combine propagate RPC error?
+                Swift.print("RPC error: \(rpcError)")
+                return Empty<Never, Never>(completeImmediately: true).eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
     }
 }
 

@@ -26,5 +26,10 @@ import Foundation
 import Combine
 
 public protocol LivePeersRequesting {
-    func getLivePeers() -> Single<[NodeInfo], Never>
+    func getLivePeers() -> AnyPublisher<[NodeInfo], DataFromNodeError>
+}
+
+public enum DataFromNodeError: Swift.Error, Equatable {
+    case rpcError(RPCError)
+    case httpError(HTTPError)
 }

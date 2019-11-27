@@ -26,6 +26,5 @@ import Foundation
 import Combine
 
 public protocol NodeNetworkDetailsRequesting {
-    
-    func networkDetails() -> Single<NodeNetworkDetails, Never>
+    func networkDetails() -> AnyPublisher<NodeNetworkDetails, DataFromNodeError>
 }

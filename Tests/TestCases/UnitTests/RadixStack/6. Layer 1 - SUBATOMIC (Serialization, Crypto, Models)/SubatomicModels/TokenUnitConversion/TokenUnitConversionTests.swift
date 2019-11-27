@@ -133,14 +133,6 @@ class TokenUnitConversionTests: TestCase {
         )
     }
     
-    func testThatUsingDoubleForAttoResultsInErrorThrown() throws {
-        XCTAssertThrowsSpecificError(
-            // We expect a compilation warning below
-            try PositiveAmount(double: 0.1, denomination: .atto),
-            PositiveAmount.Error.amountInAttoIsOnlyMeasuredInIntegers(butPassedDouble: 0.1)
-        )
-    }
-    
     func testDecimalLotsOfDigits() throws {
         let lhs = try PositiveAmount(
             string: "0.010203040506070809101112131415161718",

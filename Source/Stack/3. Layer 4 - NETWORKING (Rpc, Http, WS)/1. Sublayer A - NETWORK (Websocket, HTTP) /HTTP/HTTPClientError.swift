@@ -24,12 +24,12 @@
 
 import Foundation
 
-public enum HTTPClientError: Swift.Error, Equatable {
+public enum HTTPError: Swift.Error, Equatable {
     indirect case networkingError(NetworkingError)
     indirect case serializationError(SerializationError)
 }
 
-public extension HTTPClientError {
+public extension HTTPError {
     enum NetworkingError: Swift.Error, Equatable {
         case urlError(URLError)
         case invalidServerResponse(URLResponse)

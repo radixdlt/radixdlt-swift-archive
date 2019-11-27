@@ -34,12 +34,12 @@ public typealias Completable = AnyPublisher<Never, Never>
 public extension Publisher {
     
     /// Similar to `ignoreOutput`, but the type of `Output` remains intact, that is all elements are ignored
-    /// ("droppped"), but completion event get published. But whereas the `Output` type of the `ignoreOutput`
+    /// ("dropped"), but completion event get published. But whereas the `Output` type of the `ignoreOutput`
     /// operator, changes to `Never`, this operator keeps it.
     func dropAll() -> Publishers.Filter<Self> { filter { _ in false } }
 
     /// `ignoreOutput` transforming the `Output` type to some specified type `T`, even though no element
-    /// is published, when using chaining this operator, .e.g. with an `append`, it might be advantagous
+    /// is published, when using chaining this operator, .e.g. with an `append`, it might be advantageous
     /// to be able to specify the type (since `append` requires the outputs of both publishers to be equal).
     func ignoreOutput<T>(mapToType _: T.Type) -> AnyPublisher<T, Failure> {
         ignoreOutput()
@@ -86,23 +86,5 @@ public extension Publisher where Output: Sequence, Failure == Never {
     func flattenSequence() -> AnyPublisher<Output.Element, Never> {
         map { $0.publisher }.switchToLatest()
             .eraseToAnyPublisher()
-    }
-}
-
-public extension Publisher {
-    func crashOnFailure(
-        prefix: String = "TODO Combine, handle error",
-        
-        _ function: String = #function,
-        _ file: String = #file,
-        _ line: Int = #line
-    ) -> AnyPublisher<Output, Never> {
-       
-        return self.tryCatch { error -> AnyPublisher<Output, Failure> in
-            Swift.print("\(prefix) - line: \(line), in function: \(function), in file: \(file)")
-            unexpectedlyMissedToCatch(error: error)
-        }
-        .assertNoFailure()
-        .eraseToAnyPublisher()
     }
 }

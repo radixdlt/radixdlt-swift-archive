@@ -37,7 +37,7 @@ public final class RadixJsonRpcMethodEpic<Request, RpcMethodResult>:
     
     // swiftlint:enable colon opening_brace
     
-    public typealias MethodCall = (RPCClient, Request) -> Single<RpcMethodResult, Never>
+    public typealias MethodCall = (RPCClient, Request) -> AnyPublisher<RpcMethodResult, RPCError>
     
     private let webSocketConnector: WebSocketConnector
     private let rpcClientFromWebSocket: RPCClientFromWebSocket
@@ -65,16 +65,23 @@ public extension RadixJsonRpcMethodEpic {
             .compactMap(typeAs: Request.self)
             .flatMap { [weak self] rpcMethod -> AnyPublisher<RpcMethodResult, Never> in
                 guard let selfNonWeak = self else {
-                    return Empty<RpcMethodResult, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                    return Empty<RpcMethodResult, Never>(completeImmediately: true).eraseToAnyPublisher()
                 }
                 return selfNonWeak.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethod.node)
                     .connectAndNotifyWhenConnected()
                     .map { selfNonWeak.rpcClientFromWebSocket.rpcClientForWebSocket($0) }
-                    .flatMap { rpcClient in
-                        return selfNonWeak.methodCall(rpcClient, rpcMethod)
-                }.eraseToAnyPublisher()
-        }
-        .map { $0 as NodeAction }^
+                    .flatMap { rpcClient -> AnyPublisher<RpcMethodResult, Never> in
+                        selfNonWeak.methodCall(rpcClient, rpcMethod)
+                            .catch { (rpcError: RPCError) -> AnyPublisher<RpcMethodResult, Never> in
+                                Swift.print("RPC error: \(rpcError)")
+                                // TODO Combine should we complete here if error?
+                                return Empty<RpcMethodResult, Never>(completeImmediately: false).eraseToAnyPublisher()
+                            }
+                            .eraseToAnyPublisher()
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .map { $0 as NodeAction }^
     }
 }
 
@@ -91,6 +98,7 @@ public extension RadixJsonRpcMethodEpic {
             webSocketConnector: webSocketConnector
         ) { rpcClient, action in
             rpcClient.getLivePeers()
+                .mapError { $0.rpcError }
                 .map { GetLivePeersActionResult(node: action.node, result: $0) }
                 .eraseToAnyPublisher()
         }
@@ -105,6 +113,7 @@ public extension RadixJsonRpcMethodEpic {
             webSocketConnector: webSocketConnector
         ) { rpcClient, action in
             rpcClient.getInfo()
+                .mapError { $0.rpcError }
                 .map { GetNodeInfoActionResult(node: action.node, result: $0) }
                 .eraseToAnyPublisher()
         }
@@ -120,9 +129,19 @@ public extension RadixJsonRpcMethodEpic {
             webSocketConnector: webSocketConnector
         ) { rpcClient, action in
             rpcClient.getUniverseConfig()
+                .mapError { $0.rpcError }
                 .map { GetUniverseConfigActionResult(node: action.node, result: $0) }
                 .eraseToAnyPublisher()
         }
         
+    }
+}
+
+private extension DataFromNodeError {
+    var rpcError: RPCError {
+        switch self {
+        case .rpcError(let rpcError): return rpcError
+        case .httpError: incorrectImplementation("Expected RPC error, but got HTTP.")
+        }
     }
 }
