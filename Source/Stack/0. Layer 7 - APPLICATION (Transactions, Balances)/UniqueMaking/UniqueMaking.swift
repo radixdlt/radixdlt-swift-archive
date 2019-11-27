@@ -29,7 +29,7 @@ public protocol UniqueMaking: ActiveAccountOwner {
 }
 
 public extension UniqueMaking {
-    func putUnique(string: String) throws -> ResultOfUserAction {
+    func putUnique(string: String) -> ResultOfUserAction {
         let putUniqueIdAction = PutUniqueIdAction(
             uniqueMaker: addressOfActiveAccount,
             string: string
