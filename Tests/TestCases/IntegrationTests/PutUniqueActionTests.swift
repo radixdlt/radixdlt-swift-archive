@@ -202,24 +202,39 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         XCTAssertEqual(recordedThrownError, expectedError)
     }
     
-    /*
-    func testFailPuttingSameUniqueIdAsFixedSupplyToken() {
+    func testFailPuttingSameUniqueIdAsFixedSupplyToken() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        let putUniqueIdAction = PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
         
         // WHEN: Alice sends a `Transaction` containing a FixedSupplyToken and a UniqueId with the same RRI
         let transaction = Transaction {
             application.actionCreateFixedSupplyToken(symbol: "FOO")
-            PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
+            putUniqueIdAction
         }
         
         let resultOfUniqueMaking = application.send(transaction: transaction)
         
+        let recorder = resultOfUniqueMaking.completion.record()
+        
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
-        resultOfUniqueMaking.blockingAssertThrows(
-            error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
+        let recordedThrownError: TransactionError = try wait(
+            for: recorder.expectError(),
+            timeout: .enoughForPOW,
+            description: "Reusing same symbol should throw error"
         )
+        
+        let expectedError =  TransactionError.actionsToAtomError(
+            ActionsToAtomError(
+                error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))),
+                userAction: putUniqueIdAction
+            )
+        )
+        
+        XCTAssertEqual(recordedThrownError, expectedError)
     }
     
+    
+    /*
     func testFailAliceUsingBobsAddress() {
         // GIVEN: dentities Alice and a Bob and a RadixApplicationClient connected to some Radix node
         let aliceApp = application!
