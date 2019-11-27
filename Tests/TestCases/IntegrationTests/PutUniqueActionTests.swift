@@ -170,24 +170,39 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         XCTAssertEqual(recordedThrownError, expectedError)
     }
     
-    /*
-    func testFailPuttingSameUniqueIdAsMutableToken() {
+    func testFailPuttingSameUniqueIdAsMutableToken() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
+        
+        let putUniqueIdAction = PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
         
         // WHEN: Alice sends a `Transaction` containing a MutableSupplyToken and a UniqueId with the same RRI
         let transaction = Transaction {
             application.actionCreateMultiIssuanceToken(symbol: "FOO")
-            PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
+            putUniqueIdAction
         }
         
         let resultOfUniqueMaking = application.send(transaction: transaction)
         
+        let recorder = resultOfUniqueMaking.completion.record()
+        
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
-        resultOfUniqueMaking.blockingAssertThrows(
-            error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
+        let recordedThrownError: TransactionError = try wait(
+            for: recorder.expectError(),
+            timeout: .enoughForPOW,
+            description: "Reusing same symbol should thro error"
         )
+        
+        let expectedError =  TransactionError.actionsToAtomError(
+            ActionsToAtomError(
+                error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))),
+                userAction: putUniqueIdAction
+            )
+        )
+        
+        XCTAssertEqual(recordedThrownError, expectedError)
     }
     
+    /*
     func testFailPuttingSameUniqueIdAsFixedSupplyToken() {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
