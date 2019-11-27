@@ -130,28 +130,47 @@ class TransferTokensTests: LocalhostNodeTest {
             )
         )
     }
-    
-/*
-    func testInsufficientFunds() {
+  
+    func testInsufficientFunds() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
       
         // WHEN: Alice tries to transfer tokens with a larger amount than her current balance, to Bob
         let initialSupply: PositiveSupply = 30
         let (tokenCreation, rri) =  application.createFixedSupplyToken(supply: initialSupply)
 
-        XCTAssertTrue(
-           tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
+        try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
+
+        let amount: PositiveAmount = 50
+        
+        let transferTokensAction = TransferTokensAction(
+            from: application.addressOfActiveAccount,
+            to: bob,
+            amount: amount,
+            tokenResourceIdentifier: rri
         )
         
-        let amount: PositiveAmount = 50
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: amount)
+        let transfer = application.transfer(tokens: transferTokensAction)
+        
+        let transferRecording = transfer.completion.record()
         
         // THEN:  I see that action fails with error `InsufficientFunds`
-        transfer.blockingAssertThrows(
-            error: TransferError.insufficientFunds(currentBalance: NonNegativeAmount(subset: initialSupply), butTriedToTransfer: amount)
+        let recordedThrownError: TransactionError = try wait(
+            for: transferRecording.expectError(),
+            timeout: .enoughForPOW
+        )
+        
+        XCTAssertEqual(
+            recordedThrownError,
+            .actionsToAtomError(
+                .transferError(
+                    .insufficientFunds(currentBalance: NonNegativeAmount(subset: initialSupply), butTriedToTransfer: amount),
+                    action: transferTokensAction
+                )
+            )
         )
     }
     
+    /*
     func testTransferTokenWithGranularityOf10() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
   

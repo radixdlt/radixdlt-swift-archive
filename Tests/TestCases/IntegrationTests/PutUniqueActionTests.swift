@@ -163,7 +163,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         )
         
         let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
-        let expectedError =  TransactionError.actionsToAtomError(
+        let expectedError = TransactionError.actionsToAtomError(
             ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
         )
         
