@@ -111,29 +111,34 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
     func testFailPuttingTwoEqualUniqueIdInOneTransaction() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
 
+        let putUniqueIdAction = PutUniqueIdAction(uniqueMaker: alice, string: "foo")
+        
         // WHEN: Alice sends a `Transaction` containing two UniqueId with with the same string
         let transaction = Transaction {
-            PutUniqueIdAction(uniqueMaker: alice, string: "foo")
-            PutUniqueIdAction(uniqueMaker: alice, string: "foo")
+            putUniqueIdAction
+            putUniqueIdAction
         }
 
-//        let resultOfPutUniqueActions = try application.send(transaction: transaction)
-//        
-//        let recorderCompletable = resultOfPutUniqueActions.completable.record()
-//        
-//        // THEN: an error `uniqueStringAlreadyUsed` is thrown
-//        XCTAssertThrowsSpecificError(
-//            try wait(for: recorderCompletable.expectError(ofType: PutUniqueIdError.self), timeout: .enoughForPOW),
-//            PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
-//        )
+        let resultOfPutUniqueActions = application.send(transaction: transaction)
         
-
-
-//        XCTAssertThrowsSpecificError(
-//            try resultOfUniqueMaking.blockingRethrow(timeout: .enoughForPOW) { XCTFail("Should not have timed out \($0)") },
-//            PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
-//        )
+        let recorderCompletable = resultOfPutUniqueActions.completable
+            .receive(on: RunLoop.main)
+            .record()
         
+        // THEN: an error `uniqueStringAlreadyUsed` is thrown
+        let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
+        
+        let recordedThrownError: TransactionError = try wait(
+            for: recorderCompletable.expectError(),
+            timeout: .enoughForPOW,
+            description: "Transaction containing two identical 'PutUniqueIdAction' should throw error"
+        )
+        
+        let expectedError =  TransactionError.stageActionError(
+            StageActionError(error: putUniqueIdError, userAction: putUniqueIdAction)
+        )
+        
+        XCTAssertEqual(recordedThrownError, expectedError)
     }
     
     

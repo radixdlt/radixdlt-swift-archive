@@ -121,7 +121,6 @@ public extension InMemoryAtomStore {
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {
         if let atom = atomObservation.atom, let currentAtomObservation = atoms[atom], atomObservation.ignoringDateIsEqual(to: currentAtomObservation) {
-            print("⚠️ Ignored atom observation, already existing")
             return
         }
         

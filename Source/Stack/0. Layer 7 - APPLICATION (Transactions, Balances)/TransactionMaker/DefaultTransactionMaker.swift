@@ -25,7 +25,7 @@
 import Foundation
 import Combine
 
-public final class DefaultTransactionMaker: TransactionMaker, AddressOfAccountDeriving, Magical {
+public final class DefaultTransactionMaker: TransactionMaker, TransactionToAtomMapper, AddressOfAccountDeriving, Magical {
     
     /// A mapper from a container of `UserAction`s the user wants to perform, to an `Atom` ready to be pushed to the Radix network (some node).
     private let transactionToAtomMapper: TransactionToAtomMapper
@@ -81,41 +81,32 @@ public extension DefaultTransactionMaker {
     var magic: Magic { return universeConfig.magic }
 }
 
+// MARK: TransactionToAtomMapper
 public extension DefaultTransactionMaker {
     func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
         return try transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
     }
 }
 
+// MARK: - TransactionMaker
 public extension DefaultTransactionMaker {
-    func send(transaction: Transaction, toOriginNode originNode: Node?) throws -> ResultOfUserAction {
+    func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+        let unsignedAtom = buildAtomFrom(transaction: transaction)
         
-        do {
-            
-            let unsignedAtom = try buildAtomFrom(transaction: transaction)
-            
-            let signedAtom = sign(atom: unsignedAtom)
-            
-            return createAtomSubmission(
-                atom: signedAtom,
-                completeOnAtomStoredOnly: false,
-                originNode: originNode
-            )
-        } catch let failedToStageAction as StageActionError {
-            throw failedToStageAction
-        } catch {
-            unexpectedlyMissedToCatch(error: error)
-        }
+        let signedAtom = sign(atom: unsignedAtom)
+        
+        return createAtomSubmission(
+            atom: signedAtom,
+            completeOnAtomStoredOnly: false,
+            originNode: originNode
+        )
     }
 }
 
 private extension DefaultTransactionMaker {
     
     func addFee(to atom: Atom) -> Single<AtomWithFee, Never> {
-        return activeAccount.flatMap { [weak self] account -> AnyPublisher<AtomWithFee, Never> in
-            guard let self = self else {
-                return Empty<AtomWithFee, Never>(completeImmediately: true).eraseToAnyPublisher()
-            }
+        return activeAccount.flatMap { [unowned self] account -> AnyPublisher<AtomWithFee, Never> in
             return self.feeMapper.feeBasedOn(
                 atom: atom,
                 universeConfig: self.universeConfig,
@@ -154,12 +145,7 @@ private extension DefaultTransactionMaker {
         let cachedAtom = atomSingle.share()
         
         let submitAtomStatusUpdatesPublisher = cachedAtom
-            .flatMap { [weak self] (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
-                
-                guard let self = self else {
-                    return Empty<SubmitAtomAction, Never>(completeImmediately: true).eraseToAnyPublisher()
-                }
-                
+            .flatMap { [unowned self] (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
                 let initialAction: SubmitAtomAction
 
                 if let originNode = originNode {
@@ -197,20 +183,12 @@ private extension DefaultTransactionMaker {
         .eraseToAnyPublisher()
     }
     
-    func buildAtomFrom(transaction: Transaction) throws -> Single<UnsignedAtom, Never> {
-        addressOfActiveAccount.tryMap { [weak self] address -> Atom in
-            guard let self = self else {
-                // TODO Combine: Replace fatalError with error
-                fatalError("Self is nil")
-            }
+    func buildAtomFrom(transaction: Transaction) -> Single<UnsignedAtom, Never> {
+        addressOfActiveAccount.tryMap { [unowned self] address -> Atom in
             return try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: address)
         }
         .crashOnFailure()
-        .flatMap { [weak self] atom -> AnyPublisher<AtomWithFee, Never> in
-            guard let self = self else {
-                // TODO Combine: Replace empty with error
-                return Empty<AtomWithFee, Never>.init(completeImmediately: true).eraseToAnyPublisher()
-            }
+        .flatMap { [unowned self] atom -> AnyPublisher<AtomWithFee, Never> in
             return self.addFee(to: atom).eraseToAnyPublisher()
         }
         .tryMap { atomWithFee in

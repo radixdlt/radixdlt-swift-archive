@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,35 +23,24 @@
 //
 
 import Foundation
-import Combine
 
-public final class ResultOfUserAction {
-    
-    /// Ugly hack to retain this Publisher
-    private let cachedAtom: AnyPublisher<SignedAtom, Never>
-    let updates: AnyPublisher<SubmitAtomAction, Never>
-    let completable: AnyPublisher<Never, Never>
-    
-    init(
-        submitAtomStatusUpdatesPublisher updates: AnyPublisher<SubmitAtomAction, Never>,
-        cachedAtom: AnyPublisher<SignedAtom, Never>
-    ) {
-        self.cachedAtom = cachedAtom
-        self.updates = updates
-        
-        self.completable = updates
-            .compactMap(typeAs: SubmitAtomActionStatus.self)
-            .first()
-            .flatMap { submitAtomActionStatus -> AnyPublisher<Never, Never> in
-                switch submitAtomActionStatus.statusEvent {
-                case .stored:
-                    return Empty(completeImmediately: true).eraseToAnyPublisher()
-                case .notStored(let reason):
-//                    return Just(<SubmitAtomError>(wrappedError: reason.error)).eraseToAnyPublisher()
-                    fatalError()
-                }
-            }
-            
-        .eraseToAnyPublisher()
+public enum TransactionError: Swift.Error, Equatable {
+    case stageActionError(StageActionError)
+    case addFeeError(AtomWithFee.Error)
+    case signAtomError(SigningError)
+    case submitAtomError(SubmitAtomError)
+}
+
+public extension TransactionError {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.stageActionError(let lhsStageActionError), .stageActionError(let rhsStageActionError)):
+            return lhsStageActionError.isEqual(to: rhsStageActionError)
+        case (.signAtomError(let lhsSigningError), .signAtomError(let rhsSigningError)):
+            return lhsSigningError == rhsSigningError
+        case (.submitAtomError(let lhsSubmitAtomError), .submitAtomError(let rhsSubmitAtomError)):
+            return lhsSubmitAtomError == rhsSubmitAtomError
+        default: return false
+        }
     }
 }

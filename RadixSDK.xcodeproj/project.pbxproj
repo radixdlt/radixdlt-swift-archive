@@ -668,6 +668,7 @@
 		E6F5484222771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484122771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift */; };
 		E6F5484522771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484422771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift */; };
 		E6F5484722771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5484622771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift */; };
+		E6F6DFEB238E68E900A6B6F2 /* TransactionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F6DFEA238E68E900A6B6F2 /* TransactionError.swift */; };
 		E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
 		E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
 		E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
@@ -1381,6 +1382,7 @@
 		E6F5484122771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTokenActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E6F5484422771E9A00EE6311 /* TransferTokenActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferTokenActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
 		E6F5484622771EC800EE6311 /* DefaultTransferTokenActionToParticleGroupsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTransferTokenActionToParticleGroupsMapper.swift; sourceTree = "<group>"; };
+		E6F6DFEA238E68E900A6B6F2 /* TransactionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionError.swift; sourceTree = "<group>"; };
 		E6FB03C721EC95E8002CE331 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		E6FB03C821EC95E8002CE331 /* SwiftyBeaver.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyBeaver.framework; path = Carthage/Build/iOS/SwiftyBeaver.framework; sourceTree = "<group>"; };
 		E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BitcoinKit.framework; path = Carthage/Build/iOS/BitcoinKit.framework; sourceTree = "<group>"; };
@@ -1650,6 +1652,7 @@
 				E626E1FB22B41A4F0046D2AC /* FeeMapper.swift */,
 				E6340C8C22FC2D090044BA97 /* TransactionMaker.swift */,
 				E605543D23054A7000528510 /* DefaultTransactionMaker.swift */,
+				E6F6DFEA238E68E900A6B6F2 /* TransactionError.swift */,
 				E61E6BF0238D3B0D008C14B0 /* Mirror+Compare.swift */,
 			);
 			path = TransactionMaker;
@@ -4650,6 +4653,7 @@
 				E694E45123795DF800ECF6DE /* DefaultWebSocketsManager.swift in Sources */,
 				E6474AE422663E2F009C4FDC /* RPCMethod.swift in Sources */,
 				E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */,
+				E6F6DFEB238E68E900A6B6F2 /* TransactionError.swift in Sources */,
 				E626E1E222B3FA2A0046D2AC /* Account.swift in Sources */,
 				E6474ACC22661DDE009C4FDC /* HTTPClientOwner.swift in Sources */,
 				E6E279832271CD1C0067D46E /* MetaDataConvertible.swift in Sources */,

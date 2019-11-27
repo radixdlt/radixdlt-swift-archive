@@ -100,7 +100,6 @@ public extension WebSocketToNode {
     @discardableResult
     func close(strategy: WebSocketClosingStrategy = .ifInUseSkipClosing) -> CloseWebSocketResult {
         if strategy == .ifInUseSkipClosing && numberOfSubscriptions > 0 {
-            print("👂 did not close websocket to node: \(node), because it still has #\(numberOfSubscriptions) subscribers.")
             return .didNotClose(reason: .isInUse)
         }
         closeDisregardingListeners()

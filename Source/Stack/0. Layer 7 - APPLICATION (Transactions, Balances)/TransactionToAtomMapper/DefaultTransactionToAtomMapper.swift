@@ -75,11 +75,16 @@ public extension DefaultTransactionToAtomMapper {
             return self.atomStore.upParticles(at: $0)
         }
 
+        do {
         let particleGroups = try temporaryStore.particleGroupsFromActions(transaction.actions)
 
         let atom = Atom(particleGroups: particleGroups)
         try Addresses.allInSameUniverse(atom.addresses().map { $0 })
         return atom
+        } catch {
+            Swift.print("⚠️💥 DefaultTransactionToAtomMapper.atomFrom:transaction error: \(error)")
+            throw error
+        }
 
     }
 }
@@ -87,7 +92,23 @@ public extension DefaultTransactionToAtomMapper {
 // MARK: Throwing
 public struct StageActionError: Swift.Error {
     let error: Swift.Error
-    let userAction: UserAction
+    let userActions: [UserAction]
+    init(error: Swift.Error, userActions: [UserAction]) {
+        self.error = error
+        self.userActions = userActions
+    }
+    
+    public func isEqual(to other: StageActionError) -> Bool {
+        let sameError = compareAny(lhs: error, rhs: other.error, beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer: false)
+        let sameUserActions = self.userActions.map { $0.nameOfAction } == other.userActions.map { $0.nameOfAction }
+        return sameError && sameUserActions
+    }
+}
+
+public extension StageActionError {
+    init(error: Swift.Error, userAction: UserAction) {
+        self.init(error: error, userActions: [userAction])
+    }
 }
 
 public extension DefaultTransactionToAtomMapper {
