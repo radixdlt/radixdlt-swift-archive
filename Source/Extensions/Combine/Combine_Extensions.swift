@@ -25,9 +25,6 @@
 import Foundation
 import Combine
 
-// MARK: Typealias
-public typealias Single<Output, Failure> = AnyPublisher<Output, Failure> where Failure: Swift.Error
-
 // MARK: Any
 public extension Publisher {
     

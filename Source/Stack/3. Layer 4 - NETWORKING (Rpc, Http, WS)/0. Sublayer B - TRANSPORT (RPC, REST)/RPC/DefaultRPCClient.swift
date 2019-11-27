@@ -118,11 +118,11 @@ public extension DefaultRPCClient {
 // MARK: Internal
 internal extension DefaultRPCClient {
     
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> Single<ResultFromResponse, RPCError> where ResultFromResponse: Decodable {
+    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> AnyPublisher<ResultFromResponse, RPCError> where ResultFromResponse: Decodable {
         make(request: rootRequest, responseType: ResultFromResponse.self)
     }
     
-    func makeFireForget(request rootRequest: RPCRootRequest) -> Single<Never, RPCError> {
+    func makeFireForget(request rootRequest: RPCRootRequest) -> AnyPublisher<Never, RPCError> {
         return make(
             request: rootRequest,
             responseType: ResponseOnFireAndForgetRequest.self
@@ -132,7 +132,7 @@ internal extension DefaultRPCClient {
     func make<ResultFromResponse>(
         request rootRequest: RPCRootRequest,
         responseType: ResultFromResponse.Type
-    ) -> Single<ResultFromResponse, RPCError>
+    ) -> AnyPublisher<ResultFromResponse, RPCError>
         where
         ResultFromResponse: Decodable {
 
