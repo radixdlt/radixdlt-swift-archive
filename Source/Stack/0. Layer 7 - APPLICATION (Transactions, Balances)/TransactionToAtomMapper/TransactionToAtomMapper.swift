@@ -25,11 +25,11 @@
 import Foundation
 
 public protocol TransactionToAtomMapper {
-    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Throws<Atom, ActionsToAtomError>
 }
 
 public extension TransactionToAtomMapper where Self: ActiveAccountOwner {
-    func atomFrom(transaction: Transaction) throws -> Atom {
+    func atomFrom(transaction: Transaction) throws -> Throws<Atom, ActionsToAtomError> {
         return try atomFrom(transaction: transaction, addressOfActiveAccount: self.addressOfActiveAccount)
     }
 }

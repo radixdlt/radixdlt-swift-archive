@@ -121,8 +121,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
 
         let resultOfPutUniqueActions = application.send(transaction: transaction)
         
-        let recorderCompletable = resultOfPutUniqueActions.completion
-            .record()
+        let recorderCompletable = resultOfPutUniqueActions.completion.record()
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
@@ -141,23 +140,37 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
     }
     
     
-    /*
-    func testFailPuttingAnUniqueIdUsedInAPreviousTransaction() {
+    func testFailPuttingAnUniqueIdUsedInAPreviousTransaction() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
-        let putUniqueAction = PutUniqueIdAction(uniqueMaker: alice, string: "foo")
+        let putUniqueIdAction = PutUniqueIdAction(uniqueMaker: alice, string: "foo")
+
+        let resultOfPutUniqueAction = application.putUniqueId(putUniqueIdAction)
         
-        XCTAssertTrue(
-           application.putUniqueId(putUniqueAction)
-                .blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        let recorderCompletable = resultOfPutUniqueAction.completion.record()
+         try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
+       
+        
+        // WHEN: Performing the same action again in a second transacation
+        let resultOfPutUniqueActionOnceAgain = application.putUniqueId(putUniqueIdAction)
+        let secondRecorder = resultOfPutUniqueActionOnceAgain.completion.record()
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
-        application.putUniqueId(putUniqueAction).blockingAssertThrows(
-            error: PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
+        let recordedThrownError: TransactionError = try wait(
+            for: secondRecorder.expectError(),
+            timeout: .enoughForPOW,
+            description: "Performing same 'PutUniqueIdAction' twice in different transactions should throw error"
         )
+        
+        let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
+        let expectedError =  TransactionError.actionsToAtomError(
+            ActionsToAtomError(error: putUniqueIdError, userAction: putUniqueIdAction)
+        )
+        
+        XCTAssertEqual(recordedThrownError, expectedError)
     }
     
+    /*
     func testFailPuttingSameUniqueIdAsMutableToken() {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         
