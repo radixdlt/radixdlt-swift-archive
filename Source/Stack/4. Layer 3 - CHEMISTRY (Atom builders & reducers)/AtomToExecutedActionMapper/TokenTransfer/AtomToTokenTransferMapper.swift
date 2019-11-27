@@ -25,7 +25,15 @@
 import Foundation
 import Combine
 
-public protocol AtomToTokenTransferMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == TransferTokensAction {}
+// swiftlint:disable opening_brace
+
+public protocol AtomToTokenTransferMapper: AtomToSpecificExecutedActionMapper
+    where
+SpecificExecutedAction == TransferTokensAction,
+SpecificMappingError == Never
+{}
+
+// swiftlint:enable opening_brace
 
 public final class DefaultAtomToTokenTransferMapper: AtomToTokenTransferMapper {
     public init() {}
@@ -35,7 +43,7 @@ public extension DefaultAtomToTokenTransferMapper {
     
     typealias SpecificExecutedAction = TransferTokensAction
     
-    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[TransferTokensAction], Never> {
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[TransferTokensAction], SpecificMappingError> {
         var transferredTokens = [TransferTokensAction]()
         
         for particleGroup in atom {

@@ -25,9 +25,15 @@
 import Foundation
 import Combine
 
-public protocol AtomToSendMessageActionMapper: AtomToSpecificExecutedActionMapper, Throwing where
+// swiftlint:disable opening_brace
+
+public protocol AtomToSendMessageActionMapper: AtomToSpecificExecutedActionMapper
+    where
     SpecificExecutedAction == SendMessageAction,
-    Error == DecryptMessageFromAtomMapperError {}
+    SpecificMappingError == DecryptMessageFromAtomMapperError
+{}
+
+// swiftlint:enable opening_brace
 
 public final class DefaultAtomToSendMessageActionMapper: AtomToSendMessageActionMapper {
     private let activeAccount: AnyPublisher<Account, Never>
@@ -39,34 +45,43 @@ public final class DefaultAtomToSendMessageActionMapper: AtomToSendMessageAction
 }
 
 public extension DefaultAtomToSendMessageActionMapper {
-    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[SendMessageAction], Never> {
+    typealias SpecificMappingError = DecryptMessageFromAtomMapperError
+
+    func mapError(_ error: SpecificMappingError) -> AtomToTransactionMapperError {
+        AtomToTransactionMapperError.sendMessageActionMappingError(error)
+    }
+    
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[SendMessageAction], SpecificMappingError> {
         guard atom.containsAnyMessageParticle() else {
-            return Just([]).eraseToAnyPublisher()
+            return Just([])
+                .setFailureType(to: SpecificMappingError.self)
+                .eraseToAnyPublisher()
         }
         
         let particleGroupsWithMessageParticles = atom.particleGroups.particleGroups
             .filter { $0.containsAnyMessageParticle() }
             
-        let encryptedContexts: AnyPublisher<EncryptedMessageContext, Never> = Publishers.Sequence<[ParticleGroup], Never>(sequence: particleGroupsWithMessageParticles)
+        let encryptedContexts: AnyPublisher<EncryptedMessageContext, DecryptMessageFromAtomMapperError> = Publishers.Sequence<[ParticleGroup], DecryptMessageFromAtomMapperError>(sequence: particleGroupsWithMessageParticles)
             .map { NonEmptyArray($0.messageParticles()) }
         .tryMap {
             try EncryptedMessageContext(messageParticles: $0)
         }
-        .crashOnFailure()
+        .mapError { castOrKill(instance: $0, toType: DecryptMessageFromAtomMapperError.self) }
+        .eraseToAnyPublisher()
             
         return encryptedContexts.combineLatest(
-            activeAccount.flatMap { $0.privateKeyForSigning }
+            activeAccount.flatMap { $0.privateKeyForSigning }.setFailureType(to: SpecificMappingError.self)
         )
         .tryMap { encryptedMessageContext, key in
             try encryptedMessageContext.decryptMessageIfNeeded(key: key)
         }
+        .mapError { castOrKill(instance: $0, toType: DecryptMessageFromAtomMapperError.self) }
         .collect(particleGroupsWithMessageParticles.count)
-        .crashOnFailure()
-
+        .eraseToAnyPublisher()
     }
 }
 
-public enum DecryptMessageFromAtomMapperError: Swift.Error {
+public enum DecryptMessageFromAtomMapperError: Swift.Error, Equatable {
     case zeroMessageParticlesFound(in: Atom)
     case incorrectMetaDataValueForApplication(expected: String, butGot: String?)
 }

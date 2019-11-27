@@ -132,7 +132,7 @@ public extension RadixApplicationClient {
 
 // MARK: AtomToTransactionMapper
 public extension RadixApplicationClient {
-    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, Never> {
+    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return transactionSubscriber.transactionFromAtom(atom)
     }
 }
@@ -169,7 +169,7 @@ public extension RadixApplicationClient {
         execute(actions: transferTokensAction)
     }
     
-    func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, Never> {
+    func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, AtomToTransactionMapperError> {
         return observeActions(ofType: TransferTokensAction.self, at: address)
     }
 }
@@ -180,7 +180,7 @@ public extension RadixApplicationClient {
         execute(actions: sendMessageAction)
     }
     
-    func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, Never> {
+    func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, AtomToTransactionMapperError> {
         return observeActions(ofType: SendMessageAction.self, at: address)
     }
 }
@@ -214,7 +214,7 @@ public extension RadixApplicationClient {
 
 // MARK: TransactionSubscriber
 public extension RadixApplicationClient {
-    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, Never> {
+    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return transactionSubscriber.observeTransactions(at: address)
     }
 }

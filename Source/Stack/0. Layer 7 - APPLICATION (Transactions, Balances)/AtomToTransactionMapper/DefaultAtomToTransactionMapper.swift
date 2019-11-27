@@ -41,9 +41,13 @@ public extension DefaultAtomToTransactionMapper {
     }
 }
 
+public enum AtomToTransactionMapperError: Swift.Error, Equatable {
+    case sendMessageActionMappingError(DecryptMessageFromAtomMapperError)
+}
+
 public extension DefaultAtomToTransactionMapper {
     
-    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, Never> {
+    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         Publishers.MergeMany(
             atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
         )

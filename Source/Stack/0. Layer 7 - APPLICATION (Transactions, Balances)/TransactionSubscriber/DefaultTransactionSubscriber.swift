@@ -54,15 +54,16 @@ public extension DefaultTransactionSubscriber {
 // MARK: TransactionSubscriber
 public extension DefaultTransactionSubscriber {
     
-    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, Never> {
+    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         atomStore.atomObservations(of: address)
             .compactMap { (atomObservation: AtomObservation) -> Atom? in
                 guard case .store(let atom, _, _) = atomObservation else { return nil }
                 return atom
             }
-            .flatMap { [weak self] atom -> AnyPublisher<ExecutedTransaction, Never> in
+            .setFailureType(to: AtomToTransactionMapperError.self)
+            .flatMap { [weak self] atom -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> in
                 guard let self = self else {
-                    return Empty<ExecutedTransaction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                    return Empty<ExecutedTransaction, AtomToTransactionMapperError>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
                 return self.atomToTransactionMapper.transactionFromAtom(atom)
             }
@@ -72,7 +73,7 @@ public extension DefaultTransactionSubscriber {
 
 // MARK: AtomToTransactionMapper
 public extension DefaultTransactionSubscriber {
-    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, Never> {
+    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return atomToTransactionMapper.transactionFromAtom(atom)
     }
 }

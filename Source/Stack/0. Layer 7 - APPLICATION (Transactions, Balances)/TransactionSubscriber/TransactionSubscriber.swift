@@ -27,7 +27,7 @@ import Combine
 
 // MARK: TransactionSubscriber
 public protocol TransactionSubscriber: AtomToTransactionMapper {
-    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, Never>
+    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError>
 }
 
 public extension TransactionSubscriber {
@@ -35,7 +35,7 @@ public extension TransactionSubscriber {
     func observeTransactions(
         at address: Address,
         containingActionOfAnyType actionTypes: [UserAction.Type]
-    ) -> AnyPublisher<ExecutedTransaction, Never> {
+    ) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         
         observeTransactions(at: address)
             .filter {
@@ -48,7 +48,7 @@ public extension TransactionSubscriber {
     func observeTransactions(
         at address: Address,
         containingActionsOfAllTypes requiredActionTypes: [UserAction.Type]
-    ) -> AnyPublisher<ExecutedTransaction, Never> {
+    ) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         
         observeTransactions(at: address)
             .filter {
@@ -60,10 +60,10 @@ public extension TransactionSubscriber {
     func observeActions<Action>(
         ofType actionType: Action.Type,
         at address: Address
-    ) -> AnyPublisher<Action, Never> where Action: UserAction {
+    ) -> AnyPublisher<Action, AtomToTransactionMapperError> where Action: UserAction {
         
         observeTransactions(at: address)
-            .flatMap { executedTransaction -> AnyPublisher<Action, Never> in
+            .flatMap { executedTransaction -> AnyPublisher<Action, AtomToTransactionMapperError> in
                 let executedActions = executedTransaction.actions(ofType: actionType)
                 return Publishers.Sequence(sequence: executedActions)
                     .eraseToAnyPublisher()
@@ -78,7 +78,7 @@ public extension TransactionSubscriber where Self: ActiveAccountOwner {
     /// Do not confuse this with `observeMyTokenTransfers`, this returns a stream of `ExecutedTransaction`, which is
     /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
     /// of executed Token Transfers, either by you or someone else.
-    func observeMyTransactions() -> AnyPublisher<ExecutedTransaction, Never> {
+    func observeMyTransactions() -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return observeTransactions(at: addressOfActiveAccount)
     }
     
@@ -86,7 +86,7 @@ public extension TransactionSubscriber where Self: ActiveAccountOwner {
     /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
     /// of executed Token Transfers, either by you or someone else.
     /// Boolean `OR` of `actionTypes`
-    func observeMyTransactions(containingActionOfAnyType actionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, Never> {
+    func observeMyTransactions(containingActionOfAnyType actionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return observeTransactions(at: addressOfActiveAccount, containingActionOfAnyType: actionTypes)
     }
     
@@ -94,11 +94,11 @@ public extension TransactionSubscriber where Self: ActiveAccountOwner {
     /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
     /// of executed Token Transfers, either by you or someone else.
     /// Boolean `AND` of `requiredActionTypes`
-    func observeMyTransactions(containingActionsOfAllTypes requiredActionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, Never> {
+    func observeMyTransactions(containingActionsOfAllTypes requiredActionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return observeTransactions(at: addressOfActiveAccount, containingActionsOfAllTypes: requiredActionTypes)
     }
     
-    func observeMyActions<Action>(ofType actionType: Action.Type) -> AnyPublisher<Action, Never> where Action: UserAction {
+    func observeMyActions<Action>(ofType actionType: Action.Type) -> AnyPublisher<Action, AtomToTransactionMapperError> where Action: UserAction {
         return observeActions(ofType: actionType, at: addressOfActiveAccount)
     }
 }

@@ -25,11 +25,20 @@
 import Foundation
 import Combine
 
-public protocol AtomToCreateTokenMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == CreateTokenAction {}
+// swiftlint:disable opening_brace
+
+public protocol AtomToCreateTokenMapper:
+AtomToSpecificExecutedActionMapper
+where
+    SpecificExecutedAction == CreateTokenAction,
+    SpecificMappingError == Never
+{}
+
+// swiftlint:enable opening_brace
 
 public extension AtomToCreateTokenMapper {
     
-    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[CreateTokenAction], Never> {
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[CreateTokenAction], SpecificMappingError> {
         
         var createTokenActions = [CreateTokenAction]()
         

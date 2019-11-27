@@ -29,9 +29,21 @@ import Combine
 public protocol TokenTransferring: ActiveAccountOwner {
 
     func transfer(tokens: TransferTokensAction) throws -> ResultOfUserAction
-    func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, Never>
+    func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, AtomToTransactionMapperError>
 }
 
+public extension TokenTransferring {
+    
+    /// Do not confuse this with `observeMyTransactions`, this returns a stream
+    /// of executed Token Transfers, either by you or someone else, the latter
+    /// returns a stream of `ExecutedTransaction`, which is a container of UserActions
+    /// submitted in a single Atom at some earlier point in time
+    func observeMyTokenTransfers() -> AnyPublisher<TransferTokensAction, AtomToTransactionMapperError> {
+        return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
+    }
+}
+
+// MARK: Action shorthand
 public extension TokenTransferring {
     func transferTokens(
         identifier tokenIdentifier: ResourceIdentifier,
@@ -40,7 +52,7 @@ public extension TokenTransferring {
         message: String,
         messageEncoding: String.Encoding = .default,
         from specifiedSender: AddressConvertible? = nil
-        ) throws -> ResultOfUserAction {
+    ) throws -> ResultOfUserAction {
         
         let attachment = message.toData(encodingForced: messageEncoding)
         
@@ -113,16 +125,5 @@ public extension TokenTransferring {
         )
         
         return transferAction
-    }
-}
-
-public extension TokenTransferring {
-    
-    /// Do not confuse this with `observeMyTransactions`, this returns a stream
-    /// of executed Token Transfers, either by you or someone else, the latter
-    /// returns a stream of `ExecutedTransaction`, which is a container of UserActions
-    /// submitted in a single Atom at some earlier point in time
-    func observeMyTokenTransfers() -> AnyPublisher<TransferTokensAction, Never> {
-        return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
     }
 }

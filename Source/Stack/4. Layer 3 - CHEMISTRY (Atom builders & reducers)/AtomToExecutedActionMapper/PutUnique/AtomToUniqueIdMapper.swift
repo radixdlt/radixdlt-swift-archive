@@ -25,12 +25,20 @@
 import Foundation
 import Combine
 
+// swiftlint:disable opening_brace
+
 // MARK: AtomToUniqueIdMapper
-public protocol AtomToUniqueIdMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == PutUniqueIdAction {}
+public protocol AtomToUniqueIdMapper: AtomToSpecificExecutedActionMapper
+    where
+SpecificExecutedAction == PutUniqueIdAction,
+SpecificMappingError == Never
+{}
+
+// swiftlint:enable opening_brace
 
 public extension AtomToUniqueIdMapper {
     
-    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[PutUniqueIdAction], Never> {
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[PutUniqueIdAction], SpecificMappingError> {
         guard atom.containsAnyUniqueParticle(spin: .up) else { return Just([]).eraseToAnyPublisher() }
         
         var uniqueActions = [PutUniqueIdAction]()
@@ -54,3 +62,4 @@ public extension AtomToUniqueIdMapper {
 public struct DefaultAtomToUniqueIdMapper: AtomToUniqueIdMapper {
     public typealias SpecificExecutedAction = PutUniqueIdAction
 }
+

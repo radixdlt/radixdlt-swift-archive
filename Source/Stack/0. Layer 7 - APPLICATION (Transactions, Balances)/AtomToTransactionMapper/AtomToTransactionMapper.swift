@@ -26,12 +26,12 @@ import Foundation
 import Combine
 
 public protocol AtomToTransactionMapper {
-    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, Never>
+    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError>
 }
 
 public extension AtomToTransactionMapper {
     /// Boolean `OR` of `actionTypes`
-    func transactionFrom(atom: Atom, actionMatchingAnyType actionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, Never> {
+    func transactionFrom(atom: Atom, actionMatchingAnyType actionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return transactionFromAtom(atom).filter {
             $0.contains(actionMatchingAnyType: actionTypes)
         }
@@ -39,7 +39,7 @@ public extension AtomToTransactionMapper {
     }
     
     /// Boolean `AND` of `requiredActionTypes`
-    func transactionFrom(atom: Atom, actionMatchingAllTypes requiredActionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, Never> {
+    func transactionFrom(atom: Atom, actionMatchingAllTypes requiredActionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return transactionFromAtom(atom).filter {
             $0.contains(actionMatchingAll: requiredActionTypes)
         }

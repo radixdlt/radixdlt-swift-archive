@@ -25,10 +25,18 @@
 import Foundation
 import Combine
 
-public protocol AtomToBurnTokenMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == BurnTokensAction {}
+// swiftlint:disable opening_brace
+
+public protocol AtomToBurnTokenMapper: AtomToSpecificExecutedActionMapper
+    where
+    SpecificExecutedAction == BurnTokensAction,
+    SpecificMappingError == Never
+{}
+
+// swiftlint:enable opening_brace
 
 public extension AtomToBurnTokenMapper {
-    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[BurnTokensAction], Never> {
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[BurnTokensAction], SpecificMappingError> {
         var burnActions = [BurnTokensAction]()
         for particleGroup in atom {
             guard let burnAction = burnTokensActionFrom(particleGroup: particleGroup) else { continue }

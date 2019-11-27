@@ -33,7 +33,7 @@ public protocol MessageSending: ActiveAccountOwner {
     
     /// Sends a message
     func send(message: SendMessageAction) throws -> ResultOfUserAction
-    func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, Never>
+    func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, AtomToTransactionMapperError>
 }
 
 public extension MessageSending {
@@ -69,7 +69,7 @@ public extension MessageSending {
 
 // MARK: Sent
 public extension MessageSending {
-    func observeMyMessages() -> AnyPublisher<SendMessageAction, Never> {
+    func observeMyMessages() -> AnyPublisher<SendMessageAction, AtomToTransactionMapperError> {
         return observeMessages(toOrFrom: addressOfActiveAccount)
     }
 }
