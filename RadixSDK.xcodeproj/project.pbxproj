@@ -122,15 +122,12 @@
 		E61E6BE1238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */; };
 		E61E6BE4238C356D008C14B0 /* PrefixWhileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3612385980700950312 /* PrefixWhileTests.swift */; };
 		E61E6BE5238C356D008C14B0 /* PublisherFlatMapResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */; };
-		E61E6BE6238C356D008C14B0 /* TryFlatMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BE2238C3567008C14B0 /* TryFlatMapTests.swift */; };
 		E61E6BE7238C356D008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */; };
 		E61E6BE8238C356D008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */; };
 		E61E6BE9238C356E008C14B0 /* PrefixWhileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3612385980700950312 /* PrefixWhileTests.swift */; };
 		E61E6BEA238C356E008C14B0 /* PublisherFlatMapResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */; };
-		E61E6BEB238C356E008C14B0 /* TryFlatMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BE2238C3567008C14B0 /* TryFlatMapTests.swift */; };
 		E61E6BEC238C356E008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */; };
 		E61E6BED238C356E008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */; };
-		E61E6BEF238D1BDE008C14B0 /* Publisher+TryFlatMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BEE238D1BDE008C14B0 /* Publisher+TryFlatMap.swift */; };
 		E61E6BF1238D3B0D008C14B0 /* Mirror+Compare.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BF0238D3B0D008C14B0 /* Mirror+Compare.swift */; };
 		E61E6BF6238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BF5238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift */; };
 		E61E6BF7238D4D53008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BF5238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift */; };
@@ -864,8 +861,6 @@
 		E61E6BCD238C0C2A008C14B0 /* Inverted.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inverted.swift; sourceTree = "<group>"; };
 		E61E6BCE238C0C2A008C14B0 /* PublisherExpectation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublisherExpectation.swift; sourceTree = "<group>"; };
 		E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Recorder+Radix.swift"; sourceTree = "<group>"; };
-		E61E6BE2238C3567008C14B0 /* TryFlatMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TryFlatMapTests.swift; sourceTree = "<group>"; };
-		E61E6BEE238D1BDE008C14B0 /* Publisher+TryFlatMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+TryFlatMap.swift"; sourceTree = "<group>"; };
 		E61E6BF0238D3B0D008C14B0 /* Mirror+Compare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mirror+Compare.swift"; sourceTree = "<group>"; };
 		E61E6BF5238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineExpectationsCustomExtensionsTests.swift; sourceTree = "<group>"; };
 		E61EB9A122D86F56007826D3 /* Supply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supply.swift; sourceTree = "<group>"; };
@@ -1934,7 +1929,6 @@
 				E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */,
 				E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */,
 				E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */,
-				E61E6BEE238D1BDE008C14B0 /* Publisher+TryFlatMap.swift */,
 				E6A1A67B237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift */,
 				E67E3E792379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift */,
 				E6A1A677237B1BB800F58483 /* Publisher+FlatMapResult.swift */,
@@ -3686,7 +3680,6 @@
 			children = (
 				E6D7A3612385980700950312 /* PrefixWhileTests.swift */,
 				E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */,
-				E61E6BE2238C3567008C14B0 /* TryFlatMapTests.swift */,
 				E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */,
 				E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */,
 			);
@@ -4603,7 +4596,6 @@
 				E64641ED22F3482700E05034 /* FixedSupplyTokenDefinitionParticle+Decodable.swift in Sources */,
 				E6E279612271CD1C0067D46E /* DSONEncodable.swift in Sources */,
 				E6E279552271CD1C0067D46E /* DSONOutput.swift in Sources */,
-				E61E6BEF238D1BDE008C14B0 /* Publisher+TryFlatMap.swift in Sources */,
 				E6E279602271CD1C0067D46E /* DSONPrefixSpecifying.swift in Sources */,
 				E6A508D6224FBCA600128123 /* AtomSubmitAndSubscribeRequest.swift in Sources */,
 				E67A715421FBC65800F4B2D0 /* String+Extensions.swift in Sources */,
@@ -5110,7 +5102,6 @@
 				E6D7A3802385980700950312 /* TooLongDescriptionTests.swift in Sources */,
 				E6D7A3AA2385980700950312 /* WebSocketStatusEquatableTests.swift in Sources */,
 				E6D7A3682385980700950312 /* FetchAtomsEpicTests.swift in Sources */,
-				E61E6BE6238C356D008C14B0 /* TryFlatMapTests.swift in Sources */,
 				E6D7A3A32385980700950312 /* AddressTests.swift in Sources */,
 				E6D7A3A12385980700950312 /* EUIDTests.swift in Sources */,
 				E6D7A3B92385980700950312 /* ProofOfWorkTests.swift in Sources */,
@@ -5186,7 +5177,6 @@
 				E6D7A256238596F200950312 /* Test+Convenience+Models.swift in Sources */,
 				E6D7A25C238596F200950312 /* ErrorAutoEquatable.swift in Sources */,
 				E61E6BD4238C0C2A008C14B0 /* Finished.swift in Sources */,
-				E61E6BEB238C356E008C14B0 /* TryFlatMapTests.swift in Sources */,
 				E6D7A262238596F200950312 /* TestCase.swift in Sources */,
 				E6D7A26F238596F200950312 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E61E6BD6238C0C2A008C14B0 /* Recording.swift in Sources */,
