@@ -144,7 +144,7 @@ final class PrefixUntilCompletionFromTests: TestCase {
     }
 
     // MARK: `prefix:untilEventFrom`
-    func test_that_publisher___prefix_untilEventFrom___outut_completes_when_received_output() {
+    func test_that_publisher___prefix_untilEventFrom___output_completes_when_received_output() {
         
         let finishTriggeringSubject = PassthroughSubject<Void, Never>()
         

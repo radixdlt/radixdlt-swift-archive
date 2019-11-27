@@ -54,7 +54,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         }
         let resultOfPutUniqueAction = application.send(transaction: transaction)
         
-        let recorderCompletable = resultOfPutUniqueAction.completable.record()
+        let recorderCompletable = resultOfPutUniqueAction.completion.record()
         try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
         
         
@@ -87,7 +87,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         }
         
         let resultOfPutUniqueActions = application.send(transaction: transaction)
-        let recorderCompletable = resultOfPutUniqueActions.completable.record()
+        let recorderCompletable = resultOfPutUniqueActions.completion.record()
         try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
         
         let executedTransactionsPublisher = application.observeTransactions(
@@ -121,8 +121,8 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
 
         let resultOfPutUniqueActions = application.send(transaction: transaction)
         
-        let recorderCompletable = resultOfPutUniqueActions.completable
-            .receive(on: RunLoop.main)
+        let recorderCompletable = resultOfPutUniqueActions.completion
+//            .receive(on: RunLoop.main)
             .record()
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
@@ -134,8 +134,8 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             description: "Transaction containing two identical 'PutUniqueIdAction' should throw error"
         )
         
-        let expectedError =  TransactionError.stageActionError(
-            StageActionError(error: putUniqueIdError, userAction: putUniqueIdAction)
+        let expectedError =  TransactionError.actionsToAtomError(
+            ActionsToAtomError(error: putUniqueIdError, userAction: putUniqueIdAction)
         )
         
         XCTAssertEqual(recordedThrownError, expectedError)

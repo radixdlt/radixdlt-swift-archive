@@ -64,8 +64,10 @@ public extension DefaultTransactionToAtomMapper {
     }
 }
 
+public typealias ThrowsOrReturns<Failure: Error, Output> = Output
+
 public extension DefaultTransactionToAtomMapper {
-    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> ThrowsOrReturns<ActionsToAtomError, Atom> {
         
         let temporaryStore = TemporaryLocalAtomStore(
             actionMappers: actionMappers,
@@ -76,21 +78,23 @@ public extension DefaultTransactionToAtomMapper {
         }
 
         do {
-        let particleGroups = try temporaryStore.particleGroupsFromActions(transaction.actions)
-
-        let atom = Atom(particleGroups: particleGroups)
-        try Addresses.allInSameUniverse(atom.addresses().map { $0 })
-        return atom
+            let particleGroups = try temporaryStore.particleGroupsFromActions(transaction.actions)
+            
+            let atom = Atom(particleGroups: particleGroups)
+            try Addresses.allInSameUniverse(atom.addresses().map { $0 })
+            return atom
+        } catch let actionsToAtomError as ActionsToAtomError {
+            Swift.print("⚠️💥 ActionsToAtomError: \(actionsToAtomError)")
+            throw actionsToAtomError
         } catch {
-            Swift.print("⚠️💥 DefaultTransactionToAtomMapper.atomFrom:transaction error: \(error)")
-            throw error
+            unexpectedlyMissedToCatch(error: error)
         }
 
     }
 }
 
 // MARK: Throwing
-public struct StageActionError: Swift.Error {
+public struct ActionsToAtomError: Swift.Error {
     let error: Swift.Error
     let userActions: [UserAction]
     init(error: Swift.Error, userActions: [UserAction]) {
@@ -98,21 +102,21 @@ public struct StageActionError: Swift.Error {
         self.userActions = userActions
     }
     
-    public func isEqual(to other: StageActionError) -> Bool {
+    public func isEqual(to other: ActionsToAtomError) -> Bool {
         let sameError = compareAny(lhs: error, rhs: other.error, beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer: false)
         let sameUserActions = self.userActions.map { $0.nameOfAction } == other.userActions.map { $0.nameOfAction }
         return sameError && sameUserActions
     }
 }
 
-public extension StageActionError {
+public extension ActionsToAtomError {
     init(error: Swift.Error, userAction: UserAction) {
         self.init(error: error, userActions: [userAction])
     }
 }
 
 public extension DefaultTransactionToAtomMapper {
-    typealias Error = StageActionError
+    typealias Error = ActionsToAtomError
 }
 
 // MARK: TemporaryLocalAtomStore
@@ -147,7 +151,7 @@ extension DefaultTransactionToAtomMapper.TemporaryLocalAtomStore {
             do {
                 particleGroups = try particleGroupFromAction(action)
             } catch {
-                throw StageActionError(error: error, userAction: action)
+                throw ActionsToAtomError(error: error, userAction: action)
             }
             
             accumulatedSpunParticles.append(contentsOf: particleGroups.spunParticles)

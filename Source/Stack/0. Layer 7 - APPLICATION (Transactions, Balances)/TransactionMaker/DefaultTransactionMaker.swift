@@ -83,7 +83,7 @@ public extension DefaultTransactionMaker {
 
 // MARK: TransactionToAtomMapper
 public extension DefaultTransactionMaker {
-    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> ThrowsOrReturns<ActionsToAtomError, Atom> {
         return try transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
     }
 }
@@ -91,7 +91,7 @@ public extension DefaultTransactionMaker {
 // MARK: - TransactionMaker
 public extension DefaultTransactionMaker {
     func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
-        let unsignedAtom = buildAtomFrom(transaction: transaction)
+        let unsignedAtom = unsignedAtomFrom(transaction: transaction)
         
         let signedAtom = sign(atom: unsignedAtom)
         
@@ -105,47 +105,61 @@ public extension DefaultTransactionMaker {
 
 private extension DefaultTransactionMaker {
     
-    func addFee(to atom: Atom) -> Single<AtomWithFee, Never> {
-        return activeAccount.flatMap { [unowned self] account -> AnyPublisher<AtomWithFee, Never> in
-            return self.feeMapper.feeBasedOn(
-                atom: atom,
-                universeConfig: self.universeConfig,
-                key: account.publicKey
-            )
-            .crashOnFailure()
-        }
-        .eraseToAnyPublisher()
+    func addFee(to atom: Atom) -> AnyPublisher<AtomWithFee, TransactionError> {
+        activeAccount
+            .setFailureType(to: AtomWithFee.Error.self)
+            .flatMap { [unowned self] account -> AnyPublisher<AtomWithFee, AtomWithFee.Error> in
+                self.feeMapper.feeBasedOn(
+                    atom: atom,
+                    universeConfig: self.universeConfig,
+                    key: account.publicKey
+                )
+            }
+            .mapError { TransactionError.addFeeError($0) }
+            .eraseToAnyPublisher()
     }
     
-    func sign(atom atomPublisher: AnyPublisher<UnsignedAtom, Never>) -> Single<SignedAtom, Never> {
-        return atomPublisher
-            .withLatest(from: activeAccount) { (atom: $0, account: $1) }
-            .tryFilter {
-                if $0.account.privateKey == nil, case .throwErrorDirectly = self.strategyNoSigningKeyIsPresent {
+    var signingAccount: AnyPublisher<Account, TransactionError> {
+        activeAccount
+            .tryFilter { [unowned self] account in
+                if account.privateKey == nil, case .throwErrorDirectly = self.strategyNoSigningKeyIsPresent {
                     throw SigningError.noSigningKeyPresentButWasExpectedToBe
                 }
                 return true
             }
-            .crashOnFailure()
-            .flatMap { atomAndAccount -> Single<SignedAtom, Never> in
-                let (atom, account) = atomAndAccount
-               
-                return account.sign(atom: atom)
-                    .crashOnFailure()
-            }
+        .mapError { castOrKill(instance: $0, toType: SigningError.self) }
+        .mapError { TransactionError.signAtomError($0) }
         .eraseToAnyPublisher()
     }
     
+    func sign(atom unsignedAtomPublisher: AnyPublisher<UnsignedAtom, TransactionError>) -> AnyPublisher<SignedAtom, TransactionError> {
+        unsignedAtomPublisher
+            .withLatest(from: signingAccount) { (atom: $0, account: $1) }
+            .flatMap { atomAndAccount -> AnyPublisher<SignedAtom, TransactionError> in
+                let (atom, account) = atomAndAccount
+               
+                return account.sign(atom: atom)
+                    .mapError { TransactionError.signAtomError($0) }
+                    .eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+    
     func createAtomSubmission(
-        atom atomSingle: Single<SignedAtom, Never>,
+        atom signedAtomPublisher: AnyPublisher<SignedAtom, TransactionError>,
         completeOnAtomStoredOnly: Bool,
         originNode: Node?
     ) -> ResultOfUserAction {
         
-        let cachedAtom = atomSingle.share()
+        let cachedAtomPublisher = signedAtomPublisher.share().eraseToAnyPublisher()
         
-        let submitAtomStatusUpdatesPublisher = cachedAtom
-            .flatMap { [unowned self] (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
+        let nonFailingAtomPublisher = cachedAtomPublisher.catch { _ in
+            Empty<SignedAtom, Never>(completeImmediately: false)
+                .eraseToAnyPublisher()
+        }
+        
+        let updates = nonFailingAtomPublisher.flatMap { [unowned self]
+            (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
                 let initialAction: SubmitAtomAction
 
                 if let originNode = originNode {
@@ -164,12 +178,11 @@ private extension DefaultTransactionMaker {
                 self.radixNetworkController.dispatch(nodeAction: initialAction)
                 return status
             }
-        .share()
         .eraseToAnyPublisher()
 
         let result = ResultOfUserAction(
-            submitAtomStatusUpdatesPublisher: submitAtomStatusUpdatesPublisher,
-            cachedAtom: cachedAtom.eraseToAnyPublisher()
+            updates: updates,
+            atom: cachedAtomPublisher
         )
 
         return result
@@ -182,18 +195,37 @@ private extension DefaultTransactionMaker {
         }
         .eraseToAnyPublisher()
     }
+
+    func buildAtomFrom(transaction: Transaction) -> AnyPublisher<Atom, TransactionError> {
+        addressOfActiveAccount.tryMap { [unowned self] address throws -> ThrowsOrReturns<ActionsToAtomError, Atom> in
+            try self.atomFrom(transaction: transaction, addressOfActiveAccount: address)
+        }
+        .mapError { castOrKill(instance: $0, toType: ActionsToAtomError.self) }
+        .mapError { TransactionError.actionsToAtomError($0) }
+        .eraseToAnyPublisher()
+    }
     
-    func buildAtomFrom(transaction: Transaction) -> Single<UnsignedAtom, Never> {
-        addressOfActiveAccount.tryMap { [unowned self] address -> Atom in
-            return try self.transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: address)
+    func unsignedAtomFrom(transaction: Transaction) -> AnyPublisher<UnsignedAtom, TransactionError> {
+        buildAtomFrom(transaction: transaction)
+            .flatMap { [unowned self] atom -> AnyPublisher<AtomWithFee, TransactionError> in
+                self.addFee(to: atom)
+            }
+            .map { atomWithFee in
+                UnsignedAtom.withFee(atomWithFee)
+            }
+            .eraseToAnyPublisher()
+    }
+}
+
+public typealias SuccessAndFailurePublishers<Output, Failure: Error> = (success: AnyPublisher<Output, Never>, failure: AnyPublisher<Never, Failure>)
+
+private extension UnsignedAtom {
+    static func withFee(_ atomWithFee: AtomWithFee) -> Self {
+        do {
+            return try Self(atomWithPow: atomWithFee)
+        } catch {
+            incorrectImplementationShouldAlwaysBeAble(to: "Init UnsignedAtom with AtomWithFee")
         }
-        .crashOnFailure()
-        .flatMap { [unowned self] atom -> AnyPublisher<AtomWithFee, Never> in
-            return self.addFee(to: atom).eraseToAnyPublisher()
-        }
-        .tryMap { atomWithFee in
-            try UnsignedAtom(atomWithPow: atomWithFee)
-        }
-        .crashOnFailure()
+        
     }
 }

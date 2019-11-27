@@ -27,31 +27,50 @@ import Combine
 
 public final class ResultOfUserAction {
     
-    /// Ugly hack to retain this Publisher
-    private let cachedAtom: AnyPublisher<SignedAtom, Never>
-    let updates: AnyPublisher<SubmitAtomAction, Never>
-    let completable: AnyPublisher<Never, Never>
+    let status: AnyPublisher<SubmitAtomAction, TransactionError>
+    let completion: AnyPublisher<Never, TransactionError>
     
     init(
-        submitAtomStatusUpdatesPublisher updates: AnyPublisher<SubmitAtomAction, Never>,
-        cachedAtom: AnyPublisher<SignedAtom, Never>
+        updates: AnyPublisher<SubmitAtomAction, Never>,
+        atom: AnyPublisher<SignedAtom, TransactionError>
     ) {
-        self.cachedAtom = cachedAtom
-        self.updates = updates
         
-        self.completable = updates
+        let statusUpdates: AnyPublisher<SubmitAtomAction, TransactionError> = updates
             .compactMap(typeAs: SubmitAtomActionStatus.self)
             .first()
-            .flatMap { submitAtomActionStatus -> AnyPublisher<Never, Never> in
-                switch submitAtomActionStatus.statusEvent {
-                case .stored:
-                    return Empty(completeImmediately: true).eraseToAnyPublisher()
-                case .notStored(let reason):
-//                    return Just(<SubmitAtomError>(wrappedError: reason.error)).eraseToAnyPublisher()
-                    fatalError()
-                }
+            .setFailureType(to: TransactionError.self)
+            .flatMap { $0.publisherCompleteOnStored() }
+            .share()
+            .eraseToAnyPublisher()
+        
+        self.status = statusUpdates
+        
+        let completionFromUpdates = statusUpdates.ignoreOutput().eraseToAnyPublisher()
+        
+        let failureFromCreationOfSignedAtom: AnyPublisher<Never, TransactionError> = atom
+            .flatMap { _ in
+                // Should never finish, only complete with error
+                Empty<Never, TransactionError>(completeImmediately: false)
             }
-            
-        .eraseToAnyPublisher()
+            .eraseToAnyPublisher()
+        
+        self.completion = failureFromCreationOfSignedAtom
+            .merge(with: completionFromUpdates)
+            .prefix(untilCompletionFrom: completionFromUpdates)
+            .share()
+            .eraseToAnyPublisher()
+    }
+}
+
+private extension SubmitAtomActionStatus {
+    func publisherCompleteOnStored() -> AnyPublisher<SubmitAtomAction, TransactionError> {
+        switch statusEvent {
+        case .stored:
+            return Empty<SubmitAtomAction, TransactionError>(completeImmediately: true)
+                .eraseToAnyPublisher()
+        case .notStored(let reason):
+            return Fail<SubmitAtomAction, TransactionError>(error: .submitAtomError(reason.error))
+                .eraseToAnyPublisher()
+        }
     }
 }

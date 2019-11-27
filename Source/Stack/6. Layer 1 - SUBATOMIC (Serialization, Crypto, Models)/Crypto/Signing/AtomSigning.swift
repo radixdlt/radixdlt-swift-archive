@@ -26,13 +26,13 @@ import Foundation
 import Combine
 
 public protocol AtomSigning {
-    func sign(atom unsignedAtom: UnsignedAtom) -> Single<SignedAtom, SigningError>
+    func sign(atom unsignedAtom: UnsignedAtom) -> AnyPublisher<SignedAtom, SigningError>
 }
 
 // MARK: - Default Implementation
 public extension AtomSigning where Self: SigningRequesting, Self: PublicKeyOwner {
     
-    func sign(atom unsignedAtom: UnsignedAtom) -> Single<SignedAtom, SigningError> {
+    func sign(atom unsignedAtom: UnsignedAtom) -> AnyPublisher<SignedAtom, SigningError> {
         privateKeyForSigning.tryMap {
             try Signer.sign(unsignedAtom, privateKey: $0)
         }
