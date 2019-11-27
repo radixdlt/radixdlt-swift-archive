@@ -298,8 +298,17 @@ private extension TokenBalancesReducerTests {
         let tokensStateSubject = PassthroughSubject<TokenDefinitionsState, Never>()
         
         let tokenBalancesReducer = TokenBalancesReducer(
-            makeBalanceReferencesStatePublisher: { _ in balanceStateSubject.eraseToAnyPublisher() },
-            makeTokenDefinitionsPublisher: { _ in tokensStateSubject.eraseToAnyPublisher() }
+            makeBalanceReferencesStatePublisher: { _ in
+                balanceStateSubject
+                    .setFailureType(to: StateSubscriberError.self)
+                    .eraseToAnyPublisher()
+                
+            },
+            makeTokenDefinitionsPublisher: { _ in
+                tokensStateSubject
+                    .setFailureType(to: StateSubscriberError.self)
+                    .eraseToAnyPublisher()
+            }
         )
         
         let tokenBalancesOfAddressPublisher = tokenBalancesReducer.tokenBalancesOfAddress(address)

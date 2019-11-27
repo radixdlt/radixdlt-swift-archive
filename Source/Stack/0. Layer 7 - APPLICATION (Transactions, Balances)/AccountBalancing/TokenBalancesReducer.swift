@@ -25,8 +25,13 @@
 import Foundation
 import Combine
 
+public enum TokenBalancesReducerError: Swift.Error, Equatable {
+    case tokenBalancesError(TokenBalances.Error)
+    case stateSubscriberError(StateSubscriberError)
+}
+
 public struct TokenBalancesReducer {
-    public typealias TokenBalancesOfAddress = (Address) -> AnyPublisher<TokenBalances, Never>
+    public typealias TokenBalancesOfAddress = (Address) -> AnyPublisher<TokenBalances, TokenBalancesReducerError>
     public let tokenBalancesOfAddress: TokenBalancesOfAddress
     init(tokenBalancesOfAddress: @escaping TokenBalancesOfAddress) {
         self.tokenBalancesOfAddress = tokenBalancesOfAddress
@@ -40,29 +45,32 @@ public extension TokenBalancesReducer {
     // TODO: This can most likely be simplified a LOT.
     
     init(
-        makeBalanceReferencesStatePublisher: @escaping (Address) -> AnyPublisher<TokenBalanceReferencesState, Never>,
-        makeTokenDefinitionsPublisher: @escaping (Address) -> AnyPublisher<TokenDefinitionsState, Never>
+        makeBalanceReferencesStatePublisher: @escaping (Address) -> AnyPublisher<TokenBalanceReferencesState, StateSubscriberError>,
+        makeTokenDefinitionsPublisher: @escaping (Address) -> AnyPublisher<TokenDefinitionsState, StateSubscriberError>
     ) {
         // swiftlint:enable function_body_length
-        self.init { address in
+        self.init { address -> AnyPublisher<TokenBalances, TokenBalancesReducerError> in
             
-            let balanceReferencesStatePublisher = makeBalanceReferencesStatePublisher(address).share() // buffer?
+            let balanceReferencesStatePublisher = makeBalanceReferencesStatePublisher(address).share()
+                .mapError { TokenBalancesReducerError.stateSubscriberError($0) }
             
-            func newTokenDefinitionsStatePublisher(for someAddress: Address) -> AnyPublisher<TokenDefinitionsState, Never> {
-                makeTokenDefinitionsPublisher(someAddress).share().eraseToAnyPublisher()
+            func newTokenDefinitionsStatePublisher(for someAddress: Address) -> AnyPublisher<TokenDefinitionsState, TokenBalancesReducerError> {
+                makeTokenDefinitionsPublisher(someAddress)
+                    .mapError { TokenBalancesReducerError.stateSubscriberError($0) }
+                    .share().eraseToAnyPublisher()
             }
             
-            var tokenDefinitionPublishersMap: [Address: AnyPublisher<TokenDefinitionsState, Never>] = [
+            var tokenDefinitionPublishersMap: [Address: AnyPublisher<TokenDefinitionsState, TokenBalancesReducerError>] = [
                 address: newTokenDefinitionsStatePublisher(for: address)
             ]
             
             // MARK: TokenBalanceReferencesState --{trigger}--> TokenBalances
             let tokenBalancesTriggeredByBalanceUpdate = balanceReferencesStatePublisher
-                .flatMap { (tokenBalanceReferencesState: TokenBalanceReferencesState) in
-                    Publishers.Sequence<[TokenReferenceBalance], Never>(
+                .flatMap { (tokenBalanceReferencesState: TokenBalanceReferencesState) -> AnyPublisher<TokenBalances, TokenBalancesReducerError> in
+                    Publishers.Sequence<[TokenReferenceBalance], TokenBalancesReducerError>(
                         sequence: tokenBalanceReferencesState.tokenReferenceBalances
                     )
-                        .flatMap { tokenReferenceBalance -> AnyPublisher<TokenBalance, Never> in
+                        .flatMap { tokenReferenceBalance -> AnyPublisher<TokenBalance, TokenBalancesReducerError> in
                             let rri = tokenReferenceBalance.tokenResourceIdentifier
                             
                             return tokenDefinitionPublishersMap.valueForKey(key: rri.address) {
@@ -77,20 +85,24 @@ public extension TokenBalancesReducer {
                                     tokenReferenceBalance: tokenReferenceBalance
                                 )
                             }
-                            .crashOnFailure()
+                            .mapError { castOrKill(instance: $0, toType: TokenBalances.Error.self) }
+                            .mapError { TokenBalancesReducerError.tokenBalancesError($0) }
+                            .eraseToAnyPublisher()
                     }
                     .collect(tokenBalanceReferencesState.tokenReferenceBalances.count)
                     .tryMap { (tokenBalances: [TokenBalance]) -> TokenBalances in
                         try TokenBalances(balances: tokenBalances)
                     }
-                    .crashOnFailure()
+                    .mapError { castOrKill(instance: $0, toType: TokenBalances.Error.self) }
+                    .mapError { TokenBalancesReducerError.tokenBalancesError($0) }
+                    .eraseToAnyPublisher()
             }
             
             // MARK: TokenDefinitionsState --{trigger}--> TokenBalances
             let tokenBalancesTriggeredByTokenStateUpdate = tokenDefinitionPublishersMap[address]!
-                .flatMap { (tokenDefinitionsState: TokenDefinitionsState) in
+                .flatMap { (tokenDefinitionsState: TokenDefinitionsState) -> AnyPublisher<TokenBalances, TokenBalancesReducerError> in
                     
-                    Publishers.Sequence<[TokenDefinition], Never>(
+                    Publishers.Sequence<[TokenDefinition], TokenBalancesReducerError>(
                         sequence: tokenDefinitionsState.tokenDefinitions
                     ).combineLatest(balanceReferencesStatePublisher) {
                         (tokenDefinition: TokenDefinition, tokenBalanceReferencesState: TokenBalanceReferencesState) -> TokenBalance? in
@@ -107,13 +119,16 @@ public extension TokenBalancesReducer {
                     .tryMap { (tokenBalance: TokenBalance) -> TokenBalances in
                         try TokenBalances(balances: [tokenBalance])
                     }
-                    .crashOnFailure()
+                    .mapError { castOrKill(instance: $0, toType: TokenBalances.Error.self) }
+                    .mapError { TokenBalancesReducerError.tokenBalancesError($0) }
+                    .eraseToAnyPublisher()
             }
             
             return tokenBalancesTriggeredByBalanceUpdate
                 .merge(with: tokenBalancesTriggeredByTokenStateUpdate)
                 .tryScan(TokenBalances.empty, { try $0.merging(with: $1) })
-                 .crashOnFailure()
+                .mapError { castOrKill(instance: $0, toType: TokenBalances.Error.self) }
+                .mapError { TokenBalancesReducerError.tokenBalancesError($0) }
                 .eraseToAnyPublisher()
         }
         
@@ -125,14 +140,14 @@ public extension TokenBalancesReducer {
         Self(
             makeBalanceReferencesStatePublisher: { [weak app] in
                 guard let app = app else {
-                    return Empty<TokenBalanceReferencesState, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                    return Empty<TokenBalanceReferencesState, StateSubscriberError>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
                 return app.observeBalanceReferences(at: $0)
                 
             },
             makeTokenDefinitionsPublisher: { [weak app] in
                 guard let app = app else {
-                    return Empty<TokenDefinitionsState, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                    return Empty<TokenDefinitionsState, StateSubscriberError>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
                 return app.observeTokenDefinitions(at: $0)
             }

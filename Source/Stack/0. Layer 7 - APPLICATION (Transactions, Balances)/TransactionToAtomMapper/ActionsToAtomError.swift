@@ -23,11 +23,27 @@
 //
 
 import Foundation
-import Combine
 
-public protocol StateSubscriber {
-    func observeState<State>(
-        ofType stateType: State.Type,
-        at address: Address
-    ) -> AnyPublisher<State, StateSubscriberError> where State: ApplicationState
+public struct ActionsToAtomError: Swift.Error {
+    let error: Swift.Error
+    let userActions: [UserAction]
+    init(error: Swift.Error, userActions: [UserAction]) {
+        self.error = error
+        self.userActions = userActions
+    }
+}
+
+public extension ActionsToAtomError {
+    init(error: Swift.Error, userAction: UserAction) {
+        self.init(error: error, userActions: [userAction])
+    }
+}
+
+// MARK: Equatable-ish
+public extension ActionsToAtomError {
+    func isEqual(to other: Self) -> Bool {
+        let sameError = compareAny(lhs: error, rhs: other.error, beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer: false)
+        let sameUserActions = self.userActions.map { $0.nameOfAction } == other.userActions.map { $0.nameOfAction }
+        return sameError && sameUserActions
+    }
 }

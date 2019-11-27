@@ -29,8 +29,8 @@ public protocol AccountBalancing: ActiveAccountOwner {
     
     var nativeTokenDefinition: TokenDefinition { get }
         
-    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, Never>
-    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance?, Never>
+    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, TokenBalancesReducerError>
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance?, TokenBalancesReducerError>
 }
 
 public extension AccountBalancing {
@@ -39,31 +39,31 @@ public extension AccountBalancing {
         return nativeTokenDefinition.tokenDefinitionReference
     }
     
-    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance?, Never> {
+    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance?, TokenBalancesReducerError> {
         return observeBalances(ownedBy: owner).map {
             $0.balance(ofToken: tokenIdentifier)
         }.eraseToAnyPublisher()
     }
     
-    func observeMyBalances() -> AnyPublisher<TokenBalances, Never> {
+    func observeMyBalances() -> AnyPublisher<TokenBalances, TokenBalancesReducerError> {
         return observeBalances(ownedBy: addressOfActiveAccount)
     }
     
-    func observeMyBalance(ofToken tokenIdentifier: ResourceIdentifier) -> AnyPublisher<TokenBalance?, Never> {
+    func observeMyBalance(ofToken tokenIdentifier: ResourceIdentifier) -> AnyPublisher<TokenBalance?, TokenBalancesReducerError> {
         return observeBalance(ofToken: tokenIdentifier, ownedBy: addressOfActiveAccount)
     }
     
-    func observeMyBalanceOfNativeTokens() -> AnyPublisher<TokenBalance?, Never> {
+    func observeMyBalanceOfNativeTokens() -> AnyPublisher<TokenBalance?, TokenBalancesReducerError> {
         return observeMyBalance(ofToken: nativeTokenIdentifier)
     }
     
-    func observeMyBalanceOfNativeTokensOrZero() -> AnyPublisher<TokenBalance, Never> {
+    func observeMyBalanceOfNativeTokensOrZero() -> AnyPublisher<TokenBalance, TokenBalancesReducerError> {
         return observeMyBalanceOfNativeTokens()
             .replaceNil(with: TokenBalance.zero(token: nativeTokenDefinition, ownedBy: addressOfActiveAccount))
             .eraseToAnyPublisher()
     }
     
-    func balanceOfNativeTokensOrZero(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance, Never> {
+    func balanceOfNativeTokensOrZero(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalance, TokenBalancesReducerError> {
         return observeBalance(ofToken: nativeTokenIdentifier, ownedBy: owner)
             .replaceNil(with: TokenBalance.zero(token: nativeTokenDefinition, ownedBy: owner))
             .eraseToAnyPublisher()

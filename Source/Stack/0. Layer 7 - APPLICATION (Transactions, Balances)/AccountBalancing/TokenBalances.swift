@@ -90,18 +90,10 @@ public extension TokenBalances {
 }
 
 public extension TokenBalances {
-    func merging(with new: Self) throws -> Self {
+    func merging(with new: Self) throws -> Throws<Self, TokenBalances.Error> {
         return try self.merging(with: new, uniquingKeysWith: { last, new in
             if last.owner != new.owner {
                 throw Error.mergingTokenBalancesWithDifferentOwners(last: last.owner, new: new.owner)
-            }
-            
-            if last.token != new.token {
-                print("⚠️ replacing last token definition: '\(last.token)' with new: \(new.token)")
-            }
-            
-            if last.amount != new.amount {
-                print("💡👍 replacing last amount: '\(last.amount)' with new: \(new.amount)")
             }
             return new
         })

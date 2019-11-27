@@ -144,7 +144,7 @@ public extension RadixApplicationClient {
     }
     
     /// Returns a hot observable of the latest state of token definitions at the user's address
-    func observeMyTokenDefinitions() -> AnyPublisher<TokenDefinitionsState, Never> {
+    func observeMyTokenDefinitions() -> AnyPublisher<TokenDefinitionsState, StateSubscriberError> {
         return observeTokenDefinitions(at: addressOfActiveAccount)
     }
 }
@@ -195,7 +195,7 @@ public extension RadixApplicationClient {
 // MARK: AccountBalancing
 public extension RadixApplicationClient {
 
-    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, Never> {
+    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, TokenBalancesReducerError> {
         TokenBalancesReducer.usingApplicationClient(self).tokenBalancesOfAddress(owner.address)
     }
 }
@@ -206,7 +206,7 @@ public extension RadixApplicationClient {
     func observeState<State>(
         ofType stateType: State.Type,
         at address: Address
-    ) -> AnyPublisher<State, Never> where State: ApplicationState {
+    ) -> AnyPublisher<State, StateSubscriberError> where State: ApplicationState {
         
         stateSubscriber.observeState(ofType: stateType, at: address)
     }
@@ -221,18 +221,18 @@ public extension RadixApplicationClient {
 
 // MARK: TokenDefinitionsState Observation
 public extension RadixApplicationClient {
-    func observeTokenDefinitions(at address: Address) -> AnyPublisher<TokenDefinitionsState, Never> {
+    func observeTokenDefinitions(at address: Address) -> AnyPublisher<TokenDefinitionsState, StateSubscriberError> {
         return observeState(ofType: TokenDefinitionsState.self, at: address)
     }
     
-    func observeTokenDefinition(identifier: ResourceIdentifier) -> AnyPublisher<TokenDefinition, Never> {
+    func observeTokenDefinition(identifier: ResourceIdentifier) -> AnyPublisher<TokenDefinition, StateSubscriberError> {
         let address = identifier.address
         return observeTokenDefinitions(at: address).map {
             $0.tokenDefinition(identifier: identifier)
         }.replaceNilWithEmpty()
     }
     
-    func observeTokenState(identifier: ResourceIdentifier) -> AnyPublisher<TokenState, Never> {
+    func observeTokenState(identifier: ResourceIdentifier) -> AnyPublisher<TokenState, StateSubscriberError> {
         let address = identifier.address
         return observeTokenDefinitions(at: address).map {
             $0.tokenState(identifier: identifier)
@@ -242,7 +242,7 @@ public extension RadixApplicationClient {
 
 // MARK: TokenBalanceReferencesState Observation
 public extension RadixApplicationClient {
-    func observeBalanceReferences(at address: Address) -> AnyPublisher<TokenBalanceReferencesState, Never> {
+    func observeBalanceReferences(at address: Address) -> AnyPublisher<TokenBalanceReferencesState, StateSubscriberError> {
         return observeState(ofType: TokenBalanceReferencesState.self, at: address)
     }
 }

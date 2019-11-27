@@ -44,20 +44,47 @@ public extension DefaultStateSubscriber {
     func observeState<State>(
         ofType stateType: State.Type,
         at address: Address
-    ) -> AnyPublisher<State, Never> where State: ApplicationState {
+    ) -> AnyPublisher<State, StateSubscriberError> where State: ApplicationState {
         
         return atomStore.onSync(address: address)
             .mapToVoid()
-            .tryMap { [weak self] _ -> State in
-                guard let self = self else {
-                    // TODO Combine replace fatalError with error
-                    fatalError("Self is nil")
-                }
+            .tryMap { [unowned self] _ -> State in
                 let upParticles = self.atomStore.upParticles(at: address)
-                let reducedState = try self.particlesToStateReducer.reduce(upParticles: upParticles, to: stateType)
-                return reducedState
+                return try self.particlesToStateReducer.reduce(upParticles: upParticles, to: stateType)
             }
-            .crashOnFailure()
+            .mapError { ParticlesToStateReducerError($0) }
+            .mapError { StateSubscriberError.particlesToStateReducerError($0) }
+            .eraseToAnyPublisher()
     }
 }
 
+public struct ParticlesToStateReducerError: Swift.Error {
+    public let wrappedError: Swift.Error
+    fileprivate init(_ error: Swift.Error) {
+        self.wrappedError = error
+    }
+}
+
+// MARK: Equatable-ish
+public extension ParticlesToStateReducerError {
+    func isEqual(to other: Self) -> Bool {
+        return compareAny(
+            lhs: wrappedError,
+            rhs: other.wrappedError,
+            beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer: false
+        )
+    }
+}
+
+public enum StateSubscriberError: Swift.Error, Equatable {
+    case particlesToStateReducerError(ParticlesToStateReducerError)
+}
+
+public extension StateSubscriberError {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.particlesToStateReducerError(let lhsError), .particlesToStateReducerError(let rhsError)):
+            return lhsError.isEqual(to: rhsError)
+        }
+    }
+}

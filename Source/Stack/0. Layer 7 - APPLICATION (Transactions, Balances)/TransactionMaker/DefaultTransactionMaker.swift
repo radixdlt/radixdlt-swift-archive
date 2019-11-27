@@ -83,7 +83,7 @@ public extension DefaultTransactionMaker {
 
 // MARK: TransactionToAtomMapper
 public extension DefaultTransactionMaker {
-    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> ThrowsOrReturns<ActionsToAtomError, Atom> {
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Throws<Atom, ActionsToAtomError> {
         return try transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
     }
 }
@@ -197,7 +197,7 @@ private extension DefaultTransactionMaker {
     }
 
     func buildAtomFrom(transaction: Transaction) -> AnyPublisher<Atom, TransactionError> {
-        addressOfActiveAccount.tryMap { [unowned self] address throws -> ThrowsOrReturns<ActionsToAtomError, Atom> in
+        addressOfActiveAccount.tryMap { [unowned self] address throws -> Throws<Atom, ActionsToAtomError> in
             try self.atomFrom(transaction: transaction, addressOfActiveAccount: address)
         }
         .mapError { castOrKill(instance: $0, toType: ActionsToAtomError.self) }

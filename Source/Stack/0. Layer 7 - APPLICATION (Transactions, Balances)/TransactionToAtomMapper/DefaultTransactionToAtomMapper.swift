@@ -64,10 +64,10 @@ public extension DefaultTransactionToAtomMapper {
     }
 }
 
-public typealias ThrowsOrReturns<Failure: Error, Output> = Output
+public typealias Throws<Output, Failure: Error> = Output
 
 public extension DefaultTransactionToAtomMapper {
-    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> ThrowsOrReturns<ActionsToAtomError, Atom> {
+    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Throws<Atom, ActionsToAtomError> {
         
         let temporaryStore = TemporaryLocalAtomStore(
             actionMappers: actionMappers,
@@ -93,27 +93,6 @@ public extension DefaultTransactionToAtomMapper {
 }
 
 // MARK: Throwing
-public struct ActionsToAtomError: Swift.Error {
-    let error: Swift.Error
-    let userActions: [UserAction]
-    init(error: Swift.Error, userActions: [UserAction]) {
-        self.error = error
-        self.userActions = userActions
-    }
-    
-    public func isEqual(to other: ActionsToAtomError) -> Bool {
-        let sameError = compareAny(lhs: error, rhs: other.error, beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer: false)
-        let sameUserActions = self.userActions.map { $0.nameOfAction } == other.userActions.map { $0.nameOfAction }
-        return sameError && sameUserActions
-    }
-}
-
-public extension ActionsToAtomError {
-    init(error: Swift.Error, userAction: UserAction) {
-        self.init(error: error, userActions: [userAction])
-    }
-}
-
 public extension DefaultTransactionToAtomMapper {
     typealias Error = ActionsToAtomError
 }
@@ -141,7 +120,7 @@ private extension DefaultTransactionToAtomMapper {
 
 extension DefaultTransactionToAtomMapper.TemporaryLocalAtomStore {
     
-    fileprivate func particleGroupsFromActions(_ userAction: [UserAction]) throws -> ParticleGroups {
+    fileprivate func particleGroupsFromActions(_ userAction: [UserAction]) throws -> Throws<ParticleGroups, ActionsToAtomError> {
         var particleGroupsList = [ParticleGroup]()
         
         for action in userAction {
@@ -160,7 +139,7 @@ extension DefaultTransactionToAtomMapper.TemporaryLocalAtomStore {
         return ParticleGroups(particleGroupsList)
     }
     
-    private func particleGroupFromAction(_ action: UserAction) throws -> ParticleGroups {
+    private func particleGroupFromAction(_ action: UserAction) throws -> Throws<ParticleGroups, ActionsToAtomError> {
         let statefulMapper = actionMapperFor(action: action)
         let requiredState = self.requiredState(for: action)
         
