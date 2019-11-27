@@ -233,24 +233,36 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         XCTAssertEqual(recordedThrownError, expectedError)
     }
     
-    
-    /*
-    func testFailAliceUsingBobsAddress() {
-        // GIVEN: dentities Alice and a Bob and a RadixApplicationClient connected to some Radix node
+    func testFailAliceUsingBobsAddress() throws {
+        // GIVEN: identities Alice and a Bob and a RadixApplicationClient connected to some Radix node
         let aliceApp = application!
+        
+        let putUniqueIdAction = PutUniqueIdAction(uniqueMaker: bob, string: "foo")
         
         // WHEN: Alice sends a Transaction containing a UniqueId specifying Bob’s address
         let transaction = Transaction {
-            PutUniqueIdAction(uniqueMaker: bob, string: "foo")
+            putUniqueIdAction
         }
         
         let resultOfUniqueMaking = aliceApp.send(transaction: transaction)
         
+        let recorder = resultOfUniqueMaking.completion.record()
+        
         // THEN: an error `nonMatchingAddress` is thrown
-        resultOfUniqueMaking.blockingAssertThrows(
-            error: PutUniqueIdError.uniqueError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob))
+        let recordedThrownError: TransactionError = try wait(
+            for: recorder.expectError(),
+            timeout: .enoughForPOW,
+            description: "Using someone else's address should throw error"
         )
+        
+        let expectedError =  TransactionError.actionsToAtomError(
+            ActionsToAtomError(
+                error: PutUniqueIdError.uniqueError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)),
+                userAction: putUniqueIdAction
+            )
+        )
+        
+        XCTAssertEqual(recordedThrownError, expectedError)
     }
- */
 }
 
