@@ -122,7 +122,6 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         let resultOfPutUniqueActions = application.send(transaction: transaction)
         
         let recorderCompletable = resultOfPutUniqueActions.completion
-//            .receive(on: RunLoop.main)
             .record()
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown

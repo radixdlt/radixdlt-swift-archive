@@ -28,7 +28,11 @@ import Combine
 public final class ResultOfUserAction {
     
     let status: AnyPublisher<SubmitAtomAction, TransactionError>
-    let completion: AnyPublisher<Never, TransactionError>
+    
+    private let completionPublisher: AnyPublisher<Never, TransactionError>
+
+    private var bufferedErrors = [TransactionError]()
+    private var cancellables = Set<AnyCancellable>()
     
     init(
         updates: AnyPublisher<SubmitAtomAction, Never>,
@@ -54,11 +58,31 @@ public final class ResultOfUserAction {
             }
             .eraseToAnyPublisher()
         
-        self.completion = failureFromCreationOfSignedAtom
+        self.completionPublisher = failureFromCreationOfSignedAtom
             .merge(with: completionFromUpdates)
             .prefix(untilCompletionFrom: completionFromUpdates)
             .share()
             .eraseToAnyPublisher()
+        
+        // TODO This can probably be done in a more elegant way, since some `TransactionError`
+        // might be thrown during building of Atom, they will be thrown right away. It seems
+        // this prematurely terminates the 'completionPublisher'. Thus we manually 'buffer'
+        // these errors
+        failureFromCreationOfSignedAtom.sink(
+            receiveError: { [unowned self] errorToBuffer in
+                self.bufferedErrors.append(errorToBuffer)
+            }
+        ).store(in: &cancellables)
+    }
+}
+
+public extension ResultOfUserAction {
+    var completion: AnyPublisher<Never, TransactionError> {
+        if let bufferedError = bufferedErrors.first {
+            return Fail<Never, TransactionError>(error: bufferedError).eraseToAnyPublisher()
+        } else {
+            return completionPublisher
+        }
     }
 }
 

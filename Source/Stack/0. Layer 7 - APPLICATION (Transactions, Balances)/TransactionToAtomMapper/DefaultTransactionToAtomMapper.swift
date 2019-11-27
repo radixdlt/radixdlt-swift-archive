@@ -84,7 +84,6 @@ public extension DefaultTransactionToAtomMapper {
             try Addresses.allInSameUniverse(atom.addresses().map { $0 })
             return atom
         } catch let actionsToAtomError as ActionsToAtomError {
-            Swift.print("⚠️💥 ActionsToAtomError: \(actionsToAtomError)")
             throw actionsToAtomError
         } catch {
             unexpectedlyMissedToCatch(error: error)
