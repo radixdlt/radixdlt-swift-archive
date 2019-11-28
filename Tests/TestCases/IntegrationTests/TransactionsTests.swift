@@ -291,21 +291,36 @@ class TransactionsTests: IntegrationTest {
         
         XCTAssertEqual(transaction1.actions.count, 2)
         
-        /*
-        guard let burnOrMintTransactions = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self]).blockingArrayTakeFirst(2) else { return }
+        let burnOrMintTransactions = try waitFor(
+            first: 2,
+            valuesPublishedBy: application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self])
+        )
         
         XCTAssertEqual(burnOrMintTransactions.count, 2)
         
-        guard let uniqueBurnTransactions = application.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, BurnTokensAction.self]).blockingTakeFirst() else { return }
+        let uniqueBurnTransactions = try waitForFirstValue(
+            of: application.observeMyTransactions(
+                containingActionsOfAllTypes: [PutUniqueIdAction.self, BurnTokensAction.self]
+            )
+        )
+
+        guard
+            case let uniqueActionInBurnTxs = uniqueBurnTransactions.actions(ofType: PutUniqueIdAction.self),
+            let uniqueActionInBurnTx = uniqueActionInBurnTxs.first
+            else { return XCTFail("Expected UniqueAction") }
         
-        guard case let uniqueActionInBurnTxs = uniqueBurnTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInBurnTx = uniqueActionInBurnTxs.first else { return XCTFail("Expected UniqueAction") }
         XCTAssertEqual(uniqueActionInBurnTx.string, "burn")
+
+        let uniqueMintTransactions = try waitForFirstValue(
+            of: application.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self])
+        )
+
+        guard
+            case let uniqueActionInMintTxs = uniqueMintTransactions.actions(ofType: PutUniqueIdAction.self),
+            let uniqueActionInMintTx = uniqueActionInMintTxs.first
+            else { return XCTFail("Expected UniqueAction") }
         
-        guard let uniqueMintTransactions = application.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self]).blockingTakeFirst() else { return }
-        
-        guard case let uniqueActionInMintTxs = uniqueMintTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInMintTx = uniqueActionInMintTxs.first else { return XCTFail("Expected UniqueAction") }
         XCTAssertEqual(uniqueActionInMintTx.string, "mint")
  
- */
     }
 }
