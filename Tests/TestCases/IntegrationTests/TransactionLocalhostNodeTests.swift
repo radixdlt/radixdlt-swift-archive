@@ -28,7 +28,7 @@ import Combine
 
 // MARK: ☢️ No Target Membership ☢️
 
-class TransactionLocalhostNodeTests: LocalhostNodeTest {
+class TransactionLocalhostNodeTests: IntegrationTest {
     
     private var aliceIdentity: AbstractIdentity!
     private var application: RadixApplicationClient!

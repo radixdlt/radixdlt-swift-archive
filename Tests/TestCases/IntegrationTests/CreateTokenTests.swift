@@ -28,7 +28,7 @@ import Combine
 
 // MARK: ☢️ No Target Membership ☢️
 
-class CreateTokenTests: LocalhostNodeTest {
+class CreateTokenTests: IntegrationTest {
 
     private let aliceIdentity = AbstractIdentity()
     private let bobAccount = Account()

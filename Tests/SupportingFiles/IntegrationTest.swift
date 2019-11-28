@@ -27,7 +27,7 @@ import XCTest
 import Combine
 @testable import RadixSDK
 
-class LocalhostNodeTest: TestCase {
+class IntegrationTest: TestCase {
 
     var aliceIdentity: AbstractIdentity!
     var bobAccount: Account!
@@ -56,7 +56,7 @@ class LocalhostNodeTest: TestCase {
     
 }
 
-extension LocalhostNodeTest {
+extension IntegrationTest {
     func waitForTransactionToFinish(
         _ pendingTransaction: PendingTransaction,
         timeout: TimeInterval = .enoughForPOW,

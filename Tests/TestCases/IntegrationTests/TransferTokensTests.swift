@@ -26,7 +26,7 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-class TransferTokensTests: LocalhostNodeTest {
+class TransferTokensTests: IntegrationTest {
 
     func testTransferTokenWithGranularityOf1() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob

@@ -27,7 +27,7 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-class PutUniqueIdActionTests: LocalhostNodeTest {
+class PutUniqueIdActionTests: IntegrationTest {
     
     func testSendTransactionWithSingleUniqueId() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node

@@ -28,7 +28,7 @@ import Combine
 
 // MARK: ☢️ No Target Membership ☢️
 
-class BurnTokensTests: LocalhostNodeTest {
+class BurnTokensTests: IntegrationTest {
     
     private var aliceIdentity: AbstractIdentity!
     private var bobIdentity: AbstractIdentity!

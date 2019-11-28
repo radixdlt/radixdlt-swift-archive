@@ -32,7 +32,7 @@ private extension Supply {
     static let ten: Supply = 10
 }
 
-class MintTokensTests: LocalhostNodeTest {
+class MintTokensTests: IntegrationTest {
 
     private var aliceIdentity: AbstractIdentity!
     private var bobIdentity: AbstractIdentity!

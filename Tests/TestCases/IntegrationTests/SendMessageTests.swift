@@ -28,7 +28,7 @@ import Combine
 
 // MARK: ☢️ No Target Membership ☢️
 
-class SendMessageTests: LocalhostNodeTest {
+class SendMessageTests: IntegrationTest {
     
     private let aliceIdentity = AbstractIdentity()
     private let bobAccount = Account()
