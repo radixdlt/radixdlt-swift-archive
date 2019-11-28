@@ -182,36 +182,57 @@ extension LocalhostNodeTest {
     ) throws -> P.Output where P: Publisher {
         return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: "First value of publisher")
     }
+    
+    func waitForAction<Action>(
+        ofType _: Action.Type,
+        in pendingTransaction: PendingTransaction,
+        because description: String,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line,
+        
+        toFailWithError makeExpectedTransactionErrorFromAction: (Action) -> TransactionError
+    ) throws where Action: UserAction {
+
+        let action: Action = try XCTUnwrap(pendingTransaction.firstAction(), line: line)
+
+        let recordedThrownError: TransactionError = try wait(
+            for: pendingTransaction.completion.record().expectError(),
+            timeout: timeout,
+            description: description
+        )
+        
+        let expectedError = makeExpectedTransactionErrorFromAction(action)
+
+        XCTAssertEqual(
+            recordedThrownError,
+            expectedError,
+            line: line
+        )
+    }
 }
 
 private extension TransferTokensTests {
     
     func waitFor(
-        transfer: PendingTransaction,
+        transfer pendingTransaction: PendingTransaction,
         toFailWithError transferError: TransferError,
         because description: String,
         timeout: TimeInterval = .enoughForPOW,
         line: UInt = #line
     ) throws {
         
-        let transferTokensAction: TransferTokensAction = try XCTUnwrap(transfer.firstAction(), line: line)
-        let transferRecording = transfer.completion.record()
-        
-        let recordedThrownError: TransactionError = try wait(
-            for: transferRecording.expectError(),
-            timeout: timeout,
-            description: description
-        )
-        
-        XCTAssertEqual(
-            recordedThrownError,
+        try waitForAction(
+            ofType: TransferTokensAction.self,
+            in: pendingTransaction,
+            because: description
+        ) { transferTokensAction in
+            
             TransactionError.actionsToAtomError(
                 .transferError(
                     transferError,
                     action: transferTokensAction
                 )
-            ),
-            line: line
-        )
+            )
+        }
     }
 }

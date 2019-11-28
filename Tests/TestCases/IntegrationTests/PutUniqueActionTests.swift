@@ -52,20 +52,13 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "foobar")
         }
-        let resultOfPutUniqueAction = application.make(transaction: transaction)
         
-        let recorderCompletable = resultOfPutUniqueAction.completion.record()
+        let pendingTransaction = application.make(transaction: transaction)
+        try waitForTransactionToFinish(pendingTransaction)
         
-        try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
-        
-        let executedTransactionsPublisher = application.observeTransactions(
-            at: alice,
-            containingActionOfAnyType: [PutUniqueIdAction.self]
+        let executedTransaction = try waitForFirstValue(
+            of: application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self])
         )
-        
-        let recorderTransactions = executedTransactionsPublisher.record()
-        
-        let executedTransaction: ExecutedTransaction = try wait(for: recorderTransactions.firstOrError, timeout: 1, description: "ExecutedTransactions")
 
         let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
 
@@ -86,18 +79,12 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             PutUniqueIdAction(uniqueMaker: alice, string: "bar")
         }
         
-        let resultOfPutUniqueActions = application.make(transaction: transaction)
-        let recorderCompletable = resultOfPutUniqueActions.completion.record()
-        try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
+        let pendingTransaction = application.make(transaction: transaction)
+        try waitForTransactionToFinish(pendingTransaction)
         
-        let executedTransactionsPublisher = application.observeTransactions(
-            at: alice,
-            containingActionOfAnyType: [PutUniqueIdAction.self]
+        let executedTransaction = try waitForFirstValue(
+            of: application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self])
         )
-        
-        let recorderTransactions = executedTransactionsPublisher.record()
-        
-        let executedTransaction: ExecutedTransaction = try wait(for: recorderTransactions.firstOrError, timeout: 1, description: "ExecutedTransactions")
         
         let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
 
@@ -119,55 +106,30 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             putUniqueIdAction
         }
 
-        let resultOfPutUniqueActions = application.make(transaction: transaction)
-        
-        let recorderCompletable = resultOfPutUniqueActions.completion.record()
+        let pendingTransaction = application.make(transaction: transaction)
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
-        let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
-        
-        let recordedThrownError: TransactionError = try wait(
-            for: recorderCompletable.expectError(),
-            timeout: .enoughForPOW,
-            description: "Transaction containing two identical 'PutUniqueIdAction' should throw error"
+        try waitFor(
+            pendingTransaction: pendingTransaction,
+            toFailWithError: .uniqueError(.rriAlreadyUsedByUniqueId(string: "foo")),
+            because: "Transaction containing two identical 'PutUniqueIdAction' should throw error"
         )
-        
-        let expectedError =  TransactionError.actionsToAtomError(
-            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
-        )
-        
-        XCTAssertEqual(recordedThrownError, expectedError)
     }
     
     
     func testFailPuttingAnUniqueIdUsedInAPreviousTransaction() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
-        
         let putUniqueIdAction = PutUniqueIdAction(uniqueMaker: alice, string: "foo")
-
-        let resultOfPutUniqueAction = application.putUniqueId(action: putUniqueIdAction)
-        
-        let recorderCompletable = resultOfPutUniqueAction.completion.record()
-         try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
-       
+        try  waitForTransactionToFinish(application.putUniqueId(action: putUniqueIdAction))
         
         // WHEN: Performing the same action again in a second transaction
-        let resultOfPutUniqueActionOnceAgain = application.putUniqueId(action: putUniqueIdAction)
-        let secondRecorder = resultOfPutUniqueActionOnceAgain.completion.record()
+        let pendingTransaction = application.putUniqueId(action: putUniqueIdAction)
         
-        // THEN: an error `uniqueStringAlreadyUsed` is thrown
-        let recordedThrownError: TransactionError = try wait(
-            for: secondRecorder.expectError(),
-            timeout: .enoughForPOW,
-            description: "Performing same 'PutUniqueIdAction' twice in different transactions should throw error"
+        try waitFor(
+            pendingTransaction: pendingTransaction,
+            toFailWithError: .uniqueError(.rriAlreadyUsedByUniqueId(string: "foo")),
+            because: "Transaction containing two identical 'PutUniqueIdAction' should throw error"
         )
-        
-        let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
-        let expectedError = TransactionError.actionsToAtomError(
-            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
-        )
-        
-        XCTAssertEqual(recordedThrownError, expectedError)
     }
     
     func testFailPuttingSameUniqueIdAsMutableToken() throws {
@@ -181,24 +143,14 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             putUniqueIdAction
         }
         
-        let resultOfUniqueMaking = application.make(transaction: transaction)
-        
-        let recorder = resultOfUniqueMaking.completion.record()
+        let pendingTransaction = application.make(transaction: transaction)
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
-        let recordedThrownError: TransactionError = try wait(
-            for: recorder.expectError(),
-            timeout: .enoughForPOW,
-            description: "Reusing same symbol should throw error"
+        try waitFor(
+            pendingTransaction: pendingTransaction,
+            toFailWithError: .uniqueError(.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))),
+            because: "Reusing same symbol should throw error"
         )
-        
-        let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
-        
-        let expectedError =  TransactionError.actionsToAtomError(
-            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
-        )
-        
-        XCTAssertEqual(recordedThrownError, expectedError)
     }
     
     func testFailPuttingSameUniqueIdAsFixedSupplyToken() throws {
@@ -211,24 +163,14 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             putUniqueIdAction
         }
         
-        let resultOfUniqueMaking = application.make(transaction: transaction)
-        
-        let recorder = resultOfUniqueMaking.completion.record()
+        let pendingTransaction = application.make(transaction: transaction)
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
-        let recordedThrownError: TransactionError = try wait(
-            for: recorder.expectError(),
-            timeout: .enoughForPOW,
-            description: "Reusing same symbol should throw error"
+        try waitFor(
+            pendingTransaction: pendingTransaction,
+            toFailWithError: .uniqueError(.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))),
+            because: "Reusing same symbol should throw error"
         )
-        
-        let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
-        
-        let expectedError =  TransactionError.actionsToAtomError(
-            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
-        )
-        
-        XCTAssertEqual(recordedThrownError, expectedError)
     }
     
     func testFailAliceUsingBobsAddress() throws {
@@ -242,27 +184,40 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
             putUniqueIdAction
         }
         
-        let resultOfUniqueMaking = aliceApp.make(transaction: transaction)
+        let pendingTransaction = aliceApp.make(transaction: transaction)
         
-        let recorder = resultOfUniqueMaking.completion.record()
         
         // THEN: an error `nonMatchingAddress` is thrown
-        let recordedThrownError: TransactionError = try wait(
-            for: recorder.expectError(),
-            timeout: .enoughForPOW,
-            description: "Using someone else's address should throw error"
+        try waitFor(
+            pendingTransaction: pendingTransaction,
+            toFailWithError: .uniqueError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)),
+            because: "Using someone else's address should throw error"
         )
-        
-        let putUniqueIdError = PutUniqueIdError.uniqueError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob))
-        
-        let expectedError =  TransactionError.actionsToAtomError(
-            ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
-        )
-        
-        XCTAssertEqual(recordedThrownError, expectedError)
     }
 }
 
-//extension TestCase {
-//    func XCTAssertActionsToAtomError()
-//}
+private extension PutUniqueIdActionTests {
+
+    func waitFor(
+        pendingTransaction: PendingTransaction,
+        toFailWithError putUniqueIdError: PutUniqueIdError,
+        because description: String,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line
+    ) throws {
+        
+        try waitForAction(
+            ofType: PutUniqueIdAction.self,
+            in: pendingTransaction,
+            because: description
+        ) { putUniqueIdAction in
+            
+            TransactionError.actionsToAtomError(
+                .putUniqueIdError(
+                    putUniqueIdError,
+                    action: putUniqueIdAction
+                )
+            )
+        }
+    }
+}
