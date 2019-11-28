@@ -139,49 +139,44 @@ class MintTokensTests: IntegrationTest {
         XCTAssertNotNil(cancellableSubscriptionOfBobsAddress)
     }
     
-    /*
-    func testMintFailDueToSupplyBeingFixed() {
+    func testMintFailDueToSupplyBeingFixed() throws {
         // GIVEN: Radix identity Alice and an application layer action MintToken, and a previously created FooToken, which has FIXED supply
         let (tokenCreation, fooToken) = application.createToken(supply: .fixed(to: 10))
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
-
+        try waitForTransactionToFinish(tokenCreation)
+        
         // WHEN: Alice call Mint for FooToken
         let minting = application.mintTokens(amount: 2, ofType: fooToken)
         
-        // THEN: an error unknownToken is thrown
-        minting.blockingAssertThrows(
-            error: MintError.tokenHasFixedSupplyThusItCannotBeMinted(identifier: fooToken)
+        // THEN: an error is thrown
+        try waitFor(
+            minting: minting,
+            toFailWithError: .tokenHasFixedSupplyThusItCannotBeMinted(identifier: fooToken)
         )
-        
     }
     
-    func testMintFailDueToIncorrectGranularity() {
+    func testMintFailDueToIncorrectGranularity() throws {
         // GIVEN: Radix identity Alice and an application layer action MintToken, and a previously created FooToken, with a granularity of 3
         let (tokenCreation, fooToken) = application.createToken(
             supply: .mutable(initial: 30),
             granularity: 3
         )
+        try waitForTransactionToFinish(tokenCreation)
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
         
         // WHEN: Alice call Mint(2) for FooToken, where 3∤2 (3 does not divide 2)
         let minting = application.mintTokens(amount: 2, ofType: fooToken)
         
-        minting.blockingAssertThrows(
-            error: MintError.amountNotMultipleOfGranularity(
+        // THEN: an error is thrown
+        try waitFor(
+            minting: minting,
+            toFailWithError: .amountNotMultipleOfGranularity(
                 token: fooToken,
                 triedToMintAmount: 2,
                 whichIsNotMultipleOfGranularity: 3
             )
         )
-        
     }
-    */
 }
 
 private extension MintTokensTests {
