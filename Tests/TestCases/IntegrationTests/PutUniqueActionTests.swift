@@ -151,7 +151,7 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
          try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
        
         
-        // WHEN: Performing the same action again in a second transacation
+        // WHEN: Performing the same action again in a second transaction
         let resultOfPutUniqueActionOnceAgain = application.putUniqueId(putUniqueIdAction)
         let secondRecorder = resultOfPutUniqueActionOnceAgain.completion.record()
         

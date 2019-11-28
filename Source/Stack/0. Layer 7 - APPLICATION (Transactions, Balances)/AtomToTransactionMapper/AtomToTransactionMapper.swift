@@ -31,16 +31,24 @@ public protocol AtomToTransactionMapper {
 
 public extension AtomToTransactionMapper {
     /// Boolean `OR` of `actionTypes`
-    func transactionFrom(atom: Atom, actionMatchingAnyType actionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
-        return transactionFromAtom(atom).filter {
+    func transactionFrom(
+        atom: Atom,
+        actionMatchingAnyType actionTypes: [UserAction.Type]
+    ) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
+        
+        transactionFromAtom(atom).filter {
             $0.contains(actionMatchingAnyType: actionTypes)
         }
         .eraseToAnyPublisher()
     }
     
     /// Boolean `AND` of `requiredActionTypes`
-    func transactionFrom(atom: Atom, actionMatchingAllTypes requiredActionTypes: [UserAction.Type]) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
-        return transactionFromAtom(atom).filter {
+    func transactionFrom(
+        atom: Atom,
+        actionMatchingAllTypes requiredActionTypes: [UserAction.Type]
+    ) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
+        
+        transactionFromAtom(atom).filter {
             $0.contains(actionMatchingAll: requiredActionTypes)
         }
         .eraseToAnyPublisher()
