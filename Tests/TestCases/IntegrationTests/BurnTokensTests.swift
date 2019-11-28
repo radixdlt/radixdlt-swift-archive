@@ -174,25 +174,26 @@ class BurnTokensTests: IntegrationTest {
         XCTAssertNotNil(cancellableSubscriptionOfBobsAddress)
     }
     
-    /*
-    func testFailingBurnAliceTriesToBurnCarolsCoins() {
+    func testFailingBurnAliceTriesToBurnCarolsCoins() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
         let (tokenCreation, fooToken) = application.createMultiIssuanceToken(initialSupply: 1000)
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+       try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice tries to burn Carols coins
-        let transfer = application.burnTokens(action: BurnTokensAction(tokenDefinitionReference: fooToken, amount: 10, burner: carol))
+        let burning = application.burnTokens(
+            action: BurnTokensAction(tokenDefinitionReference: fooToken, amount: 10, burner: carol)
+        )
         
         // THEN: I see that it fails
-        transfer.blockingAssertThrows(
-            error: BurnError.consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol))
+        try waitFor(
+            burning: burning,
+            toFailWithError: .consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol))
         )
     }
     
+    /*
     func testBurnFailDueToSupplyBeingFixed() {
         // GIVEN: Radix identity Alice and an application layer action BurnToken, and a previously created FooToken, which has FIXED supply
         let (tokenCreation, fooToken) = application.createFixedSupplyToken(supply: 10)
