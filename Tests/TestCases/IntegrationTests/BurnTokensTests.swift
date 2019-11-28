@@ -53,76 +53,64 @@ class BurnTokensTests: IntegrationTest {
         XCTAssertEqual(tokenState.totalSupply, 95)
     }
     
-    /*
-    
     // TODO when https://radixdlt.atlassian.net/browse/BS-196 is fixed, this test should pass, Radix Core beta2 broke the expected ordering of particles.
-    func testMintBurnMintBurnMint() {
-        
-        let createTokenAction = application.actionCreateMultiIssuanceToken()
-        let fooToken = createTokenAction.identifier
-        
-        XCTAssertTrue(
-            application.createToken(action: createTokenAction).blockingWasSuccessful()
-        )
-        
-        let tokenContext = TokenContext(rri: fooToken, actor: alice)
-        
-        let transaction = Transaction(tokenContext) {
-            Mint(amount: 100)   // 100
-            Burn(amount: 3)     // 97
-            Mint(amount: 5)     // 102
-            Burn(amount: 7)     // 95
-            Mint(amount: 13)    // 108
-            Burn(amount: 17)    // 91
-        }
-        let atom = try! application.atomFrom(transaction: transaction)
-        print(atom.debugDescription)
-        let result = application.make(transaction: transaction)
-        
-        XCTAssertTrue(
-            result.blockingWasSuccessful(timeout: 40)
-        )
-        
-        guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: .enoughForPOW) else { return }
-        XCTAssertEqual(tokenState.totalSupply, 91)
+    func testMintBurnMintBurnMint() throws {
+        print("test 'testMintBurnMintBurnMint' is commented out awaiting fix 'BS-196' (Jira ticket number)")
+//        let createTokenAction = application.actionCreateMultiIssuanceToken()
+//        let fooToken = createTokenAction.identifier
+//
+//       try waitForTransactionToFinish(application.createToken(action: createTokenAction))
+//
+//        let tokenContext = TokenContext(rri: fooToken, actor: alice)
+//
+//        let transaction = Transaction(tokenContext) {
+//            Mint(amount: 100)   // 100
+//            Burn(amount: 3)     // 97
+//            Mint(amount: 5)     // 102
+//            Burn(amount: 7)     // 95
+//            Mint(amount: 13)    // 108
+//            Burn(amount: 17)    // 91
+//        }
+//
+//        let pendingTransaction = application.make(transaction: transaction)
+//
+//        try waitForTransactionToFinish(pendingTransaction)
+//
+//        let tokenState = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
+//        XCTAssertEqual(tokenState.totalSupply, 91)
     }
     
-    func testBurnSuccessful() {
+    func testBurnSuccessful() throws {
         
         // GIVEN: Radix identity Alice and an application layer action BurnToken
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 35))
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+       try waitForTransactionToFinish(tokenCreation)
+        
         /// GIVEN: And a previously created FooToken, for which Alice has the appropriate permissions
-        guard let fooTokenStateAfterCreation = application.observeTokenState(identifier: fooToken).blockingTakeFirst() else { return }
+        let fooTokenStateAfterCreation = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
         XCTAssertEqual(fooTokenStateAfterCreation.totalSupply, 35)
 
-        guard let myBalanceOrNilAfterCreate = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
-        guard let myBalanceAfterCreate = myBalanceOrNilAfterCreate else { return XCTFail("Expected non nil balance") }
+        let myBalanceAfterCreate = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: fooToken))
         XCTAssertEqual(myBalanceAfterCreate.amount, 35)
 
         // WHEN: Alice call Burn for FooToken
         let burning = application.burnTokens(amount: 2, ofType: fooToken)
-        
-        XCTAssertTrue(
-            // THEN: the burning succeeds
-            burning.blockingWasSuccessful(timeout: .enoughForPOW)
-        
-        )
+
+        // THEN: the burning succeeds
+        try waitForTransactionToFinish(burning)
+
         // THEN: AND the supply of FooToken is changed
-        guard let fooTokenStateAfterBurn = application.observeTokenState(identifier: fooToken).blockingTakeLast() else { return }
+        let fooTokenStateAfterBurn = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
         XCTAssertEqual(fooTokenStateAfterBurn.totalSupply, 33)
 
-
-        guard let myBalanceOrNilAfterBurn = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
-        guard let myBalanceAfterBurn = myBalanceOrNilAfterBurn else { return XCTFail("Expected non nil balance") }
+        let myBalanceAfterBurn = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: fooToken))
+        
         // THEN: AND that Alice balance is reduced
         XCTAssertEqual(myBalanceAfterBurn.amount, 33)
-        
     }
     
+    /*
     func testBurnFailsDueUnknownRRI() {
         // GIVEN: Radix identity Alice and an application layer action BurnToken
         
