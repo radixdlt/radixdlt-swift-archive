@@ -127,8 +127,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(burnTokensAction.amount, 23)
     }
     
-    /*
-    func testTransactionWithSingleMintTokensAction() {
+    func testTransactionWithSingleMintTokensAction() throws {
         // GIVEN identity alice and a RadixApplicationClient
         
         // GIVEN: and `FooToken` created by Alice
@@ -136,18 +135,14 @@ class TransactionsTests: IntegrationTest {
         let (tokenCreation, fooToken) =
             application.createToken(supply: .mutableZeroSupply)
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(tokenCreation)
         
-        XCTAssertTrue(
-            //  WHEN: Alice makes a transaction containing a single MintTokensAction of FooToken
-            application.mintTokens(amount: 23, ofType: fooToken).blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        //  WHEN: Alice makes a transaction containing a single MintTokensAction of FooToken
+        let minting = application.mintTokens(amount: 23, ofType: fooToken)
+        try waitForTransactionToFinish(minting)
         
         // WHEN: and observes her transactions
-        guard let transaction = application.observeMyTransactions(containingActionsOfAllTypes: [MintTokensAction.self])
-            .blockingTakeFirst() else { return }
+        let transaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionOfType: MintTokensAction.self))
         
         // THEN she sees a Transaction containing just the MintTokensAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -157,6 +152,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(mintTokensAction.amount, 23)
     }
     
+    /*
     func testTransactionWithSingleSendMessageAction() {
         // GIVEN identity alice and a RadixApplicationClient
         
