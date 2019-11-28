@@ -110,20 +110,18 @@ class BurnTokensTests: IntegrationTest {
         XCTAssertEqual(myBalanceAfterBurn.amount, 33)
     }
     
-    /*
-    func testBurnFailsDueUnknownRRI() {
+    func testBurnFailsDueUnknownRRI() throws {
         // GIVEN: Radix identity Alice and an application layer action BurnToken
         
         // WHEN Alice call Burn on RRI for some non existing FoobarToken
-        let foobarToken: ResourceIdentifier = "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/FoobarToken"
+        let foobarToken: ResourceIdentifier = "/\(alice!)/FoobarToken"
         let burning = application.burnTokens(amount: 123, ofType: foobarToken)
         
         // THEN: an error unknownToken is thrown
-        burning.blockingAssertThrows(
-            error: BurnError.consumeError(.unknownToken(identifier: foobarToken))
-        )
+        try waitFor(burning: burning, toFailWithError: .consumeError(.unknownToken(identifier: foobarToken)))
     }
     
+    /*
     func testBurnFailDueToExceedingBalance() {
         // GIVEN: Radix identity Alice and an application layer action BurnToken
         
@@ -235,4 +233,30 @@ class BurnTokensTests: IntegrationTest {
         
     }
     */
+}
+
+private extension BurnTokensTests {
+    
+    func waitFor(
+        burning pendingTransaction: PendingTransaction,
+        toFailWithError burnError: BurnError,
+        description: String? = nil,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line
+    ) throws {
+        
+        try waitForAction(
+            ofType: BurnTokensAction.self,
+            in: pendingTransaction,
+            because: description ?? "Waiting for PendingTransaction to fail"
+        ) { burnTokensAction in
+            
+            TransactionError.actionsToAtomError(
+                .burnTokensActionError(
+                    burnError,
+                    action: burnTokensAction
+                )
+            )
+        }
+    }
 }
