@@ -74,6 +74,15 @@ extension IntegrationTest {
         return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: description ?? "First value of publisher, or error")
     }
     
+    func waitForFirstSequence<P>(
+        of publisher: P,
+        timeout: TimeInterval = .enoughForPOW,
+        description: String? = nil,
+        line: UInt = #line
+    ) throws -> [P.Output.Element] where P: Publisher, P.Output: Sequence {
+        return try wait(for: publisher.record().firstSequenceOrError, timeout: .enoughForPOW, description: description ?? "First sequence of publisher, or error")
+    }
+    
     func waitFor<P>(
         first numberOfValuesToWaitFor: Int,
         valuesPublishedBy publisher: P,

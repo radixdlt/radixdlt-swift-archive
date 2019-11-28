@@ -285,12 +285,11 @@ class TransactionsTests: IntegrationTest {
             ["burn", "mint", "unique"]
         )
         
-        // try waitForArray ?
-//        let burnTxs: [ExecutedTransaction] = try waitForFirstValue(of: application.observeMyTransactions(containingActionOfType: BurnTokensAction.self))
+        let transaction1 = try waitForFirstValue(
+            of: application.observeMyTransactions(containingActionOfType: BurnTokensAction.self)
+        )
         
-        
-//        XCTAssertEqual(burnTxs.count, 1)
-//        XCTAssertEqual(burnTxs[0].actions.count, 2)
+        XCTAssertEqual(transaction1.actions.count, 2)
         
         /*
         guard let burnOrMintTransactions = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self]).blockingArrayTakeFirst(2) else { return }

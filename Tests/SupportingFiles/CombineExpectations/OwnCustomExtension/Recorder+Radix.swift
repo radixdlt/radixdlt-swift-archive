@@ -61,6 +61,29 @@ public extension Recorder {
     }
 }
 
+// MARK: FirstSequenceOrError
+extension PublisherExpectations {
+    /// The type of the publisher expectation returned by Recorder.firstSequenceOrError
+    public typealias FirstSequenceOrError<Input: Sequence, Failure: Error> = Map<Prefix<Input, Failure>, [Input.Element]>
+}
+
+extension Recorder where Input: Sequence {
+
+    public var firstSequenceOrError: PublisherExpectations.FirstSequenceOrError<Input, Failure> {
+        prefix(1).map { (maybeMatrixElement: [Input]) throws -> [Input.Element] in
+            
+            let maybeFirstListOfMatrix = maybeMatrixElement.first
+            
+            guard let firstListOfMatrix = maybeFirstListOfMatrix else {
+                throw RecordingError.noElements // No list in the matrix
+            }
+            
+            return [Input.Element](firstListOfMatrix)
+        }
+    }
+}
+
+
 // MARK: FirstElementOfFirstSequenceOrError
 extension PublisherExpectations {
     /// The type of the publisher expectation returned by Recorder.firstElementOfFirstSequenceOrError
@@ -69,34 +92,7 @@ extension PublisherExpectations {
 
 extension Recorder where Input: Sequence {
     
-    /// Returns a publisher expectation which waits for the recorded publisher
-    /// to emit one element, where element conforms to `Sequence`, or to complete.
-    ///
-    /// When waiting for this expectation, the publisher error is thrown if the
-    /// publisher fails before publishing any element (sequence).
-    ///
-    /// Otherwise, the first published element is returned, or nil if the publisher
-    /// completes before it publishes any element.
-    ///
-    /// For example:
-    ///
-    ///     // SUCCESS: no timeout, no error
-    ///     func testMatrixFirstElementOfFirstListPublishesItsFirstElementWithoutError() throws {
-    ///         let publisher = [["foo", "bar", "baz"]].publisher
-    ///         let recorder = publisher.record()
-    ///
-    ///         // This call might throw error RecordingError.noElements
-    ///         let element = try wait(for: recorder.firstElementOfFirstSequenceOrError, timeout: 1)
-    ///     }
-    ///
-    /// This publisher expectation can be inverted:
-    ///
-    ///     // SUCCESS: no timeout, no error
-    ///     func testPassthroughSubjectDoesNotPublishAnyElement() throws {
-    ///         let publisher = PassthroughSubject<[String], Never>()
-    ///         let recorder = publisher.record()
-    ///         _ = try wait(for: recorder.firstElementOfFirstSequenceOrError.inverted, timeout: 1)
-    ///     }
+
     public var firstElementOfFirstSequenceOrError: PublisherExpectations.FirstElementOfFirstSequenceOrError<Input, Failure> {
         prefix(1).map { (maybeMatrixElement: [Input]) throws -> Input.Element in
             
