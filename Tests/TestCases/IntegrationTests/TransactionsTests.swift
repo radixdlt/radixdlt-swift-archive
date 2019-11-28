@@ -90,7 +90,7 @@ class TransactionsTests: IntegrationTest {
         try waitForTransactionToFinish(transfer)
         
         // WHEN: and observes her transactions
-        let transaction: ExecutedTransaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionsOfAllTypes: [TransferTokensAction.self]))
+        let transaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionOfType: TransferTokensAction.self))
         
         // THEN she sees a Transaction containing just the TransferTokensAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -103,8 +103,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(transferTokensAction.sender, alice)
     }
     
-    /*
-    func testTransactionWithSingleBurnTokensAction() {
+    func testTransactionWithSingleBurnTokensAction() throws {
         // GIVEN identity alice and a RadixApplicationClient
 
         // GIVEN: and `FooToken` created by Alice
@@ -112,18 +111,13 @@ class TransactionsTests: IntegrationTest {
         let (tokenCreation, fooToken) =
             application.createToken(supply: .mutable(initial: 123))
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(tokenCreation)
         
-        XCTAssertTrue(
-            //  WHEN: Alice makes a transaction containing a single BurnTokensAction of FooToken
-            application.burnTokens(amount: 23, ofType: fooToken).blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        let burning = application.burnTokens(amount: 23, ofType: fooToken)
+        try waitForTransactionToFinish(burning)
         
         // WHEN: and observes her transactions
-        guard let transaction = application.observeMyTransactions(containingActionsOfAllTypes: [BurnTokensAction.self])
-            .blockingTakeFirst() else { return }
+        let transaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionOfType: BurnTokensAction.self))
         
         // THEN she sees a Transaction containing just the BurnTokensAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -133,6 +127,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(burnTokensAction.amount, 23)
     }
     
+    /*
     func testTransactionWithSingleMintTokensAction() {
         // GIVEN identity alice and a RadixApplicationClient
         

@@ -31,6 +31,15 @@ public protocol TransactionSubscriber: AtomToTransactionMapper {
 }
 
 public extension TransactionSubscriber {
+    
+    func observeTransactions(
+        at address: Address,
+        containingActionOfType actionType: UserAction.Type
+    ) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
+        
+        observeTransactions(at: address, containingActionsOfAllTypes: [actionType])
+    }
+    
     /// Boolean `OR` of `actionTypes`
     func observeTransactions(
         at address: Address,
@@ -80,6 +89,14 @@ public extension TransactionSubscriber where Self: ActiveAccountOwner {
     /// of executed Token Transfers, either by you or someone else.
     func observeMyTransactions() -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return observeTransactions(at: addressOfActiveAccount)
+    }
+    
+    /// Do not confuse this with `observeMyTokenTransfers`, this returns a stream of `ExecutedTransaction`, which is
+    /// a container of UserActions submitted in a single Atom at some earlier point in time, the latter is a stream
+    /// of executed Token Transfers, either by you or someone else.
+    /// Returns transactions containing `actionType`
+    func observeMyTransactions(containingActionOfType actionType: UserAction.Type) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
+        return observeTransactions(at: addressOfActiveAccount, containingActionOfType: actionType)
     }
     
     /// Do not confuse this with `observeMyTokenTransfers`, this returns a stream of `ExecutedTransaction`, which is
