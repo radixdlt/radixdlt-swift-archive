@@ -27,46 +27,36 @@ import XCTest
 
 // MARK: FirstOrError
 extension PublisherExpectations {
-    /// The type of the publisher expectation returned by Recorder.firstOrError
+
+    /// The type of the publisher expectation returned by `Recorder.firstOrError`
     public typealias FirstOrError<Input, Failure: Error> = Map<Prefix<Input, Failure>, Input>
+
+    /// The type of the publisher expectation returned by `Recorder.prefixedOrError`
+    public typealias PrefixedOrError<Input, Failure: Error> = Map<Prefix<Input, Failure>, [Input]>
+
 }
 
-extension Recorder {
-    /// Returns a publisher expectation which waits for the recorded publisher
-    /// to emit one element, or to complete.
-    ///
-    /// When waiting for this expectation, the publisher error is thrown if the
-    /// publisher fails before publishing any element.
-    ///
-    /// Otherwise, the first published element is returned, or nil if the publisher
-    /// completes before it publishes any element.
-    ///
-    /// For example:
-    ///
-    ///     // SUCCESS: no timeout, no error
-    ///     func testArrayOfThreeElementsPublishesItsFirstElementWithoutError() throws {
-    ///         let publisher = ["foo", "bar", "baz"].publisher
-    ///         let recorder = publisher.record()
-    ///
-    ///         // This call might throw error RecordingError.noElements
-    ///         let element = try wait(for: recorder.firstOrError, timeout: 1)
-    ///     }
-    ///
-    /// This publisher expectation can be inverted:
-    ///
-    ///     // SUCCESS: no timeout, no error
-    ///     func testPassthroughSubjectDoesNotPublishAnyElement() throws {
-    ///         let publisher = PassthroughSubject<String, Never>()
-    ///         let recorder = publisher.record()
-    ///         _ = try wait(for: recorder.firstOrError.inverted, timeout: 1)
-    ///     }
-    public var firstOrError: PublisherExpectations.FirstOrError<Input, Failure> {
+public extension Recorder {
+ 
+    var firstOrError: PublisherExpectations.FirstOrError<Input, Failure> {
         prefix(1).map {
             
             guard let firstElement = $0.first else {
                 throw RecordingError.noElements
             }
             return firstElement
+        }
+    }
+    
+    func prefixedOrError(_ n: Int) -> PublisherExpectations.PrefixedOrError<Input, Failure> {
+        prefix(n).map {
+            
+            let firstPrefixedElements = [Input]($0.prefix(n))
+            
+            guard firstPrefixedElements.count == n else {
+                throw RecordingError.notEnoughElements
+            }
+            return firstPrefixedElements
         }
     }
 }

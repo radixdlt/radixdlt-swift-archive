@@ -71,7 +71,21 @@ extension IntegrationTest {
         description: String? = nil,
         line: UInt = #line
     ) throws -> P.Output where P: Publisher {
-        return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: description ?? "First value of publisher")
+        return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: description ?? "First value of publisher, or error")
+    }
+    
+    func waitFor<P>(
+        first numberOfValuesToWaitFor: Int,
+        valuesPublishedBy publisher: P,
+        timeout: TimeInterval = .enoughForPOW,
+        description: String? = nil,
+        line: UInt = #line
+    ) throws -> [P.Output] where P: Publisher {
+        return try wait(
+            for: publisher.record().prefixedOrError(numberOfValuesToWaitFor),
+            timeout: .enoughForPOW,
+            description: description ?? "First \(numberOfValuesToWaitFor) values of publisher, or error"
+        )
     }
     
     func waitForFirstValueUnwrapped<P>(

@@ -244,57 +244,55 @@ class TransactionsTests: IntegrationTest {
         XCTAssertGreaterThanOrEqual(transaction.sentAt.timeIntervalSinceNow, -0.01) // max 10 ms ago
     }
     
-    /*
-    func testTransactionComplex() {
+    func testTransactionComplex() throws {
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 35))
                 
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(tokenCreation)
         
+        // Transaction 1
         let mintAndUniqueTx = Transaction {
             MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice)
             PutUniqueIdAction(uniqueMaker: alice, string: "mint")
         }
+        var pendingTransaction = application.make(transaction: mintAndUniqueTx)
+        try waitForTransactionToFinish(pendingTransaction)
         
-        XCTAssertTrue(
-            application.make(transaction: mintAndUniqueTx)
-                // THEN: the Transaction is successfully sent
-                .blockingWasSuccessful(timeout: .enoughForPOW)
-        )
-        
+        // Transaction 2
         let burnAndUniqueTx = Transaction {
             BurnTokensAction(tokenDefinitionReference: fooToken, amount: 5, burner: alice)
             PutUniqueIdAction(uniqueMaker: alice, string: "burn")
         }
+        pendingTransaction = application.make(transaction: burnAndUniqueTx)
+        try waitForTransactionToFinish(pendingTransaction)
         
-        XCTAssertTrue(
-            application.make(transaction: burnAndUniqueTx)
-                // THEN: the Transaction is successfully sent
-                .blockingWasSuccessful(timeout: .enoughForPOW)
-        )
-        
+        // Transaction 3
         let onlyUniqueTx = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "unique")
         }
+        pendingTransaction = application.make(transaction: onlyUniqueTx)
+        try waitForTransactionToFinish(pendingTransaction)
         
-        XCTAssertTrue(
-            application.make(transaction: onlyUniqueTx)
-                // THEN: the Transaction is successfully sent
-                .blockingWasSuccessful(timeout: .enoughForPOW)
+        
+        
+        let putUniqueTransactions: [ExecutedTransaction] = try waitFor(
+            first: 3,
+            valuesPublishedBy: application.observeMyTransactions(containingActionOfAnyType: [PutUniqueIdAction.self]
+            )
         )
         
-        
-        guard let putUniqueTransactions = application.observeMyTransactions(containingActionOfAnyType: [PutUniqueIdAction.self]).blockingArrayTakeFirst(3) else { return }
         XCTAssertEqual(
             putUniqueTransactions.flatMap { $0.actions(ofType: PutUniqueIdAction.self) }.map { $0.string }.sorted(),
             ["burn", "mint", "unique"]
         )
         
-        guard let burnTxs = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self]).blockingArrayTakeFirst(1) else { return }
-        XCTAssertEqual(burnTxs.count, 1)
-        XCTAssertEqual(burnTxs[0].actions.count, 2)
+        // try waitForArray ?
+//        let burnTxs: [ExecutedTransaction] = try waitForFirstValue(of: application.observeMyTransactions(containingActionOfType: BurnTokensAction.self))
         
+        
+//        XCTAssertEqual(burnTxs.count, 1)
+//        XCTAssertEqual(burnTxs[0].actions.count, 2)
+        
+        /*
         guard let burnOrMintTransactions = application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self]).blockingArrayTakeFirst(2) else { return }
         
         XCTAssertEqual(burnOrMintTransactions.count, 2)
@@ -308,6 +306,7 @@ class TransactionsTests: IntegrationTest {
         
         guard case let uniqueActionInMintTxs = uniqueMintTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInMintTx = uniqueActionInMintTxs.first else { return XCTFail("Expected UniqueAction") }
         XCTAssertEqual(uniqueActionInMintTx.string, "mint")
-    }
+ 
  */
+    }
 }

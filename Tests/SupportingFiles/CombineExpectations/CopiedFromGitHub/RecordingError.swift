@@ -33,6 +33,10 @@ public enum RecordingError: Error {
     /// does not publish any element.
     case noElements
     
+    /// Can be thrown when waiting for `recorder.prefixedOrError`, when the publisher
+    /// does not publish enough elements.
+    case notEnoughElements
+    
     /// Can be thrown when waiting for `recorder.single`, when the publisher
     /// publishes more than one element.
     case moreThanOneElement
@@ -51,6 +55,8 @@ extension RecordingError: LocalizedError {
             return "RecordingError.notCompleted"
         case .noElements:
             return "RecordingError.noElements"
+        case .notEnoughElements:
+            return "RecordingError.notEnoughElements"
         case .moreThanOneElement:
             return "RecordingError.moreThanOneElement"
         case .failedToMapErrorFromFailureToExpectedErrorType(let expectedErrorType, let butGotFailure):

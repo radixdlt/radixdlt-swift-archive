@@ -1922,12 +1922,12 @@
 		E620AB5321E7874300B36EC2 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				E61E6BC5238C0C2A008C14B0 /* CombineExpectations */,
 				E6BACE7F2350E1FF006D97C6 /* ErrorAutoEquatable.swift */,
-				E6340C9022FC4E0B0044BA97 /* Mappers */,
-				E6CEE70921F5AE5300D745EC /* Convenience */,
-				E6D325AA21EE377500851F4E /* TestExtensions */,
 				E6638CE623351C24004C9846 /* IntegrationTest.swift */,
+				E61E6BC5238C0C2A008C14B0 /* CombineExpectations */,
+				E6CEE70921F5AE5300D745EC /* Convenience */,
+				E6340C9022FC4E0B0044BA97 /* Mappers */,
+				E6D325AA21EE377500851F4E /* TestExtensions */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
