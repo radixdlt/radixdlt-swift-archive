@@ -44,23 +44,19 @@ class SendMessageTests: IntegrationTest {
         XCTAssertEqual(decryptedMessage, message)
     }
     
-    /*
-    func testSendNonEmptyEncrypted() {
+    func testSendNonEmptyEncrypted() throws {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message with encryption
         let plainTextMessage = "Hey Bob, this is super secret message"
-        let result = application.sendEncryptedMessage(plainTextMessage, to: bob)
+        let pendingTransaction = application.sendEncryptedMessage(plainTextMessage, to: bob)
+     
+        try waitForTransactionToFinish(pendingTransaction)
         
-        XCTAssertTrue(
-            // THEN: I see that action completes successfully
-            result.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
-        
-        guard let sentMessage = application.observeMyMessages().blockingTakeLast() else { return }
+        let sentMessage = try waitForFirstValue(of: application.observeMyMessages())
         XCTAssertEqual(sentMessage.textMessage(), plainTextMessage)
     }
-
     
+    /*
     func testSendNonEmptyEncryptedThatAliceCannotDecrypt() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message with encryption
