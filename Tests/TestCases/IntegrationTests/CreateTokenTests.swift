@@ -66,7 +66,7 @@ class CreateTokenTests: LocalhostNodeTest {
             actionCreateToken
         }
         
-        application.send(transaction: transaction).blockingAssertThrows(
+        application.make(transaction: transaction).blockingAssertThrows(
             error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByUniqueId(string: rri.name))
         )
     }
@@ -81,7 +81,7 @@ class CreateTokenTests: LocalhostNodeTest {
             application.actionCreateToken(symbol: symbol)
         }
         
-        application.send(transaction: transaction).blockingAssertThrows(
+        application.make(transaction: transaction).blockingAssertThrows(
             error: CreateTokenError.uniqueActionError(
                 .rriAlreadyUsedByMutableSupplyToken(identifier: actionCreateMutableToken.identifier)
             )
@@ -97,7 +97,7 @@ class CreateTokenTests: LocalhostNodeTest {
             application.actionCreateToken(symbol: symbol)
         }
         
-        application.send(transaction: transaction).blockingAssertThrows(
+        application.make(transaction: transaction).blockingAssertThrows(
             error: CreateTokenError.uniqueActionError(
                 .rriAlreadyUsedByFixedSupplyToken(identifier: actionCreateFixedToken.identifier)
             )

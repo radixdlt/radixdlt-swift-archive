@@ -90,16 +90,16 @@ public extension DefaultTransactionMaker {
 
 // MARK: - TransactionMaker
 public extension DefaultTransactionMaker {
-    func send(transaction: Transaction, toOriginNode originNode: Node?) -> PendingTransaction {
+    func make(transaction: Transaction, to originNode: Node?) -> PendingTransaction {
         
         let unsignedAtom = unsignedAtomFrom(transaction: transaction)
         let signedAtom = sign(atom: unsignedAtom)
         
-        return createAtomSubmission(
-            transaction: transaction,
+        return submit(
             atom: signedAtom,
+            for: transaction,
             completeOnAtomStoredOnly: false,
-            originNode: originNode
+            to: originNode
         )
     }
 }
@@ -146,12 +146,17 @@ private extension DefaultTransactionMaker {
             .eraseToAnyPublisher()
     }
     
-    func createAtomSubmission(
-        transaction: Transaction,
+    // swiftlint:disable function_body_length
+    
+    /// Creates a `PendingTransaction` being a reference of the status of an atom submission.
+    func submit(
         atom signedAtomPublisher: AnyPublisher<SignedAtom, TransactionError>,
+        for transaction: Transaction,
         completeOnAtomStoredOnly: Bool,
-        originNode: Node?
+        to originNode: Node?
     ) -> PendingTransaction {
+        
+        // swiftlint:enable function_body_length
         
         let cachedAtomPublisher = signedAtomPublisher.share().eraseToAnyPublisher()
         
@@ -169,25 +174,31 @@ private extension DefaultTransactionMaker {
         
         let updates = nonFailingAtomPublisher.flatMap { [unowned self]
             (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
-                let initialAction: SubmitAtomAction
+                let initialAction: SubmitAtomActionInitial
 
                 if let originNode = originNode {
-                    initialAction = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
+                    initialAction = SubmitAtomActionSend(
+                        atom: atom,
+                        node: originNode,
+                        completeOnAtomStoredOnly: completeOnAtomStoredOnly
+                    )
                 } else {
-                    initialAction = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: completeOnAtomStoredOnly)
+                    initialAction = SubmitAtomActionRequest(
+                        atom: atom,
+                        completeOnAtomStoredOnly: completeOnAtomStoredOnly
+                    )
                 }
+            
+                defer { self.radixNetworkController.dispatch(nodeAction: initialAction) }
 
-                let status: AnyPublisher<SubmitAtomAction, Never> = self.radixNetworkController
+                return self.radixNetworkController
                     .getActions()
                     .compactMap(typeAs: SubmitAtomAction.self)
                     .filter { $0.uuid == initialAction.uuid }
                     .prefix(while: { !$0.isCompleted })
                     .eraseToAnyPublisher()
-
-                self.radixNetworkController.dispatch(nodeAction: initialAction)
-                return status
             }
-        .eraseToAnyPublisher()
+            .eraseToAnyPublisher()
 
         let result = PendingTransaction(
             transaction: transaction,

@@ -31,7 +31,7 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
     
     func test_that_atom_submission_without_specifying_originnode_completes_when_atom_gets_stored() {
         let atom = SignedAtom.irrelevant
-        let submitAtomActionRequest = SubmitAtomActionRequest(atom: atom, isCompletingOnStoreOnly: true)
+        let submitAtomActionRequest = SubmitAtomActionRequest(atom: atom, completeOnAtomStoredOnly: true)
         
         doTestSubmitAtomEpic(
             submitAtomAction: submitAtomActionRequest,
@@ -65,7 +65,7 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
     func test_that_atom_submission_when_specifying_origin_node_completes_when_atom_gets_stored() {
         let atom = SignedAtom.irrelevant
         let originNode: Node = makeNode()
-        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: true)
+        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, completeOnAtomStoredOnly: true)
         
         doTestSubmitAtomEpic(
             submitAtomAction: submitAtomActionSend,
@@ -88,7 +88,7 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
     func test_that_atom_submission_when_specifying_origin_node_and_never_getting_stored_completes_when___isCompletingOnStoreOnly___is___false() {
         let atom = SignedAtom.irrelevant
         let originNode: Node = makeNode(index: 8)
-        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: false)
+        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, completeOnAtomStoredOnly: false)
         
         let atomStatusNotStoredPendingVerification = AtomStatusEvent.notStored(reason: .init(atomStatus: .pendingDependencyVerification, dataAsJsonString: ""))
         
@@ -116,7 +116,7 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
         
         let atom = SignedAtom.irrelevant
         let originNode: Node = makeNode()
-        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: true)
+        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, completeOnAtomStoredOnly: true)
         
         doTestSubmitAtomEpic(
             submitAtomAction: submitAtomActionSend,
@@ -139,7 +139,7 @@ class SubmitAtomEpicTests: NetworkEpicTestCase {
     func test_that_atom_submission_when_specifying_origin_node_and_never_getting_stored_timesout_when___isCompletingOnStoreOnly___is___true() {
         let atom = SignedAtom.irrelevant
         let originNode: Node = makeNode()
-        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, isCompletingOnStoreOnly: true)
+        let submitAtomActionSend = SubmitAtomActionSend(atom: atom, node: originNode, completeOnAtomStoredOnly: true)
         
         let atomStatusNotStoredPendingVerification = AtomStatusEvent.notStored(reason: .init(atomStatus: .pendingDependencyVerification, dataAsJsonString: ""))
         

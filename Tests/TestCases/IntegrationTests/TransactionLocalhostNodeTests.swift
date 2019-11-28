@@ -265,7 +265,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         }
             
         XCTAssertTrue(
-            application.send(transaction: newTransaction)
+            application.make(transaction: newTransaction)
                 .blockingWasSuccessful(timeout: 40)
         )
         
@@ -315,7 +315,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         }
         
         XCTAssertTrue(
-            application.send(transaction: mintAndUniqueTx)
+            application.make(transaction: mintAndUniqueTx)
                 // THEN: the Transaction is successfully sent
                 .blockingWasSuccessful(timeout: .enoughForPOW)
         )
@@ -326,7 +326,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         }
         
         XCTAssertTrue(
-            application.send(transaction: burnAndUniqueTx)
+            application.make(transaction: burnAndUniqueTx)
                 // THEN: the Transaction is successfully sent
                 .blockingWasSuccessful(timeout: .enoughForPOW)
         )
@@ -336,7 +336,7 @@ class TransactionLocalhostNodeTests: LocalhostNodeTest {
         }
         
         XCTAssertTrue(
-            application.send(transaction: onlyUniqueTx)
+            application.make(transaction: onlyUniqueTx)
                 // THEN: the Transaction is successfully sent
                 .blockingWasSuccessful(timeout: .enoughForPOW)
         )

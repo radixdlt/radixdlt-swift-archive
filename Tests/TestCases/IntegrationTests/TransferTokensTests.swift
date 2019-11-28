@@ -222,7 +222,7 @@ class TransferTokensTests: LocalhostNodeTest {
 private extension TransferTokensTests {
     
     func waitFor(
-        transfer: ResultOfUserAction,
+        transfer: PendingTransaction,
         toFailWithError transferError: TransferError,
         because description: String,
         timeout: TimeInterval = .enoughForPOW,

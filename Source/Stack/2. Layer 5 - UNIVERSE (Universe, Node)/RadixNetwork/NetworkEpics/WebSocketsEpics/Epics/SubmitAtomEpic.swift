@@ -141,7 +141,7 @@ private extension SubmitAtomEpic {
             .observeAtomStatusNotifications(subscriberId: subscriberId)
             .flatMap { statusEvent -> AnyPublisher<NodeAction, Never> in
                 let statusAction = SubmitAtomActionStatus(sendAction: sendAction, node: node, statusEvent: statusEvent)
-                if statusEvent == .stored || !sendAction.isCompletingOnStoreOnly {
+                if statusEvent == .stored || !sendAction.completeOnAtomStoredOnly {
                     return Publishers.Sequence<[NodeAction], Never>(sequence: [
                         statusAction,
                         SubmitAtomActionCompleted.success(sendAction: sendAction, node: node)

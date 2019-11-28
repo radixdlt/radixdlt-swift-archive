@@ -24,17 +24,23 @@
 
 import Foundation
 
-public struct SubmitAtomActionRequest: SubmitAtomAction, FindANodeRequestAction {
+public protocol SubmitAtomActionInitial: SubmitAtomAction {
+    /// If `true`, a pending transaction will only complete on a `store`  event (`AtomStatusEvent`).
+    var completeOnAtomStoredOnly: Bool { get }
+}
+
+public struct SubmitAtomActionRequest: SubmitAtomActionInitial, FindANodeRequestAction {
     public let atom: SignedAtom
-    public let isCompletingOnStoreOnly: Bool
+    public let completeOnAtomStoredOnly: Bool
     public let uuid: UUID
     
-    public init(atom: SignedAtom, isCompletingOnStoreOnly: Bool, uuid: UUID = .init()) {
+    public init(atom: SignedAtom, completeOnAtomStoredOnly: Bool, uuid: UUID = .init()) {
         self.atom = atom
-        self.isCompletingOnStoreOnly = isCompletingOnStoreOnly
+        self.completeOnAtomStoredOnly = completeOnAtomStoredOnly
         self.uuid = uuid
     }
 }
+
 public extension SubmitAtomActionRequest {
     var shards: Shards {
         do {

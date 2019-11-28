@@ -24,16 +24,18 @@
 
 import Foundation
 
-public struct SubmitAtomActionSend: SubmitAtomAction {
+public struct SubmitAtomActionSend: SubmitAtomActionInitial {
     public let atom: SignedAtom
     public let node: Node
-    public let isCompletingOnStoreOnly: Bool
+    
+    public let completeOnAtomStoredOnly: Bool
+    
     public let uuid: UUID
     
-    public init(atom: SignedAtom, node: Node, isCompletingOnStoreOnly: Bool, uuid: UUID = .init()) {
+    public init(atom: SignedAtom, node: Node, completeOnAtomStoredOnly: Bool, uuid: UUID = .init()) {
         self.atom = atom
         self.node = node
-        self.isCompletingOnStoreOnly = isCompletingOnStoreOnly
+        self.completeOnAtomStoredOnly = completeOnAtomStoredOnly
         self.uuid = uuid
     }
     
@@ -41,7 +43,7 @@ public struct SubmitAtomActionSend: SubmitAtomAction {
         self.init(
             atom: request.atom,
             node: node,
-            isCompletingOnStoreOnly: request.isCompletingOnStoreOnly,
+            completeOnAtomStoredOnly: request.completeOnAtomStoredOnly,
             uuid: request.uuid
         )
     }

@@ -72,7 +72,7 @@ class BurnTokensTests: LocalhostNodeTest {
             Burn(amount: 7)     // 95
         }
 
-        let result = application.send(transaction: transaction)
+        let result = application.make(transaction: transaction)
         XCTAssertTrue(
             result.blockingWasSuccessful(timeout: 40)
         )
@@ -103,7 +103,7 @@ class BurnTokensTests: LocalhostNodeTest {
         }
         let atom = try! application.atomFrom(transaction: transaction)
         print(atom.debugDescription)
-        let result = application.send(transaction: transaction)
+        let result = application.make(transaction: transaction)
         
         XCTAssertTrue(
             result.blockingWasSuccessful(timeout: 40)
