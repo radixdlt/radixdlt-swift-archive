@@ -82,7 +82,7 @@ class SendMessageTests: LocalhostNodeTest {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message with encryption
         let plainTextMessage = "Hey Bob, this is super secret message"
-        let result = application.send(message: SendMessageAction.encrypted(from: alice, to: bob, onlyDecryptableBy: [bob], text: plainTextMessage))
+        let result = application.sendMessage(action: SendMessageAction.encrypted(from: alice, to: bob, onlyDecryptableBy: [bob], text: plainTextMessage))
         
         XCTAssertTrue(
             // THEN: I see that action completes successfully

@@ -25,7 +25,7 @@
 import Foundation
 
 public protocol UniqueMaking: ActiveAccountOwner {
-    func putUniqueId(_ putUniqueAction: PutUniqueIdAction) -> PendingTransaction
+    func putUniqueId(action putUniqueAction: PutUniqueIdAction) -> PendingTransaction
 }
 
 public extension UniqueMaking {
@@ -34,6 +34,6 @@ public extension UniqueMaking {
             uniqueMaker: addressOfActiveAccount,
             string: string
         )
-        return putUniqueId(putUniqueIdAction)
+        return putUniqueId(action: putUniqueIdAction)
     }
 }

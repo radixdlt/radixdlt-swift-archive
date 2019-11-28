@@ -31,7 +31,7 @@ import Combine
 public protocol TokenCreating {
     
     /// Creates a new kind of Token
-    func create(token: CreateTokenAction) -> PendingTransaction
+    func createToken(action: CreateTokenAction) -> PendingTransaction
     
     func observeMyTokenDefinitions() -> AnyPublisher<TokenDefinitionsState, StateSubscriberError>
 }
@@ -60,7 +60,7 @@ public extension TokenCreating {
             permissions: tokenPermissions
         )
         
-        return (create(token: createTokenAction), createTokenAction.identifier)
+        return (createToken(action: createTokenAction), createTokenAction.identifier)
     }
     
     /// Just syntactic sugar for `createToken` with `fixed` supply

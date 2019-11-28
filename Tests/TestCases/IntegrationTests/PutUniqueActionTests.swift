@@ -145,14 +145,14 @@ class PutUniqueIdActionTests: LocalhostNodeTest {
         
         let putUniqueIdAction = PutUniqueIdAction(uniqueMaker: alice, string: "foo")
 
-        let resultOfPutUniqueAction = application.putUniqueId(putUniqueIdAction)
+        let resultOfPutUniqueAction = application.putUniqueId(action: putUniqueIdAction)
         
         let recorderCompletable = resultOfPutUniqueAction.completion.record()
          try wait(for: recorderCompletable.finished, timeout: .enoughForPOW)
        
         
         // WHEN: Performing the same action again in a second transaction
-        let resultOfPutUniqueActionOnceAgain = application.putUniqueId(putUniqueIdAction)
+        let resultOfPutUniqueActionOnceAgain = application.putUniqueId(action: putUniqueIdAction)
         let secondRecorder = resultOfPutUniqueActionOnceAgain.completion.record()
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown

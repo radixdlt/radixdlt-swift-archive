@@ -60,7 +60,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let fooToken = createTokenAction.identifier
 
         XCTAssertTrue(
-            application.create(token: createTokenAction).blockingWasSuccessful()
+            application.createToken(action: createTokenAction).blockingWasSuccessful()
         )
 
         let tokenContext = TokenContext(rri: fooToken, actor: alice)
@@ -88,7 +88,7 @@ class BurnTokensTests: LocalhostNodeTest {
         let fooToken = createTokenAction.identifier
         
         XCTAssertTrue(
-            application.create(token: createTokenAction).blockingWasSuccessful()
+            application.createToken(action: createTokenAction).blockingWasSuccessful()
         )
         
         let tokenContext = TokenContext(rri: fooToken, actor: alice)
@@ -224,7 +224,7 @@ class BurnTokensTests: LocalhostNodeTest {
         )
         
         // WHEN: Alice tries to burn Carols coins
-        let transfer = application.burnTokens(BurnTokensAction(tokenDefinitionReference: fooToken, amount: 10, burner: carol))
+        let transfer = application.burnTokens(action: BurnTokensAction(tokenDefinitionReference: fooToken, amount: 10, burner: carol))
         
         // THEN: I see that it fails
         transfer.blockingAssertThrows(

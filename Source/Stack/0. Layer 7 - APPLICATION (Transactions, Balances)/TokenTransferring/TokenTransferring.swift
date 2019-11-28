@@ -28,7 +28,7 @@ import Combine
 /// Type that is can make transactions of different types between Radix accounts
 public protocol TokenTransferring: ActiveAccountOwner {
 
-    func transfer(tokens: TransferTokensAction) -> PendingTransaction
+    func transferTokens(action: TransferTokensAction) -> PendingTransaction
     func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, AtomToTransactionMapperError>
 }
 
@@ -81,7 +81,7 @@ public extension TokenTransferring {
             from: specifiedSender
         )
         
-        return transfer(tokens: action)
+        return transferTokens(action: action)
     }
 }
 

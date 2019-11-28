@@ -27,7 +27,7 @@ import Foundation
 public protocol TokenMinting {
     
     /// Mints new tokens of the TokenDefinition kind
-    func mintTokens(_ action: MintTokensAction) -> PendingTransaction
+    func mintTokens(action mintTokensAction: MintTokensAction) -> PendingTransaction
 }
 
 public extension TokenMinting {
@@ -47,7 +47,7 @@ public extension TokenMinting {
             creditNewlyMintedTokensTo: creditNewlyMintedTokensTo.address
         )
         
-        return mintTokens(mintAction)
+        return mintTokens(action: mintAction)
     }
 }
 
@@ -58,7 +58,7 @@ public extension TokenMinting where Self: ActiveAccountOwner {
         credit creditSomeoneElseThanMinter: AddressConvertible? = nil
     ) -> PendingTransaction {
         
-        return mintTokens(
+        return mintTokens( 
             amount: amount,
             ofType: tokenDefinitionReference,
             minter: addressOfActiveAccount,

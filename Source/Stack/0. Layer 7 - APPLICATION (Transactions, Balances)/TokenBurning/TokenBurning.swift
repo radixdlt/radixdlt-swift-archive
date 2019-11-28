@@ -27,7 +27,7 @@ import Foundation
 public protocol TokenBurning {
     
     /// Burns tokens of the TokenDefinition kind
-    func burnTokens(_ action: BurnTokensAction) -> PendingTransaction
+    func burnTokens(action burnTokensAction: BurnTokensAction) -> PendingTransaction
 }
 
 public extension TokenBurning {
@@ -43,7 +43,7 @@ public extension TokenBurning {
             burner: burner.address
         )
         
-        return burnTokens(burnAction)
+        return burnTokens(action: burnAction)
     }
 }
 

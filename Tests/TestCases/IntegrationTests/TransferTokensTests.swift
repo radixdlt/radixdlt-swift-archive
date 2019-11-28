@@ -109,7 +109,7 @@ class TransferTokensTests: LocalhostNodeTest {
         let amount: PositiveAmount = 10
         let unknownRRI = ResourceIdentifier(address: alice.address, name: "Unknown")
         let transferAction = TransferTokensAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: unknownRRI)
-        let transfer = application.transfer(tokens: transferAction)
+        let transfer = application.transferTokens(action: transferAction)
         
         let recorder = transfer.completion.record()
         
@@ -149,7 +149,7 @@ class TransferTokensTests: LocalhostNodeTest {
             tokenResourceIdentifier: rri
         )
         
-        let transfer = application.transfer(tokens: transferTokensAction)
+        let transfer = application.transferTokens(action: transferTokensAction)
         
         let transferRecording = transfer.completion.record()
         
@@ -208,7 +208,7 @@ class TransferTokensTests: LocalhostNodeTest {
         try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
         
         // WHEN: Alice tries to spend Carols coins
-        let transfer = application.transfer(tokens: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
+        let transfer = application.transferTokens(action: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
         
         // THEN: Transfer should fail
         try waitFor(

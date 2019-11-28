@@ -36,11 +36,11 @@ final class RadixApplicationClient:
 { ... }
 
 protocol TokenCreating {
-    func create(token: CreateTokenAction) throws -> PendingTransaction
+    func createToken(action: CreateTokenAction) throws -> PendingTransaction
 }
 
 protocol TokenTransferring {
-    func transfer(tokens: TransferTokensAction) throws -> PendingTransaction
+    func transferTokens(action: TransferTokensAction) throws -> PendingTransaction
 }
 
 protocol AccountBalancing {

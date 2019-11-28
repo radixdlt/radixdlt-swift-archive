@@ -139,7 +139,7 @@ public extension RadixApplicationClient {
 
 // MARK: TokenCreating
 public extension RadixApplicationClient {
-    func create(token createTokenAction: CreateTokenAction) -> PendingTransaction {
+    func createToken(action createTokenAction: CreateTokenAction) -> PendingTransaction {
         execute(actions: createTokenAction)
     }
     
@@ -151,21 +151,21 @@ public extension RadixApplicationClient {
 
 // MARK: TokenMinting
 public extension RadixApplicationClient {
-    func mintTokens(_ action: MintTokensAction) -> PendingTransaction {
-        execute(actions: action)
+    func mintTokens(action mintTokensAction: MintTokensAction) -> PendingTransaction {
+        execute(actions: mintTokensAction)
     }
 }
 
 // MARK: TokenBurning
 public extension RadixApplicationClient {
-    func burnTokens(_ action: BurnTokensAction) -> PendingTransaction {
-        execute(actions: action)
+    func burnTokens(action burnTokensAction: BurnTokensAction) -> PendingTransaction {
+        execute(actions: burnTokensAction)
     }
 }
 
 // MARK: TokenTransferring
 public extension RadixApplicationClient {
-    func transfer(tokens transferTokensAction: TransferTokensAction) -> PendingTransaction {
+    func transferTokens(action transferTokensAction: TransferTokensAction) -> PendingTransaction {
         execute(actions: transferTokensAction)
     }
     
@@ -176,7 +176,7 @@ public extension RadixApplicationClient {
 
 // MARK: MessageSending
 public extension RadixApplicationClient {
-    func send(message sendMessageAction: SendMessageAction) -> PendingTransaction {
+    func sendMessage(action sendMessageAction: SendMessageAction) -> PendingTransaction {
         execute(actions: sendMessageAction)
     }
     
@@ -187,7 +187,7 @@ public extension RadixApplicationClient {
 
 // MARK: UniqueMaking
 public extension RadixApplicationClient {
-    func putUniqueId(_ putUniqueAction: PutUniqueIdAction) -> PendingTransaction {
+    func putUniqueId(action putUniqueAction: PutUniqueIdAction) -> PendingTransaction {
         execute(actions: putUniqueAction)
     }
 }
