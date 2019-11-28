@@ -26,7 +26,7 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-class TransactionLocalhostNodeTests: IntegrationTest {
+class TransactionsTests: IntegrationTest {
     
     func testTransactionWithSingleCreateTokenActionWithoutInitialSupply() throws {
         // GIVEN identity alice and a RadixApplicationClient

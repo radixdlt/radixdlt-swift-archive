@@ -266,7 +266,7 @@
 		E654778B22BFB3C500D968BD /* UniverseBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E654778A22BFB3C500D968BD /* UniverseBootstrap.swift */; };
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E656233023901F6200F55964 /* BurnTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BD238597FE00950312 /* BurnTokensTests.swift */; };
-		E6562331239024F400F55964 /* TransactionLocalhostNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BB238597FE00950312 /* TransactionLocalhostNodeTests.swift */; };
+		E6562331239024F400F55964 /* TransactionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BB238597FE00950312 /* TransactionsTests.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E6638CE723351C24004C9846 /* IntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6638CE623351C24004C9846 /* IntegrationTest.swift */; };
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
@@ -1152,7 +1152,7 @@
 		E6D7A2B7238597FE00950312 /* PutUniqueActionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PutUniqueActionTests.swift; sourceTree = "<group>"; };
 		E6D7A2B9238597FE00950312 /* TransferTokensTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferTokensTests.swift; sourceTree = "<group>"; };
 		E6D7A2BA238597FE00950312 /* CreateTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTokenTests.swift; sourceTree = "<group>"; };
-		E6D7A2BB238597FE00950312 /* TransactionLocalhostNodeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionLocalhostNodeTests.swift; sourceTree = "<group>"; };
+		E6D7A2BB238597FE00950312 /* TransactionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionsTests.swift; sourceTree = "<group>"; };
 		E6D7A2BC238597FE00950312 /* MintTokensTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MintTokensTests.swift; sourceTree = "<group>"; };
 		E6D7A2BD238597FE00950312 /* BurnTokensTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BurnTokensTests.swift; sourceTree = "<group>"; };
 		E6D7A2BE238597FE00950312 /* SendMessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMessageTests.swift; sourceTree = "<group>"; };
@@ -3116,7 +3116,7 @@
 				E6D7A2B7238597FE00950312 /* PutUniqueActionTests.swift */,
 				E6D7A2B9238597FE00950312 /* TransferTokensTests.swift */,
 				E6D7A2BA238597FE00950312 /* CreateTokenTests.swift */,
-				E6D7A2BB238597FE00950312 /* TransactionLocalhostNodeTests.swift */,
+				E6D7A2BB238597FE00950312 /* TransactionsTests.swift */,
 				E6D7A2BC238597FE00950312 /* MintTokensTests.swift */,
 				E6D7A2BD238597FE00950312 /* BurnTokensTests.swift */,
 				E6D7A2BE238597FE00950312 /* SendMessageTests.swift */,
@@ -5233,7 +5233,7 @@
 				E6D7A29A238596F200950312 /* TestableConvenienceInitializers.swift in Sources */,
 				E6D7A29B238596F200950312 /* ParticleSet.swift in Sources */,
 				E6D7A29D238596F200950312 /* TestCase_Extensions.swift in Sources */,
-				E6562331239024F400F55964 /* TransactionLocalhostNodeTests.swift in Sources */,
+				E6562331239024F400F55964 /* TransactionsTests.swift in Sources */,
 				E61E6BDC238C0C2A008C14B0 /* Inverted.swift in Sources */,
 				E6D7A29E238596F200950312 /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6D7A2A2238596F200950312 /* Int+Extension.swift in Sources */,
