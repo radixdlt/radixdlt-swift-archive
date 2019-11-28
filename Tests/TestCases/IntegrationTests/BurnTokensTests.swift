@@ -26,42 +26,14 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-// MARK: ☢️ No Target Membership ☢️
-
 class BurnTokensTests: IntegrationTest {
     
-    private var aliceIdentity: AbstractIdentity!
-    private var bobIdentity: AbstractIdentity!
-    private var application: RadixApplicationClient!
-    private var alice: Address!
-    private var bob: Address!
-    private var carolAccount: Account!
-    private var carol: Address!
-    
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-        
-        aliceIdentity = AbstractIdentity()
-        bobIdentity = AbstractIdentity()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
-        alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
-        carolAccount = Account()
-        carol = application.addressOf(account: carolAccount)
-    }
-    
-    private let disposeBag = DisposeBag()
-
-    
-    func testMintBurnMintBurn() {
+    func testMintBurnMintBurn() throws {
 
         let createTokenAction = application.actionCreateMultiIssuanceToken()
         let fooToken = createTokenAction.identifier
 
-        XCTAssertTrue(
-            application.createToken(action: createTokenAction).blockingWasSuccessful()
-        )
+        try waitForTransactionToFinish(application.createToken(action: createTokenAction))
 
         let tokenContext = TokenContext(rri: fooToken, actor: alice)
 
@@ -72,14 +44,16 @@ class BurnTokensTests: IntegrationTest {
             Burn(amount: 7)     // 95
         }
 
-        let result = application.make(transaction: transaction)
-        XCTAssertTrue(
-            result.blockingWasSuccessful(timeout: 40)
-        )
+        let pendingTransaction = application.make(transaction: transaction)
+     
+        try waitForTransactionToFinish(pendingTransaction)
 
-        guard let tokenState = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: .enoughForPOW) else { return }
+        let tokenState = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
+        
         XCTAssertEqual(tokenState.totalSupply, 95)
     }
+    
+    /*
     
     // TODO when https://radixdlt.atlassian.net/browse/BS-196 is fixed, this test should pass, Radix Core beta2 broke the expected ordering of particles.
     func testMintBurnMintBurnMint() {
@@ -272,5 +246,5 @@ class BurnTokensTests: IntegrationTest {
         )
         
     }
-    
+    */
 }
