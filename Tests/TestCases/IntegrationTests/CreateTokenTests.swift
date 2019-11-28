@@ -43,24 +43,32 @@ class CreateTokenTests: IntegrationTest {
         )
     }
     
-    /*
-    func testFailCreatingTokenWithSameRRIAsUniqueId() {
+    func testFailCreatingTokenWithSameRRIAsUniqueId() throws {
+        // GIVEN: An Application API owned by Alice, and identity Bob
+        let aliceApp = application!
         
-        let actionCreateToken =
+        let createTokenAction =
             application.actionCreateToken(symbol: "FOO")
         
-        let rri = actionCreateToken.identifier
+        let rri = createTokenAction.identifier
         
         let transaction = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "FOO")
-            actionCreateToken
+            createTokenAction
         }
         
-        application.make(transaction: transaction).blockingAssertThrows(
-            error: CreateTokenError.uniqueActionError(.rriAlreadyUsedByUniqueId(string: rri.name))
+        let tokenCreation = aliceApp.make(transaction: transaction)
+        
+        // THEN: We get an error
+        try waitFor(
+            tokenCreation: tokenCreation,
+            toFailWithError: .uniqueActionError(.rriAlreadyUsedByUniqueId(string: rri.name)),
+            because: "RRIs cannot be reused"
         )
     }
     
+    
+    /*
     func testFailCreatingTokenWithSameRRIAsExistingMutableSupplyToken() {
         
         let symbol: Symbol = "FOO"
