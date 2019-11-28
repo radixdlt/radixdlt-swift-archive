@@ -216,6 +216,7 @@
 		E63E4FB823671B9A00B90CF7 /* NetworkEpicsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63E4FB723671B9A00B90CF7 /* NetworkEpicsError.swift */; };
 		E63E4FBA23671BAC00B90CF7 /* EraseToAnyPublisherOperator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63E4FB923671BAC00B90CF7 /* EraseToAnyPublisherOperator.swift */; };
 		E63F0F0F238ED21D0066A8CB /* ActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63F0F0E238ED21D0066A8CB /* ActionToParticleGroupsMapper.swift */; };
+		E63F0F102390065D0066A8CB /* CreateTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BA238597FE00950312 /* CreateTokenTests.swift */; };
 		E640F638225DFC3D00855256 /* PublicKeyOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F637225DFC3D00855256 /* PublicKeyOwner.swift */; };
 		E640F63C225E21E600855256 /* Int+BitsPerByte.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63B225E21E600855256 /* Int+BitsPerByte.swift */; };
 		E640F63F225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift in Sources */ = {isa = PBXBuildFile; fileRef = E640F63E225E231600855256 /* ProofOfWork+NumberOfLeadingZeros.swift */; };
@@ -5183,6 +5184,7 @@
 				E6D7A262238596F200950312 /* TestCase.swift in Sources */,
 				E6D7A26F238596F200950312 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E61E6BD6238C0C2A008C14B0 /* Recording.swift in Sources */,
+				E63F0F102390065D0066A8CB /* CreateTokenTests.swift in Sources */,
 				E61E6BEA238C356E008C14B0 /* PublisherFlatMapResultTests.swift in Sources */,
 				E6D7A271238596F200950312 /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
 				E61E6BF7238D4D53008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */,

@@ -26,34 +26,24 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-// MARK: ☢️ No Target Membership ☢️
-
 class CreateTokenTests: IntegrationTest {
 
-    private let aliceIdentity = AbstractIdentity()
-    private let bobAccount = Account()
-    private let claraAccount = Account()
-    private let dianaAccount = Account()
-    
-    private lazy var application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
-    
-    private lazy var alice = application.addressOfActiveAccount
-    private lazy var bob = application.addressOf(account: bobAccount)
-    private lazy var clara = application.addressOf(account: claraAccount)
-    private lazy var diana = application.addressOf(account: dianaAccount)
-    
-    private let disposeBag = DisposeBag()
-    
-    
-    func testFailingCreateTokenInSomeoneElsesName() {
-
-        let (tokenCreation, _) = application.createToken(creator: bob)
+    func testFailingCreateTokenInSomeoneElsesName() throws {
+        // GIVEN: An Application API owned by Alice, and identity Bob
+        let aliceApp = application!
         
-        tokenCreation.blockingAssertThrows(
-            error: CreateTokenError.uniqueActionError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob))
+        // WHEN: Alice tries to create a token on Bob's behalf
+        let (tokenCreation, _) = aliceApp.createToken(creator: bob)
+        
+        // THEN: We get an error
+        try waitFor(
+            tokenCreation: tokenCreation,
+            toFailWithError: .uniqueActionError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)),
+            because: "Alice cannot create a Token on Bob's behalf"
         )
     }
     
+    /*
     func testFailCreatingTokenWithSameRRIAsUniqueId() {
         
         let actionCreateToken =
@@ -103,5 +93,32 @@ class CreateTokenTests: IntegrationTest {
             )
         )
     }
+ */
     
+}
+
+private extension CreateTokenTests {
+    
+    func waitFor(
+        tokenCreation pendingTransaction: PendingTransaction,
+        toFailWithError createTokenError: CreateTokenError,
+        because description: String,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line
+    ) throws {
+        
+        try waitForAction(
+            ofType: CreateTokenAction.self,
+            in: pendingTransaction,
+            because: description
+        ) { createTokenAction in
+            
+            TransactionError.actionsToAtomError(
+                .createTokenActionError(
+                    createTokenError,
+                    action: createTokenAction
+                )
+            )
+        }
+    }
 }
