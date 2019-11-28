@@ -182,36 +182,46 @@ class TransferTokensTests: LocalhostNodeTest {
         try wait(for: transfer.completion.record().finished, timeout: .enoughForPOW)
     }
     
-    /*
-    func testIncorrectGranularityOf5() {
+    func testIncorrectGranularityOf5() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
         let granularity: Granularity = 5
         
         // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
         let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 100, granularity: granularity)
-
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
+        
         
         let amountToSend: PositiveAmount = 7
-        
         let transfer = application.transferTokens(identifier: rri, to: bob, amount: amountToSend)
+        let transferRecording = transfer.completion.record()
         
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
-        transfer.blockingAssertThrows(
-            error: TransferError.consumeError(
-                .amountNotMultipleOfGranularity(
-                    token: rri,
-                    triedToConsumeAmount: amountToSend,
-                    whichIsNotMultipleOfGranularity: granularity
-                )
-            ),
+        let recordedThrownError: TransactionError = try wait(
+            for: transferRecording.expectError(),
             timeout: .enoughForPOW
+        )
+        
+        let transferTokensAction: TransferTokensAction = try XCTUnwrap(transfer.firstAction())
+        
+        XCTAssertEqual(
+            recordedThrownError,
+            TransactionError.actionsToAtomError(
+                .transferError(
+                    .consumeError(
+                        .amountNotMultipleOfGranularity(
+                            token: rri,
+                            triedToConsumeAmount: amountToSend,
+                            whichIsNotMultipleOfGranularity: granularity
+                        )
+                    ),
+                    action: transferTokensAction
+                )
+            )
         )
     }
     
+    /*
     func testFailingTransferAliceTriesToSpendCarolsCoins() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         

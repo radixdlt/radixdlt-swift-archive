@@ -189,7 +189,6 @@ private extension DefaultTransactionMaker {
             }
         .eraseToAnyPublisher()
 
-
         let result = ResultOfUserAction(
             transaction: transaction,
             transactionErrors: transactionErrors,
