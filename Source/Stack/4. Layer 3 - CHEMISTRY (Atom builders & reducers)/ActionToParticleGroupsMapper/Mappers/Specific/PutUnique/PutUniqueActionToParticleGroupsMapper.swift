@@ -36,28 +36,11 @@ public protocol PutUniqueActionToParticleGroupsMapper: UniquelyIdentifiedUserAct
 
 // swiftlint:enable opening_brace
 
+// MARK: Default Implementation
 public extension PutUniqueActionToParticleGroupsMapper {
     func mapError(_ putUniqueIdError: PutUniqueIdError, action putUniqueIdAction: PutUniqueIdAction) -> ActionsToAtomError {
-        ActionsToAtomError.putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
+        ActionsToAtomError.putUniqueIdActionError(putUniqueIdError, action: putUniqueIdAction)
     }
-}
-
-public enum PutUniqueIdError: UniqueActionErrorInitializable {
-    case uniqueError(UniquelyIdentifiedUserActionError)
-}
-
-public extension PutUniqueIdError {
-    static func errorFrom(uniqueActionError: UniquelyIdentifiedUserActionError) -> PutUniqueIdError {
-        return .uniqueError(uniqueActionError)
-    }
-    
-}
-
-// MARK: DefaultPutUniqueActionToParticleGroupsMapper
-public final class DefaultPutUniqueActionToParticleGroupsMapper: PutUniqueActionToParticleGroupsMapper { }
-
-public extension DefaultPutUniqueActionToParticleGroupsMapper {
-    typealias Action = PutUniqueIdAction
     
     func particleGroups(
         for action: PutUniqueIdAction,

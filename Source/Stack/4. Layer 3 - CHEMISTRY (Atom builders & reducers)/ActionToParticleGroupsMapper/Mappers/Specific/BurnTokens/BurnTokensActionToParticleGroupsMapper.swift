@@ -34,34 +34,7 @@ public protocol BurnTokensActionToParticleGroupsMapper: ConsumeTokenActionToPart
 
 // swiftlint:enable opening_brace
 
-public enum BurnError: ConsumeTokensActionErrorInitializable {
-    
-    case insufficientTokens(
-        token: ResourceIdentifier,
-        balance: NonNegativeAmount,
-        triedToBurnAmount: PositiveAmount
-    )
-    
-    case lackingPermissions(
-        of: Address,
-        toBurnToken: ResourceIdentifier,
-        whichRequiresPermission: TokenPermission,
-        creatorOfToken: Address
-    )
-    
-    case tokenHasFixedSupplyThusItCannotBeBurned(
-        identifier: ResourceIdentifier
-    )
-    
-    case consumeError(ConsumeTokensActionError)
-}
-
-public extension BurnError {
-    static func errorFrom(consumeTokensActionError: ConsumeTokensActionError) -> BurnError {
-        return .consumeError(consumeTokensActionError)
-    }
-}
-
+// MARK: Default Implementation
 public extension BurnTokensActionToParticleGroupsMapper {
     
     func mapError(_ error: BurnError, action burnTokensAction: BurnTokensAction) -> ActionsToAtomError {
@@ -117,6 +90,10 @@ public extension BurnTokensActionToParticleGroupsMapper {
         }
     }
 }
+
+// MARK: - Private
+
+// MARK: FungibleParticleTransitioner
 
 // swiftlint:disable opening_brace
 private extension FungibleParticleTransitioner where

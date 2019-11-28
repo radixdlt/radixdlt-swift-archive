@@ -197,7 +197,7 @@ private extension PutUniqueIdActionTests {
         ) { putUniqueIdAction in
             
             TransactionError.actionsToAtomError(
-                .putUniqueIdError(
+                .putUniqueIdActionError(
                     putUniqueIdError,
                     action: putUniqueIdAction
                 )

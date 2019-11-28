@@ -24,13 +24,13 @@
 
 import Foundation
 
-public enum ActionsToAtomError: Swift.Error, Equatable {
-    case burnTokensActionError(BurnError, action: BurnTokensAction)
-    case createTokenActionError(CreateTokenError, action: CreateTokenAction)
-    case putUniqueIdActionError(PutUniqueIdError, action: PutUniqueIdAction)
-    case mintTokensActionError(MintError, action: MintTokensAction)
-    case transferTokensActionError(TransferError, action: TransferTokensAction)
-    case sendMessageActionError(SendMessageError, action: SendMessageAction)
-    
-    case differentUniverses(addresses: Set<Address>)
+public enum TransferError: ConsumeTokensActionErrorInitializable {
+    case insufficientFunds(currentBalance: NonNegativeAmount, butTriedToTransfer: PositiveAmount)
+    case consumeError(ConsumeTokensActionError)
+}
+
+public extension TransferError {
+    static func errorFrom(consumeTokensActionError: ConsumeTokensActionError) -> TransferError {
+        return .consumeError(consumeTokensActionError)
+    }
 }

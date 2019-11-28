@@ -34,11 +34,11 @@ public protocol TransferTokensActionToParticleGroupsMapper: ConsumeTokenActionTo
 
 // swiftlint:enable opening_brace
 
-// MARK: - TransferTokensActionToParticleGroupsMapper
+// MARK: - Default Implementation
 public extension TransferTokensActionToParticleGroupsMapper {
     
     func mapError(_ transferError: TransferError, action transferTokensAction: TransferTokensAction) -> ActionsToAtomError {
-        ActionsToAtomError.transferError(transferError, action: transferTokensAction)
+        ActionsToAtomError.transferTokensActionError(transferError, action: transferTokensAction)
     }
     
     func particleGroups(
@@ -70,6 +70,9 @@ public extension TransferTokensActionToParticleGroupsMapper {
     }
 }
 
+// MARK: - Internal
+
+// MARK: TransferrableTokensParticle + Reduce
 internal extension TransferrableTokensParticle {
     static func reducing(particles: [TransferrableTokensParticle]) throws -> [TransferrableTokensParticle] {
         guard let firstParticle = particles.first else { return [] }
@@ -79,17 +82,9 @@ internal extension TransferrableTokensParticle {
 
 }
 
-public enum TransferError: ConsumeTokensActionErrorInitializable {
-    case insufficientFunds(currentBalance: NonNegativeAmount, butTriedToTransfer: PositiveAmount)
-    case consumeError(ConsumeTokensActionError)
-}
+// MARK: - Private
 
-public extension TransferError {
-    static func errorFrom(consumeTokensActionError: ConsumeTokensActionError) -> TransferError {
-        return .consumeError(consumeTokensActionError)
-    }
-}
-
+// MARK: FungibleParticleTransitioner
 private extension FungibleParticleTransitioner where From == TransferrableTokensParticle, To == TransferrableTokensParticle {
     func transition(transfer: TransferTokensAction, upParticles: [AnyUpParticle]) throws -> Transition {
         let rri = transfer.tokenResourceIdentifier

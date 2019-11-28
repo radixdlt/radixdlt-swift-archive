@@ -94,7 +94,7 @@ final class CombineExpectationsCustomExtensionsTests: TestCase {
         let putUniqueIdError = PutUniqueIdError.uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
         
         let transactionError = TransactionError.actionsToAtomError(
-            .putUniqueIdError(putUniqueIdError, action: putUniqueIdAction)
+            .putUniqueIdActionError(putUniqueIdError, action: putUniqueIdAction)
         )
         
         let publisher = Fail<Int, TransactionError>(

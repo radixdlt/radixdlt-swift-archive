@@ -24,13 +24,13 @@
 
 import Foundation
 
-public enum ActionsToAtomError: Swift.Error, Equatable {
-    case burnTokensActionError(BurnError, action: BurnTokensAction)
-    case createTokenActionError(CreateTokenError, action: CreateTokenAction)
-    case putUniqueIdActionError(PutUniqueIdError, action: PutUniqueIdAction)
-    case mintTokensActionError(MintError, action: MintTokensAction)
-    case transferTokensActionError(TransferError, action: TransferTokensAction)
-    case sendMessageActionError(SendMessageError, action: SendMessageAction)
+public enum PutUniqueIdError: UniqueActionErrorInitializable {
+    case uniqueError(UniquelyIdentifiedUserActionError)
+}
+
+public extension PutUniqueIdError {
+    static func errorFrom(uniqueActionError: UniquelyIdentifiedUserActionError) -> PutUniqueIdError {
+        return .uniqueError(uniqueActionError)
+    }
     
-    case differentUniverses(addresses: Set<Address>)
 }

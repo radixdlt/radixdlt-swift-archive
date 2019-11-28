@@ -24,13 +24,30 @@
 
 import Foundation
 
-public enum ActionsToAtomError: Swift.Error, Equatable {
-    case burnTokensActionError(BurnError, action: BurnTokensAction)
-    case createTokenActionError(CreateTokenError, action: CreateTokenAction)
-    case putUniqueIdActionError(PutUniqueIdError, action: PutUniqueIdAction)
-    case mintTokensActionError(MintError, action: MintTokensAction)
-    case transferTokensActionError(TransferError, action: TransferTokensAction)
-    case sendMessageActionError(SendMessageError, action: SendMessageAction)
+public enum BurnError: ConsumeTokensActionErrorInitializable {
     
-    case differentUniverses(addresses: Set<Address>)
+    case insufficientTokens(
+        token: ResourceIdentifier,
+        balance: NonNegativeAmount,
+        triedToBurnAmount: PositiveAmount
+    )
+    
+    case lackingPermissions(
+        of: Address,
+        toBurnToken: ResourceIdentifier,
+        whichRequiresPermission: TokenPermission,
+        creatorOfToken: Address
+    )
+    
+    case tokenHasFixedSupplyThusItCannotBeBurned(
+        identifier: ResourceIdentifier
+    )
+    
+    case consumeError(ConsumeTokensActionError)
+}
+
+public extension BurnError {
+    static func errorFrom(consumeTokensActionError: ConsumeTokensActionError) -> BurnError {
+        return .consumeError(consumeTokensActionError)
+    }
 }

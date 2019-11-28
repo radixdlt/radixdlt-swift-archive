@@ -163,7 +163,7 @@ private extension TransferTokensTests {
         ) { transferTokensAction in
             
             TransactionError.actionsToAtomError(
-                .transferError(
+                .transferTokensActionError(
                     transferError,
                     action: transferTokensAction
                 )

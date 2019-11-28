@@ -24,13 +24,31 @@
 
 import Foundation
 
-public enum ActionsToAtomError: Swift.Error, Equatable {
-    case burnTokensActionError(BurnError, action: BurnTokensAction)
-    case createTokenActionError(CreateTokenError, action: CreateTokenAction)
-    case putUniqueIdActionError(PutUniqueIdError, action: PutUniqueIdAction)
-    case mintTokensActionError(MintError, action: MintTokensAction)
-    case transferTokensActionError(TransferError, action: TransferTokensAction)
-    case sendMessageActionError(SendMessageError, action: SendMessageAction)
+public enum MintError: Swift.Error, Equatable {
     
-    case differentUniverses(addresses: Set<Address>)
+    case unknownToken(identifier: ResourceIdentifier)
+    
+    case tokenOverMint(
+        token: ResourceIdentifier,
+        maxSupply: Supply,
+        currentSupply: Supply,
+        byMintingAmount: PositiveAmount
+    )
+    
+    case lackingPermissions(
+        of: Address,
+        toMintToken: ResourceIdentifier,
+        whichRequiresPermission: TokenPermission,
+        creatorOfToken: Address
+    )
+    
+    case tokenHasFixedSupplyThusItCannotBeMinted(
+        identifier: ResourceIdentifier
+    )
+    
+    case amountNotMultipleOfGranularity(
+        token: ResourceIdentifier,
+        triedToMintAmount: PositiveAmount,
+        whichIsNotMultipleOfGranularity: Granularity
+    )
 }

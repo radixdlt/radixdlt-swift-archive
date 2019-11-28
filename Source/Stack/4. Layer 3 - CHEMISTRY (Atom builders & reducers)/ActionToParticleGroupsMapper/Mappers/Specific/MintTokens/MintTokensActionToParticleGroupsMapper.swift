@@ -34,10 +34,11 @@ public protocol MintTokensActionToParticleGroupsMapper: StatefulActionToParticle
 
 // swiftlint:enable opening_brace
 
+// MARK: - Default implementation
 public extension MintTokensActionToParticleGroupsMapper {
     
     func mapError(_ mintError: MintError, action mintTokensAction: MintTokensAction) -> ActionsToAtomError {
-        ActionsToAtomError.mintError(mintError, action: mintTokensAction)
+        ActionsToAtomError.mintTokensActionError(mintError, action: mintTokensAction)
     }
     
     func requiredState(for mintTokensAction: Action) -> [AnyShardedParticleStateId] {
@@ -57,17 +58,6 @@ public extension MintTokensActionToParticleGroupsMapper {
             )
         ]
     }
-}
-
-public final class DefaultMintTokensActionToParticleGroupsMapper: MintTokensActionToParticleGroupsMapper {
-    public init() {}
-}
-public extension DefaultMintTokensActionToParticleGroupsMapper {
-    typealias Action = MintTokensAction
-    typealias SpecificActionError = MintError
-}
-
-public extension MintTokensActionToParticleGroupsMapper {
     
     func particleGroups(
         for action: Action,
@@ -132,34 +122,9 @@ public extension MintTokensActionToParticleGroupsMapper {
     }
 }
 
-public enum MintError: Swift.Error, Equatable {
-    
-    case unknownToken(identifier: ResourceIdentifier)
-    
-    case tokenOverMint(
-        token: ResourceIdentifier,
-        maxSupply: Supply,
-        currentSupply: Supply,
-        byMintingAmount: PositiveAmount
-    )
-    
-    case lackingPermissions(
-        of: Address,
-        toMintToken: ResourceIdentifier,
-        whichRequiresPermission: TokenPermission,
-        creatorOfToken: Address
-    )
-    
-    case tokenHasFixedSupplyThusItCannotBeMinted(
-        identifier: ResourceIdentifier
-    )
-    
-    case amountNotMultipleOfGranularity(
-        token: ResourceIdentifier,
-        triedToMintAmount: PositiveAmount,
-        whichIsNotMultipleOfGranularity: Granularity
-    )
-}
+// MARK: - Private
+
+// MARK FungibleParticleTransitioner
 
 private extension FungibleParticleTransitioner where From == UnallocatedTokensParticle, To == TransferrableTokensParticle {
     func transition(mint: MintTokensAction, upParticles: [AnyUpParticle]) throws -> Transition {

@@ -37,7 +37,7 @@ public protocol SendMessageActionToParticleGroupsMapper:
 
 public extension SendMessageActionToParticleGroupsMapper {
     func mapError(_ sendMessageError: SendMessageError, action sendMessageAction: SendMessageAction) -> ActionsToAtomError {
-        ActionsToAtomError.sendMessageError(sendMessageError, action: sendMessageAction)
+        ActionsToAtomError.sendMessageActionError(sendMessageError, action: sendMessageAction)
     }
 }
 
