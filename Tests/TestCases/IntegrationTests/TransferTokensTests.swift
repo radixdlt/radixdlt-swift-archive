@@ -194,6 +194,7 @@ class TransferTokensTests: LocalhostNodeTest {
         
         let amountToSend: PositiveAmount = 7
         let transfer = application.transferTokens(identifier: rri, to: bob, amount: amountToSend)
+        let transferTokensAction: TransferTokensAction = try XCTUnwrap(transfer.firstAction())
         let transferRecording = transfer.completion.record()
         
         // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
@@ -202,7 +203,6 @@ class TransferTokensTests: LocalhostNodeTest {
             timeout: .enoughForPOW
         )
         
-        let transferTokensAction: TransferTokensAction = try XCTUnwrap(transfer.firstAction())
         
         XCTAssertEqual(
             recordedThrownError,
@@ -221,23 +221,32 @@ class TransferTokensTests: LocalhostNodeTest {
         )
     }
     
-    /*
-    func testFailingTransferAliceTriesToSpendCarolsCoins() {
+    func testFailingTransferAliceTriesToSpendCarolsCoins() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
         let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
+        try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
         
         // WHEN: Alice tries to spend Carols coins
         let transfer = application.transfer(tokens: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
+        let transferTokensAction: TransferTokensAction = try XCTUnwrap(transfer.firstAction())
+        let transferRecording = transfer.completion.record()
         
         // THEN: I see that it fails
-        transfer.blockingAssertThrows(
-            error: TransferError.consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol))
+        let recordedThrownError: TransactionError = try wait(
+            for: transferRecording.expectError(),
+            timeout: .enoughForPOW
+        )
+        
+        XCTAssertEqual(
+            recordedThrownError,
+            TransactionError.actionsToAtomError(
+                .transferError(
+                    .consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol)),
+                    action: transferTokensAction
+                )
+            )
         )
     }
-    */
 }
