@@ -26,67 +26,44 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-// MARK: ☢️ No Target Membership ☢️
-
 private extension Supply {
     static let ten: Supply = 10
 }
 
 class MintTokensTests: IntegrationTest {
-
-    private var aliceIdentity: AbstractIdentity!
-    private var bobIdentity: AbstractIdentity!
-    private var application: RadixApplicationClient!
-    private var alice: Address!
-    private var bob: Address!
     
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-        
-        aliceIdentity = AbstractIdentity()
-        bobIdentity = AbstractIdentity()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
-        alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
-    }
-    
-    func testMintSuccessful() {
+    func testMintSuccessful() throws {
         
         // GIVEN: Radix identity Alice and an application layer action MintToken
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 30))
+        try waitForTransactionToFinish(tokenCreation)
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        
         /// GIVEN: And a previously created FooToken, for which Alice has the appropriate permissions
-        guard let fooTokenStateAfterCreation = application.observeTokenState(identifier: fooToken).blockingTakeFirst(timeout: 2) else { return }
+        let fooTokenStateAfterCreation = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
         XCTAssertEqual(fooTokenStateAfterCreation.totalSupply, 30)
-        
-        guard let myBalanceOrNilAfterCreate = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
-        guard let myBalanceAfterCreate = myBalanceOrNilAfterCreate else { return XCTFail("Expected non nil balance") }
+
+        let myBalanceAfterCreate = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: fooToken))
         XCTAssertEqual(myBalanceAfterCreate.amount, 30)
-        
+
         // WHEN: Alice call Mint(42) for FooToken
         let minting = application.mintTokens(amount: 42, ofType: fooToken)
         
-        XCTAssertTrue(
-            // THEN: the minting succeeds
-            minting.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
-        
+        // THEN: the minting succeeds
+        try waitForTransactionToFinish(minting)
+
         // THEN: AND the supply of FooToken is updated with 42
-        guard let fooTokenStateAfterMint = application.observeTokenState(identifier: fooToken).blockingTakeFirst() else { return }
+        let fooTokenStateAfterMint = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
         XCTAssertEqual(fooTokenStateAfterMint.totalSupply, 72)
         
-        
-        guard let myBalanceOrNilAfterMint = application.observeMyBalance(ofToken: fooToken).blockingTakeLast() else { return }
-        guard let myBalanceAfterMint = myBalanceOrNilAfterMint else { return XCTFail("Expected non nil balance") }
+        let myBalanceAfterMint = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: fooToken))
+
         // THEN: AND that these new 42 tokens belong to Alice
         XCTAssertEqual(myBalanceAfterMint.amount, 72)
         
     }
 
+    /*
     func testMintFailsDueUnknownRRI() {
         // GIVEN: Radix identity Alice and an application layer action MintToken
         
@@ -203,5 +180,5 @@ class MintTokensTests: IntegrationTest {
         )
         
     }
-    
+    */
 }

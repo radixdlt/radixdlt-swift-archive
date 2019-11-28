@@ -73,6 +73,17 @@ extension IntegrationTest {
         return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: "First value of publisher")
     }
     
+    func waitForFirstValueUnwrapped<P>(
+        of publisher: P,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line
+    ) throws -> P.Output.Wrapped where P: Publisher, P.Output: OptionalType {
+        
+        let first: P.Output = try waitForFirstValue(of: publisher, timeout: timeout, line: line)
+        
+        return try XCTUnwrap(first.value, line: line)
+    }
+    
     func waitForAction<Action>(
         ofType _: Action.Type,
         atIndex actionIndex: Int = 0,

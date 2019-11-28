@@ -36,7 +36,7 @@ class TransferTokensTests: IntegrationTest {
         let myTokenDef = try waitForFirstValue(of: application.observeTokenDefinition(identifier: rri))
         XCTAssertEqual(myTokenDef.symbol, "AC")
 
-        let myBalanceBeforeTx = try XCTUnwrap(waitForFirstValue(of: application.observeMyBalance(ofToken: rri)))
+        let myBalanceBeforeTx = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: rri))
         XCTAssertEqual(myBalanceBeforeTx.token.tokenDefinitionReference, rri)
         XCTAssertEqual(myBalanceBeforeTx.amount, 30)
         
@@ -46,10 +46,10 @@ class TransferTokensTests: IntegrationTest {
         // THEN: I see that the transfer actions completes successfully
         try waitForTransactionToFinish(transfer)
         
-        let myBalanceAfterTx = try XCTUnwrap(waitForFirstValue(of: application.observeMyBalance(ofToken: rri)))
+        let myBalanceAfterTx = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: rri))
         XCTAssertEqual(myBalanceAfterTx.amount, 20)
         
-        let bobsBalanceAfterTx = try XCTUnwrap(waitForFirstValue(of: application.observeBalance(ofToken: rri, ownedBy: bob)))
+        let bobsBalanceAfterTx = try waitForFirstValueUnwrapped(of: application.observeBalance(ofToken: rri, ownedBy: bob))
         XCTAssertEqual(bobsBalanceAfterTx.amount, 10)
         
         let myTransfer = try waitForFirstValue(of: application.observeMyTokenTransfers())
