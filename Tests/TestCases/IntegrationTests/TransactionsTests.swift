@@ -192,8 +192,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(putUniqueAction.string, "Foobar")
     }
     
-    /*
-    func testTransactionWithTwoMintTokenAndTwoPutUniqueIdActions() {
+    func testTransactionWithTwoMintTokenAndTwoPutUniqueIdActions() throws {
         // GIVEN identity alice and a RadixApplicationClient
         
         // GIVEN: and `FooToken` created by Alice
@@ -201,26 +200,21 @@ class TransactionsTests: IntegrationTest {
         let (tokenCreation, fooToken) =
             application.createToken(supply: .mutableZeroSupply)
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(tokenCreation)
         
         //  WHEN: Alice makes a transaction containing 2 MintTokensAction of FooToken and 2 PutUnique and observes her transactions
-        let newTransaction = Transaction { // using Swift 5.1's function builder
-            MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice)
-            MintTokensAction(tokenDefinitionReference: fooToken, amount: 10, minter: alice)
-            PutUniqueIdAction(uniqueMaker: alice, string: "Mint5")
-            PutUniqueIdAction(uniqueMaker: alice, string: "Mint10")
+        let newTransaction = Transaction(TokenContext(rri: fooToken, actor: alice)) {
+            Mint(amount: 5)
+            Mint(amount: 10)
+            PutUnique("Mint5")
+            PutUnique("Mint10")
         }
             
-        XCTAssertTrue(
-            application.make(transaction: newTransaction)
-                .blockingWasSuccessful(timeout: 40)
-        )
+        let pendingTransaction = application.make(transaction: newTransaction)
+        try waitForTransactionToFinish(pendingTransaction)
         
         // WHEN: and observes her transactions
-        guard let transaction = application.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self])
-            .blockingTakeFirst() else { return }
+        let transaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self]))
         
         // THEN she sees a Transaction containing the 2 MintTokensAction and 2 PutUniqueActions
         XCTAssertEqual(transaction.actions.count, 4)
@@ -237,6 +231,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(mint10.amount, 10)
     }
     
+    /*
     func testTransactionWithNoActions() {
         let someParticle = ResourceIdentifierParticle(
             resourceIdentifier: ResourceIdentifier(address: alice, name: "WHATEVER")
