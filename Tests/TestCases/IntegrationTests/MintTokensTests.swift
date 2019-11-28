@@ -38,7 +38,6 @@ class MintTokensTests: IntegrationTest {
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 30))
         try waitForTransactionToFinish(tokenCreation)
         
-        
         /// GIVEN: And a previously created FooToken, for which Alice has the appropriate permissions
         let fooTokenStateAfterCreation = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
         XCTAssertEqual(fooTokenStateAfterCreation.totalSupply, 30)
@@ -60,23 +59,24 @@ class MintTokensTests: IntegrationTest {
 
         // THEN: AND that these new 42 tokens belong to Alice
         XCTAssertEqual(myBalanceAfterMint.amount, 72)
-        
     }
 
-    /*
-    func testMintFailsDueUnknownRRI() {
+    func testMintFailsDueUnknownRRI() throws {
         // GIVEN: Radix identity Alice and an application layer action MintToken
         
-        // WHEN Alice call Mint on RRI for some non existing FoobarToken
-        let foobarToken: ResourceIdentifier = "/JH1P8f3znbyrDj8F4RWpix7hRkgxqHjdW2fNnKpR3v6ufXnknor/FoobarToken"
-        let minting = application.mintTokens(amount: 123, ofType: foobarToken)
+        // WHEN Alice call Mint on RRI for some non existing token
+        let unknownRRI: ResourceIdentifier = "/\(bob!)/Unknown"
+        let minting = application.mintTokens(amount: 123, ofType: unknownRRI)
         
         // THEN: an error unknownToken is thrown
-        minting.blockingAssertThrows(
-            error: MintError.unknownToken(identifier: foobarToken)
+        try waitFor(
+            minting: minting,
+            toFailWithError: .unknownToken(identifier: unknownRRI),
+            because: "Unknown rri"
         )
     }
     
+    /*
     func testMintFailsDueToExceedingTheGreatestPossibleSupply() {
         // GIVEN: Radix identity Alice and an application layer action MintToken
         
@@ -181,4 +181,30 @@ class MintTokensTests: IntegrationTest {
         
     }
     */
+}
+
+private extension MintTokensTests {
+    
+    func waitFor(
+        minting pendingTransaction: PendingTransaction,
+        toFailWithError mintError: MintError,
+        because description: String,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line
+    ) throws {
+        
+        try waitForAction(
+            ofType: MintTokensAction.self,
+            in: pendingTransaction,
+            because: description
+        ) { mintTokensAction in
+            
+            TransactionError.actionsToAtomError(
+                .mintTokensActionError(
+                    mintError,
+                    action: mintTokensAction
+                )
+            )
+        }
+    }
 }
