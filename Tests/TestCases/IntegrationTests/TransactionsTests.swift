@@ -173,21 +173,16 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(sendMessageAction.textMessage(), "Hey Bob, this is secret!")
     }
     
-    /*
-    func testTransactionWithSinglePutUniqueAction() {
+    func testTransactionWithSinglePutUniqueAction() throws {
         // GIVEN identity alice and a RadixApplicationClient
         
         // WHEN Alice observes her transactions after having made one with a single `PutUniqueIdAction`
-        XCTAssertTrue(
-            application.putUnique(string: "Foobar")
-                .blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        let unique = application.putUnique(string: "Foobar")
+        try waitForTransactionToFinish(unique)
         
         // WHEN: and observes her transactions
-        guard let transaction = application.observeMyTransactions().blockingTakeFirst() else {
-            return
-        }
-
+        let transaction = try waitForFirstValue(of: application.observeMyTransactions())
+        
         // THEN she sees a Transaction containing the SendMessageAction
         XCTAssertEqual(transaction.actions.count, 1)
         guard let putUniqueAction = transaction.actions.first as? PutUniqueIdAction else {
@@ -197,6 +192,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(putUniqueAction.string, "Foobar")
     }
     
+    /*
     func testTransactionWithTwoMintTokenAndTwoPutUniqueIdActions() {
         // GIVEN identity alice and a RadixApplicationClient
         
