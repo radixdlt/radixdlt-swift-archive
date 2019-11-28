@@ -25,7 +25,7 @@
 import Foundation
 import Combine
 
-public final class ResultOfUserAction {
+public final class ResultOfUserAction: TransactionConvertible {
     
     let status: AnyPublisher<SubmitAtomAction, TransactionError>
     
@@ -33,11 +33,15 @@ public final class ResultOfUserAction {
 
     private var bufferedErrors = [TransactionError]()
     private var cancellables = Set<AnyCancellable>()
+    private let transaction: Transaction
     
     init(
-        updates: AnyPublisher<SubmitAtomAction, Never>,
-        atom: AnyPublisher<SignedAtom, TransactionError>
+        transaction: Transaction,
+        transactionErrors failureFromCreationOfSignedAtom: AnyPublisher<Never, TransactionError>,
+        updates: AnyPublisher<SubmitAtomAction, Never>
     ) {
+        
+        self.transaction = transaction
         
         let statusUpdates: AnyPublisher<SubmitAtomAction, TransactionError> = updates
             .compactMap(typeAs: SubmitAtomActionStatus.self)
@@ -50,13 +54,6 @@ public final class ResultOfUserAction {
         self.status = statusUpdates
         
         let completionFromUpdates = statusUpdates.ignoreOutput().eraseToAnyPublisher()
-        
-        let failureFromCreationOfSignedAtom: AnyPublisher<Never, TransactionError> = atom
-            .flatMap { _ in
-                // Should never finish, only complete with error
-                Empty<Never, TransactionError>(completeImmediately: false)
-            }
-            .eraseToAnyPublisher()
         
         self.completionPublisher = failureFromCreationOfSignedAtom
             .merge(with: completionFromUpdates)
@@ -76,6 +73,7 @@ public final class ResultOfUserAction {
     }
 }
 
+// MARK: - Public
 public extension ResultOfUserAction {
     var completion: AnyPublisher<Never, TransactionError> {
         if let bufferedError = bufferedErrors.first {
@@ -86,6 +84,15 @@ public extension ResultOfUserAction {
     }
 }
 
+// MARK: TransactionConvertible
+public extension ResultOfUserAction {
+    var sentAt: Date { transaction.sentAt }
+    var actions: [UserAction] { transaction.actions }
+}
+
+// MARK: - Private
+
+// MARK: SubmitAtomActionStatus
 private extension SubmitAtomActionStatus {
     func publisherCompleteOnStored() -> AnyPublisher<SubmitAtomAction, TransactionError> {
         switch statusEvent {

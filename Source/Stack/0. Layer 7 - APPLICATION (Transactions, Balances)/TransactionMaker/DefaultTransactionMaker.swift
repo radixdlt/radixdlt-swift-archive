@@ -91,11 +91,12 @@ public extension DefaultTransactionMaker {
 // MARK: - TransactionMaker
 public extension DefaultTransactionMaker {
     func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
-        let unsignedAtom = unsignedAtomFrom(transaction: transaction)
         
+        let unsignedAtom = unsignedAtomFrom(transaction: transaction)
         let signedAtom = sign(atom: unsignedAtom)
         
         return createAtomSubmission(
+            transaction: transaction,
             atom: signedAtom,
             completeOnAtomStoredOnly: false,
             originNode: originNode
@@ -146,6 +147,7 @@ private extension DefaultTransactionMaker {
     }
     
     func createAtomSubmission(
+        transaction: Transaction,
         atom signedAtomPublisher: AnyPublisher<SignedAtom, TransactionError>,
         completeOnAtomStoredOnly: Bool,
         originNode: Node?
@@ -157,6 +159,13 @@ private extension DefaultTransactionMaker {
             Empty<SignedAtom, Never>(completeImmediately: false)
                 .eraseToAnyPublisher()
         }
+        
+        let transactionErrors: AnyPublisher<Never, TransactionError> = cachedAtomPublisher
+            .flatMap { _ in
+                // Should never finish, only complete with error
+                Empty<Never, TransactionError>(completeImmediately: false)
+            }
+        .eraseToAnyPublisher()
         
         let updates = nonFailingAtomPublisher.flatMap { [unowned self]
             (atom: SignedAtom) -> AnyPublisher<SubmitAtomAction, Never> in
@@ -180,9 +189,11 @@ private extension DefaultTransactionMaker {
             }
         .eraseToAnyPublisher()
 
+
         let result = ResultOfUserAction(
-            updates: updates,
-            atom: cachedAtomPublisher
+            transaction: transaction,
+            transactionErrors: transactionErrors,
+            updates: updates
         )
 
         return result
