@@ -46,20 +46,15 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(createTokenAction.tokenSupplyType, .mutable)
     }
     
-    /*
-    func testTransactionWithSingleCreateTokenActionWithInitialSupply() {
+    func testTransactionWithSingleCreateTokenActionWithInitialSupply() throws {
         // GIVEN identity alice and a RadixApplicationClient
         
         // WHEN Alice observes her transactions after having made one with a single `CreateTokenAction`
-        XCTAssertTrue(
-            application.createToken(supply: .mutable(initial: 123))
-                .result
-                .blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        let (tokenCreation, _) = application.createToken(supply: .mutable(initial: 123))
         
-        guard let transaction = application.observeMyTransactions().blockingTakeFirst(timeout: 1) else {
-            return
-        }
+                try waitForTransactionToFinish(tokenCreation)
+        
+        let transaction = try waitForFirstValue(of: application.observeMyTransactions())
         
         switch transaction.actions.countedElementsZeroOneTwoAndMany {
         // THEN one CreateTokenAction can be seen in the transaction
@@ -76,6 +71,7 @@ class TransactionsTests: IntegrationTest {
 
     }
     
+    /*
     func testTransactionWithSingleTransferTokensAction() {
         // GIVEN identity alice and a RadixApplicationClient
         // GIVEN: and bob
