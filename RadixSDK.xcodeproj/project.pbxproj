@@ -266,6 +266,7 @@
 		E654778B22BFB3C500D968BD /* UniverseBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E654778A22BFB3C500D968BD /* UniverseBootstrap.swift */; };
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E656233023901F6200F55964 /* BurnTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BD238597FE00950312 /* BurnTokensTests.swift */; };
+		E6562331239024F400F55964 /* TransactionLocalhostNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BB238597FE00950312 /* TransactionLocalhostNodeTests.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E6638CE723351C24004C9846 /* IntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6638CE623351C24004C9846 /* IntegrationTest.swift */; };
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
@@ -5232,6 +5233,7 @@
 				E6D7A29A238596F200950312 /* TestableConvenienceInitializers.swift in Sources */,
 				E6D7A29B238596F200950312 /* ParticleSet.swift in Sources */,
 				E6D7A29D238596F200950312 /* TestCase_Extensions.swift in Sources */,
+				E6562331239024F400F55964 /* TransactionLocalhostNodeTests.swift in Sources */,
 				E61E6BDC238C0C2A008C14B0 /* Inverted.swift in Sources */,
 				E6D7A29E238596F200950312 /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6D7A2A2238596F200950312 /* Int+Extension.swift in Sources */,

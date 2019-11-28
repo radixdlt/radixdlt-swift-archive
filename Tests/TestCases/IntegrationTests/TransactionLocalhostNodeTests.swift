@@ -26,49 +26,27 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-// MARK: ☢️ No Target Membership ☢️
-
 class TransactionLocalhostNodeTests: IntegrationTest {
     
-    private var aliceIdentity: AbstractIdentity!
-    private var application: RadixApplicationClient!
-    private var alice: Address!
-    private var bob: Address!
-    
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-        
-        aliceIdentity = AbstractIdentity()
-        
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
-        
-        alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: .init())
-    }
-    
-    func testTransactionWithSingleCreateTokenActionWithoutInitialSupply() {
+    func testTransactionWithSingleCreateTokenActionWithoutInitialSupply() throws {
         // GIVEN identity alice and a RadixApplicationClient
         
         // WHEN Alice observes her transactions after creating token without
-        XCTAssertTrue(
-            application.createToken(supply: .mutableZeroSupply)
-                .result
-                .blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        let (tokenCreation, _) = application.createToken(supply: .mutableZeroSupply)
         
-        guard let transaction = application.observeMyTransactions().blockingTakeFirst(timeout: 1) else {
-            return
-        }
+        try waitForTransactionToFinish(tokenCreation)
         
         // THEN said single CreateTokenAction can be seen in the transaction
+        let transaction = try waitForFirstValue(of: application.observeMyTransactions())
         XCTAssertEqual(transaction.actions.count, 1)
+        
         guard let createTokenAction = transaction.actions.first as? CreateTokenAction else {
             return XCTFail("Transaction is expected to contain exactly one `CreateTokenAction`, nothing else.")
         }
         XCTAssertEqual(createTokenAction.tokenSupplyType, .mutable)
     }
     
+    /*
     func testTransactionWithSingleCreateTokenActionWithInitialSupply() {
         // GIVEN identity alice and a RadixApplicationClient
         
@@ -366,6 +344,5 @@ class TransactionLocalhostNodeTests: IntegrationTest {
         guard case let uniqueActionInMintTxs = uniqueMintTransactions.actions(ofType: PutUniqueIdAction.self), let uniqueActionInMintTx = uniqueActionInMintTxs.first else { return XCTFail("Expected UniqueAction") }
         XCTAssertEqual(uniqueActionInMintTx.string, "mint")
     }
+ */
 }
-
-
