@@ -106,28 +106,15 @@ class TransferTokensTests: LocalhostNodeTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
 
         // WHEN: Alice tries to transfer tokens of some type she does not own, to Bob
-        let amount: PositiveAmount = 10
-        let unknownRRI = ResourceIdentifier(address: alice.address, name: "Unknown")
-        let transferAction = TransferTokensAction(from: alice, to: bob, amount: amount, tokenResourceIdentifier: unknownRRI)
-        let transfer = application.transferTokens(action: transferAction)
+        let unknownRRI: ResourceIdentifier = "/\(alice!)/Unknown"
         
-        let recorder = transfer.completion.record()
+        let transfer = application.transferTokens(identifier: unknownRRI, to: bob, amount: 10)
         
-        // THEN:  I see that action fails with error `foundNoTokenDefinition`
-        let recordedThrownError: TransactionError = try wait(
-            for: recorder.expectError(),
-            timeout: .enoughForPOW,
-            description: "Using unknown RRI should throw error"
-        )
-      
-        XCTAssertEqual(
-            recordedThrownError,
-            .actionsToAtomError(
-                .transferError(
-                    .consumeError(.unknownToken(identifier: unknownRRI)),
-                    action: transferAction
-                )
-            )
+        // THEN:  I see that action fails with error `unknownToken`
+        try waitFor(
+            transfer: transfer,
+            toFailWithError: .consumeError(.unknownToken(identifier: unknownRRI)),
+            because: "Alice does not own that token."
         )
     }
   
@@ -135,38 +122,16 @@ class TransferTokensTests: LocalhostNodeTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
       
         // WHEN: Alice tries to transfer tokens with a larger amount than her current balance, to Bob
-        let initialSupply: PositiveSupply = 30
-        let (tokenCreation, rri) =  application.createFixedSupplyToken(supply: initialSupply)
+        let (tokenCreation, rri) =  application.createFixedSupplyToken(supply: 30)
+        try waitForTransactionToFinish(tokenCreation)
 
-        try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
-
-        let amount: PositiveAmount = 50
-        
-        let transferTokensAction = TransferTokensAction(
-            from: application.addressOfActiveAccount,
-            to: bob,
-            amount: amount,
-            tokenResourceIdentifier: rri
-        )
-        
-        let transfer = application.transferTokens(action: transferTokensAction)
-        
-        let transferRecording = transfer.completion.record()
+        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 50)
         
         // THEN:  I see that action fails with error `InsufficientFunds`
-        let recordedThrownError: TransactionError = try wait(
-            for: transferRecording.expectError(),
-            timeout: .enoughForPOW
-        )
-        
-        XCTAssertEqual(
-            recordedThrownError,
-            .actionsToAtomError(
-                .transferError(
-                    .insufficientFunds(currentBalance: NonNegativeAmount(subset: initialSupply), butTriedToTransfer: amount),
-                    action: transferTokensAction
-                )
-            )
+        try waitFor(
+            transfer: transfer,
+            toFailWithError: .insufficientFunds(currentBalance: 30, butTriedToTransfer: 50),
+            because: "Alice tries to spend more coins then she has"
         )
     }
     
@@ -175,7 +140,7 @@ class TransferTokensTests: LocalhostNodeTest {
   
         // WHEN: Alice transfer tokens she owns, having a granularity larger than 1, to Bob
         let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
-        try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
+        try waitForTransactionToFinish(tokenCreation)
        
         // THEN: I see that the transfer actions completes successfully
         let transfer = application.transferTokens(identifier: rri, to: bob, amount: 20)
@@ -183,10 +148,10 @@ class TransferTokensTests: LocalhostNodeTest {
     }
     
     func testIncorrectGranularityOf5() throws {
+
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
-        
         let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 100, granularity: 5)
-        try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
+        try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
         let transfer = application.transferTokens(identifier: rri, to: bob, amount: 7)
@@ -216,6 +181,16 @@ class TransferTokensTests: LocalhostNodeTest {
             toFailWithError: .consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol)),
             because: "Alice tries to spend Carols coins"
         )
+    }
+}
+
+extension LocalhostNodeTest {
+    func waitForTransactionToFinish(
+        _ pendingTransaction: PendingTransaction,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line
+    ) throws {
+        try wait(for: pendingTransaction.completion.record().finished, timeout: .enoughForPOW, description: "PendingTransaction should finish")
     }
 }
 
