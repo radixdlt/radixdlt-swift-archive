@@ -75,6 +75,7 @@ extension IntegrationTest {
     
     func waitForAction<Action>(
         ofType _: Action.Type,
+        atIndex actionIndex: Int = 0,
         in pendingTransaction: PendingTransaction,
         because description: String,
         timeout: TimeInterval = .enoughForPOW,
@@ -83,7 +84,9 @@ extension IntegrationTest {
         toFailWithError makeExpectedTransactionErrorFromAction: (Action) -> TransactionError
     ) throws where Action: UserAction {
         
-        let action: Action = try XCTUnwrap(pendingTransaction.firstAction(), line: line)
+        let actions = try XCTUnwrap(pendingTransaction.actions(ofType: Action.self), line: line)
+        XCTAssertGreaterThan(actions.count, actionIndex, line: line)
+        let action = actions[actionIndex]
         
         let recordedThrownError: TransactionError = try wait(
             for: pendingTransaction.completion.record().expectError(),

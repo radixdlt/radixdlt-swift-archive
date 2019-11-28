@@ -68,8 +68,9 @@ class CreateTokenTests: IntegrationTest {
     }
     
     
-    /*
-    func testFailCreatingTokenWithSameRRIAsExistingMutableSupplyToken() {
+    func testFailCreatingTokenWithSameRRIAsExistingMutableSupplyToken() throws {
+        // GIVEN: An Application API owned by Alice, and identity Bob
+        let aliceApp = application!
         
         let symbol: Symbol = "FOO"
         let actionCreateMutableToken = application.actionCreateMultiIssuanceToken(symbol: symbol)
@@ -79,14 +80,20 @@ class CreateTokenTests: IntegrationTest {
             application.actionCreateToken(symbol: symbol)
         }
         
-        application.make(transaction: transaction).blockingAssertThrows(
-            error: CreateTokenError.uniqueActionError(
-                .rriAlreadyUsedByMutableSupplyToken(identifier: actionCreateMutableToken.identifier)
-            )
+        let tokenCreation = aliceApp.make(transaction: transaction)
+        
+        // THEN: We get an error
+        try waitFor(
+            tokenCreation: tokenCreation,
+            toFailWithError: .uniqueActionError(.rriAlreadyUsedByMutableSupplyToken(identifier: actionCreateMutableToken.identifier)),
+            because: "RRIs cannot be reused"
         )
     }
     
-    func testFailCreatingTokenWithSameRRIAsExistingFixedSupplyToken() {
+    func testFailCreatingTokenWithSameRRIAsExistingFixedSupplyToken() throws {
+        // GIVEN: An Application API owned by Alice, and identity Bob
+        let aliceApp = application!
+        
         let symbol: Symbol = "FOO"
         let actionCreateFixedToken = application.actionCreateFixedSupplyToken(symbol: symbol)
         
@@ -94,14 +101,17 @@ class CreateTokenTests: IntegrationTest {
             actionCreateFixedToken
             application.actionCreateToken(symbol: symbol)
         }
+
+        let tokenCreation = aliceApp.make(transaction: transaction)
         
-        application.make(transaction: transaction).blockingAssertThrows(
-            error: CreateTokenError.uniqueActionError(
-                .rriAlreadyUsedByFixedSupplyToken(identifier: actionCreateFixedToken.identifier)
-            )
+        // THEN: We get an error
+        try waitFor(
+            tokenCreation: tokenCreation,
+            toFailWithError: .uniqueActionError(.rriAlreadyUsedByFixedSupplyToken(identifier: actionCreateFixedToken.identifier)),
+            becauseOfActionAtIndex: 1,
+            because: "RRIs cannot be reused"
         )
     }
- */
     
 }
 
@@ -110,6 +120,7 @@ private extension CreateTokenTests {
     func waitFor(
         tokenCreation pendingTransaction: PendingTransaction,
         toFailWithError createTokenError: CreateTokenError,
+        becauseOfActionAtIndex actionIndex: Int = 0,
         because description: String,
         timeout: TimeInterval = .enoughForPOW,
         line: UInt = #line
@@ -117,6 +128,7 @@ private extension CreateTokenTests {
         
         try waitForAction(
             ofType: CreateTokenAction.self,
+            atIndex: actionIndex,
             in: pendingTransaction,
             because: description
         ) { createTokenAction in
