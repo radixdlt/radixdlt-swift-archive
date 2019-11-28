@@ -50,53 +50,35 @@ class TransferTokensTests: LocalhostNodeTest {
 
     func testTransferTokenWithGranularityOf1() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
-        // WHEN: Alice transfer tokens she owns, to Bob
         let (tokenCreation, rri) = application.createToken(symbol: "AC", supply: .fixed(to: 30))
+        try waitForTransactionToFinish(tokenCreation)
         
-        let tokenCreationRecording = tokenCreation.completion.record()
-        
-        try wait(for: tokenCreationRecording.finished, timeout: .enoughForPOW)
-        
-        let myTokenDefRecording = application.observeTokenDefinition(identifier: rri).record()
-        let myTokenDef = try wait(for: myTokenDefRecording.firstOrError, timeout: .enoughForPOW)
-        
+        let myTokenDef = try waitForFirstValue(of: application.observeTokenDefinition(identifier: rri))
         XCTAssertEqual(myTokenDef.symbol, "AC")
-        let myBalanceOrNilBeforeTxRecording = application.observeMyBalance(ofToken: rri).record()
-        let myBalanceOrNilBeforeTx = try wait(for: myBalanceOrNilBeforeTxRecording.firstOrError, timeout: .enoughForPOW)
-        
-        let myBalanceBeforeTx = try XCTUnwrap(myBalanceOrNilBeforeTx)
+
+        let myBalanceBeforeTx = try XCTUnwrap(waitForFirstValue(of: application.observeMyBalance(ofToken: rri)))
         XCTAssertEqual(myBalanceBeforeTx.token.tokenDefinitionReference, rri)
         XCTAssertEqual(myBalanceBeforeTx.amount, 30)
         
-        let attachedMessage = "For taxi fare"
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 10, message: attachedMessage)
-        
-        let transferRecording = transfer.completion.record()
-        
-        // THEN: I see that the transfer actions completes successfully
-        try wait(for: transferRecording.finished, timeout: .enoughForPOW)
+        // WHEN: Alice transfer tokens she owns, to Bob
+        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 10, message: "For taxi fare")
 
-        let myBalanceOrNilAfterTxRecording = application.observeMyBalance(ofToken: rri).record()
-        let myBalanceOrNilAfterTx = try wait(for: myBalanceOrNilAfterTxRecording.firstOrError, timeout: .enoughForPOW)
+        // THEN: I see that the transfer actions completes successfully
+        try waitForTransactionToFinish(transfer)
         
-        let myBalanceAfterTx = try XCTUnwrap(myBalanceOrNilAfterTx)
+        let myBalanceAfterTx = try XCTUnwrap(waitForFirstValue(of: application.observeMyBalance(ofToken: rri)))
         XCTAssertEqual(myBalanceAfterTx.amount, 20)
         
-        let bobsBalanceOrNilAfterTxRecording = application.observeBalance(ofToken: rri, ownedBy: bob).record()
-        let bobsBalanceOrNilAfterTx = try wait(for: bobsBalanceOrNilAfterTxRecording.firstOrError, timeout: .enoughForPOW)
-        let bobsBalanceAfterTx = try XCTUnwrap(bobsBalanceOrNilAfterTx)
+        let bobsBalanceAfterTx = try XCTUnwrap(waitForFirstValue(of: application.observeBalance(ofToken: rri, ownedBy: bob)))
         XCTAssertEqual(bobsBalanceAfterTx.amount, 10)
         
-        let myTransferRecording = application.observeMyTokenTransfers().record()
-        let myTransfer = try wait(for: myTransferRecording.firstOrError, timeout: .enoughForPOW)
+        let myTransfer = try waitForFirstValue(of: application.observeMyTokenTransfers())
         XCTAssertEqual(myTransfer.sender, alice)
         XCTAssertEqual(myTransfer.recipient, bob)
         XCTAssertEqual(myTransfer.amount, 10)
-        let decodedAttachedMessage = try XCTUnwrap(myTransfer.attachedMessage())
-        XCTAssertEqual(decodedAttachedMessage, attachedMessage)
+        XCTAssertEqual(try XCTUnwrap(myTransfer.attachedMessage()), "For taxi fare")
         
-        let bobTransferRecording = application.observeTokenTransfers(toOrFrom: bob).record()
-        let bobTransfer = try wait(for: bobTransferRecording.firstOrError, timeout: .enoughForPOW)
+        let bobTransfer = try waitForFirstValue(of: application.observeTokenTransfers(toOrFrom: bob))
         XCTAssertEqual(bobTransfer.sender, alice)
         XCTAssertEqual(bobTransfer.recipient, bob)
         XCTAssertEqual(bobTransfer.amount, 10)
@@ -191,6 +173,14 @@ extension LocalhostNodeTest {
         line: UInt = #line
     ) throws {
         try wait(for: pendingTransaction.completion.record().finished, timeout: .enoughForPOW, description: "PendingTransaction should finish")
+    }
+    
+    func waitForFirstValue<P>(
+        of publisher: P,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line
+    ) throws -> P.Output where P: Publisher {
+        return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: "First value of publisher")
     }
 }
 
