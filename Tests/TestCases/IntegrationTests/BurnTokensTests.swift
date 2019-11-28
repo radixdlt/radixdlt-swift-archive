@@ -209,20 +209,19 @@ class BurnTokensTests: IntegrationTest {
         )
     }
     
-    /*
-    func testBurnFailDueToIncorrectGranularity() {
+    func testBurnFailDueToIncorrectGranularity() throws {
         // GIVEN: Radix identity Alice and an application layer action BurnToken, and a previously created FooToken, with a granularity of 3
         let (tokenCreation, fooToken) = application.createMultiIssuanceToken(initialSupply: 30, granularity: 3)
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice call Burn(2) for FooToken, where 3∤2 (3 does not divide 2)
         let burning = application.burnTokens(amount: 2, ofType: fooToken)
         
-        burning.blockingAssertThrows(
-            error: BurnError.consumeError(
+        // THEN: I see that it fails
+        try waitFor(
+            burning: burning,
+            toFailWithError: .consumeError(
                 .amountNotMultipleOfGranularity(
                     token: fooToken,
                     triedToConsumeAmount: 2,
@@ -230,9 +229,7 @@ class BurnTokensTests: IntegrationTest {
                 )
             )
         )
-        
     }
-     */
 }
 
 private extension BurnTokensTests {
