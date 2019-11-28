@@ -192,7 +192,7 @@ private extension MintTokensTests {
         try waitForAction(
             ofType: MintTokensAction.self,
             in: pendingTransaction,
-            because: description ?? "Waiting for PendingTransaction to fail"
+            description: description
         ) { mintTokensAction in
             
             TransactionError.actionsToAtomError(

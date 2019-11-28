@@ -29,7 +29,7 @@ import Combine
 class SendMessageTests: IntegrationTest {
     
     func testSendNonEmptyPlainText() throws {
-        // GIVEN: A RadidxApplicationClient
+        // GIVEN: A RadixApplicationClient
         
         // WHEN: I send a non empty message without encryption
         let message = "Hey Bob, this is plain text"
@@ -37,7 +37,7 @@ class SendMessageTests: IntegrationTest {
         
         // THEN: I see that action completes successfully
         try waitForTransactionToFinish(pendingTransaction)
-
+        
         let sentMessage = try waitForFirstValue(of: application.observeMyMessages())
         
         let decryptedMessage = sentMessage.textMessage()
@@ -45,75 +45,94 @@ class SendMessageTests: IntegrationTest {
     }
     
     func testSendNonEmptyEncrypted() throws {
-        // GIVEN: A RadidxApplicationClient
+        // GIVEN: A RadixApplicationClient
         // WHEN: I send a non empty message with encryption
         let plainTextMessage = "Hey Bob, this is super secret message"
         let pendingTransaction = application.sendEncryptedMessage(plainTextMessage, to: bob)
-     
+        
         try waitForTransactionToFinish(pendingTransaction)
         
         let sentMessage = try waitForFirstValue(of: application.observeMyMessages())
         XCTAssertEqual(sentMessage.textMessage(), plainTextMessage)
     }
     
-    /*
-    func testSendNonEmptyEncryptedThatAliceCannotDecrypt() {
-        // GIVEN: A RadidxApplicationClient
+    func testSendNonEmptyEncryptedThatAliceCannotDecrypt() throws {
+        // GIVEN: A RadixApplicationClient
         // WHEN: I send a non empty message with encryption
         let plainTextMessage = "Hey Bob, this is super secret message"
-        let result = application.sendMessage(action: SendMessageAction.encrypted(from: alice, to: bob, onlyDecryptableBy: [bob], text: plainTextMessage))
-        
-        XCTAssertTrue(
-            // THEN: I see that action completes successfully
-            result.blockingWasSuccessful(timeout: .enoughForPOW)
+        let pendingTransaction = application.sendMessage(
+            action: SendMessageAction.encrypted(from: alice, to: bob, onlyDecryptableBy: [bob], text: plainTextMessage)
         )
         
-        guard let sentMessage = application.observeMyMessages().blockingTakeLast() else { return }
+        try waitForTransactionToFinish(pendingTransaction)
+        
+        let sentMessage = try waitForFirstValue(of: application.observeMyMessages())
         XCTAssertTrue(sentMessage.isEncryptedAndCannotDecrypt)
     }
     
-    func testSendEmptyEncrypted() {
-        // GIVEN: A RadidxApplicationClient
+    func testSendEmptyEncrypted() throws {
+        // GIVEN: A RadixApplicationClient
         // WHEN: I send an empty message with encryption
-        let result = application.sendEncryptedMessage("", to: bob)
+        let pendingTransaction = application.sendEncryptedMessage("", to: bob)
         
-        XCTAssertTrue(
-            // THEN: I see that action completes successfully
-            result.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(pendingTransaction)
     }
     
-    func testThatAliceCannotSendMessagesOnBobsBehalf() {
-        // GIVEN: A RadidxApplicationClient and identities Alice, Bob and Clara
-        XCTAssertAllInequal(alice, bob, clara)
+    func testThatAliceCannotSendMessagesOnBobsBehalf() throws {
+        // GIVEN: A RadixApplicationClient and identities Alice, Bob and Carol
+        XCTAssertAllInequal(alice, bob, carol)
         
-        // WHEN: Alice tries to send a message to Bob claming to be from Clara
-        let result = application.send(
-            message: SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: clara, to: bob, text: "Hey Bob, this is Clara.")
+        // WHEN: Alice tries to send a message to Bob claiming to be from Carol
+        let pendingTransaction = application.sendMessage(
+            action: SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: carol, to: bob, text: "Hey Bob, this is Carol.")
         )
-
+        
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
-        result.blockingAssertThrows(
-            error: SendMessageError.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: clara)
+        try waitFor(
+            messageSending: pendingTransaction,
+            toFailWithError: .nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol)
         )
-        
     }
     
-    func testSendToThirdParties() {
-        // GIVEN: A RadidxApplicationClient and identities Alice, Bob and Clara
-        XCTAssertAllInequal(alice, bob, clara)
+    func testSendToThirdParties() throws {
+        // GIVEN: A RadixApplicationClient and identities Alice, Bob and Carol
+        XCTAssertAllInequal(alice, bob, carol)
         
         // WHEN: I send a non empty message with encryption
-        let result = application.sendEncryptedMessage(
-            "Hey Bob! Clara and Diana can also decrypt this encrypted message",
+        let pendingTransaction = application.sendEncryptedMessage(
+            "Hey Bob! Carol and Diana can also decrypt this encrypted message",
             to: bob,
-            canAlsoBeDecryptedBy: [clara, diana]
+            canAlsoBeDecryptedBy: [carol, diana]
         )
         
-        XCTAssertTrue(
-            // THEN: I see that action completes successfully
-            result.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(pendingTransaction)
     }
- */
 }
+
+
+private extension SendMessageTests {
+    
+    func waitFor(
+        messageSending pendingTransaction: PendingTransaction,
+        toFailWithError sendMessageError: SendMessageError,
+        description: String? = nil,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line
+    ) throws {
+        
+        try waitForAction(
+            ofType: SendMessageAction.self,
+            in: pendingTransaction,
+            description: description
+        ) { sendMessageAction in
+            
+            TransactionError.actionsToAtomError(
+                .sendMessageActionError(
+                    sendMessageError,
+                    action: sendMessageAction
+                )
+            )
+        }
+    }
+}
+

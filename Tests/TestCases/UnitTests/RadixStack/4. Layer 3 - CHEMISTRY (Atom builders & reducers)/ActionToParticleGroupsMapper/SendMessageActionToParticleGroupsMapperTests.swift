@@ -30,16 +30,16 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
     
     private lazy var alice  = AccountWithAddress()
     private lazy var bob    = AccountWithAddress()
-    private lazy var clara  = AccountWithAddress()
+    private lazy var carol  = AccountWithAddress()
     private lazy var diana  = AccountWithAddress()
     
     func testEncryptAndDecryptMessage() throws {
         
         
-        XCTAssertAllInequal(alice, bob, clara, diana)
+        XCTAssertAllInequal(alice, bob, carol, diana)
         
-        let message = "Hey Bob, this is your friend Alice, Clara should also be able to read this."
-        let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(and: [clara], from: alice, to: bob, text: message)
+        let message = "Hey Bob, this is your friend Alice, Carol should also be able to read this."
+        let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(and: [carol], from: alice, to: bob, text: message)
         
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
         
@@ -78,7 +78,7 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
             }
         }
         
-        let readers = [alice, bob, clara]
+        let readers = [alice, bob, carol]
         readers.forEach {
             ensureEligibleReaderCanDecrypt($0.account)
         }
@@ -98,7 +98,7 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
     func testThatOnlySenderAndRecipientCanDecryptMessageByDefault() throws {
         
         
-        XCTAssertAllInequal(alice, bob, clara)
+        XCTAssertAllInequal(alice, bob, carol)
         
         let message = "Hey Bob, this is your friend Alice, only you and I should be able to read this"
         let sendMessageAction = SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: alice, to: bob, text: message)
@@ -124,7 +124,7 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
         try ensureCanBeDecrypted(by: alice)
         try ensureCanBeDecrypted(by: bob)
         
-        try decryptMessage(in: atom, account: clara) {
+        try decryptMessage(in: atom, account: carol) {
             let decryptedMessage = try XCTUnwrap($0)
             
             XCTAssertEqual(
@@ -142,7 +142,7 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
     
     func testNonEncryptedMessage() throws {
         
-        XCTAssertAllInequal(alice, bob, clara)
+        XCTAssertAllInequal(alice, bob, carol)
         
         let message = "Hey Bob, this is your friend Alice, this message is not encrypted."
         let sendMessageAction = SendMessageAction.plainText(from: alice, to: bob, text: message)
@@ -165,7 +165,7 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
         
         try ensureNonEncryptedMessageCanBeRead(by: alice)
         try ensureNonEncryptedMessageCanBeRead(by: bob)
-        try ensureNonEncryptedMessageCanBeRead(by: clara)
+        try ensureNonEncryptedMessageCanBeRead(by: carol)
     }
     
 }

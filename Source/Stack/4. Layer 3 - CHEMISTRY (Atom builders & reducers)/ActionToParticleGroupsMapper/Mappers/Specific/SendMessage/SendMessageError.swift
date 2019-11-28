@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,19 +24,6 @@
 
 import Foundation
 
-// swiftlint:disable colon opening_brace
-
-public protocol SendMessageActionToParticleGroupsMapper:
-    StatelessActionToParticleGroupsMapper
-    where
-    Action == SendMessageAction,
-    Error == SendMessageError
-{}
-
-// swiftlint:enable colon opening_brace
-
-public extension SendMessageActionToParticleGroupsMapper {
-    func mapError(_ sendMessageError: SendMessageError, action sendMessageAction: SendMessageAction) -> ActionsToAtomError {
-        ActionsToAtomError.sendMessageActionError(sendMessageError, action: sendMessageAction)
-    }
+public enum SendMessageError: Swift.Error, Equatable {
+    case nonMatchingAddress(activeAddress: Address, butActionStatesAddress: Address)
 }

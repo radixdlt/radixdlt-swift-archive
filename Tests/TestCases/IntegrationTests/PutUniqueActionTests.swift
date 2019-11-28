@@ -95,8 +95,7 @@ class PutUniqueIdActionTests: IntegrationTest {
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         try waitFor(
             pendingTransaction: pendingTransaction,
-            toFailWithError: .uniqueError(.rriAlreadyUsedByUniqueId(string: "foo")),
-            because: "Transaction containing two identical 'PutUniqueIdAction' should throw error"
+            toFailWithError: .uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
         )
     }
     
@@ -111,8 +110,7 @@ class PutUniqueIdActionTests: IntegrationTest {
         
         try waitFor(
             pendingTransaction: pendingTransaction,
-            toFailWithError: .uniqueError(.rriAlreadyUsedByUniqueId(string: "foo")),
-            because: "Transaction containing two identical 'PutUniqueIdAction' should throw error"
+            toFailWithError: .uniqueError(.rriAlreadyUsedByUniqueId(string: "foo"))
         )
     }
     
@@ -132,8 +130,7 @@ class PutUniqueIdActionTests: IntegrationTest {
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         try waitFor(
             pendingTransaction: pendingTransaction,
-            toFailWithError: .uniqueError(.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))),
-            because: "Reusing same symbol should throw error"
+            toFailWithError: .uniqueError(.rriAlreadyUsedByMutableSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
         )
     }
     
@@ -152,8 +149,7 @@ class PutUniqueIdActionTests: IntegrationTest {
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         try waitFor(
             pendingTransaction: pendingTransaction,
-            toFailWithError: .uniqueError(.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO"))),
-            because: "Reusing same symbol should throw error"
+            toFailWithError: .uniqueError(.rriAlreadyUsedByFixedSupplyToken(identifier: ResourceIdentifier(address: alice, name: "FOO")))
         )
     }
     
@@ -171,11 +167,10 @@ class PutUniqueIdActionTests: IntegrationTest {
         let pendingTransaction = aliceApp.make(transaction: transaction)
         
         
-        // THEN: an error `nonMatchingAddress` is thrown
+        // THEN: an error `nonMatchingAddress` is thrown: Using someone else's address is not possible
         try waitFor(
             pendingTransaction: pendingTransaction,
-            toFailWithError: .uniqueError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)),
-            because: "Using someone else's address should throw error"
+            toFailWithError: .uniqueError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob))
         )
     }
 }
@@ -185,7 +180,7 @@ private extension PutUniqueIdActionTests {
     func waitFor(
         pendingTransaction: PendingTransaction,
         toFailWithError putUniqueIdError: PutUniqueIdError,
-        because description: String,
+        description: String? = nil,
         timeout: TimeInterval = .enoughForPOW,
         line: UInt = #line
     ) throws {
@@ -193,7 +188,7 @@ private extension PutUniqueIdActionTests {
         try waitForAction(
             ofType: PutUniqueIdAction.self,
             in: pendingTransaction,
-            because: description
+            description: description
         ) { putUniqueIdAction in
             
             TransactionError.actionsToAtomError(

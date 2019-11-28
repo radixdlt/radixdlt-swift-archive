@@ -75,8 +75,7 @@ class TransferTokensTests: IntegrationTest {
         // THEN:  I see that action fails with error `unknownToken`
         try waitFor(
             transfer: transfer,
-            toFailWithError: .consumeError(.unknownToken(identifier: unknownRRI)),
-            because: "Alice does not own that token."
+            toFailWithError: .consumeError(.unknownToken(identifier: unknownRRI))
         )
     }
   
@@ -89,11 +88,10 @@ class TransferTokensTests: IntegrationTest {
 
         let transfer = application.transferTokens(identifier: rri, to: bob, amount: 50)
         
-        // THEN:  I see that action fails with error `InsufficientFunds`
+        // THEN:  I see that action fails with error `InsufficientFunds`, Alice tries to spend more coins then she has
         try waitFor(
             transfer: transfer,
-            toFailWithError: .insufficientFunds(currentBalance: 30, butTriedToTransfer: 50),
-            because: "Alice tries to spend more coins then she has"
+            toFailWithError: .insufficientFunds(currentBalance: 30, butTriedToTransfer: 50)
         )
     }
     
@@ -118,13 +116,12 @@ class TransferTokensTests: IntegrationTest {
         // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
         let transfer = application.transferTokens(identifier: rri, to: bob, amount: 7)
      
-        // THEN: Transfer should fail
+        // THEN: Transfer should fail because The amount 7 is not a multiple of granularity 5 (both are primes)
         try waitFor(
             transfer: transfer,
             toFailWithError: .consumeError(
                 .amountNotMultipleOfGranularity(token: rri, triedToConsumeAmount: 7, whichIsNotMultipleOfGranularity: 5)
-            ),
-            because: "The amount 7 is not a multiple of granularity 5 (both are primes)"
+            )
         )
     }
     
@@ -137,11 +134,10 @@ class TransferTokensTests: IntegrationTest {
         // WHEN: Alice tries to spend Carols coins
         let transfer = application.transferTokens(action: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
         
-        // THEN: Transfer should fail
+        // THEN: Transfer should fail because Alice tries to spend Carols coins"
         try waitFor(
             transfer: transfer,
-            toFailWithError: .consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol)),
-            because: "Alice tries to spend Carols coins"
+            toFailWithError: .consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol))
         )
     }
 }
@@ -151,7 +147,7 @@ private extension TransferTokensTests {
     func waitFor(
         transfer pendingTransaction: PendingTransaction,
         toFailWithError transferError: TransferError,
-        because description: String,
+        description: String? = nil,
         timeout: TimeInterval = .enoughForPOW,
         line: UInt = #line
     ) throws {
@@ -159,7 +155,7 @@ private extension TransferTokensTests {
         try waitForAction(
             ofType: TransferTokensAction.self,
             in: pendingTransaction,
-            because: description
+            description: description
         ) { transferTokensAction in
             
             TransactionError.actionsToAtomError(

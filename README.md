@@ -115,14 +115,14 @@ application.sendEncryptedMessage("Hi Bob, this is a secret message from Alice", 
 application.sendPlainTextMessage("Hi Bob (and the world) from Alice", to: bob)
 
 // You can even include some third parties to be able to read the encrypted message
-let clara: Address = application.addressOf(account: Account()) 
+let carol: Address = application.addressOf(account: Account()) 
 let diana: Address = application.addressOf(account: Account()) 
 
 
 application.sendEncryptedMessage(
-    "Hi Bob! Clara and Diana can also decrypt this encrypted message", 
+    "Hi Bob! Carol and Diana can also decrypt this encrypted message", 
     to: bob,
-    canAlsoBeDecryptedBy: [clara, diana]) 
+    canAlsoBeDecryptedBy: [carol, diana]) 
 )
 ```
 

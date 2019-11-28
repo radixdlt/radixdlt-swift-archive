@@ -245,7 +245,7 @@ private extension BurnTokensTests {
         try waitForAction(
             ofType: BurnTokensAction.self,
             in: pendingTransaction,
-            because: description ?? "Waiting for PendingTransaction to fail"
+            description: description
         ) { burnTokensAction in
             
             TransactionError.actionsToAtomError(

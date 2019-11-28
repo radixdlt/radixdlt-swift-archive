@@ -28,7 +28,7 @@ import Combine
 
 class CreateTokenTests: IntegrationTest {
 
-    func testFailingCreateTokenInSomeoneElsesName() throws {
+    func testFailingCreateTokenInSomeoneElseʼsName() throws {
         // GIVEN: An Application API owned by Alice, and identity Bob
         let aliceApp = application!
         
@@ -38,8 +38,7 @@ class CreateTokenTests: IntegrationTest {
         // THEN: We get an error
         try waitFor(
             tokenCreation: tokenCreation,
-            toFailWithError: .uniqueActionError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob)),
-            because: "Alice cannot create a Token on Bob's behalf"
+            toFailWithError: .uniqueActionError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: bob))
         )
     }
     
@@ -62,8 +61,7 @@ class CreateTokenTests: IntegrationTest {
         // THEN: We get an error
         try waitFor(
             tokenCreation: tokenCreation,
-            toFailWithError: .uniqueActionError(.rriAlreadyUsedByUniqueId(string: rri.name)),
-            because: "RRIs cannot be reused"
+            toFailWithError: .uniqueActionError(.rriAlreadyUsedByUniqueId(string: rri.name))
         )
     }
     
@@ -85,8 +83,7 @@ class CreateTokenTests: IntegrationTest {
         // THEN: We get an error
         try waitFor(
             tokenCreation: tokenCreation,
-            toFailWithError: .uniqueActionError(.rriAlreadyUsedByMutableSupplyToken(identifier: actionCreateMutableToken.identifier)),
-            because: "RRIs cannot be reused"
+            toFailWithError: .uniqueActionError(.rriAlreadyUsedByMutableSupplyToken(identifier: actionCreateMutableToken.identifier))
         )
     }
     
@@ -108,8 +105,7 @@ class CreateTokenTests: IntegrationTest {
         try waitFor(
             tokenCreation: tokenCreation,
             toFailWithError: .uniqueActionError(.rriAlreadyUsedByFixedSupplyToken(identifier: actionCreateFixedToken.identifier)),
-            becauseOfActionAtIndex: 1,
-            because: "RRIs cannot be reused"
+            becauseOfActionAtIndex: 1
         )
     }
     
@@ -121,7 +117,7 @@ private extension CreateTokenTests {
         tokenCreation pendingTransaction: PendingTransaction,
         toFailWithError createTokenError: CreateTokenError,
         becauseOfActionAtIndex actionIndex: Int = 0,
-        because description: String,
+        description: String? = nil,
         timeout: TimeInterval = .enoughForPOW,
         line: UInt = #line
     ) throws {
@@ -130,7 +126,7 @@ private extension CreateTokenTests {
             ofType: CreateTokenAction.self,
             atIndex: actionIndex,
             in: pendingTransaction,
-            because: description
+            description: description
         ) { createTokenAction in
             
             TransactionError.actionsToAtomError(

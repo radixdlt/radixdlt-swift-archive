@@ -36,6 +36,8 @@ class IntegrationTest: TestCase {
     var bob: Address!
     var carolAccount: Account!
     var carol: Address!
+    var dianaAccount = Account()
+    var diana: Address!
     
     override func setUp() {
         super.setUp()
@@ -47,6 +49,7 @@ class IntegrationTest: TestCase {
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
         carol = application.addressOf(account: carolAccount)
+        diana = application.addressOf(account: dianaAccount)
     }
 
     override func invokeTest() {
@@ -112,7 +115,7 @@ extension IntegrationTest {
         ofType _: Action.Type,
         atIndex actionIndex: Int = 0,
         in pendingTransaction: PendingTransaction,
-        because description: String,
+        description: String? = nil,
         timeout: TimeInterval = .enoughForPOW,
         line: UInt = #line,
         
@@ -122,14 +125,14 @@ extension IntegrationTest {
         let actions = try XCTUnwrap(pendingTransaction.actions(ofType: Action.self), line: line)
         XCTAssertGreaterThan(actions.count, actionIndex, line: line)
         let action = actions[actionIndex]
+
+        let expectedError = makeExpectedTransactionErrorFromAction(action)
         
         let recordedThrownError: TransactionError = try wait(
             for: pendingTransaction.completion.record().expectError(),
             timeout: timeout,
-            description: description
+            description: description ?? "Wait for expected error: '\(expectedError)'"
         )
-        
-        let expectedError = makeExpectedTransactionErrorFromAction(action)
         
         XCTAssertEqual(
             recordedThrownError,

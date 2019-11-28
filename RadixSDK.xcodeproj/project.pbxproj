@@ -268,6 +268,7 @@
 		E656233023901F6200F55964 /* BurnTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BD238597FE00950312 /* BurnTokensTests.swift */; };
 		E6562331239024F400F55964 /* TransactionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BB238597FE00950312 /* TransactionsTests.swift */; };
 		E656233223903C7A00F55964 /* SendMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BE238597FE00950312 /* SendMessageTests.swift */; };
+		E65623342390423D00F55964 /* SendMessageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65623332390423D00F55964 /* SendMessageError.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E6638CE723351C24004C9846 /* IntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6638CE623351C24004C9846 /* IntegrationTest.swift */; };
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
@@ -1008,6 +1009,7 @@
 		E654778822BFB3B700D968BD /* BootstrapConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BootstrapConfig.swift; sourceTree = "<group>"; };
 		E654778A22BFB3C500D968BD /* UniverseBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniverseBootstrap.swift; sourceTree = "<group>"; };
 		E6550EE4224BB02900160267 /* Int+DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataInitializable.swift"; sourceTree = "<group>"; };
+		E65623332390423D00F55964 /* SendMessageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageError.swift; sourceTree = "<group>"; };
 		E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+AsArray.swift"; sourceTree = "<group>"; };
 		E6638CE623351C24004C9846 /* IntegrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationTest.swift; sourceTree = "<group>"; };
 		E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStatusChecking.swift; sourceTree = "<group>"; };
@@ -2584,6 +2586,7 @@
 			isa = PBXGroup;
 			children = (
 				E68BD81C229ECCCE00FCE4D3 /* SendMessageActionToParticleGroupsMapper.swift */,
+				E65623332390423D00F55964 /* SendMessageError.swift */,
 				E68BD81E229ECCF400FCE4D3 /* DefaultSendMessageActionToParticleGroupsMapper.swift */,
 			);
 			path = SendMessage;
@@ -4595,6 +4598,7 @@
 				E6A508DA2251100800128123 /* ProofOfWork.swift in Sources */,
 				E6E279242271CD1C0067D46E /* Signatures.swift in Sources */,
 				E68BD82522A0331800FCE4D3 /* MetaDataCommonValue.swift in Sources */,
+				E65623342390423D00F55964 /* SendMessageError.swift in Sources */,
 				E6E279992271CD1C0067D46E /* InvalidStringError.swift in Sources */,
 				E626E20022B41B350046D2AC /* AnyAtomToActionMapper.swift in Sources */,
 				E63F0F1E239019110066A8CB /* DefaultMintTokensActionToParticleGroupsMapper.swift in Sources */,

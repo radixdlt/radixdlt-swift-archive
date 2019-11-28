@@ -41,8 +41,12 @@ public protocol StatelessActionToParticleGroupsMapper:
 
 public extension StatelessActionToParticleGroupsMapper {
     
-    func particleGroupsForAnAction(_ userAction: UserAction, addressOfActiveAccount: Address) throws -> ParticleGroups {
+    func particleGroupsForAnAction(_ userAction: UserAction, addressOfActiveAccount: Address) throws -> Throws<ParticleGroups, ActionsToAtomError> {
         let action = castOrKill(instance: userAction, toType: Action.self)
-        return try particleGroups(for: action, addressOfActiveAccount: addressOfActiveAccount)
+        do {
+            return try particleGroups(for: action, addressOfActiveAccount: addressOfActiveAccount)
+        } catch let specificActionError as SpecificActionError {
+            throw mapError(specificActionError, action: action)
+        } catch { unexpectedlyMissedToCatch(error: error) }
     }
 }

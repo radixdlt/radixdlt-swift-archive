@@ -40,7 +40,7 @@ public final class DefaultSendMessageActionToParticleGroupsMapper: SendMessageAc
 }
 
 public extension DefaultSendMessageActionToParticleGroupsMapper {
-
+    
     func particleGroups(
         for action: SendMessageAction,
         addressOfActiveAccount: Address
@@ -48,7 +48,7 @@ public extension DefaultSendMessageActionToParticleGroupsMapper {
         
         do {
             guard action.sender == addressOfActiveAccount else {
-                throw Error.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: action.sender)
+                throw SendMessageError.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: action.sender)
             }
             
             var particles = [AnySpunParticle]()
