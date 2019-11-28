@@ -121,23 +121,18 @@ class BurnTokensTests: IntegrationTest {
         try waitFor(burning: burning, toFailWithError: .consumeError(.unknownToken(identifier: foobarToken)))
     }
     
-    /*
-    func testBurnFailDueToExceedingBalance() {
-        // GIVEN: Radix identity Alice and an application layer action BurnToken
-        
-        // GIVEN: ... and a previously created FooToken which has a supply of max - 10 tokens, for which Alice has the appropriate permissions.
+    func testBurnFailDueToExceedingBalance() throws {
+        // GIVEN: Radix identity Alice and an application layer action BurnToken and a previously created FooToken which has a supply of max - 10 tokens, for which Alice has the appropriate permissions.
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 10))
-        
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice call Burn(20) on FooToken
         let burning = application.burnTokens(amount: 20, ofType: fooToken)
         
         // THEN: an error supplyExceedsMax is thrown
-        burning.blockingAssertThrows(
-            error: BurnError.insufficientTokens(
+        try waitFor(
+            burning: burning,
+            toFailWithError: .insufficientTokens(
                 token: fooToken,
                 balance: 10,
                 triedToBurnAmount: 20
@@ -145,7 +140,7 @@ class BurnTokensTests: IntegrationTest {
         )
     }
     
-    func testBurnFailDueToWrongPermissions() {
+    func testBurnFailDueToWrongPermissions() throws {
         // GIVEN: Radix identity Alice and an application layer action BurnToken ...
         let bobApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: bobIdentity)
         let aliceApp = application!
@@ -153,27 +148,33 @@ class BurnTokensTests: IntegrationTest {
         // GIVEN: ... and a previously created FooToken, for which Alice does **NOT** have the appropriate permissions
         let (tokenCreation, fooToken) = bobApp.createToken(supply: .mutable(initial: 1000))
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+       try waitForTransactionToFinish(tokenCreation)
+
+        let cancellableSubscriptionOfBobsAddress = aliceApp.pull(address: bob)
         
-        aliceApp.pull(address: bob).disposed(by: disposeBag)
-        guard let _ = aliceApp.observeTokenDefinitions(at: bob).blockingTakeFirst(timeout: 5) else { return XCTFail("Alice needs to know about tokens defined by Bob") }
+        _ = try waitForFirstValue(
+            of: aliceApp.observeTokenDefinitions(at: bob),
+            description: "Alice needs to know about tokens defined by Bob"
+        )
         
         // WHEN: Alice call Burn for FooToken
         let burning = aliceApp.burnTokens(amount: 100, ofType: fooToken)
         
         // THEN: an error unknownToken is thrown
-        burning.blockingAssertThrows(
-            error: BurnError.lackingPermissions(
+        try waitFor(
+            burning: burning,
+            toFailWithError: .lackingPermissions(
                 of: alice,
                 toBurnToken: fooToken,
                 whichRequiresPermission: .tokenOwnerOnly,
                 creatorOfToken: bob
             )
         )
+        
+        XCTAssertNotNil(cancellableSubscriptionOfBobsAddress)
     }
     
+    /*
     func testFailingBurnAliceTriesToBurnCarolsCoins() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
