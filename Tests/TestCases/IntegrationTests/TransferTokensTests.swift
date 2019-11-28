@@ -170,25 +170,19 @@ class TransferTokensTests: LocalhostNodeTest {
         )
     }
     
-    /*
-    func testTransferTokenWithGranularityOf10() {
+    func testTransferTokenWithGranularityOf10() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
   
         // WHEN: Alice transfer tokens she owns, having a granularity larger than 1, to Bob
         let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
-        
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
-        
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 20)
-        
+        try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
+       
         // THEN: I see that the transfer actions completes successfully
-        XCTAssertTrue(
-            transfer.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 20)
+        try wait(for: transfer.completion.record().finished, timeout: .enoughForPOW)
     }
     
+    /*
     func testIncorrectGranularityOf5() {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
