@@ -63,7 +63,7 @@ public extension DefaultTransactionMaker {
     convenience init(
         activeAccount: AnyPublisher<Account, Never>,
         universe: RadixUniverse
-        ) {
+    ) {
         
         let transactionToAtomMapper = DefaultTransactionToAtomMapper(atomStore: universe.atomStore)
         
@@ -90,7 +90,7 @@ public extension DefaultTransactionMaker {
 
 // MARK: - TransactionMaker
 public extension DefaultTransactionMaker {
-    func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+    func send(transaction: Transaction, toOriginNode originNode: Node?) -> PendingTransaction {
         
         let unsignedAtom = unsignedAtomFrom(transaction: transaction)
         let signedAtom = sign(atom: unsignedAtom)
@@ -151,7 +151,7 @@ private extension DefaultTransactionMaker {
         atom signedAtomPublisher: AnyPublisher<SignedAtom, TransactionError>,
         completeOnAtomStoredOnly: Bool,
         originNode: Node?
-    ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         let cachedAtomPublisher = signedAtomPublisher.share().eraseToAnyPublisher()
         
@@ -189,7 +189,7 @@ private extension DefaultTransactionMaker {
             }
         .eraseToAnyPublisher()
 
-        let result = ResultOfUserAction(
+        let result = PendingTransaction(
             transaction: transaction,
             transactionErrors: transactionErrors,
             updates: updates

@@ -31,7 +31,7 @@ import Combine
 public protocol TokenCreating {
     
     /// Creates a new kind of Token
-    func create(token: CreateTokenAction) -> ResultOfUserAction
+    func create(token: CreateTokenAction) -> PendingTransaction
     
     func observeMyTokenDefinitions() -> AnyPublisher<TokenDefinitionsState, StateSubscriberError>
 }
@@ -47,7 +47,7 @@ public extension TokenCreating {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         let createTokenAction = try CreateTokenAction(
             creator: creator.address,
@@ -73,7 +73,7 @@ public extension TokenCreating {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
 
         return try createToken(
             creator: creator,
@@ -97,7 +97,7 @@ public extension TokenCreating {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try createToken(
             creator: creator,
@@ -122,7 +122,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try createToken(
             creator: addressOfActiveAccount,
@@ -145,7 +145,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try createFixedSupplyToken(
             creator: addressOfActiveAccount,
@@ -168,7 +168,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try createMultiIssuanceToken(
             creator: addressOfActiveAccount,

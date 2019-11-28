@@ -27,7 +27,7 @@ import Foundation
 public protocol TokenBurning {
     
     /// Burns tokens of the TokenDefinition kind
-    func burnTokens(_ action: BurnTokensAction) -> ResultOfUserAction
+    func burnTokens(_ action: BurnTokensAction) -> PendingTransaction
 }
 
 public extension TokenBurning {
@@ -35,7 +35,7 @@ public extension TokenBurning {
         amount: PositiveAmount,
         ofType tokenDefinitionReference: ResourceIdentifier,
         burner: AddressConvertible
-    ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         let burnAction = BurnTokensAction(
             tokenDefinitionReference: tokenDefinitionReference,
@@ -51,7 +51,7 @@ public extension TokenBurning where Self: ActiveAccountOwner {
     func burnTokens(
         amount: PositiveAmount,
         ofType tokenDefinitionReference: ResourceIdentifier
-    ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         return burnTokens(
             amount: amount,

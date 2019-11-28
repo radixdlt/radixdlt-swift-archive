@@ -32,7 +32,7 @@ import Combine
 public protocol MessageSending: ActiveAccountOwner {
     
     /// Sends a message
-    func send(message: SendMessageAction) -> ResultOfUserAction
+    func send(message: SendMessageAction) -> PendingTransaction
     func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, AtomToTransactionMapperError>
 }
 
@@ -41,7 +41,7 @@ public extension MessageSending {
         _ plainText: String,
         encoding: String.Encoding = .default,
         to recipient: AddressConvertible
-    ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
         
@@ -53,7 +53,7 @@ public extension MessageSending {
         encoding: String.Encoding = .default,
         to recipient: AddressConvertible,
         canAlsoBeDecryptedBy extraDecryptors: [AddressConvertible]? = nil
-    ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(
             and: extraDecryptors,

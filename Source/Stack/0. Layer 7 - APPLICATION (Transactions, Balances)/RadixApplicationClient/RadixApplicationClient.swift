@@ -118,7 +118,7 @@ public extension RadixApplicationClient {
 
 // MARK: TransactionMaker
 public extension RadixApplicationClient {
-    func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
+    func send(transaction: Transaction, toOriginNode originNode: Node?) -> PendingTransaction {
         transactionMaker.send(transaction: transaction, toOriginNode: originNode)
     }
 }
@@ -139,7 +139,7 @@ public extension RadixApplicationClient {
 
 // MARK: TokenCreating
 public extension RadixApplicationClient {
-    func create(token createTokenAction: CreateTokenAction) -> ResultOfUserAction {
+    func create(token createTokenAction: CreateTokenAction) -> PendingTransaction {
         execute(actions: createTokenAction)
     }
     
@@ -151,21 +151,21 @@ public extension RadixApplicationClient {
 
 // MARK: TokenMinting
 public extension RadixApplicationClient {
-    func mintTokens(_ action: MintTokensAction) -> ResultOfUserAction {
+    func mintTokens(_ action: MintTokensAction) -> PendingTransaction {
         execute(actions: action)
     }
 }
 
 // MARK: TokenBurning
 public extension RadixApplicationClient {
-    func burnTokens(_ action: BurnTokensAction) -> ResultOfUserAction {
+    func burnTokens(_ action: BurnTokensAction) -> PendingTransaction {
         execute(actions: action)
     }
 }
 
 // MARK: TokenTransferring
 public extension RadixApplicationClient {
-    func transfer(tokens transferTokensAction: TransferTokensAction) -> ResultOfUserAction {
+    func transfer(tokens transferTokensAction: TransferTokensAction) -> PendingTransaction {
         execute(actions: transferTokensAction)
     }
     
@@ -176,7 +176,7 @@ public extension RadixApplicationClient {
 
 // MARK: MessageSending
 public extension RadixApplicationClient {
-    func send(message sendMessageAction: SendMessageAction) -> ResultOfUserAction {
+    func send(message sendMessageAction: SendMessageAction) -> PendingTransaction {
         execute(actions: sendMessageAction)
     }
     
@@ -187,7 +187,7 @@ public extension RadixApplicationClient {
 
 // MARK: UniqueMaking
 public extension RadixApplicationClient {
-    func putUniqueId(_ putUniqueAction: PutUniqueIdAction) -> ResultOfUserAction {
+    func putUniqueId(_ putUniqueAction: PutUniqueIdAction) -> PendingTransaction {
         execute(actions: putUniqueAction)
     }
 }

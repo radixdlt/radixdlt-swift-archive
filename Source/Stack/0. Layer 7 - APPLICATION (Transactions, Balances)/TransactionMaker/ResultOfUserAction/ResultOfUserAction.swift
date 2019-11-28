@@ -25,19 +25,29 @@
 import Foundation
 import Combine
 
-public final class ResultOfUserAction: TransactionConvertible {
-    
+/// A transaction in progress of being sent to the Radix network
+public final class PendingTransaction: TransactionConvertible {
+
+    /// The transaction prepared by the user, consisting of one or many user actions
+    /// from which an Atom has been derived.
+    private let transaction: Transaction
+
+    /// Status updates publisher on the submission of the Atom derived from the `transaction`.
     let status: AnyPublisher<SubmitAtomAction, TransactionError>
     
+    /// A publisher which completes when this pending transaction either finishes with failure
+    /// or is gets stored by some node.
     private let completionPublisher: AnyPublisher<Never, TransactionError>
 
+    /// Errors that have occurred during preparation of the atom from the `transaction`.
     private var bufferedErrors = [TransactionError]()
+    
+    /// Subscription of buffered errors.
     private var cancellables = Set<AnyCancellable>()
-    private let transaction: Transaction
     
     init(
         transaction: Transaction,
-        transactionErrors failureFromCreationOfSignedAtom: AnyPublisher<Never, TransactionError>,
+        transactionErrors: AnyPublisher<Never, TransactionError>,
         updates: AnyPublisher<SubmitAtomAction, Never>
     ) {
         
@@ -55,7 +65,7 @@ public final class ResultOfUserAction: TransactionConvertible {
         
         let completionFromUpdates = statusUpdates.ignoreOutput().eraseToAnyPublisher()
         
-        self.completionPublisher = failureFromCreationOfSignedAtom
+        self.completionPublisher = transactionErrors
             .merge(with: completionFromUpdates)
             .prefix(untilCompletionFrom: completionFromUpdates)
             .share()
@@ -65,7 +75,7 @@ public final class ResultOfUserAction: TransactionConvertible {
         // might be thrown during building of Atom, they will be thrown right away. It seems
         // this prematurely terminates the 'completionPublisher'. Thus we manually 'buffer'
         // these errors
-        failureFromCreationOfSignedAtom.sink(
+        transactionErrors.sink(
             receiveError: { [unowned self] errorToBuffer in
                 self.bufferedErrors.append(errorToBuffer)
             }
@@ -74,7 +84,10 @@ public final class ResultOfUserAction: TransactionConvertible {
 }
 
 // MARK: - Public
-public extension ResultOfUserAction {
+public extension PendingTransaction {
+    
+    /// A publisher which completes when this pending transaction either finishes with failure
+    /// or is gets stored by some node.
     var completion: AnyPublisher<Never, TransactionError> {
         if let bufferedError = bufferedErrors.first {
             return Fail<Never, TransactionError>(error: bufferedError).eraseToAnyPublisher()
@@ -85,7 +98,7 @@ public extension ResultOfUserAction {
 }
 
 // MARK: TransactionConvertible
-public extension ResultOfUserAction {
+public extension PendingTransaction {
     var sentAt: Date { transaction.sentAt }
     var actions: [UserAction] { transaction.actions }
 }

@@ -27,7 +27,7 @@ import Foundation
 public protocol TokenMinting {
     
     /// Mints new tokens of the TokenDefinition kind
-    func mintTokens(_ action: MintTokensAction) -> ResultOfUserAction
+    func mintTokens(_ action: MintTokensAction) -> PendingTransaction
 }
 
 public extension TokenMinting {
@@ -36,7 +36,7 @@ public extension TokenMinting {
         ofType tokenDefinitionReference: ResourceIdentifier,
         minter: AddressConvertible,
         credit creditSomeoneElseThanMinter: AddressConvertible? = nil
-    ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
     
         let creditNewlyMintedTokensTo = creditSomeoneElseThanMinter ?? minter
         
@@ -56,7 +56,7 @@ public extension TokenMinting where Self: ActiveAccountOwner {
         amount: PositiveAmount,
         ofType tokenDefinitionReference: ResourceIdentifier,
         credit creditSomeoneElseThanMinter: AddressConvertible? = nil
-    ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         return mintTokens(
             amount: amount,
