@@ -52,7 +52,7 @@ class TransactionsTests: IntegrationTest {
         // WHEN Alice observes her transactions after having made one with a single `CreateTokenAction`
         let (tokenCreation, _) = application.createToken(supply: .mutable(initial: 123))
         
-                try waitForTransactionToFinish(tokenCreation)
+        try waitForTransactionToFinish(tokenCreation)
         
         let transaction = try waitForFirstValue(of: application.observeMyTransactions())
         
@@ -71,34 +71,26 @@ class TransactionsTests: IntegrationTest {
 
     }
     
-    /*
-    func testTransactionWithSingleTransferTokensAction() {
+    func testTransactionWithSingleTransferTokensAction() throws {
         // GIVEN identity alice and a RadixApplicationClient
         // GIVEN: and bob
         // GIVEN: and `FooToken` created by Alice
         let (tokenCreation, fooToken) =
             application.createToken(supply: .mutable(initial: 10))
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
+        try waitForTransactionToFinish(tokenCreation)
+        
+        let transfer = application.transferTokens(
+            identifier: fooToken,
+            to: bob,
+            amount: 5,
+            message: "For taxi fare"
         )
         
-        XCTAssertTrue(
-            //  WHEN: Alice makes a transaction containing a single TransferTokensAction of FooToken
-            application.transferTokens(
-                identifier: fooToken,
-                to: bob,
-                amount: 5,
-                message: "For taxi fare"
-            )
-            .blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(transfer)
         
         // WHEN: and observes her transactions
-        guard
-            let transaction = application.observeMyTransactions(containingActionsOfAllTypes: [TransferTokensAction.self])
-            .blockingTakeFirst()
-        else { return }
+        let transaction: ExecutedTransaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionsOfAllTypes: [TransferTokensAction.self]))
         
         // THEN she sees a Transaction containing just the TransferTokensAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -111,6 +103,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(transferTokensAction.sender, alice)
     }
     
+    /*
     func testTransactionWithSingleBurnTokensAction() {
         // GIVEN identity alice and a RadixApplicationClient
 
