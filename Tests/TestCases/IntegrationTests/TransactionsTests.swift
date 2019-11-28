@@ -231,8 +231,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(mint10.amount, 10)
     }
     
-    /*
-    func testTransactionWithNoActions() {
+    func testTransactionWithNoActions() throws {
         let someParticle = ResourceIdentifierParticle(
             resourceIdentifier: ResourceIdentifier(address: alice, name: "WHATEVER")
         )
@@ -240,12 +239,12 @@ class TransactionsTests: IntegrationTest {
         let atom = Atom(particle: someParticle)
         
         let atomToTransactionMapper = DefaultAtomToTransactionMapper(identity: aliceIdentity)
-        guard let transaction = atomToTransactionMapper.transactionFromAtom(atom).blockingTakeFirst() else { return }
+        let transaction = try waitForFirstValue(of: atomToTransactionMapper.transactionFromAtom(atom))
         XCTAssertEqual(transaction.actions.count, 0)
         XCTAssertGreaterThanOrEqual(transaction.sentAt.timeIntervalSinceNow, -0.01) // max 10 ms ago
     }
     
-    private let bag = DisposeBag()
+    /*
     func testTransactionComplex() {
         let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 35))
                 
