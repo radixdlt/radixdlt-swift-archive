@@ -71,8 +71,7 @@ class MintTokensTests: IntegrationTest {
         // THEN: an error unknownToken is thrown
         try waitFor(
             minting: minting,
-            toFailWithError: .unknownToken(identifier: unknownRRI),
-            because: "Unknown rri"
+            toFailWithError: .unknownToken(identifier: unknownRRI)
         )
     }
     
@@ -100,14 +99,12 @@ class MintTokensTests: IntegrationTest {
                 maxSupply: Supply.max,
                 currentSupply: try! Supply(subtractedFromMax: Supply.ten),
                 byMintingAmount: 20
-            ),
-            because: "OVer mint"
+            )
         )
     }
     
-    /*
     
-    func testMintFailDueToWrongPermissions() {
+    func testMintFailDueToWrongPermissions() throws {
         // GIVEN: Radix identity Alice and an application layer action MintToken ...
         let bobApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: bobIdentity)
         let aliceApp = application!
@@ -117,27 +114,32 @@ class MintTokensTests: IntegrationTest {
             supply: .mutable(initial: Supply(subtractedFromMax: Supply.ten))
         )
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        try waitForTransactionToFinish(tokenCreation)
         
-        aliceApp.pull(address: bob).disposed(by: disposeBag)
-        guard let _ = aliceApp.observeTokenDefinitions(at: bob).blockingTakeFirst(timeout: 3) else { return XCTFail("Alice needs to know about tokens defined by Bob") }
+        let cancellableSubscriptionOfBobsAddress = aliceApp.pull(address: bob)
+        _ = try waitForFirstValue(
+            of: aliceApp.observeTokenDefinitions(at: bob),
+            description: "Alice needs to know about tokens defined by Bob"
+        )
         
         // WHEN: Alice call Mint for FooToken
         let minting = aliceApp.mintTokens(amount: 123, ofType: fooToken)
         
         // THEN: an error unknownToken is thrown
-        minting.blockingAssertThrows(
-            error: MintError.lackingPermissions(
+        try waitFor(
+            minting: minting,
+            toFailWithError: .lackingPermissions(
                 of: alice,
                 toMintToken: fooToken,
                 whichRequiresPermission: .tokenOwnerOnly,
                 creatorOfToken: bob
             )
         )
+
+        XCTAssertNotNil(cancellableSubscriptionOfBobsAddress)
     }
     
+    /*
     func testMintFailDueToSupplyBeingFixed() {
         // GIVEN: Radix identity Alice and an application layer action MintToken, and a previously created FooToken, which has FIXED supply
         let (tokenCreation, fooToken) = application.createToken(supply: .fixed(to: 10))
@@ -187,7 +189,7 @@ private extension MintTokensTests {
     func waitFor(
         minting pendingTransaction: PendingTransaction,
         toFailWithError mintError: MintError,
-        because description: String,
+        description: String? = nil,
         timeout: TimeInterval = .enoughForPOW,
         line: UInt = #line
     ) throws {
@@ -195,7 +197,7 @@ private extension MintTokensTests {
         try waitForAction(
             ofType: MintTokensAction.self,
             in: pendingTransaction,
-            because: description
+            because: description ?? "Waiting for PendingTransaction to fail"
         ) { mintTokensAction in
             
             TransactionError.actionsToAtomError(

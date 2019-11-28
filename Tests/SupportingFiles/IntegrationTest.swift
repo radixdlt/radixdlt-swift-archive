@@ -30,7 +30,7 @@ import Combine
 class IntegrationTest: TestCase {
 
     var aliceIdentity: AbstractIdentity!
-    var bobAccount: Account!
+    var bobIdentity: AbstractIdentity!
     var application: RadixApplicationClient!
     var alice: Address!
     var bob: Address!
@@ -41,11 +41,11 @@ class IntegrationTest: TestCase {
         super.setUp()
         
         aliceIdentity = AbstractIdentity()
-        bobAccount = Account()
+        bobIdentity = AbstractIdentity()
         carolAccount = Account()
         application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobAccount)
+        bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
         carol = application.addressOf(account: carolAccount)
     }
 
@@ -68,9 +68,10 @@ extension IntegrationTest {
     func waitForFirstValue<P>(
         of publisher: P,
         timeout: TimeInterval = .enoughForPOW,
+        description: String? = nil,
         line: UInt = #line
     ) throws -> P.Output where P: Publisher {
-        return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: "First value of publisher")
+        return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: description ?? "First value of publisher")
     }
     
     func waitForFirstValueUnwrapped<P>(
