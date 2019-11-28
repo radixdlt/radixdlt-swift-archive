@@ -222,31 +222,51 @@ class TransferTokensTests: LocalhostNodeTest {
     }
     
     func testFailingTransferAliceTriesToSpendCarolsCoins() throws {
-        // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
+        // GIVEN: a RadixApplicationClient and identities Alice and Bob
         let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
         try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
         
-        
         // WHEN: Alice tries to spend Carols coins
         let transfer = application.transfer(tokens: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
-        let transferTokensAction: TransferTokensAction = try XCTUnwrap(transfer.firstAction())
+        
+        // THEN: Transfer should fail
+        try waitFor(
+            transfer: transfer,
+            toFailWithError: .consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol)),
+            because: "Alice tries to spend Carols coins"
+        )
+    }
+}
+
+private extension TransferTokensTests {
+    
+    func waitFor(
+        transfer: ResultOfUserAction,
+        toFailWithError transferError: TransferError,
+        because description: String,
+        timeout: TimeInterval = .enoughForPOW,
+        line: UInt = #line
+    ) throws {
+        
+        let transferTokensAction: TransferTokensAction = try XCTUnwrap(transfer.firstAction(), line: line)
         let transferRecording = transfer.completion.record()
         
-        // THEN: I see that it fails
         let recordedThrownError: TransactionError = try wait(
             for: transferRecording.expectError(),
-            timeout: .enoughForPOW
+            timeout: timeout,
+            description: description
         )
         
         XCTAssertEqual(
             recordedThrownError,
             TransactionError.actionsToAtomError(
                 .transferError(
-                    .consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol)),
+                    transferError,
                     action: transferTokensAction
                 )
-            )
+            ),
+            line: line
         )
     }
 }
