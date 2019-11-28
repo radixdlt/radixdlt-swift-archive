@@ -47,14 +47,14 @@ class MintTokensTests: IntegrationTest {
 
         // WHEN: Alice call Mint(42) for FooToken
         let minting = application.mintTokens(amount: 42, ofType: fooToken)
-        
+
         // THEN: the minting succeeds
         try waitForTransactionToFinish(minting)
 
         // THEN: AND the supply of FooToken is updated with 42
         let fooTokenStateAfterMint = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
         XCTAssertEqual(fooTokenStateAfterMint.totalSupply, 72)
-        
+
         let myBalanceAfterMint = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: fooToken))
 
         // THEN: AND that these new 42 tokens belong to Alice

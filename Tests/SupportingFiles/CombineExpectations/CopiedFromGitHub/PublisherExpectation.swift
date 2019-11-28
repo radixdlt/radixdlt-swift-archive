@@ -76,12 +76,25 @@ extension XCTestCase {
     public func wait<R: PublisherExpectation>(
         for publisherExpectation: R,
         timeout: TimeInterval,
-        description: String = "")
+        description: String = "",
+        
+        file: StaticString = #file,
+        line: UInt = #line
+    )
         throws -> R.Output
     {
         let expectation = self.expectation(description: description)
         publisherExpectation._setup(expectation)
-        wait(for: [expectation], timeout: timeout)
+        waitForExpectations(timeout: timeout) { error in
+            if let error = error {
+                self.recordFailure(
+                    withDescription: "Exceeded timeout of \(timeout) seconds, with unfulfilled expectations: \(description), error: \(error)",
+                    inFile: file.description,
+                    atLine: Int(line),
+                    expected: false
+                )
+            }
+        }
         return try publisherExpectation._value()
     }
 }

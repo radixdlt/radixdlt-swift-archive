@@ -45,7 +45,7 @@ class IntegrationTest: TestCase {
         aliceIdentity = AbstractIdentity()
         bobIdentity = AbstractIdentity()
         carolAccount = Account()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
+        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostTwoNodes, identity: aliceIdentity)
         alice = application.addressOfActiveAccount
         bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
         carol = application.addressOf(account: carolAccount)
@@ -63,27 +63,57 @@ extension IntegrationTest {
     func waitForTransactionToFinish(
         _ pendingTransaction: PendingTransaction,
         timeout: TimeInterval = .enoughForPOW,
+        
+        file: StaticString = #file,
         line: UInt = #line
     ) throws {
-        try wait(for: pendingTransaction.completion.record().finished, timeout: .enoughForPOW, description: "PendingTransaction should finish")
+        
+        try wait(
+            for: pendingTransaction.completion.record().finished,
+            timeout: timeout,
+            description: "PendingTransaction should finish",
+
+            file: file,
+            line: line
+        )
     }
     
     func waitForFirstValue<P>(
         of publisher: P,
         timeout: TimeInterval = .enoughForPOW,
         description: String? = nil,
+     
+        file: StaticString = #file,
         line: UInt = #line
     ) throws -> P.Output where P: Publisher {
-        return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: description ?? "First value of publisher, or error")
+        
+        return try wait(
+            for: publisher.record().firstOrError,
+            timeout: timeout,
+            description: description ?? "First value of publisher, or error",
+
+            file: file,
+            line: line
+        )
     }
     
     func waitForFirstSequence<P>(
         of publisher: P,
         timeout: TimeInterval = .enoughForPOW,
         description: String? = nil,
+
+        file: StaticString = #file,
         line: UInt = #line
     ) throws -> [P.Output.Element] where P: Publisher, P.Output: Sequence {
-        return try wait(for: publisher.record().firstSequenceOrError, timeout: .enoughForPOW, description: description ?? "First sequence of publisher, or error")
+        
+        return try wait(
+            for: publisher.record().firstSequenceOrError,
+            timeout: timeout,
+            description: description ?? "First sequence of publisher, or error",
+
+            file: file,
+            line: line
+        )
     }
     
     func waitFor<P>(
@@ -91,24 +121,32 @@ extension IntegrationTest {
         valuesPublishedBy publisher: P,
         timeout: TimeInterval = .enoughForPOW,
         description: String? = nil,
+
+        file: StaticString = #file,
         line: UInt = #line
     ) throws -> [P.Output] where P: Publisher {
+        
         return try wait(
             for: publisher.record().prefixedOrError(numberOfValuesToWaitFor),
-            timeout: .enoughForPOW,
-            description: description ?? "First \(numberOfValuesToWaitFor) values of publisher, or error"
+            timeout: timeout,
+            description: description ?? "First \(numberOfValuesToWaitFor) values of publisher, or error",
+
+            file: file,
+            line: line
         )
     }
     
     func waitForFirstValueUnwrapped<P>(
         of publisher: P,
         timeout: TimeInterval = .enoughForPOW,
+
+        file: StaticString = #file,
         line: UInt = #line
     ) throws -> P.Output.Wrapped where P: Publisher, P.Output: OptionalType {
         
-        let first: P.Output = try waitForFirstValue(of: publisher, timeout: timeout, line: line)
+        let first: P.Output = try waitForFirstValue(of: publisher, timeout: timeout, file: file, line: line)
         
-        return try XCTUnwrap(first.value, line: line)
+        return try XCTUnwrap(first.value, file: file, line: line)
     }
     
     func waitForAction<Action>(
@@ -117,13 +155,21 @@ extension IntegrationTest {
         in pendingTransaction: PendingTransaction,
         description: String? = nil,
         timeout: TimeInterval = .enoughForPOW,
+        
+        file: StaticString = #file,
         line: UInt = #line,
         
         toFailWithError makeExpectedTransactionErrorFromAction: (Action) -> TransactionError
     ) throws where Action: UserAction {
         
-        let actions = try XCTUnwrap(pendingTransaction.actions(ofType: Action.self), line: line)
-        XCTAssertGreaterThan(actions.count, actionIndex, line: line)
+        let actions = try XCTUnwrap(pendingTransaction.actions(ofType: Action.self), file: file, line: line)
+        
+        XCTAssertGreaterThan(
+            actions.count, actionIndex,
+            file: file,
+            line: line
+        )
+        
         let action = actions[actionIndex]
 
         let expectedError = makeExpectedTransactionErrorFromAction(action)
@@ -131,12 +177,17 @@ extension IntegrationTest {
         let recordedThrownError: TransactionError = try wait(
             for: pendingTransaction.completion.record().expectError(),
             timeout: timeout,
-            description: description ?? "Wait for expected error: '\(expectedError)'"
+            description: description ?? "Wait for expected error: '\(expectedError)'",
+
+            file: file,
+            line: line
         )
         
         XCTAssertEqual(
             recordedThrownError,
             expectedError,
+
+            file: file,
             line: line
         )
     }
