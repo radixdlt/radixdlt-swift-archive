@@ -76,8 +76,7 @@ class MintTokensTests: IntegrationTest {
         )
     }
     
-    /*
-    func testMintFailsDueToExceedingTheGreatestPossibleSupply() {
+    func testMintFailsDueToExceedingTheGreatestPossibleSupply() throws {
         // GIVEN: Radix identity Alice and an application layer action MintToken
         
         // GIVEN: ... and a previously created FooToken which has a supply of max - 10 tokens, for which Alice has the appropriate permissions.
@@ -88,25 +87,25 @@ class MintTokensTests: IntegrationTest {
             supply: .mutable(initial: Supply(subtractedFromMax: Supply.ten))
         )
         
-        XCTAssertTrue(
-            tokenCreation.blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+       try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice call Mint(20) on FooToken
         let minting = application.mintTokens(amount: 20, ofType: fooToken)
         
         // THEN: an error supplyExceedsMax is thrown
-        minting.blockingAssertThrows(
-            error: MintError.tokenOverMint(
+        try waitFor(
+            minting: minting,
+            toFailWithError: .tokenOverMint(
                 token: fooToken,
                 maxSupply: Supply.max,
                 currentSupply: try! Supply(subtractedFromMax: Supply.ten),
                 byMintingAmount: 20
-            )
+            ),
+            because: "OVer mint"
         )
     }
     
-    private let disposeBag = DisposeBag()
+    /*
     
     func testMintFailDueToWrongPermissions() {
         // GIVEN: Radix identity Alice and an application layer action MintToken ...
