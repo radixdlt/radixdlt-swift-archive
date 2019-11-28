@@ -29,22 +29,6 @@ import Combine
 
 class PutUniqueIdActionTests: LocalhostNodeTest {
     
-    private var aliceIdentity: AbstractIdentity!
-    private var bobAccount: Account!
-    private var application: RadixApplicationClient!
-    private var alice: Address!
-    private var bob: Address!
-    
-    override func setUp() {
-        super.setUp()
-        
-        aliceIdentity = AbstractIdentity()
-        bobAccount = Account()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
-        alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobAccount)
-    }
-
     func testSendTransactionWithSingleUniqueId() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
 

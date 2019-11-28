@@ -27,26 +27,6 @@ import XCTest
 import Combine
 
 class TransferTokensTests: LocalhostNodeTest {
-    
-    private var aliceIdentity: AbstractIdentity!
-    private var bobAccount: Account!
-    private var application: RadixApplicationClient!
-    private var alice: Address!
-    private var bob: Address!
-    private var carolAccount: Account!
-    private var carol: Address!
-    
-    override func setUp() {
-        super.setUp()
-        
-        aliceIdentity = AbstractIdentity()
-        bobAccount = Account()
-        carolAccount = Account()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
-        alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobAccount)
-        carol = application.addressOf(account: carolAccount)
-    }
 
     func testTransferTokenWithGranularityOf1() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
@@ -162,51 +142,6 @@ class TransferTokensTests: LocalhostNodeTest {
             transfer: transfer,
             toFailWithError: .consumeError(.nonMatchingAddress(activeAddress: alice, butActionStatesAddress: carol)),
             because: "Alice tries to spend Carols coins"
-        )
-    }
-}
-
-extension LocalhostNodeTest {
-    func waitForTransactionToFinish(
-        _ pendingTransaction: PendingTransaction,
-        timeout: TimeInterval = .enoughForPOW,
-        line: UInt = #line
-    ) throws {
-        try wait(for: pendingTransaction.completion.record().finished, timeout: .enoughForPOW, description: "PendingTransaction should finish")
-    }
-    
-    func waitForFirstValue<P>(
-        of publisher: P,
-        timeout: TimeInterval = .enoughForPOW,
-        line: UInt = #line
-    ) throws -> P.Output where P: Publisher {
-        return try wait(for: publisher.record().firstOrError, timeout: .enoughForPOW, description: "First value of publisher")
-    }
-    
-    func waitForAction<Action>(
-        ofType _: Action.Type,
-        in pendingTransaction: PendingTransaction,
-        because description: String,
-        timeout: TimeInterval = .enoughForPOW,
-        line: UInt = #line,
-        
-        toFailWithError makeExpectedTransactionErrorFromAction: (Action) -> TransactionError
-    ) throws where Action: UserAction {
-
-        let action: Action = try XCTUnwrap(pendingTransaction.firstAction(), line: line)
-
-        let recordedThrownError: TransactionError = try wait(
-            for: pendingTransaction.completion.record().expectError(),
-            timeout: timeout,
-            description: description
-        )
-        
-        let expectedError = makeExpectedTransactionErrorFromAction(action)
-
-        XCTAssertEqual(
-            recordedThrownError,
-            expectedError,
-            line: line
         )
     }
 }
