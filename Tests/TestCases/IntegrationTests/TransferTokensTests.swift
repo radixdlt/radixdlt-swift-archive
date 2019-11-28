@@ -185,39 +185,19 @@ class TransferTokensTests: LocalhostNodeTest {
     func testIncorrectGranularityOf5() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
-        let granularity: Granularity = 5
-        
-        // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
-        let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 100, granularity: granularity)
+        let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 100, granularity: 5)
         try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
         
-        
-        let amountToSend: PositiveAmount = 7
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: amountToSend)
-        let transferTokensAction: TransferTokensAction = try XCTUnwrap(transfer.firstAction())
-        let transferRecording = transfer.completion.record()
-        
-        // THEN: I see that action fails with an error saying that the granularity of the amount did not match the one of the Token.
-        let recordedThrownError: TransactionError = try wait(
-            for: transferRecording.expectError(),
-            timeout: .enoughForPOW
-        )
-        
-        
-        XCTAssertEqual(
-            recordedThrownError,
-            TransactionError.actionsToAtomError(
-                .transferError(
-                    .consumeError(
-                        .amountNotMultipleOfGranularity(
-                            token: rri,
-                            triedToConsumeAmount: amountToSend,
-                            whichIsNotMultipleOfGranularity: granularity
-                        )
-                    ),
-                    action: transferTokensAction
-                )
-            )
+        // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
+        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 7)
+     
+        // THEN: Transfer should fail
+        try waitFor(
+            transfer: transfer,
+            toFailWithError: .consumeError(
+                .amountNotMultipleOfGranularity(token: rri, triedToConsumeAmount: 7, whichIsNotMultipleOfGranularity: 5)
+            ),
+            because: "The amount 7 is not a multiple of granularity 5 (both are primes)"
         )
     }
     
