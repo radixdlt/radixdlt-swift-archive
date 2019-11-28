@@ -267,6 +267,7 @@
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
 		E656233023901F6200F55964 /* BurnTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BD238597FE00950312 /* BurnTokensTests.swift */; };
 		E6562331239024F400F55964 /* TransactionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BB238597FE00950312 /* TransactionsTests.swift */; };
+		E656233223903C7A00F55964 /* SendMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BE238597FE00950312 /* SendMessageTests.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E6638CE723351C24004C9846 /* IntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6638CE623351C24004C9846 /* IntegrationTest.swift */; };
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
@@ -5220,6 +5221,7 @@
 				E656233023901F6200F55964 /* BurnTokensTests.swift in Sources */,
 				E61E6BE1238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */,
 				E6D7A272238596F200950312 /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
+				E656233223903C7A00F55964 /* SendMessageTests.swift in Sources */,
 				E61E6BEC238C356E008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E63F0F12239012B60066A8CB /* MintTokensTests.swift in Sources */,
 				E61E6BD2238C0C2A008C14B0 /* RecordingError.swift in Sources */,

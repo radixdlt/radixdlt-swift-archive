@@ -26,42 +26,25 @@ import XCTest
 @testable import RadixSDK
 import Combine
 
-// MARK: ☢️ No Target Membership ☢️
-
 class SendMessageTests: IntegrationTest {
     
-    private let aliceIdentity = AbstractIdentity()
-    private let bobAccount = Account()
-    private let claraAccount = Account()
-    private let dianaAccount = Account()
-    
-    private lazy var application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
-    
-    private lazy var alice = application.addressOfActiveAccount
-    private lazy var bob = application.addressOf(account: bobAccount)
-    private lazy var clara = application.addressOf(account: claraAccount)
-    private lazy var diana = application.addressOf(account: dianaAccount)
-    
-    private let disposeBag = DisposeBag()
- 
-    func testSendNonEmptyPlainText() {
+    func testSendNonEmptyPlainText() throws {
         // GIVEN: A RadidxApplicationClient
+        
         // WHEN: I send a non empty message without encryption
-        application.pull().disposed(by: disposeBag)
         let message = "Hey Bob, this is plain text"
-        let result = application.sendPlainTextMessage(message, to: bob)
+        let pendingTransaction = application.sendPlainTextMessage(message, to: bob)
         
         // THEN: I see that action completes successfully
-        XCTAssertTrue(result.blockingWasSuccessful(timeout: .enoughForPOW))
-        
-        print(try! result.atom().debugDescription)
+        try waitForTransactionToFinish(pendingTransaction)
 
-        guard let sentMessage = application.observeMyMessages().blockingTakeFirst() else { return }
+        let sentMessage = try waitForFirstValue(of: application.observeMyMessages())
+        
         let decryptedMessage = sentMessage.textMessage()
         XCTAssertEqual(decryptedMessage, message)
-        XCTAssertNotEqual(decryptedMessage, "foobar")
     }
     
+    /*
     func testSendNonEmptyEncrypted() {
         // GIVEN: A RadidxApplicationClient
         // WHEN: I send a non empty message with encryption
@@ -136,4 +119,5 @@ class SendMessageTests: IntegrationTest {
             result.blockingWasSuccessful(timeout: .enoughForPOW)
         )
     }
+ */
 }
