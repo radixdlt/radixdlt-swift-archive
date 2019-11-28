@@ -152,20 +152,15 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(mintTokensAction.amount, 23)
     }
     
-    /*
-    func testTransactionWithSingleSendMessageAction() {
+    func testTransactionWithSingleSendMessageAction() throws {
         // GIVEN identity alice and a RadixApplicationClient
         
         // WHEN Alice observes her transactions after having made one with a single `SendMessageAction`
-        XCTAssertTrue(
-            application.sendEncryptedMessage("Hey Bob, this is secret!", to: bob)
-                .blockingWasSuccessful(timeout: .enoughForPOW)
-        )
+        let messageSending = application.sendEncryptedMessage("Hey Bob, this is secret!", to: bob)
+        try waitForTransactionToFinish(messageSending)
         
         // WHEN: and observes her transactions
-        guard let transaction = application.observeMyTransactions().blockingTakeFirst() else {
-            return
-        }
+        let transaction = try waitForFirstValue(of: application.observeMyTransactions())
         
         // THEN she sees a Transaction containing the SendMessageAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -176,9 +171,9 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(sendMessageAction.recipient, bob)
         XCTAssertEqual(sendMessageAction.decryptionContext, .decrypted)
         XCTAssertEqual(sendMessageAction.textMessage(), "Hey Bob, this is secret!")
-
     }
     
+    /*
     func testTransactionWithSinglePutUniqueAction() {
         // GIVEN identity alice and a RadixApplicationClient
         
