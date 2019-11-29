@@ -28,8 +28,8 @@ import CommonCrypto
 
 internal struct AES256 {
     
-    private let key: Data
-    private let initializationVector: Data
+    private var key: Data
+    private var initializationVector: Data
     
     init(
         key: Data,
@@ -71,18 +71,18 @@ internal extension AES256 {
         var outBytes = [UInt8](repeating: 0, count: input.count + kCCBlockSizeAES128)
         var status: CCCryptorStatus = CCCryptorStatus(kCCSuccess)
         
-        input.withUnsafeBytes { (encryptedBytes: UnsafePointer<UInt8>!) -> Void in
-            initializationVector.withUnsafeBytes { (ivBytes: UnsafePointer<UInt8>!) in
-                key.withUnsafeBytes { (keyBytes: UnsafePointer<UInt8>!) -> Void in
+        input.withUnsafeBytes { encryptedBytes in
+            initializationVector.withUnsafeBytes { ivBytes in
+                key.withUnsafeBytes { keyBytes in
                     
                     status = CCCrypt(
                         operation.ccOperation,              // encrypt or decrypt
                         CCAlgorithm(kCCAlgorithmAES128),    // algorithm
                         CCOptions(kCCOptionPKCS7Padding),   // options
-                        keyBytes,                           // key
+                        keyBytes.baseAddress!,              // key
                         key.count,                          // key length
-                        ivBytes,                            // iv
-                        encryptedBytes,                     // dataIn
+                        ivBytes.baseAddress!,               // iv
+                        encryptedBytes.baseAddress!,        // dataIn
                         input.count,                        // dataInLength
                         &outBytes,                          // dataOut
                         outBytes.count,                     // dataOutAvailable
