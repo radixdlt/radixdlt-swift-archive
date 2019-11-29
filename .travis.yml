@@ -2,6 +2,9 @@ language: objective-c
 os: osx
 osx_image: xcode11.2
 
+services:
+  - docker
+  
 cache:
   directories:
     - Carthage
