@@ -258,7 +258,6 @@
 		E6506921238162B800AB420D /* DataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506920238162B800AB420D /* DataFetcher.swift */; };
 		E6506923238162CE00AB420D /* HTTPClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506922238162CE00AB420D /* HTTPClientError.swift */; };
 		E6506925238162DF00AB420D /* URLConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506924238162DF00AB420D /* URLConvertible.swift */; };
-		E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; };
 		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
 		E6533FE422BA63950068B07D /* Starscream.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -441,7 +440,6 @@
 		E6D7A2A9238596F200950312 /* RadixSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E645E72E21E7827D00532ACD /* RadixSDK.framework */; };
 		E6D7A2AA238596F200950312 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
 		E6D7A2AB238596F200950312 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
-		E6D7A2AC238596F200950312 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
 		E6D7A2AD238596F200950312 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
 		E6D7A2AE238596F200950312 /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */; };
 		E6D7A2B0238596F200950312 /* betanet.json in Resources */ = {isa = PBXBuildFile; fileRef = E62EFDB82248F9B600B6DAD6 /* betanet.json */; };
@@ -685,10 +683,8 @@
 		E6F6DFEB238E68E900A6B6F2 /* TransactionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F6DFEA238E68E900A6B6F2 /* TransactionError.swift */; };
 		E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
 		E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
-		E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
 		E6FB03D721ECE4EC002CE331 /* BigInt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; };
 		E6FB03D821ECE4EC002CE331 /* BitcoinKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; };
-		E6FB03D921ECE4EC002CE331 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; };
 		E6FB03E221ECF186002CE331 /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FB03E121ECF186002CE331 /* Macros.swift */; };
 		E6FCB65B22F0C76900ECC01B /* MintTokensAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB65A22F0C76900ECC01B /* MintTokensAction.swift */; };
 		E6FCB65E22F0C79A00ECC01B /* PutUniqueIdAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FCB65D22F0C79A00ECC01B /* PutUniqueIdAction.swift */; };
@@ -1437,11 +1433,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6533FE022BA63620068B07D /* Alamofire.framework in Frameworks */,
 				E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */,
 				E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */,
 				E6F471CC238BD73F00658449 /* Entwine.framework in Frameworks */,
-				E6FB03D621ECE4C3002CE331 /* CryptoSwift.framework in Frameworks */,
 				E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */,
 				E6CEE75421F78B1300D745EC /* SwiftCBOR.framework in Frameworks */,
 			);
@@ -1455,7 +1449,6 @@
 				E6FB03D721ECE4EC002CE331 /* BigInt.framework in Frameworks */,
 				E6F471CD238BD86900658449 /* Entwine.framework in Frameworks */,
 				E6FB03D821ECE4EC002CE331 /* BitcoinKit.framework in Frameworks */,
-				E6FB03D921ECE4EC002CE331 /* CryptoSwift.framework in Frameworks */,
 				E6A7479922CC914300DACEA0 /* Starscream.framework in Frameworks */,
 				E6CEE75521F78B2000D745EC /* SwiftCBOR.framework in Frameworks */,
 			);
@@ -1469,7 +1462,6 @@
 				E6D7A2AA238596F200950312 /* BigInt.framework in Frameworks */,
 				E6D7A2AB238596F200950312 /* BitcoinKit.framework in Frameworks */,
 				E6F471CE238BD86E00658449 /* Entwine.framework in Frameworks */,
-				E6D7A2AC238596F200950312 /* CryptoSwift.framework in Frameworks */,
 				E6D7A2AD238596F200950312 /* Starscream.framework in Frameworks */,
 				E6D7A2AE238596F200950312 /* SwiftCBOR.framework in Frameworks */,
 			);
