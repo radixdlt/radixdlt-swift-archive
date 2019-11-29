@@ -22,5 +22,15 @@ install:
   - brew upgrade swiftlint || true
   - travis_wait 600 carthage bootstrap --platform iOS --cache-builds
 
-script:
-  - fastlane unitTests
+jobs:
+  include:
+    - stage: prepare caches
+      script: travis_wait 600 carthage update --platform iOS --cache-builds BitcoinKit
+      script: stravis_wait 600 carthage update --platform iOS --cache-builds Alamofire
+      script: travis_wait 600 carthage update --platform iOS --cache-builds Entwine
+      script: travis_wait 600 carthage update --platform iOS --cache-builds RxSwift
+      script: travis_wait 600 carthage update --platform iOS --cache-builds RxOptional,RxSwiftExt,SwiftyBeaver
+      script: travis_wait 600 carthage update --platform iOS --cache-builds BigInt,Starscream,CryptoSwift,SwiftCBOR
+    - stage: run unit tests
+      script:
+        - fastlane unitTests

@@ -9,15 +9,13 @@
 //
 
 class Scanfile: ScanfileProtocol {
-    var project:String {return "RadixSDK.xcodeproj"}
-    var scheme: String {return "UnitTests"}
-    var device: String {return "iPhone 11 Pro"}
-    
-    var prelaunch_simulator: Bool? {return true}
-    var include_simulator_logs: Bool? {return true}
-    var clean: Bool? {true}
-    var skip_build: Bool? {true}
-    var skip_detect_devices: Bool? {true}
-    
+// If you want to enable `scan`, run `fastlane scan init`
+// After, this file will be replaced with a custom implementation that contains values you supplied
+// during the `init` process, and you won't see this message
 }
 
+
+
+
+
+// Generated with fastlane 2.137.0
