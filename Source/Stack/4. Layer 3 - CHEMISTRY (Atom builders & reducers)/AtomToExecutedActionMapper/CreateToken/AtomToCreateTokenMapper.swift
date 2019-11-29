@@ -65,7 +65,7 @@ private func createTokensActionFrom(particleGroup: ParticleGroup, atomIdentifier
         else { return nil }
     
     guard let derivedSupply = derivedSupplyFrom(typedTokenDefinition: typedTokenDefinition, particles: particleGroup.spunParticles, atomIdentifier: atomIdentifier) else {
-        log.warning("Found TypeTokenDefinition: \(typedTokenDefinition), but no initial supply, this is probably incorrectly implemented.")
+        Swift.print("warning: Found TypeTokenDefinition: \(typedTokenDefinition), but no initial supply, this is probably incorrectly implemented.")
         return nil
     }
     return CreateTokenAction(derivedSupply: derivedSupply, tokenDefinition: typedTokenDefinition.tokenDefinition)

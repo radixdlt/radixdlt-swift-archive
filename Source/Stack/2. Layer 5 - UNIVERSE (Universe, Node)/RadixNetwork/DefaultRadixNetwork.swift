@@ -37,7 +37,7 @@ public extension DefaultRadixNetwork {
     func reduce(state: RadixNetworkState, action nodeAction: NodeAction) throws -> RadixNetworkState {
         guard let action = nodeAction as? RadixNetworkNodeAction else { return state }
         let node = action.node
-        log.verbose("Reducing network, action: \(action), from state: \(state.debugDescription)")
+//        print("verbose: Reducing network, action: \(action), from state: \(state.debugDescription)")
 
         if let nodeInfoResult = action as? GetNodeInfoActionResult {
             return try state.insertingMergeIfNeeded(for: node, nodeInfo: nodeInfoResult.result)

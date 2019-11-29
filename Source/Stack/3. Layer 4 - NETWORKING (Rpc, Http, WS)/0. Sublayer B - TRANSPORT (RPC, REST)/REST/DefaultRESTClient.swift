@@ -34,7 +34,7 @@ public final class DefaultRESTClient: RESTClient, HTTPClientOwner {
     }
     
     deinit {
-        log.error("💣")
+        print("error: 💣")
     }
 }
 

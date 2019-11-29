@@ -112,18 +112,12 @@ public enum RPCRequestMethod: String {
     case getLivePeers                   = "Network.getLivePeers"
     case getNetworkInfo                 = "Network.getInfo"
     case getUniverse                    = "Universe.getUniverse"
-//    case submitAndSubscribe             = "Universe.submitAtomAndSubscribe"
 }
 
 public enum RPCNotification: String, Equatable, Decodable {
     case observeAtomStatusNotifications = "Atoms.nextStatusEvent"
     case subscribeUpdate                = "Atoms.subscribeUpdate"
 }
-
-//public enum RPCResponseMethod: String {
-//    case subscribeUpdate = "Atoms.subscribeUpdate"
-//    case submitAndSubscribe = "AtomSubmissionState.onNext"
-//}
 
 public extension RPCMethod {
     

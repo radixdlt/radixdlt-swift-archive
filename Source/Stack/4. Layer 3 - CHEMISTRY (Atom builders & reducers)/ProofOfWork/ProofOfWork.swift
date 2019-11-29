@@ -39,7 +39,7 @@ public struct ProofOfWork: CustomStringConvertible, CustomDebugStringConvertible
         
         func logIfNonceExceedsThreshold(_ threshold: Nonce = 500_000) {
             guard nonce.value > threshold.value else { return }
-            log.info("🙋🏻‍♀️ POW high nonce: \(nonce.value), seed: \(seed.hex)\nmagic: \(magic), #zeros: \(targetNumberOfLeadingZeros)")
+            Swift.print("info: 🙋🏻‍♀️ POW high nonce: \(nonce.value), seed: \(seed.hex)\nmagic: \(magic), #zeros: \(targetNumberOfLeadingZeros)")
         }
         logIfNonceExceedsThreshold()
     }

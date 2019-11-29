@@ -47,7 +47,7 @@ public extension SendMessageAction.EncryptionMode.DecryptedContext {
     var isEncryptedButCannotDecrypt: Bool {
         switch self {
         case .cannotDecrypt(let reason):
-            log.info(reason)
+            print(reason)
             return true
         case .decrypted, .wasNotEncrypted: return false
         }

@@ -36,7 +36,7 @@ public protocol DataConvertible: LengthMeasurable {
 // MARK: - Default Implementation
 public extension DataConvertible {
     func toData(minByteCount expectedLength: Int? = nil, concatMode: ConcatMode = .prepend) -> Data {
-      
+        
         guard let expectedLength = expectedLength else {
             return self.asData
         }
@@ -51,10 +51,8 @@ public extension DataConvertible {
         return modified
         
     }
-
-    var bytes: [Byte] {
-        return asData.bytes
-    }
+    
+    var bytes: [Byte] { asData.bytes }
 }
 
 // MARK: - LengthMeasurable
@@ -74,6 +72,85 @@ public extension DataConvertible {
 // MARK: - Conformance
 extension Array: DataConvertible where Element == Byte {
     public var asData: Data {
-        return Data(self)
+        Data(self)
+    }
+    
+    public var bytes: [Byte] {
+        self
+    }
+}
+
+extension Data {
+    public var bytes: [Byte] {
+        [Byte](self)
+    }
+}
+
+extension Data {
+    struct HexEncodingOptions: OptionSet {
+        let rawValue: Int
+        static let upperCase = HexEncodingOptions(rawValue: 1 << 0)
+    }
+    
+    func toHexString(options: HexEncodingOptions = []) -> String {
+        let hexDigits = Array((options.contains(.upperCase) ? "0123456789ABCDEF" : "0123456789abcdef").utf16)
+        var chars: [unichar] = []
+        chars.reserveCapacity(2 * count)
+        for byte in self {
+            chars.append(hexDigits[Int(byte / 16)])
+            chars.append(hexDigits[Int(byte % 16)])
+        }
+        return String(utf16CodeUnits: chars, count: chars.count)
+    }
+}
+
+extension Array where Element == Byte {
+    
+    // swiftlint:disable identifier_name
+    
+    // https://github.com/krzyzanowskim/CryptoSwift/blob/1755bd0917f401451d16faafe3c8e078b8eeb9c9/Sources/CryptoSwift/Array%2BExtension.swift#L28-L64
+    public init(hex: String) {
+        self.init(reserveCapacity: hex.unicodeScalars.lazy.underestimatedCount)
+        var buffer: UInt8?
+        var skip = hex.hasPrefix("0x") ? 2 : 0
+        for char in hex.unicodeScalars.lazy {
+            guard skip == 0 else {
+                skip -= 1
+                continue
+            }
+            guard char.value >= 48 && char.value <= 102 else {
+                removeAll()
+                return
+            }
+            let v: UInt8
+            let c: UInt8 = UInt8(char.value)
+            switch c {
+            case let c where c <= 57:
+                v = c - 48
+            case let c where c >= 65 && c <= 70:
+                v = c - 55
+            case let c where c >= 97:
+                v = c - 87
+            default:
+                removeAll()
+                return
+            }
+            if let b = buffer {
+                append(b << 4 | v)
+                buffer = nil
+            } else {
+                buffer = v
+            }
+        }
+        if let b = buffer {
+            append(b)
+        }
+    }
+    
+    // swiftlint:enable identifier_name
+    
+    init(reserveCapacity: Int) {
+        self = [Element]()
+        self.reserveCapacity(reserveCapacity)
     }
 }

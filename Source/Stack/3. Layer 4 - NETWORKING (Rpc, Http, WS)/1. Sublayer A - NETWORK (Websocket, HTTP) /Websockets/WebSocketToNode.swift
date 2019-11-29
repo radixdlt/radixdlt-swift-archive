@@ -69,9 +69,9 @@ public final class WebSocketToNode:
         self.webSocketStatusSubject = webSocketStatusSubject
         self.node = node
         
-        webSocketStatusSubject.sink(
-            receiveValue: { log.verbose("WS status -> `\($0)`") }
-        ).store(in: &cancellables)
+//        webSocketStatusSubject.sink(
+//            receiveValue: { Swift.print("verbose: WS status -> `\($0)`") }
+//        ).store(in: &cancellables)
     }
     
     deinit {
@@ -147,8 +147,8 @@ public extension WebSocketToNode {
             queuedOutgoingMessages.append(message)
             return
         }
-        log.verbose("Sending message of length: #\(message.count) chars")
-        log.verbose("Sending message:\n<\(message)>")
+//        Swift.print("verbose: Sending message of length: #\(message.count) chars")
+//        Swift.print("verbose: Sending message:\n<\(message)>")
         socket?.write(string: message)
     }
 }
@@ -157,11 +157,11 @@ public extension WebSocketToNode {
 // It is unfortunate that StarScream decided to spell out `webSocket` like `websocket` in their prefix of their delegate methods.
 public extension WebSocketToNode {
     func websocketDidConnect(socket: WebSocketClient) {
-        log.verbose("Websocket did connect, to node: \(node)")
+//        Swift.print("verbose: Websocket did connect, to node: \(node)")
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Swift.Error?) {
-        log.debug("Websocket closed")
+        Swift.print("debug: Websocket closed")
         guard !isClosing else {
             self.socket = nil
             return webSocketStatusSubject.send(.disconnected)
@@ -176,22 +176,22 @@ public extension WebSocketToNode {
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if text.contains("Radix.welcome") {
-            log.verbose("Received welcome message, which we ignore, proceed sending queued")
+//            Swift.print("verbose: Received welcome message, which we ignore, proceed sending queued")
             webSocketStatusSubject.send(.connected) // Connected and ready to read messages from, since we have discarded this first Welcome message
             sendQueued()
         } else {
-            log.debug("Received response over webSockets (text of #\(text.count) chars)")
-            log.verbose("Received response over webSockets: \n<\(text)>\n")
+//            Swift.print("debug: Received response over webSockets (text of #\(text.count) chars)")
+//            Swift.print("verbose: Received response over webSockets: \n<\(text)>\n")
             receivedMessagesSubject.send(text)
         }
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        log.info("Socket did receive data.")
+//        Swift.print("info: Socket did receive data.")
     }
     
     func websocketDidReceivePong(socket: WebSocketClient, data: Data?) {
-        log.info("Socket got pong")
+//        Swift.print("info: Socket got pong")
     }
 }
 

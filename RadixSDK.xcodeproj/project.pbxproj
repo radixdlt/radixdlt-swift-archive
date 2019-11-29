@@ -134,7 +134,6 @@
 		E61EB9A222D86F56007826D3 /* Supply.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A122D86F56007826D3 /* Supply.swift */; };
 		E61EB9A422D87130007826D3 /* SupplyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EB9A322D87130007826D3 /* SupplyType.swift */; };
 		E620AB4821E785D600B36EC2 /* RadixSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E620AB4621E785D600B36EC2 /* RadixSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E620CA9823682F0800EB3EC3 /* Publisher+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9723682F0800EB3EC3 /* Publisher+Debug.swift */; };
 		E620CA9E23687C6300EB3EC3 /* TestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9D23687C6300EB3EC3 /* TestCase.swift */; };
 		E620CAA023687CE200EB3EC3 /* TestCase_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */; };
 		E620CAAC2369BE9000EB3EC3 /* Combine_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */; };
@@ -177,7 +176,6 @@
 		E62EFDC6224936E000B6DAD6 /* URL_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDC5224936E000B6DAD6 /* URL_Extensions.swift */; };
 		E62EFDC9224936F700B6DAD6 /* NodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDC8224936F700B6DAD6 /* NodeRouter.swift */; };
 		E62EFDCC2249378300B6DAD6 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDCB2249378300B6DAD6 /* HTTPClient.swift */; };
-		E62EFDCE224937A400B6DAD6 /* HTTPRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDCD224937A400B6DAD6 /* HTTPRequestInterceptor.swift */; };
 		E62EFDDC224A42C300B6DAD6 /* Dictionary_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDDB224A42C300B6DAD6 /* Dictionary_Extensions.swift */; };
 		E62EFDE1224A4D4600B6DAD6 /* FullDuplexCommunicationChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDE0224A4D4600B6DAD6 /* FullDuplexCommunicationChannel.swift */; };
 		E62EFDE3224A4D6F00B6DAD6 /* WebSocketToNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDE2224A4D6F00B6DAD6 /* WebSocketToNode.swift */; };
@@ -251,16 +249,12 @@
 		E6474AFB226795D6009C4FDC /* AtomContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AFA226795D6009C4FDC /* AtomContainer.swift */; };
 		E64BFF8A226879C100501726 /* ProofOfWorkWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF89226879C100501726 /* ProofOfWorkWorker.swift */; };
 		E64BFF8D2268985800501726 /* ResourceIdentifierParticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF8C2268985800501726 /* ResourceIdentifierParticle.swift */; };
-		E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64BFF932269B96A00501726 /* Optional+Debug.swift */; };
 		E650690E237E8E5D00AB420D /* InMemoryAtomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650690D237E8E5D00AB420D /* InMemoryAtomStore.swift */; };
 		E6506914237EE47000AB420D /* TokenBalancesReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506913237EE47000AB420D /* TokenBalancesReducer.swift */; };
 		E650691F2381620200AB420D /* HTTPPageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650691E2381620200AB420D /* HTTPPageLoader.swift */; };
 		E6506921238162B800AB420D /* DataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506920238162B800AB420D /* DataFetcher.swift */; };
 		E6506923238162CE00AB420D /* HTTPClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506922238162CE00AB420D /* HTTPClientError.swift */; };
 		E6506925238162DF00AB420D /* URLConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6506924238162DF00AB420D /* URLConvertible.swift */; };
-		E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FDF22BA63620068B07D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
-		E6533FE422BA63950068B07D /* Starscream.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E654778922BFB3B700D968BD /* BootstrapConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E654778822BFB3B700D968BD /* BootstrapConfig.swift */; };
 		E654778B22BFB3C500D968BD /* UniverseBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = E654778A22BFB3C500D968BD /* UniverseBootstrap.swift */; };
 		E6550EE5224BB02900160267 /* Int+DataInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6550EE4224BB02900160267 /* Int+DataInitializable.swift */; };
@@ -287,10 +281,6 @@
 		E67E3E7623798ACE00A33DBA /* FindANodeRequestAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E7523798ACE00A33DBA /* FindANodeRequestAction.swift */; };
 		E67E3E7823798ADE00A33DBA /* FindANodeResultAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E7723798ADE00A33DBA /* FindANodeResultAction.swift */; };
 		E67E3E7A2379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67E3E792379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift */; };
-		E685BBB922BA5F5800563B1A /* SwiftCBOR.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E685BBBA22BA5F5800563B1A /* CryptoSwift.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03D521ECE4C3002CE331 /* CryptoSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E685BBBB22BA5F5800563B1A /* BigInt.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CF21EC9987002CE331 /* BigInt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E685BBBD22BA5F5800563B1A /* BitcoinKit.framework in Copy Carthage Frameworks */ = {isa = PBXBuildFile; fileRef = E6FB03CB21EC996E002CE331 /* BitcoinKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E68727FE2343BC6400FF4FCE /* Locale+DecimalSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68727FD2343BC6400FF4FCE /* Locale+DecimalSeparator.swift */; };
 		E689DB78225F24DA00340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB76225F227800340CF3 /* PrivateKey+ExpressilbleByIntegerLiteral.swift */; };
 		E689DB7D225F61BF00340CF3 /* DefaultHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689DB7C225F61BF00340CF3 /* DefaultHTTPClient.swift */; };
@@ -316,6 +306,8 @@
 		E68BD82522A0331800FCE4D3 /* MetaDataCommonValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */; };
 		E68BD82722A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */; };
 		E68BF7E023911F120058D07E /* AES+CBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BF7DF23911F120058D07E /* AES+CBC.swift */; };
+		E68BF7E123912BE20058D07E /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6533FE222BA638B0068B07D /* Starscream.framework */; };
+		E68BF7E323912BE40058D07E /* Entwine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6F471CB238BD73F00658449 /* Entwine.framework */; };
 		E68DFA2E22FC50F40050F69E /* UniqueMaking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA2D22FC50F40050F69E /* UniqueMaking.swift */; };
 		E68DFA3222FC64140050F69E /* ExecutedTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA3122FC64140050F69E /* ExecutedTransaction.swift */; };
 		E68DFA3422FC64290050F69E /* TransactionConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA3322FC64290050F69E /* TransactionConvertible.swift */; };
@@ -672,7 +664,6 @@
 		E6ED1A5821F8E5A100654105 /* AtomSubmitting.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A5721F8E5A100654105 /* AtomSubmitting.swift */; };
 		E6ED1A6521F8E69000654105 /* NodeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A6421F8E69000654105 /* NodeInfo.swift */; };
 		E6ED1A7821F8E78900654105 /* Optional+OptionalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */; };
-		E6F471CC238BD73F00658449 /* Entwine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6F471CB238BD73F00658449 /* Entwine.framework */; };
 		E6F471CD238BD86900658449 /* Entwine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6F471CB238BD73F00658449 /* Entwine.framework */; };
 		E6F471CE238BD86E00658449 /* Entwine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6F471CB238BD73F00658449 /* Entwine.framework */; };
 		E6F5483D22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F5483C22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift */; };
@@ -743,25 +734,6 @@
 			remoteInfo = RadixDLTSDK;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		E685BBB822BA5F2400563B1A /* Copy Carthage Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				E6533FE422BA63950068B07D /* Starscream.framework in Copy Carthage Frameworks */,
-				E6533FE122BA636E0068B07D /* Alamofire.framework in Copy Carthage Frameworks */,
-				E685BBB922BA5F5800563B1A /* SwiftCBOR.framework in Copy Carthage Frameworks */,
-				E685BBBA22BA5F5800563B1A /* CryptoSwift.framework in Copy Carthage Frameworks */,
-				E685BBBB22BA5F5800563B1A /* BigInt.framework in Copy Carthage Frameworks */,
-				E685BBBD22BA5F5800563B1A /* BitcoinKit.framework in Copy Carthage Frameworks */,
-			);
-			name = "Copy Carthage Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		480484172333BCEC0085225F /* IndependentTransactionToAtomMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndependentTransactionToAtomMapper.swift; sourceTree = "<group>"; };
@@ -879,7 +851,6 @@
 		E61EB9A322D87130007826D3 /* SupplyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyType.swift; sourceTree = "<group>"; };
 		E620AB4621E785D600B36EC2 /* RadixSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadixSDK.h; sourceTree = "<group>"; };
 		E620AB4721E785D600B36EC2 /* RadixSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RadixSDK-Info.plist"; sourceTree = "<group>"; };
-		E620CA9723682F0800EB3EC3 /* Publisher+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Debug.swift"; sourceTree = "<group>"; };
 		E620CA9D23687C6300EB3EC3 /* TestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase.swift; sourceTree = "<group>"; };
 		E620CA9F23687CE200EB3EC3 /* TestCase_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCase_Extensions.swift; sourceTree = "<group>"; };
 		E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combine_Extensions.swift; sourceTree = "<group>"; };
@@ -921,7 +892,6 @@
 		E62EFDC5224936E000B6DAD6 /* URL_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL_Extensions.swift; sourceTree = "<group>"; };
 		E62EFDC8224936F700B6DAD6 /* NodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeRouter.swift; sourceTree = "<group>"; };
 		E62EFDCB2249378300B6DAD6 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
-		E62EFDCD224937A400B6DAD6 /* HTTPRequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPRequestInterceptor.swift; sourceTree = "<group>"; };
 		E62EFDDB224A42C300B6DAD6 /* Dictionary_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary_Extensions.swift; sourceTree = "<group>"; };
 		E62EFDE0224A4D4600B6DAD6 /* FullDuplexCommunicationChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullDuplexCommunicationChannel.swift; sourceTree = "<group>"; };
 		E62EFDE2224A4D6F00B6DAD6 /* WebSocketToNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketToNode.swift; sourceTree = "<group>"; };
@@ -995,7 +965,6 @@
 		E6474AFA226795D6009C4FDC /* AtomContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomContainer.swift; sourceTree = "<group>"; };
 		E64BFF89226879C100501726 /* ProofOfWorkWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProofOfWorkWorker.swift; sourceTree = "<group>"; };
 		E64BFF8C2268985800501726 /* ResourceIdentifierParticle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceIdentifierParticle.swift; sourceTree = "<group>"; };
-		E64BFF932269B96A00501726 /* Optional+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Debug.swift"; sourceTree = "<group>"; };
 		E650690D237E8E5D00AB420D /* InMemoryAtomStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryAtomStore.swift; sourceTree = "<group>"; };
 		E6506913237EE47000AB420D /* TokenBalancesReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenBalancesReducer.swift; sourceTree = "<group>"; };
 		E650691E2381620200AB420D /* HTTPPageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPPageLoader.swift; sourceTree = "<group>"; };
@@ -1435,8 +1404,8 @@
 			files = (
 				E6FB03D021EC9987002CE331 /* BigInt.framework in Frameworks */,
 				E6FB03CC21EC996E002CE331 /* BitcoinKit.framework in Frameworks */,
-				E6F471CC238BD73F00658449 /* Entwine.framework in Frameworks */,
-				E6533FE322BA638B0068B07D /* Starscream.framework in Frameworks */,
+				E68BF7E123912BE20058D07E /* Starscream.framework in Frameworks */,
+				E68BF7E323912BE40058D07E /* Entwine.framework in Frameworks */,
 				E6CEE75421F78B1300D745EC /* SwiftCBOR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1943,7 +1912,6 @@
 		E620CAAA2369BE8500EB3EC3 /* Combine */ = {
 			isa = PBXGroup;
 			children = (
-				E620CA9723682F0800EB3EC3 /* Publisher+Debug.swift */,
 				E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */,
 				E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */,
 				E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */,
@@ -2030,7 +1998,6 @@
 				E6506922238162CE00AB420D /* HTTPClientError.swift */,
 				E6506924238162DF00AB420D /* URLConvertible.swift */,
 				E650691E2381620200AB420D /* HTTPPageLoader.swift */,
-				E62EFDCD224937A400B6DAD6 /* HTTPRequestInterceptor.swift */,
 			);
 			path = HTTP;
 			sourceTree = "<group>";
@@ -4235,7 +4202,6 @@
 			isa = PBXGroup;
 			children = (
 				E6ED1A7721F8E78900654105 /* Optional+OptionalType.swift */,
-				E64BFF932269B96A00501726 /* Optional+Debug.swift */,
 				E6A7479C22CCC72700DACEA0 /* Optional+IfPresentMap.swift */,
 			);
 			path = Optionals;
@@ -4387,7 +4353,6 @@
 				E645E72A21E7827D00532ACD /* Sources */,
 				E645E72B21E7827D00532ACD /* Frameworks */,
 				E645E72C21E7827D00532ACD /* Resources */,
-				E685BBB822BA5F2400563B1A /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -4685,7 +4650,6 @@
 				E6474AEA22664056009C4FDC /* FullDuplexCommunicationChannel+RPC.swift in Sources */,
 				E6E279822271CD1C0067D46E /* MetaData.swift in Sources */,
 				E654778B22BFB3C500D968BD /* UniverseBootstrap.swift in Sources */,
-				E620CA9823682F0800EB3EC3 /* Publisher+Debug.swift in Sources */,
 				E63B206F22FD648600D6FF79 /* Particles+Filtering.swift in Sources */,
 				E605543E23054A7000528510 /* DefaultTransactionMaker.swift in Sources */,
 				E6CABA1322D4C39000B6D00C /* AtomSubscriptionCancelling.swift in Sources */,
@@ -4743,7 +4707,6 @@
 				E626E20222B41B750046D2AC /* AnyStatelessActionToParticleGroupsMapper.swift in Sources */,
 				E6FCB66822F2EDD500ECC01B /* AddressOfAccountDeriving.swift in Sources */,
 				E6D325B321EE48B800851F4E /* Signing+Message+Hash.swift in Sources */,
-				E62EFDCE224937A400B6DAD6 /* HTTPRequestInterceptor.swift in Sources */,
 				E6340C8122FAD77B0044BA97 /* UnallocatedTokensParticle+FromParticle.swift in Sources */,
 				E6ED1A2C21F7CE9C00654105 /* Node.swift in Sources */,
 				E6A7479B22CC960800DACEA0 /* JsonRpcResultAction.swift in Sources */,
@@ -4839,7 +4802,6 @@
 				E67E3E7A2379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift in Sources */,
 				E605A6EF2345DD3800E47257 /* NonNegativeAmount.swift in Sources */,
 				E6E279572271CD1C0067D46E /* AnyEncodableKeyValuesProcessing.swift in Sources */,
-				E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */,
 				E68BF7E023911F120058D07E /* AES+CBC.swift in Sources */,
 				E64641EC22F3482700E05034 /* FixedSupplyTokenDefinitionParticle+Encodable.swift in Sources */,
 				E615C51922B791FA00604E90 /* SomeParticleReducer.swift in Sources */,
