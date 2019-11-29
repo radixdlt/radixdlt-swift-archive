@@ -30,8 +30,6 @@ class CreateTokenTests: IntegrationTest {
 
     func testFailingCreateTokenInSomeoneElseʼsName() throws {
         // GIVEN: An Application API owned by Alice, and identity Bob
-        let aliceApp = application!
-        
         // WHEN: Alice tries to create a token on Bob's behalf
         let (tokenCreation, _) = aliceApp.createToken(creator: bob)
         
@@ -44,10 +42,8 @@ class CreateTokenTests: IntegrationTest {
     
     func testFailCreatingTokenWithSameRRIAsUniqueId() throws {
         // GIVEN: An Application API owned by Alice, and identity Bob
-        let aliceApp = application!
-        
         let createTokenAction =
-            application.actionCreateToken(symbol: "FOO")
+            aliceApp.actionCreateToken(symbol: "FOO")
         
         let rri = createTokenAction.identifier
         
@@ -68,14 +64,12 @@ class CreateTokenTests: IntegrationTest {
     
     func testFailCreatingTokenWithSameRRIAsExistingMutableSupplyToken() throws {
         // GIVEN: An Application API owned by Alice, and identity Bob
-        let aliceApp = application!
-        
         let symbol: Symbol = "FOO"
-        let actionCreateMutableToken = application.actionCreateMultiIssuanceToken(symbol: symbol)
+        let actionCreateMutableToken = aliceApp.actionCreateMultiIssuanceToken(symbol: symbol)
         
         let transaction = Transaction {
             actionCreateMutableToken
-            application.actionCreateToken(symbol: symbol)
+            aliceApp.actionCreateToken(symbol: symbol)
         }
         
         let tokenCreation = aliceApp.make(transaction: transaction)
@@ -89,14 +83,12 @@ class CreateTokenTests: IntegrationTest {
     
     func testFailCreatingTokenWithSameRRIAsExistingFixedSupplyToken() throws {
         // GIVEN: An Application API owned by Alice, and identity Bob
-        let aliceApp = application!
-        
         let symbol: Symbol = "FOO"
-        let actionCreateFixedToken = application.actionCreateFixedSupplyToken(symbol: symbol)
+        let actionCreateFixedToken = aliceApp.actionCreateFixedSupplyToken(symbol: symbol)
         
         let transaction = Transaction {
             actionCreateFixedToken
-            application.actionCreateToken(symbol: symbol)
+            aliceApp.actionCreateToken(symbol: symbol)
         }
 
         let tokenCreation = aliceApp.make(transaction: transaction)

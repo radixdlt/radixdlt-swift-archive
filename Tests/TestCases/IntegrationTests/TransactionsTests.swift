@@ -32,12 +32,12 @@ class TransactionsTests: IntegrationTest {
         // GIVEN identity alice and a RadixApplicationClient
         
         // WHEN Alice observes her transactions after creating token without
-        let (tokenCreation, _) = application.createToken(supply: .mutableZeroSupply)
+        let (tokenCreation, _) = aliceApp.createToken(supply: .mutableZeroSupply)
         
         try waitForTransactionToFinish(tokenCreation)
         
         // THEN said single CreateTokenAction can be seen in the transaction
-        let transaction = try waitForFirstValue(of: application.observeMyTransactions())
+        let transaction = try waitForFirstValue(of: aliceApp.observeMyTransactions())
         XCTAssertEqual(transaction.actions.count, 1)
         
         guard let createTokenAction = transaction.actions.first as? CreateTokenAction else {
@@ -50,11 +50,11 @@ class TransactionsTests: IntegrationTest {
         // GIVEN identity alice and a RadixApplicationClient
         
         // WHEN Alice observes her transactions after having made one with a single `CreateTokenAction`
-        let (tokenCreation, _) = application.createToken(supply: .mutable(initial: 123))
+        let (tokenCreation, _) = aliceApp.createToken(supply: .mutable(initial: 123))
         
         try waitForTransactionToFinish(tokenCreation)
         
-        let transaction = try waitForFirstValue(of: application.observeMyTransactions())
+        let transaction = try waitForFirstValue(of: aliceApp.observeMyTransactions())
         
         switch transaction.actions.countedElementsZeroOneTwoAndMany {
         // THEN one CreateTokenAction can be seen in the transaction
@@ -76,11 +76,11 @@ class TransactionsTests: IntegrationTest {
         // GIVEN: and bob
         // GIVEN: and `FooToken` created by Alice
         let (tokenCreation, fooToken) =
-            application.createToken(supply: .mutable(initial: 10))
+            aliceApp.createToken(supply: .mutable(initial: 10))
         
         try waitForTransactionToFinish(tokenCreation)
         
-        let transfer = application.transferTokens(
+        let transfer = aliceApp.transferTokens(
             identifier: fooToken,
             to: bob,
             amount: 5,
@@ -90,7 +90,7 @@ class TransactionsTests: IntegrationTest {
         try waitForTransactionToFinish(transfer)
         
         // WHEN: and observes her transactions
-        let transaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionOfType: TransferTokensAction.self))
+        let transaction = try waitForFirstValue(of: aliceApp.observeMyTransactions(containingActionOfType: TransferTokensAction.self))
         
         // THEN she sees a Transaction containing just the TransferTokensAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -109,15 +109,15 @@ class TransactionsTests: IntegrationTest {
         // GIVEN: and `FooToken` created by Alice
         
         let (tokenCreation, fooToken) =
-            application.createToken(supply: .mutable(initial: 123))
+            aliceApp.createToken(supply: .mutable(initial: 123))
         
         try waitForTransactionToFinish(tokenCreation)
         
-        let burning = application.burnTokens(amount: 23, ofType: fooToken)
+        let burning = aliceApp.burnTokens(amount: 23, ofType: fooToken)
         try waitForTransactionToFinish(burning)
         
         // WHEN: and observes her transactions
-        let transaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionOfType: BurnTokensAction.self))
+        let transaction = try waitForFirstValue(of: aliceApp.observeMyTransactions(containingActionOfType: BurnTokensAction.self))
         
         // THEN she sees a Transaction containing just the BurnTokensAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -133,16 +133,16 @@ class TransactionsTests: IntegrationTest {
         // GIVEN: and `FooToken` created by Alice
         
         let (tokenCreation, fooToken) =
-            application.createToken(supply: .mutableZeroSupply)
+            aliceApp.createToken(supply: .mutableZeroSupply)
         
         try waitForTransactionToFinish(tokenCreation)
         
         //  WHEN: Alice makes a transaction containing a single MintTokensAction of FooToken
-        let minting = application.mintTokens(amount: 23, ofType: fooToken)
+        let minting = aliceApp.mintTokens(amount: 23, ofType: fooToken)
         try waitForTransactionToFinish(minting)
         
         // WHEN: and observes her transactions
-        let transaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionOfType: MintTokensAction.self))
+        let transaction = try waitForFirstValue(of: aliceApp.observeMyTransactions(containingActionOfType: MintTokensAction.self))
         
         // THEN she sees a Transaction containing just the MintTokensAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -156,11 +156,11 @@ class TransactionsTests: IntegrationTest {
         // GIVEN identity alice and a RadixApplicationClient
         
         // WHEN Alice observes her transactions after having made one with a single `SendMessageAction`
-        let messageSending = application.sendEncryptedMessage("Hey Bob, this is secret!", to: bob)
+        let messageSending = aliceApp.sendEncryptedMessage("Hey Bob, this is secret!", to: bob)
         try waitForTransactionToFinish(messageSending)
         
         // WHEN: and observes her transactions
-        let transaction = try waitForFirstValue(of: application.observeMyTransactions())
+        let transaction = try waitForFirstValue(of: aliceApp.observeMyTransactions())
         
         // THEN she sees a Transaction containing the SendMessageAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -177,11 +177,11 @@ class TransactionsTests: IntegrationTest {
         // GIVEN identity alice and a RadixApplicationClient
         
         // WHEN Alice observes her transactions after having made one with a single `PutUniqueIdAction`
-        let unique = application.putUnique(string: "Foobar")
+        let unique = aliceApp.putUnique(string: "Foobar")
         try waitForTransactionToFinish(unique)
         
         // WHEN: and observes her transactions
-        let transaction = try waitForFirstValue(of: application.observeMyTransactions())
+        let transaction = try waitForFirstValue(of: aliceApp.observeMyTransactions())
         
         // THEN she sees a Transaction containing the SendMessageAction
         XCTAssertEqual(transaction.actions.count, 1)
@@ -198,7 +198,7 @@ class TransactionsTests: IntegrationTest {
         // GIVEN: and `FooToken` created by Alice
         
         let (tokenCreation, fooToken) =
-            application.createToken(supply: .mutableZeroSupply)
+            aliceApp.createToken(supply: .mutableZeroSupply)
         
         try waitForTransactionToFinish(tokenCreation)
         
@@ -210,11 +210,11 @@ class TransactionsTests: IntegrationTest {
             PutUnique("Mint10")
         }
             
-        let pendingTransaction = application.make(transaction: newTransaction)
+        let pendingTransaction = aliceApp.make(transaction: newTransaction)
         try waitForTransactionToFinish(pendingTransaction)
         
         // WHEN: and observes her transactions
-        let transaction = try waitForFirstValue(of: application.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self]))
+        let transaction = try waitForFirstValue(of: aliceApp.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self]))
         
         // THEN she sees a Transaction containing the 2 MintTokensAction and 2 PutUniqueActions
         XCTAssertEqual(transaction.actions.count, 4)
@@ -245,7 +245,7 @@ class TransactionsTests: IntegrationTest {
     }
     
     func testTransactionComplex() throws {
-        let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 35))
+        let (tokenCreation, fooToken) = aliceApp.createToken(supply: .mutable(initial: 35))
                 
         try waitForTransactionToFinish(tokenCreation)
         
@@ -254,7 +254,7 @@ class TransactionsTests: IntegrationTest {
             MintTokensAction(tokenDefinitionReference: fooToken, amount: 5, minter: alice)
             PutUniqueIdAction(uniqueMaker: alice, string: "mint")
         }
-        var pendingTransaction = application.make(transaction: mintAndUniqueTx)
+        var pendingTransaction = aliceApp.make(transaction: mintAndUniqueTx)
         try waitForTransactionToFinish(pendingTransaction)
         
         // Transaction 2
@@ -262,21 +262,21 @@ class TransactionsTests: IntegrationTest {
             BurnTokensAction(tokenDefinitionReference: fooToken, amount: 5, burner: alice)
             PutUniqueIdAction(uniqueMaker: alice, string: "burn")
         }
-        pendingTransaction = application.make(transaction: burnAndUniqueTx)
+        pendingTransaction = aliceApp.make(transaction: burnAndUniqueTx)
         try waitForTransactionToFinish(pendingTransaction)
         
         // Transaction 3
         let onlyUniqueTx = Transaction {
             PutUniqueIdAction(uniqueMaker: alice, string: "unique")
         }
-        pendingTransaction = application.make(transaction: onlyUniqueTx)
+        pendingTransaction = aliceApp.make(transaction: onlyUniqueTx)
         try waitForTransactionToFinish(pendingTransaction)
         
         
         
         let putUniqueTransactions: [ExecutedTransaction] = try waitFor(
             first: 3,
-            valuesPublishedBy: application.observeMyTransactions(containingActionOfAnyType: [PutUniqueIdAction.self]
+            valuesPublishedBy: aliceApp.observeMyTransactions(containingActionOfAnyType: [PutUniqueIdAction.self]
             )
         )
         
@@ -286,20 +286,20 @@ class TransactionsTests: IntegrationTest {
         )
         
         let transaction1 = try waitForFirstValue(
-            of: application.observeMyTransactions(containingActionOfType: BurnTokensAction.self)
+            of: aliceApp.observeMyTransactions(containingActionOfType: BurnTokensAction.self)
         )
         
         XCTAssertEqual(transaction1.actions.count, 2)
         
         let burnOrMintTransactions = try waitFor(
             first: 2,
-            valuesPublishedBy: application.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self])
+            valuesPublishedBy: aliceApp.observeMyTransactions(containingActionOfAnyType: [BurnTokensAction.self, MintTokensAction.self])
         )
         
         XCTAssertEqual(burnOrMintTransactions.count, 2)
         
         let uniqueBurnTransactions = try waitForFirstValue(
-            of: application.observeMyTransactions(
+            of: aliceApp.observeMyTransactions(
                 containingActionsOfAllTypes: [PutUniqueIdAction.self, BurnTokensAction.self]
             )
         )
@@ -312,7 +312,7 @@ class TransactionsTests: IntegrationTest {
         XCTAssertEqual(uniqueActionInBurnTx.string, "burn")
 
         let uniqueMintTransactions = try waitForFirstValue(
-            of: application.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self])
+            of: aliceApp.observeMyTransactions(containingActionsOfAllTypes: [PutUniqueIdAction.self, MintTokensAction.self])
         )
 
         guard

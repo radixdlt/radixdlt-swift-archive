@@ -259,10 +259,32 @@ private extension SubmitAtomEpicTests {
                 outputtedSubmitAtomAction(submitAtomActions)
                 
                 // Assure correctness of "inner" functions/publishers
-                XCTAssertEqual(atomStatusObservationCanceller.closeAtomStatusNotifications_method_call_count, 1, line: line)
-                XCTAssertEqual(atomStatusObserving.observeAtomStatusNotifications_method_call_count, 1, line: line)
-                XCTAssertEqual(atomStatusObservationRequesting.sendGetAtomStatusNotifications_method_call_count, 1, line: line)
-                XCTAssertEqual(atomSubmitter.pushAtom_method_call_count, 1, line: line)
+                XCTAssertEqual(
+                    atomStatusObservationCanceller.closeAtomStatusNotifications_method_call_count,
+                    1,
+                    "Expected method 'closeAtomStatusNotifications' to be called once, but was called: \(atomStatusObservationCanceller.closeAtomStatusNotifications_method_call_count)",
+                    line: line
+                )
+                
+                XCTAssertEqual(
+                    atomStatusObserving.observeAtomStatusNotifications_method_call_count,
+                    1,
+                    "Expected method 'observeAtomStatusNotifications' to be called once, but was called: \(atomStatusObserving.observeAtomStatusNotifications_method_call_count)",
+                    line: line
+                )
+                XCTAssertEqual(
+                    atomStatusObservationRequesting.sendGetAtomStatusNotifications_method_call_count,
+                    1,
+                    "Expected method 'sendGetAtomStatusNotifications' to be called once, but was called: \(atomStatusObservationRequesting.sendGetAtomStatusNotifications_method_call_count)",
+                    line: line
+                )
+                
+                XCTAssertEqual(
+                    atomSubmitter.pushAtom_method_call_count,
+                    1,
+                    "Expected method 'pushAtom' to be called once, but was called: \(atomSubmitter.pushAtom_method_call_count)",
+                    line: line
+                )
                 
                 do {
                     let webSocketToNode = try XCTUnwrap(retainSocket)

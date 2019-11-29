@@ -30,10 +30,10 @@ class BurnTokensTests: IntegrationTest {
     
     func testMintBurnMintBurn() throws {
         
-        let createTokenAction = application.actionCreateMultiIssuanceToken()
+        let createTokenAction = aliceApp.actionCreateMultiIssuanceToken()
         let fooToken = createTokenAction.identifier
         
-        try waitForTransactionToFinish(application.createToken(action: createTokenAction))
+        try waitForTransactionToFinish(aliceApp.createToken(action: createTokenAction))
         
         let tokenContext = TokenContext(rri: fooToken, actor: alice)
         
@@ -44,11 +44,11 @@ class BurnTokensTests: IntegrationTest {
             Burn(amount: 7)     // 95
         }
         
-        let pendingTransaction = application.make(transaction: transaction)
+        let pendingTransaction = aliceApp.make(transaction: transaction)
         
         try waitForTransactionToFinish(pendingTransaction)
         
-        let tokenState = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
+        let tokenState = try waitForFirstValue(of: aliceApp.observeTokenState(identifier: fooToken))
         
         XCTAssertEqual(tokenState.totalSupply, 95)
     }
@@ -56,10 +56,10 @@ class BurnTokensTests: IntegrationTest {
     // TODO when https://radixdlt.atlassian.net/browse/BS-196 is fixed, this test should pass, Radix Core beta2 broke the expected ordering of particles.
     func testMintBurnMintBurnMint() throws {
         print("test 'testMintBurnMintBurnMint' is commented out awaiting fix 'BS-196' (Jira ticket number)")
-//        let createTokenAction = application.actionCreateMultiIssuanceToken()
+//        let createTokenAction = aliceApp.actionCreateMultiIssuanceToken()
 //        let fooToken = createTokenAction.identifier
 //
-//       try waitForTransactionToFinish(application.createToken(action: createTokenAction))
+//       try waitForTransactionToFinish(aliceApp.createToken(action: createTokenAction))
 //
 //        let tokenContext = TokenContext(rri: fooToken, actor: alice)
 //
@@ -72,39 +72,39 @@ class BurnTokensTests: IntegrationTest {
 //            Burn(amount: 17)    // 91
 //        }
 //
-//        let pendingTransaction = application.make(transaction: transaction)
+//        let pendingTransaction = aliceApp.make(transaction: transaction)
 //
 //        try waitForTransactionToFinish(pendingTransaction)
 //
-//        let tokenState = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
+//        let tokenState = try waitForFirstValue(of: aliceApp.observeTokenState(identifier: fooToken))
 //        XCTAssertEqual(tokenState.totalSupply, 91)
     }
     
     func testBurnSuccessful() throws {
         
         // GIVEN: Radix identity Alice and an application layer action BurnToken
-        let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 35))
+        let (tokenCreation, fooToken) = aliceApp.createToken(supply: .mutable(initial: 35))
         
         try waitForTransactionToFinish(tokenCreation)
         
         /// GIVEN: And a previously created FooToken, for which Alice has the appropriate permissions
-        let fooTokenStateAfterCreation = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
+        let fooTokenStateAfterCreation = try waitForFirstValue(of: aliceApp.observeTokenState(identifier: fooToken))
         XCTAssertEqual(fooTokenStateAfterCreation.totalSupply, 35)
         
-        let myBalanceAfterCreate = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: fooToken))
+        let myBalanceAfterCreate = try waitForFirstValueUnwrapped(of: aliceApp.observeMyBalance(ofToken: fooToken))
         XCTAssertEqual(myBalanceAfterCreate.amount, 35)
         
         // WHEN: Alice call Burn for FooToken
-        let burning = application.burnTokens(amount: 2, ofType: fooToken)
+        let burning = aliceApp.burnTokens(amount: 2, ofType: fooToken)
         
         // THEN: the burning succeeds
         try waitForTransactionToFinish(burning)
         
         // THEN: AND the supply of FooToken is changed
-        let fooTokenStateAfterBurn = try waitForFirstValue(of: application.observeTokenState(identifier: fooToken))
+        let fooTokenStateAfterBurn = try waitForFirstValue(of: aliceApp.observeTokenState(identifier: fooToken))
         XCTAssertEqual(fooTokenStateAfterBurn.totalSupply, 33)
         
-        let myBalanceAfterBurn = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: fooToken))
+        let myBalanceAfterBurn = try waitForFirstValueUnwrapped(of: aliceApp.observeMyBalance(ofToken: fooToken))
         
         // THEN: AND that Alice balance is reduced
         XCTAssertEqual(myBalanceAfterBurn.amount, 33)
@@ -115,7 +115,7 @@ class BurnTokensTests: IntegrationTest {
         
         // WHEN Alice call Burn on RRI for some non existing FoobarToken
         let foobarToken: ResourceIdentifier = "/\(alice!)/FoobarToken"
-        let burning = application.burnTokens(amount: 123, ofType: foobarToken)
+        let burning = aliceApp.burnTokens(amount: 123, ofType: foobarToken)
         
         // THEN: an error unknownToken is thrown
         try waitFor(burning: burning, toFailWithError: .consumeError(.unknownToken(identifier: foobarToken)))
@@ -123,11 +123,11 @@ class BurnTokensTests: IntegrationTest {
     
     func testBurnFailDueToExceedingBalance() throws {
         // GIVEN: Radix identity Alice and an application layer action BurnToken and a previously created FooToken which has a supply of max - 10 tokens, for which Alice has the appropriate permissions.
-        let (tokenCreation, fooToken) = application.createToken(supply: .mutable(initial: 10))
+        let (tokenCreation, fooToken) = aliceApp.createToken(supply: .mutable(initial: 10))
         try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice call Burn(20) on FooToken
-        let burning = application.burnTokens(amount: 20, ofType: fooToken)
+        let burning = aliceApp.burnTokens(amount: 20, ofType: fooToken)
         
         // THEN: an error supplyExceedsMax is thrown
         try waitFor(
@@ -143,7 +143,6 @@ class BurnTokensTests: IntegrationTest {
     func testBurnFailDueToWrongPermissions() throws {
         // GIVEN: Radix identity Alice and an application layer action BurnToken ...
         let bobApp = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: bobIdentity)
-        let aliceApp = application!
         
         // GIVEN: ... and a previously created FooToken, for which Alice does **NOT** have the appropriate permissions
         let (tokenCreation, fooToken) = bobApp.createToken(supply: .mutable(initial: 1000))
@@ -177,12 +176,12 @@ class BurnTokensTests: IntegrationTest {
     func testFailingBurnAliceTriesToBurnCarolsCoins() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
         
-        let (tokenCreation, fooToken) = application.createMultiIssuanceToken(initialSupply: 1000)
+        let (tokenCreation, fooToken) = aliceApp.createMultiIssuanceToken(initialSupply: 1000)
         
         try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice tries to burn Carols coins
-        let burning = application.burnTokens(
+        let burning = aliceApp.burnTokens(
             action: BurnTokensAction(tokenDefinitionReference: fooToken, amount: 10, burner: carol)
         )
         
@@ -195,12 +194,12 @@ class BurnTokensTests: IntegrationTest {
     
     func testBurnFailDueToSupplyBeingFixed() throws {
         // GIVEN: Radix identity Alice and an application layer action BurnToken, and a previously created FooToken, which has FIXED supply
-        let (tokenCreation, fooToken) = application.createFixedSupplyToken(supply: 10)
+        let (tokenCreation, fooToken) = aliceApp.createFixedSupplyToken(supply: 10)
         
         try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice call Burn for FooToken
-        let burning = application.burnTokens(amount: 2, ofType: fooToken)
+        let burning = aliceApp.burnTokens(amount: 2, ofType: fooToken)
         
         // THEN: I see that it fails
         try waitFor(
@@ -211,12 +210,12 @@ class BurnTokensTests: IntegrationTest {
     
     func testBurnFailDueToIncorrectGranularity() throws {
         // GIVEN: Radix identity Alice and an application layer action BurnToken, and a previously created FooToken, with a granularity of 3
-        let (tokenCreation, fooToken) = application.createMultiIssuanceToken(initialSupply: 30, granularity: 3)
+        let (tokenCreation, fooToken) = aliceApp.createMultiIssuanceToken(initialSupply: 30, granularity: 3)
         
         try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice call Burn(2) for FooToken, where 3∤2 (3 does not divide 2)
-        let burning = application.burnTokens(amount: 2, ofType: fooToken)
+        let burning = aliceApp.burnTokens(amount: 2, ofType: fooToken)
         
         // THEN: I see that it fails
         try waitFor(

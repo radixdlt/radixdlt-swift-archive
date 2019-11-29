@@ -29,9 +29,16 @@ import Combine
 
 class IntegrationTest: TestCase {
 
-    var aliceIdentity: AbstractIdentity!
+    var aliceIdentity = AbstractIdentity()
+    
+    // Same RadixApplicationClient for each test per test file, but changing
+    // Alice's account before each test.
+    lazy var aliceApp = RadixApplicationClient(
+        bootstrapConfig: UniverseBootstrap.localhostTwoNodes,
+        identity: aliceIdentity
+    )
+    
     var bobIdentity: AbstractIdentity!
-    var application: RadixApplicationClient!
     var alice: Address!
     var bob: Address!
     var carolAccount: Account!
@@ -43,20 +50,23 @@ class IntegrationTest: TestCase {
         super.setUp()
         
         aliceIdentity = AbstractIdentity()
+        
+        // New account before each test.
+        aliceApp.changeAccount(to: aliceIdentity.snapshotActiveAccount)
+        
         bobIdentity = AbstractIdentity()
         carolAccount = Account()
-        application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostTwoNodes, identity: aliceIdentity)
-        alice = application.addressOfActiveAccount
-        bob = application.addressOf(account: bobIdentity.snapshotActiveAccount)
-        carol = application.addressOf(account: carolAccount)
-        diana = application.addressOf(account: dianaAccount)
+      
+        alice = aliceApp.addressOfActiveAccount
+        bob = aliceApp.addressOf(account: bobIdentity.snapshotActiveAccount)
+        carol = aliceApp.addressOf(account: carolAccount)
+        diana = aliceApp.addressOf(account: dianaAccount)
     }
 
     override func invokeTest() {
         guard isConnectedToLocalhost() else { return }
         super.invokeTest()
     }
-    
 }
 
 extension IntegrationTest {

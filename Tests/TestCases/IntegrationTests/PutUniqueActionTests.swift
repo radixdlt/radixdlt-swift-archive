@@ -37,11 +37,11 @@ class PutUniqueIdActionTests: IntegrationTest {
             PutUniqueIdAction(uniqueMaker: alice, string: "foobar")
         }
         
-        let pendingTransaction = application.make(transaction: transaction)
+        let pendingTransaction = aliceApp.make(transaction: transaction)
         try waitForTransactionToFinish(pendingTransaction)
         
         let executedTransaction = try waitForFirstValue(
-            of: application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self])
+            of: aliceApp.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self])
         )
 
         let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
@@ -63,11 +63,11 @@ class PutUniqueIdActionTests: IntegrationTest {
             PutUniqueIdAction(uniqueMaker: alice, string: "bar")
         }
         
-        let pendingTransaction = application.make(transaction: transaction)
+        let pendingTransaction = aliceApp.make(transaction: transaction)
         try waitForTransactionToFinish(pendingTransaction)
         
         let executedTransaction = try waitForFirstValue(
-            of: application.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self])
+            of: aliceApp.observeTransactions(at: alice, containingActionOfAnyType: [PutUniqueIdAction.self])
         )
         
         let putUniqueActions = executedTransaction.actions(ofType: PutUniqueIdAction.self)
@@ -90,7 +90,7 @@ class PutUniqueIdActionTests: IntegrationTest {
             putUniqueIdAction
         }
 
-        let pendingTransaction = application.make(transaction: transaction)
+        let pendingTransaction = aliceApp.make(transaction: transaction)
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         try waitFor(
@@ -103,10 +103,10 @@ class PutUniqueIdActionTests: IntegrationTest {
     func testFailPuttingAnUniqueIdUsedInAPreviousTransaction() throws {
         // GIVEN: identity Alice and a RadixApplicationClient connected to some Radix node
         let putUniqueIdAction = PutUniqueIdAction(uniqueMaker: alice, string: "foo")
-        try  waitForTransactionToFinish(application.putUniqueId(action: putUniqueIdAction))
+        try  waitForTransactionToFinish(aliceApp.putUniqueId(action: putUniqueIdAction))
         
         // WHEN: Performing the same action again in a second transaction
-        let pendingTransaction = application.putUniqueId(action: putUniqueIdAction)
+        let pendingTransaction = aliceApp.putUniqueId(action: putUniqueIdAction)
         
         try waitFor(
             pendingTransaction: pendingTransaction,
@@ -121,11 +121,11 @@ class PutUniqueIdActionTests: IntegrationTest {
         
         // WHEN: Alice sends a `Transaction` containing a MutableSupplyToken and a UniqueId with the same RRI
         let transaction = Transaction {
-            application.actionCreateMultiIssuanceToken(symbol: "FOO")
+            aliceApp.actionCreateMultiIssuanceToken(symbol: "FOO")
             putUniqueIdAction
         }
         
-        let pendingTransaction = application.make(transaction: transaction)
+        let pendingTransaction = aliceApp.make(transaction: transaction)
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         try waitFor(
@@ -140,11 +140,11 @@ class PutUniqueIdActionTests: IntegrationTest {
         
         // WHEN: Alice sends a `Transaction` containing a FixedSupplyToken and a UniqueId with the same RRI
         let transaction = Transaction {
-            application.actionCreateFixedSupplyToken(symbol: "FOO")
+            aliceApp.actionCreateFixedSupplyToken(symbol: "FOO")
             putUniqueIdAction
         }
         
-        let pendingTransaction = application.make(transaction: transaction)
+        let pendingTransaction = aliceApp.make(transaction: transaction)
         
         // THEN: an error `uniqueStringAlreadyUsed` is thrown
         try waitFor(
@@ -155,8 +155,6 @@ class PutUniqueIdActionTests: IntegrationTest {
     
     func testFailAliceUsingBobsAddress() throws {
         // GIVEN: identities Alice and a Bob and a RadixApplicationClient connected to some Radix node
-        let aliceApp = application!
-        
         let putUniqueIdAction = PutUniqueIdAction(uniqueMaker: bob, string: "foo")
         
         // WHEN: Alice sends a Transaction containing a UniqueId specifying Bob’s address

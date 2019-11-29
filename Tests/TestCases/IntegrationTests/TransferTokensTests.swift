@@ -30,35 +30,35 @@ class TransferTokensTests: IntegrationTest {
 
     func testTransferTokenWithGranularityOf1() throws {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
-        let (tokenCreation, rri) = application.createToken(symbol: "AC", supply: .fixed(to: 30))
+        let (tokenCreation, rri) = aliceApp.createToken(symbol: "AC", supply: .fixed(to: 30))
         try waitForTransactionToFinish(tokenCreation)
         
-        let myTokenDef = try waitForFirstValue(of: application.observeTokenDefinition(identifier: rri))
+        let myTokenDef = try waitForFirstValue(of: aliceApp.observeTokenDefinition(identifier: rri))
         XCTAssertEqual(myTokenDef.symbol, "AC")
 
-        let myBalanceBeforeTx = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: rri))
+        let myBalanceBeforeTx = try waitForFirstValueUnwrapped(of: aliceApp.observeMyBalance(ofToken: rri))
         XCTAssertEqual(myBalanceBeforeTx.token.tokenDefinitionReference, rri)
         XCTAssertEqual(myBalanceBeforeTx.amount, 30)
         
         // WHEN: Alice transfer tokens she owns, to Bob
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 10, message: "For taxi fare")
+        let transfer = aliceApp.transferTokens(identifier: rri, to: bob, amount: 10, message: "For taxi fare")
 
         // THEN: I see that the transfer actions completes successfully
         try waitForTransactionToFinish(transfer)
         
-        let myBalanceAfterTx = try waitForFirstValueUnwrapped(of: application.observeMyBalance(ofToken: rri))
+        let myBalanceAfterTx = try waitForFirstValueUnwrapped(of: aliceApp.observeMyBalance(ofToken: rri))
         XCTAssertEqual(myBalanceAfterTx.amount, 20)
         
-        let bobsBalanceAfterTx = try waitForFirstValueUnwrapped(of: application.observeBalance(ofToken: rri, ownedBy: bob))
+        let bobsBalanceAfterTx = try waitForFirstValueUnwrapped(of: aliceApp.observeBalance(ofToken: rri, ownedBy: bob))
         XCTAssertEqual(bobsBalanceAfterTx.amount, 10)
         
-        let myTransfer = try waitForFirstValue(of: application.observeMyTokenTransfers())
+        let myTransfer = try waitForFirstValue(of: aliceApp.observeMyTokenTransfers())
         XCTAssertEqual(myTransfer.sender, alice)
         XCTAssertEqual(myTransfer.recipient, bob)
         XCTAssertEqual(myTransfer.amount, 10)
         XCTAssertEqual(try XCTUnwrap(myTransfer.attachedMessage()), "For taxi fare")
         
-        let bobTransfer = try waitForFirstValue(of: application.observeTokenTransfers(toOrFrom: bob))
+        let bobTransfer = try waitForFirstValue(of: aliceApp.observeTokenTransfers(toOrFrom: bob))
         XCTAssertEqual(bobTransfer.sender, alice)
         XCTAssertEqual(bobTransfer.recipient, bob)
         XCTAssertEqual(bobTransfer.amount, 10)
@@ -70,7 +70,7 @@ class TransferTokensTests: IntegrationTest {
         // WHEN: Alice tries to transfer tokens of some type she does not own, to Bob
         let unknownRRI: ResourceIdentifier = "/\(alice!)/Unknown"
         
-        let transfer = application.transferTokens(identifier: unknownRRI, to: bob, amount: 10)
+        let transfer = aliceApp.transferTokens(identifier: unknownRRI, to: bob, amount: 10)
         
         // THEN:  I see that action fails with error `unknownToken`
         try waitFor(
@@ -83,10 +83,10 @@ class TransferTokensTests: IntegrationTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
       
         // WHEN: Alice tries to transfer tokens with a larger amount than her current balance, to Bob
-        let (tokenCreation, rri) =  application.createFixedSupplyToken(supply: 30)
+        let (tokenCreation, rri) =  aliceApp.createFixedSupplyToken(supply: 30)
         try waitForTransactionToFinish(tokenCreation)
 
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 50)
+        let transfer = aliceApp.transferTokens(identifier: rri, to: bob, amount: 50)
         
         // THEN:  I see that action fails with error `InsufficientFunds`, Alice tries to spend more coins then she has
         try waitFor(
@@ -99,22 +99,22 @@ class TransferTokensTests: IntegrationTest {
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
   
         // WHEN: Alice transfer tokens she owns, having a granularity larger than 1, to Bob
-        let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
+        let (tokenCreation, rri) = aliceApp.createFixedSupplyToken(supply: 10000, granularity: 10)
         try waitForTransactionToFinish(tokenCreation)
        
         // THEN: I see that the transfer actions completes successfully
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 20)
+        let transfer = aliceApp.transferTokens(identifier: rri, to: bob, amount: 20)
         try wait(for: transfer.completion.record().finished, timeout: .enoughForPOW)
     }
     
     func testIncorrectGranularityOf5() throws {
 
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
-        let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 100, granularity: 5)
+        let (tokenCreation, rri) = aliceApp.createFixedSupplyToken(supply: 100, granularity: 5)
         try waitForTransactionToFinish(tokenCreation)
         
         // WHEN: Alice tries to transfer an amount of tokens not being a multiple of the granularity of said token, to Bob
-        let transfer = application.transferTokens(identifier: rri, to: bob, amount: 7)
+        let transfer = aliceApp.transferTokens(identifier: rri, to: bob, amount: 7)
      
         // THEN: Transfer should fail because The amount 7 is not a multiple of granularity 5 (both are primes)
         try waitFor(
@@ -128,11 +128,11 @@ class TransferTokensTests: IntegrationTest {
     func testFailingTransferAliceTriesToSpendCarolsCoins() throws {
         
         // GIVEN: a RadixApplicationClient and identities Alice and Bob
-        let (tokenCreation, rri) = application.createFixedSupplyToken(supply: 10000, granularity: 10)
+        let (tokenCreation, rri) = aliceApp.createFixedSupplyToken(supply: 10000, granularity: 10)
         try wait(for: tokenCreation.completion.record().finished, timeout: .enoughForPOW)
         
         // WHEN: Alice tries to spend Carols coins
-        let transfer = application.transferTokens(action: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
+        let transfer = aliceApp.transferTokens(action: TransferTokensAction(from: carol, to: bob, amount: 20, tokenResourceIdentifier: rri))
         
         // THEN: Transfer should fail because Alice tries to spend Carols coins"
         try waitFor(
