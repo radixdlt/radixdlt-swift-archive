@@ -155,7 +155,6 @@ private extension SubmitAtomEpic {
                 receiveSubscription: { _ in
                     atomStatusSubscriber
                         .sendGetAtomStatusNotifications(atomIdentifier: atom.identifier(), subscriberId: subscriberId)
-                        .share()
                         .ignoreOutput()
                         .andThen(
                             atomSubmitter.pushAtom(atom)
