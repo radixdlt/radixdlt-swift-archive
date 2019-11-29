@@ -39,6 +39,7 @@ class Fastfile: LaneFile {
         desc("Running local 'minimal-network' and runs integration tests with 'InegrationTests' scheme.")
 
         defer {
+            print ("Bringing down the network...")
             sh(command: "docker-compose -f \(RadixFastlaneConstants.singleNodeNetworkYaml) down")
         }
 
