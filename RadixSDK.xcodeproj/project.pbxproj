@@ -316,6 +316,7 @@
 		E68BD821229ED06C00FCE4D3 /* EncryptedPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD820229ED06C00FCE4D3 /* EncryptedPrivateKey.swift */; };
 		E68BD82522A0331800FCE4D3 /* MetaDataCommonValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */; };
 		E68BD82722A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */; };
+		E68BF7E023911F120058D07E /* AES+CBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68BF7DF23911F120058D07E /* AES+CBC.swift */; };
 		E68DFA2E22FC50F40050F69E /* UniqueMaking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA2D22FC50F40050F69E /* UniqueMaking.swift */; };
 		E68DFA3222FC64140050F69E /* ExecutedTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA3122FC64140050F69E /* ExecutedTransaction.swift */; };
 		E68DFA3422FC64290050F69E /* TransactionConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68DFA3322FC64290050F69E /* TransactionConvertible.swift */; };
@@ -1053,6 +1054,7 @@
 		E68BD820229ED06C00FCE4D3 /* EncryptedPrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedPrivateKey.swift; sourceTree = "<group>"; };
 		E68BD82422A0331800FCE4D3 /* MetaDataCommonValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaDataCommonValue.swift; sourceTree = "<group>"; };
 		E68BD82622A0337400FCE4D3 /* DictionaryConvertible+ArrayInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DictionaryConvertible+ArrayInitializable.swift"; sourceTree = "<group>"; };
+		E68BF7DF23911F120058D07E /* AES+CBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AES+CBC.swift"; sourceTree = "<group>"; };
 		E68DFA2D22FC50F40050F69E /* UniqueMaking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniqueMaking.swift; sourceTree = "<group>"; };
 		E68DFA3122FC64140050F69E /* ExecutedTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecutedTransaction.swift; sourceTree = "<group>"; };
 		E68DFA3322FC64290050F69E /* TransactionConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionConvertible.swift; sourceTree = "<group>"; };
@@ -3740,6 +3742,7 @@
 			children = (
 				E6E278762271CD1C0067D46E /* ECIES.swift */,
 				E656233523904FBC00F55964 /* Crypt.swift */,
+				E68BF7DF23911F120058D07E /* AES+CBC.swift */,
 				E656233723904FDB00F55964 /* DecryptionError.swift */,
 			);
 			path = Encryption;
@@ -4845,6 +4848,7 @@
 				E605A6EF2345DD3800E47257 /* NonNegativeAmount.swift in Sources */,
 				E6E279572271CD1C0067D46E /* AnyEncodableKeyValuesProcessing.swift in Sources */,
 				E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */,
+				E68BF7E023911F120058D07E /* AES+CBC.swift in Sources */,
 				E64641EC22F3482700E05034 /* FixedSupplyTokenDefinitionParticle+Encodable.swift in Sources */,
 				E615C51922B791FA00604E90 /* SomeParticleReducer.swift in Sources */,
 				E6A7479D22CCC72700DACEA0 /* Optional+IfPresentMap.swift in Sources */,

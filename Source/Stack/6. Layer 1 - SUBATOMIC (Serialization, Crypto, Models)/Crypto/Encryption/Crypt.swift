@@ -24,11 +24,6 @@
 
 import Foundation
 
-// This is this is the only file where we import CryptoSwift, it is because Apple's CryptoKit does not `CBC` mode with `AES`
-// we could drop CryptoSwift in favour of using `CommonCrypto.h`, like e.g.:
-// https://gist.github.com/hfossli/7165dc023a10046e2322b0ce74c596f8
-import CryptoSwift
-
 public struct Crypt {
     public init() {}
 }
@@ -43,22 +38,37 @@ public extension Crypt {
 // swiftlint:disable identifier_name
 
 public extension Crypt {
-    func encrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
-        return try crypt(operation: .encrypt, initializationVector: iv, data: data, keyE: keyE)
+    func encrypt(
+        initializationVector iv: DataConvertible,
+        data: DataConvertible,
+        keyE: DataConvertible
+    ) throws -> Data {
+        try crypt(operation: .encrypt, initializationVector: iv, data: data, keyE: keyE)
     }
     
-    func decrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
-        return try crypt(operation: .decrypt, initializationVector: iv, data: data, keyE: keyE)
+    func decrypt(
+        initializationVector iv: DataConvertible,
+        data: DataConvertible,
+        keyE: DataConvertible
+    ) throws -> Data {
+        try crypt(operation: .decrypt, initializationVector: iv, data: data, keyE: keyE)
     }
 }
 
 private extension Crypt {
-    func crypt(operation: Operation, initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
-        let aes = try CryptoSwift.AES(key: keyE.bytes, blockMode: CBC(iv: iv.bytes), padding: Padding.pkcs7)
-        switch operation {
-        case .decrypt: return try aes.decrypt(data.bytes).asData
-        case .encrypt: return try aes.encrypt(data.bytes).asData
-        }
+    func crypt(
+        operation: Operation,
+        initializationVector iv: DataConvertible,
+        data: DataConvertible,
+        keyE: DataConvertible
+    ) throws -> Data {
+        
+        let aes = try AES256(
+            key: keyE.asData,
+            initializationVector: iv.asData
+        )
+   
+        return try aes.crypt(input: data.asData, operation: operation)
     }
 }
 
