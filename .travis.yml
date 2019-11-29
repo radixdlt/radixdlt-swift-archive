@@ -7,12 +7,6 @@ cache:
     - Carthage
     - $HOME/Library/Caches/Homebrew
 
-before_install:
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
-
 install:
   - brew update
   - gem uninstall fastlane --force
@@ -26,6 +20,8 @@ install:
       brew install carthage;
     fi
   - brew upgrade swiftlint || true
+  - brew install docker
+  - docker --version
 
 jobs:
   include:
