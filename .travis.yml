@@ -22,6 +22,9 @@ install:
   - brew upgrade swiftlint || true
   - brew install docker
   - docker --version
+  - brew install docker-machine
+  - brew cask install virtualbox
+  - docker-machine create --driver virtualbox default
   - brew install docker-compose
   - docker-compose --version
 
