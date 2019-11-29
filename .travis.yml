@@ -25,5 +25,8 @@ jobs:
   include:
     - stage: Caches bootstrap
       script: travis_wait 600 carthage bootstrap --platform iOS --cache-builds
-    - stage: run unit tests
+    - stage: run tests
       script: fastlane unitTests
+      name: "Unit Tests"
+    - script: fastlane integrationTests || true
+      name: "Integration Tests (doesn't fail  the build)"
