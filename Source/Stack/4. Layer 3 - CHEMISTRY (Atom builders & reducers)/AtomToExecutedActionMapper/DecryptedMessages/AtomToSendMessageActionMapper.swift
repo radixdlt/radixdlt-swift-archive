@@ -201,7 +201,7 @@ private extension EncryptedMessageContext {
             do {
                 let decryptedData = try encryptor.decrypt(data: encryptedData, using: key)
                 return SendMessageAction(context: self, data: decryptedData, decryptContext: .decrypted)
-            } catch let decryptionError as ECIES.DecryptionError {
+            } catch let decryptionError as DecryptionError {
                 return SendMessageAction(context: self, data: encryptedData, decryptContext: .cannotDecrypt(error: decryptionError))
             } catch let unhandledError {
                 throw unhandledError

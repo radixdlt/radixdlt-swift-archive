@@ -87,7 +87,7 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
         do {
             try decryptMessage(in: atom, account: diana) {
                 let dianasFeableAttemptToIntercept = try XCTUnwrap($0)
-                doTestResult(dianasFeableAttemptToIntercept, expectedEncryptionState: .cannotDecrypt(error: ECIES.DecryptionError.keyMismatch))
+                doTestResult(dianasFeableAttemptToIntercept, expectedEncryptionState: .cannotDecrypt(error: DecryptionError.keyMismatch))
             }
             
         } catch {

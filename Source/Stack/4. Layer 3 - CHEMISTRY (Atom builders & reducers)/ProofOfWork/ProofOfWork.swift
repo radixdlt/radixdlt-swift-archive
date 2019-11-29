@@ -50,7 +50,7 @@ public extension ProofOfWork {
     @discardableResult
     func prove() throws -> ProofOfWork {
         let hashed = hash()
-        let numberOfLeadingZeros = hashed.numberOfLeadingZeroBits
+        let numberOfLeadingZeros = hashed.asData.countNumberOfLeadingZeroBits()
         if numberOfLeadingZeros < targetNumberOfLeadingZeros {
             throw Error.tooFewLeadingZeros(
                 expectedAtLeast: targetNumberOfLeadingZeros.numberOfLeadingZeros,

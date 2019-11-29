@@ -29,7 +29,7 @@ class NumberOfLeadingZeroBitsInDataTests: TestCase {
 
     func testCountNumberOfLeadingZeroBitsInData() {
         func doTest(data: DataConvertible, expectZeroCount: Int) {
-            XCTAssertEqual(data.numberOfLeadingZeroBits, expectZeroCount)
+            XCTAssertEqual(data.asData.countNumberOfLeadingZeroBits(), expectZeroCount)
         }
         doTest(data: Data(), expectZeroCount: 0)
         doTest(data: [0], expectZeroCount: 8)

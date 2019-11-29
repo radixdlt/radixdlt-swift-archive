@@ -80,7 +80,7 @@ class ECIESEncryptionAndDecryptionTests: TestCase {
         // THEN
         XCTAssertThrowsSpecificError(
             try bob.decrypt(encryptedByAlice),
-            ECIES.DecryptionError.macMismatch(expected: .irrelevant, butGot: .irrelevant),
+            DecryptionError.macMismatch(expected: .irrelevant, butGot: .irrelevant),
             "Alice should not be able to decode message intended for Bob"
         )
     }

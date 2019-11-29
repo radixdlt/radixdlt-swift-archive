@@ -25,12 +25,24 @@
 import Foundation
 import CryptoKit
 
-public struct CryptoKitSha256TwiceHasher: SHA256TwiceHashing {
+public final class SHA256TwiceHasher: SHA256TwiceHashing {
     public init() {}
-    public func sha256Twice(of data: Data) -> Data {
-        let once = SHA256.hash(data: data).asData
-        let twice = SHA256.hash(data: once).asData
-        return twice
-    }
 }
 
+public extension SHA256TwiceHasher {
+    
+    @inline(__always)
+    func sha256Twice(of data: Data) -> Data {
+        var hasher1 = SHA256()
+        data.withUnsafeBytes { (bufferPointer: UnsafeRawBufferPointer) in
+            hasher1.update(bufferPointer: bufferPointer)
+        }
+        let digest1 = hasher1.finalize()
+        
+        var hasher2 = SHA256()
+        digest1.withUnsafeBytes { (bufferPointer: UnsafeRawBufferPointer) in
+            hasher2.update(bufferPointer: bufferPointer)
+        }
+        return hasher2.finalize().asData
+    }
+}

@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,11 +23,10 @@
 //
 
 import Foundation
-import CryptoSwift
 
-public struct SHA256TwiceHasher: SHA256TwiceHashing {
+public struct RadixHasher: Hashing {
     public init() {}
-    public func sha256Twice(of data: Data) -> Data {
-        return data.sha256().sha256()
+    public func hash(data: Data) -> Data {
+        return RadixHash(unhashedData: data).asData
     }
 }

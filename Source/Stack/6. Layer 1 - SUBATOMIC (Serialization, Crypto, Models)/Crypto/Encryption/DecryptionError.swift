@@ -23,28 +23,29 @@
 //
 
 import Foundation
-import CryptoKit
 
-public final class SHA512TwiceHasher: SHA512TwiceHashing {
-    public init() {}
+public enum DecryptionError: Swift.Error, Equatable {
+    case failedToConvertPublicKeyLengthDataToInteger
+    case failedToConvertCipherTextLengthDataToInteger
+    case macMismatch(expected: Data, butGot: Data)
+    case keyMismatch
+    case failedToDecodePublicKeyPoint(error: EllipticCurvePoint.Error)
 }
-
-public extension SHA512TwiceHasher {
     
-    @inline(__always)
-    func sha512Twice(of data: Data) -> Data {
-        var hasher1 = SHA512()
-        data.withUnsafeBytes { (bufferPointer: UnsafeRawBufferPointer) in
-            hasher1.update(bufferPointer: bufferPointer)
+// MARK: DecryptionError + Equatable
+public extension DecryptionError {
+     static func == (lhs: Self, rhs: Self) -> Bool {
+        switch (lhs, rhs) {
+        case (.macMismatch, .macMismatch): return true
+        case (.macMismatch, _): return false
+        case (.keyMismatch, .keyMismatch): return true
+        case (.keyMismatch, _): return false
+        case (.failedToDecodePublicKeyPoint, .failedToDecodePublicKeyPoint): return true
+        case (.failedToDecodePublicKeyPoint, _): return false
+        case (.failedToConvertCipherTextLengthDataToInteger, .failedToConvertCipherTextLengthDataToInteger): return true
+        case (.failedToConvertCipherTextLengthDataToInteger, _): return false
+        case (.failedToConvertPublicKeyLengthDataToInteger, .failedToConvertPublicKeyLengthDataToInteger): return true
+        case (.failedToConvertPublicKeyLengthDataToInteger, _): return false
         }
-        let digest1 = hasher1.finalize()
-        
-        var hasher2 = SHA512()
-        digest1.withUnsafeBytes { (bufferPointer: UnsafeRawBufferPointer) in
-            hasher2.update(bufferPointer: bufferPointer)
-        }
-        
-        return hasher2.finalize().asData
     }
 }
-

@@ -12,9 +12,9 @@
 		486924262333A2500009F9DB /* Transaction+FunctionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486924252333A2500009F9DB /* Transaction+FunctionBuilder.swift */; };
 		486924282333A27D0009F9DB /* TokenContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486924272333A27D0009F9DB /* TokenContext.swift */; };
 		4869242A2333A2A80009F9DB /* UserActionMaking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486924292333A2A80009F9DB /* UserActionMaking.swift */; };
-		48A33DF523085A8400626090 /* CryptoKitSha256Hasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */; };
+		48A33DF523085A8400626090 /* SHA256Hasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF423085A8400626090 /* SHA256Hasher.swift */; };
 		48A33DF723085A9E00626090 /* SHA512TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF623085A9E00626090 /* SHA512TwiceHasher.swift */; };
-		48A33DF923085ABD00626090 /* CryptoKitSha256TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF823085ABD00626090 /* CryptoKitSha256TwiceHasher.swift */; };
+		48A33DF923085ABD00626090 /* SHA256TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A33DF823085ABD00626090 /* SHA256TwiceHasher.swift */; };
 		48E1A5F4232130F8009A34C6 /* HDWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E1A5F3232130F8009A34C6 /* HDWallet.swift */; };
 		E601D3352242410700A81412 /* UnsignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D3342242410700A81412 /* UnsignedAtom.swift */; };
 		E601D33C22428C7F00A81412 /* SignedAtom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E601D33B22428C7F00A81412 /* SignedAtom.swift */; };
@@ -269,6 +269,9 @@
 		E6562331239024F400F55964 /* TransactionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BB238597FE00950312 /* TransactionsTests.swift */; };
 		E656233223903C7A00F55964 /* SendMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2BE238597FE00950312 /* SendMessageTests.swift */; };
 		E65623342390423D00F55964 /* SendMessageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65623332390423D00F55964 /* SendMessageError.swift */; };
+		E656233623904FBC00F55964 /* Crypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E656233523904FBC00F55964 /* Crypt.swift */; };
+		E656233823904FDB00F55964 /* DecryptionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E656233723904FDB00F55964 /* DecryptionError.swift */; };
+		E656233A2391114700F55964 /* RadixHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65623392391114700F55964 /* RadixHasher.swift */; };
 		E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */; };
 		E6638CE723351C24004C9846 /* IntegrationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6638CE623351C24004C9846 /* IntegrationTest.swift */; };
 		E67129A122C1FCC9004F6D0A /* AtomStatusChecking.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */; };
@@ -570,8 +573,6 @@
 		E6E2793C2271CD1C0067D46E /* PrivateKey+ECEIS+Decrypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E2789D2271CD1C0067D46E /* PrivateKey+ECEIS+Decrypt.swift */; };
 		E6E2793D2271CD1C0067D46E /* ChainId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E2789F2271CD1C0067D46E /* ChainId.swift */; };
 		E6E2793E2271CD1C0067D46E /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278A12271CD1C0067D46E /* RandomData.swift */; };
-		E6E2793F2271CD1C0067D46E /* Sha256Hasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278A32271CD1C0067D46E /* Sha256Hasher.swift */; };
-		E6E279402271CD1C0067D46E /* SHA256TwiceHasher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278A42271CD1C0067D46E /* SHA256TwiceHasher.swift */; };
 		E6E279412271CD1C0067D46E /* RadixHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278A52271CD1C0067D46E /* RadixHash.swift */; };
 		E6E279422271CD1C0067D46E /* Hashing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278A62271CD1C0067D46E /* Hashing.swift */; };
 		E6E279432271CD1C0067D46E /* RadixHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278A72271CD1C0067D46E /* RadixHashable.swift */; };
@@ -772,9 +773,9 @@
 		486924252333A2500009F9DB /* Transaction+FunctionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Transaction+FunctionBuilder.swift"; sourceTree = "<group>"; };
 		486924272333A27D0009F9DB /* TokenContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenContext.swift; sourceTree = "<group>"; };
 		486924292333A2A80009F9DB /* UserActionMaking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserActionMaking.swift; sourceTree = "<group>"; };
-		48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitSha256Hasher.swift; sourceTree = "<group>"; };
+		48A33DF423085A8400626090 /* SHA256Hasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256Hasher.swift; sourceTree = "<group>"; };
 		48A33DF623085A9E00626090 /* SHA512TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA512TwiceHasher.swift; sourceTree = "<group>"; };
-		48A33DF823085ABD00626090 /* CryptoKitSha256TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitSha256TwiceHasher.swift; sourceTree = "<group>"; };
+		48A33DF823085ABD00626090 /* SHA256TwiceHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256TwiceHasher.swift; sourceTree = "<group>"; };
 		48E1A5F3232130F8009A34C6 /* HDWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HDWallet.swift; sourceTree = "<group>"; };
 		E601D3342242410700A81412 /* UnsignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsignedAtom.swift; sourceTree = "<group>"; };
 		E601D33B22428C7F00A81412 /* SignedAtom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedAtom.swift; sourceTree = "<group>"; };
@@ -1010,6 +1011,9 @@
 		E654778A22BFB3C500D968BD /* UniverseBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniverseBootstrap.swift; sourceTree = "<group>"; };
 		E6550EE4224BB02900160267 /* Int+DataInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+DataInitializable.swift"; sourceTree = "<group>"; };
 		E65623332390423D00F55964 /* SendMessageError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMessageError.swift; sourceTree = "<group>"; };
+		E656233523904FBC00F55964 /* Crypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Crypt.swift; sourceTree = "<group>"; };
+		E656233723904FDB00F55964 /* DecryptionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptionError.swift; sourceTree = "<group>"; };
+		E65623392391114700F55964 /* RadixHasher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadixHasher.swift; sourceTree = "<group>"; };
 		E6611F3F2225B93C00AD2F83 /* Set+AsArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+AsArray.swift"; sourceTree = "<group>"; };
 		E6638CE623351C24004C9846 /* IntegrationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationTest.swift; sourceTree = "<group>"; };
 		E67129A022C1FCC9004F6D0A /* AtomStatusChecking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomStatusChecking.swift; sourceTree = "<group>"; };
@@ -1291,8 +1295,6 @@
 		E6E2789D2271CD1C0067D46E /* PrivateKey+ECEIS+Decrypt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PrivateKey+ECEIS+Decrypt.swift"; sourceTree = "<group>"; };
 		E6E2789F2271CD1C0067D46E /* ChainId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChainId.swift; sourceTree = "<group>"; };
 		E6E278A12271CD1C0067D46E /* RandomData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomData.swift; sourceTree = "<group>"; };
-		E6E278A32271CD1C0067D46E /* Sha256Hasher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sha256Hasher.swift; sourceTree = "<group>"; };
-		E6E278A42271CD1C0067D46E /* SHA256TwiceHasher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA256TwiceHasher.swift; sourceTree = "<group>"; };
 		E6E278A52271CD1C0067D46E /* RadixHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadixHash.swift; sourceTree = "<group>"; };
 		E6E278A62271CD1C0067D46E /* Hashing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hashing.swift; sourceTree = "<group>"; };
 		E6E278A72271CD1C0067D46E /* RadixHashable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadixHashable.swift; sourceTree = "<group>"; };
@@ -3737,6 +3739,8 @@
 			isa = PBXGroup;
 			children = (
 				E6E278762271CD1C0067D46E /* ECIES.swift */,
+				E656233523904FBC00F55964 /* Crypt.swift */,
+				E656233723904FDB00F55964 /* DecryptionError.swift */,
 			);
 			path = Encryption;
 			sourceTree = "<group>";
@@ -3884,12 +3888,11 @@
 		E6E278A22271CD1C0067D46E /* Hash */ = {
 			isa = PBXGroup;
 			children = (
-				E6E278A32271CD1C0067D46E /* Sha256Hasher.swift */,
-				48A33DF423085A8400626090 /* CryptoKitSha256Hasher.swift */,
-				48A33DF823085ABD00626090 /* CryptoKitSha256TwiceHasher.swift */,
-				E6E278A42271CD1C0067D46E /* SHA256TwiceHasher.swift */,
+				48A33DF423085A8400626090 /* SHA256Hasher.swift */,
+				48A33DF823085ABD00626090 /* SHA256TwiceHasher.swift */,
 				48A33DF623085A9E00626090 /* SHA512TwiceHasher.swift */,
 				E6E278A52271CD1C0067D46E /* RadixHash.swift */,
+				E65623392391114700F55964 /* RadixHasher.swift */,
 				E6E278A62271CD1C0067D46E /* Hashing.swift */,
 				E6E278A72271CD1C0067D46E /* RadixHashable.swift */,
 			);
@@ -4692,6 +4695,7 @@
 				E605543E23054A7000528510 /* DefaultTransactionMaker.swift in Sources */,
 				E6CABA1322D4C39000B6D00C /* AtomSubscriptionCancelling.swift in Sources */,
 				E6FB03E221ECF186002CE331 /* Macros.swift in Sources */,
+				E656233623904FBC00F55964 /* Crypt.swift in Sources */,
 				E615C51722B791E800604E90 /* TokenBalanceReferencesReducer.swift in Sources */,
 				E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */,
 				E606FC4922CB5E0C00A7E52E /* RadixJsonRpcMethodEpic.swift in Sources */,
@@ -4736,7 +4740,7 @@
 				E6474AF9226794D5009C4FDC /* ExpressibleBySubatomicParts.swift in Sources */,
 				E60554142303160600528510 /* EncryptionMode.swift in Sources */,
 				E6E2799A2271CD1C0067D46E /* MaxLengthSpecifying.swift in Sources */,
-				48A33DF523085A8400626090 /* CryptoKitSha256Hasher.swift in Sources */,
+				48A33DF523085A8400626090 /* SHA256Hasher.swift in Sources */,
 				E606FC4F22CB5E4200A7E52E /* WebSocketEventsEpic.swift in Sources */,
 				E69E752322A18F5C00AC631B /* Encryptor.swift in Sources */,
 				E6E279502271CD1C0067D46E /* JSONPrefix.swift in Sources */,
@@ -4840,7 +4844,6 @@
 				E67E3E7A2379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift in Sources */,
 				E605A6EF2345DD3800E47257 /* NonNegativeAmount.swift in Sources */,
 				E6E279572271CD1C0067D46E /* AnyEncodableKeyValuesProcessing.swift in Sources */,
-				E6E2793F2271CD1C0067D46E /* Sha256Hasher.swift in Sources */,
 				E64BFF942269B96A00501726 /* Optional+Debug.swift in Sources */,
 				E64641EC22F3482700E05034 /* FixedSupplyTokenDefinitionParticle+Encodable.swift in Sources */,
 				E615C51922B791FA00604E90 /* SomeParticleReducer.swift in Sources */,
@@ -5031,7 +5034,6 @@
 				E606F13823016A83004D4D3D /* UniquelyIdentifiedAction.swift in Sources */,
 				E672564B228AEBE0004631F1 /* TokenCreating.swift in Sources */,
 				E6E2798E2271CD1C0067D46E /* DataInitializable.swift in Sources */,
-				E6E279402271CD1C0067D46E /* SHA256TwiceHasher.swift in Sources */,
 				E6E2798B2271CD1C0067D46E /* StringConversionMode.swift in Sources */,
 				E6E279442271CD1C0067D46E /* StringValue.swift in Sources */,
 				E626E1FE22B41A7B0046D2AC /* AtomToTokenTransferMapper.swift in Sources */,
@@ -5040,7 +5042,7 @@
 				E605541E2304170D00528510 /* SendMessageAction+Init+Data.swift in Sources */,
 				E6A1A678237B1BB800F58483 /* Publisher+FlatMapResult.swift in Sources */,
 				E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */,
-				48A33DF923085ABD00626090 /* CryptoKitSha256TwiceHasher.swift in Sources */,
+				48A33DF923085ABD00626090 /* SHA256TwiceHasher.swift in Sources */,
 				E62EFDCC2249378300B6DAD6 /* HTTPClient.swift in Sources */,
 				E6E2797A2271CD1C0067D46E /* TokenPermissions.swift in Sources */,
 				E6E279722271CD1C0067D46E /* ResourceIdentifier.swift in Sources */,
@@ -5050,6 +5052,7 @@
 				E626E1F022B3FFE70046D2AC /* ResultOfUserAction.swift in Sources */,
 				E6E279482271CD1C0067D46E /* RadixJSONDecoder.swift in Sources */,
 				E6E279282271CD1C0067D46E /* Signature.swift in Sources */,
+				E656233823904FDB00F55964 /* DecryptionError.swift in Sources */,
 				E6A508B4224E713F00128123 /* ParticleGroup.swift in Sources */,
 				E62780252341F5E6008F2857 /* Denomination+CaseIteratable.swift in Sources */,
 				E6A508B1224E713F00128123 /* ParticleGroups.swift in Sources */,
@@ -5064,6 +5067,7 @@
 				E689DBA4225F881700340CF3 /* LivePeersRequesting.swift in Sources */,
 				E6ED1A4221F8872300654105 /* RadixUniverse.swift in Sources */,
 				E61E6BF1238D3B0D008C14B0 /* Mirror+Compare.swift in Sources */,
+				E656233A2391114700F55964 /* RadixHasher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5407,6 +5411,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Build112/iOS",
 				);
+				GCC_OPTIMIZATION_LEVEL = 3;
 				INFOPLIST_FILE = "Source/SupportingFiles/RadixSDK-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -5420,6 +5425,7 @@
 				PRODUCT_NAME = RadixSDK;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WARNING_CFLAGS = (
@@ -5480,7 +5486,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)/Carthage/Build112/iOS",
 				);
-				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				INFOPLIST_FILE = "Tests/SupportingFiles/RadixSDKiOSUnitTests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5491,6 +5497,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.radixdlt.ios.unit.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

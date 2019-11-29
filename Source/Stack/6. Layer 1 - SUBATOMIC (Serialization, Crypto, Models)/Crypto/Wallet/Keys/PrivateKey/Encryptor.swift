@@ -76,6 +76,6 @@ public extension Encryptor {
                 return try key.decrypt(encryptedData, sharedKey: protector)
             } catch { /* try next one */ }
         }
-        throw ECIES.DecryptionError.keyMismatch
+        throw DecryptionError.keyMismatch
     }
 }

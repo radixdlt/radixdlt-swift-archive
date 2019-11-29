@@ -25,16 +25,17 @@
 import Foundation
 import CryptoKit
 
-// CryptoKit.Digest utils
-public extension CryptoKit.Digest {
-    var asData: Data { Data(Array(makeIterator()) ) }
-}
-extension SHA256.Digest: DataConvertible {}
-extension SHA512.Digest: DataConvertible {}
-
-public struct CryptoKitSha256Hasher: SHA256Hashing {
+public final class SHA256Hasher: SHA256Hashing {
     public init() {}
-    public func sha256(of data: Data) -> Data {
-        return SHA256.hash(data: data).asData
+}
+
+public extension SHA256Hasher {
+    @inline(__always)
+    func sha256(of data: Data) -> Data {
+        var hasher = SHA256()
+        data.withUnsafeBytes { (bufferPointer: UnsafeRawBufferPointer) in
+            hasher.update(bufferPointer: bufferPointer)
+        }
+        return hasher.finalize().asData
     }
 }

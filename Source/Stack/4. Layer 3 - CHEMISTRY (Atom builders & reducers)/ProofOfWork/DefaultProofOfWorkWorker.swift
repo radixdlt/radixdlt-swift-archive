@@ -26,7 +26,6 @@ import Foundation
 import Combine
 
 public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
-    private let dispatchQueue = DispatchQueue(label: "Radix.DefaultProofOfWorkWorker", qos: .userInitiated)
     private let targetNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros
     private let sha256TwiceHasher: SHA256TwiceHashing
 
@@ -39,7 +38,7 @@ public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
     }
     
     deinit {
-        log.verbose("POW Worker deinit")
+        print("POW Worker deinit")
     }
 }
 
@@ -52,8 +51,7 @@ public extension DefaultProofOfWorkWorker {
     ) -> Future<ProofOfWork, ProofOfWork.Error> {
         
         return Future<ProofOfWork, ProofOfWork.Error> { promise in
-            self.dispatchQueue.async {
-                log.verbose("POW started")
+            RadixSchedulers.backgroundScheduler.async {
                 self.doWork(
                     seed: seed,
                     magic: magic
@@ -80,12 +78,14 @@ internal extension DefaultProofOfWorkWorker {
         
         var nonce: Nonce = 0
         let base: Data = magic.toFourBigEndianBytes() + seed
-        var radixHash: RadixHash!
+        var radixHashedData = Data(capacity: 32)
+        
+        var unhashed = Data(capacity: base.count + 8)
         repeat {
             nonce += 1
-            let unhashed = base + nonce.toEightBigEndianBytes()
-            radixHash = RadixHash(unhashedData: unhashed, hashedBy: sha256TwiceHasher)
-        } while radixHash.numberOfLeadingZeroBits < targetNumberOfLeadingZeros.numberOfLeadingZeros
+            unhashed = base + nonce.toEightBigEndianBytes()
+            radixHashedData = self.sha256TwiceHasher.sha256Twice(of: unhashed)
+        } while radixHashedData.countNumberOfLeadingZeroBits() < targetNumberOfLeadingZeros.numberOfLeadingZeros
         
         let pow = ProofOfWork(seed: seed, targetNumberOfLeadingZeros: targetNumberOfLeadingZeros, magic: magic, nonce: nonce)
         done(.success(pow))
