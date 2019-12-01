@@ -25,6 +25,8 @@ type_name:
   max_length:
     warning: 60
     error:  70
+  excluded:
+    - ID
 
 file_length:
   warning: 200
