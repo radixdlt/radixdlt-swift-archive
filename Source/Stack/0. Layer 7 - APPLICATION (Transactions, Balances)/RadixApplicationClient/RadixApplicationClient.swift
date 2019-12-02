@@ -292,8 +292,7 @@ public extension RadixApplicationClient {
     func pull(address: Address) -> Cancellable {
         atomPuller.pull(address: address)
             .sink(
-                receiveCompletion: { completion in Swift.print("⚡️completion: \(completion)") },
-                receiveValue: { _ in fatalError("got value, but expected not to") }
+                receiveCompletion: { Swift.print("Completed pulling address: \($0)") }
             )
     }
     
