@@ -24,9 +24,14 @@ install:
   - brew install docker
   - docker --version
   - brew install docker-machine
+  - brew tap caskroom/cask                # Tap the Caskroom/Cask repository from Github using HTTPS.
+  - brew search virtualbox                # Searches all known Casks for a partial or exact match.
+  - brew cask info virtualbox             # Displays information about the given Cask
+  - brew cask install virtualbox          # Install the given cask.
   - docker-machine create --driver virtualbox default
   - brew install docker-compose
   - docker-compose --version
+  - brew cleanup
 
 jobs:
   include:
