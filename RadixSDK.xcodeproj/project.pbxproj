@@ -237,7 +237,6 @@
 		E6474AD022661E44009C4FDC /* RESTClient+HTTPClientOwner+Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474ACF22661E44009C4FDC /* RESTClient+HTTPClientOwner+Default.swift */; };
 		E6474AD222661F03009C4FDC /* FullDuplexCommunicating.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AD122661F03009C4FDC /* FullDuplexCommunicating.swift */; };
 		E6474AD922661FE8009C4FDC /* RPCResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AD822661FE8009C4FDC /* RPCResult.swift */; };
-		E6474ADF22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474ADE22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift */; };
 		E6474AE222663E23009C4FDC /* SubscriberId.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AE122663E23009C4FDC /* SubscriberId.swift */; };
 		E6474AE422663E2F009C4FDC /* RPCMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AE322663E2F009C4FDC /* RPCMethod.swift */; };
 		E6474AE622663F33009C4FDC /* RPCRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6474AE522663F33009C4FDC /* RPCRequest.swift */; };
@@ -954,7 +953,6 @@
 		E6474ACF22661E44009C4FDC /* RESTClient+HTTPClientOwner+Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RESTClient+HTTPClientOwner+Default.swift"; sourceTree = "<group>"; };
 		E6474AD122661F03009C4FDC /* FullDuplexCommunicating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullDuplexCommunicating.swift; sourceTree = "<group>"; };
 		E6474AD822661FE8009C4FDC /* RPCResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCResult.swift; sourceTree = "<group>"; };
-		E6474ADE22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionIdIncrementingGenerator.swift; sourceTree = "<group>"; };
 		E6474AE122663E23009C4FDC /* SubscriberId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriberId.swift; sourceTree = "<group>"; };
 		E6474AE322663E2F009C4FDC /* RPCMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCMethod.swift; sourceTree = "<group>"; };
 		E6474AE522663F33009C4FDC /* RPCRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPCRequest.swift; sourceTree = "<group>"; };
@@ -2229,7 +2227,6 @@
 				E6CABA1022D4C36300B6D00C /* RPCClientError.swift */,
 				E62EFDFD224A4EC100B6DAD6 /* RPCClient.swift */,
 				E6CABA1222D4C39000B6D00C /* AtomSubscriptionCancelling.swift */,
-				E6474ADE22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift */,
 				E6474ADD22663D91009C4FDC /* JSONParameters */,
 				E6474AF022679261009C4FDC /* RPCRequest */,
 				E6A507E2224E208900128123 /* RPCResponse */,
@@ -4917,7 +4914,6 @@
 				E6474AD222661F03009C4FDC /* FullDuplexCommunicating.swift in Sources */,
 				E6F5483D22771E4400EE6311 /* StatelessActionToParticleGroupsMapper.swift in Sources */,
 				E606F134230151FB004D4D3D /* ShardedParticleStateId.swift in Sources */,
-				E6474ADF22663DBE009C4FDC /* SubscriptionIdIncrementingGenerator.swift in Sources */,
 				E650691F2381620200AB420D /* HTTPPageLoader.swift in Sources */,
 				E626E21222B4F7F00046D2AC /* StatefulActionToParticleGroupsMapper.swift in Sources */,
 				E60E0568236B08CB000A10D6 /* DetermineIfMoreInfoAboutNodeIsNeeded.swift in Sources */,
