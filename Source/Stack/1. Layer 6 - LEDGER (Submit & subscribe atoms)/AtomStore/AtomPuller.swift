@@ -26,5 +26,5 @@ import Foundation
 import Combine
 
 public protocol AtomPuller {
-    func pull(address: Address) -> Cancellable
+    func pull(address: Address) -> AnyPublisher<Never, Never>
 }

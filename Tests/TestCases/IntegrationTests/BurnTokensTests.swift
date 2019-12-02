@@ -171,6 +171,7 @@ class BurnTokensTests: IntegrationTest {
         )
         
         XCTAssertNotNil(cancellableSubscriptionOfBobsAddress)
+        cancellableSubscriptionOfBobsAddress.cancel()
     }
     
     func testFailingBurnAliceTriesToBurnCarolsCoins() throws {

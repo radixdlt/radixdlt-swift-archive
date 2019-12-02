@@ -126,14 +126,14 @@ public extension RadixApplicationClient {
 // MARK: TransactionToAtomMapper
 public extension RadixApplicationClient {
     func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
-        return try transactionMaker.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
+        try transactionMaker.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
     }
 }
 
 // MARK: AtomToTransactionMapper
 public extension RadixApplicationClient {
     func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
-        return transactionSubscriber.transactionFromAtom(atom)
+        transactionSubscriber.transactionFromAtom(atom)
     }
 }
 
@@ -145,7 +145,7 @@ public extension RadixApplicationClient {
     
     /// Returns a hot observable of the latest state of token definitions at the user's address
     func observeMyTokenDefinitions() -> AnyPublisher<TokenDefinitionsState, StateSubscriberError> {
-        return observeTokenDefinitions(at: addressOfActiveAccount)
+        observeTokenDefinitions(at: addressOfActiveAccount)
     }
 }
 
@@ -170,7 +170,7 @@ public extension RadixApplicationClient {
     }
     
     func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, AtomToTransactionMapperError> {
-        return observeActions(ofType: TransferTokensAction.self, at: address)
+        observeActions(ofType: TransferTokensAction.self, at: address)
     }
 }
 
@@ -181,7 +181,7 @@ public extension RadixApplicationClient {
     }
     
     func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, AtomToTransactionMapperError> {
-        return observeActions(ofType: SendMessageAction.self, at: address)
+        observeActions(ofType: SendMessageAction.self, at: address)
     }
 }
 
@@ -215,26 +215,24 @@ public extension RadixApplicationClient {
 // MARK: TransactionSubscriber
 public extension RadixApplicationClient {
     func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
-        return transactionSubscriber.observeTransactions(at: address)
+        transactionSubscriber.observeTransactions(at: address)
     }
 }
 
 // MARK: TokenDefinitionsState Observation
 public extension RadixApplicationClient {
     func observeTokenDefinitions(at address: Address) -> AnyPublisher<TokenDefinitionsState, StateSubscriberError> {
-        return observeState(ofType: TokenDefinitionsState.self, at: address)
+        observeState(ofType: TokenDefinitionsState.self, at: address)
     }
     
     func observeTokenDefinition(identifier: ResourceIdentifier) -> AnyPublisher<TokenDefinition, StateSubscriberError> {
-        let address = identifier.address
-        return observeTokenDefinitions(at: address).map {
+        observeTokenDefinitions(at: identifier.address).map {
             $0.tokenDefinition(identifier: identifier)
         }.replaceNilWithEmpty()
     }
     
     func observeTokenState(identifier: ResourceIdentifier) -> AnyPublisher<TokenState, StateSubscriberError> {
-        let address = identifier.address
-        return observeTokenDefinitions(at: address).map {
+        observeTokenDefinitions(at: identifier.address).map {
             $0.tokenState(identifier: identifier)
         }.replaceNilWithEmpty()
     }
@@ -243,7 +241,7 @@ public extension RadixApplicationClient {
 // MARK: TokenBalanceReferencesState Observation
 public extension RadixApplicationClient {
     func observeBalanceReferences(at address: Address) -> AnyPublisher<TokenBalanceReferencesState, StateSubscriberError> {
-        return observeState(ofType: TokenBalanceReferencesState.self, at: address)
+        observeState(ofType: TokenBalanceReferencesState.self, at: address)
     }
 }
 
@@ -293,6 +291,10 @@ public extension RadixApplicationClient {
     
     func pull(address: Address) -> Cancellable {
         atomPuller.pull(address: address)
+            .sink(
+                receiveCompletion: { completion in Swift.print("⚡️completion: \(completion)") },
+                receiveValue: { _ in fatalError("got value, but expected not to") }
+            )
     }
     
     func pull() -> Cancellable {

@@ -136,6 +136,7 @@ class MintTokensTests: IntegrationTest {
         )
 
         XCTAssertNotNil(cancellableSubscriptionOfBobsAddress)
+        cancellableSubscriptionOfBobsAddress.cancel()
     }
     
     func testMintFailDueToSupplyBeingFixed() throws {

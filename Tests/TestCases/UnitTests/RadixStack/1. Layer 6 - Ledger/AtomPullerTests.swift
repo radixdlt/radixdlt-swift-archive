@@ -31,7 +31,6 @@ final class AtomPullerTests: TestCase {
 
     private let address1: Address = .irrelevant(index: 1)
     private let address2: Address = .irrelevant(index: 2)
-    private let address3: Address = .irrelevant(index: 3)
     
     func test_DefaultAtomPuller() throws {
         
@@ -44,7 +43,7 @@ final class AtomPullerTests: TestCase {
         )
   
         XCTAssertTrue(requestCache.isEmpty)
-        let cancellable = atomPuller.pull(address: address1)
+        let cancellable = atomPuller.pull(address: address1).sink {}
         XCTAssertFalse(requestCache.isEmpty)
         XCTAssertNil(requestCache.valueFor(key: address2))
 
@@ -53,6 +52,38 @@ final class AtomPullerTests: TestCase {
         cancellable.cancel()
         XCTAssertEqual(dispatchedNodeActions.count, 2)
         let fetchAtomsActionCancel: FetchAtomsActionCancel! = XCTAssertType(of: dispatchedNodeActions[1])
+        XCTAssertEqual(fetchAtomsActionRequest.address, address1)
+        XCTAssertEqual(fetchAtomsActionCancel.uuid, fetchAtomsActionRequest.uuid)
+        XCTAssertEqual(fetchAtomsActionCancel.address, address1)
+    }
+    
+    func test_when_many_subscribers_pull_atoms_on_the_same_address__fetch_atoms_action_should_be_emitted_once() {
+        
+        var dispatchedNodeActions = [NodeAction]()
+        let requestCache: DefaultAtomPuller.RequestCache = [:]
+        
+        let atomPuller: AtomPuller = DefaultAtomPuller(
+            requestCache: requestCache,
+            nodeActionsDispatcher: .callback { dispatchedNodeActions.append($0) }
+        )
+        
+        XCTAssertTrue(requestCache.isEmpty)
+        
+        var cancellables = Set<AnyCancellable>()
+        let times = 10
+        for _ in 0..<times {
+            atomPuller.pull(address: address1).sink {}.store(in: &cancellables)
+        }
+        
+        XCTAssertEqual(dispatchedNodeActions.count, 1)
+        let fetchAtomsActionRequest: FetchAtomsActionRequest! = XCTAssertType(of: dispatchedNodeActions[0])
+        
+        XCTAssertEqual(cancellables.count, times)
+        cancellables.forEach { $0.cancel() }
+        
+        XCTAssertEqual(dispatchedNodeActions.count, 2)
+        let fetchAtomsActionCancel: FetchAtomsActionCancel! = XCTAssertType(of: dispatchedNodeActions[1])
+        
         XCTAssertEqual(fetchAtomsActionRequest.address, address1)
         XCTAssertEqual(fetchAtomsActionCancel.uuid, fetchAtomsActionRequest.uuid)
         XCTAssertEqual(fetchAtomsActionCancel.address, address1)

@@ -46,7 +46,7 @@ public extension DefaultStateSubscriber {
         at address: Address
     ) -> AnyPublisher<State, StateSubscriberError> where State: ApplicationState {
         
-        return atomStore.onSync(address: address)
+        atomStore.onSync(address: address)
             .mapToVoid()
             .tryMap { [unowned self] _ -> State in
                 let upParticles = self.atomStore.upParticles(at: address)

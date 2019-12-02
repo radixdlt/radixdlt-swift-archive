@@ -49,17 +49,29 @@ public extension DefaultAtomPuller {
 
 // MARK: AtomPuller
 public extension DefaultAtomPuller {
-    func pull(address: Address) -> Cancellable {
+    func pull(address: Address) -> AnyPublisher<Never, Never> {
         
-        return requestCache.valueForKey(key: address) {
-            let fetchAtomsRequest = FetchAtomsActionRequest(address: address)
-            self.nodeActionsDispatcher.dispatchNodeAction(fetchAtomsRequest)
+        return requestCache.valueForKey(key: address) { [unowned self] in
             
-            return AnyCancellable {
+            let fetchAtomsRequest = FetchAtomsActionRequest(address: address)
+            
+            func cleanUp() {
                 let cancelRequest = FetchAtomsActionCancel(request: fetchAtomsRequest)
                 self.nodeActionsDispatcher.dispatchNodeAction(cancelRequest)
             }
             
+            return Empty<Never, Never>.init(completeImmediately: false)
+                .handleEvents(
+                    receiveSubscription: { [weak self] _ in
+                        self?.nodeActionsDispatcher.dispatchNodeAction(fetchAtomsRequest)
+                    },
+                    receiveCompletion: { _ in cleanUp() },
+                    receiveCancel: { cleanUp() }
+                )
+                
+                // Important to `share` the `Publisher` so that we do not accidentally dispatch multiple `FetchAtomsActionRequest`
+                .share()
+                .eraseToAnyPublisher()
         }
     }
 }
@@ -68,7 +80,7 @@ public extension DefaultAtomPuller {
 public extension DefaultAtomPuller {
     final class RequestCache: DictionaryConvertibleMutable, ExpressibleByDictionaryLiteral {
         public typealias Key = Address
-        public typealias Value = Cancellable
+        public typealias Value = AnyPublisher<Never, Never>
         public typealias Map = [Key: Value]
         public var dictionary: Map
         public init(dictionary: Map) {
