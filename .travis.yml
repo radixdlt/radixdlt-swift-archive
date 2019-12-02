@@ -9,7 +9,7 @@ cache:
     - $HOME/Library/Caches/Homebrew
 
 install:
-  - brew update
+  - brew update -v
   - gem uninstall fastlane --force
   - gem install fastlane
   - which fastlane || true
@@ -24,7 +24,7 @@ install:
   - brew install docker
   - docker --version
   - brew install docker-machine
-  - brew tap homebrew/cask-cask           # Tap the homebrew/cask-cask repository from Github using HTTPS.
+  #- brew tap homebrew/cask-cask           # Tap the homebrew/cask-cask repository from Github using HTTPS.
   - brew search virtualbox                # Searches all known Casks for a partial or exact match.
   - brew cask info virtualbox             # Displays information about the given Cask
   - brew cask install virtualbox          # Install the given cask.
