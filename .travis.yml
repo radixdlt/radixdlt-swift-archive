@@ -1,5 +1,6 @@
 language: objective-c
-os: osx
+os:
+  - osx
 osx_image: xcode11.2
 
 cache:
@@ -23,7 +24,6 @@ install:
   - brew install docker
   - docker --version
   - brew install docker-machine
-  - sudo brew cask install virtualbox
   - docker-machine create --driver virtualbox default
   - brew install docker-compose
   - docker-compose --version
