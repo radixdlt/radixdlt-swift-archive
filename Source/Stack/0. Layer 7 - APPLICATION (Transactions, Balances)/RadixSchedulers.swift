@@ -28,60 +28,43 @@ import Combine
 internal enum RadixSchedulers {}
 
 internal extension RadixSchedulers {
-    typealias MainThreadScheduler = RunLoop
-    typealias BackgroundScheduler = DispatchQueue
     
-    static let backgroundScheduler: BackgroundScheduler = .global(qos: .utility)
-    static let mainThreadScheduler: MainThreadScheduler = .main
+    typealias MainThread = DispatchQueue
+    typealias BackgroundThread = DispatchQueue
+     
+    static let backgroundScheduler: BackgroundThread = .global(qos: .utility)
+    static let mainThreadScheduler: MainThread = .main
 }
 
 internal extension RadixSchedulers {
-    static func mainScheduler(time: DispatchTimeInterval) -> MainThreadScheduler.SchedulerTimeType.Stride {
-        guard let seconds: Double = time.asSeconds else { incorrectImplementation("Fix time logic") }
-        return .seconds(seconds)
-    }
-    
-    static func backgroundScheduler(time: DispatchTimeInterval) -> BackgroundScheduler.SchedulerTimeType.Stride {
-        return BackgroundScheduler.SchedulerTimeType.Stride(time)
-    }
-}
-
-internal extension RadixSchedulers {
-    enum SchedulerType {
-        case mainThread, backgroundThread
-    }
     
     static func delay<P>(
         publisher: P,
         for delay: DispatchTimeInterval,
-        on schedulerType: SchedulerType
+        dispatchQueue: DispatchQueue
     ) -> AnyPublisher<P.Output, P.Failure> where P: Publisher {
-        
-        switch schedulerType {
-
-        case .mainThread:
-            return publisher.delay(
-                for: RadixSchedulers.mainScheduler(time: delay),
-                scheduler: RadixSchedulers.mainThreadScheduler
-            )
-            .eraseToAnyPublisher()
-            
-        case .backgroundThread:
-            return publisher.delay(
-                for: RadixSchedulers.backgroundScheduler(time: delay),
-                scheduler: RadixSchedulers.backgroundScheduler
-            )
-            .eraseToAnyPublisher()
-        }
+        return publisher.delay(
+            for: DispatchQueue.SchedulerTimeType.Stride(delay),
+            scheduler: dispatchQueue
+        )
+        .eraseToAnyPublisher()
+    }
+    
+    enum SchedulerType: Int, Equatable {
+        case mainThread, backgroundThread
     }
 }
 
 internal extension Publisher {
+    
     func delay(
         for delay: DispatchTimeInterval,
         on schedulerType: RadixSchedulers.SchedulerType
     ) -> AnyPublisher<Output, Failure> {
-        return RadixSchedulers.delay(publisher: self, for: delay, on: schedulerType)
+        
+        let queue: DispatchQueue = schedulerType == .mainThread ? RadixSchedulers.mainThreadScheduler : RadixSchedulers.backgroundScheduler
+            
+        return RadixSchedulers.delay(publisher: self, for: delay, dispatchQueue: queue)
     }
 }
 
@@ -99,6 +82,49 @@ extension DispatchTimeInterval {
         case .never: return nil
         @unknown default:
             incorrectImplementation("Have not yet handled new enum case: \(self)")
+        }
+    }
+}
+
+extension RadixSchedulers {
+    static func timer<MapTo>(
+        publishEvery interval: TimeInterval,
+        _ transform: @escaping () -> MapTo
+    ) -> AnyPublisher<MapTo, Never> {
+        
+        return Timer.publish(
+            every: interval,
+            on: RunLoop.main,
+            in: .common
+        )
+            .autoconnect()^
+            .receive(on: RadixSchedulers.mainThreadScheduler)
+            .map { _ in transform() }
+            .eraseToAnyPublisher()
+    }
+}
+
+extension Thread {
+    
+    var threadName: String {
+        func nameOf(queue: DispatchQueue?) -> String {
+            let labelOfCurrentQueue = __dispatch_queue_get_label(nil)
+            guard let name = String(cString: labelOfCurrentQueue, encoding: .utf8) else {
+                fatalError("fail")
+            }
+            return name
+        }
+        
+        let nameOfRadixBackgroundThread = nameOf(queue: RadixSchedulers.backgroundScheduler)
+        let nameOfRadixMainThread = nameOf(queue: RadixSchedulers.mainThreadScheduler)
+        let nameOfCurrent = nameOf(queue: nil)
+        
+        if nameOfCurrent == nameOfRadixBackgroundThread {
+            return "background"
+        } else if nameOfCurrent == nameOfRadixMainThread {
+            return "main"
+        } else {
+            return "Other thread: \(nameOfCurrent)"
         }
     }
 }

@@ -62,25 +62,25 @@ public extension DefaultRPCClient {
 public extension DefaultRPCClient {
     
     func getNetworkInfo() -> AnyPublisher<RadixSystem, DataFromNodeError> {
-        return make(request: .getNetworkInfo)
+        make(request: .getNetworkInfo)
             .mapError { DataFromNodeError.rpcError($0) }
             .eraseToAnyPublisher()
     }
     
     func getLivePeers() -> AnyPublisher<[NodeInfo], DataFromNodeError> {
-        return make(request: .getLivePeers)
+        make(request: .getLivePeers)
             .mapError { DataFromNodeError.rpcError($0) }
             .eraseToAnyPublisher()
     }
     
     func getUniverseConfig() -> AnyPublisher<UniverseConfig, DataFromNodeError> {
-        return make(request: .getUniverse)
+        make(request: .getUniverse)
             .mapError { DataFromNodeError.rpcError($0) }
             .eraseToAnyPublisher()
     }
     
     func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> AnyPublisher<AtomStatus, DataFromNodeError> {
-        return make(request: .getAtomStatus(atomIdentifier: atomIdentifier))
+        make(request: .getAtomStatus(atomIdentifier: atomIdentifier))
             .mapError { DataFromNodeError.rpcError($0) }
             .eraseToAnyPublisher()
     }
@@ -96,22 +96,30 @@ public extension DefaultRPCClient {
 public extension DefaultRPCClient {
     
     func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
-        return sendStartSubscription(request: .subscribe(to: address, subscriberId: subscriberId))
+        sendStartSubscription(
+            request: .subscribe(to: address, subscriberId: subscriberId)
+        )
     }
     
     func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
-        return sendStartSubscription(request: .getAtomStatusNotifications(atomIdentifier: atomIdentifier, subscriberId: subscriberId))
+        sendStartSubscription(
+            request: .getAtomStatusNotifications(atomIdentifier: atomIdentifier, subscriberId: subscriberId)
+        )
     }
 }
 
 // MARK: - Send Request for CLOSING Subscribing To Some Notification
 public extension DefaultRPCClient {
     func closeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
-        return sendCancelSubscription(request: .closeAtomStatusNotifications(subscriberId: subscriberId))
+        sendCancelSubscription(
+            request: .closeAtomStatusNotifications(subscriberId: subscriberId)
+        )
     }
     
     func cancelAtomsSubscription(subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
-        return sendCancelSubscription(request: .unsubscribe(subscriberId: subscriberId))
+        sendCancelSubscription(
+            request: .unsubscribe(subscriberId: subscriberId)
+        )
     }
 }
 
@@ -123,18 +131,16 @@ internal extension DefaultRPCClient {
     }
     
     func makeFireForget(request rootRequest: RPCRootRequest) -> AnyPublisher<Never, RPCError> {
-        return make(
+        make(
             request: rootRequest,
             responseType: ResponseOnFireAndForgetRequest.self
         ).ignoreOutput().eraseToAnyPublisher()
     }
     
-    func make<ResultFromResponse>(
+    func make<Model>(
         request rootRequest: RPCRootRequest,
-        responseType: ResultFromResponse.Type
-    ) -> AnyPublisher<ResultFromResponse, RPCError>
-        where
-        ResultFromResponse: Decodable {
+        responseType: Model.Type
+    ) -> AnyPublisher<Model, RPCError> where Model: Decodable {
 
         let rpcRequest = RPCRequest(rootRequest: rootRequest)
         
@@ -156,16 +162,15 @@ internal extension DefaultRPCClient {
         subscriberId: SubscriberId,
         responseType: NotificationResponse.Type
     ) -> AnyPublisher<NotificationResponse, Never> where NotificationResponse: Decodable {
-        
         channel.observeNotification(notification, subscriberId: subscriberId)
     }
     
     func sendStartSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
-        return sendStartOrCancelSubscription(request: request, mode: .start)
+        sendStartOrCancelSubscription(request: request, mode: .start)
     }
     
     func sendCancelSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
-        return sendStartOrCancelSubscription(request: request, mode: .cancel)
+        sendStartOrCancelSubscription(request: request, mode: .cancel)
     }
 }
 

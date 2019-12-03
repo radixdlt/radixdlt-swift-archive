@@ -124,12 +124,12 @@ public extension FindANodeEpic {
                     .filter { $0.isEmpty }^
                     .first().ignoreOutput()
                     .andThen(
-                        Timer.publish(every: selfNonWeak.waitForConnectionDurationInSeconds, on: RadixSchedulers.mainThreadScheduler, in: .common)
-                            .autoconnect()^
-                            .map { _ -> [NodeAction] in
-                                selfNonWeak.findAndConnectToSuitablePeer(shards: shardsOfRequest, networkState: networkState)
-                            }
-                            .flattenSequence()
+                        RadixSchedulers.timer(
+                            publishEvery: selfNonWeak.waitForConnectionDurationInSeconds
+                        ) {
+                            selfNonWeak.findAndConnectToSuitablePeer(shards: shardsOfRequest, networkState: networkState)
+                        }
+                        .flattenSequence()
                         .removeDuplicates(by: {
                             $0.sameTypeOfActionAndSameNodeAs(other: $1)
                         })

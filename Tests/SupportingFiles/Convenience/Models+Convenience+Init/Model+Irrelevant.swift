@@ -29,7 +29,11 @@ extension SignedAtom {
     static var irrelevant: Self {
         let unsignedAtom = UnsignedAtom.irrelevant
         return unsignedAtom.signed(signature: .irrelevant, signatureId: .irrelevant)
-        
+    }
+    
+    static func withDestinationAddress(_ address: Address, date: Date = .init()) -> Self {
+        let unsignedAtom = UnsignedAtom.withDestinationAddress(address, date: date)
+        return unsignedAtom.signed(signature: .irrelevant, signatureId: .irrelevant)
     }
 }
 
@@ -43,11 +47,22 @@ extension UnsignedAtom {
     static var irrelevant: Self {
         try! UnsignedAtom(atomWithPow: .irrelevant)
     }
+    
+    static func withDestinationAddress(_ address: Address, date: Date = .init()) -> Self {
+        try! UnsignedAtom(atomWithPow: .withDestinationAddress(address, date: date))
+    }
 }
 
 extension AtomWithFee {
     static var irrelevant: Self {
         try! AtomWithFee(atomWithoutPow: Atom.irrelevant, proofOfWork: .irrelevant)
+    }
+    
+    static func withDestinationAddress(_ address: Address, date: Date = .init()) -> Self {
+         try! AtomWithFee(
+            atomWithoutPow: Atom.withDestinationAddress(address, date: date),
+            proofOfWork: .irrelevant
+        )
     }
 }
 

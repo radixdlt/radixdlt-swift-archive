@@ -35,7 +35,7 @@ public protocol WebSocketsManager: AnyObject {
     
     /// Try to close any web socket to the node using the provided closing strategy
     @discardableResult
-    func tryCloseSocketTo(node: Node, strategy: WebSocketClosingStrategy) -> CloseWebSocketResult
+    func tryCloseSocketTo(node: Node, strategy: WebSocketClosingStrategy) -> AnyPublisher<CloseWebSocketResult, Never>
     
     /// Subscribe to this publisher to get notified about newly created sockets
     func observeNewSockets() -> AnyPublisher<WebSocketToNode, Never>

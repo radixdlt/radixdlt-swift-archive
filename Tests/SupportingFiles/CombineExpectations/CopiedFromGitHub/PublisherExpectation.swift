@@ -85,15 +85,13 @@ extension XCTestCase {
     {
         let expectation = self.expectation(description: description)
         publisherExpectation._setup(expectation)
-        waitForExpectations(timeout: timeout) { error in
-            if let error = error {
-                self.recordFailure(
-                    withDescription: "Exceeded timeout of \(timeout) seconds, with unfulfilled expectations: \(description), error: \(error)",
-                    inFile: file.description,
-                    atLine: Int(line),
-                    expected: false
-                )
-            }
+        if XCTWaiter().wait(for: [expectation], timeout: timeout) ==  .timedOut {
+            self.recordFailure(
+                withDescription: "Exceeded timeout of \(timeout) seconds, with unfulfilled expectations: \(description)",
+                inFile: file.description,
+                atLine: Int(line),
+                expected: false
+            )
         }
         return try publisherExpectation._value()
     }

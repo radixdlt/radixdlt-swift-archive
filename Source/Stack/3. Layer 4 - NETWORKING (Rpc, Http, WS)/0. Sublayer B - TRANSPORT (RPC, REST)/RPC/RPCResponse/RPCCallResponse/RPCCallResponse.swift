@@ -24,27 +24,26 @@
 
 import Foundation
 
-public struct AtomSubscriptionRequest: Encodable {
-    public let subscriberId: SubscriberId
-    public let query: AtomQuery
+// swiftlint:disable colon opening_brace
+
+public struct RPCCallResponse<Model>:
+    Decodable,
+    RPCResponseResultConvertible
+    where
+    Model: Decodable
+{
+    // swiftlint:enable colon opening_brace
     
-    public init(query: AtomQuery, subscriberId: SubscriberId) {
-        self.query = query
-        self.subscriberId = subscriberId
-    }
+    public let result: Model
+    public let id: String
 }
 
-// MARK: Convenience init
-public extension AtomSubscriptionRequest {
-    init(address: Address, subscriberId: SubscriberId) {
-        self.init(query: AtomQuery(address: address), subscriberId: subscriberId)
-    }
+// MARK: RPCResponseResultConvertible
+public extension RPCCallResponse {
+    var model: Model { result }
 }
 
-public struct UnsubscribeRequest: Encodable {
-    public let subscriberId: SubscriberId
-    
-    public init(subscriberId: SubscriberId) {
-        self.subscriberId = subscriberId
-    }
+// MARK: Codable
+public extension RPCCallResponse {
+    typealias CodingKeys = RPCCallResponseCodingKeys
 }

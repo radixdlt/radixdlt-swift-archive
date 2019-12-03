@@ -234,7 +234,7 @@ private extension SubmitAtomEpicTests {
             timeout: overridingTimeoutIfPresent,
             resultingPublisherTransformation: { actionSubject, _, output in
                 output
-                    .receive(on: RunLoop.main)
+                    .receive(on: RadixSchedulers.mainThreadScheduler)
                     .handleEvents(
                         receiveOutput: {
                             emulateRadixNetworkController?($0, actionSubject, atomStatusNotificationSubject)

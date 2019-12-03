@@ -24,14 +24,6 @@
 
 import Foundation
 
-public protocol SubscriptionUpdate: PotentiallySubscriptionIdentifiable, Decodable {
-    var subscriberId: SubscriberId { get }
-}
-
-public extension SubscriptionUpdate {
-    var subscriberIdIfPresent: SubscriberId? { return subscriberId }
-}
-
 public struct AtomSubscriptionUpdate: SubscriptionUpdate {
     public let atomEvents: [AtomEvent]
     public let subscriberId: SubscriberId

@@ -30,7 +30,7 @@ public struct SubmitAtomActionStatus: SubmitAtomAction {
     public let statusEvent: AtomStatusEvent
     public let uuid: UUID
     
-    private init(atom: SignedAtom, node: Node, statusEvent: AtomStatusEvent, uuid: UUID) {
+    internal init(atom: SignedAtom, node: Node, statusEvent: AtomStatusEvent, uuid: UUID) {
         self.atom = atom
         self.node = node
         self.statusEvent = statusEvent

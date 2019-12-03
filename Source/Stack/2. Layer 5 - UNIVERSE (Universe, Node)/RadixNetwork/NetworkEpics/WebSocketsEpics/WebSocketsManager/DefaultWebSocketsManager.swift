@@ -53,11 +53,18 @@ public extension DefaultWebSocketsManager {
     }
   
     @discardableResult
-    func tryCloseSocketTo(node: Node, strategy: WebSocketClosingStrategy) -> CloseWebSocketResult {
+    func tryCloseSocketTo(node: Node, strategy: WebSocketClosingStrategy) -> AnyPublisher<CloseWebSocketResult, Never> {
         guard let webSocket = webSockets[node] else {
-            return .didNotClose(reason: .foundNoSocketForNode(node))
+            return Just(.didNotClose(reason: .foundNoSocketForNode(node))).eraseToAnyPublisher()
         }
-        return tryClose(socket: webSocket, strategy: strategy)
+        
+        return Publishers.Throttle(
+            upstream: Just<CloseWebSocketResult>(tryClose(socket: webSocket, strategy: strategy)),
+            interval: 10,
+            scheduler: RadixSchedulers.mainThreadScheduler,
+            latest: true
+        )
+            .eraseToAnyPublisher()
     }
 }
 

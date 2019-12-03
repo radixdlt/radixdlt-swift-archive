@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,27 +24,18 @@
 
 import Foundation
 
-public struct AtomSubscriptionRequest: Encodable {
-    public let subscriberId: SubscriberId
-    public let query: AtomQuery
+public enum RPCRequestMethod: String {
+    case subscribe                      = "Atoms.subscribe"
+    case unsubscribe                    = "Atoms.cancel"
+    case submitAtom                     = "Atoms.submitAtom"
     
-    public init(query: AtomQuery, subscriberId: SubscriberId) {
-        self.query = query
-        self.subscriberId = subscriberId
-    }
-}
-
-// MARK: Convenience init
-public extension AtomSubscriptionRequest {
-    init(address: Address, subscriberId: SubscriberId) {
-        self.init(query: AtomQuery(address: address), subscriberId: subscriberId)
-    }
-}
-
-public struct UnsubscribeRequest: Encodable {
-    public let subscriberId: SubscriberId
+    case getAtomStatus                  = "Atoms.getAtomStatus"
+    case getAtomStatusNotifications     = "Atoms.getAtomStatusNotifications"
+    case closeAtomStatusNotifications   = "Atoms.closeAtomStatusNotifications"
     
-    public init(subscriberId: SubscriberId) {
-        self.subscriberId = subscriberId
-    }
+    case getAtom                        = "Ledger.getAtoms"
+    
+    case getLivePeers                   = "Network.getLivePeers"
+    case getNetworkInfo                 = "Network.getInfo"
+    case getUniverse                    = "Universe.getUniverse"
 }

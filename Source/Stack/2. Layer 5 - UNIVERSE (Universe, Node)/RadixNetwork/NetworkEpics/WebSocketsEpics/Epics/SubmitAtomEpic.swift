@@ -39,7 +39,7 @@ public final class SubmitAtomEpic: RadixNetworkWebSocketsEpic {
     // MARK: Non-injected properties
     private var cancellables = Set<AnyCancellable>()
     
-    private let submissionTimeoutInSeconds: RunLoop.SchedulerTimeType.Stride
+    private let submissionTimeoutInSeconds: RadixSchedulers.MainThread.SchedulerTimeType.Stride
     
     public init(
         webSocketConnector: WebSocketConnector,
@@ -61,7 +61,7 @@ public final class SubmitAtomEpic: RadixNetworkWebSocketsEpic {
         self.makeAtomStatusObservationRequesting = makeAtomStatusObservationRequesting
         self.makeAtomSubmitting = makeAtomSubmitting
         self.makeAtomStatusObservationCanceller = makeAtomStatusObservationCanceller
-        self.submissionTimeoutInSeconds = RunLoop.SchedulerTimeType.Stride.seconds(overridingSubmissionTimeoutInSeconds ?? Self.defaultSubmissionTimeoutInSeconds)
+        self.submissionTimeoutInSeconds = RadixSchedulers.MainThread.SchedulerTimeType.Stride.seconds(overridingSubmissionTimeoutInSeconds ?? Self.defaultSubmissionTimeoutInSeconds)
     }
 }
 
@@ -176,7 +176,13 @@ private extension SubmitAtomEpic {
                                     return Empty<NodeAction, Never>(completeImmediately: true)
                                 }
                         )
-                        .sink(receiveFinish: { submitAtomActionSubject.send(SubmitAtomActionReceived(sendAction: sendAction, node: node)) })
+                        .sink(
+                            receiveFinish: {
+                                submitAtomActionSubject.send(
+                                    SubmitAtomActionReceived(sendAction: sendAction, node: node)
+                                )
+                            }
+                        )
                         .store(in: &self.cancellables)
                 },
                 receiveCompletion: { _ in cleanUp() },

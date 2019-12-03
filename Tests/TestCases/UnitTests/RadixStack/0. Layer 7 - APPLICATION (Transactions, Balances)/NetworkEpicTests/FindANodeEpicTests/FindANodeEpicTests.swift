@@ -164,7 +164,7 @@ class FindANodeEpicTests: NetworkEpicTestCase {
             epic: findANodeEpic,
             resultingPublisherTransformation: { actionSubject, networkStateSubject, output in
                 output
-                    .receive(on: RunLoop.main) /* Important to receive:on:RunLoop.main */
+                    .receive(on: RadixSchedulers.mainThreadScheduler) /* Important to receive:on:RadixSchedulers.mainThreadScheduler */
                     .handleEvents(
                         receiveOutput: {
                             emulateWebSockets(reactingTo: $0, actionSubject, networkStateSubject)
@@ -240,7 +240,7 @@ class FindANodeEpicTests: NetworkEpicTestCase {
             epic: findANodeEpic,
             resultingPublisherTransformation: { actionSubject, networkStateSubject, output in
                 output
-                    .receive(on: RunLoop.main) /* Important to receive:on:RunLoop.main */
+                    .receive(on: RadixSchedulers.mainThreadScheduler) /* Important to receive:on:RadixSchedulers.mainThreadScheduler */
                     .handleEvents(
                         receiveOutput: {
                             emulateWebSockets(reactingTo: $0, actionSubject, networkStateSubject)

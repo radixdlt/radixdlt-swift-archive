@@ -24,9 +24,12 @@
 
 import Foundation
 
-/// Simple although important wrapper of _ALL_ JSON-RPC responses, taking a `ResultOrParam` which must conform to Decodable and decodes the
+// swiftlint:disable colon opening_brace
+
+/// Simple although important wrapper of *ALL* JSON-RPC responses, taking a `Model` which must conform to Decodable and decodes the
 /// JSON from the RPC API. It can be on two different formats:
 ///
+/// # Format 1 - JSON-RPC Call Response
 /// Either we get a response containing a requestId (`"id"`), matching the number sent in our request. This also contains the JSON key
 /// and value for `"result"`, this is the first message response of the `Atoms.subscribe` request, followed by two messages on the other
 /// format.
@@ -40,6 +43,7 @@ import Foundation
 ///     }
 /// ```
 ///
+/// # Format 2 - JSON-RPC Notification
 /// Here follows the second possible format of responses from the RPC API, the message lacks both `"id"` and `"result"`, instead it contains
 /// `"method"` and `"params"`, just like our requests we sent. When we send a `Atoms.subscribe` request as mentioned above, the first response
 /// is the previous example followed by these two messages:
@@ -61,6 +65,7 @@ import Foundation
 ///         }
 ///     }
 /// ```
+///
 /// Followed by the third message, also on the same format:
 /// ```
 ///     {
@@ -73,38 +78,36 @@ import Foundation
 ///         }
 ///     }
 /// ```
-/// Another example of such a message, lacking `"result"` and `"id"` but containing `"params"` and `"method"` is
-/// The absolute first message received from the RPC API over webscoket, nameley the `Radix.welcome` message, which looks like this:
-/// ```
-///     {
-///         "jsonrpc": "2.0",
-///         "method": "Radix.welcome",
-///         "params": {
-///             "message": "Hello!"
-///         }
-///     }
-/// ```
-/// It is important to note that this message SHOULD have been filtered out by the Websocket code, i.e. the RCP client code
-/// should not have to care about this message.
-internal enum RPCResponse<ResultOrParam>: Decodable, RPCResponseResultConvertible where ResultOrParam: Decodable {
-    case resultWithRequestId(RPCResponseResultWithRequestId<ResultOrParam>)
-    case resultLookingLikeRequest(RPCResponseLookingLikeRequest<ResultOrParam>)
+///
+internal enum RPCResponse<Model>:
+    Decodable,
+    RPCResponseResultConvertible
+where Model: Decodable
+{
+    // swiftlint:enable colon opening_brace
+
+    case fromCall(RPCCallResponse<Model>)
+    case notification(RPCNotificationResponse<Model>)
 }
 
 // MARK: - RPCResponseResultConvertible
 extension RPCResponse {
-    var model: ResultOrParam {
+    var model: Model {
         switch self {
-        case .resultWithRequestId(let response): return response.model
-        case .resultLookingLikeRequest(let response): return response.model
+        case .fromCall(let response): return response.model
+        case .notification(let response): return response.model
         }
     }
 }
 
 extension RPCResponse {
-    var resultWithRequestId: RPCResponseResultWithRequestId<ResultOrParam>? {
-        guard case .resultWithRequestId(let resultWithRequestId) = self else { return nil }
-        return resultWithRequestId
+    var fromCall: RPCCallResponse<Model>? {
+        guard case .fromCall(let fromCall) = self else { return nil }
+        return fromCall
+    }
+    var notification: RPCNotificationResponse<Model>? {
+        guard case .notification(let notification) = self else { return nil }
+        return notification
     }
 }
 
@@ -121,19 +124,19 @@ extension RPCResponse {
         
         if keyedContainer.contains(.params) {
             do {
-                self = .resultLookingLikeRequest(try singleValueContainer.decode(RPCResponseLookingLikeRequest<ResultOrParam>.self))
+                self = .notification(try singleValueContainer.decode(RPCNotificationResponse<Model>.self))
             } catch let decodingError as DecodingError {
                 throw decodingError
             } catch {
-                incorrectImplementation("Unexpected and unhandled error trying to decode JSON into `RPCResponseLookingLikeRequest`: \(error)")
+                incorrectImplementation("Unexpected and unhandled error trying to decode JSON into `RPCNotificationResponse`: \(error)")
             }
         } else if keyedContainer.contains(.result) {
             do {
-              self = .resultWithRequestId(try singleValueContainer.decode(RPCResponseResultWithRequestId<ResultOrParam>.self))
+              self = .fromCall(try singleValueContainer.decode(RPCCallResponse<Model>.self))
             } catch let decodingError as DecodingError {
                 throw decodingError
             } catch {
-                incorrectImplementation("Unexpected and unhandled error trying to decode JSON into `RPCResponseResultWithRequestId`: \(error)")
+                incorrectImplementation("Unexpected and unhandled error trying to decode JSON into `RPCCallResponse`: \(error)")
             }
         } else {
             incorrectImplementation("Error decoding `RPCResponse`, found neither json key `\(CodingKeys.result.stringValue)`, nor `\(CodingKeys.params.stringValue)`")

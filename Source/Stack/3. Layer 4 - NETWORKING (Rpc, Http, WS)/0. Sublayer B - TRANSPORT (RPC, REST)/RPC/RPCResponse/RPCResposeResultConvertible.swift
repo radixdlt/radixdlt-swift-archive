@@ -24,14 +24,6 @@
 
 import Foundation
 
-public protocol PotentiallyRequestIdentifiable {
-    var requestIdIfPresent: String? { get }
-}
-
-public extension PotentiallyRequestIdentifiable {
-    var requestIdIfPresent: String? { return nil }
-}
-
 public protocol BaseRPCResponseResult {}
 
 public protocol RPCResponseResultConvertible: Decodable, BaseRPCResponseResult {

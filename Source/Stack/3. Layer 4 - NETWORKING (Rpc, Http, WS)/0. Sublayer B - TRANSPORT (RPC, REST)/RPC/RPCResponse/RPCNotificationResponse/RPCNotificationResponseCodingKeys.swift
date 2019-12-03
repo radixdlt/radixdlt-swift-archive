@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,27 +24,6 @@
 
 import Foundation
 
-public struct AtomSubscriptionRequest: Encodable {
-    public let subscriberId: SubscriberId
-    public let query: AtomQuery
-    
-    public init(query: AtomQuery, subscriberId: SubscriberId) {
-        self.query = query
-        self.subscriberId = subscriberId
-    }
-}
-
-// MARK: Convenience init
-public extension AtomSubscriptionRequest {
-    init(address: Address, subscriberId: SubscriberId) {
-        self.init(query: AtomQuery(address: address), subscriberId: subscriberId)
-    }
-}
-
-public struct UnsubscribeRequest: Encodable {
-    public let subscriberId: SubscriberId
-    
-    public init(subscriberId: SubscriberId) {
-        self.subscriberId = subscriberId
-    }
+public enum RPCNotificationResponseCodingKeys: String, CodingKey {
+    case params, method, subscriberId
 }
