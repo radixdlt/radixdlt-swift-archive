@@ -59,20 +59,26 @@ private extension FullDuplexCommunicationChannel {
 
         return messageSubject
             .flatMap { webSocketMessage -> AnyPublisher<RPCTopLevelResponse, Never> in
+                let data = webSocketMessage.toData()
                 do {
-                    let data = webSocketMessage.toData()
                     let decoded = try JSONDecoder().decode(RPCTopLevelResponse.self, from: data)
                     return Just(decoded).eraseToAnyPublisher()
-                } catch {
-                    if webSocketMessage.contains(identifier) {
-                        Swift.print("\n\n⚡️Suppressed error when decoding \(RPCTopLevelResponse.self)\n\nError: \(error)\n\nFrom json:\n<\n\(webSocketMessage)\n>\n")
+                } catch let decodingError {
+                    if
+                        let json = try? JSONSerialization.jsonObject(with: data, options: []) as? JSON,
+                        let errorJson = json["error"] as? JSON,
+                        let errorJsonData = try? JSONSerialization.data(withJSONObject: errorJson, options: []),
+                        let rpcRequestError = try? JSONDecoder().decode(RPCRequestError.self, from: errorJsonData)
+                    {
+                        Swift.print("☢️ error from API:\n\(rpcRequestError)\nIdentifier used: '\(identifier)'\n\n")
+                    } else if webSocketMessage.contains(identifier) {
+                        Swift.print("\n\n⚡️Suppressed error when decoding \(RPCTopLevelResponse.self)\nError: \(decodingError)\n\nFrom json:\n<\n\(webSocketMessage)\n>\n\n")
                     }
                     return Empty<RPCTopLevelResponse, Never>(completeImmediately: false)
                         .eraseToAnyPublisher()
                 }
             }
             .handleEvents(
-//                receiveOutput: { Swift.print("✅ rpc model over ws: \($0)") },
                 receiveCompletion: { _ in removeListener() },
                 receiveCancel: { removeListener() }
             )
