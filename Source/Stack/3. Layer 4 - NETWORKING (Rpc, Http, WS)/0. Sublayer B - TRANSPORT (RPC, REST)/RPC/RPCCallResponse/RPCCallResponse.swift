@@ -24,28 +24,19 @@
 
 import Foundation
 
-// swiftlint:disable colon opening_brace
-
-public struct RPCNotificationResponse<Model>:
-    Decodable,
-    RPCResponseResultConvertible
-where
-    Model: Decodable
-{
-    // swiftlint:enable colon opening_brace
-
-    public let params: Model
-    public let method: RPCNotification
-    public let subscriberId: SubscriberId
-}
-
-// MARK: RPCResponseResultConvertible
-public extension RPCNotificationResponse {
-    var model: Model { params }
+public struct RPCCallResponse<Model>: Decodable where Model: Decodable {
+    
+    public let result: Model
+    public let id: String
 }
 
 // MARK: Codable
-public extension RPCNotificationResponse {
-    typealias CodingKeys = RPCNotificationResponseCodingKeys
+public extension RPCCallResponse {
+    typealias CodingKeys = RPCCallResponseCodingKeys
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        result = try container.decode(Model.self, forKey: .result)
+        id = try container.decode(String.self, forKey: .id)
+    }
 }
-

@@ -150,10 +150,10 @@ class BurnTokensTests: IntegrationTest {
         try waitForTransactionToFinish(tokenCreation)
         
         let cancellableSubscriptionOfBobsAddress = aliceApp.pull(address: bob)
-        
+        print("✨ waiting for definition of token with symbol: <\(fooToken)>")
         _ = try waitForFirstValue(
             of: aliceApp.observeTokenDefinitions(at: bob),
-            description: "Alice needs to know about tokens defined by Bob"
+            description: "Alice needs to know about token <\(fooToken)> defined by Bob."
         )
         
         // WHEN: Alice call Burn for FooToken
@@ -245,7 +245,8 @@ private extension BurnTokensTests {
         try waitForAction(
             ofType: BurnTokensAction.self,
             in: pendingTransaction,
-            description: description
+            description: description,
+            line: line
         ) { burnTokensAction in
             
             TransactionError.actionsToAtomError(

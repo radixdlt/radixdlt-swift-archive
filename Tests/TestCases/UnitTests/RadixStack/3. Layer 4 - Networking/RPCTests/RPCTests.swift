@@ -22,8 +22,32 @@
 // SOFTWARE.
 //
 
-import Foundation
+import XCTest
+@testable import RadixSDK
 
-public protocol SubscriptionUpdate: Decodable {
-    var subscriberId: SubscriberId { get }
+class RPCTests: TestCase {
+
+   
+    func testDecodingNotificationAtomsNextStatusEvent() throws {
+        let json = """
+            {
+                "method": "Atoms.nextStatusEvent",
+                "params": {
+                    "status": "STORED",
+                    "subscriberId": "B958DB35-0C38-4A5A-8AA4-89CB23673A66",
+                },
+                "jsonrpc": "2.0"
+            }
+        """
+        
+        let jsonData = json.toData()
+        
+        let notification = try JSONDecoder().decode(RPCNotificationResponse<AtomStatusEvent>.self, from: jsonData)
+        XCTAssertEqual(notification.method, .observeAtomStatusNotifications)
+        let atomStatusEvent = notification.params
+        XCTAssertEqual(atomStatusEvent, .stored)
+        
+    }
+
+ 
 }

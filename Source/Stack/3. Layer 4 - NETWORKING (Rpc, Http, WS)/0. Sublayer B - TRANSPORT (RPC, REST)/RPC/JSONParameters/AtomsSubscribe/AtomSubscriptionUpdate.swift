@@ -24,7 +24,7 @@
 
 import Foundation
 
-public struct AtomSubscriptionUpdate: SubscriptionUpdate {
+public struct AtomSubscriptionUpdate: Decodable {
     public let atomEvents: [AtomEvent]
     public let subscriberId: SubscriberId
     public let isHead: Bool

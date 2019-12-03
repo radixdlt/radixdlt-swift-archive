@@ -24,6 +24,7 @@
 
 import Foundation
 
-public enum RPCNotificationResponseCodingKeys: String, CodingKey {
-    case params, method, subscriberId
+public enum RPCNotificationMethod: String, Equatable, Decodable {
+    case observeAtomStatusNotifications = "Atoms.nextStatusEvent"
+    case subscribeUpdate                = "Atoms.subscribeUpdate"
 }

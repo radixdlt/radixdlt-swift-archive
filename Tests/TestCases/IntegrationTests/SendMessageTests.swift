@@ -123,7 +123,8 @@ private extension SendMessageTests {
         try waitForAction(
             ofType: SendMessageAction.self,
             in: pendingTransaction,
-            description: description
+            description: description,
+            line: line
         ) { sendMessageAction in
             
             TransactionError.actionsToAtomError(

@@ -186,7 +186,8 @@ private extension PutUniqueIdActionTests {
         try waitForAction(
             ofType: PutUniqueIdAction.self,
             in: pendingTransaction,
-            description: description
+            description: description,
+            line: line
         ) { putUniqueIdAction in
             
             TransactionError.actionsToAtomError(

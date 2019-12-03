@@ -118,7 +118,8 @@ private extension CreateTokenTests {
             ofType: CreateTokenAction.self,
             atIndex: actionIndex,
             in: pendingTransaction,
-            description: description
+            description: description,
+            line: line
         ) { createTokenAction in
             
             TransactionError.actionsToAtomError(

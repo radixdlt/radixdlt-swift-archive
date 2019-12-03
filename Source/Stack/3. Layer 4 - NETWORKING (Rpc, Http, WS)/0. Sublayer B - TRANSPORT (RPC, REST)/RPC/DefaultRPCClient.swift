@@ -126,8 +126,8 @@ public extension DefaultRPCClient {
 // MARK: Internal
 internal extension DefaultRPCClient {
     
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> AnyPublisher<ResultFromResponse, RPCError> where ResultFromResponse: Decodable {
-        make(request: rootRequest, responseType: ResultFromResponse.self)
+    func make<Model>(request rootRequest: RPCRootRequest) -> AnyPublisher<Model, RPCError> where Model: Decodable {
+        make(request: rootRequest, responseType: Model.self)
     }
     
     func makeFireForget(request rootRequest: RPCRootRequest) -> AnyPublisher<Never, RPCError> {
@@ -152,13 +152,14 @@ internal extension DefaultRPCClient {
             .handleEvents(
                 receiveSubscription: { _ in
                     self.channel.sendMessage(message)
-            }
-        )
+                }
+            )
+            .setFailureType(to: RPCError.self)
             .eraseToAnyPublisher()
     }
     
     func observe<NotificationResponse>(
-        notification: RPCNotification,
+        notification: RPCNotificationMethod,
         subscriberId: SubscriberId,
         responseType: NotificationResponse.Type
     ) -> AnyPublisher<NotificationResponse, Never> where NotificationResponse: Decodable {

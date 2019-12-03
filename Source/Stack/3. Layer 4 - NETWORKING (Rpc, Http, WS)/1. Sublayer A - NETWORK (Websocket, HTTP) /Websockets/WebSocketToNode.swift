@@ -50,11 +50,9 @@ public final class WebSocketToNode:
     // MARK: Private Properties
     private let webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>
     
-    private let receivedMessagesSubject = PassthroughSubject<String, Never>()
+    private var listeners = [ListenerKey: Listener]()
     
-    private var queuedOutgoingMessages = [String]()
     private var cancellables = Set<AnyCancellable>()
-    private var numberOfSubscriptions: Int = 0
     
     // `internal` only for test purposes, otherwise `private`
     internal init(node: Node, webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>) {
@@ -99,7 +97,7 @@ public extension WebSocketToNode {
     
     @discardableResult
     func close(strategy: WebSocketClosingStrategy = .ifInUseSkipClosing) -> CloseWebSocketResult {
-        if strategy == .ifInUseSkipClosing && numberOfSubscriptions > 0 {
+        if strategy == .ifInUseSkipClosing && listeners.count > 0 {
             return .didNotClose(reason: .isInUse)
         }
         closeDisregardingListeners()
@@ -131,25 +129,22 @@ public extension WebSocketToNode {
 
 // MARK: FullDuplexCommunicationChannel
 public extension WebSocketToNode {
-    /// Messages received over webSockets, required by `FullDuplexCommunicationChannel`
-    var messages: AnyPublisher<String, Never> {
-        receivedMessagesSubject.trackNumberOfSubscribers { [weak self] update in
-            switch update {
-            case .increased: self?.numberOfSubscriptions += 1
-            case .decreased: self?.numberOfSubscriptions -= 1
-            }
-            
-        }
-    }
     
     func sendMessage(_ message: String) {
         guard isConnected else {
-            queuedOutgoingMessages.append(message)
-            return
+            fatalError("Should not send message before we are connected...")
         }
 //        Swift.print("verbose: Sending message of length: #\(message.count) chars")
 //        Swift.print("verbose: Sending message:\n<\(message)>")
         socket?.write(string: message)
+    }
+    
+    func addListener(_ listener: Listener, forKey key: ListenerKey) -> RemoveListener {
+        assert(listeners[key] == nil)
+        listeners[key] = listener
+        return { [weak self] in
+            self?.listeners.removeValue(forKey: key)
+        }
     }
 }
 
@@ -157,7 +152,7 @@ public extension WebSocketToNode {
 // It is unfortunate that StarScream decided to spell out `webSocket` like `websocket` in their prefix of their delegate methods.
 public extension WebSocketToNode {
     func websocketDidConnect(socket: WebSocketClient) {
-//        Swift.print("verbose: Websocket did connect, to node: \(node)")
+        webSocketStatusSubject.send(.connected)
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Swift.Error?) {
@@ -175,14 +170,8 @@ public extension WebSocketToNode {
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        if text.contains("Radix.welcome") {
-//            Swift.print("verbose: Received welcome message, which we ignore, proceed sending queued")
-            webSocketStatusSubject.send(.connected) // Connected and ready to read messages from, since we have discarded this first Welcome message
-            sendQueued()
-        } else {
-//            Swift.print("debug: Received response over webSockets (text of #\(text.count) chars)")
-//            Swift.print("verbose: Received response over webSockets: \n<\(text)>\n")
-            receivedMessagesSubject.send(text)
+        listeners.values.forEach { listener in
+            listener.send(text)
         }
     }
     
@@ -219,13 +208,7 @@ private extension WebSocketToNode {
 
 // MARK: Helpers
 private extension WebSocketToNode {
-    func sendQueued() {
-        queuedOutgoingMessages.forEach {
-            self.sendMessage($0)
-        }
-        queuedOutgoingMessages = []
-    }
-    
+
     func closeDisregardingListeners() {
         webSocketStatusSubject.send(.closing)
         socket?.disconnect()

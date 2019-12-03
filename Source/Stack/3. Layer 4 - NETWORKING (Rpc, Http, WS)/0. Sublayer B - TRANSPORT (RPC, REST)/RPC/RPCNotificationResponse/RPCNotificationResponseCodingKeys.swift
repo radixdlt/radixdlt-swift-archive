@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,9 +24,6 @@
 
 import Foundation
 
-public protocol BaseRPCResponseResult {}
-
-public protocol RPCResponseResultConvertible: Decodable, BaseRPCResponseResult {
-    associatedtype Model: Decodable
-    var model: Model { get }
+public enum RPCNotificationResponseCodingKeys: String, CodingKey {
+    case params, method
 }

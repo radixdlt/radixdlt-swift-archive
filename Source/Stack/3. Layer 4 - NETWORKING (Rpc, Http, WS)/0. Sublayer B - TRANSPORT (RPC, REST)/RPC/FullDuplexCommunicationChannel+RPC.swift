@@ -27,77 +27,57 @@ import Combine
 
 extension FullDuplexCommunicationChannel {
     
-    func responseOrErrorForMessage<Model>(requestId: String) -> AnyPublisher<Model, RPCError> where Model: Decodable {
-        return resultForMessage(parseMode: .responseOnRequest(withId: requestId))
+    func responseOrErrorForMessage<Model>(requestId: String) -> AnyPublisher<Model, Never> where Model: Decodable {
+        addListener(decodeAs: RPCCallResponse<Model>.self, identifier: requestId)
+            .filter { $0.id == requestId }
+            .map { $0.result }
+            .eraseToAnyPublisher()
     }
     
-    func observeNotification<Model>(_ notification: RPCNotification, subscriberId: SubscriberId) -> AnyPublisher<Model, Never> where Model: Decodable {
-        return Publishers.Merge(
-            Empty<Model, Never>.init(completeImmediately: false), // never complete
-            self.resultForMessage(
-                parseMode: .parseAsNotification(notification, subscriberId: subscriberId)
-            ).catch { (rpcError: RPCError) -> AnyPublisher<Model, Never> in
-                fatalError("TODO Combine handle rpcError: \(rpcError)")
-            }
-        ).eraseToAnyPublisher()
+    func observeNotification<Model>(
+        _ method: RPCNotificationMethod,
+        subscriberId: SubscriberId
+    ) -> AnyPublisher<Model, Never> where Model: Decodable {
+        addListener(decodeAs: RPCNotificationResponse<Model>.self, identifier: subscriberId.value)
+            .filter { $0.subscriberId == subscriberId }
+            .filter { $0.method == method }
+            .map { $0.params }
+            .eraseToAnyPublisher()
+        
     }
-}
-
-private enum ParseJsonRpcResponseMode {
-    case parseAsNotification(RPCNotification, subscriberId: SubscriberId)
-    case responseOnRequest(withId: String)
 }
 
 private extension FullDuplexCommunicationChannel {
-
-    func resultForMessage<Model>(
-        parseMode: ParseJsonRpcResponseMode
-    ) -> AnyPublisher<Model, RPCError> where Model: Decodable {
-        return messages
-            .map { $0.toData() }
-            .filter { self.filterOutRelevant(data: $0, parseMode: parseMode) }
-            .decode(type: Result<RPCResponse<Model>, RPCError>.self, decoder: JSONDecoder())
-            .mapError { castOrKill(instance: $0, toType: DecodingError.self) }
-            .mapError { RPCError(rpcError: .metaError($0)) }
-            .flatMapResult()
-            .map { $0.model }
-            .eraseToAnyPublisher()
-        
-        //            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-        //            .subscribeOn(MainScheduler.instance)
-    }
     
-    func filterOutRelevant(data: Data, parseMode: ParseJsonRpcResponseMode) -> Bool {
-        guard
-            let jsonObj = try? JSONSerialization.jsonObject(with: data, options: []) as? JSON
-            else {
-                incorrectImplementation("not json!")
-        }
+    func addListener<RPCTopLevelResponse: Decodable>(
+        decodeAs _: RPCTopLevelResponse.Type,
+        identifier: String
+    ) -> AnyPublisher<RPCTopLevelResponse, Never> {
         
-        switch parseMode {
-        case .parseAsNotification(let expectedNotification, let expectedSubscriberId):
-            guard
-                let notificationMethodFromResponseAsString = jsonObj[RPCResponseLookingLikeRequestCodingKeys.method.rawValue] as? String,
-                let notificationMethodFromResponse = RPCNotification(rawValue: notificationMethodFromResponseAsString),
-                notificationMethodFromResponse == expectedNotification,
-                let subscriberIdWrapperJson = jsonObj[RPCResponseLookingLikeRequestCodingKeys.params.rawValue] as? JSON,
-                let subscriberIdFromResponseAsString = subscriberIdWrapperJson["subscriberId"] as? String,
-                case let subscriberIdFromResponse = SubscriberId(validated: subscriberIdFromResponseAsString),
-                subscriberIdFromResponse == expectedSubscriberId
-                else {
-                    return false
+        let messageSubject = PassthroughSubject<String, Never>()
+        let removeListener = addListener(messageSubject, forKey: ListenerKey(UUID.init()))
+
+        return messageSubject
+            .flatMap { webSocketMessage -> AnyPublisher<RPCTopLevelResponse, Never> in
+                do {
+                    let data = webSocketMessage.toData()
+                    let decoded = try JSONDecoder().decode(RPCTopLevelResponse.self, from: data)
+                    return Just(decoded).eraseToAnyPublisher()
+                } catch {
+                    if webSocketMessage.contains(identifier) {
+                        Swift.print("\n\n⚡️Suppressed error when decoding \(RPCTopLevelResponse.self)\n\nError: \(error)\n\nFrom json:\n<\n\(webSocketMessage)\n>\n")
+                    }
+                    return Empty<RPCTopLevelResponse, Never>(completeImmediately: false)
+                        .eraseToAnyPublisher()
+                }
             }
-            return true
-            
-        case .responseOnRequest(let rpcRequestId):
-            guard
-                let requestIdFromResponse = jsonObj[RPCResponseResultWithRequestIdCodingKeys.id.rawValue] as? String,
-                requestIdFromResponse == rpcRequestId
-                else {
-                    return false
-                    
-            }
-            return true
-        }
+            .handleEvents(
+//                receiveOutput: { Swift.print("✅ rpc model over ws: \($0)") },
+                receiveCompletion: { _ in removeListener() },
+                receiveCancel: { removeListener() }
+            )
+            .subscribe(on: RadixSchedulers.mainThreadScheduler)
+            .receive(on: RadixSchedulers.backgroundScheduler)
+            .eraseToAnyPublisher()
     }
 }

@@ -24,26 +24,29 @@
 
 import Foundation
 
-// swiftlint:disable colon opening_brace
+public struct RPCNotificationResponse<Model>: Decodable where Model: Decodable {
 
-public struct RPCCallResponse<Model>:
-    Decodable,
-    RPCResponseResultConvertible
-    where
-    Model: Decodable
-{
-    // swiftlint:enable colon opening_brace
-    
-    public let result: Model
-    public let id: String
-}
-
-// MARK: RPCResponseResultConvertible
-public extension RPCCallResponse {
-    var model: Model { result }
+    public let params: Model
+    public let method: RPCNotificationMethod
+    public let subscriberId: SubscriberId
 }
 
 // MARK: Codable
-public extension RPCCallResponse {
-    typealias CodingKeys = RPCCallResponseCodingKeys
+public extension RPCNotificationResponse {
+    typealias CodingKeys = RPCNotificationResponseCodingKeys
+    
+    private enum NestedKey: String, CodingKey {
+        case subscriberId
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        params = try container.decode(Model.self, forKey: .params)
+        method = try container.decode(RPCNotificationMethod.self, forKey: .method)
+        
+        // `SubscriberId` is one level down, nested inside `params`
+        let paramsNestedContainer = try container.nestedContainer(keyedBy: NestedKey.self, forKey: .params)
+        self.subscriberId = try paramsNestedContainer.decode(SubscriberId.self, forKey: .subscriberId)
+    }
 }
+

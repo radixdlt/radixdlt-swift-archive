@@ -155,7 +155,8 @@ private extension TransferTokensTests {
         try waitForAction(
             ofType: TransferTokensAction.self,
             in: pendingTransaction,
-            description: description
+            description: description,
+            line: line
         ) { transferTokensAction in
             
             TransactionError.actionsToAtomError(

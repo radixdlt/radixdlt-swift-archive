@@ -192,7 +192,8 @@ private extension MintTokensTests {
         try waitForAction(
             ofType: MintTokensAction.self,
             in: pendingTransaction,
-            description: description
+            description: description,
+            line: line
         ) { mintTokensAction in
             
             TransactionError.actionsToAtomError(

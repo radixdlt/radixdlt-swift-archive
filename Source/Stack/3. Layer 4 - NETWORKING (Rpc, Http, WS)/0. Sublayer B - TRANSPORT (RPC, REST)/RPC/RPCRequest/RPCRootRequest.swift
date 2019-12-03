@@ -26,7 +26,7 @@ import Foundation
 
 public enum RPCRootRequest {
     case fireAndForget(RPCMethod)
-    case sendAndListenToNotifications(RPCMethod, RPCNotification)
+    case sendAndListenToNotifications(RPCMethod, RPCNotificationMethod)
 }
 
 public extension RPCRootRequest {

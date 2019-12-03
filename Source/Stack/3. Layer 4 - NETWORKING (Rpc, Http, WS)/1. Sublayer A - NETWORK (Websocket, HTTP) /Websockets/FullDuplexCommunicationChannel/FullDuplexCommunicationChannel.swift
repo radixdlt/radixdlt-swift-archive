@@ -28,5 +28,12 @@ import Combine
 /// A channel open for communication in both directions, e.g. WebSockets
 public protocol FullDuplexCommunicationChannel: AnyObject {
     func sendMessage(_ message: String)
-    var messages: AnyPublisher<String, Never> { get }
+    
+    func addListener(_ listener: Listener, forKey key: ListenerKey) -> RemoveListener
+}
+
+public extension FullDuplexCommunicationChannel {
+    typealias ListenerKey = AnyHashable
+    typealias Listener = PassthroughSubject<String, Never>
+    typealias RemoveListener = () -> Void
 }
