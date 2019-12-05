@@ -27,7 +27,6 @@ import Foundation
 import Combine
 import Entwine
 
-
 // swiftlint:disable colon opening_brace
 
 public final class WebSocketToNode:
@@ -44,21 +43,28 @@ public final class WebSocketToNode:
     
     /// The pending webSocket to the `node`
     private var webSocketTask: URLSessionWebSocketTask?
-
+    
     // MARK: Private Properties
     private let webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>
     
     private lazy var urlSession = URLSession(
         configuration: .default,
         delegate: self,
-        delegateQueue: OperationQueue()
+        delegateQueue: OperationQueue.main
     )
     
-    private var listeners = [ListenerKey: Listener]()
+    private var listeners = [UUID: Listener]()
     
     private var cancellables = Set<AnyCancellable>()
     
-    private let dispatchQueue: DispatchQueue
+    private lazy var dispatchQueue = DispatchQueue(
+        label: "com.radixdlt.ws-to-node-\(node.webSocketsUrl.url.absoluteURL)",
+        qos: .utility,
+//        attributes: .concurrent,
+//        autoreleaseFrequency: .never,
+        target: nil
+    )
+    
     
     internal init(
         node: Node,
@@ -66,14 +72,6 @@ public final class WebSocketToNode:
     ) {
         self.webSocketStatusSubject = webSocketStatusSubject
         self.node = node
-        
-        self.dispatchQueue = DispatchQueue(
-            label: "com.radixdlt.ws-to-node-\(node.hypertextUrl.url)",
-            qos: .background,
-//            attributes: .initiallyInactive,
-//            autoreleaseFrequency: .never,
-            target: nil
-        )
     }
     
     deinit {
@@ -116,23 +114,28 @@ public extension WebSocketToNode {
 public extension WebSocketToNode {
     
     func sendMessage(_ message: String) {
-        guard isConnected else {
-            fatalError("Should not send message before we are connected...")
-        }
+        guard isConnected else { return }
         
         webSocketTask?.send(.string(message)) { error in
             if let error = error {
-//                fatalError("Failed to send message over websocket to node, error: \(error)")
-                Swift.print("🔌☢️ Failed to send message, error: \(error)")
+                // TODO forward errors to listener?
+                print("🔌☢️ Failed to send message, error: \(error)")
             }
         }
     }
     
-    func addListener(_ listener: Listener, forKey key: ListenerKey) -> RemoveListener {
-        listeners[key] = listener
+    func addListener(_ listener: Listener) -> RemoveListener {
+        let key = UUID()
+        self.syncronize { [weak self] in
+            guard let nonWeakSelf = self else { return }
+            nonWeakSelf.listeners[key] = listener
+        }
         
-        return { [weak self] in
-            self?.listeners.removeValue(forKey: key)
+        return { [unowned self] in
+            self.syncronize { [weak self] in
+                guard let nonWeakSelf = self else { return }
+                nonWeakSelf.listeners.removeValue(forKey: key)
+            }
         }
     }
 }
@@ -156,14 +159,14 @@ public extension WebSocketToNode {
             changeStatus(to: .failed)
         }
     }
-
+    
 }
 
 // MARK: - Private
 
 // MARK: Helpers
 private extension WebSocketToNode {
-
+    
     func tearDown() {
         print("🔌💣 tear down")
         cancellables = Set<AnyCancellable>()
@@ -172,10 +175,12 @@ private extension WebSocketToNode {
     }
     
     func cleanUpListeners() {
-        listeners.values.forEach {
-            $0.send(completion: .finished)
+        self.syncronize { [weak self] in
+            self?.listeners.values.forEach {
+                $0.send(completion: .finished)
+            }
+            self?.listeners = [:]
         }
-        listeners = [:]
     }
     
     func closeDisregardingListeners(closeCode: URLSessionWebSocketTask.CloseCode, reason: Data? = nil) {
@@ -202,14 +207,16 @@ private extension WebSocketToNode {
     }
     
     func startReceivingMessages() {
-        webSocketTask?.receive { [weak self] messageResult in
+        webSocketTask?.receive { [unowned self] messageResult in
             guard case .success(let message) = messageResult else {
-//                fatalError("Error: \(messageResult)")
-                Swift.print("🔌☢️ error receiving \(messageResult)")
+                // TODO forward errors to listener?
+                print("🔌☢️ error receiving \(messageResult)")
                 return
             }
-            self?.forwardMessageToListeners(message)
-            self?.startReceivingMessages()
+            self.syncronize { [weak self] in
+                self?.forwardMessageToListeners(message)
+            }
+            self.startReceivingMessages()
         }
     }
     
@@ -219,6 +226,7 @@ private extension WebSocketToNode {
         ) { [weak self] in
             self?.webSocketTask?.sendPing { error in
                 if let error = error {
+                    // TODO forward errors to listener?
                     Swift.print("🔌☢️ Error pinging: \(error)")
                 }
             }
@@ -231,14 +239,23 @@ private extension WebSocketToNode {
     }
     
     func forwardMessageToListeners(_ message: URLSessionWebSocketTask.Message) {
-        RadixSchedulers.backgroundScheduler.async { [unowned self] in
-//        dispatchQueue.sync { [weak self] in
-            self.listeners.values.forEach { listener in
-                self.dispatchQueue.sync {
-                    listener.send(message)
-                }
+        listeners.values.forEach { listener in
+            listener.send(message)
+        }
+    }
+    
+    func syncronize(_ task: @escaping () -> Void) {
+//        RadixSchedulers.backgroundScheduler.async { [weak self] in
+//            guard let nonWeakSelf = self else { return }
+//            nonWeakSelf.dispatchQueue.sync {
+//                task()
+//            }
+//        }
+       
+        dispatchQueue.async {
+            RadixSchedulers.backgroundScheduler.sync {
+                task()
             }
-            
         }
     }
 }
@@ -249,7 +266,7 @@ private extension WebSocketToNode {
     func changeStatus(to status: WebSocketStatus) {
         webSocketStatusSubject.send(status)
     }
-        
+    
     var shouldConnect: Bool {
         guard !isConnecting else { return false }
         return isDisconnected || isFailed

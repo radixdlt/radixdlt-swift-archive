@@ -29,11 +29,10 @@ import Combine
 public protocol FullDuplexCommunicationChannel: AnyObject {
     func sendMessage(_ message: String)
     
-    func addListener(_ listener: Listener, forKey key: ListenerKey) -> RemoveListener
+    func addListener(_ listener: Listener) -> RemoveListener
 }
 
 public extension FullDuplexCommunicationChannel {
-    typealias ListenerKey = AnyHashable
     typealias Listener = PassthroughSubject<URLSessionWebSocketTask.Message, Never>
     typealias RemoveListener = () -> Void
 }

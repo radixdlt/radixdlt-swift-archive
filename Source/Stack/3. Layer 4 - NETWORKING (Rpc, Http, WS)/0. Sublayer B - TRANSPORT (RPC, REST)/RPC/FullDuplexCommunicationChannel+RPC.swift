@@ -55,7 +55,7 @@ private extension FullDuplexCommunicationChannel {
     ) -> AnyPublisher<RPCTopLevelResponse, Never> {
         
         let listener = Listener()
-        let removeListener = addListener(listener, forKey: ListenerKey(UUID.init()))
+        let removeListener = addListener(listener)
 
         return listener
             .map { (messageFromWebSocket: URLSessionWebSocketTask.Message) -> String in
