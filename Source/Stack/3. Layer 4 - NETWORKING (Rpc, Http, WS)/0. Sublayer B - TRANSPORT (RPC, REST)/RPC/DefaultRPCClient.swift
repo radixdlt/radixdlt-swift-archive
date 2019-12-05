@@ -167,18 +167,18 @@ internal extension DefaultRPCClient {
     }
     
     func sendStartSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
-        sendStartOrCancelSubscription(request: request, mode: .start)
+        sendStartOrCancelSubscription(request: request)
     }
     
     func sendCancelSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
-        sendStartOrCancelSubscription(request: request, mode: .cancel)
+        sendStartOrCancelSubscription(request: request)
     }
 }
 
 // MARK: - Private
 private extension DefaultRPCClient {
     
-    func sendStartOrCancelSubscription(request: RPCRootRequest, mode: SubscriptionMode) -> AnyPublisher<Never, Never> {
+    func sendStartOrCancelSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
         
         self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
             .filter { rpcSubscriptionStartOrCancel in
@@ -196,19 +196,6 @@ private extension DefaultRPCClient {
             }
             .eraseToAnyPublisher()
     }
-}
-
-private extension RPCClientError {
-    init(subscriptionMode: SubscriptionMode) {
-        switch subscriptionMode {
-        case .start: self = .failedToStartAtomSubscription
-        case .cancel: self = .failedToCancelAtomSubscription
-        }
-    }
-}
-
-private enum SubscriptionMode: Int, Equatable {
-    case start, cancel
 }
 
 private extension RPCRequest {
