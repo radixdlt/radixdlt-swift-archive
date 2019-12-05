@@ -27,7 +27,7 @@ import BitcoinKit
 import XCTest
 @testable import RadixSDK
 
-class PrivateKeyTests: XCTestCase {
+class PrivateKeyTests: TestCase {
     
     override func setUp() {
         super.setUp()

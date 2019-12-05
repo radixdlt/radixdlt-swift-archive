@@ -231,6 +231,7 @@ private extension SubmitAtomEpicTests {
         
         doTest(
             epic: epic,
+            line: line,
             timeout: overridingTimeoutIfPresent,
             resultingPublisherTransformation: { actionSubject, _, output in
                 output

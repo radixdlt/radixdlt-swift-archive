@@ -33,9 +33,10 @@ extension TimeInterval {
 
 class NetworkEpicTestCase: TestCase {
     
-        func doTest<Epic>(
+    func doTest<Epic>(
         epic: Epic,
         
+        file: StaticString = #file,
         line: UInt = #line,
         
         timeout: TimeInterval = .defaultNetworkEpicTimeout,
@@ -52,6 +53,7 @@ class NetworkEpicTestCase: TestCase {
         
         doTest(
             epic: epic,
+            file: file,
             line: line,
             timeout: timeout,
             resultingPublisherTransformation: { _, _, output in output.prefix(expectedNumberOfOutput)^ },
@@ -64,6 +66,7 @@ class NetworkEpicTestCase: TestCase {
     func doTest<Epic>(
         epic: Epic,
         
+        file: StaticString = #file,
         line: UInt = #line,
         
         timeout: TimeInterval = .defaultNetworkEpicTimeout,
@@ -103,7 +106,14 @@ class NetworkEpicTestCase: TestCase {
         
         input(actionsSubject, networkStateSubject)
         
-        wait(for: [expectation], timeout: timeout)
+        if XCTWaiter().wait(for: [expectation], timeout: timeout) ==  .timedOut {
+            self.recordFailure(
+                withDescription: "Exceeded timeout of \(timeout) seconds, with unfulfilled expectations: \(expectation)",
+                inFile: file.description,
+                atLine: Int(line),
+                expected: false
+            )
+        }
         
         outputtedNodeActionsHandler(receivedValues)
         

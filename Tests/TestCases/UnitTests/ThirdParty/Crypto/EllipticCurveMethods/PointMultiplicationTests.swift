@@ -27,7 +27,7 @@ import Foundation
 import XCTest
 @testable import RadixSDK
 
-class PointMultiplicationTests: XCTestCase {
+class PointMultiplicationTests: TestCase {
     func testPointMultiplication() {
         let G = Secp256k1.G
      

@@ -59,11 +59,14 @@ public extension DefaultWebSocketsManager {
         }
         
         return Publishers.Throttle(
-            upstream: Just<CloseWebSocketResult>(tryClose(socket: webSocket, strategy: strategy)),
+            upstream: Just(true),
             interval: 10,
             scheduler: RadixSchedulers.mainThreadScheduler,
             latest: true
         )
+            .compactMap { [weak self] _ in
+                self?.tryClose(socket: webSocket, strategy: strategy)
+            }
             .eraseToAnyPublisher()
     }
 }

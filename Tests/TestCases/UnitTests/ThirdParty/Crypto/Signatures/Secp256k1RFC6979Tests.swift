@@ -30,7 +30,7 @@ import XCTest
 /// Sanity checks of Signing implementation of RFC6979 - Deterministic usage of ECDSA: https://tools.ietf.org/html/rfc6979
 /// Test vectors: https://github.com/trezor/trezor-crypto/blob/957b8129bded180c8ac3106e61ff79a1a3df8893/tests/test_check.c#L1959-L1965
 /// Signature data from: https://github.com/oleganza/CoreBitcoin/blob/master/CoreBitcoinTestsOSX/BTCKeyTests.swift
-class Secp256k1RFC6979Tests: XCTestCase {
+class Secp256k1RFC6979Tests: TestCase {
     
     override func setUp() {
         super.setUp()

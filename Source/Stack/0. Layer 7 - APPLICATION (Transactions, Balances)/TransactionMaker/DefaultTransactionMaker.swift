@@ -83,14 +83,17 @@ public extension DefaultTransactionMaker {
 
 // MARK: TransactionToAtomMapper
 public extension DefaultTransactionMaker {
-    func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Throws<Atom, ActionsToAtomError> {
-        return try transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
+    func atomFrom(
+        transaction: Transaction,
+        addressOfActiveAccount: Address
+    ) throws -> Throws<Atom, ActionsToAtomError> {
+        try transactionToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
     }
 }
 
 // MARK: - TransactionMaker
 public extension DefaultTransactionMaker {
-    func make(transaction: Transaction, to originNode: Node?) -> PendingTransaction {
+    func commitAndPush(transaction: Transaction, to originNode: Node?) -> PendingTransaction {
         
         let unsignedAtom = unsignedAtomFrom(transaction: transaction)
         let signedAtom = sign(atom: unsignedAtom)

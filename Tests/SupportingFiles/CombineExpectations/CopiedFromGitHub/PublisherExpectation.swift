@@ -53,7 +53,7 @@ public protocol PublisherExpectation {
     func _value() throws -> Output
 }
 
-extension XCTestCase {
+extension TestCase {
     /// Waits for the publisher expectation to fulfill, and returns the
     /// expected value.
     ///

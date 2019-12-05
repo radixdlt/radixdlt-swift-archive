@@ -33,12 +33,14 @@ class IntegrationTest: TestCase {
     
     // Same RadixApplicationClient for each test per test file, but changing
     // Alice's account before each test.
-    lazy var aliceApp = RadixApplicationClient(
-        bootstrapConfig: UniverseBootstrap.localhostTwoNodes,
+    static let bootStrap = UniverseBootstrap.localhostTwoNodes
+    lazy var applicationClient = RadixApplicationClient(
+        bootstrapConfig: IntegrationTest.bootStrap,
         identity: aliceIdentity
     )
     
-    var bobIdentity: AbstractIdentity!
+    var aliceAccount: Account!
+    var bobAccount: Account!
     var alice: Address!
     var bob: Address!
     var carolAccount: Account!
@@ -50,30 +52,41 @@ class IntegrationTest: TestCase {
         super.setUp()
         
         aliceIdentity = AbstractIdentity()
-        
+        aliceAccount = aliceIdentity.snapshotActiveAccount
+        alice = applicationClient.addressOf(account: aliceAccount)
+
         // New account before each test.
-        aliceApp.changeAccount(to: aliceIdentity.snapshotActiveAccount)
+        applicationClient.changeAccount(to: aliceAccount)
         
-        bobIdentity = AbstractIdentity()
+        bobAccount = Account()
+        aliceIdentity.addAccount(bobAccount)
         carolAccount = Account()
-      
-        alice = aliceApp.addressOfActiveAccount
-        bob = aliceApp.addressOf(account: bobIdentity.snapshotActiveAccount)
-        carol = aliceApp.addressOf(account: carolAccount)
-        diana = aliceApp.addressOf(account: dianaAccount)
+
+        bob = applicationClient.addressOf(account: bobAccount)
+        carol = applicationClient.addressOf(account: carolAccount)
+        diana = applicationClient.addressOf(account: dianaAccount)
+    }
+    
+    private static var isConnectedToHostForIntegrationTest = false
+    class override func setUp() {
+        super.setUp()
+        IntegrationTest.isConnectedToHostForIntegrationTest = isConnectedToLocalhost(bootstrap: IntegrationTest.bootStrap)
     }
 
     override func invokeTest() {
-        guard isConnectedToLocalhost() else { return }
+        guard IntegrationTest.isConnectedToHostForIntegrationTest else {
+            XCTFail("Not connected to any node")
+            return
+        }
         super.invokeTest()
     }
 }
 
 extension IntegrationTest {
+    
     func waitForTransactionToFinish(
         _ pendingTransaction: PendingTransaction,
         timeout: TimeInterval = .enoughForPOW,
-        
         file: StaticString = #file,
         line: UInt = #line
     ) throws {

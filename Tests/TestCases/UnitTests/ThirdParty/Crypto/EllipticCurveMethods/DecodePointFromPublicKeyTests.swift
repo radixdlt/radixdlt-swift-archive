@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-class DecodePointTests: XCTestCase {
+class DecodePointTests: TestCase {
     func testPointDecoding() {
         do {
             

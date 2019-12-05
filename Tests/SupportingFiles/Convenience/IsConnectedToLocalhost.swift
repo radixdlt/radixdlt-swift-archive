@@ -23,23 +23,32 @@
 //
 
 import Foundation
+@testable import RadixSDK
 
 private var timeoutForLocalhostLookup = DispatchTime.distantFuture
-func isConnectedToLocalhost(timeout: DispatchTime? = nil) -> Bool {
+func isConnectedToLocalhost(
+    bootstrap: BootstrapConfig,
+    timeout: DispatchTime? = nil
+) -> Bool {
     if let timeout = timeout {
         timeoutForLocalhostLookup = timeout
     }
-    return isConnectedToLocalhost
-}
 
-private var isConnectedToLocalhost: Bool = {
     var isConnected = false
-    let url = URL(string: "http://127.0.0.1:8080/api/network")!
+    
+    let url: URL
+    
+    switch bootstrap.discoveryMode {
+    case .byDiscoveryEpics: return false
+    case .byInitialNetworkOfNodes(let nodes):
+        let baseUrl = nodes.contents[0].hypertextUrl.url
+        url = baseUrl.appendingPathComponent("network")
+    }
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     
-    let (data, response, error) = URLSession(configuration: .default)
-        .synchronousDataTask(request: request)
+    let (data, _, error) = URLSession(configuration: .default).synchronousDataTask(request: request)
+    
     if let error = error {
         print("⚠️ Not connect to localhost, error: \(error)")
     } else if let _ = data {
@@ -47,7 +56,8 @@ private var isConnectedToLocalhost: Bool = {
         isConnected = true
     }
     return isConnected
-}()
+    
+}
 
 private extension URLSession {
     func synchronousDataTask(request: URLRequest) -> (data: Data?, response: URLResponse?, error: Error?) {

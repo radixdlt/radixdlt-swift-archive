@@ -118,8 +118,8 @@ public extension RadixApplicationClient {
 
 // MARK: TransactionMaker
 public extension RadixApplicationClient {
-    func make(transaction: Transaction, to originNode: Node?) -> PendingTransaction {
-        transactionMaker.make(transaction: transaction, to: originNode)
+    func commitAndPush(transaction: Transaction, to originNode: Node?) -> PendingTransaction {
+        transactionMaker.commitAndPush(transaction: transaction, to: originNode)
     }
 }
 

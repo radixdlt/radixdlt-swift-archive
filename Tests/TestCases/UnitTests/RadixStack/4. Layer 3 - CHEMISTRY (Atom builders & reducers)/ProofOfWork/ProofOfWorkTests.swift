@@ -42,31 +42,25 @@ class ProofOfWorkTest: TestCase {
     
     func test10LeadingZeros() {
         measure { // strictly less than 0.01 sec without optimization
-            doTest(zeros: 10, expectedNonce: 198)
+            doTest(zeros: 10, expectedNonce: 198, timeout: 1)
         }
     }
     
     func test12LeadingZeros() {
-        doTest(zeros: 12, expectedNonce: 6825)
+        doTest(zeros: 12, expectedNonce: 6825, timeout: 1)
     }
     
     func test14LeadingZeros() {
-        doTest(zeros: 14, expectedNonce: 9255)
+        doTest(zeros: 14, expectedNonce: 9255, timeout: 1)
     }
-    
-    func test14LeadingZeroRx() {
-        doTest(
-            zeros: 14,
-            expectedNonce: 9255
-        )
-    }
-    
+        
     func omitted_testSlowVectors() {
         func test(vector: Vector) {
             
             doTest(
                 zeros: vector.zeros,
                 expectedNonce: vector.expectedResultingNonce,
+                timeout: .enoughForPOW,
                 magic: vector.magic,
                 seed: vector.seed
             )
@@ -79,9 +73,13 @@ private extension ProofOfWorkTest {
     func doTest(
         zeros: ProofOfWork.NumberOfLeadingZeros,
         expectedNonce: Nonce,
+        timeout: TimeInterval = 0.1,
         magic overridingMagic: Magic? = nil,
         seed overridingSeed: HexString? = nil,
-        sha256TwiceHasher: SHA256TwiceHashing = SHA256TwiceHasher()
+        sha256TwiceHasher: SHA256TwiceHashing = SHA256TwiceHasher(),
+        
+        file: StaticString = #file,
+        line: UInt = #line
     ) {
         
         let expectation = XCTestExpectation(description: self.debugDescription)
@@ -95,17 +93,30 @@ private extension ProofOfWorkTest {
         )
 
         var pow: ProofOfWork?
-        var cancellable: AnyCancellable?
-        cancellable = worker.work(seed: seedUsed.asData, magic: magicUsed).sink(
+        
+        let cancellable = worker.work(
+            seed: seedUsed.asData,
+            magic: magicUsed
+        )
+        .sink(
             receiveCompletion: { completion in
                 expectation.fulfill()
-        },
-            receiveValue: { pow = $0 })
+            },
+            receiveValue: { pow = $0 }
+        )
+        
+        if XCTWaiter().wait(for: [expectation], timeout: timeout) ==  .timedOut {
+            self.recordFailure(
+                withDescription: "POW time out after \(timeout) seconds",
+                inFile: file.description,
+                atLine: Int(line),
+                expected: false
+            )
+        }
         
         
-        wait(for: [expectation], timeout: .enoughForPOW)
-        XCTAssertEqual(pow?.nonce, expectedNonce)
-        XCTAssertNotNil(cancellable)
+        XCTAssertEqual(pow?.nonce, expectedNonce, line: line)
+        XCTAssertNotNil(cancellable, line: line)
         
     }
 }

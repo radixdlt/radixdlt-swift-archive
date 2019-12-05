@@ -26,18 +26,18 @@ import Foundation
 import Combine
 
 public protocol TransactionMaker: TransactionToAtomMapper {
-    func make(transaction: Transaction, to originNode: Node?) -> PendingTransaction
+    func commitAndPush(transaction: Transaction, to originNode: Node?) -> PendingTransaction
 }
 
 public extension TransactionMaker {
     
-    func make(transaction: Transaction) -> PendingTransaction {
-        make(transaction: transaction, to: nil)
+    func commitAndPush(transaction: Transaction) -> PendingTransaction {
+        commitAndPush(transaction: transaction, to: nil)
     }
     
     func execute(actions: [UserAction], to originNode: Node? = nil) -> PendingTransaction {
         let transaction = Transaction(actions: actions)
-        return make(transaction: transaction, to: originNode)
+        return commitAndPush(transaction: transaction, to: originNode)
     }
     
     func execute(actions: UserAction..., to originNode: Node? = nil) -> PendingTransaction {

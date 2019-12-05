@@ -33,12 +33,12 @@ class SendMessageTests: IntegrationTest {
         
         // WHEN: I send a non empty message without encryption
         let message = "Hey Bob, this is plain text"
-        let pendingTransaction = aliceApp.sendPlainTextMessage(message, to: bob)
+        let pendingTransaction = applicationClient.sendPlainTextMessage(message, to: bob)
         
         // THEN: I see that action completes successfully
         try waitForTransactionToFinish(pendingTransaction)
         
-        let sentMessage = try waitForFirstValue(of: aliceApp.observeMyMessages())
+        let sentMessage = try waitForFirstValue(of: applicationClient.observeMyMessages())
         
         let decryptedMessage = sentMessage.textMessage()
         XCTAssertEqual(decryptedMessage, message)
@@ -48,11 +48,11 @@ class SendMessageTests: IntegrationTest {
         // GIVEN: A RadixApplicationClient
         // WHEN: I send a non empty message with encryption
         let plainTextMessage = "Hey Bob, this is super secret message"
-        let pendingTransaction = aliceApp.sendEncryptedMessage(plainTextMessage, to: bob)
+        let pendingTransaction = applicationClient.sendEncryptedMessage(plainTextMessage, to: bob)
         
         try waitForTransactionToFinish(pendingTransaction)
         
-        let sentMessage = try waitForFirstValue(of: aliceApp.observeMyMessages())
+        let sentMessage = try waitForFirstValue(of: applicationClient.observeMyMessages())
         XCTAssertEqual(sentMessage.textMessage(), plainTextMessage)
     }
     
@@ -60,20 +60,20 @@ class SendMessageTests: IntegrationTest {
         // GIVEN: A RadixApplicationClient
         // WHEN: I send a non empty message with encryption
         let plainTextMessage = "Hey Bob, this is super secret message"
-        let pendingTransaction = aliceApp.sendMessage(
+        let pendingTransaction = applicationClient.sendMessage(
             action: SendMessageAction.encrypted(from: alice, to: bob, onlyDecryptableBy: [bob], text: plainTextMessage)
         )
         
         try waitForTransactionToFinish(pendingTransaction)
         
-        let sentMessage = try waitForFirstValue(of: aliceApp.observeMyMessages())
+        let sentMessage = try waitForFirstValue(of: applicationClient.observeMyMessages())
         XCTAssertTrue(sentMessage.isEncryptedAndCannotDecrypt)
     }
     
     func testSendEmptyEncrypted() throws {
         // GIVEN: A RadixApplicationClient
         // WHEN: I send an empty message with encryption
-        let pendingTransaction = aliceApp.sendEncryptedMessage("", to: bob)
+        let pendingTransaction = applicationClient.sendEncryptedMessage("", to: bob)
         
         try waitForTransactionToFinish(pendingTransaction)
     }
@@ -83,7 +83,7 @@ class SendMessageTests: IntegrationTest {
         XCTAssertAllInequal(alice, bob, carol)
         
         // WHEN: Alice tries to send a message to Bob claiming to be from Carol
-        let pendingTransaction = aliceApp.sendMessage(
+        let pendingTransaction = applicationClient.sendMessage(
             action: SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: carol, to: bob, text: "Hey Bob, this is Carol.")
         )
         
@@ -99,7 +99,7 @@ class SendMessageTests: IntegrationTest {
         XCTAssertAllInequal(alice, bob, carol)
         
         // WHEN: I send a non empty message with encryption
-        let pendingTransaction = aliceApp.sendEncryptedMessage(
+        let pendingTransaction = applicationClient.sendEncryptedMessage(
             "Hey Bob! Carol and Diana can also decrypt this encrypted message",
             to: bob,
             canAlsoBeDecryptedBy: [carol, diana]

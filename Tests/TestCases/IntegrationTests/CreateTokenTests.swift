@@ -31,7 +31,7 @@ class CreateTokenTests: IntegrationTest {
     func testFailingCreateTokenInSomeoneElseʼsName() throws {
         // GIVEN: An Application API owned by Alice, and identity Bob
         // WHEN: Alice tries to create a token on Bob's behalf
-        let (tokenCreation, _) = aliceApp.createToken(creator: bob)
+        let (tokenCreation, _) = applicationClient.createToken(creator: bob)
         
         // THEN: We get an error
         try waitFor(
@@ -43,7 +43,7 @@ class CreateTokenTests: IntegrationTest {
     func testFailCreatingTokenWithSameRRIAsUniqueId() throws {
         // GIVEN: An Application API owned by Alice, and identity Bob
         let createTokenAction =
-            aliceApp.actionCreateToken(symbol: "FOO")
+            applicationClient.actionCreateToken(symbol: "FOO")
         
         let rri = createTokenAction.identifier
         
@@ -52,7 +52,7 @@ class CreateTokenTests: IntegrationTest {
             createTokenAction
         }
         
-        let tokenCreation = aliceApp.make(transaction: transaction)
+        let tokenCreation = applicationClient.commitAndPush(transaction: transaction)
         
         // THEN: We get an error
         try waitFor(
@@ -65,14 +65,14 @@ class CreateTokenTests: IntegrationTest {
     func testFailCreatingTokenWithSameRRIAsExistingMutableSupplyToken() throws {
         // GIVEN: An Application API owned by Alice, and identity Bob
         let symbol: Symbol = "FOO"
-        let actionCreateMutableToken = aliceApp.actionCreateMultiIssuanceToken(symbol: symbol)
+        let actionCreateMutableToken = applicationClient.actionCreateMultiIssuanceToken(symbol: symbol)
         
         let transaction = Transaction {
             actionCreateMutableToken
-            aliceApp.actionCreateToken(symbol: symbol)
+            applicationClient.actionCreateToken(symbol: symbol)
         }
         
-        let tokenCreation = aliceApp.make(transaction: transaction)
+        let tokenCreation = applicationClient.commitAndPush(transaction: transaction)
         
         // THEN: We get an error
         try waitFor(
@@ -84,14 +84,14 @@ class CreateTokenTests: IntegrationTest {
     func testFailCreatingTokenWithSameRRIAsExistingFixedSupplyToken() throws {
         // GIVEN: An Application API owned by Alice, and identity Bob
         let symbol: Symbol = "FOO"
-        let actionCreateFixedToken = aliceApp.actionCreateFixedSupplyToken(symbol: symbol)
+        let actionCreateFixedToken = applicationClient.actionCreateFixedSupplyToken(symbol: symbol)
         
         let transaction = Transaction {
             actionCreateFixedToken
-            aliceApp.actionCreateToken(symbol: symbol)
+            applicationClient.actionCreateToken(symbol: symbol)
         }
 
-        let tokenCreation = aliceApp.make(transaction: transaction)
+        let tokenCreation = applicationClient.commitAndPush(transaction: transaction)
         
         // THEN: We get an error
         try waitFor(
