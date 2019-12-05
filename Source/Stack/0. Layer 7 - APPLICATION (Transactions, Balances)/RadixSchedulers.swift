@@ -32,7 +32,7 @@ internal extension RadixSchedulers {
     typealias MainThread = DispatchQueue
     typealias BackgroundThread = DispatchQueue
      
-    static let backgroundScheduler: BackgroundThread = .global(qos: .utility)
+    static let backgroundScheduler: BackgroundThread = .global(qos: .background)
     static let mainThreadScheduler: MainThread = .main
 }
 
