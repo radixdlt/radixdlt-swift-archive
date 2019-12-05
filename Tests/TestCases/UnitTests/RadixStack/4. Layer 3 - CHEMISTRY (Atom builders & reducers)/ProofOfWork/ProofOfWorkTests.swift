@@ -104,16 +104,8 @@ private extension ProofOfWorkTest {
             },
             receiveValue: { pow = $0 }
         )
-        
-        if XCTWaiter().wait(for: [expectation], timeout: timeout) ==  .timedOut {
-            self.recordFailure(
-                withDescription: "POW time out after \(timeout) seconds",
-                inFile: file.description,
-                atLine: Int(line),
-                expected: false
-            )
-        }
-        
+
+        wait(for: [expectation], timeout: timeout, description: "POW timed out", file: file, line: line)
         
         XCTAssertEqual(pow?.nonce, expectedNonce, line: line)
         XCTAssertNotNil(cancellable, line: line)

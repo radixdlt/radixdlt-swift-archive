@@ -85,7 +85,21 @@ extension TestCase {
     {
         let expectation = self.expectation(description: description)
         publisherExpectation._setup(expectation)
-        if XCTWaiter().wait(for: [expectation], timeout: timeout) ==  .timedOut {
+        
+        wait(for: [expectation], timeout: timeout, description: description, file: file, line: line)
+        
+        return try publisherExpectation._value()
+    }
+    
+    func wait(
+        for expectations: [XCTestExpectation],
+        timeout: TimeInterval,
+        
+        description: String = "",
+        file: StaticString,
+        line: UInt
+    ) {
+        if XCTWaiter().wait(for: expectations, timeout: timeout) ==  .timedOut {
             self.recordFailure(
                 withDescription: "Exceeded timeout of \(timeout) seconds, with unfulfilled expectations: \(description)",
                 inFile: file.description,
@@ -93,6 +107,5 @@ extension TestCase {
                 expected: false
             )
         }
-        return try publisherExpectation._value()
     }
 }

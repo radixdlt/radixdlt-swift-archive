@@ -105,15 +105,8 @@ class NetworkEpicTestCase: TestCase {
         )
         
         input(actionsSubject, networkStateSubject)
-        
-        if XCTWaiter().wait(for: [expectation], timeout: timeout) ==  .timedOut {
-            self.recordFailure(
-                withDescription: "Exceeded timeout of \(timeout) seconds, with unfulfilled expectations: \(expectation)",
-                inFile: file.description,
-                atLine: Int(line),
-                expected: false
-            )
-        }
+
+        wait(for: [expectation], timeout: timeout, description: description, file: file, line: line)
         
         outputtedNodeActionsHandler(receivedValues)
         
