@@ -121,12 +121,8 @@
 		E61E6BE0238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */; };
 		E61E6BE1238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BDF238C0EE3008C14B0 /* Recorder+Radix.swift */; };
 		E61E6BE4238C356D008C14B0 /* PrefixWhileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3612385980700950312 /* PrefixWhileTests.swift */; };
-		E61E6BE5238C356D008C14B0 /* PublisherFlatMapResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */; };
-		E61E6BE7238C356D008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */; };
 		E61E6BE8238C356D008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */; };
 		E61E6BE9238C356E008C14B0 /* PrefixWhileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3612385980700950312 /* PrefixWhileTests.swift */; };
-		E61E6BEA238C356E008C14B0 /* PublisherFlatMapResultTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */; };
-		E61E6BEC238C356E008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */; };
 		E61E6BED238C356E008C14B0 /* PrefixUntilCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */; };
 		E61E6BF1238D3B0D008C14B0 /* Mirror+Compare.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BF0238D3B0D008C14B0 /* Mirror+Compare.swift */; };
 		E61E6BF6238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61E6BF5238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift */; };
@@ -337,8 +333,6 @@
 		E69F1AC52395665500CCA264 /* InMemoryAtomStoreReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69F1AC42395665500CCA264 /* InMemoryAtomStoreReducerTests.swift */; };
 		E69F1AC623965C4900CCA264 /* SubmitAtomEpicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2D22385980700950312 /* SubmitAtomEpicTests.swift */; };
 		E69F1AC723965C5C00CCA264 /* FetchAtomsEpicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A2D02385980700950312 /* FetchAtomsEpicTests.swift */; };
-		E6A1A678237B1BB800F58483 /* Publisher+FlatMapResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A1A677237B1BB800F58483 /* Publisher+FlatMapResult.swift */; };
-		E6A1A67C237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A1A67B237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift */; };
 		E6A4AB8C221C0717006C5CA8 /* DateFormatter_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4AB8B221C0717006C5CA8 /* DateFormatter_Extension.swift */; };
 		E6A4ABC6221EDD4A006C5CA8 /* BigUInt_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A4ABC5221EDD4A006C5CA8 /* BigUInt_Extension.swift */; };
 		E6A507D5224E14D500128123 /* AtomSubscriptionRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A507D4224E14D500128123 /* AtomSubscriptionRequest.swift */; };
@@ -1049,8 +1043,6 @@
 		E69E755222AA338600AC631B /* ProofOfWorkWorking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProofOfWorkWorking.swift; sourceTree = "<group>"; };
 		E69E755422AA33A400AC631B /* DefaultProofOfWorkWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProofOfWorkWorker.swift; sourceTree = "<group>"; };
 		E69F1AC42395665500CCA264 /* InMemoryAtomStoreReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryAtomStoreReducerTests.swift; sourceTree = "<group>"; };
-		E6A1A677237B1BB800F58483 /* Publisher+FlatMapResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+FlatMapResult.swift"; sourceTree = "<group>"; };
-		E6A1A67B237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+TrackNumberOfSubscribers.swift"; sourceTree = "<group>"; };
 		E6A4AB8B221C0717006C5CA8 /* DateFormatter_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter_Extension.swift; sourceTree = "<group>"; };
 		E6A4ABB9221EA120006C5CA8 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		E6A4ABBA221EA120006C5CA8 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
@@ -1229,8 +1221,6 @@
 		E6D7A35D2385980700950312 /* PointMultiplicationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointMultiplicationTests.swift; sourceTree = "<group>"; };
 		E6D7A35E2385980700950312 /* DecodePointFromPublicKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodePointFromPublicKeyTests.swift; sourceTree = "<group>"; };
 		E6D7A3612385980700950312 /* PrefixWhileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefixWhileTests.swift; sourceTree = "<group>"; };
-		E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublisherFlatMapResultTests.swift; sourceTree = "<group>"; };
-		E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublisherTrackNumberOfSubscribersTest.swift; sourceTree = "<group>"; };
 		E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefixUntilCompletionFrom.swift; sourceTree = "<group>"; };
 		E6DC275E22C3FDFB0049BB3C /* TokenDefinitionsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDefinitionsState.swift; sourceTree = "<group>"; };
 		E6DC276422C4C7650049BB3C /* TokenReferenceBalance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReferenceBalance.swift; sourceTree = "<group>"; };
@@ -1918,9 +1908,7 @@
 				E620CAAB2369BE9000EB3EC3 /* Combine_Extensions.swift */,
 				E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */,
 				E6198E79237AE1D400F8205D /* Publisher+PrefixWhile+IncludeLast.swift */,
-				E6A1A67B237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift */,
 				E67E3E792379BFFD00A33DBA /* Publisher+Sink_Extensionss.swift */,
-				E6A1A677237B1BB800F58483 /* Publisher+FlatMapResult.swift */,
 			);
 			path = Combine;
 			sourceTree = "<group>";
@@ -3686,8 +3674,6 @@
 			isa = PBXGroup;
 			children = (
 				E6D7A3612385980700950312 /* PrefixWhileTests.swift */,
-				E6D7A3622385980700950312 /* PublisherFlatMapResultTests.swift */,
-				E6D7A3632385980700950312 /* PublisherTrackNumberOfSubscribersTest.swift */,
 				E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */,
 			);
 			path = CombineExtensionTests;
@@ -4909,7 +4895,6 @@
 				E68BD81D229ECCCE00FCE4D3 /* SendMessageActionToParticleGroupsMapper.swift in Sources */,
 				E605A6F12345DD6D00E47257 /* UnsignedAmountType+MinMax.swift in Sources */,
 				E6F5484222771E7100EE6311 /* CreateTokenActionToParticleGroupsMapper.swift in Sources */,
-				E6A1A67C237B2A0B00F58483 /* Publisher+TrackNumberOfSubscribers.swift in Sources */,
 				E6E279692271CD1C0067D46E /* DictionaryConvertibleMutable.swift in Sources */,
 				E606FC3D22CB46D300A7E52E /* KeyValueTuple.swift in Sources */,
 				E6CABA1722D4C6A400B6D00C /* AnyParticle.swift in Sources */,
@@ -5022,7 +5007,6 @@
 				E626E1FE22B41A7B0046D2AC /* AtomToTokenTransferMapper.swift in Sources */,
 				E6E2792D2271CD1C0067D46E /* Signer.swift in Sources */,
 				E605541E2304170D00528510 /* SendMessageAction+Init+Data.swift in Sources */,
-				E6A1A678237B1BB800F58483 /* Publisher+FlatMapResult.swift in Sources */,
 				E6611F402225B93C00AD2F83 /* Set+AsArray.swift in Sources */,
 				48A33DF923085ABD00626090 /* SHA256TwiceHasher.swift in Sources */,
 				E62EFDCC2249378300B6DAD6 /* HTTPClient.swift in Sources */,
@@ -5082,7 +5066,6 @@
 				E6D7A3652385980700950312 /* AtomPullerTests.swift in Sources */,
 				E61E6BF6238D3D24008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */,
 				E6D7A38C2385980700950312 /* AtomJsonDeserializationInvalidSerializerValueTests.swift in Sources */,
-				E61E6BE5238C356D008C14B0 /* PublisherFlatMapResultTests.swift in Sources */,
 				E6D7A39D2385980700950312 /* GranularityTests.swift in Sources */,
 				E62F35372273378300B6779A /* DecodingError+ConvenienceInit.swift in Sources */,
 				E6D7A3A42385980700950312 /* DecimalStringTests.swift in Sources */,
@@ -5168,7 +5151,6 @@
 				E61E6BE0238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */,
 				480484182333BCEC0085225F /* IndependentTransactionToAtomMapper.swift in Sources */,
 				E6D325AC21EE37DA00851F4E /* Int+Extension.swift in Sources */,
-				E61E6BE7238C356D008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E6D7A3BA2385980700950312 /* NumberOfLeadingZeroBitsInDataTests.swift in Sources */,
 				E6D7A37A2385980700950312 /* AddressInvalidChecksumTests.swift in Sources */,
 				E6D7A3702385980700950312 /* SignatureLengthTests.swift in Sources */,
@@ -5205,7 +5187,6 @@
 				E6D7A26F238596F200950312 /* PrivateKey+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E61E6BD6238C0C2A008C14B0 /* Recording.swift in Sources */,
 				E63F0F102390065D0066A8CB /* CreateTokenTests.swift in Sources */,
-				E61E6BEA238C356E008C14B0 /* PublisherFlatMapResultTests.swift in Sources */,
 				E6D7A271238596F200950312 /* Models+ExpressibleByIntegerLiteral.swift in Sources */,
 				E61E6BF7238D4D53008C14B0 /* CombineExpectationsCustomExtensionsTests.swift in Sources */,
 				E61E6BD8238C0C2A008C14B0 /* Prefix.swift in Sources */,
@@ -5214,7 +5195,6 @@
 				E61E6BE1238C0EE3008C14B0 /* Recorder+Radix.swift in Sources */,
 				E6D7A272238596F200950312 /* KeyPair+ExpressilbleByIntegerLiteral.swift in Sources */,
 				E656233223903C7A00F55964 /* SendMessageTests.swift in Sources */,
-				E61E6BEC238C356E008C14B0 /* PublisherTrackNumberOfSubscribersTest.swift in Sources */,
 				E63F0F12239012B60066A8CB /* MintTokensTests.swift in Sources */,
 				E61E6BD2238C0C2A008C14B0 /* RecordingError.swift in Sources */,
 				E6D7A27A238596F200950312 /* Test+Convenience+RadixApplicationClient.swift in Sources */,
