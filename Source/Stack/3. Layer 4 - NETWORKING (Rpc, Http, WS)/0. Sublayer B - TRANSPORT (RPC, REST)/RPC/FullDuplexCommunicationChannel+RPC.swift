@@ -54,10 +54,16 @@ private extension FullDuplexCommunicationChannel {
         identifier: String
     ) -> AnyPublisher<RPCTopLevelResponse, Never> {
         
-        let messageSubject = PassthroughSubject<String, Never>()
-        let removeListener = addListener(messageSubject, forKey: ListenerKey(UUID.init()))
+        let listener = Listener()
+        let removeListener = addListener(listener, forKey: ListenerKey(UUID.init()))
 
-        return messageSubject
+        return listener
+            .map { (messageFromWebSocket: URLSessionWebSocketTask.Message) -> String in
+                guard case let .string(textMessage) = messageFromWebSocket else {
+                    fatalError("Got non string from ws.")
+                }
+                return textMessage
+            }
             .flatMap { webSocketMessage -> AnyPublisher<RPCTopLevelResponse, Never> in
                 let data = webSocketMessage.toData()
                 do {

@@ -87,6 +87,19 @@ extension DispatchTimeInterval {
 }
 
 extension RadixSchedulers {
+    
+    static func timer<MapTo>(
+        publishEvery interval: DispatchTimeInterval,
+        _ transform: @escaping () -> MapTo
+    ) -> AnyPublisher<MapTo, Never> {
+        guard let timeInterval = interval.asSeconds else {
+            incorrectImplementation("Cannot schedule if no time is specified.")
+        }
+        return timer(
+            publishEvery: timeInterval,
+            transform)
+    }
+    
     static func timer<MapTo>(
         publishEvery interval: TimeInterval,
         _ transform: @escaping () -> MapTo
@@ -101,30 +114,5 @@ extension RadixSchedulers {
             .receive(on: RadixSchedulers.mainThreadScheduler)
             .map { _ in transform() }
             .eraseToAnyPublisher()
-    }
-}
-
-extension Thread {
-    
-    var threadName: String {
-        func nameOf(queue: DispatchQueue?) -> String {
-            let labelOfCurrentQueue = __dispatch_queue_get_label(nil)
-            guard let name = String(cString: labelOfCurrentQueue, encoding: .utf8) else {
-                fatalError("fail")
-            }
-            return name
-        }
-        
-        let nameOfRadixBackgroundThread = nameOf(queue: RadixSchedulers.backgroundScheduler)
-        let nameOfRadixMainThread = nameOf(queue: RadixSchedulers.mainThreadScheduler)
-        let nameOfCurrent = nameOf(queue: nil)
-        
-        if nameOfCurrent == nameOfRadixBackgroundThread {
-            return "background"
-        } else if nameOfCurrent == nameOfRadixMainThread {
-            return "main"
-        } else {
-            return "Other thread: \(nameOfCurrent)"
-        }
     }
 }

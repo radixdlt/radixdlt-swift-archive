@@ -1,6 +1,6 @@
 //
 // MIT License
-// 
+//
 // Copyright (c) 2018-2019 Radix DLT ( https://radixdlt.com )
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,17 +23,7 @@
 //
 
 import Foundation
-import Combine
 
-/// A channel open for communication in both directions, e.g. WebSockets
-public protocol FullDuplexCommunicationChannel: AnyObject {
-    func sendMessage(_ message: String)
-    
-    func addListener(_ listener: Listener, forKey key: ListenerKey) -> RemoveListener
-}
-
-public extension FullDuplexCommunicationChannel {
-    typealias ListenerKey = AnyHashable
-    typealias Listener = PassthroughSubject<URLSessionWebSocketTask.Message, Never>
-    typealias RemoveListener = () -> Void
+public enum WebSocketClosingStrategy: Int, Equatable {
+    case ifInUseSkipClosing
 }

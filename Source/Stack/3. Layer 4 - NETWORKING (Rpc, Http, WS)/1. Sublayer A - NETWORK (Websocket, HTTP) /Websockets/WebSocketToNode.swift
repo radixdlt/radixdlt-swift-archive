@@ -24,18 +24,16 @@
 
 import Foundation
 
-// TODO replace Starscream with Apple's `URLSessionWebSocketTask` introduced in iOS 13: https://developer.apple.com/documentation/foundation/urlsessionwebSockettask
-import Starscream
-
 import Combine
 import Entwine
+
 
 // swiftlint:disable colon opening_brace
 
 public final class WebSocketToNode:
+    NSObject, // `URLSessionWebSocketDelegate` requires `NSObject` 😢
     FullDuplexCommunicationChannel,
-    WebSocketDelegate,
-    WebSocketPongDelegate
+    URLSessionWebSocketDelegate
 {
     // swiftlint:enable colon opening_brace
     
@@ -45,54 +43,50 @@ public final class WebSocketToNode:
     internal let node: Node
     
     /// The pending webSocket to the `node`
-    private var socket: WebSocket?
+    private var webSocketTask: URLSessionWebSocketTask?
 
     // MARK: Private Properties
     private let webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>
+    
+    private lazy var urlSession = URLSession(
+        configuration: .default,
+        delegate: self,
+        delegateQueue: OperationQueue()
+    )
     
     private var listeners = [ListenerKey: Listener]()
     
     private var cancellables = Set<AnyCancellable>()
     
-    // `internal` only for test purposes, otherwise `private`
-    internal init(node: Node, webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never>) {
-        
-        webSocketStatusSubject.filter { $0 == .failed }
-            .debounce(for: 60, scheduler: RadixSchedulers.mainThreadScheduler)
-            .sink(
-                receiveCompletion: { _ in webSocketStatusSubject.send(.disconnected) },
-                receiveValue: { _ in webSocketStatusSubject.send(.disconnected) }
-            ).store(in: &cancellables)
-         
+    private let dispatchQueue: DispatchQueue
+    
+    internal init(
+        node: Node,
+        webSocketStatusSubject: CurrentValueSubject<WebSocketStatus, Never> = .init(.disconnected)
+    ) {
         self.webSocketStatusSubject = webSocketStatusSubject
         self.node = node
         
-//        webSocketStatusSubject.sink(
-//            receiveValue: { Swift.print("verbose: WS status -> `\($0)`") }
-//        ).store(in: &cancellables)
+        self.dispatchQueue = DispatchQueue(
+            label: "com.radixdlt.ws-to-node-\(node.hypertextUrl.url)",
+            qos: .background,
+//            attributes: .initiallyInactive,
+//            autoreleaseFrequency: .never,
+            target: nil
+        )
     }
     
     deinit {
-        closeDisregardingListeners()
+        closeDisregardingListeners(closeCode: .goingAway)
     }
-}
-
-public extension WebSocketToNode {
-    convenience init(node: Node) {
-        self.init(node: node, webSocketStatusSubject: .init(.disconnected))
-    }
-}
-
-public enum WebSocketClosingStrategy: Int, Equatable {
-    case ifInUseSkipClosing
-    case closeDisregardingIfSocketHasListeners
 }
 
 // MARK: Public
 public extension WebSocketToNode {
     
     var webSocketStatus: AnyPublisher<WebSocketStatus, Never> {
-        webSocketStatusSubject.eraseToAnyPublisher()
+        webSocketStatusSubject
+            .eraseToAnyPublisher()
     }
     
     @discardableResult
@@ -100,24 +94,15 @@ public extension WebSocketToNode {
         if strategy == .ifInUseSkipClosing && listeners.count > 0 {
             return .didNotClose(reason: .isInUse)
         }
-        closeDisregardingListeners()
+        closeDisregardingListeners(closeCode: .normalClosure)
         return .closed
     }
     
     @discardableResult
     func connectAndNotifyWhenConnected() -> Future<WebSocketToNode, Never> {
-        switch webSocketStatusSubject.value {
-        case .disconnected, .failed:
-            webSocketStatusSubject.send(.connecting)
-            socket = createAndConnectToSocket()
-        case .closing, .connecting, .connected: break
-        }
+        createAndConnectToSocketIfNeeded()
         
-        return Future<WebSocketToNode, Never> { [weak self] promise in
-            guard let self = self else {
-                // TODO Combine replace fatalError with error
-                fatalError("Self nil, replace this fatalError with an Error")
-            }
+        return Future<WebSocketToNode, Never> { [unowned self] promise in
             self.webSocketStatus.filter { $0.isConnected }
                 .first()
                 .ignoreOutput()
@@ -127,97 +112,159 @@ public extension WebSocketToNode {
     }
 }
 
-// MARK: FullDuplexCommunicationChannel
+// MARK: WebSocketToNode
 public extension WebSocketToNode {
     
     func sendMessage(_ message: String) {
         guard isConnected else {
             fatalError("Should not send message before we are connected...")
         }
-//        Swift.print("verbose: Sending message of length: #\(message.count) chars")
-//        Swift.print("verbose: Sending message:\n<\(message)>")
-        socket?.write(string: message)
+        
+        webSocketTask?.send(.string(message)) { error in
+            if let error = error {
+//                fatalError("Failed to send message over websocket to node, error: \(error)")
+                Swift.print("🔌☢️ Failed to send message, error: \(error)")
+            }
+        }
     }
     
     func addListener(_ listener: Listener, forKey key: ListenerKey) -> RemoveListener {
-        assert(listeners[key] == nil)
         listeners[key] = listener
+        
         return { [weak self] in
             self?.listeners.removeValue(forKey: key)
         }
     }
 }
 
-// MARK: WebSocketDelegate
-// It is unfortunate that StarScream decided to spell out `webSocket` like `websocket` in their prefix of their delegate methods.
+// MARK: URLSessionWebSocketDelegate
 public extension WebSocketToNode {
-    func websocketDidConnect(socket: WebSocketClient) {
-        webSocketStatusSubject.send(.connected)
+    
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
+        changeStatus(to: .connected)
     }
     
-    func websocketDidDisconnect(socket: WebSocketClient, error: Swift.Error?) {
-        Swift.print("debug: Websocket closed")
-        guard !isClosing else {
-            self.socket = nil
-            return webSocketStatusSubject.send(.disconnected)
-        }
-        if error != nil {
-            self.socket = nil
-            webSocketStatusSubject.send(.failed)
-        } else {
-            webSocketStatusSubject.send(.disconnected)
-        }
-    }
-    
-    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        listeners.values.forEach { listener in
-            listener.send(text)
+    func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
+        
+        defer { tearDown() }
+        
+        switch closeCode {
+        case .goingAway, .normalClosure:
+            guard !isClosing else { return }
+            changeStatus(to: .disconnected)
+        default:
+            changeStatus(to: .failed)
         }
     }
-    
-    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-//        Swift.print("info: Socket did receive data.")
-    }
-    
-    func websocketDidReceivePong(socket: WebSocketClient, data: Data?) {
-//        Swift.print("info: Socket got pong")
-    }
+
 }
 
 // MARK: - Private
 
-// MARK: Status
-private extension WebSocketToNode {
-    
-    var isDisconnected: Bool {
-        return hasStatus(.disconnected)
-    }
-    
-    var isClosing: Bool {
-        return hasStatus(.closing)
-    }
-    
-    var isConnected: Bool {
-        return hasStatus(.connected)
-    }
-    
-    func hasStatus(_ status: WebSocketStatus) -> Bool {
-        webSocketStatusSubject.value == status
-    }
-}
-
 // MARK: Helpers
 private extension WebSocketToNode {
 
-    func closeDisregardingListeners() {
-        webSocketStatusSubject.send(.closing)
-        socket?.disconnect()
+    func tearDown() {
+        print("🔌💣 tear down")
+        cancellables = Set<AnyCancellable>()
+        cleanUpListeners()
+        webSocketTask = nil
     }
     
-    func createAndConnectToSocket() -> WebSocket {
-        let newSocket = WebSocket(url: node.webSocketsUrl.url)
-        newSocket.delegate = self
-        newSocket.connect()
-        return newSocket
+    func cleanUpListeners() {
+        listeners.values.forEach {
+            $0.send(completion: .finished)
+        }
+        listeners = [:]
+    }
+    
+    func closeDisregardingListeners(closeCode: URLSessionWebSocketTask.CloseCode, reason: Data? = nil) {
+        changeStatus(to: .closing)
+        webSocketTask?.cancel(with: closeCode, reason: reason)
+    }
+    
+    func createAndConnectToSocketIfNeeded() {
+        guard shouldConnect else { return }
+        createAndConnectToSocket()
+    }
+    
+    func createAndConnectToSocket() {
+        changeStatus(to: .connecting)
+        let webSocketTask: URLSessionWebSocketTask
+        defer {
+            self.webSocketTask = webSocketTask
+            webSocketTask.resume()
+            startReceivingMessages()
+            schedulePinging(every: .seconds(10))
+        }
+        let webSocketUrl = node.webSocketsUrl.url
+        webSocketTask = urlSession.webSocketTask(with: webSocketUrl)
+    }
+    
+    func startReceivingMessages() {
+        webSocketTask?.receive { [weak self] messageResult in
+            guard case .success(let message) = messageResult else {
+//                fatalError("Error: \(messageResult)")
+                Swift.print("🔌☢️ error receiving \(messageResult)")
+                return
+            }
+            self?.forwardMessageToListeners(message)
+            self?.startReceivingMessages()
+        }
+    }
+    
+    func schedulePinging(every interval: DispatchTimeInterval) {
+        RadixSchedulers.timer(
+            publishEvery: interval
+        ) { [weak self] in
+            self?.webSocketTask?.sendPing { error in
+                if let error = error {
+                    Swift.print("🔌☢️ Error pinging: \(error)")
+                }
+            }
+        }
+        .subscribe(on: dispatchQueue)
+        .receive(on: RadixSchedulers.backgroundScheduler)
+        .ignoreOutput()
+        .sink {}
+        .store(in: &cancellables)
+    }
+    
+    func forwardMessageToListeners(_ message: URLSessionWebSocketTask.Message) {
+        RadixSchedulers.backgroundScheduler.async { [unowned self] in
+//        dispatchQueue.sync { [weak self] in
+            self.listeners.values.forEach { listener in
+                self.dispatchQueue.sync {
+                    listener.send(message)
+                }
+            }
+            
+        }
+    }
+}
+
+// MARK: Status
+private extension WebSocketToNode {
+    
+    func changeStatus(to status: WebSocketStatus) {
+        webSocketStatusSubject.send(status)
+    }
+        
+    var shouldConnect: Bool {
+        guard !isConnecting else { return false }
+        return isDisconnected || isFailed
+    }
+    
+    var isConnecting: Bool { hasStatus(.connecting) }
+    var isDisconnected: Bool { hasStatus(.disconnected) }
+    
+    var isFailed: Bool { hasStatus(.failed) }
+    
+    var isClosing: Bool { hasStatus(.closing) }
+    
+    var isConnected: Bool { hasStatus(.connected) }
+    
+    func hasStatus(_ status: WebSocketStatus) -> Bool {
+        webSocketStatusSubject.value == status
     }
 }

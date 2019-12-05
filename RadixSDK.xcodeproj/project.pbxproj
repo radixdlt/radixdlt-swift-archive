@@ -170,6 +170,7 @@
 		E6296C8B2292EF6000753FD5 /* AnyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C8A2292EF6000753FD5 /* AnyDecodable.swift */; };
 		E6296C8D229455CB00753FD5 /* StringAnyDictionary+Decodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6296C8C229455CB00753FD5 /* StringAnyDictionary+Decodable.swift */; };
 		E62C030C220491CD001F27DE /* Sequence_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62C030B220491CD001F27DE /* Sequence_Extension.swift */; };
+		E62C364D2399455800309801 /* WebSocketClosingStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62C364C2399455800309801 /* WebSocketClosingStrategy.swift */; };
 		E62EFDB92248F9B600B6DAD6 /* betanet.json in Resources */ = {isa = PBXBuildFile; fileRef = E62EFDB82248F9B600B6DAD6 /* betanet.json */; };
 		E62EFDBA2248F9B600B6DAD6 /* betanet.json in Resources */ = {isa = PBXBuildFile; fileRef = E62EFDB82248F9B600B6DAD6 /* betanet.json */; };
 		E62EFDBE22490BA900B6DAD6 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = E62EFDBD22490BA900B6DAD6 /* Router.swift */; };
@@ -890,6 +891,7 @@
 		E6296C8A2292EF6000753FD5 /* AnyDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDecodable.swift; sourceTree = "<group>"; };
 		E6296C8C229455CB00753FD5 /* StringAnyDictionary+Decodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StringAnyDictionary+Decodable.swift"; sourceTree = "<group>"; };
 		E62C030B220491CD001F27DE /* Sequence_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence_Extension.swift; sourceTree = "<group>"; };
+		E62C364C2399455800309801 /* WebSocketClosingStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketClosingStrategy.swift; sourceTree = "<group>"; };
 		E62EFDB82248F9B600B6DAD6 /* betanet.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = betanet.json; sourceTree = "<group>"; };
 		E62EFDBD22490BA900B6DAD6 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		E62EFDC5224936E000B6DAD6 /* URL_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL_Extensions.swift; sourceTree = "<group>"; };
@@ -2022,6 +2024,7 @@
 			children = (
 				E6474AD322661F26009C4FDC /* FullDuplexCommunicationChannel */,
 				E62EFDE2224A4D6F00B6DAD6 /* WebSocketToNode.swift */,
+				E62C364C2399455800309801 /* WebSocketClosingStrategy.swift */,
 				E62EFDE7224A4DBF00B6DAD6 /* WebSocketStatus.swift */,
 				E6A747A122CCF09100DACEA0 /* WebSocketEvent.swift */,
 			);
@@ -4682,6 +4685,7 @@
 				E6FB03E221ECF186002CE331 /* Macros.swift in Sources */,
 				E656233623904FBC00F55964 /* Crypt.swift in Sources */,
 				E615C51722B791E800604E90 /* TokenBalanceReferencesReducer.swift in Sources */,
+				E62C364D2399455800309801 /* WebSocketClosingStrategy.swift in Sources */,
 				E606F1362301520A004D4D3D /* AnyShardedParticleStateId.swift in Sources */,
 				E606FC4922CB5E0C00A7E52E /* RadixJsonRpcMethodEpic.swift in Sources */,
 				E6E279942271CD1C0067D46E /* RequiringThatLengthIsMultipleOfN.swift in Sources */,
