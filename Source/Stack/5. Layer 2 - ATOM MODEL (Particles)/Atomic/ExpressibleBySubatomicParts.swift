@@ -147,11 +147,10 @@ public extension ExpressibleBySubatomicParts {
         self.init(metaData: metaData, signatures: signatures, particleGroups: particleGroups)
     }
     
-    init(particle: ParticleConvertible, spin: Spin = .up) {
+    init(particle: ParticleConvertible, spin: Spin = .up) throws {
         self.init(
             particleGroups: [
-                // swiftlint:disable:next force_try
-                try! ParticleGroup(
+                try ParticleGroup(
                     spunParticles: [
                         AnySpunParticle(spin: spin, particle: particle)
                     ]

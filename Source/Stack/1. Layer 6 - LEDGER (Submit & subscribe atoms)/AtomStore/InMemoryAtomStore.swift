@@ -98,24 +98,27 @@ public extension InMemoryAtomStore {
     }
     
     func upParticles(at address: Address) -> [AnyUpParticle] {
-        return particleIndex.filter {
-            // swiftlint:disable:next force_try
-            let shardables = try! $0.key.someParticle.shardables()
-            guard shardables?.contains(address) == true else { return false }
-            
-            var spinParticleIndex = $0.value
-            let hasDown = spinParticleIndex.valueForKey(key: .down, ifAbsent: { Set() }).contains(where: { atoms[$0]?.isStore == true })
-            if hasDown { return false }
-            
-            let uppingAtoms = spinParticleIndex.valueForKey(key: .up, ifAbsent: { Set() })
-            return uppingAtoms.contains(where: { atom in
-                guard let atomObservation = self.atoms.valueFor(key: atom) else { return false }
-                return atomObservation.isStore
-            })
+        do {
+            return try particleIndex.filter {
+                let shardables = try $0.key.someParticle.shardables()
+                guard shardables?.contains(address) == true else { return false }
+                
+                var spinParticleIndex = $0.value
+                let hasDown = spinParticleIndex.valueForKey(key: .down, ifAbsent: { Set() }).contains(where: { atoms[$0]?.isStore == true })
+                if hasDown { return false }
+                
+                let uppingAtoms = spinParticleIndex.valueForKey(key: .up, ifAbsent: { Set() })
+                return uppingAtoms.contains(where: { atom in
+                    guard let atomObservation = self.atoms.valueFor(key: atom) else { return false }
+                    return atomObservation.isStore
+                })
+            }
+            .map { $0.key }
+                .removeDuplicates() // remove any duplicates
+                .upParticles()
+        } catch {
+            return []
         }
-        .map { $0.key }
-            .removeDuplicates() // remove any duplicates
-            .upParticles()
     }
     
     // swiftlint:disable:next function_body_length cyclomatic_complexity

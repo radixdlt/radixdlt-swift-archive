@@ -25,6 +25,7 @@
 import Foundation
 
 public enum HTTPError: Swift.Error, Equatable {
+    case failedToCreateRequest(url: URL)
     indirect case networkingError(NetworkingError)
     indirect case serializationError(SerializationError)
 }

@@ -35,8 +35,12 @@ public protocol HTTPClient {
 public extension HTTPClient {
     
     func request<D>(router: Router, decodeAs _: D.Type) -> AnyPublisher<D, HTTPError> where D: Decodable {
-        // swiftlint:disable:next force_try
-        let urlRequest = try! router.asURLRequest()
+        let urlRequest: URLRequest
+        do {
+            urlRequest = try router.asURLRequest()
+        } catch {
+            return Fail<D, HTTPError>(error: HTTPError.failedToCreateRequest(url: router.path)).eraseToAnyPublisher()
+        }
         return fetch(urlRequest: urlRequest, decodeAs: D.self)
     }
   

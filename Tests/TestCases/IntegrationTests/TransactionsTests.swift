@@ -236,7 +236,7 @@ class TransactionsTests: IntegrationTest {
             resourceIdentifier: ResourceIdentifier(address: alice, name: "WHATEVER")
         )
         
-        let atom = Atom(particle: someParticle)
+        let atom = try Atom(particle: someParticle)
         
         let atomToTransactionMapper = DefaultAtomToTransactionMapper(identity: aliceIdentity)
         let transaction = try waitForFirstValue(of: atomToTransactionMapper.transactionFromAtom(atom))
