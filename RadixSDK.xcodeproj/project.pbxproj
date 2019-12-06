@@ -3105,18 +3105,18 @@
 		E6D7A2C82385980700950312 /* RadixStack */ = {
 			isa = PBXGroup;
 			children = (
-				E6D7A2CD2385980700950312 /* 0. Layer 7 - APPLICATION (Transactions, Balances) */,
-				E6D7A2C92385980700950312 /* 1. Layer 6 - Ledger */,
-				E6D7A3302385980700950312 /* 2. Layer 5 - UNIVERSE (Universe, Node) */,
-				E6D7A33A2385980700950312 /* 3. Layer 4 - Networking */,
-				E6D7A3422385980700950312 /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */,
-				E6D7A33C2385980700950312 /* 5. Layer 2 - ATOM MODEL (Particles) */,
-				E6D7A2DB2385980700950312 /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */,
+				E6D7A2CD2385980700950312 /* 7_Application */,
+				E6D7A2C92385980700950312 /* 6_Ledger */,
+				E6D7A3302385980700950312 /* 5_Universe */,
+				E6D7A33A2385980700950312 /* 4_Networking */,
+				E6D7A3422385980700950312 /* 3_Chemistry */,
+				E6D7A33C2385980700950312 /* 2_AtomModel */,
+				E6D7A2DB2385980700950312 /* 1_Subatomic */,
 			);
 			path = RadixStack;
 			sourceTree = "<group>";
 		};
-		E6D7A2C92385980700950312 /* 1. Layer 6 - Ledger */ = {
+		E6D7A2C92385980700950312 /* 6_Ledger */ = {
 			isa = PBXGroup;
 			children = (
 				E6D7A2CA2385980700950312 /* AtomPullerTests.swift */,
@@ -3124,10 +3124,10 @@
 				E69F1AC42395665500CCA264 /* InMemoryAtomStoreReducerTests.swift */,
 				E6D7A2CC2385980700950312 /* AtomNotificationModeTests.swift */,
 			);
-			path = "1. Layer 6 - Ledger";
+			path = 6_Ledger;
 			sourceTree = "<group>";
 		};
-		E6D7A2CD2385980700950312 /* 0. Layer 7 - APPLICATION (Transactions, Balances) */ = {
+		E6D7A2CD2385980700950312 /* 7_Application */ = {
 			isa = PBXGroup;
 			children = (
 				E6D7A2CE2385980700950312 /* NetworkEpicTests */,
@@ -3136,7 +3136,7 @@
 				E6D7A2D92385980700950312 /* BurnMintTransactionOfflineTests.swift */,
 				E6D7A2DA2385980700950312 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */,
 			);
-			path = "0. Layer 7 - APPLICATION (Transactions, Balances)";
+			path = 7_Application;
 			sourceTree = "<group>";
 		};
 		E6D7A2CE2385980700950312 /* NetworkEpicTests */ = {
@@ -3184,14 +3184,14 @@
 			path = FindANodeEpicTests;
 			sourceTree = "<group>";
 		};
-		E6D7A2DB2385980700950312 /* 6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models) */ = {
+		E6D7A2DB2385980700950312 /* 1_Subatomic */ = {
 			isa = PBXGroup;
 			children = (
 				E6D7A2DC2385980700950312 /* Crypto */,
 				E6D7A2E62385980700950312 /* DecodingAndEncoding */,
 				E6D7A3182385980700950312 /* SubatomicModels */,
 			);
-			path = "6. Layer 1 - SUBATOMIC (Serialization, Crypto, Models)";
+			path = 1_Subatomic;
 			sourceTree = "<group>";
 		};
 		E6D7A2DC2385980700950312 /* Crypto */ = {
@@ -3485,12 +3485,12 @@
 			path = Base58;
 			sourceTree = "<group>";
 		};
-		E6D7A3302385980700950312 /* 2. Layer 5 - UNIVERSE (Universe, Node) */ = {
+		E6D7A3302385980700950312 /* 5_Universe */ = {
 			isa = PBXGroup;
 			children = (
 				E6D7A3312385980700950312 /* RadixNodeStateTests */,
 			);
-			path = "2. Layer 5 - UNIVERSE (Universe, Node)";
+			path = 5_Universe;
 			sourceTree = "<group>";
 		};
 		E6D7A3312385980700950312 /* RadixNodeStateTests */ = {
@@ -3508,23 +3508,23 @@
 			path = RadixNodeStateTests;
 			sourceTree = "<group>";
 		};
-		E6D7A33A2385980700950312 /* 3. Layer 4 - Networking */ = {
+		E6D7A33A2385980700950312 /* 4_Networking */ = {
 			isa = PBXGroup;
 			children = (
 				E623BD1A2396765200959232 /* RPCTests */,
 				E6D7A33B2385980700950312 /* HTTPClientTests.swift */,
 			);
-			path = "3. Layer 4 - Networking";
+			path = 4_Networking;
 			sourceTree = "<group>";
 		};
-		E6D7A33C2385980700950312 /* 5. Layer 2 - ATOM MODEL (Particles) */ = {
+		E6D7A33C2385980700950312 /* 2_AtomModel */ = {
 			isa = PBXGroup;
 			children = (
 				E6D7A33D2385980700950312 /* SwiftHashesAreDeterministicTests.swift */,
 				E6D7A33E2385980700950312 /* MagicTests.swift */,
 				E6D7A33F2385980700950312 /* Shard */,
 			);
-			path = "5. Layer 2 - ATOM MODEL (Particles)";
+			path = 2_AtomModel;
 			sourceTree = "<group>";
 		};
 		E6D7A33F2385980700950312 /* Shard */ = {
@@ -3536,7 +3536,7 @@
 			path = Shard;
 			sourceTree = "<group>";
 		};
-		E6D7A3422385980700950312 /* 4. Layer 3 - CHEMISTRY (Atom builders & reducers) */ = {
+		E6D7A3422385980700950312 /* 3_Chemistry */ = {
 			isa = PBXGroup;
 			children = (
 				E6D7A3432385980700950312 /* AtomToExecutedActionMapper */,
@@ -3545,7 +3545,7 @@
 				E6D7A34C2385980700950312 /* ProofOfWork */,
 				E6D7A34F2385980700950312 /* Reducers */,
 			);
-			path = "4. Layer 3 - CHEMISTRY (Atom builders & reducers)";
+			path = 3_Chemistry;
 			sourceTree = "<group>";
 		};
 		E6D7A3432385980700950312 /* AtomToExecutedActionMapper */ = {
