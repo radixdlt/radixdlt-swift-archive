@@ -27,8 +27,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      codeCoverageEnabled = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -123,6 +122,16 @@
                   Identifier = "WebsocketTest">
                </Test>
             </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E6D7A22C238596F200950312"
+               BuildableName = "RadixSDK iOS Integration Tests.xctest"
+               BlueprintName = "RadixSDK iOS Integration Tests"
+               ReferencedContainer = "container:RadixSDK.xcodeproj">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>
