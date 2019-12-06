@@ -63,7 +63,7 @@ public final class HDWallet: CustomStringConvertible {
     }
 
     public convenience init(seedFromMnemonic hdWalletSeed: Data, highestKnownAccountIndex: HDSubAccountAtIndex.Index = 0) {
-        let wallet = BitcoinKit.HDWallet(seed: hdWalletSeed, network: BitcoinKit.Network.testnetBTC)
+        let wallet = BitcoinKit.HDWallet(seed: hdWalletSeed, externalIndex: 0, internalIndex: 0, network: BitcoinKit.Network.testnetBTC, account: highestKnownAccountIndex)
         self.init(hdWallet: wallet, highestKnownAccountIndex: highestKnownAccountIndex)
     }
 }
@@ -119,9 +119,9 @@ extension HDWallet: CustomDebugStringConvertible {
 // MARK: BitcoinKit
 private extension HDWallet {
     func privateKey(at index: HDSubAccountAtIndex.Index) -> PrivateKey {
-        do {
-            let extendedPrivateKey: BitcoinKit.HDPrivateKey = try hdWallet.extendedPrivateKey(index: index)
+            let extendedPrivateKey: BitcoinKit.HDPrivateKey = hdWallet.xprivKey(index: index, chain: .external)
             let privateKeyBitcoinKit: BitcoinKit.PrivateKey = extendedPrivateKey.privateKey()
+        do {
             return try PrivateKey(data: privateKeyBitcoinKit.data)
         } catch {
             incorrectImplementation("Should be able to derive key, got error: \(error)")

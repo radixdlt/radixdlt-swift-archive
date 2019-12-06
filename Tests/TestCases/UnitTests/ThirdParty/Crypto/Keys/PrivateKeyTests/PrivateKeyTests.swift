@@ -28,17 +28,12 @@ import XCTest
 @testable import RadixSDK
 
 class PrivateKeyTests: TestCase {
-    
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-    }
-    
+ 
     func testBitcoinKitPerformanceOfRestorationUsingMnemonic24Words() {
         measure {
             let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords) { _ in }
-            let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
-            let privateKey = try! wallet.privateKey(index: expected.hdWalletIndex)
+            let wallet = BitcoinKit.HDWallet(seed: seed, externalIndex: 0, internalIndex: 0, network: expected.network)
+            let privateKey = wallet.privKey(index: expected.hdWalletIndex, chain: .external)
             XCTAssertEqual(privateKey.toWIF(), expected.wif)
         }
     }
@@ -55,22 +50,22 @@ class PrivateKeyTests: TestCase {
         XCTAssertEqual(third.hex, "c4f99552b187e98f9410137ccfe60b314e71184648281f6ba8774d93b9c9fb00c0d12b63cc5ab4375b4f1b24727db2ef94bb415f61bc737effebfe7e7dbc56d8")
     }
   
-    func testBitcoinKitGenerate12Mneominic() {
-        let words = try! BitcoinKit.Mnemonic.generate(strength: Mnemonic.Strength.default, language: Mnemonic.Language.english)
+    func testBitcoinKitGenerate12Mnemonic() throws {
+        let words = try BitcoinKit.Mnemonic.generate(strength: Mnemonic.Strength.default, language: Mnemonic.Language.english)
         XCTAssertEqual(words.count, 12)
     }
 
-    func testMnemonicGeneratorThat12WordsResultsIn12Words() {
-        let mnemonic = try! Mnemonic.Generator(strength: .wordCountOf12).generate()
+    func testMnemonicGeneratorThat12WordsResultsIn12Words() throws {
+        let mnemonic = try Mnemonic.Generator(strength: .wordCountOf12).generate()
         XCTAssertEqual(mnemonic.words.count, 12)
     }
 
-    func testBitcoinKitPerformanceOfSignAndVerify() {
+    func testBitcoinKitPerformanceOfSignAndVerify() throws {
         let magic: Magic = 2
         let seed = BitcoinKit.Mnemonic.seed(mnemonic: expected.seedWords) { _ in }
-        let wallet = BitcoinKit.HDWallet(seed: seed, network: expected.network)
-        let privateKeyBicoinKit = try! wallet.privateKey(index: expected.hdWalletIndex)
-        let privateKey = try! PrivateKey(data: privateKeyBicoinKit.data)
+        let wallet = BitcoinKit.HDWallet(seed: seed, externalIndex: 0, internalIndex: 0, network: expected.network)
+        let privateKeyBicoinKit = wallet.privKey(index: expected.hdWalletIndex, chain: .external)
+        let privateKey = try PrivateKey(data: privateKeyBicoinKit.data)
         XCTAssertEqual(privateKey.hex, "3737eade55463b1cbae340bb3bc770d42a6e54a39e3fd92c080b1621b170eb03")
         let account = Account.init(privateKey: privateKey)
         let address = Address(
@@ -83,7 +78,6 @@ class PrivateKeyTests: TestCase {
         
         measure {
             do {
-                
                 let message = try SignableMessage(data: expected.messageHashedUTF8Encoded)
                 
                 let signature = try Signer.sign(message, privateKey: privateKey)

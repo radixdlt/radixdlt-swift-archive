@@ -1,6 +1,6 @@
 github "attaswift/BigInt"
 
-github "https://github.com/Sajjon/BitcoinKit.git" "fd73469592123b5b8704de05cbcf721db0331a20"
+github "yenom/BitcoinKit"
 
 github "https://github.com/Sajjon/Entwine.git" "carthage"
 

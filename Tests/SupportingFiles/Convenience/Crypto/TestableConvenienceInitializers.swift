@@ -25,24 +25,6 @@
 import Foundation
 @testable import RadixSDK
 
-extension HierarchicalDeterministicWallet {
-    init() {
-        let mnemonic = try! Mnemonic.Generator().generate()
-        self.init(mnemonic: mnemonic)
-    }
-    
-    init(mnemonic: Mnemonic) {
-        self.init(mnemonic: mnemonic, network: .testnet(.winterfell))
-    }
-}
-
-extension KeyPair {
-    init() {
-        let wallet = HierarchicalDeterministicWallet()
-        self = try! wallet.keyPairFor(index: 0)
-    }
-}
-
 extension Mnemonic: ExpressibleByArrayLiteral {
     init(strings: [String]) {
         // Assumes English

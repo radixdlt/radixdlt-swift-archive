@@ -543,8 +543,6 @@
 		E6E2792D2271CD1C0067D46E /* Signer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278862271CD1C0067D46E /* Signer.swift */; };
 		E6E2792E2271CD1C0067D46E /* SignedAtomVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278872271CD1C0067D46E /* SignedAtomVerifier.swift */; };
 		E6E2792F2271CD1C0067D46E /* Secp256k1.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278892271CD1C0067D46E /* Secp256k1.swift */; };
-		E6E279302271CD1C0067D46E /* HierarchicalDeterministicWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E2788C2271CD1C0067D46E /* HierarchicalDeterministicWallet.swift */; };
-		E6E279312271CD1C0067D46E /* HierarchicalDeterministicMasterSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E2788D2271CD1C0067D46E /* HierarchicalDeterministicMasterSeed.swift */; };
 		E6E279322271CD1C0067D46E /* Mnemonic+Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E2788F2271CD1C0067D46E /* Mnemonic+Language.swift */; };
 		E6E279332271CD1C0067D46E /* Mnemonic+Word.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278902271CD1C0067D46E /* Mnemonic+Word.swift */; };
 		E6E279342271CD1C0067D46E /* Mnemonic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E278912271CD1C0067D46E /* Mnemonic.swift */; };
@@ -1240,8 +1238,6 @@
 		E6E278862271CD1C0067D46E /* Signer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Signer.swift; sourceTree = "<group>"; };
 		E6E278872271CD1C0067D46E /* SignedAtomVerifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignedAtomVerifier.swift; sourceTree = "<group>"; };
 		E6E278892271CD1C0067D46E /* Secp256k1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secp256k1.swift; sourceTree = "<group>"; };
-		E6E2788C2271CD1C0067D46E /* HierarchicalDeterministicWallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HierarchicalDeterministicWallet.swift; sourceTree = "<group>"; };
-		E6E2788D2271CD1C0067D46E /* HierarchicalDeterministicMasterSeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HierarchicalDeterministicMasterSeed.swift; sourceTree = "<group>"; };
 		E6E2788F2271CD1C0067D46E /* Mnemonic+Language.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Mnemonic+Language.swift"; sourceTree = "<group>"; };
 		E6E278902271CD1C0067D46E /* Mnemonic+Word.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Mnemonic+Word.swift"; sourceTree = "<group>"; };
 		E6E278912271CD1C0067D46E /* Mnemonic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mnemonic.swift; sourceTree = "<group>"; };
@@ -3766,21 +3762,11 @@
 		E6E2788A2271CD1C0067D46E /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
-				E6E2788B2271CD1C0067D46E /* HierarchicalDeterministicWallet */,
 				E6E2788E2271CD1C0067D46E /* Mnemonic */,
 				E6E278952271CD1C0067D46E /* Keys */,
 				E6E2789E2271CD1C0067D46E /* ChainId */,
 			);
 			path = Wallet;
-			sourceTree = "<group>";
-		};
-		E6E2788B2271CD1C0067D46E /* HierarchicalDeterministicWallet */ = {
-			isa = PBXGroup;
-			children = (
-				E6E2788C2271CD1C0067D46E /* HierarchicalDeterministicWallet.swift */,
-				E6E2788D2271CD1C0067D46E /* HierarchicalDeterministicMasterSeed.swift */,
-			);
-			path = HierarchicalDeterministicWallet;
 			sourceTree = "<group>";
 		};
 		E6E2788E2271CD1C0067D46E /* Mnemonic */ = {
@@ -4838,7 +4824,6 @@
 				E6E279492271CD1C0067D46E /* RadixJSONEncoder.swift in Sources */,
 				E6340C8322FAD7AE0044BA97 /* TransferrableTokensParticle+FromParticle.swift in Sources */,
 				E6E279512271CD1C0067D46E /* JSONPrefixSpecifying.swift in Sources */,
-				E6E279312271CD1C0067D46E /* HierarchicalDeterministicMasterSeed.swift in Sources */,
 				E6ED1A7821F8E78900654105 /* Optional+OptionalType.swift in Sources */,
 				E605540A2302E57300528510 /* AtomToCreateTokenMapper.swift in Sources */,
 				E6FCB66222F0C7FE00ECC01B /* BurnTokensAction.swift in Sources */,
@@ -4898,7 +4883,6 @@
 				E6FF7E4A229C1F1900BC22EA /* NonEmptySet.swift in Sources */,
 				E6E279982271CD1C0067D46E /* Base58String.swift in Sources */,
 				E6D1318321F7B2050014792D /* Data+Hex.swift in Sources */,
-				E6E279302271CD1C0067D46E /* HierarchicalDeterministicWallet.swift in Sources */,
 				E6E2792A2271CD1C0067D46E /* Signing.swift in Sources */,
 				E6E279732271CD1C0067D46E /* ResourceType.swift in Sources */,
 				E60554332305497300528510 /* DefaultParticlesToStateReducer.swift in Sources */,
