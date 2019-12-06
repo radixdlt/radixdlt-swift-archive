@@ -25,7 +25,7 @@
 import Foundation
 
 public protocol TransactionConvertible {
-    var sentAt: Date { get }
+    var date: Date { get }
     var actions: [UserAction] { get }
 }
 

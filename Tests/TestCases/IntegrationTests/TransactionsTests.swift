@@ -241,7 +241,7 @@ class TransactionsTests: IntegrationTest {
         let atomToTransactionMapper = DefaultAtomToTransactionMapper(identity: aliceIdentity)
         let transaction = try waitForFirstValue(of: atomToTransactionMapper.transactionFromAtom(atom))
         XCTAssertEqual(transaction.actions.count, 0)
-        XCTAssertGreaterThanOrEqual(transaction.sentAt.timeIntervalSinceNow, -0.01) // max 10 ms ago
+        XCTAssertGreaterThanOrEqual(transaction.date.timeIntervalSinceNow, -0.01) // max 10 ms ago
     }
     
     func testTransactionComplex() throws {

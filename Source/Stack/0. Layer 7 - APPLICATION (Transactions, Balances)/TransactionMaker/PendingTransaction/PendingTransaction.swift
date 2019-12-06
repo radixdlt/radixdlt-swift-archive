@@ -99,7 +99,7 @@ public extension PendingTransaction {
 
 // MARK: TransactionConvertible
 public extension PendingTransaction {
-    var sentAt: Date { transaction.sentAt }
+    var date: Date { transaction.date }
     var actions: [UserAction] { transaction.actions }
 }
 

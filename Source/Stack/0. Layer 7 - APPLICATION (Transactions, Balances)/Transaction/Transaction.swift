@@ -27,16 +27,16 @@ import Foundation
 public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStringConvertible {
     
     public let uuid: UUID
-    public let sentAt: Date
+    public let date: Date
     public let actions: [UserAction]
     
     fileprivate init(
         uuid: UUID = .init(),
-        sentAt: Date = .init(),
+        createdAt: Date = .init(),
         userActions actions: [UserAction]
     ) {
         self.uuid = uuid
-        self.sentAt = sentAt
+        self.date = createdAt
         self.actions = actions
     }
 }

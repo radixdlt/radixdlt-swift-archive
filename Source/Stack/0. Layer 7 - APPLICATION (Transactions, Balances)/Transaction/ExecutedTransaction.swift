@@ -26,16 +26,16 @@ import Foundation
 
 public struct ExecutedTransaction: TransactionConvertible, ArrayConvertible, CustomStringConvertible {
     public let atomIdentifier: AtomIdentifier
-    public let sentAt: Date
+    public let date: Date
     public let actions: [UserAction]
     
     private init(
         atomIdentifier: AtomIdentifier,
-        sentAt: Date,
+        date registeredDate: Date,
         actions: [UserAction]
         ) {
         self.atomIdentifier = atomIdentifier
-        self.sentAt = sentAt
+        self.date = registeredDate
         self.actions = actions
     }
 }
@@ -45,7 +45,7 @@ public extension ExecutedTransaction {
     init(atom: Atom, actions: [UserAction]) {
         self.init(
             atomIdentifier: atom.identifier(),
-            sentAt: atom.timestamp,
+            date: atom.timestamp,
             actions: actions
         )
     }
