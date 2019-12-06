@@ -25,7 +25,7 @@
 import Foundation
 import XCTest
 
-private let timeoutInSecondsEnoughForPOW: Int = 10
+private let timeoutInSecondsEnoughForPOW: Int = 20
 extension TimeInterval {
     static var enoughForPOW: Self { .init(timeoutInSecondsEnoughForPOW) }
     static var ms100: Self { .init(0.1) }
