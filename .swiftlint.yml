@@ -10,7 +10,7 @@ disabled_rules:
   - empty_parameters
 
 included:
-  - Source
+  - Sources
 
 excluded:
   - Carthage
