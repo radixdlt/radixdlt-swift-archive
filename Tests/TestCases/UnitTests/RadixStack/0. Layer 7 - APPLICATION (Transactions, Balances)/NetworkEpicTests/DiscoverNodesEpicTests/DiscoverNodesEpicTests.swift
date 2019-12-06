@@ -34,7 +34,7 @@ class DiscoverNodesEpicTests: NetworkEpicTestCase {
         let node = makeNode()
         
         let epic = DiscoverNodesEpic(
-            seedNodes: Just(node)^,
+            seedNodes: Just(node).eraseToAnyPublisher(),
             isUniverseSuitable: .alwaysMismatch
         )
         
@@ -61,7 +61,7 @@ class DiscoverNodesEpicTests: NetworkEpicTestCase {
         let node = makeNode()
         
         let epic = DiscoverNodesEpic(
-            seedNodes: Just(node)^,
+            seedNodes: Just(node).eraseToAnyPublisher(),
             isUniverseSuitable: .alwaysMatch
         )
         

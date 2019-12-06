@@ -65,23 +65,24 @@ public extension RadixJsonRpcMethodEpic {
             .compactMap(typeAs: Request.self)
             .flatMap { [weak self] rpcMethod -> AnyPublisher<RpcMethodResult, Never> in
                 guard let selfNonWeak = self else {
-                    return Empty<RpcMethodResult, Never>(completeImmediately: true).eraseToAnyPublisher()
+                    return Empty<RpcMethodResult, Never>().eraseToAnyPublisher()
                 }
                 return selfNonWeak.webSocketConnector.newClosedWebSocketConnectionToNode(rpcMethod.node)
                     .connectAndNotifyWhenConnected()
                     .map { selfNonWeak.rpcClientFromWebSocket.rpcClientForWebSocket($0) }
                     .flatMap { rpcClient -> AnyPublisher<RpcMethodResult, Never> in
                         selfNonWeak.methodCall(rpcClient, rpcMethod)
-                            .catch { (rpcError: RPCError) -> AnyPublisher<RpcMethodResult, Never> in
+                            .catch { (rpcError: RPCError) -> Empty<RpcMethodResult, Never> in
                                 Swift.print("RPC error: \(rpcError)")
                                 // TODO Combine should we complete here if error?
-                                return Empty<RpcMethodResult, Never>(completeImmediately: false).eraseToAnyPublisher()
+                                return Empty<RpcMethodResult, Never>(completeImmediately: false)
                             }
                             .eraseToAnyPublisher()
                     }
                     .eraseToAnyPublisher()
             }
-            .map { $0 as NodeAction }^
+            .map { $0 as NodeAction }
+            .eraseToAnyPublisher()
     }
 }
 

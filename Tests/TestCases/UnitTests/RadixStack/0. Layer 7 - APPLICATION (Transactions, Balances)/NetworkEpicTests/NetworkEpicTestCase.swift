@@ -56,7 +56,7 @@ class NetworkEpicTestCase: TestCase {
             file: file,
             line: line,
             timeout: timeout,
-            resultingPublisherTransformation: { _, _, output in output.prefix(expectedNumberOfOutput)^ },
+            resultingPublisherTransformation: { _, _, output in output.prefix(expectedNumberOfOutput).eraseToAnyPublisher() },
             input: input,
             outputtedNodeActionsHandler: outputtedNodeActionsHandler
         )
@@ -94,8 +94,8 @@ class NetworkEpicTestCase: TestCase {
         let resultingPublisher = resultingPublisherTransformation(
             actionsSubject, networkStateSubject,
             epic.handle(
-                actions: actionsSubject^,
-                networkState: networkStateSubject^
+                actions: actionsSubject.eraseToAnyPublisher(),
+                networkState: networkStateSubject.eraseToAnyPublisher()
             )
         )
         

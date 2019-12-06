@@ -241,7 +241,7 @@ private extension SubmitAtomEpicTests {
                             emulateRadixNetworkController?($0, actionSubject, atomStatusNotificationSubject)
                     }
                 )
-                    .prefix(expectedNumberOfOutput)^
+                    .prefix(expectedNumberOfOutput).eraseToAnyPublisher()
         },
             input: { actionSubject, _ in input(node, actionSubject, atomStatusNotificationSubject) },
             

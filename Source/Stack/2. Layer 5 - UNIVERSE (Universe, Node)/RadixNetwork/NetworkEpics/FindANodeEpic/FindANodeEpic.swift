@@ -89,13 +89,13 @@ public extension FindANodeEpic {
         return nodeActionPublisher.compactMap(typeAs: FindANodeRequestAction.self)
             .combineLatest(
                 networkStatePublisher.prepend(RadixNetworkState.empty)
-            )
+        )
             .flatMap { [weak self] tuple -> AnyPublisher<NodeAction, Never> in
                 
                 guard let selfNonWeak = self else {
-                    return Empty<NodeAction, Never>.init(completeImmediately: true).eraseToAnyPublisher()
+                    return Empty<NodeAction, Never>().eraseToAnyPublisher()
                 }
-                 
+                
                 let (findANodeRequestAction, networkState) = tuple
                 
                 let shardsOfRequest = findANodeRequestAction.shards
@@ -106,22 +106,21 @@ public extension FindANodeEpic {
                     })
                 }
                 
+                let connectedNodes = networkStatePublisher.map { networkState -> [RadixNodeState] in
+                    getConnectedNodes(networkState: networkState)
+                }
+                .prepend(getConnectedNodes(networkState: networkState))
                 
-                let connectedNodes: AnyPublisher<[RadixNodeState], Never> = networkStatePublisher.map {
-                    getConnectedNodes(networkState: $0)
-                    }^
-                    .prepend(getConnectedNodes(networkState: networkState))^
-                   
                 // Stream to find node
-                let selectedNode: AnyPublisher<NodeAction, Never> = connectedNodes
-                    .compactMap { nodeStates in try? NonEmptySet(array: nodeStates.map { $0.node }) }^
-                    .first()^
-                    .map { selfNonWeak.peerSelector.selectPeer($0) }^
-                    .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) as NodeAction }^
+                let selectedNode = connectedNodes
+                    .compactMap { nodeStates in try? NonEmptySet(array: nodeStates.map { $0.node }) }
+                    .first()
+                    .map { selfNonWeak.peerSelector.selectPeer($0) }
+                    .map { FindANodeResultAction(node: $0, request: findANodeRequestAction) as NodeAction }
                 
                 // Stream of new actions to find a new node
-                let findConnectionActionsStream: AnyPublisher<NodeAction, Never> = connectedNodes
-                    .filter { $0.isEmpty }^
+                let findConnectionActionsStream = connectedNodes
+                    .filter { $0.isEmpty }
                     .first().ignoreOutput()
                     .andThen(
                         RadixSchedulers.timer(
@@ -134,7 +133,7 @@ public extension FindANodeEpic {
                             $0.sameTypeOfActionAndSameNodeAs(other: $1)
                         })
                     )
-                    .prefix(untilOutputFrom: selectedNode)^
+                    .prefix(untilOutputFrom: selectedNode)
                     
                     // 🐉 HERE BE DRAGONS 🐉
                     // For some strange reason this `flatMap { Just($0) }`
@@ -144,26 +143,28 @@ public extension FindANodeEpic {
                     // get get better crash reports telling us why it crashes. I've tried
                     // `makeConnectable()` (with or without `.autoconnect()`) instead,
                     // but that didn't fix it.
-                    .flatMap { Just($0) }^ // or `.handleEvents(receiveOutput: { _ in })`
+                    .flatMap { Just($0) }
                 
                 // Cleanup and close connections which never worked out
-                let cleanupConnections: AnyPublisher<NodeAction, Never> = findConnectionActionsStream
+                let cleanupConnections = findConnectionActionsStream
                     .compactMap(typeAs: ConnectWebSocketAction.self)
                     .flatMap { connectWebSocketAction -> AnyPublisher<NodeAction, Never> in
                         let node = connectWebSocketAction.node
                         return selectedNode
-                            .map { $0.node }^
-                            .filter { selectedNode in selectedNode != node }^
-                            .map { _ in CloseWebSocketAction(node: node) }^
-                    }^
+                            .map { $0.node }
+                            .filter { selectedNode in selectedNode != node }
+                            .map { _ in CloseWebSocketAction(node: node) }
+                            .eraseToAnyPublisher()
+                    }
                 
-                    
+                
                 return findConnectionActionsStream
                     .append(selectedNode)
                     .merge(with: cleanupConnections)
-                        .eraseToAnyPublisher()
-                    
-        }^
+                    .eraseToAnyPublisher()
+                
+        }
+        .eraseToAnyPublisher()
     }
 }
 

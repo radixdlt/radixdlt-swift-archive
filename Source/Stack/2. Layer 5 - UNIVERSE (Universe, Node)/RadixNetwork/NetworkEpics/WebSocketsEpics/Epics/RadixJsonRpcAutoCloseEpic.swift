@@ -48,14 +48,15 @@ public extension RadixJsonRpcAutoCloseEpic {
     ) -> AnyPublisher<NodeAction, Never> {
 
         nodeActionPublisher
-            .filter { $0 is BaseJsonRpcResultAction }^
+            .filter { $0 is BaseJsonRpcResultAction }
             .delay(for: WebSocketCloser.delay, on: .mainThread)
             .handleEvents(
                 receiveOutput: { [weak self] nodeAction in
                     self?.webSocketCloser.closeWebSocketToNode(nodeAction.node)
                 }
-            )^
-            .dropAll()^
+            )
+            .dropAll()
+            .eraseToAnyPublisher()
         
     }
 }

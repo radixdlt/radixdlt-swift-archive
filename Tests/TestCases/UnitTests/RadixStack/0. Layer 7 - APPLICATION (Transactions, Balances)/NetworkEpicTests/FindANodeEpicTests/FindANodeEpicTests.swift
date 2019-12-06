@@ -170,7 +170,7 @@ class FindANodeEpicTests: NetworkEpicTestCase {
                             emulateWebSockets(reactingTo: $0, actionSubject, networkStateSubject)
                         }
                     )
-                    .prefix(expectedNumberOfOutput)^
+                    .prefix(expectedNumberOfOutput).eraseToAnyPublisher()
             },
             input: { actionsSubject, networkStateSubject in
                 networkStateSubject.send([
@@ -246,7 +246,7 @@ class FindANodeEpicTests: NetworkEpicTestCase {
                             emulateWebSockets(reactingTo: $0, actionSubject, networkStateSubject)
                     }
                 )
-                    .prefix(expectedNumberOfOutput)^
+                    .prefix(expectedNumberOfOutput).eraseToAnyPublisher()
             },
             input: { actionsSubject, networkStateSubject in
                 networkStateSubject.send([
@@ -275,8 +275,6 @@ class FindANodeEpicTests: NetworkEpicTestCase {
             XCTAssertEqual(action3.node, failingNode)
         }
     }
-    
-//    func test_that_we_connect_to
 }
 
 // MARK: Helpers

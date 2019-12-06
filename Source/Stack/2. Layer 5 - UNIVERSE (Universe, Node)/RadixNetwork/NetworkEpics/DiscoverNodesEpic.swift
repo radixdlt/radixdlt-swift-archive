@@ -56,8 +56,9 @@ public extension DiscoverNodesEpic {
                     return Empty<Node, Never>.init(completeImmediately: true).eraseToAnyPublisher()
                 }
                 return selfNonWeak.seedNodes
-            }^
-            .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }^
+            }
+            .map { GetUniverseConfigActionRequest(node: $0) as NodeAction }
+        .eraseToAnyPublisher()
         // TODO Combine change epics `actions: AnyPublisher<NodeAction, Never>` to `AnyPublisher<NodeAction, NodeActionsError>`
 //            .catchError { .just(DiscoverMoreNodesActionError(reason: $0)) }
 
@@ -65,20 +66,27 @@ public extension DiscoverNodesEpic {
             .compactMap(typeAs: GetUniverseConfigActionResult.self)
             .filter { [weak self] in
                 return self?.isUniverseSuitable.isUniverseSuitableBasedOn(config: $0.result) == false
-            }^
-            .map { NodeUniverseMismatch(getUniverseConfigActionResult: $0) }^
+            }
+            .map { NodeUniverseMismatch(getUniverseConfigActionResult: $0) }
+            .eraseToAnyPublisher()
 
         let connectedSeedNodes: AnyPublisher<Node, Never> = nodeActionPublisher
             .compactMap(typeAs: GetUniverseConfigActionResult.self)
             .filter { [weak self] in
                 return self?.isUniverseSuitable.isUniverseSuitableBasedOn(config: $0.result) == true
-            }^
+            }
             .map { $0.node }
-            .makeConnectable().autoconnect()^  // .autoConnect(numberOfSubscribers: 3)
+            .makeConnectable().autoconnect()
+            .eraseToAnyPublisher()
 
-        let addSeedNodes: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { AddNodeAction(node: $0) }^
-        let addSeedNodesInfo: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetNodeInfoActionRequest(node: $0) }^
-        let addSeedNodeSiblings: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetLivePeersActionRequest(node: $0) }^
+        let addSeedNodes: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { AddNodeAction(node: $0) }
+            .eraseToAnyPublisher()
+        
+        let addSeedNodesInfo: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetNodeInfoActionRequest(node: $0) }
+            .eraseToAnyPublisher()
+
+        let addSeedNodeSiblings: AnyPublisher<NodeAction, Never> = connectedSeedNodes.map { GetLivePeersActionRequest(node: $0) }
+            .eraseToAnyPublisher()
 
         let addNodes: AnyPublisher<NodeAction, Never> = nodeActionPublisher
             .compactMap(typeAs: GetLivePeersActionResult.self)
@@ -99,8 +107,10 @@ public extension DiscoverNodesEpic {
                         return AddNodeAction(node: nodeFromInfo, nodeInfo: nodeInfo)
                         }
                         .map { $0 as NodeAction } /* `AddNodeAction` -> `NodeAction` */
-                    }^.flattenSequence()
-            }^
+                    }
+                .flattenSequence()
+            }
+            .eraseToAnyPublisher()
 
         return Publishers.MergeMany([
             addSeedNodes,
@@ -109,7 +119,8 @@ public extension DiscoverNodesEpic {
             addNodes,
             getUniverseConfigsOfSeedNodes,
             seedNodesHavingMismatchingUniverse
-        ])^
+        ])
+        .eraseToAnyPublisher()
 
     }
     

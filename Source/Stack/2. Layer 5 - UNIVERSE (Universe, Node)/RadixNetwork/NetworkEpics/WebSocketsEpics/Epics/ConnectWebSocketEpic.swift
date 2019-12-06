@@ -56,27 +56,28 @@ public extension ConnectWebSocketEpic {
     ) -> AnyPublisher<NodeAction, Never> {
         
         let onConnect: AnyPublisher<NodeAction, Never> = nodeActionPublisher
-            .filter { $0 is ConnectWebSocketAction }^
+            .filter { $0 is ConnectWebSocketAction }
             // TODO Combine investigate if we really should use `handleEvents` instead of `flatMap`?
             .handleEvents(
                 receiveOutput: { [weak self] connectWebSocketAction in
-                    
                     self?.webSocketConnector
                         .newClosedWebSocketConnectionToNode(connectWebSocketAction.node)
                         .connectAndNotifyWhenConnected()
                 }
-            )^
-            .dropAll()^
+            )
+            .dropAll()
+            .eraseToAnyPublisher()
 
         let onClose: AnyPublisher<NodeAction, Never> = nodeActionPublisher
-            .filter { $0 is CloseWebSocketAction }^
+            .filter { $0 is CloseWebSocketAction }
             .handleEvents(
                 receiveOutput: { [weak self] closeWebSocketAction in
                     self?.webSocketCloser.closeWebSocketToNode(closeWebSocketAction.node)
                 }
-            )^
-            .dropAll()^
+            )
+            .dropAll()
+            .eraseToAnyPublisher()
 
-        return onConnect.merge(with: onClose)^
+        return onConnect.merge(with: onClose).eraseToAnyPublisher()
     }
 }

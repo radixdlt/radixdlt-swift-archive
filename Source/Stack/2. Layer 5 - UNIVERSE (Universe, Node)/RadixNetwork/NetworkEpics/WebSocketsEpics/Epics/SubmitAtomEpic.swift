@@ -86,11 +86,13 @@ public extension SubmitAtomEpic {
         
         let foundNode = nodeActionPublisher
             .compactMap(typeAs: FindANodeResultAction.self)
-            .filter { $0.request is SubmitAtomActionRequest }^
+            .filter { $0.request is SubmitAtomActionRequest }
+.eraseToAnyPublisher()
             .map { findANodeResultAction -> NodeAction in
                 let request = castOrKill(instance: findANodeResultAction.request, toType: SubmitAtomActionRequest.self)
                 return SubmitAtomActionSend(request: request, node: findANodeResultAction.node) as NodeAction
-            }^
+            }
+.eraseToAnyPublisher()
 
         let submitToNode = nodeActionPublisher
             .compactMap(typeAs: SubmitAtomActionSend.self)
@@ -104,7 +106,8 @@ public extension SubmitAtomEpic {
                     .andThen(
                         selfNonWeak.submitAtom(sendAction: submitAtomAction, toNode: node)
                 )
-            }^
+            }
+.eraseToAnyPublisher()
         
         return foundNode.merge(with: submitToNode).eraseToAnyPublisher()
     }
@@ -148,9 +151,9 @@ private extension SubmitAtomEpic {
                         ]
                     ).eraseToAnyPublisher()
                 } else {
-                    return Just(statusAction)^
+                    return Just(statusAction).eraseToAnyPublisher()
                 }
-            }^
+            }
             .handleEvents(
                 receiveSubscription: { _ in
                     atomStatusSubscriber
@@ -158,7 +161,7 @@ private extension SubmitAtomEpic {
                         .ignoreOutput()
                         .andThen(
                             atomSubmitter.pushAtom(atom)
-                                .flatMap { _ in Empty<NodeAction, SubmitAtomError>(completeImmediately: true)^ }^
+                                .flatMap { _ in Empty<NodeAction, SubmitAtomError>().eraseToAnyPublisher() }
                                 .catch { submitAtomError -> Empty<NodeAction, Never> in
                                     submitAtomActionSubject.send(
                                         SubmitAtomActionStatus(
@@ -173,7 +176,7 @@ private extension SubmitAtomEpic {
                                     submitAtomActionSubject.send(
                                         SubmitAtomActionCompleted.success(sendAction: sendAction, node: node)
                                     )
-                                    return Empty<NodeAction, Never>(completeImmediately: true)
+                                    return Empty<NodeAction, Never>()
                                 }
                         )
                         .sink(
@@ -187,7 +190,8 @@ private extension SubmitAtomEpic {
                 },
                 receiveCompletion: { _ in cleanUp() },
                 receiveCancel: { cleanUp() }
-            )^
+            )
+            .eraseToAnyPublisher()
             
             // Important: this makes sure that the publisher returned by
             // `observeAtomStatusNotifications` does not result in two subscriptions,
@@ -196,11 +200,10 @@ private extension SubmitAtomEpic {
             // solution to this, but for now it works.
             .share()
             
-            .merge(with: submitAtomActionSubject.map { $0 as NodeAction })^
+            .merge(with: submitAtomActionSubject.map { $0 as NodeAction })
             .setFailureType(to: Publishers.TimeoutError.self)
             .timeout(submissionTimeoutInSeconds, scheduler: RadixSchedulers.mainThreadScheduler) { Publishers.TimeoutError.publisherTimeout }
             .replaceError(with: SubmitAtomActionCompleted.failed(sendAction: sendAction, node: node, error: .timeout))
-            .eraseToAnyPublisher()
             .prefixWhile { $0 is SubmitAtomActionCompleted == false }
         
     }

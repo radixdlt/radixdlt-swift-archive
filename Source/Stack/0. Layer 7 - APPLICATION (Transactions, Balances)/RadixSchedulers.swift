@@ -110,7 +110,7 @@ extension RadixSchedulers {
             on: RunLoop.main,
             in: .common
         )
-            .autoconnect()^
+            .autoconnect()
             .receive(on: RadixSchedulers.mainThreadScheduler)
             .map { _ in transform() }
             .eraseToAnyPublisher()

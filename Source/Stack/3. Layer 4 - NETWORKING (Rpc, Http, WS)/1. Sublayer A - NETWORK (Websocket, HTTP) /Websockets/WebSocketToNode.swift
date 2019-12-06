@@ -60,11 +60,8 @@ public final class WebSocketToNode:
     private lazy var dispatchQueue = DispatchQueue(
         label: "com.radixdlt.ws-to-node-\(node.webSocketsUrl.url.absoluteURL)",
         qos: .utility,
-//        attributes: .concurrent,
-//        autoreleaseFrequency: .never,
         target: nil
     )
-    
     
     internal init(
         node: Node,
