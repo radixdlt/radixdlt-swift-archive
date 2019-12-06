@@ -277,13 +277,13 @@ final class AtomStoreTests: TestCase {
         XCTAssertTrue(upParticles.isEmpty)
     }
     
-    func test_when_getting_up_particles_from_store_with_an_atom_with_one_up_particle__store_should_return_that_particle() {
+    func test_when_getting_up_particles_from_store_with_an_atom_with_one_up_particle__store_should_return_that_particle() throws {
         let atomStore = InMemoryAtomStore()
         let address = Address.irrelevant
         let rri: ResourceIdentifier = "/\(address)/FOOBAR"
         let rriParticle =  ResourceIdentifierParticle(resourceIdentifier: rri)
         let spunUpRRIParticle = rriParticle.withSpin(.up)
-        let particleGroup = try!  spunUpRRIParticle.wrapInGroup()
+        let particleGroup = try  spunUpRRIParticle.wrapInGroup()
         let atom = Atom(metaData: .timeNow, particleGroups: [particleGroup])
         atomStore.store(atomObservation: .stored(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
         let upParticles = atomStore.upParticles(at: address)
@@ -294,25 +294,25 @@ final class AtomStoreTests: TestCase {
         XCTAssertEqual(rriParticle, fetchedRRIParticle)
     }
     
-    func test_when_getting_up_particles_from_store_with_an_atom_with_one_down_particle__store_should_return_an_empty_stream() {
+    func test_when_getting_up_particles_from_store_with_an_atom_with_one_down_particle__store_should_return_an_empty_stream() throws {
         let atomStore = InMemoryAtomStore()
         let address = Address.irrelevant
         let rri: ResourceIdentifier = "/\(address)/FOOBAR"
         let rriParticle =  ResourceIdentifierParticle(resourceIdentifier: rri)
-        let particleGroup = try! rriParticle.withSpin(.down).wrapInGroup()
+        let particleGroup = try rriParticle.withSpin(.down).wrapInGroup()
         let atom = Atom(metaData: .timeNow, particleGroups: [particleGroup])
         atomStore.store(atomObservation: .stored(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
         let upParticles = atomStore.upParticles(at: address)
         XCTAssertTrue(upParticles.isEmpty)
     }
     
-    func test_when_getting_up_particles_from_store_with_an_atom_with_one_up_particle_then_deleted__store_should_return_an_empty_stream() {
+    func test_when_getting_up_particles_from_store_with_an_atom_with_one_up_particle_then_deleted__store_should_return_an_empty_stream() throws {
         let atomStore = InMemoryAtomStore()
         let address = Address.irrelevant
         let rri: ResourceIdentifier = "/\(address)/FOOBAR"
         let rriParticle =  ResourceIdentifierParticle(resourceIdentifier: rri)
         let spunUpRRIParticle = rriParticle.withSpin(.up)
-        let particleGroup = try!  spunUpRRIParticle.wrapInGroup()
+        let particleGroup = try  spunUpRRIParticle.wrapInGroup()
         let atom = Atom(metaData: .timeNow, particleGroups: [particleGroup])
         atomStore.store(atomObservation: .stored(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
         atomStore.store(atomObservation: .deleted(atom), address: address, notifyListenerMode: .notifyOnAtomUpdateAndSync)
@@ -320,14 +320,14 @@ final class AtomStoreTests: TestCase {
         XCTAssertTrue(upParticles.isEmpty)
     }
     
-    func test_when_getting_up_particles_from_store_with_dependent_deletes__store_should_return_an_empty_stream() {
+    func test_when_getting_up_particles_from_store_with_dependent_deletes__store_should_return_an_empty_stream() throws {
         let atomStore = InMemoryAtomStore()
         let someAddress = Address.irrelevant
         let particle0 =  ResourceIdentifierParticle(resourceIdentifier: "/\(someAddress)/FOO")
 
         let atom0 = Atom(
             metaData: .timeNow,
-            particleGroups: [try! ParticleGroup(spunParticles: [particle0.withSpin(.up)], metaData: .timeNow)]
+            particleGroups: [try ParticleGroup(spunParticles: [particle0.withSpin(.up)], metaData: .timeNow)]
         )
         
         XCTAssertEqual(atomStore.upParticles(at: someAddress).count, 0)
@@ -340,7 +340,7 @@ final class AtomStoreTests: TestCase {
         let atom1 = Atom(
             metaData: .timeNow,
             particleGroups: [
-                try! ParticleGroup(
+                try ParticleGroup(
                     spunParticles: [
                         particle0.withSpin(.down),
                         particle1.withSpin(.up),
@@ -357,7 +357,7 @@ final class AtomStoreTests: TestCase {
         XCTAssertEqual(atomStore.upParticles(at: someAddress).count, 0)
     }
     
-    func test_when_getting_up_particles_from_store_where_collision_occurred_on_soft_state__store_should_return_winner_particle() {
+    func test_when_getting_up_particles_from_store_where_collision_occurred_on_soft_state__store_should_return_winner_particle() throws {
         let atomStore = InMemoryAtomStore()
         let someAddress = Address.irrelevant
         
@@ -370,7 +370,7 @@ final class AtomStoreTests: TestCase {
         let atom0 = Atom(
             metaData: .timestamp(timeNow.advanced(by: 0)),
             particleGroups: [
-                try! ParticleGroup(
+                try ParticleGroup(
                     spunParticles: [
                         particle0.withSpin(.down),
                         particle1.withSpin(.up) // <- Particle1️⃣
@@ -386,7 +386,7 @@ final class AtomStoreTests: TestCase {
         let atom1 = Atom(
             metaData: .timestamp(timeNow.advanced(by: 1)),
             particleGroups: [
-                try! ParticleGroup(
+                try ParticleGroup(
                     spunParticles: [
                         particle0.withSpin(.down),
                         particle2.withSpin(.up) // <- Particle2️⃣

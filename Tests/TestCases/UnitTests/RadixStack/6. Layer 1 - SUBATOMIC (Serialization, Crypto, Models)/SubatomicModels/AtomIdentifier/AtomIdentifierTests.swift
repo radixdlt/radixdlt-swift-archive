@@ -97,19 +97,19 @@ class AtomIdentifierTests: TestCase {
         }
     }
     
-    func testEndianessNegativeShards() {
+    func testEndianessNegativeShards() throws {
         let aidString: String = "126fd230a7cab9d9766f1065d498c4ac80ad2b754af1889fb1cd0a4eb6d1cea5"
         let aidFromString = AtomIdentifier(stringLiteral: aidString)
         let shard: Shard = -5634836225579692379
         XCTAssertEqual(aidFromString.shard, shard)
         XCTAssertEqual(aidString, aidFromString.hex)
-        let aidFromHashAndShard = try! AtomIdentifier(hash: "126fd230a7cab9d9766f1065d498c4ac80ad2b754af1889fdafeb316d52c54e0", shard: shard)
+        let aidFromHashAndShard = try AtomIdentifier(hash: "126fd230a7cab9d9766f1065d498c4ac80ad2b754af1889fdafeb316d52c54e0", shard: shard)
         XCTAssertEqual(aidFromHashAndShard, aidFromString)
     }
     
-    func testAtomIdentifierForAtomFromCreateTokenAction() {
+    func testAtomIdentifierForAtomFromCreateTokenAction() throws {
         
-        let createTokenAction = try! CreateTokenAction(
+        let createTokenAction = try CreateTokenAction(
             creator: alice.address,
             name: "Test",
             symbol: "TEST",
@@ -117,7 +117,7 @@ class AtomIdentifierTests: TestCase {
             supply: .fixed(to: 10)
         )
         
-        let createTokenAtom = testAidOfAtomFrom(
+        let createTokenAtom = try doTestAidOfAtomFrom(
             action: createTokenAction,
             mapper: DefaultCreateTokenActionToParticleGroupsMapper(),
             expectedAidShard: .this(alice.shard)
@@ -147,13 +147,13 @@ class AtomIdentifierTests: TestCase {
             upParticles.append(AnyUpParticle(particle: mutable))
         }
         
-        let atomFromTransfer = testAidOfAtomFrom(
+        let atomFromTransfer = try doTestAidOfAtomFrom(
             action: transferTokens,
             mapper: DefaultTransferTokensActionToParticleGroupsMapper(),
             upParticles: upParticles,
             expectedAidShard: .eitherIn([alice.shard, bob.shard])
         )
-        XCTAssertEqual(try! atomFromTransfer.shards(), [alice.shard, bob.shard])
+        XCTAssertEqual(try atomFromTransfer.shards(), [alice.shard, bob.shard])
     }
 }
 
@@ -171,17 +171,17 @@ private enum ShardAssertion {
 
 private extension AtomIdentifierTests {
     @discardableResult
-    func testAidOfAtomFrom<Action, Mapper>(
+    func doTestAidOfAtomFrom<Action, Mapper>(
         action: Action,
         mapper: Mapper,
         upParticles: [AnyUpParticle] = [],
         expectedAidShard: ShardAssertion
-        ) -> Atom
+    ) throws -> Atom
         where Mapper: StatefulActionToParticleGroupsMapper,
         Action == Mapper.Action
     {
         
-        let particleGroup = try! mapper.particleGroups(for: action, upParticles: upParticles, addressOfActiveAccount: alice)
+        let particleGroup = try mapper.particleGroups(for: action, upParticles: upParticles, addressOfActiveAccount: alice)
         
         let date = TimeConverter.dateFrom(millisecondsSince1970: 237)
         let metaData = ChronoMetaData.timestamp(date)

@@ -92,24 +92,3 @@ extension DetermineIfUniverseIsSuitable {
     static let alwaysMismatch = DetermineIfUniverseIsSuitable { _ in false }
     static let alwaysMatch = DetermineIfUniverseIsSuitable { _ in true }
 }
-
-extension UniverseConfig {
-    static let irrelevant = Self.localnet
-}
-
-extension NodeInfo {
-    static let one = Self(system: .irrelevant, host: .local(port: 1))
-    static let two = Self(system: .irrelevant, host: .local(port: 2))
-}
-
-extension RadixSystem {
-    static let irrelevant = Self(shardSpace: .irrelevant)
-}
-
-extension ShardSpace {
-    static let irrelevant = try! Self(range: .irrelevant, anchor: 1)
-}
-
-extension ShardRange {
-    static let irrelevant: Self =  try! Self(lower: 0, upperInclusive: 2)
-}

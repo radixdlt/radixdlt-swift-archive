@@ -42,9 +42,9 @@ class ShardSpaceTests: TestCase {
         )
     }
     
-    func testOutOfRange() {
+    func testOutOfRange() throws {
         
-        let badRange = try! ShardRange(
+        let badRange = try ShardRange(
             lower: -(1 << 60),
             upperInclusive: 1 << 60
         )

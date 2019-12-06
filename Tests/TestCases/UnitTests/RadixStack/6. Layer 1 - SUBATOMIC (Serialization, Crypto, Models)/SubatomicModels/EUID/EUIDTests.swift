@@ -78,15 +78,15 @@ class EUIDTests: TestCase {
         XCTAssertEqual(euid.toHexString().asData.bytes.count, 16)
     }
     
-    func testShard() {
-        func doTest(_ vector: ShardTestVector) {
-            let euid = try! EUID(hexString: vector.euid)
+    func testShard() throws {
+        func doTest(_ vector: ShardTestVector) throws {
+            let euid = try EUID(hexString: vector.euid)
             let expected = vector.shard
             XCTAssertEqual(euid.shard, expected)
         }
         
-        euidAndShardTestVectors.forEach {
-            doTest($0)
+        try euidAndShardTestVectors.forEach {
+            try doTest($0)
         }
     }
 }

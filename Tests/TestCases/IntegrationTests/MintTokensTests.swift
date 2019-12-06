@@ -79,7 +79,7 @@ class MintTokensTests: IntegrationTest {
         // GIVEN: Radix identity Alice and an application layer action MintToken
         
         // GIVEN: ... and a previously created FooToken which has a supply of max - 10 tokens, for which Alice has the appropriate permissions.
-        let (tokenCreation, fooToken) = try! applicationClient.createToken(
+        let (tokenCreation, fooToken) = try applicationClient.createToken(
             name: "FooToken",
             symbol: "ALICE",
             description: "Created By Alice",
@@ -97,7 +97,7 @@ class MintTokensTests: IntegrationTest {
             toFailWithError: .tokenOverMint(
                 token: fooToken,
                 maxSupply: Supply.max,
-                currentSupply: try! Supply(subtractedFromMax: Supply.ten),
+                currentSupply: try Supply(subtractedFromMax: Supply.ten),
                 byMintingAmount: 20
             )
         )
@@ -109,7 +109,7 @@ class MintTokensTests: IntegrationTest {
         applicationClient.changeAccount(to: bobAccount)
         
         // GIVEN: ... and a previously created FooToken, for which Alice does **NOT** have the appropriate permissions
-        let (tokenCreation, fooToken) = try! applicationClient.createToken(
+        let (tokenCreation, fooToken) = try applicationClient.createToken(
             supply: .mutable(initial: Supply(subtractedFromMax: Supply.ten))
         )
         

@@ -27,11 +27,11 @@ import XCTest
 
 class AtomTooBigDSONEncodingTests: TestCase {
     
-    func testDsonEncodingAtomTooBig() {
+    func testDsonEncodingAtomTooBig() throws {
         // GIVEN
         // An atom with 1000 particles
         let atom = Atom(
-            particleGroups: [try! ParticleGroup(spunParticles: oneThousandParticles)]
+            particleGroups: [try ParticleGroup(spunParticles: oneThousandParticles)]
         )
         
         XCTAssertThrowsSpecificError(

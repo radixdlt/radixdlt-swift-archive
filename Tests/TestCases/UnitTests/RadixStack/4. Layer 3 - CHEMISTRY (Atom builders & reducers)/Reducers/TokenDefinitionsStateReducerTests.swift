@@ -31,52 +31,52 @@ private extension Supply {
 
 class TokenDefinitionsStateReducerTests: TestCase {
 
-    func testTokenWithNoMint() {
+    func testTokenWithNoMint() throws {
         let tokenDefinitionParticle = makeMutableSupplyTokenDefinitionParticle(tokenPermissions: [.mint: .all])
         
         let expectedRri = tokenDefinitionParticle.tokenDefinitionReference
         let reducer = TokenDefinitionsReducer()
-        let state = try! reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
+        let state = try reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
         XCTAssertNil(state.tokenState(identifier: expectedRri), "No supply info yet, cannot make state")
         guard let tokenDefinition = state.tokenDefinition(identifier: expectedRri) else { return XCTFail("expected TokenDefintion") }
         
         assertValuesIn(tokenDefinition: tokenDefinition, expectedTokenSupplyType: .mutable)
     }
     
-    func testFixedTokenWithNoMint() {
+    func testFixedTokenWithNoMint() throws {
         let tokenDefinitionParticle = makeFixedSupplyTokenDefinitionParticle(supply: 1)
         
         let expectedRri = tokenDefinitionParticle.tokenDefinitionReference
         let reducer = TokenDefinitionsReducer()
-        let state = try! reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
+        let state = try reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
         XCTAssertNil(state.tokenState(identifier: expectedRri), "No supply info yet, cannot make state")
         guard let tokenDefinition = state.tokenDefinition(identifier: expectedRri) else { return XCTFail("expected TokenDefintion") }
         
         assertValuesIn(tokenDefinition: tokenDefinition, expectedTokenSupplyType: .fixed)
     }
 
-    func testTokenWithMint() {
+    func testTokenWithMint() throws {
         let tokenDefinitionParticle = makeMutableSupplyTokenDefinitionParticle(tokenPermissions: [.mint: .tokenOwnerOnly])
         
         let expectedRri = tokenDefinitionParticle.tokenDefinitionReference
         
         let unallocatedTokensParticle = UnallocatedTokensParticle(
-            amount: try! Supply(subtractedFromMax: Supply.hundred),
+            amount: try Supply(subtractedFromMax: Supply.hundred),
             tokenDefinitionReference: expectedRri
         )
         
-        print(try! RadixJSONEncoder().encode(unallocatedTokensParticle).toString())
+        print(try RadixJSONEncoder().encode(unallocatedTokensParticle).toString())
         
         let reducer = TokenDefinitionsReducer()
-        let state_Un = try! reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: unallocatedTokensParticle))
-        let state_Un_Td = try! reducer.reduce(state: state_Un, upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
+        let state_Un = try reducer.reduce(state: .init(), upParticle: AnyUpParticle(particle: unallocatedTokensParticle))
+        let state_Un_Td = try reducer.reduce(state: state_Un, upParticle: AnyUpParticle(particle: tokenDefinitionParticle))
         
         XCTAssertEqual(state_Un_Td.tokenState(identifier: expectedRri)?.totalSupply, Supply.hundred)
         XCTAssertEqual(state_Un_Td.tokenState(identifier: expectedRri)?.tokenSupplyType, .mutable)
 
         // Assert that no action is performed on `TransferrableTokensParticle`.
-        let transferrableTokensParticle = try! TransferrableTokensParticle(mutableSupplyToken: tokenDefinitionParticle, amount: .irrelevant)
-        XCTAssertEqual(state_Un, try! reducer.reduce(state: state_Un, upParticle: AnyUpParticle(particle: transferrableTokensParticle)))
+        let transferrableTokensParticle = try TransferrableTokensParticle(mutableSupplyToken: tokenDefinitionParticle, amount: .irrelevant)
+        XCTAssertEqual(state_Un, try reducer.reduce(state: state_Un, upParticle: AnyUpParticle(particle: transferrableTokensParticle)))
         
     }
 

@@ -43,7 +43,7 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
         
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
         
-        let particleGroupsForMessage = try! mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address)
+        let particleGroupsForMessage = try mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address)
         
         let mockedTimestamp = TimeConverter.dateFrom(millisecondsSince1970: 123456789)
         
@@ -104,16 +104,9 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
         let sendMessageAction = SendMessageAction.encryptedDecryptableOnlyByRecipientAndSender(from: alice, to: bob, text: message)
         
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
-        let atom = try! mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address).wrapInAtom()
+        let atom = try mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address).wrapInAtom()
         
         func ensureCanBeDecrypted(by account: AccountOwner) throws {
-            //            XCTAssertNotThrows(
-            //                try decryptMessage(in: atom, account: account)
-            //            ) { decryptedMessage in
-            //                XCTAssertEqual(decryptedMessage.decryptionContext, .decrypted)
-            //                XCTAssertEqual(decryptedMessage.payload.toString(), message)
-            //            }
-            
             try decryptMessage(in: atom, account: account) {
                 let decryptedMessage = try XCTUnwrap($0)
                 XCTAssertEqual(decryptedMessage.decryptionContext, .decrypted)
@@ -149,7 +142,7 @@ class SendMessageActionToParticleGroupsMapperTests: TestCase {
         
         XCTAssertFalse(sendMessageAction.shouldBeEncrypted)
         let mapper = DefaultSendMessageActionToParticleGroupsMapper()
-        let atom = try! mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address).wrapInAtom()
+        let atom = try mapper.particleGroups(for: sendMessageAction, addressOfActiveAccount: alice.address).wrapInAtom()
         
         let atomToDecryptedMessagesMapper = DefaultAtomToSendMessageActionMapper(
             activeAccount: Just(alice.account).eraseToAnyPublisher()
@@ -192,11 +185,6 @@ extension TestCase {
                 receiveCompletion: { _ in expectation.fulfill() },
                 receiveValue: { outputtedValues.append(contentsOf: $0) }
         )
-        
-        //        let decryptedMessage = decryptedMessages.first
-        //    else {
-        //        throw DecryptMessageErrorInTest.unknownError
-        //    }
         
         wait(for: [expectation], timeout: 0.1)
         

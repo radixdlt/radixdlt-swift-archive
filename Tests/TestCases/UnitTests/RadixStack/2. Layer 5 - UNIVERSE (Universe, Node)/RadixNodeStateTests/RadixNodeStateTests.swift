@@ -56,7 +56,7 @@ class RadixNodeStateTests: TestCase {
     
     func testSameNodeSameWebSocketStatusSameUniverseConfigDifferentNodeInfoNotEqual() throws {
         let nodeInfo2 = NodeInfo(
-            system: try! RadixSystem(lower: 5, upperInclusive: 15),
+            system: try RadixSystem(lower: 5, upperInclusive: 15),
             host: host
         )
 
@@ -74,7 +74,7 @@ class RadixNodeStateTests: TestCase {
     }
     
     func testDifferentNodeSameWebSocketStatusSameUniverseConfigSameNodeInfoEqual() throws {
-        let node2 = try! Node(host: host, isUsingSSL: false)
+        let node2 = try Node(host: host, isUsingSSL: false)
         XCTAssertNotEqual(node, node2)
         
         XCTAssertNotEqual(
@@ -83,11 +83,11 @@ class RadixNodeStateTests: TestCase {
         )
     }
     
-    func testAssertErrorIsThrownWhenHostOfNodeInfoAndHostOfNodeDiffers() {
-        let host2 = try! Host(domain: "4.4.4.4", port: 237)
+    func testAssertErrorIsThrownWhenHostOfNodeInfoAndHostOfNodeDiffers() throws {
+        let host2 = try Host(domain: "4.4.4.4", port: 237)
         XCTAssertNotEqual(host, host2)
         let nodeInfo2 = NodeInfo(
-            system: try! RadixSystem(lower: 5, upperInclusive: 15),
+            system: try RadixSystem(lower: 5, upperInclusive: 15),
             host: host2
         )
         XCTAssertNotEqual(node.host, nodeInfo2.host)

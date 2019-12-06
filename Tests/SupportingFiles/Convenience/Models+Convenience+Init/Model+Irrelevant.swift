@@ -102,3 +102,33 @@ extension ResourceIdentifier {
     }
 }
 
+
+extension UniverseConfig {
+    static let irrelevant = Self.localnet
+}
+
+extension NodeInfo {
+    static let one = Self(system: .irrelevant, host: .local(port: 1))
+    static let two = Self(system: .irrelevant, host: .local(port: 2))
+}
+
+extension RadixSystem {
+    static let irrelevant = Self(shardSpace: .irrelevant)
+}
+
+extension ShardSpace {
+    static let irrelevant = try! Self(range: .irrelevant, anchor: 1)
+}
+
+extension ShardRange {
+    static let irrelevant: Self =  try! Self(lower: 0, upperInclusive: 2)
+}
+
+extension Shards {
+    static var irrelevant: Self { .init(single: .irrelevant) }
+}
+
+func makeNode(index specifiedIndex: UInt8? = nil) -> Node {
+    let index: UInt8 = specifiedIndex ?? UInt8.random(in: 100...255)
+    return try! Node(domain: "1.1.1.\(index)", port: 1, isUsingSSL: false)
+}

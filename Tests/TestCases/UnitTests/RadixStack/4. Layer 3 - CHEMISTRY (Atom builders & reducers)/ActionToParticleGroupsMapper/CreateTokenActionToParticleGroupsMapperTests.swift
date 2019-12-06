@@ -33,16 +33,16 @@ class CreateTokenActionToParticleGroupsMapperTests: TestCase {
     private lazy var address = Address(magic: magic, publicKey: account.publicKey)
     
 
-    func testMutableSupplyTokenCreationWithoutInitialSupply() {
-        doTestTokenCreation(initialSupply: .mutable(initial: 0))
+    func testMutableSupplyTokenCreationWithoutInitialSupply() throws {
+        try doTestTokenCreation(initialSupply: .mutable(initial: 0))
     }
     
-    func testTokenCreationWithInitialSupplyPartial() {
-        doTestTokenCreation(initialSupply: .fixed(to: 1000))
+    func testTokenCreationWithInitialSupplyPartial() throws {
+        try doTestTokenCreation(initialSupply: .fixed(to: 1000))
     }
     
-    func testTokenCreationWithInitialSupplyAll() {
-        doTestTokenCreation(initialSupply: .fixed(to: PositiveSupply.max))
+    func testTokenCreationWithInitialSupplyAll() throws {
+        try doTestTokenCreation(initialSupply: .fixed(to: PositiveSupply.max))
     }
     
     func testAssertMaxSupplySubtractedFromMaxIsZero() {
@@ -59,8 +59,8 @@ class CreateTokenActionToParticleGroupsMapperTests: TestCase {
 }
 
 private extension CreateTokenActionToParticleGroupsMapperTests {
-    func doTestTokenCreation(initialSupply: CreateTokenAction.InitialSupply.SupplyTypeDefinition) {
-        let createTokenAction = try! CreateTokenAction(
+    func doTestTokenCreation(initialSupply: CreateTokenAction.InitialSupply.SupplyTypeDefinition) throws {
+        let createTokenAction = try CreateTokenAction(
             creator: address,
             name: "Cyon",
             symbol: "CCC",
@@ -69,7 +69,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         )
         
         let mapper = DefaultCreateTokenActionToParticleGroupsMapper()
-        let particleGroups = try! mapper.particleGroups(for: createTokenAction, upParticles: [], addressOfActiveAccount: address)
+        let particleGroups = try mapper.particleGroups(for: createTokenAction, upParticles: [], addressOfActiveAccount: address)
         guard let tokenCreationGroup = particleGroups.first else { return }
         assertCorrectnessTokenCreationGroup(tokenCreationGroup, testPermissions: initialSupply.isFixed)
         
@@ -84,10 +84,10 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
             XCTAssertEqual(particleGroups.count, 2)
             let mintTokenGroup = particleGroups[1]
             
-            assertCorrectnessMintTokenGroup(
+            try assertCorrectnessMintTokenGroup(
                 mintTokenGroup,
                 tokenCreationGroup: tokenCreationGroup,
-                initialSupply: try! PositiveAmount(unrelated: mutableInitialSupply),
+                initialSupply: try PositiveAmount(unrelated: mutableInitialSupply),
                 createTokenAction: createTokenAction
             )
         }
@@ -98,7 +98,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         tokenCreationGroup: ParticleGroup,
         initialSupply initialSupplyAmount: PositiveAmount,
         createTokenAction: CreateTokenAction
-        ) {
+        ) throws {
         
         guard
             case let tokenCreationGroupParticles = tokenCreationGroup.spunParticles,
@@ -140,7 +140,7 @@ private extension CreateTokenActionToParticleGroupsMapperTests {
         
         XCTAssertEqual(
             transferrableTokensParticle.amount,
-            try! PositiveAmount(unrelated: createTokenAction.supplyDefinition!.initialSupply)
+            try PositiveAmount(unrelated: createTokenAction.supplyDefinition!.initialSupply)
         )
         
         if expectUnallocatedFromLeftOverSupply {

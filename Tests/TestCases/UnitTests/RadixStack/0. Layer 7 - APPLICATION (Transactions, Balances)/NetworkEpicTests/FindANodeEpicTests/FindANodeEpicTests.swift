@@ -314,14 +314,6 @@ struct FindNodeRequestGivenShards: FindANodeRequestAction {
     let shards: Shards
 }
 
-extension Shards {
-    static var irrelevant: Self { .init(single: .irrelevant) }
-}
-
-func makeNode(index specifiedIndex: UInt8? = nil) -> Node {
-    let index: UInt8 = specifiedIndex ?? UInt8.random(in: 100...255)
-    return try! Node(domain: "1.1.1.\(index)", port: 1, isUsingSSL: false)
-}
 
 extension DetermineIfMoreInfoAboutNodeIsNeeded {
     static var neverAskForMoreInfo: DetermineIfMoreInfoAboutNodeIsNeeded {

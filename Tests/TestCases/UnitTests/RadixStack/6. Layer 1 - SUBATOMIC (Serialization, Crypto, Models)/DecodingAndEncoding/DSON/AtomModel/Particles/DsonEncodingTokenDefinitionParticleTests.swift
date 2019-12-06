@@ -29,9 +29,9 @@ import XCTest
 
 class DsonEncodingTokenDefinitionParticleTests: TestCase {
 
-    func testDsonEncodingOfTokenDefinitionParticle() {
+    func testDsonEncodingOfTokenDefinitionParticle() throws {
         
-        let tokenDefinitionParticle = try! MutableSupplyTokenDefinitionParticle(
+        let tokenDefinitionParticle = try MutableSupplyTokenDefinitionParticle(
             symbol: "POW",
             name: "Proof of Work",
             description: "Radix POW",

@@ -209,7 +209,7 @@ final class HTTPClientTests: TestCase {
         XCTAssertNotNil(cancellable)
     }
     
-    func test_data_as_model_success() {
+    func test_data_as_model_success() throws {
 
         let subject = PassthroughSubject<Data, HTTPError.NetworkingError>()
 
@@ -232,7 +232,7 @@ final class HTTPClientTests: TestCase {
         
         let rriParticle = ResourceIdentifierParticle(resourceIdentifier: .irrelevant)
 
-        let dataSent = try! JSONEncoder().encode(rriParticle)
+        let dataSent = try JSONEncoder().encode(rriParticle)
         subject.send(dataSent)
         wait(for: [expectation], timeout: 0.1)
         XCTAssertEqual(outputtedValues.count, 1)
@@ -294,7 +294,7 @@ final class HTTPClientTests: TestCase {
 }
 
 extension FormattedURL {
-    static let localhostHttp = try! URLFormatter.format(host: Host.local(), protocol: .hypertext, useSSL: false)
+//    static let localhostHttp = try URLFormatter.format(host: Host.local(), protocol: .hypertext, useSSL: false)
     
     static var localhostWebsocket: FormattedURL {
         return URLFormatter.localhostWebsocket

@@ -49,7 +49,7 @@ private let atom = Atom(
         try! ParticleGroup(spunParticles: [
             AnySpunParticle(
                 spin: .up,
-                particle: try! MutableSupplyTokenDefinitionParticle(
+                particle: try MutableSupplyTokenDefinitionParticle(
                     symbol: "CCC",
                     name: "Cyon",
                     description: "Cyon Crypto Coin is the worst shit coin",

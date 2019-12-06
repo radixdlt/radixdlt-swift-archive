@@ -27,18 +27,18 @@ import XCTest
 
 class TokenBalanceReducerTests: TestCase {
     
-    func testSimpleBalance() {
+    func testSimpleBalance() throws {
         let reducer = TokenBalanceReferencesReducer()
-        let balances = try! reducer.reduceFromInitialState(upParticles: [transferrable(10)])
+        let balances = try reducer.reduceFromInitialState(upParticles: [transferrable(10)])
         
         let balance = balances[xrd]
         XCTAssertEqual(balance?.amount, 10)
     }
     
-    func testMultipleMintedTokens() {
+    func testMultipleMintedTokens() throws {
         let reducer = TokenBalanceReferencesReducer()
     
-        let balances = try! reducer.reduceFromInitialState(upParticles: [
+        let balances = try reducer.reduceFromInitialState(upParticles: [
             transferrable(3),
             transferrable(5),
             transferrable(11)

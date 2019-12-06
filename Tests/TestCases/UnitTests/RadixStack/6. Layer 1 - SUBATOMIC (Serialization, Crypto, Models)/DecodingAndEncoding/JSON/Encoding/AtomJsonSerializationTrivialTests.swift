@@ -27,12 +27,12 @@ import XCTest
 
 class AtomJsonSerializationTrivialTests: TestCase {
     
-    func testJsonEncodingAndDecodingResultsInTheSameTrivialAtom() {
+    func testJsonEncodingAndDecodingResultsInTheSameTrivialAtom() throws {
 
         // GIVEN
         // A simple atom
         let atom: Atom = [
-            try! UniqueParticle(
+            try UniqueParticle(
                 address: "JHdWTe8zD2BMWwMWZxcKAFx1E8kK3UqBSsqxD9UWkkVD78uMCei",
                 string: "Sajjon"
             ).withSpin(.up).wrapInGroup()
