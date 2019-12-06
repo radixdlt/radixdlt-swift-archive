@@ -1,7 +1,7 @@
 github "attaswift/BigInt"
 
-github "yenom/BitcoinKit"
+github "yenom/BitcoinKit" "v1.1.0"
 
 github "https://github.com/Sajjon/Entwine.git" "carthage"
 
-github "https://github.com/myfreeweb/SwiftCBOR.git" "3e0cb0135632583362dfa0cfaaf790a36890d7fd"
+github "myfreeweb/SwiftCBOR" "v0.4.3"
