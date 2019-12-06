@@ -35,7 +35,7 @@ final class RadixApplicationClient:
 { ... }
 
 
-protocol AccountBalancing:  {
+protocol AccountBalancing {
 
     func observeBalances(ownedBy owner: ) -> AnyPublisher<TokenBalances, TokenBalancesReducerError>
     
@@ -148,7 +148,7 @@ XCTAssertEqual(bobsBalanceOfAliceCoin.amount, 10)
 
 #### Send Message
 ```swift
-// `application` is initialzed above using Alice's identity
+// `application` is initialized above using Alice's identity
 var pendingTransaction = application.sendEncryptedMessage("Hi Bob, this is a secret message from Alice", to: bob)
 try waitForTransactionToFinish(pendingTransaction)
 
@@ -275,7 +275,7 @@ to help with understanding of the different layers and trying to ease separation
 | 7     | [Application](#layer-7---application)   		| Transfer & create token, account balance 									| `RadixApplicationClient`, `AbstractIdentity`                         		 
 | 6     | [Ledger](#layer-6---ledger)             		| Fetching and storing of Atoms                 							| `AtomStore`, `AtomObservation`                                   
 | 5     | [Universe](#layer-5---universe)               | RadixUniverse, RadixNetwork, RadixNode and interaction with the nodes     | `Node`, `Universe`, `RadixNetwork`, `NodeAction`
-| 4     | [Networking](#layer-4---networking)           | Networking (Websocket, HTTP) and transport (RPC, REST)                   	| `RPCClient`, `RESTClient`, `WebsocketToNode`                           
+| 4     | [Networking](#layer-4---networking)           | Networking (WebAocket, HTTP) and transport (RPC, REST)                   	| `RPCClient`, `RESTClient`, `WebsocketToNode`                           
 | 3     | [Chemistry](#layer-3---chemistry)       		| Mapping user action to atoms and reducing atoms to state (e.g. balance) 	| `UserAction`, `ActionToParticlesMapper`, `AtomToExecutedActionReducer` 
 | 2     | [Atom Model](#layer-2---atom-model)     		| Radix multi-purpose "transaction" packaged in the `Atom`.               	| `Atom`, `ParticleGroup`, `Spin` and particles                          
 | 1     | [Subatomic](#layer-1---subatomic)     		| (De- &) serialization, crypto and models.                               	|  `DSONEncodable`, ECC, `HexString`, `Amount` etc...                    
@@ -290,7 +290,7 @@ Fetching and storing atoms
 Connect to a Node and access its RPC and REST API's, please see the [API docs here](https://docs.radixdlt.com/node-api/) for a list of existing API's/
 
 #### Layer 4 - Networking
-Networking (Websocket, HTTP) and transport (RPC, REST).
+Networking (WebSocket, HTTP) and transport (RPC, REST).
 
 #### Layer 3 - Chemistry
 Mapping user actions to particles used to instantiate Atoms. Reduce atoms into state, such as account balance.
