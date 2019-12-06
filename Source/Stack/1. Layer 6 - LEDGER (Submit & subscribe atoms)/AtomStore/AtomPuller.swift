@@ -23,50 +23,8 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol AtomPuller {
-    func pull(address: Address) -> Observable<Any>
-}
-
-public final class DefaultAtomPuller: AtomPuller {
-    
-    private var requestCache = RequestCache()
-    
-    private let networkController: RadixNetworkController
-    public init(networkController: RadixNetworkController) {
-        self.networkController = networkController
-    }
-}
-
-public extension DefaultAtomPuller {
-    func pull(address: Address) -> Observable<Any> {
-        return requestCache.valueForKey(key: address) {
-            let fetchAtomsRequest = FetchAtomsActionRequest(address: address)
-            return Observable.create { [weak self] observer in
-                guard let `self` = self else {
-                    observer.onCompleted()
-                    return Disposables.create()
-                }
-                self.networkController.dispatch(nodeAction: fetchAtomsRequest)
-                
-                return Disposables.create {
-                    let cancelRequest = FetchAtomsActionCancel(request: fetchAtomsRequest)
-                    self.networkController.dispatch(nodeAction: cancelRequest)
-                }
-            }
-        }.map { $0 }
-    }
-}
-
-internal extension DefaultAtomPuller {
-    struct RequestCache: DictionaryConvertibleMutable, ExpressibleByDictionaryLiteral {
-        public typealias Key = Address
-        public typealias Value = Observable<FetchAtomsAction>
-        public typealias Map = [Key: Value]
-        public var dictionary: Map
-        public init(dictionary: Map) {
-            self.dictionary = dictionary
-        }
-    }
+    func pull(address: Address) -> AnyPublisher<Never, Never>
 }

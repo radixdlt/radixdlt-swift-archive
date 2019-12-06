@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public final class DefaultRESTClient: RESTClient, HTTPClientOwner {
 
@@ -34,7 +34,7 @@ public final class DefaultRESTClient: RESTClient, HTTPClientOwner {
     }
     
     deinit {
-        log.error("💣")
+        print("error: 💣")
     }
 }
 

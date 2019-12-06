@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 // swiftlint:disable file_length
 // syntactic sugar mostly
@@ -31,14 +31,13 @@ import RxSwift
 public protocol TokenCreating {
     
     /// Creates a new kind of Token
-    func create(token: CreateTokenAction) -> ResultOfUserAction
+    func createToken(action: CreateTokenAction) -> PendingTransaction
     
-    func observeMyTokenDefinitions() -> Observable<TokenDefinitionsState>
+    func observeMyTokenDefinitions() -> AnyPublisher<TokenDefinitionsState, StateSubscriberError>
 }
 
 public extension TokenCreating {
     
-    // swiftlint:disable:next function_parameter_count
     func createToken(
         creator: AddressConvertible,
         name: Name,
@@ -48,7 +47,7 @@ public extension TokenCreating {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         let createTokenAction = try CreateTokenAction(
             creator: creator.address,
@@ -61,7 +60,7 @@ public extension TokenCreating {
             permissions: tokenPermissions
         )
         
-        return (create(token: createTokenAction), createTokenAction.identifier)
+        return (createToken(action: createTokenAction), createTokenAction.identifier)
     }
     
     /// Just syntactic sugar for `createToken` with `fixed` supply
@@ -74,7 +73,7 @@ public extension TokenCreating {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
 
         return try createToken(
             creator: creator,
@@ -98,7 +97,7 @@ public extension TokenCreating {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try createToken(
             creator: creator,
@@ -123,7 +122,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try createToken(
             creator: addressOfActiveAccount,
@@ -146,7 +145,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try createFixedSupplyToken(
             creator: addressOfActiveAccount,
@@ -169,7 +168,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         iconUrl: URL? = nil,
         granularity: Granularity = .default,
         tokenPermissions: TokenPermissions? = .mutableSupplyToken
-    ) throws -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) throws -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try createMultiIssuanceToken(
             creator: addressOfActiveAccount,
@@ -288,7 +287,7 @@ public extension TokenCreating where Self: ActiveAccountOwner {
         iconUrl: URL? = nil,
         supply: PositiveSupply = .max,
         granularity: Granularity = .default
-    ) throws-> CreateTokenAction {
+    ) throws -> CreateTokenAction {
         
         return try CreateTokenAction(
             creator: addressOfActiveAccount,

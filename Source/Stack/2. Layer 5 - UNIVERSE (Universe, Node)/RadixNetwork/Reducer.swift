@@ -46,13 +46,8 @@ public struct SomeReducer<Action>: Reducer, Throwing {
     init<Concrete>(_ concrete: Concrete) where Concrete: Reducer, Concrete.Action == Action {
         self._reduce = { concrete.reduce(action: $0) }
     }
-    init(any: AnyReducer) throws {
-        guard any.matches(actionType: Action.self) else {
-            throw Error.actionTypeMismatch
-        }
-        self._reduce = { any.reduce(anAction: $0) }
-    }
 }
+
 public extension SomeReducer {
     func reduce(action: Action) {
         self._reduce(action)
@@ -62,35 +57,5 @@ public extension SomeReducer {
 public extension SomeReducer {
     enum Error: Int, Swift.Error, Equatable {
         case actionTypeMismatch
-    }
-}
-
-public struct AnyReducer: BaseReducer {
-    private let _actionType: () -> Any.Type
-    private let _matchesType: (Any.Type) -> Bool
-    private let _reduce: (Any) -> Void
-    
-    public init<Concrete>(_ concrete: Concrete) where Concrete: Reducer {
-        self._actionType = { Concrete.Action.self }
-        self._matchesType = { return $0 == Concrete.Action.self }
-        self._reduce = {
-            let action = castOrKill(instance: $0, toType: Concrete.Action.self)
-            concrete.reduce(action: action)
-        }
-    }
-}
-
-public extension AnyReducer {
-    
-    func reduce(anAction: Any) {
-        self._reduce(anAction)
-    }
-    
-    func matches<Action>(actionType: Action.Type) -> Bool {
-        return _matchesType(actionType)
-    }
-    
-    var actionType: Any.Type {
-        return _actionType()
     }
 }

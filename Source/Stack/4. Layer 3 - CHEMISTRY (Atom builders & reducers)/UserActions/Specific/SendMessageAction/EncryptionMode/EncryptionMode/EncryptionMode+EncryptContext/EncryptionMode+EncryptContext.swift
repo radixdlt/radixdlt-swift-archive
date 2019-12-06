@@ -25,8 +25,8 @@
 import Foundation
 
 public extension SendMessageAction.EncryptionMode {
-    enum EncryptContext {
-        case encrypt(onlyDecryptableBy: [AddressConvertible])
+    enum EncryptContext: Equatable {
+        case encrypt(onlyDecryptableBy: [Address])
         case plainText
     }
 }

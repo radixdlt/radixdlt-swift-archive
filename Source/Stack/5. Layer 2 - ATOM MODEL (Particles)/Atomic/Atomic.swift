@@ -70,8 +70,15 @@ public extension Atomic {
 public extension Atomic where Self: RadixHashable {
     
     func identifier() -> AtomIdentifier {
+        let shards: Shards
         do {
-            return try AtomIdentifier(hash: radixHash, shards: try shards())
+            shards = try self.shards()
+        } catch {
+            incorrectImplementation("Failed to create AtomIdentifier, could not even create `shards`, error: \(error)")
+        }
+        
+        do {
+            return try AtomIdentifier(hash: radixHash, shards: shards)
         } catch {
             incorrectImplementation("Failed to create AtomIdentifier, error: \(error)")
         }

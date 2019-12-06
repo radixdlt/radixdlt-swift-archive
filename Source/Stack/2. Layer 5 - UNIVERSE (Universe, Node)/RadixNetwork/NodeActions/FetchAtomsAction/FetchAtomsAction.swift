@@ -61,9 +61,3 @@ public struct FetchAtomsActionRequest: FetchAtomsAction, FindANodeRequestAction 
         return Shards(single: address.shard)
     }
 }
-
-public struct FetchAtomsActionSubscribe: FetchAtomsAction {
-    public let address: Address
-    public let node: Node
-    public let uuid: UUID
-}

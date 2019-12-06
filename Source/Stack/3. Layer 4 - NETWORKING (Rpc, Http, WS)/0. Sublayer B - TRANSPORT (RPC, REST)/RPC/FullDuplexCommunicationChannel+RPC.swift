@@ -23,77 +23,73 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 extension FullDuplexCommunicationChannel {
     
-    func responseForMessage<Model>(requestId: String) -> Observable<Model> where Model: Decodable {
-        
-        return responseOrErrorForMessage(requestId: requestId).map {
-            try $0.get().model
-        }
+    func responseOrErrorForMessage<Model>(requestId: String) -> AnyPublisher<Model, Never> where Model: Decodable {
+        addListener(decodeAs: RPCCallResponse<Model>.self, identifier: requestId)
+            .filter { $0.id == requestId }
+            .map { $0.result }
+            .eraseToAnyPublisher()
     }
     
-    func responseOrErrorForMessage<Model>(requestId: String) -> Observable<RPCResult<Model>> where Model: Decodable {
-        return resultForMessage(parseMode: .responseOnRequest(withId: requestId))
-    }
-    
-    func observeNotification<Model>(_ notification: RPCNotification, subscriberId: SubscriberId) -> Observable<Model> where Model: Decodable {
+    func observeNotification<Model>(
+        _ method: RPCNotificationMethod,
+        subscriberId: SubscriberId
+    ) -> AnyPublisher<Model, Never> where Model: Decodable {
+        addListener(decodeAs: RPCNotificationResponse<Model>.self, identifier: subscriberId.value)
+            .filter { $0.subscriberId == subscriberId }
+            .filter { $0.method == method }
+            .map { $0.params }
+            .eraseToAnyPublisher()
         
-        return resultForMessage(parseMode: .parseAsNotification(notification, subscriberId: subscriberId)).map {
-            try $0.get().model
-        }
     }
-}
-
-private enum ParseJsonRpcResponseMode {
-    case parseAsNotification(RPCNotification, subscriberId: SubscriberId)
-    case responseOnRequest(withId: String)
 }
 
 private extension FullDuplexCommunicationChannel {
+    
+    func addListener<RPCTopLevelResponse: Decodable>(
+        decodeAs _: RPCTopLevelResponse.Type,
+        identifier: String
+    ) -> AnyPublisher<RPCTopLevelResponse, Never> {
+        
+        let listener = Listener()
+        let removeListener = addListener(listener)
 
-    func resultForMessage<Model>(
-        parseMode: ParseJsonRpcResponseMode
-    ) -> Observable<RPCResult<Model>> where Model: Decodable {
-
-        return messages
-            .map { $0.toData() }
-            .filter {
-                guard
-                    let jsonObj = try? JSONSerialization.jsonObject(with: $0, options: []) as? JSON
-                    else {
-                       incorrectImplementation("not json!")
+        return listener
+            .map { (messageFromWebSocket: URLSessionWebSocketTask.Message) -> String in
+                guard case let .string(textMessage) = messageFromWebSocket else {
+                    fatalError("Got non string from ws.")
                 }
-                
-                switch parseMode {
-                case .parseAsNotification(let expectedNotification, let expectedSubscriberId):
-                    guard
-                        let notificationMethodFromResponseAsString = jsonObj[RPCResponseLookingLikeRequestCodingKeys.method.rawValue] as? String,
-                        let notificationMethodFromResponse = RPCNotification(rawValue: notificationMethodFromResponseAsString),
-                        notificationMethodFromResponse == expectedNotification,
-                        let subscriberIdWrapperJson = jsonObj[RPCResponseLookingLikeRequestCodingKeys.params.rawValue] as? JSON,
-                        let subscriberIdFromResponseAsString = subscriberIdWrapperJson["subscriberId"] as? String,
-                        case let subscriberIdFromResponse = SubscriberId(validated: subscriberIdFromResponseAsString),
-                        subscriberIdFromResponse == expectedSubscriberId
-                    else {
-                        return false
+                return textMessage
+            }
+            .flatMap { webSocketMessage -> AnyPublisher<RPCTopLevelResponse, Never> in
+                let data = webSocketMessage.toData()
+                do {
+                    let decoded = try JSONDecoder().decode(RPCTopLevelResponse.self, from: data)
+                    return Just(decoded).eraseToAnyPublisher()
+                } catch let decodingError {
+                    if
+                        let json = try? JSONSerialization.jsonObject(with: data, options: []) as? JSON,
+                        let errorJson = json["error"] as? JSON,
+                        let errorJsonData = try? JSONSerialization.data(withJSONObject: errorJson, options: []),
+                        let rpcRequestError = try? JSONDecoder().decode(RPCRequestError.self, from: errorJsonData)
+                    {
+                        Swift.print("☢️ error from API:\n\(rpcRequestError)\nIdentifier used: '\(identifier)'\n\n")
+                    } else if webSocketMessage.contains(identifier) {
+                        Swift.print("\n\n⚡️Suppressed error when decoding \(RPCTopLevelResponse.self)\nError: \(decodingError)\n\nFrom json:\n<\n\(webSocketMessage)\n>\n\n")
                     }
-                    return true
-                    
-                case .responseOnRequest(let rpcRequestId):
-                    guard
-                        let requestIdFromResponse = jsonObj[RPCResponseResultWithRequestIdCodingKeys.id.rawValue] as? String,
-                        requestIdFromResponse == rpcRequestId
-                        else {
-                            return false
-                            
-                    }
-                    return true
+                    return Empty<RPCTopLevelResponse, Never>(completeImmediately: false)
+                        .eraseToAnyPublisher()
                 }
             }
-            .map { try JSONDecoder().decode(RPCResult<Model>.self, from: $0) }
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            .subscribeOn(MainScheduler.instance)
+            .handleEvents(
+                receiveCompletion: { _ in removeListener() },
+                receiveCancel: { removeListener() }
+            )
+            .subscribe(on: RadixSchedulers.mainThreadScheduler)
+            .receive(on: RadixSchedulers.backgroundScheduler)
+            .eraseToAnyPublisher()
     }
 }

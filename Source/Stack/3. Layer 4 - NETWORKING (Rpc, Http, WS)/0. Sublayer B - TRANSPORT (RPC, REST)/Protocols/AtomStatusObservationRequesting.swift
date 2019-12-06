@@ -23,8 +23,8 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol AtomStatusObservationRequesting {
-    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> Completable
+    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> AnyPublisher<Never, Never>
 }

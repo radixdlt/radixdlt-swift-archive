@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol RadixUniverse {
     
@@ -35,7 +35,7 @@ public protocol RadixUniverse {
 }
 
 public extension RadixUniverse {
-    var readyNodes: Observable<[RadixNodeState]> { networkController.readyNodes }
+    var connectedNodes: AnyPublisher<[RadixNodeState], Never> { networkController.connectedNodes }
 }
 
 // MARK: - RadixUniverse
@@ -57,23 +57,32 @@ public final class DefaultRadixUniverse: RadixUniverse {
 }
 
 public extension DefaultRadixUniverse {
-
-    convenience init(config: UniverseConfig, discoveryMode: DiscoveryMode) throws {
-       let atomStore = InMemoryAtomStore(genesisAtoms: config.genesis.atoms)
-
-        let discoveryEpics: [RadixNetworkEpic]
-        let initialNetworkOfNodes: Set<Node>
+    
+    static func makeNetworkEpics(
+        discoveryMode: DiscoveryMode,
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
+    ) -> [RadixNetworkEpic] {
+        return makeNetworkEpics(
+            discoveryEpics: discoveryMode.radixNetworkEpics,
+            determineIfPeerIsSuitable: determineIfPeerIsSuitable
+        )
+    }
+    
+    static func makeNetworkEpics(
+        discoveryEpics: [RadixNetworkEpic],
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
+    ) -> [RadixNetworkEpic] {
+        var networkEpics = makeNetworkEpics(determineIfPeerIsSuitable: determineIfPeerIsSuitable)
+        networkEpics.append(contentsOf: discoveryEpics)
+        return networkEpics
+    }
+    
+    static func makeNetworkEpics(
+        determineIfPeerIsSuitable: DetermineIfPeerIsSuitable
+    ) -> [RadixNetworkEpic] {
         
-        switch discoveryMode {
-        case .byDiscoveryEpics(let discoveryEpicsFromMode):
-            discoveryEpics = discoveryEpicsFromMode.elements
-            initialNetworkOfNodes = Set()
-        case .byInitialNetworkOfNodes(let initialNetworkOfNodesFromMode):
-            discoveryEpics = []
-            initialNetworkOfNodes = initialNetworkOfNodesFromMode.asSet
-        }
-        var networkEpics: [RadixNetworkEpic] = [
-            WebSocketsEpic.init(epicFromWebsockets: [
+        return [
+            WebSocketsEpic.init(epicFromWebsocketMakers: [
                 WebSocketEventsEpic.init(webSockets:),
                 ConnectWebSocketEpic.init(webSockets:),
                 SubmitAtomEpic.init(webSockets:),
@@ -84,16 +93,26 @@ public extension DefaultRadixUniverse {
                 RadixJsonRpcAutoConnectEpic.init(webSockets:),
                 RadixJsonRpcAutoCloseEpic.init(webSockets:)
             ]),
-            FindANodeEpic()
+            FindANodeEpic(
+                determineIfPeerIsSuitable: determineIfPeerIsSuitable
+            )
         ]
+    }
+
+    convenience init(config: UniverseConfig, discoveryMode: DiscoveryMode) throws {
+       let atomStore = InMemoryAtomStore(genesisAtoms: config.genesis.atoms)
+
+        let initialNetworkOfNodes = discoveryMode.initialNetworkOfNodes
+     
+        let networkEpics = DefaultRadixUniverse.makeNetworkEpics(
+            discoveryMode: discoveryMode,
+            determineIfPeerIsSuitable: .basedOn(ifUniverseIsSuitable: .ifEqual(to: config))
+        )
         
-        networkEpics.append(contentsOf: discoveryEpics)
-        
-        let networkController = DefaultRadixNetworkController(
-            network: DefaultRadixNetwork(),
-            initialNetworkState: RadixNetworkState(nodesDisconnectFromWS: initialNetworkOfNodes.asArray),
+        let networkController = try DefaultRadixNetworkController(
+            network: DefaultRadixNetwork(state: RadixNetworkState(nodesDisconnectFromWS: initialNetworkOfNodes.contents)),
             epics: networkEpics,
-            reducers: [SomeReducer(InMemoryAtomStoreReducer(atomStore: atomStore))]
+            nodeActionReducers: [SomeReducer(InMemoryAtomStoreReducer(atomStore: atomStore))]
         )
         
         try self.init(config: config, networkController: networkController, atomStore: atomStore)
@@ -120,11 +139,22 @@ public extension DefaultRadixUniverse {
 }
 
 private extension RadixNetworkState {
-    init(nodesDisconnectFromWS: [Node]) {
-        self.init(nodes:
-            nodesDisconnectFromWS
-                .map { KeyValuePair<Node, RadixNodeState>(key: $0, value: .init(node: $0, webSocketStatus: .disconnected)) }
-                .toDictionary()
-        )
+    init(nodesDisconnectFromWS nodes: [Node]) {
+        self.init(nodeStates: nodes.map { RadixNodeState.disconnected(from: $0) })
+    }
+}
+
+extension RadixNodeState {
+    
+    static func of(node: Node, webSocketStatus: WebSocketStatus) -> Self {
+        do {
+            return try Self(node: node, webSocketStatus: webSocketStatus)
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
+    }
+    
+    static func disconnected(from node: Node) -> Self {
+        of(node: node, webSocketStatus: .disconnected)
     }
 }

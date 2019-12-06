@@ -23,8 +23,8 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol AtomSubscriptionCancelling {
-    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable
+    func cancelAtomsSubscription(subscriberId: SubscriberId) -> AnyPublisher<Never, Never>
 }

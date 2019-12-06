@@ -28,7 +28,6 @@ import Foundation
 
 /// A collection of Radix addresses, all belonging to the same universe (having the same magic)
 public struct Addresses:
-    Throwing,
     ArrayDecodable,
     Equatable
 {
@@ -45,11 +44,8 @@ public struct Addresses:
 
 // MARK: - Throwing
 public extension Addresses {
-    enum Error: Swift.Error, Equatable {
-        case differentUniverses(addresses: Set<Address>)
-    }
 
-    static func allInSameUniverse(_ addressConvertibles: [AddressConvertible]) throws {
+    static func allInSameUniverse(_ addressConvertibles: [AddressConvertible]) throws -> Throws<Void, ActionsToAtomError> {
         let addresses = [Address](addressConvertibles.map { $0.address })
         let head: Address 
         let tail: [Address]
@@ -62,7 +58,7 @@ public extension Addresses {
 
         for address in tail {
             guard address.inTheSameUniverse(as: head) else {
-                throw Error.differentUniverses(addresses: Set(addresses))
+                throw ActionsToAtomError.differentUniverses(addresses: Set(addresses))
             }
         }
 

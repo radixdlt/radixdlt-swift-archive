@@ -23,10 +23,14 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol ProofOfWorkWorker {
-    func work(seed: Data, magic: Magic) -> Single<ProofOfWork>
+    
+    func work(
+        seed: Data,
+        magic: Magic
+    ) -> Future<ProofOfWork, ProofOfWork.Error>
 }
 
 // MARK: - Convenience
@@ -34,9 +38,9 @@ public extension ProofOfWorkWorker {
     func work(
         atom: Atom,
         magic: Magic
-    ) -> Single<ProofOfWork> {
+    ) -> Future<ProofOfWork, ProofOfWork.Error> {
         
-        return work(
+        work(
             seed: atom.radixHash.asData,
             magic: magic
         )

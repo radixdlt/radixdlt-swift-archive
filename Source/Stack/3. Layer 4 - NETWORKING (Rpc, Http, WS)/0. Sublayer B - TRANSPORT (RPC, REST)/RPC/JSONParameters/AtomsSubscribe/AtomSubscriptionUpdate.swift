@@ -24,15 +24,7 @@
 
 import Foundation
 
-public protocol SubscriptionUpdate: PotentiallySubscriptionIdentifiable, Decodable {
-    var subscriberId: SubscriberId { get }
-}
-
-public extension SubscriptionUpdate {
-    var subscriberIdIfPresent: SubscriberId? { return subscriberId }
-}
-
-public struct AtomSubscriptionUpdate: SubscriptionUpdate {
+public struct AtomSubscriptionUpdate: Decodable {
     public let atomEvents: [AtomEvent]
     public let subscriberId: SubscriberId
     public let isHead: Bool
@@ -44,7 +36,7 @@ public extension AtomSubscriptionUpdate {
             let atomObservations = atomEvents.map { AtomObservation($0) }
             return atomObservations
         } else {
-            return [AtomObservation.head()]
+            return [AtomObservation.headNow()]
         }
     }
 }

@@ -25,7 +25,7 @@
 import Foundation
 
 public extension SendMessageAction {
-    enum EncryptionMode {
+    enum EncryptionMode: Equatable {
         case encryptContext(EncryptContext)
         case decryptContext(DecryptedContext)
     }

@@ -23,19 +23,23 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol NodeNetworkInfoRequesting {
-    func getNetworkInfo() -> Single<RadixSystem>
+    
+    func getNetworkInfo() -> AnyPublisher<RadixSystem, DataFromNodeError>
 }
 
 public protocol NodeInfoRequesting {
-    func getInfo() -> Single<NodeInfo>
+    
+    func getInfo() -> AnyPublisher<NodeInfo, DataFromNodeError>
 }
 
 public extension NodeInfoRequesting where Self: NodeNetworkInfoRequesting {
-    func getInfo() -> Single<NodeInfo> {
-        return getNetworkInfo().map { NodeInfo(system: $0, host: nil) }
+    func getInfo() -> AnyPublisher<NodeInfo, DataFromNodeError> {
+        getNetworkInfo()
+            .map { NodeInfo(system: $0, host: nil) }
+            .eraseToAnyPublisher()
     }
+    
 }
-

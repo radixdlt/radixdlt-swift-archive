@@ -23,15 +23,23 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
+
+// swiftlint:disable opening_brace
 
 // MARK: AtomToUniqueIdMapper
-public protocol AtomToUniqueIdMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == PutUniqueIdAction {}
+public protocol AtomToUniqueIdMapper: AtomToSpecificExecutedActionMapper
+    where
+SpecificExecutedAction == PutUniqueIdAction,
+SpecificMappingError == Never
+{}
+
+// swiftlint:enable opening_brace
 
 public extension AtomToUniqueIdMapper {
     
-    func mapAtomToActions(_ atom: Atom) -> Observable<[PutUniqueIdAction]> {
-        guard atom.containsAnyUniqueParticle(spin: .up) else { return .just([]) }
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[PutUniqueIdAction], SpecificMappingError> {
+        guard atom.containsAnyUniqueParticle(spin: .up) else { return Just([]).eraseToAnyPublisher() }
         
         var uniqueActions = [PutUniqueIdAction]()
         for particleGroup in atom {
@@ -46,7 +54,7 @@ public extension AtomToUniqueIdMapper {
             )
         }
         
-        return Observable.just(uniqueActions)
+        return Just(uniqueActions).eraseToAnyPublisher()
     }
 }
 
@@ -54,3 +62,4 @@ public extension AtomToUniqueIdMapper {
 public struct DefaultAtomToUniqueIdMapper: AtomToUniqueIdMapper {
     public typealias SpecificExecutedAction = PutUniqueIdAction
 }
+

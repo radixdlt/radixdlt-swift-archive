@@ -52,7 +52,8 @@ public struct AtomWithFee:
 
 // MARK: - Throwing
 public extension AtomWithFee {
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
+        case powError(ProofOfWork.Error)
         case atomAlreadyContainedPow(powNonce: String)
         case atomDoesNotContainPow
     }

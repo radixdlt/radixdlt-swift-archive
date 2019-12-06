@@ -38,7 +38,7 @@ public extension SendMessageAction.EncryptionMode {
         /// Specifies that the data in the SentMessage object WAS encrypted
         /// but could not be decrypted. The present data byte array represents the still
         /// encrypted data.
-        case cannotDecrypt(error: ECIES.DecryptionError)
+        case cannotDecrypt(error: DecryptionError)
     }
 }
 
@@ -47,7 +47,7 @@ public extension SendMessageAction.EncryptionMode.DecryptedContext {
     var isEncryptedButCannotDecrypt: Bool {
         switch self {
         case .cannotDecrypt(let reason):
-            log.info(reason)
+            print(reason)
             return true
         case .decrypted, .wasNotEncrypted: return false
         }

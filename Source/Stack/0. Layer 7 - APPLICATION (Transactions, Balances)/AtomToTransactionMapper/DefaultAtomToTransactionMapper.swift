@@ -23,14 +23,14 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public final class DefaultAtomToTransactionMapper: AtomToTransactionMapper {
     
     /// A list of type-erased mappers from `Atom` to `UserAction`
     private let atomToExecutedActionMappers: [AnyAtomToExecutedActionMapper]
     
-    public init(activeAccount: Observable<Account>) {
+    public init(activeAccount: AnyPublisher<Account, Never>) {
         atomToExecutedActionMappers = .atomToActionMappers(activeAccount: activeAccount)
     }
 }
@@ -41,21 +41,28 @@ public extension DefaultAtomToTransactionMapper {
     }
 }
 
+public enum AtomToTransactionMapperError: Swift.Error, Equatable {
+    case sendMessageActionMappingError(DecryptMessageFromAtomMapperError)
+}
+
 public extension DefaultAtomToTransactionMapper {
     
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
-        return Observable.combineLatest(
+    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
+        Publishers.MergeMany(
             atomToExecutedActionMappers.map { $0.mapAtomSomeUserActions(atom) }
-        ) { $0.flatMap { $0 } }
-            .map { optionalActions in return optionalActions.compactMap { $0 } }
-            .map { ExecutedTransaction(atom: atom, actions: $0) }
+        )
+        .collect(atomToExecutedActionMappers.count)
+            .map { matrix in matrix.flatMap { $0 } }
+            .map {
+                ExecutedTransaction(atom: atom, actions: $0)
+            }
+            .eraseToAnyPublisher()
     }
-    
 }
 
 // MARK: - Default mappers
 public extension Array where Element == AnyAtomToExecutedActionMapper {
-    static func atomToActionMappers(activeAccount: Observable<Account>) -> [AnyAtomToExecutedActionMapper] {
+    static func atomToActionMappers(activeAccount: AnyPublisher<Account, Never>) -> [AnyAtomToExecutedActionMapper] {
         return [
             AnyAtomToExecutedActionMapper(any: DefaultAtomToSendMessageActionMapper(activeAccount: activeAccount) ),
             AnyAtomToExecutedActionMapper(any: DefaultAtomToCreateTokenMapper()),

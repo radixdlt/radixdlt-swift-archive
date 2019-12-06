@@ -24,7 +24,21 @@
 
 import Foundation
 
-public protocol CreateTokenActionToParticleGroupsMapper: UniquelyIdentifiedUserActionToParticleGroupsMapper, Throwing where Action == CreateTokenAction, Error == CreateTokenError {}
+// swiftlint:disable opening_brace
+
+public protocol CreateTokenActionToParticleGroupsMapper: UniquelyIdentifiedUserActionToParticleGroupsMapper
+    where
+    Action == CreateTokenAction,
+    SpecificActionError == CreateTokenError
+{}
+
+// swiftlint:enable opening_brace
+
+public extension CreateTokenActionToParticleGroupsMapper {
+    func mapError(_ createTokenActionError: CreateTokenError, action createTokenAction: CreateTokenAction) -> ActionsToAtomError {
+        ActionsToAtomError.createTokenActionError(createTokenActionError, action: createTokenAction)
+    }
+}
 
 public enum CreateTokenError: UniqueActionErrorInitializable {
     case uniqueActionError(UniquelyIdentifiedUserActionError)

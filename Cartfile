@@ -1,12 +1,24 @@
-github "ReactiveX/RxSwift" "5.0.1"
-github "RxSwiftCommunity/RxSwiftExt" "5.0.0"
-github "RxSwiftCommunity/RxOptional" "4.0.0"
+# When dependency 'BitcoinKit' either supports SPM (see issue: https://github.com/yenom/BitcoinKit/issues/224 )
+# Or when Apple's CryptoKit supports curve `secp256k1` (supports `secp256r1` (a.k.a. `P256`)) AND ECC primitives
+# such as EC multiplication we can drop third party libs for crypto all together (given we find a BIP32 and BIP44 Swift project)
+# Or when another OSS for ECC matures to take BitcoinKit's place. Or start a new wrapper around C lib secp56k1 by using this
+# Swift wrapper as a reference: https://github.com/LanfordCai/Secp256k1Swift
+# BIP39 (mnemonic) can be replaced with: https://github.com/Sajjon/VanligaOrd
 
-github "Alamofire/Alamofire" "5.0.0-beta.3"
-github "daltoniam/Starscream" >= 3.0.2
-github "SwiftyBeaver/SwiftyBeaver"
-github "https://github.com/Sajjon/BitcoinKit.git" "fd73469592123b5b8704de05cbcf721db0331a20"
+# Dependencies ordered according to importance (most significant project first)
 
-github "attaswift/BigInt"
-github "krzyzanowskim/CryptoSwift"
-github "https://github.com/myfreeweb/SwiftCBOR.git" "3e0cb0135632583362dfa0cfaaf790a36890d7fd"
+# Unfortunatly BitcoinKit is the least worst solution. Does not work with SPM. Extremely slow build time
+# Used for ECC. BIP32, BIP39 and BIP44, i.e. Key generation including mnemonic and HDWallet support + message signing.
+github "yenom/BitcoinKit" "v1.1.0"
+
+# Currently best CBOR Swift lib? But a good alternative seems to be: https://github.com/outfoxx/PotentCodables
+# Switching over to PotentCodables might help with DSON implementation (especially cleaning up JSON+DSON encoding code, which is messy).
+github "myfreeweb/SwiftCBOR" "v0.4.3"
+
+# Used for types dependent on big integer, such as amount and supply. When switching over to SPM
+# we might wanna use github.com/sajjon/deltal.
+github "attaswift/BigInt" "v5.0.0"
+
+# Entwine is really just used for its `ReplaySubject`, once Apple implement this themselves as part of Combine, this can be dropped.
+# Entwine did not offer Carthage support, which my fork fixes.
+github "https://github.com/Sajjon/Entwine.git" "carthage"

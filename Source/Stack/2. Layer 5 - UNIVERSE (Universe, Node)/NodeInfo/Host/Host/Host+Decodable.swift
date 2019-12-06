@@ -55,5 +55,6 @@ public extension Host {
     enum Error: Swift.Error, Equatable {
         case badPort(Port.Error)
         case locationEmpty
+        case bothDomainsAreLocalhostButOneUsesLettersAndOtherNumbers
     }
 }

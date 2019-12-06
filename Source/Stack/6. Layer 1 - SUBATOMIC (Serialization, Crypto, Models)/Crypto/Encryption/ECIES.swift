@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import CryptoSwift
+import CryptoKit
 
 // swiftlint:disable all
 
@@ -42,7 +42,6 @@ public final class ECIES {
 
 // MARK: Constants
 public extension ECIES {
-    
     var byteCountInitializationVector: Int { return 16 }
     var byteCountHashH: Int { return 64 }
     var byteCountMac: Int { return 32 }
@@ -53,8 +52,11 @@ public extension ECIES {
     /// Calculates a 32 byte MAC with HMACSHA256
     func calculateMAC(salt: DataConvertible, initializationVector iv: DataConvertible, ephemeralPublicKey: PublicKey, cipherText: DataConvertible) throws -> Data {
         let message = iv + ephemeralPublicKey.asData + cipherText
-        let macBytes = try HMAC(key: salt.bytes, variant: .sha256).authenticate(message.bytes)
-        return macBytes.asData
+        
+        let key: SymmetricKey = .init(data: salt.bytes)
+        
+        let authentication = HMAC<SHA256>.authenticationCode(for: message.bytes, using: key)
+        return Data(authentication)
     }
     
     func encrypt(data dataConvertible: DataConvertible, using publicKeyOwner: PublicKeyOwner) throws -> Data {
@@ -66,7 +68,7 @@ public extension ECIES {
             point = try EllipticCurvePoint.decodePointFromPublicKey(publicKeyOwner.publicKey)
         } catch let decodePublicKeyError as EllipticCurvePoint.Error {
             throw DecryptionError.failedToDecodePublicKeyPoint(error: decodePublicKeyError)
-        } catch { incorrectImplementation("unhandled error: \(error)") }
+        } catch { unexpectedlyMissedToCatch(error: error) }
         
         
         // 2. Generate 16 random bytes using a secure random number generator. Call them IV
@@ -74,10 +76,10 @@ public extension ECIES {
         let iv = try securelyGenerateBytes(count: byteCountInitializationVector)
         
         // 3. Generate a new ephemeral EC key pair
-        let ephermalKeyPair = KeyPair()
+        let ephemeralKeyPair = KeyPair()
         
         // 4. Do an EC point multiply with this.getPublicKey() and ephemeral private key. This gives you a point M.
-        let pointM = point * ephermalKeyPair.privateKey
+        let pointM = point * ephemeralKeyPair.privateKey
         
         // 5. Use the X component of point M and calculate the SHA512 hash H.
         let hashH = RadixHash(unhashedData: pointM.x.asData, hashedBy: sha512TwiceHasher).asData
@@ -95,7 +97,7 @@ public extension ECIES {
         let macData = try calculateMAC(
             salt: keyDataM,
             initializationVector: iv,
-            ephemeralPublicKey: ephermalKeyPair.publicKey,
+            ephemeralPublicKey: ephemeralKeyPair.publicKey,
             cipherText: cipherText
         )
         assert(macData.length == byteCountMac)
@@ -106,8 +108,8 @@ public extension ECIES {
             let bigEndianInt32Bytes = CFSwapInt32HostToBig(cipherTextLength)
             return bigEndianInt32Bytes.asData
         }
-        let ephermalPublicKeyLength = Byte(ephermalKeyPair.publicKey.length).asData
-        let ephermalPublicKey = ephermalKeyPair.publicKey.asData
+        let ephermalPublicKeyLength = Byte(ephemeralKeyPair.publicKey.length).asData
+        let ephermalPublicKey = ephemeralKeyPair.publicKey.asData
         let cipherTextLength = encodeCipherTextLength()
         
         let encrypted: Data = [
@@ -121,15 +123,7 @@ public extension ECIES {
         
         return encrypted
     }
-    
-    enum DecryptionError: Swift.Error, Equatable {
-        case failedToConvertPublicKeyLengthDataToInteger
-        case failedToConvertCipherTextLengthDataToInteger
-        case macMismatch(expected: Data, butGot: Data)
-        case keyMismatch
-        case failedToDecodePublicKeyPoint(error: EllipticCurvePoint.Error)
-    }
-    
+
     func decrypt(data dataConvertible: DataConvertible, using signing: Signing) throws -> Data {
         var encrypted = dataConvertible.asData
         let privateKey = signing.privateKey
@@ -181,8 +175,6 @@ public extension ECIES {
         let calculatedMac = try calculateMAC(salt: keyDataM, initializationVector: iv, ephemeralPublicKey: ephemeralPublicKey, cipherText: cipherText)
         
         guard calculatedMac == mac else {
-            log.verbose("Expected MAC:\n<\(mac.hex)>")
-            log.verbose("Calculated MAC:\n<\(calculatedMac.hex)>")
             throw DecryptionError.macMismatch(expected: mac, butGot: calculatedMac)
         }
         
@@ -193,24 +185,6 @@ public extension ECIES {
     }
 }
 
-// MARK: ECIES.DecryptionError + Equatable
-extension ECIES.DecryptionError {
-    public static func == (lhs: ECIES.DecryptionError, rhs: ECIES.DecryptionError) -> Bool {
-        switch (lhs, rhs) {
-        case (.macMismatch, .macMismatch): return true
-        case (.macMismatch, _): return false
-        case (.keyMismatch, .keyMismatch): return true
-        case (.keyMismatch, _): return false
-        case (.failedToDecodePublicKeyPoint, .failedToDecodePublicKeyPoint): return true
-        case (.failedToDecodePublicKeyPoint, _): return false
-        case (.failedToConvertCipherTextLengthDataToInteger, .failedToConvertCipherTextLengthDataToInteger): return true
-        case (.failedToConvertCipherTextLengthDataToInteger, _): return false
-        case (.failedToConvertPublicKeyLengthDataToInteger, .failedToConvertPublicKeyLengthDataToInteger): return true
-        case (.failedToConvertPublicKeyLengthDataToInteger, _): return false
-        }
-    }
-}
-
 
 extension Data {
     /// Mutates current data and returns the first `byteCount` bytes that was dropped
@@ -218,37 +192,6 @@ extension Data {
         let dropped = prefix(byteCount)
         self = dropFirst(byteCount)
         return Data(dropped)
-    }
-}
-
-public struct Crypt {
-    public init() {}
-}
-
-public extension Crypt {
-    enum Operation {
-        case encrypt
-        case decrypt
-    }
-}
-
-public extension Crypt {
-    func encrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
-        return try crypt(operation: .encrypt, initializationVector: iv, data: data, keyE: keyE)
-    }
-    
-    func decrypt(initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
-        return try crypt(operation: .decrypt, initializationVector: iv, data: data, keyE: keyE)
-    }
-}
-
-private extension Crypt {
-    func crypt(operation: Operation, initializationVector iv: DataConvertible, data: DataConvertible, keyE: DataConvertible) throws -> Data {
-        let aes = try AES(key: keyE.bytes, blockMode: CBC(iv: iv.bytes), padding: Padding.pkcs7)
-        switch operation {
-        case .decrypt: return try aes.decrypt(data.bytes).asData
-        case .encrypt: return try aes.encrypt(data.bytes).asData
-        }
     }
 }
 

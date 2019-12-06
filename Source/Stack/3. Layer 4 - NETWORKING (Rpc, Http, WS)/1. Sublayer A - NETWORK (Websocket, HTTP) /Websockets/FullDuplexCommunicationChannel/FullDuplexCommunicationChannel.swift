@@ -23,10 +23,16 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 /// A channel open for communication in both directions, e.g. WebSockets
-public protocol FullDuplexCommunicationChannel {
+public protocol FullDuplexCommunicationChannel: AnyObject {
     func sendMessage(_ message: String)
-    var messages: Observable<String> { get }
+    
+    func addListener(_ listener: Listener) -> RemoveListener
+}
+
+public extension FullDuplexCommunicationChannel {
+    typealias Listener = PassthroughSubject<URLSessionWebSocketTask.Message, Never>
+    typealias RemoveListener = () -> Void
 }

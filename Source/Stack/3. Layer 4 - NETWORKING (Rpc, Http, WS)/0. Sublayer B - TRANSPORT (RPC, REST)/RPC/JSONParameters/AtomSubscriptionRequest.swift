@@ -41,7 +41,7 @@ public extension AtomSubscriptionRequest {
     }
 }
 
-public struct UnsubscriptionRequest: Encodable {
+public struct UnsubscribeRequest: Encodable {
     public let subscriberId: SubscriberId
     
     public init(subscriberId: SubscriberId) {

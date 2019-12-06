@@ -27,6 +27,7 @@ import Foundation
 public extension Mnemonic {
     enum Error: Swift.Error, Equatable {
         case generatingRandomBytes
+        case unsupportedByteCountOfEntropy(got: Int)
         case validation(Validation)
     }
 }
@@ -46,7 +47,8 @@ internal extension Mnemonic.Error {
     init(fromBitcoinKitError bitcoinKitMnemonicError: BitcoinKit.MnemonicError) {
         switch bitcoinKitMnemonicError {
         case .randomBytesError: self = .generatingRandomBytes
-        case .invalid(let bitcoinKitInvalidMnemonicError):
+        case .unsupportedByteCountOfEntropy(let badEntropy): self = .unsupportedByteCountOfEntropy(got: badEntropy)
+        case .validationError(let bitcoinKitInvalidMnemonicError):
             switch bitcoinKitInvalidMnemonicError {
             case .badWordCount(let expected, let butGot):
                 self = .validation(.badWordCount(expectedAnyOf: expected, butGot: butGot))

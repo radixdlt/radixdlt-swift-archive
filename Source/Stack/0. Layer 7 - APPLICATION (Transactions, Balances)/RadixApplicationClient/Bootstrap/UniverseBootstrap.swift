@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public struct UniverseBootstrap: BootstrapConfig {
     public let config: UniverseConfig
@@ -31,7 +31,7 @@ public struct UniverseBootstrap: BootstrapConfig {
 }
 
 private extension UniverseBootstrap {
-    init(config: UniverseConfig, seedNodes: Observable<Node>) {
+    init(config: UniverseConfig, seedNodes: AnyPublisher<Node, Never>) {
         self.config = config
         self.discoveryMode = .byDiscovery(config: config, seedNodes: seedNodes)
     }
@@ -57,15 +57,15 @@ public extension UniverseBootstrap {
     static var localhostTwoNodes: UniverseBootstrap {
         return UniverseBootstrap(
             config: .localnet,
-            originNode: .localhostWebsocket(port: 8080),
-            nodes: .localhostWebsocket(port: 8081)
+            originNode: .localhost(port: 8080),
+            nodes: .localhost(port: 8081)
         )
     }
     
     static var localhostSingleNode: UniverseBootstrap {
         return UniverseBootstrap(
             config: .localnet,
-            originNode: .localhostWebsocket(port: 8080)
+            originNode: .localhost(port: 8080)
         )
     }
     
@@ -74,13 +74,13 @@ public extension UniverseBootstrap {
 //    static var betanet: UniverseBootstrap {
 //        return UniverseBootstrap(
 //            config: .betanet,
-//            seedNodes: OriginNodeFinder.betanet.findSomeOriginNode(port: .nodeFinder).asObservable()
+//            seedNodes: OriginNodeFinder.betanet.findSomeOriginNode(port: .nodeFinder).eraseToAnyPublisher()
 //        )
 //    }
 }
 
-private extension Node {
-    static func localhostWebsocket(port: Port) -> Node {
+internal extension Node {
+    static func localhost(port: Port) -> Node {
         do {
             return try Node(host: Host.local(port: port), isUsingSSL: false)
         } catch { incorrectImplementation("should be able to create localhost node") }

@@ -35,7 +35,7 @@ public protocol UserActionMakingSpecific: UserActionMaking where SpecificAction.
 
 }
 
-// UserActionMaking
+// MARK: Conform UserActionMaking
 public extension UserActionMakingSpecific {
     func makeSomeUserAction(tokenContext: TokenContext) -> UserAction {
         return makeSpecificUserAction(tokenContext: tokenContext)
@@ -46,11 +46,13 @@ public extension UserActionMakingSpecific {
     }
 }
 
+// MARK: ExpressibleByOwnedTokenContextAndOther
 public protocol ExpressibleByOwnedTokenContextAndOther {
     associatedtype Other: UserActionMakingSpecific
     init(tokenContext: TokenContext, other: Other)
 }
 
+// MARK: Burn
 public typealias Burn = BurnTokensAction.Other
 extension BurnTokensAction: ExpressibleByOwnedTokenContextAndOther {}
 public extension BurnTokensAction {
@@ -70,6 +72,7 @@ public extension BurnTokensAction {
     }
 }
 
+// MARK: Mint
 public typealias Mint = MintTokensAction.Other
 extension MintTokensAction: ExpressibleByOwnedTokenContextAndOther {}
 public extension MintTokensAction {
@@ -91,6 +94,27 @@ public extension MintTokensAction {
             amount: other.amount,
             minter: tokenContext.actor,
             creditNewlyMintedTokensTo: other.creditNewlyMintedTokensTo
+        )
+    }
+}
+
+// MARK: PutUniqueId
+public typealias PutUnique = PutUniqueIdAction.Other
+extension PutUniqueIdAction: ExpressibleByOwnedTokenContextAndOther {}
+public extension PutUniqueIdAction {
+    
+    struct Other: UserActionMakingSpecific {
+        public typealias SpecificAction = PutUniqueIdAction
+        let string: String
+        init(_ string: String) {
+            self.string = string
+        }
+    }
+    
+    init(tokenContext: TokenContext, other: Other) {
+        self.init(
+            uniqueMaker: tokenContext.actor,
+            string: other.string
         )
     }
 }

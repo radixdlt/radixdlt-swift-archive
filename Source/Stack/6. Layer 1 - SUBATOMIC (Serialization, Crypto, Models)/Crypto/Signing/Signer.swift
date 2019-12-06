@@ -33,6 +33,10 @@ public final class Signer {
     }
 }
 
+extension Signer: Throwing {
+    public typealias Error = SigningError
+}
+
 public extension Signer {
 
     static func sign(hashedData: Data, privateKey: PrivateKey) throws -> Signature {

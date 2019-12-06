@@ -24,4 +24,6 @@
 
 import Foundation
 
-public struct DiscoverMoreNodesAction: NodeAction {}
+public struct DiscoverMoreNodesAction: NodeAction {
+    public init() {}
+}

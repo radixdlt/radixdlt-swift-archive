@@ -23,16 +23,28 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
-public protocol AtomToSpecificExecutedActionMapper: BaseAtomToUserActionMapper {
+public protocol AtomToSpecificExecutedActionMapper: BaseAtomToUserActionMapper, Throwing where Error == SpecificMappingError {
     associatedtype SpecificExecutedAction: UserAction
-    func mapAtomToActions(_ atom: Atom) -> Observable<[SpecificExecutedAction]>
+    associatedtype SpecificMappingError
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[SpecificExecutedAction], SpecificMappingError>
+    func mapError(_ error: SpecificMappingError) -> AtomToTransactionMapperError
 }
 
 public extension AtomToSpecificExecutedActionMapper {
         
-    func mapAtomSomeUserActions(_ atom: Atom) -> Observable<[UserAction]> {
-        return mapAtomToActions(atom).map { actions in return actions.map { $0 } }
+    func mapAtomSomeUserActions(_ atom: Atom) -> AnyPublisher<[UserAction], AtomToTransactionMapperError> {
+        return mapAtomToActions(atom).map { actions in
+            actions.map { specificAction in
+                specificAction as UserAction
+            }
+        }
+        .mapError(mapError)
+        .eraseToAnyPublisher()
     }
+}
+
+public extension AtomToSpecificExecutedActionMapper where SpecificMappingError == Never {
+    func mapError(_ error: Never) -> AtomToTransactionMapperError {}
 }

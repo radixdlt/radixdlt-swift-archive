@@ -23,8 +23,7 @@
 //
 
 import Foundation
-import RxSwift
-import RxSwiftExt
+import Combine
 
 public final class DefaultTransactionSubscriber: TransactionSubscriber {
     
@@ -43,7 +42,7 @@ public final class DefaultTransactionSubscriber: TransactionSubscriber {
 public extension DefaultTransactionSubscriber {
     convenience init(
         atomStore: AtomStore,
-        activeAccount: Observable<Account>
+        activeAccount: AnyPublisher<Account, Never>
     ) {
         self.init(
             atomStore: atomStore,
@@ -55,20 +54,26 @@ public extension DefaultTransactionSubscriber {
 // MARK: TransactionSubscriber
 public extension DefaultTransactionSubscriber {
     
-    func observeTransactions(at address: Address) -> Observable<ExecutedTransaction> {
-        return atomStore.atomObservations(of: address)
-            .filterMap { (atomObservation: AtomObservation) -> FilterMap<Atom> in
-                guard case .store(let atom, _, _) = atomObservation else { return .ignore }
-                return .map(atom)
-            }.flatMap { [unowned self] in
-                return self.atomToTransactionMapper.transactionFromAtom($0)
-        }
+    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
+        atomStore.atomObservations(of: address)
+            .compactMap { (atomObservation: AtomObservation) -> Atom? in
+                guard case .store(let atom, _, _) = atomObservation else { return nil }
+                return atom
+            }
+            .setFailureType(to: AtomToTransactionMapperError.self)
+            .flatMap { [weak self] atom -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> in
+                guard let self = self else {
+                    return Empty<ExecutedTransaction, AtomToTransactionMapperError>.init(completeImmediately: true).eraseToAnyPublisher()
+                }
+                return self.atomToTransactionMapper.transactionFromAtom(atom)
+            }
+            .eraseToAnyPublisher()
     }
 }
 
 // MARK: AtomToTransactionMapper
 public extension DefaultTransactionSubscriber {
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
+    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
         return atomToTransactionMapper.transactionFromAtom(atom)
     }
 }

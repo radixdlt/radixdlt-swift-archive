@@ -23,10 +23,10 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol SigningRequesting {
-    var privateKeyForSigning: Single<PrivateKey> { get }
+    var privateKeyForSigning: AnyPublisher<PrivateKey, Never> { get } // Single?
 }
 
 public protocol Signing: SigningRequesting {
@@ -34,7 +34,7 @@ public protocol Signing: SigningRequesting {
 }
 
 public extension Signing {
-    var privateKeyForSigning: Single<PrivateKey> {
-        return Single.just(privateKey)
+    var privateKeyForSigning: AnyPublisher<PrivateKey, Never> { // Single?
+        Just(privateKey).eraseToAnyPublisher()
     }
 }

@@ -25,10 +25,12 @@
 import Foundation
 
 public enum WebSocketStatus: String, Hashable, CustomStringConvertible, CaseIterable {
+
+    /// Newly found (not yet connected) nodes
     case disconnected
     
     case connecting
-    case ready
+    case connected
 
     case closing
     case failed
@@ -36,8 +38,8 @@ public enum WebSocketStatus: String, Hashable, CustomStringConvertible, CaseIter
 
 public extension WebSocketStatus {
     
-    var isReady: Bool {
-        return statusIs(.ready)
+    var isConnected: Bool {
+        return statusIs(.connected)
     }
 
     var isDisconnected: Bool {

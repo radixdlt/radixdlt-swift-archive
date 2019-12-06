@@ -26,7 +26,7 @@ import Foundation
 
 public extension CreateTokenAction.InitialSupply {
     
-    enum DerivedFromAtom {
+    enum DerivedFromAtom: Equatable {
         case fixedInitialSupply(PositiveSupply)
         
         /// Mutable Supply without information about any potential initial supply.

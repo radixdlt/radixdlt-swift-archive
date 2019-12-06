@@ -23,21 +23,24 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol AtomSigning {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom>
+    func sign(atom unsignedAtom: UnsignedAtom) -> AnyPublisher<SignedAtom, SigningError>
 }
 
 // MARK: - Default Implementation
 public extension AtomSigning where Self: SigningRequesting, Self: PublicKeyOwner {
-    func sign(atom unsignedAtom: UnsignedAtom) throws -> Single<SignedAtom> {
-        let signatureId = publicKey.hashEUID
-        
-        return privateKeyForSigning.map {
+    
+    func sign(atom unsignedAtom: UnsignedAtom) -> AnyPublisher<SignedAtom, SigningError> {
+        privateKeyForSigning.tryMap {
             try Signer.sign(unsignedAtom, privateKey: $0)
-        }.map {
-            unsignedAtom.signed(signature: $0, signatureId: signatureId)
         }
+        .tryMap {
+            unsignedAtom.signed(signature: $0, signatureId: self.publicKey.hashEUID)
+        }
+        .mapError { castOrKill(instance: $0, toType: SigningError.self) }
+        .first()
+        .eraseToAnyPublisher()
     }
 }

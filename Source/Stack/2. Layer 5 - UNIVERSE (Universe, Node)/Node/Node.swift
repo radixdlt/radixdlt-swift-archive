@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 // swiftlint:disable colon opening_brace
 
@@ -31,12 +31,11 @@ import RxSwift
 public struct Node:
     Hashable,
     Equatable,
+    Comparable,
     Identifiable,
     CustomDebugStringConvertible
 {
     // swiftlint:enable colon opening_brace
-    
-    public let websocketsUrl: FormattedURL
     
     public let isUsingSSL: Bool
     public let host: Host
@@ -44,15 +43,16 @@ public struct Node:
     public init(host: Host, isUsingSSL: Bool) throws {
         self.host = host
         self.isUsingSSL = isUsingSSL
-        self.websocketsUrl = try URLFormatter.format(host: host, protocol: .websockets, useSSL: isUsingSSL)
+        
+        // Validate that we CAN format urls
+        _ = try URLFormatter.format(host: host, protocol: .webSockets, useSSL: isUsingSSL)
+        _ = try URLFormatter.format(host: host, protocol: .hypertext, useSSL: isUsingSSL)
     }
 }
 
-// MARK: - Equatable
 public extension Node {
-    static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.host == rhs.host
-    }
+    var webSocketsUrl: FormattedURL { formatUrl(protocol: .webSockets) }
+    var hypertextUrl: FormattedURL { formatUrl(protocol: .hypertext) }
 }
 
 // MARK: - Identifiable
@@ -66,7 +66,7 @@ public extension Node {
 public extension Node {
     var debugDescription: String {
         return """
-        Node(\(websocketsUrl.domain))
+        Node(\(webSocketsUrl.url))
         """
     }
 }
@@ -85,4 +85,38 @@ public extension Node {
     enum Error: Swift.Error, Equatable {
         case domainCannotBeNil
     }
+}
+
+public extension Node {
+    static func < (lhs: Self, rhs: Self) -> Bool {
+        compare(lhs, rhs, <)
+    }
+    
+    static func <= (lhs: Self, rhs: Self) -> Bool {
+        compare(lhs, rhs, <=)
+    }
+    
+    static func > (lhs: Self, rhs: Self) -> Bool {
+        compare(lhs, rhs, >)
+    }
+    
+    static func >= (lhs: Self, rhs: Self) -> Bool {
+        compare(lhs, rhs, >=)
+    }
+    
+}
+
+private extension Node {
+    static func compare(_ lhs: Self, _ rhs: Self, _ comparison: (Host, Host) -> Bool) -> Bool {
+        comparison(lhs.host, rhs.host)
+    }
+    
+    func formatUrl(`protocol`: URLFormatter.CommunicationProtocol) -> FormattedURL {
+        do {
+            return try URLFormatter.format(host: host, protocol: `protocol`, useSSL: isUsingSSL)
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
+    }
+    
 }

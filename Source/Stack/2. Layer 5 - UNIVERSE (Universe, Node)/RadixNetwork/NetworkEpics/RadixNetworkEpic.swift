@@ -23,14 +23,20 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol RadixNetworkEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction>
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never>
 }
 
 public extension RadixNetworkEpic {
-    func epic(actions: Observable<NodeAction>, networkState: Observable<RadixNetworkState>) -> Observable<NodeAction> {
-        abstract()
+    func handle(
+        actions nodeActionPublisher: AnyPublisher<NodeAction, Never>,
+        networkState networkStatePublisher: AnyPublisher<RadixNetworkState, Never>
+    ) -> AnyPublisher<NodeAction, Never> {
+        abstract("Self: \(Mirror(reflecting: self).subjectType)")
     }
 }

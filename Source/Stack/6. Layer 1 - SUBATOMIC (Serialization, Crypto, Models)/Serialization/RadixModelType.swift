@@ -24,9 +24,10 @@
 
 import Foundation
 
-public enum RadixModelType: String, Codable, CaseIterable {
+public enum RadixModelType: String, Equatable, Codable, CaseIterable {
 
     // MARK: "api"
+    case radixLocalSystem                       = "api.local_system"
     case radixSystem                            = "api.system"
     case atomEvent                              = "api.atom_event"
     

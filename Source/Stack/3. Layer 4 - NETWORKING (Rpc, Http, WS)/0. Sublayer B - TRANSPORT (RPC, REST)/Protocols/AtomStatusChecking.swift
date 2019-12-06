@@ -23,8 +23,9 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol AtomStatusChecking {
-    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> Single<AtomStatus>
+    
+    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> AnyPublisher<AtomStatus, DataFromNodeError>
 }

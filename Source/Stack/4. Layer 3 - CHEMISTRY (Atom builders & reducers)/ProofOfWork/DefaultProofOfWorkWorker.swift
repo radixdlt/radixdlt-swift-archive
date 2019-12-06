@@ -23,10 +23,9 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
-    private let dispatchQueue = DispatchQueue(label: "Radix.DefaultProofOfWorkWorker", qos: .userInitiated)
     private let targetNumberOfLeadingZeros: ProofOfWork.NumberOfLeadingZeros
     private let sha256TwiceHasher: SHA256TwiceHashing
 
@@ -39,7 +38,7 @@ public final class DefaultProofOfWorkWorker: ProofOfWorkWorker {
     }
     
     deinit {
-        log.verbose("POW Worker deinit")
+        print("POW Worker deinit")
     }
 }
 
@@ -49,30 +48,15 @@ public extension DefaultProofOfWorkWorker {
     func work(
         seed: Data,
         magic: Magic
-    ) -> Single<ProofOfWork> {
-        return Single.create { [unowned self] single in
-            var powDone = false
-            self.dispatchQueue.async {
-                log.verbose("POW started")
+    ) -> Future<ProofOfWork, ProofOfWork.Error> {
+        
+        return Future<ProofOfWork, ProofOfWork.Error> { promise in
+            RadixSchedulers.backgroundScheduler.async {
                 self.doWork(
                     seed: seed,
                     magic: magic
                 ) { resultOfWork in
-                    switch resultOfWork {
-                    case .failure(let error):
-                        log.error("POW failed: \(error), seed: \(seed), magic: \(magic), #0: \(self.targetNumberOfLeadingZeros)")
-                        single(.error(error))
-                    case .success(let pow):
-                        powDone = true
-                        log.verbose("POW done")
-                        single(.success(pow))
-                    }
-                }
-            }
-            
-            return Disposables.create {
-                if !powDone {
-                    log.warning("POW cancelled")
+                    promise(resultOfWork)
                 }
             }
         }
@@ -84,7 +68,7 @@ internal extension DefaultProofOfWorkWorker {
     func doWork(
         seed: Data,
         magic: Magic,
-        done: ((Result<ProofOfWork, Error>) -> Void)
+        done: ((Result<ProofOfWork, ProofOfWork.Error>) -> Void)
     ) {
         guard seed.length == DefaultProofOfWorkWorker.expectedByteCountOfSeed else {
             let error = ProofOfWork.Error.workInputIncorrectLengthOfSeed(expectedByteCountOf: DefaultProofOfWorkWorker.expectedByteCountOfSeed, butGot: seed.length)
@@ -94,12 +78,14 @@ internal extension DefaultProofOfWorkWorker {
         
         var nonce: Nonce = 0
         let base: Data = magic.toFourBigEndianBytes() + seed
-        var radixHash: RadixHash!
+        var radixHashedData = Data(capacity: 32)
+        
+        var unhashed = Data(capacity: base.count + 8)
         repeat {
             nonce += 1
-            let unhashed = base + nonce.toEightBigEndianBytes()
-            radixHash = RadixHash(unhashedData: unhashed, hashedBy: sha256TwiceHasher)
-        } while radixHash.numberOfLeadingZeroBits < targetNumberOfLeadingZeros.numberOfLeadingZeros
+            unhashed = base + nonce.toEightBigEndianBytes()
+            radixHashedData = self.sha256TwiceHasher.sha256Twice(of: unhashed)
+        } while radixHashedData.countNumberOfLeadingZeroBits() < targetNumberOfLeadingZeros.numberOfLeadingZeros
         
         let pow = ProofOfWork(seed: seed, targetNumberOfLeadingZeros: targetNumberOfLeadingZeros, magic: magic, nonce: nonce)
         done(.success(pow))
@@ -107,10 +93,20 @@ internal extension DefaultProofOfWorkWorker {
 }
 
 extension DefaultProofOfWorkWorker: FeeMapper {}
+
 public extension DefaultProofOfWorkWorker {
-    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> Single<AtomWithFee> {
-        return work(atom: atom, magic: universeConfig.magic).map {
+    
+    func feeBasedOn(
+        atom: Atom,
+        universeConfig: UniverseConfig,
+        key: PublicKey
+    ) -> AnyPublisher<AtomWithFee, AtomWithFee.Error> {
+        
+        return work(atom: atom, magic: universeConfig.magic).tryMap {
             try AtomWithFee(atomWithoutPow: atom, proofOfWork: $0)
         }
+        .mapError { castOrKill(instance: $0, toType: ProofOfWork.Error.self) }
+        .mapError { AtomWithFee.Error.powError($0) }
+        .eraseToAnyPublisher()
     }
 }

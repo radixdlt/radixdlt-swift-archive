@@ -27,6 +27,7 @@ import Foundation
 // swiftlint:disable colon opening_brace
 
 public struct NonEmptyArray<ElementInArray>:
+    NonEmptyCollection,
     ArrayConvertible,
     ArrayInitializable,
     Throwing
@@ -65,12 +66,6 @@ public extension NonEmptyArray {
 
 // MARK: Public
 public extension NonEmptyArray {
-    var first: Element {
-        guard let first = elements.first else {
-            incorrectImplementation("A non empty array should indeed contain at least one element")
-        }
-        return first
-    }
 
     mutating func append(_ element: Element) {
         elements.append(element)

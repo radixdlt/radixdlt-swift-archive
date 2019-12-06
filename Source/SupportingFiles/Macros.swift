@@ -24,14 +24,7 @@
 
 import Foundation
 
-import SwiftyBeaver
-internal let log: SwiftyBeaver.Type = {
-    let log = SwiftyBeaver.self
-    let console = ConsoleDestination()
-    console.minLevel = .info
-    log.addDestination(console)
-    return log
-}()
+internal let void: Void = ()
 
 /// true when optimization is set to -Onone
 var isDebug: Bool {
@@ -105,8 +98,9 @@ internal func typeErasureExpected<T>(
     _ file: String = #file,
     _ line: Int = #line
 ) -> Never {
+    let incorrectTypeString = String(describing: Mirror(reflecting: incorrectTypeOfThisInstance).subjectType)
     incorrectImplementation(
-        "Expected \(incorrectTypeOfThisInstance) to be of type `\(expectedType)`",
+        "Expected variable '\(incorrectTypeOfThisInstance)' (type: '\(incorrectTypeString)') to be of type `\(expectedType)`",
         file, line
     )
 }

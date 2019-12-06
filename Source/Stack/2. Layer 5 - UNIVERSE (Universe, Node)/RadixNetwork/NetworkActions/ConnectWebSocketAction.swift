@@ -24,8 +24,9 @@
 
 import Foundation
 
-public struct ConnectWebSocketAction: NodeAction {
+public struct ConnectWebSocketAction: NodeAction, Equatable {
     public let node: Node
+    
     init(node: Node) {
         self.node = node
     }

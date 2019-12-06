@@ -25,7 +25,7 @@
 import Foundation
 
 public extension CreateTokenAction {
-    enum InitialSupply {
+    enum InitialSupply: Equatable {
         case defined(in: SupplyTypeDefinition)
         case derivedFromAtom(DerivedFromAtom)
     }

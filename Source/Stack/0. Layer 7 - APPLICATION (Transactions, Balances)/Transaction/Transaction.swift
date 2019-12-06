@@ -27,16 +27,16 @@ import Foundation
 public struct Transaction: TransactionConvertible, ArrayConvertible, CustomStringConvertible {
     
     public let uuid: UUID
-    public let sentAt: Date
+    public let date: Date
     public let actions: [UserAction]
     
     fileprivate init(
         uuid: UUID = .init(),
-        sentAt: Date = .init(),
+        createdAt: Date = .init(),
         userActions actions: [UserAction]
     ) {
         self.uuid = uuid
-        self.sentAt = sentAt
+        self.date = createdAt
         self.actions = actions
     }
 }
@@ -48,6 +48,24 @@ public extension Transaction {
 
     init(_ actions: UserAction...) {
         self.init(actions: actions)
+    }
+}
+
+public extension Transaction {
+    func addressesOfActionsAreInTheSameUniverseAs(activeAddress: Address) throws -> Throws<Void, ActionsToAtomError> {
+        do {
+            for action in actions {
+                if let actionWithAddresses = action as? UserActionWithAddresses {
+                    var addressesToCheck = actionWithAddresses.addresses
+                    addressesToCheck.insert(activeAddress)
+                    try Addresses.allInSameUniverse(addressesToCheck.asArray)
+                }
+            }
+        } catch let actionsToAtomError as ActionsToAtomError {
+            throw actionsToAtomError
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
     }
 }
 

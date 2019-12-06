@@ -22,9 +22,10 @@
 // SOFTWARE.
 //
 
+import XCTest
 import Foundation
 @testable import RadixSDK
-import RxSwift
+import Combine
 
 struct HardCodedAtomStore: AtomStore {
     private let upParticles: [AnyUpParticle]
@@ -33,20 +34,38 @@ struct HardCodedAtomStore: AtomStore {
     }
 }
 
+extension TransactionToAtomMapper {
+    func atomFrom(actions: UserAction..., addressOfActiveAccount: Address = .irrelevant) throws -> Atom {
+        try atomFrom(transaction: .init(actions: actions), addressOfActiveAccount: addressOfActiveAccount)
+    }
+}
+
 extension HardCodedAtomStore {
+    static func particlesFrom(transaction: Transaction, address: Address = .irrelevant) -> Self {
+        let txToAtomMapper = DefaultTransactionToAtomMapper(atomStore: HardCodedAtomStore(upParticles: []) )
 
-    func onSync(address: Address) -> Observable<Date> {
-        return .empty()
+        let atom = try! txToAtomMapper.atomFrom(transaction: transaction, addressOfActiveAccount: address)
+
+        return Self(upParticles: atom.upParticles())
     }
+}
 
-    func atomObservations(of address: Address) -> Observable<AtomObservation> {
-         return .empty()
+extension HardCodedAtomStore {
+    
+    func onSync(address: Address) -> AnyPublisher<Date, Never> {
+        Empty<Date, Never>(completeImmediately: true)
+            .eraseToAnyPublisher()
     }
-
+    
+    func atomObservations(of address: Address) -> AnyPublisher<AtomObservation, Never> {
+        Empty<AtomObservation, Never>(completeImmediately: true)
+            .eraseToAnyPublisher()
+    }
+    
     func upParticles(at address: Address) -> [AnyUpParticle] {
         return upParticles
     }
-
+    
     func store(atomObservation: AtomObservation, address: Address, notifyListenerMode: AtomNotificationMode) {
         abstract()
     }

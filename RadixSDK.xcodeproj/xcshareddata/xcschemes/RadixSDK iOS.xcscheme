@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "1120"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -27,8 +27,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      codeCoverageEnabled = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -49,12 +48,13 @@
       </CodeCoverageTargets>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E645E73621E7827D00532ACD"
-               BuildableName = "RadixSDK iOS Tests.xctest"
-               BlueprintName = "RadixSDK iOS Tests"
+               BuildableName = "RadixSDK iOS Unit Tests.xctest"
+               BlueprintName = "RadixSDK iOS Unit Tests"
                ReferencedContainer = "container:RadixSDK.xcodeproj">
             </BuildableReference>
             <SkippedTests>
@@ -122,6 +122,16 @@
                   Identifier = "WebsocketTest">
                </Test>
             </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E6D7A22C238596F200950312"
+               BuildableName = "RadixSDK iOS Integration Tests.xctest"
+               BlueprintName = "RadixSDK iOS Integration Tests"
+               ReferencedContainer = "container:RadixSDK.xcodeproj">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>

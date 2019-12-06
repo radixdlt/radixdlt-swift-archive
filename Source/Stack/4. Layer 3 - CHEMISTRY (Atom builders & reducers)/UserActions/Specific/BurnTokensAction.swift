@@ -24,7 +24,15 @@
 
 import Foundation
 
-public struct BurnTokensAction: ConsumeTokensAction {
+// swiftlint:disable colon opening_brace
+
+public struct BurnTokensAction:
+    ConsumeTokensAction,
+    UserActionWithAddresses,
+    Equatable
+{
+    // swiftlint:enable colon opening_brace
+    
     public let tokenDefinitionReference: ResourceIdentifier
     public let amount: PositiveAmount
     public let burner: Address
@@ -40,9 +48,17 @@ public struct BurnTokensAction: ConsumeTokensAction {
     }
 }
 
+// MARK: UserAction
 public extension BurnTokensAction {
     
     var user: Address { return burner }
     var nameOfAction: UserActionName { return .burnTokens }
     var identifierForTokenToConsume: ResourceIdentifier { return tokenDefinitionReference }
+}
+
+// MARK: UserActionWithAddresses
+public extension BurnTokensAction {
+    var addresses: Set<Address> {
+        return Set([burner])
+    }
 }

@@ -48,8 +48,11 @@ public extension ParticleConvertible {
 
 public extension DestinationsOwner where Self: Accountable {
     func destinations() -> [PublicKeyHashEUID] {
-        // swiftlint:disable:next force_try
-        return try! addresses().elements.map { $0.publicKey.hashEUID }.sorted()
+        do {
+            return try addresses().elements.map { $0.publicKey.hashEUID }.sorted()
+        } catch {
+            return []
+        }
     }
 }
 

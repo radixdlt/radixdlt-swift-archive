@@ -23,20 +23,32 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol HTTPClient {
-    func request<D>(router: Router, decodeAs type: D.Type) -> Single<D> where D: Decodable
+    func perform(absoluteUrlRequest: URLRequest) -> AnyPublisher<Data, HTTPError.NetworkingError>
+    func performRequest(pathRelativeToBase path: String) -> AnyPublisher<Data, HTTPError.NetworkingError>
+    func fetch<D>(urlRequest: URLRequest, decodeAs: D.Type) -> AnyPublisher<D, HTTPError> where D: Decodable
     
-    func loadContent(of page: String) -> Single<String>
 }
 
 public extension HTTPClient {
-    func request<D>(router: Router) -> Single<D> where D: Decodable {
+    
+    func request<D>(router: Router, decodeAs _: D.Type) -> AnyPublisher<D, HTTPError> where D: Decodable {
+        let urlRequest: URLRequest
+        do {
+            urlRequest = try router.asURLRequest()
+        } catch {
+            return Fail<D, HTTPError>(error: HTTPError.failedToCreateRequest(url: router.path)).eraseToAnyPublisher()
+        }
+        return fetch(urlRequest: urlRequest, decodeAs: D.self)
+    }
+  
+    func request<D>(router: Router) -> AnyPublisher<D, HTTPError> where D: Decodable {
         return request(router: router, decodeAs: D.self)
     }
     
-    func request<D>(_ nodeRouter: NodeRouter) -> Single<D> where D: Decodable {
+    func request<D>(_ nodeRouter: NodeRouter) -> AnyPublisher<D, HTTPError> where D: Decodable {
         return request(router: nodeRouter, decodeAs: D.self)
     }
 }

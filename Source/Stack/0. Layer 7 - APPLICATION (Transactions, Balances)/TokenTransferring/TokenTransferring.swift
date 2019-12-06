@@ -23,15 +23,27 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 /// Type that is can make transactions of different types between Radix accounts
 public protocol TokenTransferring: ActiveAccountOwner {
 
-    func transfer(tokens: TransferTokensAction) -> ResultOfUserAction
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokensAction>
+    func transferTokens(action: TransferTokensAction) -> PendingTransaction
+    func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, AtomToTransactionMapperError>
 }
 
+public extension TokenTransferring {
+    
+    /// Do not confuse this with `observeMyTransactions`, this returns a stream
+    /// of executed Token Transfers, either by you or someone else, the latter
+    /// returns a stream of `ExecutedTransaction`, which is a container of UserActions
+    /// submitted in a single Atom at some earlier point in time
+    func observeMyTokenTransfers() -> AnyPublisher<TransferTokensAction, AtomToTransactionMapperError> {
+        return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
+    }
+}
+
+// MARK: Action shorthand
 public extension TokenTransferring {
     func transferTokens(
         identifier tokenIdentifier: ResourceIdentifier,
@@ -40,7 +52,7 @@ public extension TokenTransferring {
         message: String,
         messageEncoding: String.Encoding = .default,
         from specifiedSender: AddressConvertible? = nil
-        ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         let attachment = message.toData(encodingForced: messageEncoding)
         
@@ -59,7 +71,7 @@ public extension TokenTransferring {
         amount: PositiveAmount,
         attachment: Data? = nil,
         from specifiedSender: AddressConvertible? = nil
-    ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         let action = actionTransferTokens(
             identifier: tokenIdentifier,
@@ -69,7 +81,7 @@ public extension TokenTransferring {
             from: specifiedSender
         )
         
-        return transfer(tokens: action)
+        return transferTokens(action: action)
     }
 }
 
@@ -113,16 +125,5 @@ public extension TokenTransferring {
         )
         
         return transferAction
-    }
-}
-
-public extension TokenTransferring {
-    
-    /// Do not confuse this with `observeMyTransactions`, this returns a stream
-    /// of executed Token Transfers, either by you or someone else, the latter
-    /// returns a stream of `ExecutedTransaction`, which is a container of UserActions
-    /// submitted in a single Atom at some earlier point in time
-    func observeMyTokenTransfers() -> Observable<TransferTokensAction> {
-        return observeTokenTransfers(toOrFrom: addressOfActiveAccount)
     }
 }

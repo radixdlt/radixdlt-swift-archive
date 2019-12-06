@@ -23,19 +23,37 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
-public protocol AtomToCreateTokenMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == CreateTokenAction {}
+// swiftlint:disable opening_brace
+
+public protocol AtomToCreateTokenMapper:
+AtomToSpecificExecutedActionMapper
+where
+    SpecificExecutedAction == CreateTokenAction,
+    SpecificMappingError == Never
+{}
+
+// swiftlint:enable opening_brace
 
 public extension AtomToCreateTokenMapper {
-    func mapAtomToActions(_ atom: Atom) -> Observable<[CreateTokenAction]> {
+    
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[CreateTokenAction], SpecificMappingError> {
+        
         var createTokenActions = [CreateTokenAction]()
+        
         for particleGroup in atom {
-            guard let createTokenAction = createTokensActionFrom(particleGroup: particleGroup, atomIdentifier: atom.identifier()) else { continue }
+            guard
+                let createTokenAction = createTokensActionFrom(
+                    particleGroup: particleGroup,
+                    atomIdentifier: atom.identifier()
+                    )
+                else { continue }
+            
             createTokenActions.append(createTokenAction)
         }
         
-        return Observable.just(createTokenActions)
+        return Just(createTokenActions).eraseToAnyPublisher()
     }
 }
 
@@ -47,7 +65,7 @@ private func createTokensActionFrom(particleGroup: ParticleGroup, atomIdentifier
         else { return nil }
     
     guard let derivedSupply = derivedSupplyFrom(typedTokenDefinition: typedTokenDefinition, particles: particleGroup.spunParticles, atomIdentifier: atomIdentifier) else {
-        log.warning("Found TypeTokenDefinition: \(typedTokenDefinition), but no initial supply, this is probably incorrectly implemented.")
+        Swift.print("warning: Found TypeTokenDefinition: \(typedTokenDefinition), but no initial supply, this is probably incorrectly implemented.")
         return nil
     }
     return CreateTokenAction(derivedSupply: derivedSupply, tokenDefinition: typedTokenDefinition.tokenDefinition)

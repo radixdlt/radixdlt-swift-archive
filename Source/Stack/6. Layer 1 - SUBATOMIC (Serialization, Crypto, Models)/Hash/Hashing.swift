@@ -23,6 +23,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 public protocol Hashing {
     func hash(data: Data) -> Data
@@ -56,4 +57,12 @@ public extension SHA512TwiceHashing {
     func hash(data: Data) -> Data {
         return sha512Twice(of: data)
     }
+}
+
+extension SHA256.Digest: DataConvertible {
+    public var asData: Data { return Data(self) }
+}
+
+extension SHA512.Digest: DataConvertible {
+    public var asData: Data { return Data(self) }
 }

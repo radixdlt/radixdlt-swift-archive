@@ -23,8 +23,8 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol BaseAtomToUserActionMapper {
-    func mapAtomSomeUserActions(_ atom: Atom) -> Observable<[UserAction]>
+    func mapAtomSomeUserActions(_ atom: Atom) -> AnyPublisher<[UserAction], AtomToTransactionMapperError>
 }

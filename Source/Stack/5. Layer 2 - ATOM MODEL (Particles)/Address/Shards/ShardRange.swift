@@ -40,7 +40,7 @@ public struct ShardRange:
     
     public typealias Bound = Shard
     
-    private let range: Range<Bound>
+    internal let range: Range<Bound>
     
     public init(range: Range<Bound>) {
         self.range = range
@@ -64,12 +64,19 @@ public extension ShardRange {
 // MARK: - Convenience Init
 public extension ShardRange {
     
-    init(lower: Bound, upper: Bound) throws {
-        guard lower < upper else {
+    /// From `lower` (inclusive) to `upper` (exclusive).
+    init(lower: Bound, upperExclusive: Bound) throws {
+        guard lower < upperExclusive else {
             throw Error.upperMustBeGreaterThanLower
         }
-        let actuallyCheckedbounds = (lower, upper)
+        let actuallyCheckedbounds = (lower, upperExclusive)
         self.init(range: Range(uncheckedBounds: actuallyCheckedbounds))
+    }
+    
+    /// From `lower` (inclusive) to `upper` (inclusive).
+    init(lower: Bound, upperInclusive upperExclusive: Bound) throws {
+        // We are making the `upperExclusive` init inclusive, by adding 1.
+        try self.init(lower: lower, upperExclusive: upperExclusive + 1)
     }
 }
 
@@ -104,7 +111,7 @@ public extension ShardRange {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let lower = try container.decode(Shard.self, forKey: .low)
         let upper = try container.decode(Shard.self, forKey: .high)
-        try self.init(lower: lower, upper: upper)
+        try self.init(lower: lower, upperInclusive: upper)
     }
     
     func encodableKeyValues() throws -> [EncodableKeyValue<CodingKeys>] {

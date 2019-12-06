@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 // swiftlint:disable colon opening_brace
 
@@ -38,11 +38,17 @@ public protocol RESTClient:
 
 public extension NodeNetworkDetailsRequesting where Self: RESTClient {
     
-    func getInfo() -> Single<NodeInfo> {
-        return networkDetails().map {
-            $0.udp
-        }.flatMap { (nodesInfos: [NodeInfo]) -> Single<NodeInfo> in
-            return Observable.from(nodesInfos).asSingle()
+    func getInfo() -> AnyPublisher<NodeInfo, DataFromNodeError> {
+        networkDetails().map { (nodeNetworkDetails: NodeNetworkDetails) in
+        
+            let listOfPeersOverUDP = nodeNetworkDetails.udp
+            // TODO should we always pick 'first' peer? Or should we pick random?
+            guard let udpPeer = listOfPeersOverUDP.first else {
+                // TODO replace 'fatalError' with thrown and propagated error
+                fatalError("Peers UDP list is empty, which is bad. What to do?")
+            }
+            return udpPeer
         }
+        .eraseToAnyPublisher()
     }
 }

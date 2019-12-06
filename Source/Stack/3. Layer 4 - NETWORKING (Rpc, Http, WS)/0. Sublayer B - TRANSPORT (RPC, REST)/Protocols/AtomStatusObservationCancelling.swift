@@ -23,8 +23,8 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol AtomStatusObservationCancelling {
-    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> Completable
+    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<Never, Never>
 }

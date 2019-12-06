@@ -125,7 +125,6 @@ public extension FungibleParticleTransitioner {
         )
         
         guard balance >= toAmount else {
-            print("☢️ toAmount:\(toAmount), balance: \(balance)")
             throw Error.notEnoughFungibles(requiredAmount: toAmount, butOnlyGotBalance: balance)
         }
         var consumerTotal: NonNegativeAmount = .zero

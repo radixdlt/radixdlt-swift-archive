@@ -24,8 +24,19 @@
 
 import Foundation
 
-public protocol SendMessageActionToParticleGroupsMapper: StatelessActionToParticleGroupsMapper, Throwing where Action == SendMessageAction, Error == SendMessageError {}
+// swiftlint:disable colon opening_brace
 
-public enum SendMessageError: Swift.Error, Equatable {
-     case nonMatchingAddress(activeAddress: Address, butActionStatesAddress: Address)
+public protocol SendMessageActionToParticleGroupsMapper:
+    StatelessActionToParticleGroupsMapper
+    where
+    Action == SendMessageAction,
+    Error == SendMessageError
+{}
+
+// swiftlint:enable colon opening_brace
+
+public extension SendMessageActionToParticleGroupsMapper {
+    func mapError(_ sendMessageError: SendMessageError, action sendMessageAction: SendMessageAction) -> ActionsToAtomError {
+        ActionsToAtomError.sendMessageActionError(sendMessageError, action: sendMessageAction)
+    }
 }

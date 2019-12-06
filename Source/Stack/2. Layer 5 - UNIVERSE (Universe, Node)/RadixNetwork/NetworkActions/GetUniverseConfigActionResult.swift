@@ -28,7 +28,7 @@ public struct GetUniverseConfigActionResult: JsonRpcResultAction, RadixNetworkNo
     public let node: Node
     private let universeConfig: UniverseConfig
     
-    public init(node: Node, result: Result) {
+    public init(node: Node, result: UniverseConfig) {
         self.node = node
         self.universeConfig = result
     }

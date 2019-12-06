@@ -44,86 +44,7 @@ public enum RPCMethod {
     case getLivePeers
     case getNetworkInfo
     case getUniverse
-//    case submitAndSubscribe(atom: SignedAtom, subscriberId: SubscriberId)
 }
-
-public enum RPCRootRequest {
-    case fireAndForget(RPCMethod)
-    case sendAndListenToNotifications(RPCMethod, RPCNotification)
-}
-
-public extension RPCRootRequest {
-    
-    static func subscribe(to address: Address, subscriberId: SubscriberId) -> RPCRootRequest {
-        return .sendAndListenToNotifications(
-            .subscribe(to: address, subscriberId: subscriberId),
-            .subscribeUpdate
-        )
-    }
-    
-    static func unsubscribe(subscriberId: SubscriberId) -> RPCRootRequest {
-        return .fireAndForget(.unsubscribe(subscriberId: subscriberId))
-    }
-    
-    static func submitAtom(atom: SignedAtom) -> RPCRootRequest {
-        return .fireAndForget(.submitAtom(atom: atom))
-    }
-
-    static func getAtomStatus(atomIdentifier: AtomIdentifier) -> RPCRootRequest {
-        return .fireAndForget(.getAtomStatus(atomIdentifier: atomIdentifier))
-    }
-    
-    static func getAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> RPCRootRequest {
-        return .fireAndForget(.getAtomStatusNotifications(atomIdentifier: atomIdentifier, subscriberId: subscriberId))
-    }
-    
-    static func closeAtomStatusNotifications(subscriberId: SubscriberId) -> RPCRootRequest {
-        return .fireAndForget(.closeAtomStatusNotifications(subscriberId: subscriberId))
-    }
-
-    static func getAtom(byHashId hashEUID: HashEUID) -> RPCRootRequest {
-        return .fireAndForget(.getAtom(byHashId: hashEUID))
-    }
-
-    static var getLivePeers: RPCRootRequest {
-        return .fireAndForget(.getLivePeers)
-    }
-    
-    static var getNetworkInfo: RPCRootRequest {
-        return .fireAndForget(.getNetworkInfo)
-    }
-    
-    static var getUniverse: RPCRootRequest {
-        return .fireAndForget(.getUniverse)
-    }
-}
-
-public enum RPCRequestMethod: String {
-    case subscribe                      = "Atoms.subscribe"
-    case unsubscribe                    = "Atoms.cancel"
-    case submitAtom                     = "Atoms.submitAtom"
-    
-    case getAtomStatus                  = "Atoms.getAtomStatus"
-    case getAtomStatusNotifications     = "Atoms.getAtomStatusNotifications"
-    case closeAtomStatusNotifications   = "Atoms.closeAtomStatusNotifications"
-
-    case getAtom                        = "Ledger.getAtoms"
-    
-    case getLivePeers                   = "Network.getLivePeers"
-    case getNetworkInfo                 = "Network.getInfo"
-    case getUniverse                    = "Universe.getUniverse"
-//    case submitAndSubscribe             = "Universe.submitAtomAndSubscribe"
-}
-
-public enum RPCNotification: String, Equatable, Decodable {
-    case observeAtomStatusNotifications = "Atoms.nextStatusEvent"
-    case subscribeUpdate                = "Atoms.subscribeUpdate"
-}
-
-//public enum RPCResponseMethod: String {
-//    case subscribeUpdate = "Atoms.subscribeUpdate"
-//    case submitAndSubscribe = "AtomSubmissionState.onNext"
-//}
 
 public extension RPCMethod {
     
@@ -160,8 +81,8 @@ public extension RPCMethod {
             let atomSubscriptionRequest = AtomSubscriptionRequest(address: address, subscriberId: subscriberId)
             return innerEncode(atomSubscriptionRequest)
         case .unsubscribe(let subscriberId):
-            let unsubscriptionRequest = UnsubscriptionRequest(subscriberId: subscriberId)
-            return innerEncode(unsubscriptionRequest)
+            let unsubscribeRequest = UnsubscribeRequest(subscriberId: subscriberId)
+            return innerEncode(unsubscribeRequest)
         case .submitAtom(let atom):
             let atomToEncode = atom.atomWithFee.wrappedAtom
             return innerEncode(atomToEncode)

@@ -28,7 +28,7 @@ public struct GetLivePeersActionResult: JsonRpcResultAction {
     public let node: Node
     private let nodeInfos: [NodeInfo]
     
-    public init(node: Node, result: Result) {
+    public init(node: Node, result: [NodeInfo]) {
         self.node = node
         self.nodeInfos = result
     }

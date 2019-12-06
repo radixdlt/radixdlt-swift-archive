@@ -39,7 +39,10 @@ public struct AtomNotificationMode: OptionSet {
 
 // MARK: - Presets
 public extension AtomNotificationMode {
-    static let dontNotify = AtomNotificationMode()
+
+    // Using unicode letter `U+02BC` which is allowed, because default apostrophe (unicode `U+0027`) is disallowed.
+    static let donʼtNotify = AtomNotificationMode()
+    
     static let notifyOnAtomUpdate = AtomNotificationMode()
     static let notifyOnSync = AtomNotificationMode()
     static let notifyOnAtomUpdateAndSync: AtomNotificationMode = [.notifyOnAtomUpdate, .notifyOnSync]

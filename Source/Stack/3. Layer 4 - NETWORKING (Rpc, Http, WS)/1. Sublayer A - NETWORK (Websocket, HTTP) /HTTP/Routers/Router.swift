@@ -23,14 +23,14 @@
 //
 
 import Foundation
-import Alamofire
-import RxSwift
+import Combine
 
-public protocol Router: URLRequestConvertible {
+public protocol Router {
+    func asURLRequest() throws -> URLRequest
     var baseURLString: String? { get }
-    var method: Alamofire.HTTPMethod { get }
+    var method: HTTPMethod { get }
     var path: URL { get }
-    var headers: Alamofire.HTTPHeaders? { get }
+    var headers: HTTPHeaders? { get }
 }
 
 public extension Router where Self: RawRepresentable, Self.RawValue == String {
@@ -48,14 +48,13 @@ public extension Router {
         return "localhost:8080"
     }
     
-    var method: Alamofire.HTTPMethod {
+    var method: HTTPMethod {
         return .get
     }
     
-    var headers: Alamofire.HTTPHeaders? { return nil }
+    var headers: HTTPHeaders? { return nil }
 }
 
-// MARK: URLRequestConvertible Default Conformance
 public extension Router {
     func asURLRequest() throws -> URLRequest {
         let url: URL
@@ -68,5 +67,35 @@ public extension Router {
             url = path
         }
         return try URLRequest(url: url, method: method, headers: headers)
+    }
+}
+
+public enum HTTPMethod: String {
+    case get
+    case head
+    public init(string: String) {
+        self.init(rawValue: string)!
+    }
+}
+
+public struct HTTPHeaders {
+    public let dictionary: [String: String]
+}
+
+public extension URLRequest {
+    /// Creates an instance with the specified `url`, `method`, and `headers`.
+    ///
+    /// - Parameters:
+    ///   - url:     The `URLConvertible` value.
+    ///   - method:  The `HTTPMethod`.
+    ///   - headers: The `HTTPHeaders`, `nil` by default.
+    /// - Throws:    Any error thrown while converting the `URLConvertible` to a `URL`.
+    init(url urlConvertible: URLConvertible, method: HTTPMethod, headers: HTTPHeaders? = nil) throws {
+        let url = urlConvertible.url
+        
+        self.init(url: url)
+        
+        httpMethod = method.rawValue.uppercased()
+        allHTTPHeaderFields = headers?.dictionary
     }
 }

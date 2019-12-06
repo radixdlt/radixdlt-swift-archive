@@ -36,6 +36,12 @@ public struct TokenBalanceReferencesState: ApplicationState, DictionaryConvertib
     }
 }
 
+public extension TokenBalanceReferencesState {
+    var tokenReferenceBalances: [TokenReferenceBalance] {
+        dictionary.values.map { $0 }
+    }
+}
+
 // MARK: Convenience Init
 public extension TokenBalanceReferencesState {
     init(reducing balances: [TokenReferenceBalance]) {

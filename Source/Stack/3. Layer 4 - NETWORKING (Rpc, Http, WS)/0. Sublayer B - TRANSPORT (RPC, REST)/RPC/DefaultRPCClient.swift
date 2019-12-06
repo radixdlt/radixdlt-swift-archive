@@ -23,12 +23,12 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
     
     /// The channel this JSON RPC client uses for messaging
-    public let channel: FullDuplexCommunicationChannel
+    public unowned let channel: FullDuplexCommunicationChannel
     
     public init(channel: FullDuplexCommunicationChannel) {
         self.channel = channel
@@ -37,168 +37,165 @@ public final class DefaultRPCClient: RPCClient, FullDuplexCommunicating {
 
 // MARK: - Observing RPC Responses
 public extension DefaultRPCClient {
-    func observeAtoms(subscriberId: SubscriberId) -> Observable<AtomObservation> {
-        return observe(notification: .subscribeUpdate, subscriberId: subscriberId, responseType: AtomSubscriptionUpdate.self)
+    func observeAtoms(subscriberId: SubscriberId) -> AnyPublisher<AtomObservation, Never> {
+        observe(
+            notification: .subscribeUpdate,
+            subscriberId: subscriberId,
+            responseType: AtomSubscriptionUpdate.self
+        )
             .map { $0.toAtomObservation() }
-            .flatMap { (atomObservations: [AtomObservation]) -> Observable<AtomObservation> in
-                return Observable.from(atomObservations)
-            }
+            .flattenSequence()
     }
     
-    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> Observable<AtomStatusEvent> {
-        return self.observe(notification: .observeAtomStatusNotifications, subscriberId: subscriberId, responseType: AtomStatusEvent.self)
-       
+    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<AtomStatusEvent, Never> {
+        observe(
+            notification: .observeAtomStatusNotifications,
+            subscriberId: subscriberId,
+            responseType: AtomStatusEvent.self
+        )
+        
     }
 }
 
 // MARK: - Make RPC Requests
 
-// MARK: - Single's
 public extension DefaultRPCClient {
-    func getNetworkInfo() -> Single<RadixSystem> {
-        return make(request: .getNetworkInfo)
+    
+    func getNetworkInfo() -> AnyPublisher<RadixSystem, DataFromNodeError> {
+        make(request: .getNetworkInfo)
+            .mapError { DataFromNodeError.rpcError($0) }
+            .eraseToAnyPublisher()
     }
     
-    func getLivePeers() -> Single<[NodeInfo]> {
-        return make(request: .getLivePeers)
+    func getLivePeers() -> AnyPublisher<[NodeInfo], DataFromNodeError> {
+        make(request: .getLivePeers)
+            .mapError { DataFromNodeError.rpcError($0) }
+            .eraseToAnyPublisher()
     }
     
-    func getUniverseConfig() -> Single<UniverseConfig> {
-        return make(request: .getUniverse)
+    func getUniverseConfig() -> AnyPublisher<UniverseConfig, DataFromNodeError> {
+        make(request: .getUniverse)
+            .mapError { DataFromNodeError.rpcError($0) }
+            .eraseToAnyPublisher()
     }
     
-    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> Single<AtomStatus> {
-        return make(request: .getAtomStatus(atomIdentifier: atomIdentifier))
+    func statusOfAtom(withIdentifier atomIdentifier: AtomIdentifier) -> AnyPublisher<AtomStatus, DataFromNodeError> {
+        make(request: .getAtomStatus(atomIdentifier: atomIdentifier))
+            .mapError { DataFromNodeError.rpcError($0) }
+            .eraseToAnyPublisher()
     }
-}
 
-// MARK: - Completable
-public extension DefaultRPCClient {
-    func pushAtom(_ atom: SignedAtom) -> Completable {
-        return makeCompletableMapError(request: .submitAtom(atom: atom)) { SubmitAtomError(rpcError: $0) }
+    func pushAtom(_ atom: SignedAtom) -> AnyPublisher<Never, SubmitAtomError> {
+        makeFireForget(request: .submitAtom(atom: atom))
+            .mapError { SubmitAtomError(rpcError: $0) }
+            .eraseToAnyPublisher()
     }
 }
 
 // MARK: - Send Request for STARTING Subscribing To Some Notification
 public extension DefaultRPCClient {
     
-    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable {
-        return sendStartSubscription(request: .subscribe(to: address, subscriberId: subscriberId))
+    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
+        sendStartSubscription(
+            request: .subscribe(to: address, subscriberId: subscriberId)
+        )
     }
     
-    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> Completable {
-        return sendStartSubscription(request: .getAtomStatusNotifications(atomIdentifier: atomIdentifier, subscriberId: subscriberId))
+    func sendGetAtomStatusNotifications(atomIdentifier: AtomIdentifier, subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
+        sendStartSubscription(
+            request: .getAtomStatusNotifications(atomIdentifier: atomIdentifier, subscriberId: subscriberId)
+        )
     }
 }
 
 // MARK: - Send Request for CLOSING Subscribing To Some Notification
 public extension DefaultRPCClient {
-    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> Completable {
-        return sendCancelSubscription(request: .closeAtomStatusNotifications(subscriberId: subscriberId))
+    func closeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
+        sendCancelSubscription(
+            request: .closeAtomStatusNotifications(subscriberId: subscriberId)
+        )
     }
     
-    func cancelAtomsSubscription(subscriberId: SubscriberId) -> Completable {
-        return sendCancelSubscription(request: .unsubscribe(subscriberId: subscriberId))
+    func cancelAtomsSubscription(subscriberId: SubscriberId) -> AnyPublisher<Never, Never> {
+        sendCancelSubscription(
+            request: .unsubscribe(subscriberId: subscriberId)
+        )
     }
 }
 
 // MARK: Internal
 internal extension DefaultRPCClient {
     
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest) -> Single<ResultFromResponse> where ResultFromResponse: Decodable {
-        return make(request: rootRequest, responseType: ResultFromResponse.self)
+    func make<Model>(request rootRequest: RPCRootRequest) -> AnyPublisher<Model, RPCError> where Model: Decodable {
+        make(request: rootRequest, responseType: Model.self)
     }
     
-    func makeCompletableMapError<ErrorToMapTo>(request rootRequest: RPCRootRequest, errorMapper: @escaping (RPCError) -> (ErrorToMapTo)) -> Completable where ErrorToMapTo: ErrorMappedFromRPCError {
-        return make(request: rootRequest, responseType: ResponseOnFireAndForgetRequest.self, errorMapper: errorMapper).asCompletable()
+    func makeFireForget(request rootRequest: RPCRootRequest) -> AnyPublisher<Never, RPCError> {
+        make(
+            request: rootRequest,
+            responseType: ResponseOnFireAndForgetRequest.self
+        ).ignoreOutput().eraseToAnyPublisher()
     }
     
-    func observe<NotificationResponse>(notification: RPCNotification, subscriberId: SubscriberId, responseType: NotificationResponse.Type) -> Observable<NotificationResponse> where NotificationResponse: Decodable {
-        return channel.observeNotification(notification, subscriberId: subscriberId)
-    }
-    
-    func make<ResultFromResponse>(request rootRequest: RPCRootRequest, responseType: ResultFromResponse.Type) -> Single<ResultFromResponse> where ResultFromResponse: Decodable {
-        let noMapper: ((RPCError) -> RPCError)? = nil
-        return make(request: rootRequest, responseType: responseType, errorMapper: noMapper)
-    }
-    
-    func make<ResultFromResponse, MapToError>(
+    func make<Model>(
         request rootRequest: RPCRootRequest,
-        responseType: ResultFromResponse.Type,
-        errorMapper: ((RPCError) -> MapToError)?
-    ) -> Single<ResultFromResponse>
-        where
-        ResultFromResponse: Decodable,
-        MapToError: ErrorMappedFromRPCError {
+        responseType: Model.Type
+    ) -> AnyPublisher<Model, RPCError> where Model: Decodable {
+
+        let rpcRequest = RPCRequest(rootRequest: rootRequest)
         
-        return makeRequestMapToResponseOrError(request: rootRequest, responseType: responseType).map {
-            do {
-                return try $0.get().model
-            } catch let rpcError as RPCError {
-                if let errorMapper = errorMapper {
-                    throw errorMapper(rpcError)
-                } else { throw rpcError }
-            } catch { unexpectedlyMissedToCatch(error: error) }
-        }
+        let message = rpcRequest.jsonString
+        let requestId = rpcRequest.requestUuid
+        
+        return channel.responseOrErrorForMessage(requestId: requestId)
+            .first()
+            .handleEvents(
+                receiveSubscription: { _ in
+                    self.channel.sendMessage(message)
+                }
+            )
+            .setFailureType(to: RPCError.self)
+            .eraseToAnyPublisher()
     }
     
-    func sendStartSubscription(request: RPCRootRequest) -> Completable {
-        return sendStartOrCancelSubscription(request: request, mode: .start)
+    func observe<NotificationResponse>(
+        notification: RPCNotificationMethod,
+        subscriberId: SubscriberId,
+        responseType: NotificationResponse.Type
+    ) -> AnyPublisher<NotificationResponse, Never> where NotificationResponse: Decodable {
+        channel.observeNotification(notification, subscriberId: subscriberId)
     }
     
-    func sendCancelSubscription(request: RPCRootRequest) -> Completable {
-        return sendStartOrCancelSubscription(request: request, mode: .cancel)
+    func sendStartSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
+        sendStartOrCancelSubscription(request: request)
+    }
+    
+    func sendCancelSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
+        sendStartOrCancelSubscription(request: request)
     }
 }
 
 // MARK: - Private
 private extension DefaultRPCClient {
     
-    func makeRequestMapToResponseOrError<Model>(request rootRequest: RPCRootRequest, responseType: Model.Type) -> Single<RPCResult<Model>> where Model: Decodable {
+    func sendStartOrCancelSubscription(request: RPCRootRequest) -> AnyPublisher<Never, Never> {
         
-        let rpcRequest = RPCRequest(rootRequest: rootRequest)
-        
-        let message = rpcRequest.jsonString
-        let requestId = rpcRequest.requestUuid
-        
-        return channel.responseOrErrorForMessage(requestId: requestId).take(1).asSingle()
-            .do(onSubscribed: {
-                self.channel.sendMessage(message)
-            })
-    }
-    
-    func sendStartOrCancelSubscription(request: RPCRootRequest, mode: SubscriptionMode) -> Completable {
-        return Completable.create { [unowned self] completable in
-            let singleDisposable = self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
-                .subscribe(
-                    onSuccess: { rpcResponseAboutSubscriptionChange in
-                        if rpcResponseAboutSubscriptionChange.success {
-                            completable(.completed)
-                        } else {
-                            completable(.error(RPCClientError(subscriptionMode: mode)))
-                        }
-                },
-                    onError: {
-                        // change to `completable(.error($0))`?
-                        unexpectedlyMissedToCatch(error: $0)
+        self.make(request: request, responseType: RPCSubscriptionStartOrCancel.self)
+            .filter { rpcSubscriptionStartOrCancel in
+                guard rpcSubscriptionStartOrCancel.success else {
+                    fatalError("TODO Combine handle failed to subscribe, throw `RPCClientError:subscriptionMode`, and deal with error flow")
                 }
-            )
-            return Disposables.create([singleDisposable])
-        }
+                return true
+            }
+            .first()
+            .ignoreOutput()
+            .catch { (rpcError: RPCError) -> AnyPublisher<Never, Never> in
+                // TODO Combine propagate RPC error?
+                Swift.print("RPC error: \(rpcError)")
+                return Empty<Never, Never>(completeImmediately: true).eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
     }
-}
-
-private extension RPCClientError {
-    init(subscriptionMode: SubscriptionMode) {
-        switch subscriptionMode {
-        case .start: self = .failedToStartAtomSubscription
-        case .cancel: self = .failedToCancelAtomSubscription
-        }
-    }
-}
-
-private enum SubscriptionMode: Int, Equatable {
-    case start, cancel
 }
 
 private extension RPCRequest {
@@ -207,7 +204,7 @@ private extension RPCRequest {
             let data = try RadixJSONEncoder().encode(self)
             return String(data: data)
         } catch {
-            incorrectImplementation("Should be able to encode `self` to JSON string")
+            incorrectImplementation("Should be able to encode 'self' to JSON string")
         }
     }
 }

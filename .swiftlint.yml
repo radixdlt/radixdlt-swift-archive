@@ -25,6 +25,8 @@ type_name:
   max_length:
     warning: 60
     error:  70
+  excluded:
+    - ID
 
 file_length:
   warning: 200
@@ -55,8 +57,11 @@ type_body_length:
   - 150 # error
 
 function_parameter_count:
-  - 4 # warning
-  - 5 # error
+  # Apple's Combine `schedule` takes 5 parameters
+  # https://developer.apple.com/documentation/combine/scheduler/3213636-schedule
+  # thus seams prudent to accept 5.
+  - 6 # warning, 
+  - 7 # error
 
 function_body_length:
   - 30 # warning

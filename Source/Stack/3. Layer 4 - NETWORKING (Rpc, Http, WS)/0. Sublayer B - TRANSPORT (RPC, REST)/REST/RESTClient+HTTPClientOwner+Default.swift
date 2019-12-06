@@ -23,22 +23,31 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public extension NodeNetworkDetailsRequesting where Self: HTTPClientOwner {
-    func networkDetails() -> Single<NodeNetworkDetails> {
-        return httpClient.request(.network)
+    
+    func networkDetails() -> AnyPublisher<NodeNetworkDetails, DataFromNodeError> {
+        httpClient.request(.network)
+            .mapError { DataFromNodeError.httpError($0) }
+            .eraseToAnyPublisher()
     }
 }
 
 public extension LivePeersRequesting where Self: HTTPClientOwner {
-    func getLivePeers() -> Single<[NodeInfo]> {
-        return httpClient.request(.getLivePeers)
+    
+    func getLivePeers() -> AnyPublisher<[NodeInfo], DataFromNodeError> {
+        httpClient.request(.getLivePeers)
+            .mapError { DataFromNodeError.httpError($0) }
+            .eraseToAnyPublisher()
     }
 }
 
 public extension UniverseConfigRequesting where Self: HTTPClientOwner {
-    func getUniverseConfig() -> Single<UniverseConfig> {
-        return httpClient.request(.getUniverseConfig)
+    
+    func getUniverseConfig() -> AnyPublisher<UniverseConfig, DataFromNodeError> {
+        httpClient.request(.getUniverseConfig)
+            .mapError { DataFromNodeError.httpError($0) }
+            .eraseToAnyPublisher()
     }
 }

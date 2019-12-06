@@ -24,9 +24,17 @@
 
 import Foundation
 
+// swiftlint:disable colon opening_brace
+
 /// A transfer of a non-zero amount of a certain token between two Radix accounts
-public struct TransferTokensAction: ConsumeTokensAction, Hashable {
+public struct TransferTokensAction:
+    ConsumeTokensAction,
+    UserActionWithAddresses,
+    Hashable
+{
     
+    // swiftlint:enable colon opening_brace
+
     public let sender: Address
     public let recipient: Address
     public let amount: PositiveAmount
@@ -70,6 +78,13 @@ public extension TransferTokensAction {
     var user: Address { return sender }
     var nameOfAction: UserActionName { return .transferTokens }
     var identifierForTokenToConsume: ResourceIdentifier { return tokenResourceIdentifier }
+}
+
+// MARK: UserActionWithAddresses
+public extension TransferTokensAction {
+    var addresses: Set<Address> {
+        return Set([sender, recipient])
+    }
 }
 
 public extension TransferTokensAction {

@@ -23,8 +23,8 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol AtomStatusObserving {
-    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> Observable<AtomStatusEvent>
+    func observeAtomStatusNotifications(subscriberId: SubscriberId) -> AnyPublisher<AtomStatusEvent, Never>
 }

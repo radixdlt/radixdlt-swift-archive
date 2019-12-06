@@ -26,16 +26,16 @@ import Foundation
 
 public extension SendMessageAction.EncryptionMode.EncryptContext {
     enum Builder {
-        public typealias EncryptionSpecifyDecryptors = ([AddressConvertible]) -> SendMessageAction.EncryptionMode.EncryptContext
+        public typealias EncryptionSpecifyDecryptors = ([Address]) -> SendMessageAction.EncryptionMode.EncryptContext
         case encryptionSpecifyDecryptors(EncryptionSpecifyDecryptors)
-        case encryption(onlyDecryptableBy: [AddressConvertible])
+        case encryption(onlyDecryptableBy: [Address])
         case plainText
     }
 }
 
 public extension SendMessageAction.EncryptionMode.EncryptContext.Builder {
     
-    static func encrypted(decryptableOnlyBy decryptors: [AddressConvertible]) -> SendMessageAction.EncryptionMode.EncryptContext.Builder {
+    static func encrypted(decryptableOnlyBy decryptors: [Address]) -> SendMessageAction.EncryptionMode.EncryptContext.Builder {
         return .encryption(onlyDecryptableBy: decryptors)
     }
     
@@ -55,7 +55,7 @@ public extension SendMessageAction.EncryptionMode.EncryptContext.Builder {
         case .encryption(let onlyDecryptableBy):
             return .encrypt(onlyDecryptableBy: onlyDecryptableBy)
         case .encryptionSpecifyDecryptors(let encryptionSpecifyDecryptors):
-            return encryptionSpecifyDecryptors([sender, recipient])
+            return encryptionSpecifyDecryptors([sender.address, recipient.address])
         }
     }
 }

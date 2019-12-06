@@ -25,18 +25,18 @@
 import Foundation
 
 public protocol TransactionConvertible {
-    var sentAt: Date { get }
+    var date: Date { get }
     var actions: [UserAction] { get }
 }
 
 public extension TransactionConvertible {
     func containsAction<Action>(ofType actionType: Action.Type) -> Bool where Action: UserAction {
-        return actions.contains(where: { type(of: $0) == actionType })
+        actions.contains(where: { type(of: $0) == actionType })
     }
     
     /// Boolean OR of `actionTypes`
     func contains(actionMatchingAnyType actionTypes: [UserAction.Type]) -> Bool {
-        return actions.contains(where: { action in
+        actions.contains(where: { action in
             let typeOfAction = type(of: action)
             return actionTypes.contains(where: { $0 == typeOfAction }) }
         )
@@ -44,12 +44,20 @@ public extension TransactionConvertible {
     
     /// Boolean AND of `actionTypes`
     func contains(actionMatchingAll actionTypes: [UserAction.Type]) -> Bool {
-        return actionTypes.allSatisfy { requiredActionType in
+        actionTypes.allSatisfy { requiredActionType in
             self.actions.contains(where: { type(of: $0) == requiredActionType })
         }
     }
     
     func actions<Action>(ofType actionType: Action.Type) -> [Action] where Action: UserAction {
-        return actions.compactMap { $0 as? Action }
+        actions.compactMap { $0 as? Action }
+    }
+    
+    func firstAction<Action>(ofType actionType: Action.Type) -> Action? where Action: UserAction {
+        actions(ofType: actionType).first
+    }
+    
+    func firstAction<Action>() -> Action? where Action: UserAction {
+        firstAction(ofType: Action.self)
     }
 }

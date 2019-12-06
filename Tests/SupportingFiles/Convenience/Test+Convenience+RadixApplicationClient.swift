@@ -38,7 +38,7 @@ extension RadixApplicationClient {
         supply supplyTypeDefinition: CreateTokenAction.InitialSupply.SupplyTypeDefinition = .mutableZeroSupply,
         iconUrl: URL? = nil,
         granularity: Granularity = .default
-    ) -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         let createTokenAction = try! CreateTokenAction(
             creator: creator ?? addressOfActiveAccount,
@@ -50,7 +50,7 @@ extension RadixApplicationClient {
             granularity: granularity
         )
         
-        return (create(token: createTokenAction), createTokenAction.identifier)
+        return (createToken(action: createTokenAction), createTokenAction.identifier)
     }
     
     func createFixedSupplyToken(
@@ -61,7 +61,7 @@ extension RadixApplicationClient {
         iconUrl: URL? = nil,
         supply: PositiveSupply = .max,
         granularity: Granularity = .default
-        ) -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+        ) -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try! createToken(
             creator: creator ?? addressOfActiveAccount,
@@ -82,7 +82,7 @@ extension RadixApplicationClient {
         iconUrl: URL? = nil,
         initialSupply: Supply? = nil,
         granularity: Granularity = .default
-    ) -> (result: ResultOfUserAction, rri: ResourceIdentifier) {
+    ) -> (result: PendingTransaction, rri: ResourceIdentifier) {
         
         return try! createToken(
             creator: creator ?? addressOfActiveAccount,

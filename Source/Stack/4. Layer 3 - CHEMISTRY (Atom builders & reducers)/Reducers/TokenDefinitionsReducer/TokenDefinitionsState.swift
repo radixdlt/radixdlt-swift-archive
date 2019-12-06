@@ -92,6 +92,12 @@ public extension TokenDefinitionsState {
         }
     }
     
+    var tokenDefinitions: [TokenDefinition] {
+        return self.dictionary.compactMap {
+            self.tokenDefinition(identifier: $0.key)
+        }
+    }
+    
     func valueFor(identifier: ResourceIdentifier) -> Value? {
         return dictionary[identifier]
     }

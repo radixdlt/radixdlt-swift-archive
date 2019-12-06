@@ -23,9 +23,9 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol AtomsByAddressSubscribing {
-    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> Completable
-    func observeAtoms(subscriberId: SubscriberId) -> Observable<AtomObservation>
+    func sendAtomsSubscribe(to address: Address, subscriberId: SubscriberId) -> AnyPublisher<Never, Never>
+    func observeAtoms(subscriberId: SubscriberId) -> AnyPublisher<AtomObservation, Never>
 }

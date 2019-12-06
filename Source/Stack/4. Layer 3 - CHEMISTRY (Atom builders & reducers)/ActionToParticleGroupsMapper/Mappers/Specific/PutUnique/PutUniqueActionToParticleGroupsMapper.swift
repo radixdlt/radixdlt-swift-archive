@@ -25,39 +25,46 @@
 import Foundation
 
 // MARK: PutUniqueActionToParticleGroupsMapper
-public protocol PutUniqueActionToParticleGroupsMapper: UniquelyIdentifiedUserActionToParticleGroupsMapper, Throwing where Action == PutUniqueIdAction, Error == PutUniqueIdError {}
 
-public enum PutUniqueIdError: UniqueActionErrorInitializable {
-    case uniqueError(UniquelyIdentifiedUserActionError)
-}
+// swiftlint:disable opening_brace
 
-public extension PutUniqueIdError {
-    static func errorFrom(uniqueActionError: UniquelyIdentifiedUserActionError) -> PutUniqueIdError {
-        return .uniqueError(uniqueActionError)
+public protocol PutUniqueActionToParticleGroupsMapper: UniquelyIdentifiedUserActionToParticleGroupsMapper
+    where
+    Action == PutUniqueIdAction,
+    SpecificActionError == PutUniqueIdError
+{}
+
+// swiftlint:enable opening_brace
+
+// MARK: Default Implementation
+public extension PutUniqueActionToParticleGroupsMapper {
+    func mapError(_ putUniqueIdError: PutUniqueIdError, action putUniqueIdAction: PutUniqueIdAction) -> ActionsToAtomError {
+        ActionsToAtomError.putUniqueIdActionError(putUniqueIdError, action: putUniqueIdAction)
     }
     
-}
-
-// MARK: DefaultPutUniqueActionToParticleGroupsMapper
-public final class DefaultPutUniqueActionToParticleGroupsMapper: PutUniqueActionToParticleGroupsMapper { }
-
-public extension DefaultPutUniqueActionToParticleGroupsMapper {
-    typealias Action = PutUniqueIdAction
-
-    func particleGroups(for action: PutUniqueIdAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
-
-        try validateInputMappingUniqueActionError(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
-
-        let uniqueParticle = UniqueParticle(address: action.uniqueMaker, string: action.string)
-        let rriParticle = ResourceIdentifierParticle(resourceIdentifier: uniqueParticle.identifier)
-        
-        let spunParticles = [
-            rriParticle.withSpin(.down),
-            uniqueParticle.withSpin(.up)
-        ]
-
-        let particleGroup = try spunParticles.wrapInGroup()
-
-        return [particleGroup]
+    func particleGroups(
+        for action: PutUniqueIdAction,
+        upParticles: [AnyUpParticle],
+        addressOfActiveAccount: Address
+    ) throws -> Throws<ParticleGroups, PutUniqueIdError> {
+        do {
+            try validateInputMappingUniqueActionError(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+            
+            let uniqueParticle = UniqueParticle(address: action.uniqueMaker, string: action.string)
+            let rriParticle = ResourceIdentifierParticle(resourceIdentifier: uniqueParticle.identifier)
+            
+            let spunParticles = [
+                rriParticle.withSpin(.down),
+                uniqueParticle.withSpin(.up)
+            ]
+            
+            let particleGroup = try spunParticles.wrapInGroup()
+            
+            return [particleGroup]
+        } catch let putUniqueIdError as PutUniqueIdError {
+            throw putUniqueIdError
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
     }
 }

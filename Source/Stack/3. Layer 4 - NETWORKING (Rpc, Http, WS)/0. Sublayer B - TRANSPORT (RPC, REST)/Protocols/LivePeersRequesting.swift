@@ -23,8 +23,13 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol LivePeersRequesting {
-    func getLivePeers() -> Single<[NodeInfo]>
+    func getLivePeers() -> AnyPublisher<[NodeInfo], DataFromNodeError>
+}
+
+public enum DataFromNodeError: Swift.Error, Equatable {
+    case rpcError(RPCError)
+    case httpError(HTTPError)
 }

@@ -35,7 +35,7 @@ public struct RadixSystem:
 
     // swiftlint:enable colon opening_brace
     
-    public static let serializer = RadixModelType.radixSystem
+    public static let serializer = RadixModelType.radixLocalSystem
     
     public let shardSpace: ShardSpace
     

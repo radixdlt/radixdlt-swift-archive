@@ -23,38 +23,66 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
-public protocol AtomToSendMessageActionMapper: AtomToSpecificExecutedActionMapper, Throwing where
+// swiftlint:disable opening_brace
+
+public protocol AtomToSendMessageActionMapper: AtomToSpecificExecutedActionMapper
+    where
     SpecificExecutedAction == SendMessageAction,
-    Error == DecryptMessageFromAtomMapperError {}
+    SpecificMappingError == DecryptMessageFromAtomMapperError
+{}
+
+// swiftlint:enable opening_brace
 
 public final class DefaultAtomToSendMessageActionMapper: AtomToSendMessageActionMapper {
-    private let activeAccount: Observable<Account>
+    private let activeAccount: AnyPublisher<Account, Never>
     public init(
-        activeAccount: Observable<Account>
+        activeAccount: AnyPublisher<Account, Never>
     ) {
         self.activeAccount = activeAccount
     }
 }
 
 public extension DefaultAtomToSendMessageActionMapper {
-    func mapAtomToActions(_ atom: Atom) -> Observable<[SendMessageAction]> {
-        guard atom.containsAnyMessageParticle() else { return Observable.just([]) }
-        
-        return activeAccount.flatMap {
-            $0.privateKeyForSigning
-        }.map {
-            try EncryptedMessageContext(atom: atom).decryptMessageIfNeeded(key: $0)
-        }.map {
-            [$0]
+    typealias SpecificMappingError = DecryptMessageFromAtomMapperError
+
+    func mapError(_ error: SpecificMappingError) -> AtomToTransactionMapperError {
+        AtomToTransactionMapperError.sendMessageActionMappingError(error)
+    }
+    
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[SendMessageAction], SpecificMappingError> {
+        guard atom.containsAnyMessageParticle() else {
+            return Just([])
+                .setFailureType(to: SpecificMappingError.self)
+                .eraseToAnyPublisher()
         }
+        
+        let particleGroupsWithMessageParticles = atom.particleGroups.particleGroups
+            .filter { $0.containsAnyMessageParticle() }
+            
+        let encryptedContexts: AnyPublisher<EncryptedMessageContext, DecryptMessageFromAtomMapperError> = Publishers.Sequence<[ParticleGroup], DecryptMessageFromAtomMapperError>(sequence: particleGroupsWithMessageParticles)
+            .map { NonEmptyArray($0.messageParticles()) }
+        .tryMap {
+            try EncryptedMessageContext(messageParticles: $0)
+        }
+        .mapError { castOrKill(instance: $0, toType: DecryptMessageFromAtomMapperError.self) }
+        .eraseToAnyPublisher()
+            
+        return encryptedContexts.combineLatest(
+            activeAccount.flatMap { $0.privateKeyForSigning }.setFailureType(to: SpecificMappingError.self)
+        )
+        .tryMap { encryptedMessageContext, key in
+            try encryptedMessageContext.decryptMessageIfNeeded(key: key)
+        }
+        .mapError { castOrKill(instance: $0, toType: DecryptMessageFromAtomMapperError.self) }
+        .collect(particleGroupsWithMessageParticles.count)
+        .eraseToAnyPublisher()
     }
 }
 
-public enum DecryptMessageFromAtomMapperError: Swift.Error {
+public enum DecryptMessageFromAtomMapperError: Swift.Error, Equatable {
     case zeroMessageParticlesFound(in: Atom)
-    case zeroMessageParticlesWithoutEncryptorMetaDataFound
     case incorrectMetaDataValueForApplication(expected: String, butGot: String?)
 }
 
@@ -82,28 +110,48 @@ private struct EncryptedMessageContext {
 // MARK: - From Atom
 private extension EncryptedMessageContext {
     
-    init(atom: Atom) throws {
+    // TODO Clean up and change fatalError to throwing error, also sync API layer design with other libraries
+    init(messageParticles messageParticlesNonEmpty: NonEmptyArray<MessageParticle>) throws {
         
-        guard case let messageParticles = atom.messageParticles(), !messageParticles.isEmpty else {
-            throw DecryptMessageFromAtomMapperError.zeroMessageParticlesFound(in: atom)
+        func particleContainsMetaDataApplicationMessage(_ messageParticle: MessageParticle) -> Bool {
+            messageParticle.metaData.contains(where: {
+                $0.key == MetaDataKey.application &&
+                    $0.value == MetaDataCommonValue.message.rawValue
+            })
         }
         
-        try self.init(messageParticles: messageParticles)
-    }
-    
-    init(messageParticles: [MessageParticle]) throws {
-        guard let messageParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .message) else {
-            throw DecryptMessageFromAtomMapperError.zeroMessageParticlesWithoutEncryptorMetaDataFound
+        func printIfParticleLacksCorrectMetaData(_ messageParticle: MessageParticle) {
+            guard particleContainsMetaDataApplicationMessage(messageParticle) == false else { return }
+            
+            print("⚠️ Application layer discrepancy, got message particle without any metadata with key-value: '\([MetaDataKey.application: MetaDataCommonValue.message]))', but proceeding anyway")
         }
-        
-        let encryptorParticle = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .encryptor)
-        
-        try self.init(messageParticle: messageParticle, encryptorParticle: encryptorParticle)
+    
+        switch messageParticlesNonEmpty.countedElementsOneTwoAndMany {
+        case .one(let singleMessageParticle):
+            printIfParticleLacksCorrectMetaData(singleMessageParticle)
+            try self.init(messageParticle: singleMessageParticle)
+        case .two:
+            let messageParticles = messageParticlesNonEmpty.elements
+            
+            let messageParticleWithApplicationMetaData = messageParticles.firstWhereMetaDataValueFor(key: .application, equals: .message)
+            let messageParticleFallBack = messageParticles.firstWhereMetaDataValueFor(key: .application, notEquals: .encryptor)
+            
+            guard let messageParticle = (messageParticleWithApplicationMetaData ?? messageParticleFallBack) else {
+                fatalError("Found no unencrypted message particle.")
+            }
+            
+            guard let encryptorParticle = messageParticles
+                .firstWhereMetaDataValueFor(key: .application, equals: .encryptor) else {
+                    fatalError("Found no encryptor particle, does this ParticleGroup contain multiple unencrypted message particles?")
+            }
+            
+            try self.init(messageParticle: messageParticle, encryptorParticle: encryptorParticle)
+        case .many:
+            fatalError("Unexpectedly got more than 2 message particles in same ParticleGroup, is this a bad state?")
+        }
     }
     
-    init(messageParticle: MessageParticle, encryptorParticle: MessageParticle?) throws {
-
-        try EncryptedMessageContext.ensureMetaDataApplication(value: .message, in: messageParticle)
+    init(messageParticle: MessageParticle, encryptorParticle: MessageParticle? = nil) throws {
         
         let encryptor: Encryptor? = try {
             guard let encryptorParticle = encryptorParticle else {
@@ -153,7 +201,7 @@ private extension EncryptedMessageContext {
             do {
                 let decryptedData = try encryptor.decrypt(data: encryptedData, using: key)
                 return SendMessageAction(context: self, data: decryptedData, decryptContext: .decrypted)
-            } catch let decryptionError as ECIES.DecryptionError {
+            } catch let decryptionError as DecryptionError {
                 return SendMessageAction(context: self, data: encryptedData, decryptContext: .cannotDecrypt(error: decryptionError))
             } catch let unhandledError {
                 throw unhandledError

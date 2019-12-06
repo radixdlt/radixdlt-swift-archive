@@ -29,5 +29,5 @@ public protocol NodeAction {
 }
 
 public extension NodeAction {
-    var node: Node { abstract() }
+    var node: Node { abstract("Self: \(Mirror(reflecting: self).subjectType)") }
 }

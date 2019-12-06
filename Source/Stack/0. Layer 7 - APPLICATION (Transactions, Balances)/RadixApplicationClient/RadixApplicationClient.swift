@@ -23,13 +23,11 @@
 //
 
 import Foundation
-import RxSwift
-import RxSwiftExt
-import RxOptional
+import Combine
 
 // MARK: - RadixApplicationClient
 
- // swiftlint:disable opening_brace colon
+// swiftlint:disable opening_brace colon
 
 public final class RadixApplicationClient:
     AccountBalancing,
@@ -51,7 +49,7 @@ public final class RadixApplicationClient:
     // swiftlint:enable opening_brace colon
     
     // MARK: - Stored properties
-
+    
     /// The chosen Radix universe, a network of nodes running a specific version of the Radix Node Runner software
     public let universe: RadixUniverse
     
@@ -66,8 +64,8 @@ public final class RadixApplicationClient:
     
     /// A subscriber of executed transactions at a given address
     private let transactionSubscriber: TransactionSubscriber
-
-    private let disposeBag = DisposeBag()
+    
+    private var cancellables = Set<AnyCancellable>()
     
     public init(
         identity: AbstractIdentity,
@@ -120,96 +118,85 @@ public extension RadixApplicationClient {
 
 // MARK: TransactionMaker
 public extension RadixApplicationClient {
-    func send(transaction: Transaction, toOriginNode originNode: Node?) -> ResultOfUserAction {
-        transactionMaker.send(transaction: transaction, toOriginNode: originNode)
+    func commitAndPush(transaction: Transaction, to originNode: Node?) -> PendingTransaction {
+        transactionMaker.commitAndPush(transaction: transaction, to: originNode)
     }
 }
 
 // MARK: TransactionToAtomMapper
 public extension RadixApplicationClient {
     func atomFrom(transaction: Transaction, addressOfActiveAccount: Address) throws -> Atom {
-        return try transactionMaker.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
+        try transactionMaker.atomFrom(transaction: transaction, addressOfActiveAccount: addressOfActiveAccount)
     }
 }
 
 // MARK: AtomToTransactionMapper
 public extension RadixApplicationClient {
-    func transactionFromAtom(_ atom: Atom) -> Observable<ExecutedTransaction> {
-        return transactionSubscriber.transactionFromAtom(atom)
+    func transactionFromAtom(_ atom: Atom) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
+        transactionSubscriber.transactionFromAtom(atom)
     }
 }
 
 // MARK: TokenCreating
 public extension RadixApplicationClient {
-    func create(token createTokenAction: CreateTokenAction) -> ResultOfUserAction {
-        return execute(actions: createTokenAction)
+    func createToken(action createTokenAction: CreateTokenAction) -> PendingTransaction {
+        execute(actions: createTokenAction)
     }
     
     /// Returns a hot observable of the latest state of token definitions at the user's address
-    func observeMyTokenDefinitions() -> Observable<TokenDefinitionsState> {
-        return observeTokenDefinitions(at: addressOfActiveAccount)
+    func observeMyTokenDefinitions() -> AnyPublisher<TokenDefinitionsState, StateSubscriberError> {
+        observeTokenDefinitions(at: addressOfActiveAccount)
     }
 }
 
 // MARK: TokenMinting
 public extension RadixApplicationClient {
-    func mintTokens(_ action: MintTokensAction) -> ResultOfUserAction {
-        return execute(actions: action)
+    func mintTokens(action mintTokensAction: MintTokensAction) -> PendingTransaction {
+        execute(actions: mintTokensAction)
     }
 }
 
 // MARK: TokenBurning
 public extension RadixApplicationClient {
-    func burnTokens(_ action: BurnTokensAction) -> ResultOfUserAction {
-        return execute(actions: action)
+    func burnTokens(action burnTokensAction: BurnTokensAction) -> PendingTransaction {
+        execute(actions: burnTokensAction)
     }
 }
 
 // MARK: TokenTransferring
 public extension RadixApplicationClient {
-    func transfer(tokens transferTokensAction: TransferTokensAction) -> ResultOfUserAction {
-        return execute(actions: transferTokensAction)
+    func transferTokens(action transferTokensAction: TransferTokensAction) -> PendingTransaction {
+        execute(actions: transferTokensAction)
     }
     
-    func observeTokenTransfers(toOrFrom address: Address) -> Observable<TransferTokensAction> {
-        return observeActions(ofType: TransferTokensAction.self, at: address)
+    func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, AtomToTransactionMapperError> {
+        observeActions(ofType: TransferTokensAction.self, at: address)
     }
 }
 
 // MARK: MessageSending
 public extension RadixApplicationClient {
-    func send(message sendMessageAction: SendMessageAction) -> ResultOfUserAction {
-        return execute(actions: sendMessageAction)
+    func sendMessage(action sendMessageAction: SendMessageAction) -> PendingTransaction {
+        execute(actions: sendMessageAction)
     }
     
-    func observeMessages(toOrFrom address: Address) -> Observable<SendMessageAction> {
-        return observeActions(ofType: SendMessageAction.self, at: address)
+    func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, AtomToTransactionMapperError> {
+        observeActions(ofType: SendMessageAction.self, at: address)
     }
 }
 
 // MARK: UniqueMaking
 public extension RadixApplicationClient {
-    func putUniqueId(_ putUniqueAction: PutUniqueIdAction) -> ResultOfUserAction {
-        return execute(actions: putUniqueAction)
+    func putUniqueId(action putUniqueAction: PutUniqueIdAction) -> PendingTransaction {
+        execute(actions: putUniqueAction)
     }
 }
 
 // MARK: AccountBalancing
 public extension RadixApplicationClient {
-    
-    func observeBalances(ownedBy owner: AddressConvertible) -> Observable<TokenBalances> {
-        return observeBalanceReferences(at: owner.address).flatMap {
-            Observable.combineLatest($0.dictionary.values
-                .map { tokenReferenceBalance -> Observable<TokenBalance> in
-                    let rriOfToken = tokenReferenceBalance.tokenResourceIdentifier
-                    return self.observeTokenDefinitions(at: rriOfToken.address).map { tokenDefinitionState -> TokenBalance in
-                        
-                        guard let tokenDefinition = tokenDefinitionState.tokenDefinition(identifier: rriOfToken) else { incorrectImplementation("Expected token definition") }
-                        
-                        return try TokenBalance(tokenDefinition: tokenDefinition, tokenReferenceBalance: tokenReferenceBalance)
-                    }
-            }) { $0 } /* Observable.combineLatest continued */
-        }.map { TokenBalances(balances: $0) }
+
+    func observeBalances(ownedBy owner: AddressConvertible) -> AnyPublisher<TokenBalances, TokenBalancesReducerError> {
+        TokenBalancesReducer.usingApplicationClient(self).tokenBalancesOfAddress(owner.address)
     }
 }
 
@@ -219,44 +206,42 @@ public extension RadixApplicationClient {
     func observeState<State>(
         ofType stateType: State.Type,
         at address: Address
-    ) -> Observable<State>
-        where State: ApplicationState {
-        return stateSubscriber.observeState(ofType: stateType, at: address)
+    ) -> AnyPublisher<State, StateSubscriberError> where State: ApplicationState {
+        
+        stateSubscriber.observeState(ofType: stateType, at: address)
     }
 }
 
 // MARK: TransactionSubscriber
 public extension RadixApplicationClient {
-    func observeTransactions(at address: Address) -> Observable<ExecutedTransaction> {
-        return transactionSubscriber.observeTransactions(at: address)
+    func observeTransactions(at address: Address) -> AnyPublisher<ExecutedTransaction, AtomToTransactionMapperError> {
+        transactionSubscriber.observeTransactions(at: address)
     }
 }
 
 // MARK: TokenDefinitionsState Observation
 public extension RadixApplicationClient {
-    func observeTokenDefinitions(at address: Address) -> Observable<TokenDefinitionsState> {
-        return observeState(ofType: TokenDefinitionsState.self, at: address)
+    func observeTokenDefinitions(at address: Address) -> AnyPublisher<TokenDefinitionsState, StateSubscriberError> {
+        observeState(ofType: TokenDefinitionsState.self, at: address)
     }
     
-    func observeTokenDefinition(identifier: ResourceIdentifier) -> Observable<TokenDefinition> {
-        let address = identifier.address
-        return observeTokenDefinitions(at: address).map {
+    func observeTokenDefinition(identifier: ResourceIdentifier) -> AnyPublisher<TokenDefinition, StateSubscriberError> {
+        observeTokenDefinitions(at: identifier.address).map {
             $0.tokenDefinition(identifier: identifier)
-            }.ifNilReturnEmpty()
+        }.replaceNilWithEmpty()
     }
     
-    func observeTokenState(identifier: ResourceIdentifier) -> Observable<TokenState> {
-        let address = identifier.address
-        return observeTokenDefinitions(at: address).map {
+    func observeTokenState(identifier: ResourceIdentifier) -> AnyPublisher<TokenState, StateSubscriberError> {
+        observeTokenDefinitions(at: identifier.address).map {
             $0.tokenState(identifier: identifier)
-            }.ifNilReturnEmpty()
+        }.replaceNilWithEmpty()
     }
 }
 
 // MARK: TokenBalanceReferencesState Observation
 public extension RadixApplicationClient {
-    func observeBalanceReferences(at address: Address) -> Observable<TokenBalanceReferencesState> {
-        return observeState(ofType: TokenBalanceReferencesState.self, at: address)
+    func observeBalanceReferences(at address: Address) -> AnyPublisher<TokenBalanceReferencesState, StateSubscriberError> {
+        observeState(ofType: TokenBalanceReferencesState.self, at: address)
     }
 }
 
@@ -268,15 +253,16 @@ public extension RadixApplicationClient {
 // MARK: ActiveAccountOwner
 public extension RadixApplicationClient {
     var addressOfActiveAccount: Address { snapshotActiveAccount.addressFromMagic(magic) }
-
-    func observeAddressOfActiveAccount() -> Observable<Address> {
-        let magic = self.magic
-        return identity.activeAccountObservable.map { newActiveAccount in
-            return newActiveAccount.addressFromMagic(magic)
+    
+    func observeAddressOfActiveAccount() -> AnyPublisher<Address, Never> {
+        identity.activeAccountObservable
+            .map { newActiveAccount in
+                newActiveAccount.addressFromMagic(self.magic)
         }
+        .eraseToAnyPublisher()
     }
-
-    func observeActiveAccount() -> Observable<Account> {
+    
+    func observeActiveAccount() -> AnyPublisher<Account, Never> {
         identity.activeAccountObservable
     }
 }
@@ -287,30 +273,33 @@ public extension RadixApplicationClient {
     var universeConfig: UniverseConfig { universe.config }
     
     var nativeTokenDefinition: TokenDefinition { universe.nativeTokenDefinition }
- 
+    
     var nativeTokenIdentifier: ResourceIdentifier { nativeTokenDefinition.tokenDefinitionReference }
     
     @discardableResult
     func changeAccount(accountSelector: AbstractIdentity.AccountSelector) -> Account? {
-        return identity.selectAccount(accountSelector)
+        identity.selectAccount(accountSelector)
     }
-
+    
     func changeAccount(to selectedAccount: Account) {
         identity.changeAccount(to: selectedAccount)
     }
-
+    
     func addAccount(_ newAccount: Account) {
         identity.addAccount(newAccount)
     }
     
-    func pull(address: Address) -> Disposable {
-        return atomPuller.pull(address: address).subscribe()
+    func pull(address: Address) -> Cancellable {
+        atomPuller.pull(address: address)
+            .sink(
+                receiveCompletion: { Swift.print("Completed pulling address: \($0)") }
+            )
     }
     
-    func pull() -> Disposable {
-        return pull(address: addressOfActiveAccount)
+    func pull() -> Cancellable {
+        pull(address: addressOfActiveAccount)
     }
-
+    
     var snapshotActiveAccount: Account {
         identity.snapshotActiveAccount
     }

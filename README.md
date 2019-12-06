@@ -19,9 +19,6 @@
 - [License](#license)
 
 ## Features
-⚠️👷🏾‍♀️ The Swift library is not production ready yet, it's under construction 🚜⚠️  
-
-This is a **sneak peak** of the **coming** Application Layer API
 
 ### Radix Application
 
@@ -32,38 +29,71 @@ final class RadixApplicationClient:
     AccountBalancing,
     TokenTransferring,
     TokenCreating,
-    MessageSending
+    TokenMinting,
+    TokenBurning,
+    MessageSending // ...
 { ... }
 
-protocol TokenCreating {
-    func create(token: CreateTokenAction) -> ResultOfUserAction
+
+protocol AccountBalancing:  {
+
+    func observeBalances(ownedBy owner: ) -> AnyPublisher<TokenBalances, TokenBalancesReducerError>
+    
+    func observeBalance(
+        ofToken tokenIdentifier: ResourceIdentifier,
+        ownedBy owner: Address
+    ) -> AnyPublisher<TokenBalance?, TokenBalancesReducerError>
+    
 }
 
 protocol TokenTransferring {
-    func transfer(tokens: TransferTokensAction) -> ResultOfUserAction
+
+    /// Transfers tokens to some address
+    func transferTokens(action: TransferTokensAction) -> PendingTransaction
+
+    func observeTokenTransfers(toOrFrom address: Address) -> AnyPublisher<TransferTokensAction, AtomToTransactionMapperError>
 }
 
-protocol AccountBalancing {
-    /// `AddressConvertible` is a protocol for something that can return a Radix `Address` (`Address` conforms to `AddressConvertible`, returning `self`).
-    func observeBalances(ownedBy owner: AddressConvertible) -> Observable<TokenBalances>
-    func observeBalance(ofToken tokenIdentifier: ResourceIdentifier, ownedBy owner: AddressConvertible) -> Observable<TokenBalance?>
+protocol TokenCreating {
+    
+    /// Creates a new kind of Token
+    func createToken(action: CreateTokenAction) -> PendingTransaction
+    
+    func observeMyTokenDefinitions() -> AnyPublisher<TokenDefinitionsState, StateSubscriberError>
+}
+
+
+protocol TokenMinting {
+    
+    /// Mints new tokens of the TokenDefinition kind
+    func mintTokens(action mintTokensAction: MintTokensAction) -> PendingTransaction
+}
+
+protocol TokenBurning {
+    
+    /// Burns tokens of the TokenDefinition kind
+    func burnTokens(action burnTokensAction: BurnTokensAction) -> PendingTransaction
 }
 
 protocol MessageSending {
-    func sendMessage(_ message: SendMessageAction) -> ResultOfUserAction
+    
+    func sendMessage(action sendMessageAction: SendMessageAction) -> PendingTransaction
+
+    func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, AtomToTransactionMapperError>
 }
+
 ```
 
 ### Usage
 
-Here are some example usages. The code below is an excerpt of an existing the unit test [`TransferTokensTests.swift`](https://github.com/radixdlt/radixdlt-swift/blob/develop/Tests/TestCases/Radix/0.%20Layer%207%20-%20APPLICATION%20(Transactions%2C%20Balances)/TransferTokensTests.swift)
+Here are some example usages. The code below is an excerpt of an existing the integration (unit) test `TransferTokensTests.swift`.
 
 #### Create Token
 
 ```swift
 let aliceIdentity = AbstractIdentity()
 
-let application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.default, identity: aliceIdentity)
+let application = RadixApplicationClient(bootstrapConfig: UniverseBootstrap.localhostTwoNodes, identity: aliceIdentity)
 
 /// A Radix `Address` is dependent on `RadixUniverse` of the `RadixApplicationClient`. Betanet, Alphanet, Mainnet are examples of different Universes.
 let alice: Address = application.addressOfActiveAccount
@@ -71,58 +101,71 @@ let alice: Address = application.addressOfActiveAccount
 /// Alice defines her own token, resulting in a tuple, where first parameter is the pending result of the action,
 /// the second is the Radix Resource Identifier (RRI) of the newly created token. The RRI uniquely identifies Alice's coin
 /// having this format:  "/<ALICE_ADDRESS>/AC", "AC" matching the `symbol`
-let (result, rriAliceCoin) = application.createToken(name: "Alice Coin", symbol: "AC", description: "Best coin", supply: .fixed(to: 30))
-assert(rriAliceCoin == "/\(alice)/AC")
+let (tokenCreation, rriAliceCoin) = application.createToken(name: "Alice Coin", symbol: "AC", description: "Best coin", supply: .fixed(to: 30))
+
+try waitForTransactionToFinish(tokenCreation)
+
+let aliceCoinTokenDefinition = try waitForFirstValue(of: applicationClient.observeTokenDefinition(identifier: rriAliceCoin))
+XCTAssertEqual(aliceCoinTokenDefinition.symbol, "AC")
+
+
 ```
 
 #### Get token balance
 
 ```swift
-let bob: Address = application.addressOf(account: Account()) 
+var alicesBalanceOfHerCoin = try waitForFirstValueUnwrapped(
+    of: applicationClient.observeMyBalance(ofToken: rriAliceCoin)
+)
 
-var alicesBalanceOfHerCoin = application.observeMyBalance(ofToken: rriAliceCoin)
-var bobsBalanceOfAliceCoin = application.observeBalance(ofToken: rriAliceCoin, ownedBy: bob)
+XCTAssertEqual(alicesBalanceOfHerCoin.amount, 30)
 
-assert(alicesBalanceOfHerCoin.amount == 30, "Alice's balance should equal `30`(initialSupply)")
-assert(bobsBalanceOfAliceCoin.amount == 0, "Bob's balance should equal `0`")
+let bob = applicationClient.addressOf(account: Account())
+var bobsBalanceOfAliceCoin = try waitForFirstValueUnwrapped(
+    of: applicationClient.observeBalance(ofToken: rriAliceCoin, ownedBy: bob)
+)
 ```
 
 #### Transfer tokens
 
 ```swift
 // Alice sends 10 coins to Bob
-application.transferTokens(
-    identifier: rriAliceCoin, 
-    to: bob, // `from` address defaults to the identity passed in th e
-    amount: 10, // type`PositiveAmount`, conforming to `ExpressibleByIntegerLiteral`
-    message: "For taxi fare" // Optional
+let transfer = applicationClient.transferTokens(identifier: rri, to: bob, amount: 10, message: "For taxi fare")
+
+try waitForTransactionToFinish(transfer)
+
+alicesBalanceOfHerCoin = try waitForFirstValueUnwrapped(
+    of: applicationClient.observeMyBalance(ofToken: rriAliceCoin)
+)
+XCTAssertEqual(alicesBalanceOfHerCoin.amount, 20) // 30 - 10 => 20
+
+bobsBalanceOfAliceCoin = try waitForFirstValueUnwrapped(
+    of: applicationClient.observeBalance(ofToken: rriAliceCoin, ownedBy: bob)
 )
 
-alicesBalanceOfHerCoin = application.observeMyBalance(ofToken: rriAliceCoin)
-bobsBalanceOfAliceCoin = application.observeBalance(ofToken: rriAliceCoin, ownedBy: bob)
-
-assert(alicesBalanceOfHerCoin.amount == 20, "Alice's balance should equal `20`")
-assert(bobsBalanceOfAliceCoin.amount == 10, "Bob's balance should equal `10`")
-
+XCTAssertEqual(bobsBalanceOfAliceCoin.amount, 10) 
 ```
 
 #### Send Message
 ```swift
 // `application` is initialzed above using Alice's identity
-application.sendEncryptedMessage("Hi Bob, this is a secret message from Alice", to: bob)
+var pendingTransaction = application.sendEncryptedMessage("Hi Bob, this is a secret message from Alice", to: bob)
+try waitForTransactionToFinish(pendingTransaction)
+
 
 // Plain text messages (i.e. no encryption) can be sent like so
-application.sendPlainTextMessage("Hi Bob (and the world) from Alice", to: bob)
+pendingTransaction = application.sendPlainTextMessage("Hi Bob (and the world) from Alice", to: bob)
+try waitForTransactionToFinish(pendingTransaction)
 
 // You can even include some third parties to be able to read the encrypted message
-let clara: Address = application.addressOf(account: Account()) 
+let carol: Address = application.addressOf(account: Account()) 
 let diana: Address = application.addressOf(account: Account()) 
 
 
-application.sendEncryptedMessage(
-    "Hi Bob! Clara and Diana can also decrypt this encrypted message", 
+pendingTransaction = applicationClient.sendEncryptedMessage(
+    "Hey Bob! Carol and Diana can also decrypt this encrypted message",
     to: bob,
-    canAlsoBeDecryptedBy: [clara, diana]) 
+    canAlsoBeDecryptedBy: [carol, diana]
 )
 ```
 
@@ -261,26 +304,14 @@ Serialization and deserialization, cryptography and subatomic parts, making up t
 ## Design choices
 
 ### Why Carthage?
-As of 2019-01-14, [BitcoinKit doesn't build using Cocoapods](https://github.com/yenom/BitcoinKit/issues/193). But it works fine using Carthage.
+As of 2019-01-14, [BitcoinKit doesn't build using SPM](https://github.com/yenom/BitcoinKit/issues/224). But it works fine using Carthage.
 
-### Why RxSwift based APIs?
-First of all, all the existing Radix Libraries are Rx based, secondly because it makes perfect sense since it makes async programming easy.
+### Why Combine based APIs?
+First of all, all the existing Radix Libraries are FRP (Functional reactive programming, e.g. RxJava) based, secondly because it makes perfect sense since it makes async programming easy.
 
 ## Dependencies
 
-You will find the dependencies in the [Cartfile](Cartfile), but we will go through the most important ones here:
-
-- [BitcoinKit](https://github.com/yenom/BitcoinKit):
-Elliptic Curve Cryptography, this library is one of the better Swift wrappers of the C library [bitcoin-core/secp256k1](https://github.com/bitcoin-core/secp256k1).
-
-- [CryptoSwift](https://github.com/krzyzanowskim/CryptoSwift):
-For standard crypto utilities such as hash functions.
-
-- [BigInt](https://github.com/attaswift/BigInt):
-Support for big numbers.
-
-- [RxSwift](https://github.com/ReactiveX/RxSwift):
-The library uses RxSwift for async programming.
+You will find the dependencies in the [Cartfile](Cartfile).
 
 
 ## Other Radix Libraries

@@ -23,44 +23,7 @@
 //
 
 import Foundation
-
-// MARK: - Compare + Mirror
-private func compareSome<T>(lhs: T, rhs: T, beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer: Bool) -> Bool {
-    compareAny(lhs: lhs, rhs: rhs, beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer: beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer)
-}
-
-private func compareAny(lhs: Any, rhs: Any, beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer: Bool = true) -> Bool {
-    let lMirror = Mirror(reflecting: lhs)
-    let rMirror = Mirror(reflecting: rhs)
-    
-    guard
-        lMirror.displayStyle == rMirror.displayStyle,
-        lMirror.children.count == rMirror.children.count
-        else
-    { return false }
-    
-    for indexInt in 0..<lMirror.children.count {
-        let index = AnyCollection<(label: Optional<String>, value: Any)>.Index(indexInt)
-        let lChild = lMirror.children[index]
-        let rChild = rMirror.children[index]
-        
-        guard lChild.label == rChild.label else {
-            return false
-        }
-        
-        guard "\(lChild.value)" ==  "\(rChild.value)" else {
-            let lChildType = type(of: lChild.value)
-            let rChildType = type(of: rChild.value)
-            if beSatisfiedWithSameAssociatedTypeIfTheirValuesDiffer && "\(lChildType)" == "\(rChildType)" {
-                continue
-            } else {
-                return false
-            }
-        }
-    }
-    
-    return true
-}
+@testable import RadixSDK
 
 // MARK: - AutoEquatable
 public protocol AutoEquatable: Equatable {

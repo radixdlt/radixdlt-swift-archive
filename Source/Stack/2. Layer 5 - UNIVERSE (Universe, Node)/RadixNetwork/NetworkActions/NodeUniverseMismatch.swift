@@ -26,6 +26,11 @@ import Foundation
 
 public struct NodeUniverseMismatch: NodeAction {
     public let node: Node
-    public let expectedConfig: UniverseConfig
-    public let actualConfig: UniverseConfig
+    public let incompatibleUniverseConfig: UniverseConfig
+}
+
+extension NodeUniverseMismatch {
+    init(getUniverseConfigActionResult actionResult: GetUniverseConfigActionResult) {
+        self.init(node: actionResult.node, incompatibleUniverseConfig: actionResult.result)
+    }
 }

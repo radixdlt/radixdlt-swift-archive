@@ -23,8 +23,8 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol AtomSubmitting {
-    func pushAtom(_ atom: SignedAtom) -> Completable
+    func pushAtom(_ atom: SignedAtom) -> AnyPublisher<Never, SubmitAtomError>
 }

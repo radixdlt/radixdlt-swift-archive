@@ -26,6 +26,7 @@ import Foundation
 import Combine
 import RadixSDK
 import RxSwift
+import Combine
 
 public typealias Client = RadixApplicationClient
 

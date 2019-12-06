@@ -31,7 +31,8 @@ public struct ResourceIdentifierParticle:
     ParticleConvertible,
     RadixModelTypeStaticSpecifying,
     RadixCodable,
-    Accountable
+    Accountable,
+    Equatable
 {
     // swiftlint:enable colon opening_brace
 

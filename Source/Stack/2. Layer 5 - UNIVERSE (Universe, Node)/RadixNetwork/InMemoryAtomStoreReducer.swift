@@ -52,7 +52,7 @@ public extension InMemoryAtomStoreReducer {
                         atomStore.store(atomObservation: atomObservation, address: addressInAtom, notifyListenerMode: .notifyOnAtomUpdateAndSync)
                     }
                     store(atomObservation: .stored(atom.wrappedAtom.wrappedAtom, isSoft: true))
-                    store(atomObservation: .head())
+                    store(atomObservation: .headNow())
                 }
             }
         }
@@ -65,7 +65,7 @@ extension Atomic {
     var allAddresses: [Address] {
         do {
             return try addresses().elements
-        } catch let addressWrongUniverseError as Addresses.Error {
+        } catch let addressWrongUniverseError as ActionsToAtomError {
             incorrectImplementation("Should not be able to create an atom with addresses not in the same universe: \(addressWrongUniverseError)")
         } catch { unexpectedlyMissedToCatch(error: error) }
     }

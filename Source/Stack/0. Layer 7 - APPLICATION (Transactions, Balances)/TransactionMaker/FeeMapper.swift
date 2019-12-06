@@ -21,8 +21,8 @@
 /// SOFTWARE.
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol FeeMapper {
-    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> Single<AtomWithFee>
+    func feeBasedOn(atom: Atom, universeConfig: UniverseConfig, key: PublicKey) -> AnyPublisher<AtomWithFee, AtomWithFee.Error>
 }

@@ -28,21 +28,38 @@ import Foundation
 
 /// Immutable state at a certain point in time of a RadixNode (`Node`)
 public struct RadixNodeState:
+    Throwing,
     Equatable,
     CustomDebugStringConvertible,
     Identifiable
 {
     // swiftlint:enable colon opening_brace
     public let node: Node
-    public let websocketStatus: WebSocketStatus
+    public let webSocketStatus: WebSocketStatus
     public let universeConfig: UniverseConfig?
     public let nodeInfo: NodeInfo?
     
-    public init(node: Node, webSocketStatus: WebSocketStatus, nodeInfo: NodeInfo? = nil, universeConfig: UniverseConfig? = nil) {
+    public init(
+        node: Node,
+        webSocketStatus: WebSocketStatus,
+        nodeInfo: NodeInfo? = nil,
+        universeConfig: UniverseConfig? = nil
+    ) throws {
+        if let hostOfNodeInfo = nodeInfo?.host {
+            if hostOfNodeInfo != node.host {
+                throw Error.hostOfNodeInfoDifferentThanHostOfNode(hostOfNodeInfo: hostOfNodeInfo, hostOfNode: node.host)
+            }
+        }
         self.node = node
-        self.websocketStatus = webSocketStatus
+        self.webSocketStatus = webSocketStatus
         self.nodeInfo = nodeInfo
         self.universeConfig = universeConfig
+    }
+}
+
+public extension RadixNodeState {
+    enum Error: Swift.Error, Equatable {
+        case hostOfNodeInfoDifferentThanHostOfNode(hostOfNodeInfo: Host, hostOfNode: Host)
     }
 }
 
@@ -50,10 +67,7 @@ public extension RadixNodeState {
     func debugDescriptionIncludeNode(_ includeNode: Bool) -> String {
         
         return """
-        \(includeNode.ifTrue { "Node: \(node.debugDescription),\n" })
-        webSocketStatus: \(websocketStatus),
-        nodeInfo: \(nodeInfo.ifPresent(elseDefaultTo: "nil") { "\($0.shardSpace)" })
-        universeConfig: \(universeConfig.ifPresent(elseDefaultTo: "nil") { "\($0)" }),
+        \(includeNode.ifTrue { "\(node.debugDescription)" }), hasNodeInfo: \(nodeInfo != nil), hasUniverseConfig: \(universeConfig != nil), webSocketStatus: \(webSocketStatus)
         """
     }
     
@@ -75,3 +89,18 @@ public extension RadixNodeState {
     }
 }
 
+internal extension RadixNodeState {
+    func merging(
+        webSocketStatus newWSStatus: WebSocketStatus,
+        nodeInfo newNodeInfo: NodeInfo? = nil,
+        universeConfig newUniverseConfig: UniverseConfig? = nil
+    ) throws -> RadixNodeState {
+        
+        return try RadixNodeState(
+            node: node,
+            webSocketStatus: newWSStatus,
+            nodeInfo: newNodeInfo ?? self.nodeInfo,
+            universeConfig: newUniverseConfig ?? self.universeConfig
+        )
+    }
+}

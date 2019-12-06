@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol BootstrapConfig: CustomDebugStringConvertible {
     var config: UniverseConfig { get }
@@ -32,7 +32,7 @@ public protocol BootstrapConfig: CustomDebugStringConvertible {
 
 public enum DiscoveryMode: CustomDebugStringConvertible {
     case byDiscoveryEpics(NonEmptyArray<RadixNetworkEpic>)
-    case byInitialNetworkOfNodes(NonEmptySet<Node>)
+    case byInitialNetworkOfNodes(OrderedSet<Node>) // Should be non empty as well
 }
 
 // MARK: - CustomDebugStringConvertible
@@ -54,20 +54,29 @@ public extension DiscoveryMode {
 }
 
 public extension DiscoveryMode {
-    static func byDiscovery(config: UniverseConfig, seedNodes: Observable<Node>) -> DiscoveryMode {
+    static func byDiscovery(config: UniverseConfig, seedNodes: AnyPublisher<Node, Never>) -> DiscoveryMode {
         return .byDiscoveryEpics(
             NonEmptyArray([
-                DiscoverNodesEpic(seedNodes: seedNodes, universeConfig: config)
+                DiscoverNodesEpic(seedNodes: seedNodes, isUniverseSuitable: .ifEqual(to: config))
             ])
         )
     }
 
     static func byOriginNode(_ originNode: Node, nodes: [Node]) -> DiscoveryMode {
-        var allNodes = [originNode]
-        allNodes.append(contentsOf: nodes)
-        do {
-            let initialNetworkOfNodes = try NonEmptySet<Node>.init(array: allNodes)
-            return .byInitialNetworkOfNodes(initialNetworkOfNodes)
-        } catch { incorrectImplementation("Should never happen, set is not empty") }
+        var initialNetworkOfNodes = OrderedSet<Node>(single: originNode)
+        initialNetworkOfNodes.append(contentsOf: nodes)
+        return .byInitialNetworkOfNodes(initialNetworkOfNodes)
+    }
+}
+
+public extension DiscoveryMode {
+    var initialNetworkOfNodes: OrderedSet<Node> {
+        guard case .byInitialNetworkOfNodes(let nodes) = self else { return .init() }
+        return nodes
+    }
+    
+    var radixNetworkEpics: [RadixNetworkEpic] {
+        guard case .byDiscoveryEpics(let discoveryEpicsFromMode) = self else { return [] }
+        return discoveryEpicsFromMode.elements
     }
 }

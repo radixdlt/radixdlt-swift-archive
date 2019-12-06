@@ -26,7 +26,7 @@ import Foundation
 @testable import RadixSDK
 import XCTest
 
-extension XCTestCase {
+extension TestCase {
     
     var testBundle: Bundle {
         return Bundle(for: type(of: self))

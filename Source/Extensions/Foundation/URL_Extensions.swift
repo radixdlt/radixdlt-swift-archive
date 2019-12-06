@@ -55,10 +55,10 @@ extension URLRequest {
 
 extension URL {
     var isLocalhost: Bool {
-        let isLocalhost = absoluteString.contains(String.localhost)
+        let isLocalhost = absoluteString.contains(String.localhostLetters) || absoluteString.contains(String.localhostNumbers)
         return isLocalhost
     }
     static var localhost: URL {
-        return URL(stringLiteral: String.localhost)
+        return URL(stringLiteral: String.localhostLetters)
     }
 }

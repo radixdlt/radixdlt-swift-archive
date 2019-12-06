@@ -24,16 +24,35 @@
 
 import Foundation
 
-public struct PutUniqueIdAction: UserAction, UniquelyIdentifiedUserAction {
+// swiftlint:disable colon opening_brace
+
+public struct PutUniqueIdAction:
+    UserAction,
+    UserActionWithAddresses,
+    UniquelyIdentifiedUserAction,
+    Equatable
+{
+    
+    // swiftlint:enable colon opening_brace
+    
     public let uniqueMaker: Address
     public let string: String
 }
 
+// MARK: UserAction
 public extension PutUniqueIdAction {
     var user: Address { return uniqueMaker }
     var nameOfAction: UserActionName { return .putUnique }
 }
 
+// MARK: UserActionWithAddresses
+public extension PutUniqueIdAction {
+    var addresses: Set<Address> {
+        return Set([uniqueMaker])
+    }
+}
+
+// MARK: UniquelyIdentifiedUserAction
 public extension PutUniqueIdAction {
     var identifier: ResourceIdentifier {
         return ResourceIdentifier(address: uniqueMaker, name: string)

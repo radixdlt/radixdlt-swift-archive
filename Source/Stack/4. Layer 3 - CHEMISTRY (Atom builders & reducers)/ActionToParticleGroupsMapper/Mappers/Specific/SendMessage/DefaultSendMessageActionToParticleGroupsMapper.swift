@@ -40,32 +40,42 @@ public final class DefaultSendMessageActionToParticleGroupsMapper: SendMessageAc
 }
 
 public extension DefaultSendMessageActionToParticleGroupsMapper {
-
-    func particleGroups(for action: SendMessageAction, addressOfActiveAccount: Address) throws -> ParticleGroups {
-        guard action.sender == addressOfActiveAccount else {
-            throw Error.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: action.sender)
+    
+    func particleGroups(
+        for action: SendMessageAction,
+        addressOfActiveAccount: Address
+    ) throws -> Throws<ParticleGroups, SendMessageError> {
+        
+        do {
+            guard action.sender == addressOfActiveAccount else {
+                throw SendMessageError.nonMatchingAddress(activeAddress: addressOfActiveAccount, butActionStatesAddress: action.sender)
+            }
+            
+            var particles = [AnySpunParticle]()
+            
+            let (payload, encryptorParticle) = try encryptDataIfNeeded(action: action)
+            
+            if let encryptorParticle = encryptorParticle {
+                particles += encryptorParticle
+            }
+            
+            let messageParticle = MessageParticle(
+                from: action.sender,
+                to: action.recipient,
+                payload: payload,
+                metaData: [MetaDataKey.application(.message)]
+            )
+            
+            particles += messageParticle.withSpin(.up)
+            
+            let particleGroup = try ParticleGroup(spunParticles: particles)
+            
+            return [particleGroup]
+        } catch let sendMessageError as SendMessageError {
+            throw sendMessageError
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
         }
-        
-        var particles = [AnySpunParticle]()
-
-        let (payload, encryptorParticle) = try encryptDataIfNeeded(action: action)
-        
-        if let encryptorParticle = encryptorParticle {
-            particles += encryptorParticle
-        }
-        
-        let messageParticle = MessageParticle(
-            from: action.sender,
-            to: action.recipient,
-            payload: payload,
-            metaData: [MetaDataKey.application(.message)]
-        )
-        
-        particles += messageParticle.withSpin(.up)
-
-        let particleGroup = try ParticleGroup(spunParticles: particles)
-
-        return [particleGroup]
     }
 }
 

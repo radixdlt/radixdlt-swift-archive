@@ -39,7 +39,7 @@ public struct ProofOfWork: CustomStringConvertible, CustomDebugStringConvertible
         
         func logIfNonceExceedsThreshold(_ threshold: Nonce = 500_000) {
             guard nonce.value > threshold.value else { return }
-            log.info("🙋🏻‍♀️ POW high nonce: \(nonce.value), seed: \(seed.hex)\nmagic: \(magic), #zeros: \(targetNumberOfLeadingZeros)")
+            Swift.print("info: 🙋🏻‍♀️ POW high nonce: \(nonce.value), seed: \(seed.hex)\nmagic: \(magic), #zeros: \(targetNumberOfLeadingZeros)")
         }
         logIfNonceExceedsThreshold()
     }
@@ -50,7 +50,7 @@ public extension ProofOfWork {
     @discardableResult
     func prove() throws -> ProofOfWork {
         let hashed = hash()
-        let numberOfLeadingZeros = hashed.numberOfLeadingZeroBits
+        let numberOfLeadingZeros = hashed.asData.countNumberOfLeadingZeroBits()
         if numberOfLeadingZeros < targetNumberOfLeadingZeros {
             throw Error.tooFewLeadingZeros(
                 expectedAtLeast: targetNumberOfLeadingZeros.numberOfLeadingZeros,
@@ -87,7 +87,7 @@ public extension ProofOfWork {
 
 // MARK: - Error
 public extension ProofOfWork {
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, Equatable {
         case workInputIncorrectLengthOfSeed(expectedByteCountOf: Int, butGot: Int)
         case tooFewLeadingZeros(expectedAtLeast: UInt8, butGot: UInt8)
     }

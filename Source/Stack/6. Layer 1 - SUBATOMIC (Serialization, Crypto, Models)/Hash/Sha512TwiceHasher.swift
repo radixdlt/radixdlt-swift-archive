@@ -23,12 +23,28 @@
 //
 
 import Foundation
-import CryptoSwift
+import CryptoKit
 
-public struct SHA512TwiceHasher: SHA512TwiceHashing {
+public final class SHA512TwiceHasher: SHA512TwiceHashing {
     public init() {}
-    public func sha512Twice(of data: Data) -> Data {
-        return data.sha512().sha512()
+}
+
+public extension SHA512TwiceHasher {
+    
+    @inline(__always)
+    func sha512Twice(of data: Data) -> Data {
+        var hasher1 = SHA512()
+        data.withUnsafeBytes { (bufferPointer: UnsafeRawBufferPointer) in
+            hasher1.update(bufferPointer: bufferPointer)
+        }
+        let digest1 = hasher1.finalize()
+        
+        var hasher2 = SHA512()
+        digest1.withUnsafeBytes { (bufferPointer: UnsafeRawBufferPointer) in
+            hasher2.update(bufferPointer: bufferPointer)
+        }
+        
+        return hasher2.finalize().asData
     }
 }
 

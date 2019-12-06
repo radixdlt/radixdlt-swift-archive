@@ -23,7 +23,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 /// Important that `MessageSending` conforms to `ActiveAccountOwner` so that we can verify that the address
 /// of a message `sender` is the same as the `addressOfActiveAccount` that signs the message. In order
@@ -32,8 +32,8 @@ import RxSwift
 public protocol MessageSending: ActiveAccountOwner {
     
     /// Sends a message
-    func send(message: SendMessageAction) -> ResultOfUserAction
-    func observeMessages(toOrFrom address: Address) -> Observable<SendMessageAction>
+    func sendMessage(action sendMessageAction: SendMessageAction) -> PendingTransaction
+    func observeMessages(toOrFrom address: Address) -> AnyPublisher<SendMessageAction, AtomToTransactionMapperError>
 }
 
 public extension MessageSending {
@@ -41,11 +41,11 @@ public extension MessageSending {
         _ plainText: String,
         encoding: String.Encoding = .default,
         to recipient: AddressConvertible
-        ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         let sendMessageAction = SendMessageAction.plainText(from: addressOfActiveAccount, to: recipient, text: plainText, encoding: encoding)
         
-        return send(message: sendMessageAction)
+        return sendMessage(action: sendMessageAction)
     }
     
     func sendEncryptedMessage(
@@ -53,7 +53,7 @@ public extension MessageSending {
         encoding: String.Encoding = .default,
         to recipient: AddressConvertible,
         canAlsoBeDecryptedBy extraDecryptors: [AddressConvertible]? = nil
-        ) -> ResultOfUserAction {
+    ) -> PendingTransaction {
         
         let sendMessageAction = SendMessageAction.encryptedDecryptableBySenderAndRecipient(
             and: extraDecryptors,
@@ -63,13 +63,13 @@ public extension MessageSending {
             encoding: encoding
         )
         
-        return send(message: sendMessageAction)
+        return sendMessage(action: sendMessageAction)
     }
 }
 
 // MARK: Sent
 public extension MessageSending {
-    func observeMyMessages() -> Observable<SendMessageAction> {
+    func observeMyMessages() -> AnyPublisher<SendMessageAction, AtomToTransactionMapperError> {
         return observeMessages(toOrFrom: addressOfActiveAccount)
     }
 }

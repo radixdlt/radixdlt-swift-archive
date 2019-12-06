@@ -23,19 +23,27 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
-public protocol AtomToMintTokenMapper: AtomToSpecificExecutedActionMapper where SpecificExecutedAction == MintTokensAction {}
+// swiftlint:disable opening_brace
+
+public protocol AtomToMintTokenMapper: AtomToSpecificExecutedActionMapper
+where
+    SpecificExecutedAction == MintTokensAction,
+    SpecificMappingError == Never
+{}
+
+// swiftlint:enable opening_brace
 
 public extension AtomToMintTokenMapper {
-    func mapAtomToActions(_ atom: Atom) -> Observable<[MintTokensAction]> {
+    func mapAtomToActions(_ atom: Atom) -> AnyPublisher<[MintTokensAction], SpecificMappingError> {
         var mintActions = [MintTokensAction]()
         for particleGroup in atom {
             guard let mintAction = mintTokensActionFrom(particleGroup: particleGroup) else { continue }
             mintActions.append(mintAction)
         }
         
-        return Observable.just(mintActions)
+        return Just(mintActions).eraseToAnyPublisher()
     }
 }
 

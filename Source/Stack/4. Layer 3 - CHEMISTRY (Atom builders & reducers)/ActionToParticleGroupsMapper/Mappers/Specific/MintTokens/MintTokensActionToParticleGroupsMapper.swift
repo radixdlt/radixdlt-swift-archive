@@ -24,9 +24,23 @@
 
 import Foundation
 
-public protocol MintTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper where Action == MintTokensAction {}
+// swiftlint:disable opening_brace
 
+public protocol MintTokensActionToParticleGroupsMapper: StatefulActionToParticleGroupsMapper
+    where
+    Action == MintTokensAction,
+    SpecificActionError == MintError
+{}
+
+// swiftlint:enable opening_brace
+
+// MARK: - Default implementation
 public extension MintTokensActionToParticleGroupsMapper {
+    
+    func mapError(_ mintError: MintError, action mintTokensAction: MintTokensAction) -> ActionsToAtomError {
+        ActionsToAtomError.mintTokensActionError(mintError, action: mintTokensAction)
+    }
+    
     func requiredState(for mintTokensAction: Action) -> [AnyShardedParticleStateId] {
         let tokenDefinitionAddress = mintTokensAction.tokenDefinitionReference.address
         return [
@@ -44,34 +58,34 @@ public extension MintTokensActionToParticleGroupsMapper {
             )
         ]
     }
-}
-
-public final class DefaultMintTokensActionToParticleGroupsMapper: MintTokensActionToParticleGroupsMapper, Throwing {
     
-    public init() {}
-}
-
-public extension DefaultMintTokensActionToParticleGroupsMapper {
-    
-    typealias Action = MintTokensAction
-    
-    func particleGroups(for action: Action, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws -> ParticleGroups {
-        try validateInput(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+    func particleGroups(
+        for action: Action,
+        upParticles: [AnyUpParticle],
+        addressOfActiveAccount: Address
+    ) throws -> Throws<ParticleGroups, MintError> {
+        do {
+            try validateInput(action: action, upParticles: upParticles, addressOfActiveAccount: addressOfActiveAccount)
+            
+            let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
+                transitioner: { try TransferrableTokensParticle(unallocatedTokensParticle: $0, amount: $1, address: action.creditNewlyMintedTokensTo) },
+                transitionedCombiner: { $0 },
+                migrator: UnallocatedTokensParticle.init(unallocatedTokensParticle:amount:),
+                migratedCombiner: { $0 },
+                amountMapper: { NonNegativeAmount(other: $0.amount) }
+            )
+            
+            let spunParticles = try transitioner.particlesFrom(mint: action, upParticles: upParticles)
+            
+            let particleGroup = try ParticleGroup(spunParticles: spunParticles)
+            
+            return [particleGroup]
+        } catch let mintError as MintError {
+            throw mintError
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
         
-        let transitioner = FungibleParticleTransitioner<UnallocatedTokensParticle, TransferrableTokensParticle>(
-            transitioner: { try TransferrableTokensParticle(unallocatedTokensParticle: $0, amount: $1, address: action.creditNewlyMintedTokensTo) },
-            transitionedCombiner: { $0 },
-            migrator: UnallocatedTokensParticle.init(unallocatedTokensParticle:amount:),
-            migratedCombiner: { $0 },
-            amountMapper: { NonNegativeAmount(other: $0.amount) }
-        )
-        
-        let spunParticles = try transitioner.particlesFrom(mint: action, upParticles: upParticles)
-
-        let particleGroup = try ParticleGroup(spunParticles: spunParticles)
-
-        return [particleGroup]
-
     }
     
     func validateInput(action mintAction: MintTokensAction, upParticles: [AnyUpParticle], addressOfActiveAccount: Address) throws {
@@ -108,39 +122,9 @@ public extension DefaultMintTokensActionToParticleGroupsMapper {
     }
 }
 
-// MARK: - Throwing
-public extension DefaultMintTokensActionToParticleGroupsMapper {
-    typealias Error = MintError
-}
+// MARK: - Private
 
-public enum MintError: Swift.Error, Equatable {
-    
-    case unknownToken(identifier: ResourceIdentifier)
-    
-    case tokenOverMint(
-        token: ResourceIdentifier,
-        maxSupply: Supply,
-        currentSupply: Supply,
-        byMintingAmount: PositiveAmount
-    )
-    
-    case lackingPermissions(
-        of: Address,
-        toMintToken: ResourceIdentifier,
-        whichRequiresPermission: TokenPermission,
-        creatorOfToken: Address
-    )
-    
-    case tokenHasFixedSupplyThusItCannotBeMinted(
-        identifier: ResourceIdentifier
-    )
-    
-    case amountNotMultipleOfGranularity(
-        token: ResourceIdentifier,
-        triedToMintAmount: PositiveAmount,
-        whichIsNotMultipleOfGranularity: Granularity
-    )
-}
+// MARK FungibleParticleTransitioner
 
 private extension FungibleParticleTransitioner where From == UnallocatedTokensParticle, To == TransferrableTokensParticle {
     func transition(mint: MintTokensAction, upParticles: [AnyUpParticle]) throws -> Transition {

@@ -27,8 +27,9 @@ import Foundation
 // swiftlint:disable opening_brace colon
 
 public struct Host:
-    HostConvertible,
     Throwing,
+    CustomStringConvertible,
+    Comparable,
     Decodable,
     Hashable
 {
@@ -42,4 +43,59 @@ public struct Host:
         self.port = port
     }
     
+}
+
+public extension Host {
+    var urlString: String {
+        [domain, "\(port.port)"].joined(separator: ":")
+    }
+    
+    var description: String {
+        urlString
+    }
+
+}
+
+public extension Host {
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        do {
+            return try compareDomains(of: lhs, and: rhs)
+        } catch Error.bothDomainsAreLocalhostButOneUsesLettersAndOtherNumbers {
+            fatalError("Both LHS and RHS are localhost, but one is '\(String.localhostLetters)' and other `\(String.localhostNumbers)`, thus Equatable consider them to differ, but in fact they should equal. TODO handle this gracefully")
+        } catch {
+            unexpectedlyMissedToCatch(error: error)
+        }
+    }
+
+    static func compareDomains(of lhs: Self, and rhs: Self) throws -> Bool {
+        let domains = [lhs, rhs].map { $0.domain }
+        if domains.contains(String.localhostLetters) && domains.contains(String.localhostNumbers) {
+            throw Error.bothDomainsAreLocalhostButOneUsesLettersAndOtherNumbers
+        }
+        return compare(lhs, rhs, ==)
+    }
+    
+    static func < (lhs: Self, rhs: Self) -> Bool {
+        compare(lhs, rhs, <)
+    }
+    
+    static func <= (lhs: Self, rhs: Self) -> Bool {
+        compare(lhs, rhs, <=)
+    }
+    
+    static func > (lhs: Self, rhs: Self) -> Bool {
+        compare(lhs, rhs, >)
+    }
+    
+    static func >= (lhs: Self, rhs: Self) -> Bool {
+        compare(lhs, rhs, >=)
+    }
+    
+}
+
+private extension Host {
+    static func compare(_ lhs: Self, _ rhs: Self, _ comparison: (String, String) -> Bool) -> Bool {
+        comparison(lhs.urlString, rhs.urlString)
+    }
 }

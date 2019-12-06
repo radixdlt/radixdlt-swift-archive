@@ -23,24 +23,24 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 
 public protocol TransactionMaker: TransactionToAtomMapper {
-    func send(transaction: Transaction, toOriginNode: Node?) -> ResultOfUserAction
+    func commitAndPush(transaction: Transaction, to originNode: Node?) -> PendingTransaction
 }
 
 public extension TransactionMaker {
     
-    func send(transaction: Transaction) -> ResultOfUserAction {
-        return send(transaction: transaction, toOriginNode: nil)
+    func commitAndPush(transaction: Transaction) -> PendingTransaction {
+        commitAndPush(transaction: transaction, to: nil)
     }
     
-    func execute(actions: [UserAction], originNode: Node? = nil) -> ResultOfUserAction {
+    func execute(actions: [UserAction], to originNode: Node? = nil) -> PendingTransaction {
         let transaction = Transaction(actions: actions)
-        return send(transaction: transaction, toOriginNode: originNode)
+        return commitAndPush(transaction: transaction, to: originNode)
     }
     
-    func execute(actions: UserAction..., originNode: Node? = nil) -> ResultOfUserAction {
-        return execute(actions: actions, originNode: originNode)
+    func execute(actions: UserAction..., to originNode: Node? = nil) -> PendingTransaction {
+        execute(actions: actions, to: originNode)
     }
 }
