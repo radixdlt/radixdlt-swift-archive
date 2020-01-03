@@ -29,35 +29,34 @@ extension DecodingError: Equatable {
     public static func == (lhs: DecodingError, rhs: DecodingError) -> Bool {
         
         switch (lhs, rhs) {
-            /// An indication that a value of the given type could not be decoded because
-            /// it did not match the type of what was found in the encoded payload.
-            /// As associated values, this case contains the attempted type and context
-        /// for debugging.
+
+            /// `typeMismatch` is an indication that a value of the given type could not
+            /// be decoded because it did not match the type of what was found in the
+            /// encoded payload. As associated values, this case contains the attempted
+            /// type and context for debugging.
         case (
             .typeMismatch(let lhsType, let lhsContext),
             .typeMismatch(let rhsType, let rhsContext)):
             return lhsType == rhsType && lhsContext == rhsContext
             
-            /// An indication that a non-optional value of the given type was expected,
-            /// but a null value was found.
-            /// As associated values, this case contains the attempted type and context
-        /// for debugging.
+            /// `valueNotFound` is an indication that a non-optional value of the given
+            /// type was expected, but a null value was found. As associated values,
+            /// this case contains the attempted type and context for debugging.
         case (
             .valueNotFound(let lhsType, let lhsContext),
             .valueNotFound(let rhsType, let rhsContext)):
             return lhsType == rhsType && lhsContext == rhsContext
             
-            /// An indication that a keyed decoding container was asked for an entry for
-            /// the given key, but did not contain one.
-            /// As associated values, this case contains the attempted key and context
-        /// for debugging.
+            /// `keyNotFound` is an indication that a keyed decoding container was asked
+            /// for an entry for the given key, but did not contain one. As associated values,
+            /// this case contains the attempted key and context for debugging.
         case (
-            .keyNotFound(let lhsKey, _),
-            .keyNotFound(let rhsKey, _)):
-            return lhsKey.stringValue == rhsKey.stringValue
+            .keyNotFound(let lhsKey, let lhsContext),
+            .keyNotFound(let rhsKey, let rhsContext)):
+            return lhsKey.stringValue == rhsKey.stringValue && lhsContext == rhsContext
             
-            /// An indication that the data is corrupted or otherwise invalid.
-        /// As an associated value, this case contains the context for debugging.
+            /// `dataCorrupted` is an indication that the data is corrupted or otherwise
+            /// invalid. As an associated value, this case contains the context for debugging.
         case (
             .dataCorrupted(let lhsContext),
             .dataCorrupted(let rhsContext)):
