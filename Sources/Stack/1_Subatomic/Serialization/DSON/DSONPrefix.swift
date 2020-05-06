@@ -37,7 +37,12 @@ public enum DSONPrefix: Int {
 }
 
 public extension DSONPrefix {
+    
+    var byte: Byte {
+        .init(rawValue)
+    }
+    
     var additionalInformation: Data {
-        return Byte(rawValue).asData
+        byte.asData
     }
 }

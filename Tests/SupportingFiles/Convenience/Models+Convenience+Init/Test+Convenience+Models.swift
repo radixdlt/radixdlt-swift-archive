@@ -32,17 +32,17 @@ extension String {
 }
 
 extension Symbol {
-    static var random: Symbol {
+    static var random: Self {
         .init(validated: String.randomSuitableForSymbol)
     }
 }
 
 extension Address {
-    static var irrelevant: Address {
-        return Address(magic: .irrelevant, publicKey: .irrelevant)
+    static var irrelevant: Self {
+        .init(magic: .irrelevant, publicKey: .irrelevant)
     }
     
-    static func irrelevant(index: Int) -> Address {
+    static func irrelevant(index: Int) -> Self {
         let privateKeyScalar: PrivateKey.Scalar = PrivateKey.Scalar(exactly: index)!
         let privateKey: PrivateKey = try! .init(scalar: privateKeyScalar)
         return Address(magic: .irrelevant, publicKey: PublicKey(private: privateKey))

@@ -34,6 +34,7 @@ public struct ResourceIdentifier:
     PrefixedJSONCodable,
     StringRepresentable,
     DSONPrefixedDataConvertible,
+    DataInitializable,
     Hashable,
     CustomStringConvertible
 {
@@ -65,8 +66,15 @@ public extension ResourceIdentifier {
 
 // MARK: - DSONPrefixSpecifying
 public extension ResourceIdentifier {
-    var dsonPrefix: DSONPrefix {
-        return .radixResourceIdentifier
+    static var dsonPrefix: DSONPrefix {
+        .radixResourceIdentifier
+    }
+}
+
+// MARK: - DataInitializable
+public extension ResourceIdentifier {
+    init(data: Data) throws {
+        try self.init(string: String(bytes: data, encoding: .utf8)!)
     }
 }
 

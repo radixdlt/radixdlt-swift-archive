@@ -69,6 +69,7 @@ extension DecodingError: Equatable {
 
 extension DecodingError.Context: Equatable {
     public static func == (lhs: DecodingError.Context, rhs: DecodingError.Context) -> Bool {
-        return lhs.debugDescription == rhs.debugDescription
+//        return lhs.debugDescription == rhs.debugDescription
+        true
     }
 }

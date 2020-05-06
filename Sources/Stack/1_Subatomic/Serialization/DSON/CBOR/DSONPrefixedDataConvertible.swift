@@ -31,7 +31,7 @@ public protocol DSONPrefixedDataConvertible: CBORConvertible, DSONPrefixSpecifyi
 // MARK: - CBORConvertible
 public extension DSONPrefixedDataConvertible {
     func toCBOR() -> CBOR {
-        return CBOR.bytes(cborEncodedData, dsonPrefix: dsonPrefix)
+        return CBOR.bytes(cborEncodedData, dsonPrefix: Self.dsonPrefix)
     }
 }
 
@@ -42,7 +42,7 @@ public extension DSONPrefixedDataConvertible where Self: DataConvertible {
         return asData
     }
     
-    var dsonPrefix: DSONPrefix {
+    static var dsonPrefix: DSONPrefix {
         return .bytesBase64
     }
 }

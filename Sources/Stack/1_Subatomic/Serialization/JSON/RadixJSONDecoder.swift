@@ -27,8 +27,7 @@ import Foundation
 public typealias JSON = [String: Any]
 
 public final class RadixJSONDecoder: Foundation.JSONDecoder {
-    
-    public override func decode<T>(_ type: T.Type, from data: Data) throws -> T where T: Decodable & RadixModelTypeStaticSpecifying {
+    public func decodeRadix<T>(_ type: T.Type, from data: Data) throws -> T where T: Decodable & RadixModelTypeStaticSpecifying {
         let jsonObjectAny = try JSONSerialization.jsonObject(with: data, options: [])
         
         func handle(jsonObject: JSON) throws {

@@ -32,7 +32,7 @@ public struct UniverseConfig:
     RadixHashable,
     DSONEncodable,
     Throwing,
-    Decodable,
+    Codable,
     Equatable,
     CustomStringConvertible,
     CustomDebugStringConvertible

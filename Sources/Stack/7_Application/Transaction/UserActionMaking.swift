@@ -118,3 +118,54 @@ public extension PutUniqueIdAction {
         )
     }
 }
+
+// MARK: Transfer
+public typealias Transfer = TransferTokensAction.Other
+extension TransferTokensAction: ExpressibleByOwnedTokenContextAndOther {}
+public extension TransferTokensAction {
+    
+    struct Other: UserActionMakingSpecific {
+        public typealias SpecificAction = TransferTokensAction
+        
+        let amount: PositiveAmount
+        let recipient: Address
+        init(amount: PositiveAmount, to recipient: Address) {
+            self.amount = amount
+            self.recipient = recipient
+        }
+    }
+    
+    init(tokenContext: TokenContext, other: Other) {
+        self.init(
+            from: tokenContext.actor,
+            to: other.recipient,
+            amount: other.amount,
+            tokenResourceIdentifier: tokenContext.rri
+        )
+    }
+}
+
+// MARK: Message
+public typealias Message = SendMessageAction.Other
+extension SendMessageAction: ExpressibleByOwnedTokenContextAndOther {}
+public extension SendMessageAction {
+    
+    struct Other: UserActionMakingSpecific {
+        public typealias SpecificAction = SendMessageAction
+        
+        let text: String
+        let recipient: Address
+        init(text: String, to recipient: Address) {
+            self.text = text
+            self.recipient = recipient
+        }
+    }
+    
+    init(tokenContext: TokenContext, other: Other) {
+        self = .plainText(
+            from: tokenContext.actor,
+            to: other.recipient,
+            text: other.text
+        )
+    }
+}

@@ -98,7 +98,7 @@ public extension EUID {
 
 // MARK: - DSONPrefixSpecifying
 public extension EUID {
-    var dsonPrefix: DSONPrefix {
+    static var dsonPrefix: DSONPrefix {
         return .euidHex
     }
 }

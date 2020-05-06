@@ -201,7 +201,7 @@ private extension AtomIdentifierTests {
 
 
 private let magic: Magic = 63799298
-private extension Address {
+extension Address {
     init() {
         self.init(privateKey: PrivateKey())
     }

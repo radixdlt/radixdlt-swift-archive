@@ -32,6 +32,7 @@ public struct UnsignedAmount<Bound, Trait>:
     PrefixedJSONCodable,
     StringRepresentable,
     CBORDataConvertible,
+    DataInitializable,
     CustomStringConvertible
 where
     Trait: AmountTrait,
@@ -63,6 +64,11 @@ public extension UnsignedAmount {
         case amountMustBePositive
         case amountInAttoIsOnlyMeasuredInIntegers(butPassedDouble: Double)
         case amountFromStringNotRepresentableInDenomination(amountString: String, specifiedDenomination: Denomination)
+        
+        case amountFromDataError(FromDataError)
+        public enum FromDataError: Swift.Error, Equatable {
+            case expected32Bytes(butGot: Int)
+        }
     }
 }
 
@@ -75,6 +81,17 @@ public extension UnsignedAmount {
     // expression `someAmount > 0` (<- where `0` is a literal). Might be a red herring, but
     // moving `words` from protocol to this concrete existential breaks the recursion.
     var words: Words { magnitude.words }
+}
+
+// MARK: DataInitializable
+public extension UnsignedAmount {
+    init(data: Data) throws {
+        guard data.count == 32 else {
+            throw Error.amountFromDataError(.expected32Bytes(butGot: data.count))
+        }
+        let magnitude = try Magnitude.init(data: data)
+        try self.init(magnitude: magnitude)
+    }
 }
 
 // MARK: CustomStringConvertible
@@ -136,15 +153,15 @@ public extension UnsignedAmount {
 
 // MARK: DSONPrefixSpecifying
 public extension UnsignedAmount {
-    var dsonPrefix: DSONPrefix {
-        return .unsignedBigInteger
+    static var dsonPrefix: DSONPrefix {
+        .unsignedBigInteger
     }
 }
 
 // MARK: - DataConvertible
 public extension UnsignedAmount {
     var asData: Data {
-        return magnitude.toData(minByteCount: 32)
+        magnitude.toData(minByteCount: 32)
     }
 }
 
@@ -161,7 +178,7 @@ public extension UnsignedAmount {
 // MARK: - StringRepresentable
 public extension UnsignedAmount {
     var stringValue: String {
-        return magnitude.stringValue
+        magnitude.stringValue
     }
 }
 

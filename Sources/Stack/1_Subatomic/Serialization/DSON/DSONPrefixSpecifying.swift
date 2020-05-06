@@ -35,5 +35,5 @@ import Foundation
 /// `DSONEncoder` for encoding.
 ///
 public protocol DSONPrefixSpecifying {
-    var dsonPrefix: DSONPrefix { get }
+    static var dsonPrefix: DSONPrefix { get }
 }

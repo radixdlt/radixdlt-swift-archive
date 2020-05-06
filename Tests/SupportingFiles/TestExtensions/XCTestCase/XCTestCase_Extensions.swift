@@ -54,7 +54,7 @@ extension TestCase {
     
     @discardableResult
     func decode<D>(_ type: D.Type, jsonData: Data) throws -> D where D: Decodable & RadixModelTypeStaticSpecifying {
-        return try RadixJSONDecoder().decode(D.self, from: jsonData)
+        return try RadixJSONDecoder().decodeRadix(D.self, from: jsonData)
     }
     
     func jsonOrFail<EncodableModel>(_ model: EncodableModel)  -> Data? where EncodableModel: Encodable {

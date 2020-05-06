@@ -46,7 +46,7 @@ private extension UniverseConfig {
         do {
             let data = try Data(contentsOf: url)
             return try
-                RadixJSONDecoder().decode(UniverseConfig.self, from: data)
+                RadixJSONDecoder().decodeRadix(UniverseConfig.self, from: data)
         } catch {
             incorrectImplementation("Failed to create config from data, error: \(error)")
         }
