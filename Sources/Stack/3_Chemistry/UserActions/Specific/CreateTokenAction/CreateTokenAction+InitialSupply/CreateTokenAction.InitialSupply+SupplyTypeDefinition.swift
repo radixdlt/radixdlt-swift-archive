@@ -26,17 +26,17 @@ import Foundation
 
 public extension CreateTokenAction.InitialSupply {
     enum SupplyTypeDefinition: Equatable {
-        case fixed(to: PositiveSupply)
+        case fixed(to: PositiveSupply = PositiveSupply.max)
         case mutable(initial: Supply?)
     }
 }
 
 // MARK: Public
 public extension CreateTokenAction.InitialSupply.SupplyTypeDefinition {
+    
     var initialSupply: Supply {
         switch self {
         case .fixed(let positiveInitialSupply):
-//            return Supply(positiveSupply: positiveInitialSupply)
             return Supply(subset: positiveInitialSupply)
         case .mutable(let nonNegativeInitialSupply):
             return nonNegativeInitialSupply ?? .zero

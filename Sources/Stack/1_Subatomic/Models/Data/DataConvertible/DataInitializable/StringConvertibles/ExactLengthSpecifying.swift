@@ -35,7 +35,9 @@ public extension ExactLengthSpecifying {
     static var maxLength: Int {
         return length
     }
-    
+}
+
+public extension MinLengthSpecifying where Self: MaxLengthSpecifying {
     static func validateLength<L>(of measurable: L) throws where L: LengthMeasurable {
         try validateMaxLength(of: measurable)
         try validateMinLength(of: measurable)

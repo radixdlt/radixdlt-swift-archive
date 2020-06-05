@@ -27,7 +27,6 @@ import Foundation
 public extension UnsignedAmount {
     
     init(string: String, denomination from: Denomination) throws {
-        let numberFormatter: NumberFormatter = .default
         let decimalSeparator = Locale.decimalSeparatorIndeed
         
         func magnitudeFromNonDecimalString(_ nonDecimalString: String) throws -> Magnitude {

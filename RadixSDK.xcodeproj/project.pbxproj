@@ -550,7 +550,7 @@
 		E6BACE802350E1FF006D97C6 /* ErrorAutoEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BACE7F2350E1FF006D97C6 /* ErrorAutoEquatable.swift */; };
 		E6BF7CE22382DC2E002D1535 /* HardCodedAtomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BF7CE02382DC2C002D1535 /* HardCodedAtomStore.swift */; };
 		E6C8240B23869EF40037B336 /* NetworkControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C8240A23869EF40037B336 /* NetworkControllerTests.swift */; };
-		E6CE9CDB245823F500C06D5E /* TransferrableTokensParticleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CE9CDA245823F500C06D5E /* TransferrableTokensParticleTests.swift */; };
+		E6CE9CDB245823F500C06D5E /* ParticlesMetaDataForLedgerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CE9CDA245823F500C06D5E /* ParticlesMetaDataForLedgerApp.swift */; };
 		E6CEE70D21F5AE9900D745EC /* TestableConvenienceInitializers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE70B21F5AE7800D745EC /* TestableConvenienceInitializers.swift */; };
 		E6CEE73021F5D4E000D745EC /* CharacterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6CEE72F21F5D4E000D745EC /* CharacterSet.swift */; };
 		E6CEE75421F78B1300D745EC /* SwiftCBOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */; };
@@ -676,6 +676,7 @@
 		E6D7A3C02385980700950312 /* PrivateKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A35B2385980700950312 /* PrivateKeyTests.swift */; };
 		E6D7A3C12385980700950312 /* PointMultiplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A35D2385980700950312 /* PointMultiplicationTests.swift */; };
 		E6D7A3C22385980700950312 /* DecodePointFromPublicKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D7A35E2385980700950312 /* DecodePointFromPublicKeyTests.swift */; };
+		E6D90BF0248A39B50043B9A8 /* GenerateTestVectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6D90BEF248A39B50043B9A8 /* GenerateTestVectors.swift */; };
 		E6E27A552271EEE20067D46E /* XCTestCase_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E27A542271EEE20067D46E /* XCTestCase_Extensions.swift */; };
 		E6E9D2F323747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */; };
 		E6ED1A4C21F8ACB700654105 /* Int+DataConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6ED1A4B21F8ACB700654105 /* Int+DataConvertible.swift */; };
@@ -1258,7 +1259,7 @@
 		E6BACE7F2350E1FF006D97C6 /* ErrorAutoEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorAutoEquatable.swift; sourceTree = "<group>"; };
 		E6BF7CE02382DC2C002D1535 /* HardCodedAtomStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardCodedAtomStore.swift; sourceTree = "<group>"; };
 		E6C8240A23869EF40037B336 /* NetworkControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkControllerTests.swift; sourceTree = "<group>"; };
-		E6CE9CDA245823F500C06D5E /* TransferrableTokensParticleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferrableTokensParticleTests.swift; sourceTree = "<group>"; };
+		E6CE9CDA245823F500C06D5E /* ParticlesMetaDataForLedgerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticlesMetaDataForLedgerApp.swift; sourceTree = "<group>"; };
 		E6CEE70B21F5AE7800D745EC /* TestableConvenienceInitializers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableConvenienceInitializers.swift; sourceTree = "<group>"; };
 		E6CEE72F21F5D4E000D745EC /* CharacterSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterSet.swift; sourceTree = "<group>"; };
 		E6CEE75321F78B1300D745EC /* SwiftCBOR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftCBOR.framework; path = Carthage/Build/iOS/SwiftCBOR.framework; sourceTree = "<group>"; };
@@ -1371,6 +1372,7 @@
 		E6D7A35E2385980700950312 /* DecodePointFromPublicKeyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodePointFromPublicKeyTests.swift; sourceTree = "<group>"; };
 		E6D7A3612385980700950312 /* PrefixWhileTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefixWhileTests.swift; sourceTree = "<group>"; };
 		E6D7A3642385980700950312 /* PrefixUntilCompletionFrom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefixUntilCompletionFrom.swift; sourceTree = "<group>"; };
+		E6D90BEF248A39B50043B9A8 /* GenerateTestVectors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenerateTestVectors.swift; sourceTree = "<group>"; };
 		E6DE2C2D21E7A02C007DDA26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E6E27A542271EEE20067D46E /* XCTestCase_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCase_Extensions.swift; sourceTree = "<group>"; };
 		E6E9D2F223747960003753B4 /* Publisher+PrefixUntil_OutputOrCompletionFrom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+PrefixUntil_OutputOrCompletionFrom.swift"; sourceTree = "<group>"; };
@@ -1445,6 +1447,14 @@
 				E699AEAD2392A25500852486 /* Model+Irrelevant.swift */,
 			);
 			path = "Models+Convenience+Init";
+			sourceTree = "<group>";
+		};
+		E605E4DF248A3953008B9598 /* LedgerApp */ = {
+			isa = PBXGroup;
+			children = (
+				E6D90BEF248A39B50043B9A8 /* GenerateTestVectors.swift */,
+			);
+			path = LedgerApp;
 			sourceTree = "<group>";
 		};
 		E61E6BC5238C0C2A008C14B0 /* CombineExpectations */ = {
@@ -1528,6 +1538,7 @@
 		E620AB5321E7874300B36EC2 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				E6CE9CDA245823F500C06D5E /* ParticlesMetaDataForLedgerApp.swift */,
 				E6BACE7F2350E1FF006D97C6 /* ErrorAutoEquatable.swift */,
 				E6638CE623351C24004C9846 /* IntegrationTest.swift */,
 				E61E6BC5238C0C2A008C14B0 /* CombineExpectations */,
@@ -3682,6 +3693,7 @@
 		E6D7A2C72385980700950312 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				E605E4DF248A3953008B9598 /* LedgerApp */,
 				E6D7A2C82385980700950312 /* RadixStack */,
 				E6D7A3542385980700950312 /* ThirdParty */,
 				E6D7A35F2385980700950312 /* TestOfExtensions */,
@@ -3722,7 +3734,6 @@
 				E608999623870B5E001CA61C /* DetermineIfPeerIsSuitableTests.swift */,
 				E6D7A2D92385980700950312 /* BurnMintTransactionOfflineTests.swift */,
 				E6D7A2DA2385980700950312 /* BalanceOfNativeTokenFromGenesisAtomsTests.swift */,
-				E6CE9CDA245823F500C06D5E /* TransferrableTokensParticleTests.swift */,
 			);
 			path = 7_Application;
 			sourceTree = "<group>";
@@ -5056,7 +5067,7 @@
 				E6D7A3AE2385980700950312 /* HTTPClientTests.swift in Sources */,
 				E6D7A3BF2385980700950312 /* Secp256k1RFC6979Tests.swift in Sources */,
 				E6D7A3822385980700950312 /* TokenPermissionBadValueTests.swift in Sources */,
-				E6CE9CDB245823F500C06D5E /* TransferrableTokensParticleTests.swift in Sources */,
+				E6CE9CDB245823F500C06D5E /* ParticlesMetaDataForLedgerApp.swift in Sources */,
 				E6055449230553E600528510 /* Test+Convenience+Models.swift in Sources */,
 				E6D7A3892385980700950312 /* BadRRITests.swift in Sources */,
 				E6D7A3B02385980700950312 /* MagicTests.swift in Sources */,
@@ -5070,6 +5081,7 @@
 				E6D7A3732385980700950312 /* ECIESEncryptionAndDecryptionTests.swift in Sources */,
 				E6D7A3A62385980700950312 /* RadixSystemTests.swift in Sources */,
 				E623BD1C2396766800959232 /* RPCTests.swift in Sources */,
+				E6D90BF0248A39B50043B9A8 /* GenerateTestVectors.swift in Sources */,
 				E6D7A3832385980700950312 /* GranularityNegativeTests.swift in Sources */,
 				E699AEAE2392A25500852486 /* Model+Irrelevant.swift in Sources */,
 				E6D7A3912385980700950312 /* CBOREncodingPrimitivesIntTests.swift in Sources */,

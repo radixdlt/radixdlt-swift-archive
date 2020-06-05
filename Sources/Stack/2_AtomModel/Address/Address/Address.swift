@@ -36,7 +36,8 @@ import Foundation
 public struct Address:
     CBORDataConvertible,
     PrefixedJsonCodableByProxy,
-    ExactLengthSpecifying,
+    MinLengthSpecifying,
+    MaxLengthSpecifying,
     DataInitializable,
     StringRepresentable,
     AddressConvertible,
@@ -52,7 +53,10 @@ public struct Address:
 
     // swiftlint:enable colon
     
-    public static let length = 51
+    // Length of a base58 encoded address is at least 51 chars long
+    public static let minLength = 51
+    // Length of a base58 encoded address is at most 52 chars long
+    public static let maxLength = 52
     
     /// `base58String` is the base58 encoding of `Z` where:
     ///

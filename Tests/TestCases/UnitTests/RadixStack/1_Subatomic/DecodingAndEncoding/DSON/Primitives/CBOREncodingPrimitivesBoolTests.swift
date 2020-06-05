@@ -44,6 +44,6 @@ class CBOREncodingPrimitivesBoolTests: TestCase {
 
 extension DSONEncodable {
     func cborEncodedHexString() -> String {
-        return try! toDSON(output: .all).hex
+        return try! toDSON(output: .hash).hex
     }
 }

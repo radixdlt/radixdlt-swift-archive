@@ -210,6 +210,11 @@ extension Address {
         let publicKey = PublicKey(private: privateKey)
         self.init(magic: magic, publicKey: publicKey)
     }
+    
+    init(magic newMagic: Magic, privateKey: PrivateKey) {
+        let publicKey = PublicKey(private: privateKey)
+        self.init(magic: newMagic, publicKey: publicKey)
+    }
 }
 
 
