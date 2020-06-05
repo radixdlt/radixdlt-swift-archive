@@ -26,7 +26,7 @@ import Foundation
 
 public final class RadixJSONEncoder: Foundation.JSONEncoder {
     
-    convenience init(outputFormat: Foundation.JSONEncoder.OutputFormatting = [.sortedKeys, .prettyPrinted]) {
+    convenience init(outputFormat: Foundation.JSONEncoder.OutputFormatting = [.sortedKeys, .prettyPrinted, .withoutEscapingSlashes]) {
         self.init()
         self.outputFormatting = outputFormat
     }

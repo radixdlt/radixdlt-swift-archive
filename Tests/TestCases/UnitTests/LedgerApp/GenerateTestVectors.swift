@@ -34,84 +34,250 @@ final class GenerateTestVectorsForLedgerApp: TestCase {
         print("🙋🏻 Bob:   \(bob)")
         print("🙋🏻‍♀️ Clara: \(clara)")
         print("🙋🏾‍♀️ Diana: \(diana)")
+        
+        (mapper, token) = mapperWithToken()
     }
     
 
-    private let jsonEncoder = RadixJSONEncoder(outputFormat: .prettyPrinted)
+    private let jsonEncoder: JSONEncoder = RadixJSONEncoder(outputFormat: [.prettyPrinted, .withoutEscapingSlashes])
+    
     private let testCasePrefix = "testMakeVector_"
     
     private var token: TokenConvertible!
     private var rri: ResourceIdentifier { token.tokenDefinitionReference }
+    private var allTokens: PositiveAmount {
+        guard let supply = token.supply else { fatalError("Expected supply") }
+        guard let positiveSupply = try? PositiveSupply(related: supply) else {
+            fatalError("Expected non zero supply")
+        }
+        return positiveSupply.amount
+        
+    }
 }
 
 // MARK: Vector Generation
+// ==================
+// ==================
+// ==================
 extension GenerateTestVectorsForLedgerApp {
-    func testMakeVector_no_data_single_transfer_of_short_rri_no_change_small_amount() {
-        let supply: PositiveSupply = 1
-        (mapper, token) = mapperWithToken(symbol: "APA", supply: .fixed(to: supply))
-        
+    
+    // MARK: *** NO DATA ***
+    // ==================
+    // ==================
+    // ==================
+    
+    // MARK: Single Transfer
+    // ==================
+    // ==================
+    // ==================
+    
+    // MARK: Small Amount
+    // ==================
+    // ==================
+    // ==================
+    func testMakeVector_no_data_single_transfer_small_amount_with_change() {
         let vectorJsonString = makeVectorJSON(
             Transaction(TokenContext(rri: rri, actor: alice)) {
-                Transfer(amount: supply.amount, to: bob)
+                Transfer(amount: 9, to: bob)
             }
         )
         print(vectorJsonString)
         XCTAssertFalse(vectorJsonString.isEmpty)
     }
     
-    func testMakeVector_no_data_single_transfer_of_short_rri_no_change_huge_amount() {
-        let supply: PositiveSupply = .max
-        (mapper, token) = mapperWithToken(symbol: "APA", supply: .fixed(to: supply))
-        
+    func testMakeVector_no_data_single_transfer_small_amount_no_change() {
+        let smallSupply: PositiveSupply = 10
+        (mapper, token) = mapperWithToken(supply: .fixed(to: smallSupply))
         let vectorJsonString = makeVectorJSON(
             Transaction(TokenContext(rri: rri, actor: alice)) {
-                Transfer(amount: supply.amount, to: bob)
+                Transfer(amount: smallSupply.amount, to: bob)
             }
         )
         print(vectorJsonString)
         XCTAssertFalse(vectorJsonString.isEmpty)
     }
     
-    func testMakeVector_data_putUniqueAction_single_transfer_of_short_rri_no_change_small_amount() {
-        let supply: PositiveSupply = 1
-        (mapper, token) = mapperWithToken(symbol: "APA", supply: .fixed(to: supply))
+    // MARK: Huge Amount
+    // ==================
+    // ==================
+    // ==================
+    func testMakeVector_no_data_single_transfer_huge_amount_with_change() {
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: rri, actor: alice)) {
+                Transfer(amount: PositiveSupply.max.amount - 1337, to: bob)
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
+    func testMakeVector_no_data_single_transfer_huge_amount_no_change() {
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: rri, actor: alice)) {
+                Transfer(amount: allTokens, to: bob)
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
+    
+    // MARK: *** DATA ***
+    // ==================
+    // ==================
+    // ==================
+    // MARK: No Transfers
+    func testMakeVector_data_no_transfer_burn_action() {
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: rri, actor: alice)) {
+                Burn(amount: 5)
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
+    func testMakeVector_data_no_transfer_message_action() {
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: .irrelevant, actor: alice)) {
+                Message(text: "Hey you!", to: clara)
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
+    
+    func testMakeVector_data_no_transfer_put_unique_action() {
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: .irrelevant, actor: alice)) {
+                PutUnique("Unicorn")
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
+    // MARK: Single Transfer
+    // ==================
+    // ==================
+    // ==================
+    
+    // MARK: Small Amount
+    // ==================
+    // ==================
+    // ==================
+    func testMakeVector_data_single_transfer_small_amount_with_change() {
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: rri, actor: alice)) {
+                Transfer(amount: 9, to: bob)
+                 PutUnique("Unicorn")
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
+    func testMakeVector_data_single_transfer_small_amount_no_change() {
+        let smallSupply: PositiveSupply = 10
+        (mapper, token) = mapperWithToken(supply: .fixed(to: smallSupply))
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: rri, actor: alice)) {
+                Message(text: "Hey you!", to: clara)
+                Transfer(amount: smallSupply.amount, to: bob)
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
+    // MARK: Huge Amount
+    // ==================
+    // ==================
+    // ==================
+    func testMakeVector_data_single_transfer_huge_amount_with_change() {
+        let bigSupply = Supply.max
+        (mapper, token) = mapperWithToken(supply: .mutable(initial: bigSupply))
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: rri, actor: alice)) {
+                Transfer(amount: bigSupply.amount - 1337, to: bob)
+                Burn(amount: 5)
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
+    func testMakeVector_data_single_transfer_huge_amount_no_change() {
+        let bigSupply = Supply.max - 1234
+        (mapper, token) = mapperWithToken(supply: .mutable(initial: bigSupply))
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: rri, actor: alice)) {
+                Transfer(amount: allTokens, to: bob)
+                PutUnique("Unicorn")
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
+    
+    func testMakeVector_data_single_transfer_no_change_small_amount_unique_and_message() {
+        let smallSupply: PositiveSupply = 10
+        (mapper, token) = mapperWithToken(supply: .fixed(to: smallSupply))
         
         let vectorJsonString = makeVectorJSON(
             Transaction(TokenContext(rri: rri, actor: alice)) {
                 PutUnique("Unicorn")
-                Transfer(amount: supply.amount, to: bob)
+                Transfer(amount: smallSupply.amount, to: bob)
+                Message(text: "Hey you!", to: diana)
             }
         )
         print(vectorJsonString)
         XCTAssertFalse(vectorJsonString.isEmpty)
     }
     
-    func testMakeVector_data_unallocated_single_transfer_of_short_rri_no_change_small_amount() {
-        let supply: PositiveSupply = 1
-        (mapper, token) = mapperWithToken(symbol: "APA", supply: .fixed(to: supply))
-        
+
+    // MARK: Multiple Transfers
+    // ==================
+    // ==================
+    // ==================
+    
+    func testMakeVector_data_multiple_transfers_small_amounts_with_change_unique() {
         let vectorJsonString = makeVectorJSON(
             Transaction(TokenContext(rri: rri, actor: alice)) {
-                Transfer(amount: supply.amount, to: bob)
-            },
-            appendingAdhocParticleWrappedInSeparateGroups: [
-                AnySpunParticle(
-                    spin: .up,
-                    particle: UnallocatedTokensParticle(amount: .min, tokenDefinitionReference: .init(address: diana, name: .irrelevant))
-                )
-            ]
+                Transfer(amount: 9, to: bob)
+                Transfer(amount: 42, to: clara)
+                Transfer(amount: 237, to: diana)
+                PutUnique("Unicorn")
+            }
         )
         print(vectorJsonString)
         XCTAssertFalse(vectorJsonString.isEmpty)
     }
+    
+    func testMakeVector_data_multiple_transfers_small_and_big_amount_messages() {
+        let vectorJsonString = makeVectorJSON(
+            Transaction(TokenContext(rri: rri, actor: alice)) {
+                Message(text: "All I ever wanted", to: clara)
+                Transfer(amount: 123, to: bob)
+                Message(text: "All I ever needed", to: clara)
+                Transfer(amount: PositiveAmount.max - 123, to: clara)
+                Message(text: "Is you, in my arms", to: clara)
+            }
+        )
+        print(vectorJsonString)
+        XCTAssertFalse(vectorJsonString.isEmpty)
+    }
+    
 }
 
 // MARK: Atom preparation
 private extension GenerateTestVectorsForLedgerApp {
     
     func mapperWithToken(
-        symbol: Symbol,
-        supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition
+        symbol: Symbol = "ZELDA",
+        supply: CreateTokenAction.InitialSupply.SupplyTypeDefinition = .mutable(initial: Supply.max)
     ) -> (TransactionToAtomMapper, TokenConvertible) {
         
         let createTokenAction = try! CreateTokenAction.new(
@@ -175,17 +341,7 @@ private extension GenerateTestVectorsForLedgerApp {
 // MARK: Extension/Helpers
 extension TokenDefinition {
     init(createTokenAction: CreateTokenAction) {
-        self.init(
-            symbol: createTokenAction.symbol,
-            name: createTokenAction.name,
-            tokenDefinedBy: createTokenAction.creator,
-            granularity: createTokenAction.granularity,
-            description: createTokenAction.description,
-            tokenSupplyType: createTokenAction.tokenSupplyType,
-            iconUrl: createTokenAction.iconUrl,
-            tokenPermissions: createTokenAction.tokenPermissions,
-            supply: createTokenAction.supply
-        )
+        self.init(tokenConvertible: createTokenAction)
     }
 }
 
@@ -194,6 +350,16 @@ extension PositiveSupply {
         PositiveAmount(other: self)
     }
 }
+
+extension Supply {
+    var amount: PositiveAmount {
+        guard let amount = try? PositiveAmount(unrelated: self) else {
+            fatalError("Failed to convert supply to PositiveAmount: \(self)")
+        }
+        return amount
+    }
+}
+
 
 extension Atom {
     mutating func appendingParticleGroup(_ particleGroup: ParticleGroup) {
