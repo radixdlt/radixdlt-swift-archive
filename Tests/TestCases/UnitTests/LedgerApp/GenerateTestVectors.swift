@@ -334,7 +334,7 @@ private extension GenerateTestVectorsForLedgerApp {
             .forEach { atom.appendingParticleGroup($0) }
         
         
-        return LedgerSignAtomTestVector(description: description, magic: magic, atom: atom)
+        return LedgerSignAtomTestVector(description: description, magic: magic, atom: atom, actor: alice)
     }
 }
 

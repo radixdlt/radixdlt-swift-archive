@@ -110,12 +110,10 @@ struct LedgerSignAtomTestVector: Equatable, Encodable {
         let shaSha256HashOfAtomCborHex: String
         let signatureDEROfAtomHashHex: String
         let signatureRSOfAtomHashHex: String
-        let particleSpinUpMetaDataHex: String
         
         init(
             magic: Magic,
-            atom: Atom,
-            particleMetaData: [ParticleInAtomMetaData]
+            atom: Atom
         ) {
             
             self.privateKeyAlice = Self.hardCodedPrivateKeyAlice
@@ -131,13 +129,7 @@ struct LedgerSignAtomTestVector: Equatable, Encodable {
             let signatureDER = try! signature.toDER()
             self.signatureDEROfAtomHashHex = signatureDER.hex
             
-            let metaData: Data = particleMetaData.map {
-                $0.toData()
-            }.reduce(Data(), +)
-            
-            
-            self.particleSpinUpMetaDataHex = metaData.hex
-            
+      
             assert(
                 try! SignatureVerifier.verifyThat(
                     signature: signature,
@@ -148,8 +140,9 @@ struct LedgerSignAtomTestVector: Equatable, Encodable {
         }
     }
     struct AtomDescription: Equatable, Encodable {
-        let allAddresses: [Address]
+        let allAddresses: [String]
         let cborEncodedHex: String
+        let particleSpinUpMetaDataHex: String
         
         let particleGroupCount: UInt
         let totalNumberOfParticles: UInt
@@ -158,7 +151,6 @@ struct LedgerSignAtomTestVector: Equatable, Encodable {
         
         
         struct ParticleSpinCount: Equatable, Encodable {
-            let spin: String
             
             let transferrableTokensParticles: UInt
             let messageParticles: UInt
@@ -177,7 +169,6 @@ struct LedgerSignAtomTestVector: Equatable, Encodable {
                     totalCount += counted
                     return counted
                 }
-                self.spin = .init(describing: spin)
                 self.transferrableTokensParticles = countParticles(ofType: TransferrableTokensParticle.self)
                 self.messageParticles = countParticles(ofType: MessageParticle.self)
                 self.uniqueParticles = countParticles(ofType: UniqueParticle.self)
@@ -189,18 +180,27 @@ struct LedgerSignAtomTestVector: Equatable, Encodable {
             }
         }
         
-        init(atom: Atom) {
+        init(atom: Atom, particleMetaData: [ParticleInAtomMetaData]) {
             let upParticles = ParticleSpinCount(spin: .up, atom: atom)
             self.upParticles = upParticles
             let downParticles = ParticleSpinCount(spin: .down, atom: atom)
             self.downParticles = downParticles
             self.cborEncodedHex = atom.cborEncodedHexString()
-            self.allAddresses = try! atom.addresses().elements
+            self.allAddresses = try! atom.addresses().elements.map { $0.base58 }
             
             let totalNumberOfParticles = upParticles.totalCount + downParticles.totalCount
             self.totalNumberOfParticles = totalNumberOfParticles
             
             self.particleGroupCount = UInt(atom.particleGroups.count)
+            
+            
+            let metaData: Data = particleMetaData.map {
+                $0.toData()
+            }.reduce(Data(), +)
+            
+            
+            self.particleSpinUpMetaDataHex = metaData.hex
+            
             
             assert(atom.upParticles().count == upParticles.totalCount)
             assert(atom.particles(spin: .down).count == downParticles.totalCount)
@@ -212,19 +212,20 @@ struct LedgerSignAtomTestVector: Equatable, Encodable {
     let universeMagic: Magic
     let atomDescription: AtomDescription
     let expected: Expected
-    let atomContentsHumanReadable: String
+    let transfersHumanReadable: String
     
     init(
         description: String,
         magic: Magic = 1,
-        atom: Atom
+        atom: Atom,
+        actor: Address
     ) {
         self.descriptionOfTest = description
         self.universeMagic = magic
-        self.atomDescription = AtomDescription(atom: atom)
         let particleMetaData = try! cborByteOffsetsOfUpParticlesIn(atom: atom)
-        self.expected = Expected(magic: magic, atom: atom, particleMetaData: particleMetaData)
-        self.atomContentsHumanReadable = try! cborDecodeParticleMetaData(metaData: particleMetaData, in: atom)
+        self.atomDescription = AtomDescription(atom: atom, particleMetaData: particleMetaData)
+        self.transfersHumanReadable = try! cborDecodeParticleMetaData(metaData: particleMetaData, in: atom, sender: actor)
+        self.expected = Expected(magic: magic, atom: atom)
         
         assert(LedgerAppConstraints.validate(vector: self))
     }
@@ -333,7 +334,8 @@ extension String: DSONDecodable {
 
 func cborDecodeParticleMetaData(
     metaData particleInAtomMetaDatas: [ParticleInAtomMetaData],
-    in atom: Atom
+    in atom: Atom,
+    sender: Address
 ) throws -> String {
     
     let atomCbor = try! atom.toDSON(output: .hash)
@@ -358,35 +360,41 @@ func cborDecodeParticleMetaData(
     var descriptionOfAtom = ""
     
     let separator = "\n**************************\n"
-    
+//    var serializersOfNonTTPType = [String]()
     for metaData in particleInAtomMetaDatas {
         
         let _ = try decodeCbor(at: \.serializerByteInterval, from: metaData, into: String.self)
         
-        
-        
         if metaData.isTransferrableTokensParticle {
+            let address = try decodeCbor(at: \.addressByteInterval, from: metaData, into: Address.self)
+            defer { transferIndex += 1 }
+            guard address != sender else { continue }
             descriptionOfAtom += separator
             
             descriptionOfAtom += "Transfer at index: \(transferIndex)\n"
-            transferIndex += 1
             
-            let address = try decodeCbor(at: \.addressByteInterval, from: metaData, into: Address.self)
             descriptionOfAtom += "Address: \(address)\n"
             
             let amount = try decodeCbor(at: \.amountByteInterval, from: metaData, into: PositiveAmount.self)
             descriptionOfAtom += "Amount: \(amount.magnitude)\n"
             
             let rri = try decodeCbor(at: \.tokenDefinitionReferenceByteInterval, from: metaData, into: ResourceIdentifier.self)
-            descriptionOfAtom += "Token: \(rri.name)\n"
-            
-            descriptionOfAtom += separator
-        } else {
-            assert(metaData.isNonTransferrableTokensParticle)
-            let serializer = try decodeCbor(at: \.serializerByteInterval, from: metaData, into: String.self)
-            descriptionOfAtom += "NonTransfer particle of type: <\(serializer)>\n"
+            descriptionOfAtom += "Token: \(rri.name)\(separator)"
         }
+//        else {
+//            assert(metaData.isNonTransferrableTokensParticle)
+//            let serializer = try decodeCbor(at: \.serializerByteInterval, from: metaData, into: String.self)
+//            if !serializersOfNonTTPType.contains(serializer) {
+//                serializersOfNonTTPType.append(serializer)
+//            }
+//        }
     }
+    
+//    if !serializersOfNonTTPType.isEmpty {
+//        descriptionOfAtom += "\n======== NON TTP PARTICLES FOUND ===========\n["
+//        descriptionOfAtom += serializersOfNonTTPType.joined(separator: ", ")
+//        descriptionOfAtom += "]\n===========================================\n"
+//    }
     
     return descriptionOfAtom
 }
