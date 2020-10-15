@@ -26,7 +26,7 @@ import Foundation
 
 public extension Data {
     init(hex: String) {
-        self.init([Byte](hex: hex))
+        self.init([Byte].init(hex: hex))
     }
     
     static var empty: Data {

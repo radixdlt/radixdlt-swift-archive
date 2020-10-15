@@ -46,6 +46,7 @@ func cborByteOffsetsOfUpParticlesIn(
                 stringLength: needle.count
             )
             
+          
             
             return byteInterval
         }
@@ -61,7 +62,7 @@ func cborByteOffsetsOfUpParticlesIn(
         )
         
         guard let transferrableTokensParticle = upParticle.someParticle as? TransferrableTokensParticle else {
-            return .otherParticle(serializer: serializerIntervalWithinAtom)
+            return .otherParticle(particleItself: particleIntervalInAtom, serializer: serializerIntervalWithinAtom)
         }
         
         func intervalByKeyPath<Field>(_ keyPath: KeyPath<TransferrableTokensParticle, Field>) -> ByteInterval where Field: TTPFieldOfInterest & DSONEncodable {
@@ -76,6 +77,7 @@ func cborByteOffsetsOfUpParticlesIn(
         }
         
         return .transferrableParticle(
+            particleItself: particleIntervalInAtom,
             address: intervalByKeyPath(\.address),
             amount: intervalByKeyPath(\.amount),
             serializer: serializerIntervalWithinAtom,
@@ -86,12 +88,17 @@ func cborByteOffsetsOfUpParticlesIn(
 
 enum LedgerAppConstraints {
     
-    static let maxTransfTokenParticleSpinUp = 7
-    static let maxNonTransfParticleSpinUp = 7
+    static let maxTransfTokenParticleSpinUp = 6
+    static let maxParticlesSpinUp = 15 // 240/16, where 16 is size of `ParticleInAtomMetaData` and 240 is LedgerMaxChunkSize-2-12, where 2 is number of bytes to encode AtomSize and 12 is number of bytes for BIP32 path
     
     static func validate(vector: LedgerSignAtomTestVector) -> Bool {
         guard vector.atomDescription.upParticles.transferrableTokensParticles <= maxTransfTokenParticleSpinUp else {
-            print("Too many transf tokens part with spin up")
+            print("Too many TransferrableTokensParticles with spin up")
+            return false
+        }
+        
+        guard vector.atomDescription.upParticles.totalCount <= maxParticlesSpinUp else {
+            print("Too many particles with spin up in total.")
             return false
         }
         
@@ -207,29 +214,55 @@ struct LedgerSignAtomTestVector: Equatable, Encodable {
         }
     }
     
+
+
+    
     let descriptionOfTest: String // e.g. "test of single transfer with short amount string"
     let bip32PathAlice = "44'/536'/2'/1/3"
     let universeMagic: Magic
     let atomDescription: AtomDescription
     let expected: Expected
-    let transfersHumanReadable: String
+    
+//    let transfersHumanReadable: String
+    
+    
+    let transfers: [TokensTransfer]?
     
     init(
         description: String,
         magic: Magic = 1,
         atom: Atom,
-        actor: Address
+        actor: Address,
+        transfers: [TokensTransfer]
     ) {
         self.descriptionOfTest = description
         self.universeMagic = magic
         let particleMetaData = try! cborByteOffsetsOfUpParticlesIn(atom: atom)
         self.atomDescription = AtomDescription(atom: atom, particleMetaData: particleMetaData)
-        self.transfersHumanReadable = try! cborDecodeParticleMetaData(metaData: particleMetaData, in: atom, sender: actor)
+
+        self.transfers = transfers.isEmpty ? nil : transfers
         self.expected = Expected(magic: magic, atom: atom)
         
-        assert(LedgerAppConstraints.validate(vector: self))
     }
 }
+
+public struct TokensTransfer: Equatable, Encodable {
+//    let recipient: Address
+//    let amount: PositiveAmount
+//    let tokenDefinitionReference: ResourceIdentifier
+    let recipient: String
+    let amount: String
+    let tokenDefinitionReference: String
+    let isChangeBackToUserHerself: Bool
+    
+    init(transferAction transfer: TransferTokensAction) {
+        self.recipient = transfer.recipient.stringValue
+        self.amount = transfer.amount.stringValue
+        self.tokenDefinitionReference = transfer.tokenResourceIdentifier.stringValue
+        self.isChangeBackToUserHerself = transfer.recipient == transfer.sender
+    }
+}
+
 
 func += <I>(lhs: inout Optional<I>, rhs: I) where I: FixedWidthInteger {
     if lhs == nil {
@@ -366,7 +399,7 @@ func cborDecodeParticleMetaData(
         let _ = try decodeCbor(at: \.serializerByteInterval, from: metaData, into: String.self)
         
         if metaData.isTransferrableTokensParticle {
-            let address = try decodeCbor(at: \.addressByteInterval, from: metaData, into: Address.self)
+            let address = try decodeCbor(at: \.addressByteInterval!, from: metaData, into: Address.self)
             defer { transferIndex += 1 }
             guard address != sender else { continue }
             descriptionOfAtom += separator
@@ -375,10 +408,10 @@ func cborDecodeParticleMetaData(
             
             descriptionOfAtom += "Address: \(address)\n"
             
-            let amount = try decodeCbor(at: \.amountByteInterval, from: metaData, into: PositiveAmount.self)
+            let amount = try decodeCbor(at: \.amountByteInterval!, from: metaData, into: PositiveAmount.self)
             descriptionOfAtom += "Amount: \(amount.magnitude)\n"
             
-            let rri = try decodeCbor(at: \.tokenDefinitionReferenceByteInterval, from: metaData, into: ResourceIdentifier.self)
+            let rri = try decodeCbor(at: \.tokenDefinitionReferenceByteInterval!, from: metaData, into: ResourceIdentifier.self)
             descriptionOfAtom += "Token: \(rri.name)\(separator)"
         }
 //        else {
@@ -445,15 +478,18 @@ public extension ByteInterval {
 /// particles types
 public struct ParticleInAtomMetaData {
     
+    /// Byte interval of the particle itself, as in where the particle starts in some Atom, and the size of it.
+    let particleItself: ByteInterval
+    
     /// Byte interval of a value of field `address`, in a particle in some Atom.
     /// In the case of the Particle being TransferrableTokensParticle this
     /// will have non zero values, otherwise it will be (0, 0)
-    let addressByteInterval: ByteInterval
+    let addressByteInterval: ByteInterval?
     
     /// Byte interval of a value of field `amount`, in a particle in some Atom.
     /// In the case of the Particle being TransferrableTokensParticle this
     /// will have non zero values, otherwise it will be (0, 0)
-    let amountByteInterval: ByteInterval
+    let amountByteInterval: ByteInterval?
     
     /// Byte interval of a particles "serializer" value, identifying the type of particle, within some Atom
     let serializerByteInterval: ByteInterval
@@ -461,14 +497,16 @@ public struct ParticleInAtomMetaData {
     /// Byte interval of a value of field `tokenDefinitionReference`, in a particle in some Atom.
     /// In the case of the Particle being TransferrableTokensParticle this
     /// will have non zero values, otherwise it will be (0, 0)
-    let tokenDefinitionReferenceByteInterval: ByteInterval
+    let tokenDefinitionReferenceByteInterval: ByteInterval?
     
     private init(
-        address: ByteInterval,
-        amount: ByteInterval,
+        particleItself: ByteInterval,
+        address: ByteInterval? = nil,
+        amount: ByteInterval? = nil,
         serializer: ByteInterval,
-        tokenDefinitionReference: ByteInterval
+        tokenDefinitionReference: ByteInterval? = nil
     ) {
+        self.particleItself = particleItself
         self.addressByteInterval = address
         self.amountByteInterval = amount
         self.serializerByteInterval = serializer
@@ -478,22 +516,22 @@ public struct ParticleInAtomMetaData {
 
 public extension ParticleInAtomMetaData {
     
-    static func otherParticle(serializer: ByteInterval) -> Self {
+    static func otherParticle(particleItself: ByteInterval, serializer: ByteInterval) -> Self {
         Self(
-            address: .zero,
-            amount: .zero,
-            serializer: serializer,
-            tokenDefinitionReference: .zero
+            particleItself: particleItself,
+            serializer: serializer
         )
     }
     
     static func transferrableParticle(
+        particleItself: ByteInterval,
         address: ByteInterval,
         amount: ByteInterval,
         serializer: ByteInterval,
         tokenDefinitionReference: ByteInterval
     ) -> Self {
         Self(
+            particleItself: particleItself,
             address: address,
             amount: amount,
             serializer: serializer,
@@ -514,15 +552,18 @@ public extension ParticleInAtomMetaData {
     func toData() -> Data {
         // MUST be in the same order as the fields are encoded to CBOR:
         let fieldsInCorrectAlphabeticalOrder = [
+            particleItself,
             addressByteInterval,
             amountByteInterval,
             serializerByteInterval,
             tokenDefinitionReferenceByteInterval
         ]
         
-        let data = fieldsInCorrectAlphabeticalOrder.map {
+        let data = fieldsInCorrectAlphabeticalOrder.compactMap{ $0 ?? .zero }.map {
             $0.toData()
         }.reduce(Data(), +)
+        
+        assert(data.count == 20)
         
         return data
     }
@@ -532,24 +573,10 @@ public extension ParticleInAtomMetaData {
     
     
     var isTransferrableTokensParticle: Bool {
-        [addressByteInterval, amountByteInterval, tokenDefinitionReferenceByteInterval].allSatisfy {
-            switch ($0.byteCount > 0, $0.startsAtByte > 0) {
-            case (true, true): return true
-            case (false, false): return false
-            default:
-                fatalError("Bad state: startsAt: \($0.startsAtByte), byteCount: \($0.byteCount)")
-            }
-        }
+        [addressByteInterval, amountByteInterval, tokenDefinitionReferenceByteInterval].allSatisfy { $0 != nil }
     }
     
     var isNonTransferrableTokensParticle: Bool {
-        [addressByteInterval, amountByteInterval, tokenDefinitionReferenceByteInterval].allSatisfy {
-            switch ($0.byteCount == 0, $0.startsAtByte == 0) {
-            case (true, true): return true
-            case (false, false): return false
-            default:
-                fatalError("Bad state: startsAt: \($0.startsAtByte), byteCount: \($0.byteCount)")
-            }
-        }
+        [addressByteInterval, amountByteInterval, tokenDefinitionReferenceByteInterval].allSatisfy { $0 == nil }
     }
 }
