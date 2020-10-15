@@ -413,22 +413,22 @@ private extension GenerateTestVectorsForLedgerApp {
             .map({ try! ParticleGroup(spunParticles: $0) })
             .forEach { atom.appendingParticleGroup($0) }
         
+//
+//        let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
+//        let actionsPublisher = atomToTransferMapper.mapAtomToActions(atom)
+//
+//        let recorder = actionsPublisher.record()
+//
+//        let transfers: [TokensTransfer]
+//        do {
+//            let transferActions: [TransferTokensAction] = try wait(for: recorder.firstOrError, timeout: 1.5)
+//            transfers = transferActions.map(TokensTransfer.init)
+//        } catch {
+//            transfers = []
+//        }
+//
         
-        let atomToTransferMapper = DefaultAtomToTokenTransferMapper()
-        let actionsPublisher = atomToTransferMapper.mapAtomToActions(atom)
-        
-        let recorder = actionsPublisher.record()
-        
-        let transfers: [TokensTransfer]
-        do {
-            let transferActions: [TransferTokensAction] = try wait(for: recorder.firstOrError, timeout: 1.5)
-            transfers = transferActions.map(TokensTransfer.init)
-        } catch {
-            transfers = []
-        }
-        
-        
-        return LedgerSignAtomTestVector.init(description: description, magic: magic, atom: atom, actor: alice, transfers: transfers)
+        return LedgerSignAtomTestVector.init(description: description, magic: magic, atom: atom, actor: alice)
     }
 }
 

@@ -232,34 +232,39 @@ struct LedgerSignAtomTestVector: Equatable, Encodable {
         description: String,
         magic: Magic = 1,
         atom: Atom,
-        actor: Address,
-        transfers: [TokensTransfer]
+        actor: Address
     ) {
         self.descriptionOfTest = description
         self.universeMagic = magic
         let particleMetaData = try! cborByteOffsetsOfUpParticlesIn(atom: atom)
         self.atomDescription = AtomDescription(atom: atom, particleMetaData: particleMetaData)
 
+        let transfers = try! cborDecodeParticleMetaDataAndReadOutTransfers(metaData: particleMetaData, in: atom, sender: actor)
+        assert(transfers.count == atom.spunTransferrableTokensParticles(spin: .up).count)
         self.transfers = transfers.isEmpty ? nil : transfers
         self.expected = Expected(magic: magic, atom: atom)
+        
         
     }
 }
 
 public struct TokensTransfer: Equatable, Encodable {
-//    let recipient: Address
-//    let amount: PositiveAmount
-//    let tokenDefinitionReference: ResourceIdentifier
+
     let recipient: String
     let amount: String
     let tokenDefinitionReference: String
     let isChangeBackToUserHerself: Bool
     
-    init(transferAction transfer: TransferTokensAction) {
-        self.recipient = transfer.recipient.stringValue
-        self.amount = transfer.amount.stringValue
-        self.tokenDefinitionReference = transfer.tokenResourceIdentifier.stringValue
-        self.isChangeBackToUserHerself = transfer.recipient == transfer.sender
+    init(
+        from sender: Address,
+        to recipient: Address,
+        amount: PositiveAmount,
+        rri: ResourceIdentifier
+    ) {
+        self.recipient = recipient.stringValue
+        self.amount = amount.stringValue
+        self.tokenDefinitionReference = rri.stringValue
+        self.isChangeBackToUserHerself = sender == recipient
     }
 }
 
@@ -365,12 +370,13 @@ extension String: DSONDecodable {
 }
 
 
-func cborDecodeParticleMetaData(
+func cborDecodeParticleMetaDataAndReadOutTransfers(
     metaData particleInAtomMetaDatas: [ParticleInAtomMetaData],
     in atom: Atom,
     sender: Address
-) throws -> String {
+) throws -> [TokensTransfer] {
     
+    var transfers = [TokensTransfer]()
     let atomCbor = try! atom.toDSON(output: .hash)
     
     func extractCborBytesFromAtom(byteInterval: ByteInterval) -> Data {
@@ -388,48 +394,27 @@ func cborDecodeParticleMetaData(
         return try T(unknownCborRawData: cborBytesOfField)
     }
     
-    var transferIndex = 0
     
-    var descriptionOfAtom = ""
-    
-    let separator = "\n**************************\n"
-//    var serializersOfNonTTPType = [String]()
     for metaData in particleInAtomMetaDatas {
-        
         let _ = try decodeCbor(at: \.serializerByteInterval, from: metaData, into: String.self)
+        guard metaData.isTransferrableTokensParticle else { continue }
         
-        if metaData.isTransferrableTokensParticle {
-            let address = try decodeCbor(at: \.addressByteInterval!, from: metaData, into: Address.self)
-            defer { transferIndex += 1 }
-            guard address != sender else { continue }
-            descriptionOfAtom += separator
-            
-            descriptionOfAtom += "Transfer at index: \(transferIndex)\n"
-            
-            descriptionOfAtom += "Address: \(address)\n"
-            
-            let amount = try decodeCbor(at: \.amountByteInterval!, from: metaData, into: PositiveAmount.self)
-            descriptionOfAtom += "Amount: \(amount.magnitude)\n"
-            
-            let rri = try decodeCbor(at: \.tokenDefinitionReferenceByteInterval!, from: metaData, into: ResourceIdentifier.self)
-            descriptionOfAtom += "Token: \(rri.name)\(separator)"
-        }
-//        else {
-//            assert(metaData.isNonTransferrableTokensParticle)
-//            let serializer = try decodeCbor(at: \.serializerByteInterval, from: metaData, into: String.self)
-//            if !serializersOfNonTTPType.contains(serializer) {
-//                serializersOfNonTTPType.append(serializer)
-//            }
-//        }
+        let recipientAddress = try decodeCbor(at: \.addressByteInterval!, from: metaData, into: Address.self)
+        let amount = try decodeCbor(at: \.amountByteInterval!, from: metaData, into: PositiveAmount.self)
+        let rri = try decodeCbor(at: \.tokenDefinitionReferenceByteInterval!, from: metaData, into: ResourceIdentifier.self)
+        let transfer = TokensTransfer(
+            from: sender,
+            to: recipientAddress,
+            amount: amount,
+            rri: rri
+        )
+        
+        transfers.append(transfer)
     }
     
-//    if !serializersOfNonTTPType.isEmpty {
-//        descriptionOfAtom += "\n======== NON TTP PARTICLES FOUND ===========\n["
-//        descriptionOfAtom += serializersOfNonTTPType.joined(separator: ", ")
-//        descriptionOfAtom += "]\n===========================================\n"
-//    }
+ 
     
-    return descriptionOfAtom
+    return transfers
 }
 
 
