@@ -1,4 +1,4 @@
 github "Sajjon/Entwine" "8ed6fc037aa094f3a07fe070e44851e265aa8cd6"
-github "attaswift/BigInt" "v5.0.0"
+github "attaswift/BigInt" "v5.2.0"
 github "myfreeweb/SwiftCBOR" "v0.4.3"
 github "yenom/BitcoinKit" "v1.1.0"

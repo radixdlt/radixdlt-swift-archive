@@ -17,7 +17,7 @@ github "myfreeweb/SwiftCBOR" "v0.4.3"
 
 # Used for types dependent on big integer, such as amount and supply. When switching over to SPM
 # we might wanna use github.com/sajjon/deltal.
-github "attaswift/BigInt" "v5.0.0"
+github "attaswift/BigInt" ~> 5.2
 
 # Entwine is really just used for its `ReplaySubject`, once Apple implement this themselves as part of Combine, this can be dropped.
 # Entwine did not offer Carthage support, which my fork fixes.
